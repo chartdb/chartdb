@@ -16,6 +16,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'react/no-unescaped-entities': 'off',
   },
   settings: {
     react: { version: 'detect' },
