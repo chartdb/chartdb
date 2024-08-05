@@ -7,12 +7,14 @@
     "dev": "vite",
     "build": "npm run lint && tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
     "preview": "vite preview"
   },
   "dependencies": {
     "eslint-config-airbnb-typescript": "^18.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
