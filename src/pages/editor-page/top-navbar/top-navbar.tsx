@@ -111,7 +111,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 </MenubarContent>
             </MenubarMenu>
 
-            {/* <Label contentEditable>aaa</Label> */}
+            <Label contentEditable>aaa</Label>
         </Menubar>
     );
 };
