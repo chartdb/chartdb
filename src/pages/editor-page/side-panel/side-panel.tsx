@@ -15,7 +15,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
         <aside className="flex h-full flex-col">
             <div className="flex justify-center border-b">
                 <Select defaultValue="tables">
-                    <SelectTrigger className="mt-1 border-none shadow-none focus:border-transparent focus:ring-0">
+                    <SelectTrigger className="border-none shadow-none focus:border-transparent focus:ring-0">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -28,6 +28,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                     </SelectContent>
                 </Select>
             </div>
+            {/* <div className="flex flex-1 bg-foreground">aa</div> */}
         </aside>
     );
 };

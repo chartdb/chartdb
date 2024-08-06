@@ -11,10 +11,10 @@ import { Canvas } from './canvas/canvas';
 
 export const EditorPage: React.FC = () => {
     return (
-        <section className="bg-background h-screen w-screen">
+        <section className="bg-background h-screen w-screen flex flex-col">
             <TopNavbar />
             <Toolbar />
-            <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanelGroup direction="horizontal">
                 <ResizablePanel defaultSize={25} minSize={25} maxSize={99}>
                     <SidePanel />
                 </ResizablePanel>
