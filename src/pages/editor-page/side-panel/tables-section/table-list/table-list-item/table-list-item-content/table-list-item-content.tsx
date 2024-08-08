@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ellipsis, Trash2 } from 'lucide-react';
+import { Ellipsis, Trash2, Plus, FileType2, FileKey2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Combobox } from '@/components/combobox/combobox';
 import { Button } from '@/components/button/button';
@@ -10,6 +10,7 @@ import {
     AccordionTrigger,
     AccordionContent,
 } from '@/components/accordion/accordion';
+import { Separator } from '@/components/separator/separator';
 
 export interface TableListItemContentProps {
     tableColor: string;
@@ -119,7 +120,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
 
     return (
         <div
-            className="border-l-[6px] rounded-b-md px-1"
+            className="border-l-[6px] rounded-b-md px-1 flex flex-col gap-1"
             style={{
                 borderColor: tableColor,
             }}
@@ -132,9 +133,21 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="fields" className="border-y-0 mb-2">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex-1"
+                        className="p-0 px-2 text-xs text-slate-600 flex flex-1"
                     >
-                        Fields
+                        <div className="flex items-center justify-between flex-1 group">
+                            <div>Fields</div>
+                            <div className="flex flex-row-reverse">
+                                <div className="hidden group-hover:flex flex-row-reverse">
+                                    <Button
+                                        variant="ghost"
+                                        className="hover:bg-primary-foreground p-0 h-4 w-4  text-slate-500 hover:text-slate-700 text-xs"
+                                    >
+                                        <Plus className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
                         {renderField()}
@@ -146,9 +159,21 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="indexes" className="border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex-1"
+                        className="p-0 px-2 text-xs text-slate-600 flex flex-1"
                     >
-                        Indexes
+                        <div className="flex items-center justify-between flex-1 group">
+                            <div>Indexes</div>
+                            <div className="flex flex-row-reverse">
+                                <div className="hidden group-hover:flex flex-row-reverse">
+                                    <Button
+                                        variant="ghost"
+                                        className="hover:bg-primary-foreground p-0 h-4 w-4  text-slate-500 hover:text-slate-700 text-xs"
+                                    >
+                                        <Plus className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
                         {renderIndex()}
@@ -156,6 +181,29 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
+            <Separator className="" />
+            <div className="flex items-center justify-between flex-1">
+                <div>
+                    <Button
+                        variant="outline"
+                        className="text-xs h-8 p-2"
+                        // className="hover:bg-primary-foreground p-2 text-slate-500 hover:text-slate-700 h-8"
+                    >
+                        <FileKey2 className="h-4" />
+                        Add Index
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="outline"
+                        className="text-xs h-8 p-2"
+                        // className="hover:bg-primary-foreground p-2 text-slate-500 hover:text-slate-700 h-8"
+                    >
+                        <FileType2 className="h-4" />
+                        Add Field
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 };
