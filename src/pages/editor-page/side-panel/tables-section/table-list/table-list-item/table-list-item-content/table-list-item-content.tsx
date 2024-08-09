@@ -133,10 +133,13 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="fields" className="border-y-0 mb-2">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex flex-1"
+                        className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
                     >
-                        <div className="flex items-center justify-between flex-1 group">
-                            <div>Fields</div>
+                        <div className="flex items-center justify-between flex-1">
+                            <div className="flex flex-row items-center gap-1">
+                                <FileType2 className="h-4 w-4" />
+                                Fields
+                            </div>
                             <div className="flex flex-row-reverse">
                                 <div className="hidden group-hover:flex flex-row-reverse">
                                     <Button
@@ -159,10 +162,13 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="indexes" className="border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex flex-1"
+                        className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
                     >
-                        <div className="flex items-center justify-between flex-1 group">
-                            <div>Indexes</div>
+                        <div className="flex items-center justify-between flex-1">
+                            <div className="flex flex-row items-center gap-1">
+                                <FileKey2 className="h-4 w-4" />
+                                Indexes
+                            </div>
                             <div className="flex flex-row-reverse">
                                 <div className="hidden group-hover:flex flex-row-reverse">
                                     <Button
@@ -184,21 +190,13 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             <Separator className="" />
             <div className="flex items-center justify-between flex-1">
                 <div>
-                    <Button
-                        variant="outline"
-                        className="text-xs h-8 p-2"
-                        // className="hover:bg-primary-foreground p-2 text-slate-500 hover:text-slate-700 h-8"
-                    >
+                    <Button variant="outline" className="text-xs h-8 p-2">
                         <FileKey2 className="h-4" />
                         Add Index
                     </Button>
                 </div>
                 <div>
-                    <Button
-                        variant="outline"
-                        className="text-xs h-8 p-2"
-                        // className="hover:bg-primary-foreground p-2 text-slate-500 hover:text-slate-700 h-8"
-                    >
+                    <Button variant="outline" className="text-xs h-8 p-2">
                         <FileType2 className="h-4" />
                         Add Field
                     </Button>

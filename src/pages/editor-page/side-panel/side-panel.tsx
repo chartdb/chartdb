@@ -14,7 +14,7 @@ export interface SidePanelProps {}
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const [selected, setSelected] = React.useState('tables');
     return (
-        <aside className="flex h-full flex-col">
+        <aside className="flex h-full flex-col overflow-hidden">
             <div className="flex justify-center border-b">
                 <Select
                     value={selected}

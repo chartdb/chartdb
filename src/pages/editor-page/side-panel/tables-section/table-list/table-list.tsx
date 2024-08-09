@@ -6,10 +6,21 @@ export interface TableListProps {}
 
 export const TableList: React.FC<TableListProps> = () => {
     return (
-        <div className="flex flex-col">
-            <Accordion type="single" collapsible className="w-full">
-                <TableListItem />
-            </Accordion>
-        </div>
+        <Accordion
+            type="single"
+            collapsible
+            className="flex flex-col w-full gap-1"
+        >
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+            <TableListItem />
+        </Accordion>
     );
 };

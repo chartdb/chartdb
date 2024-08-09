@@ -13,7 +13,7 @@ export interface TableListItemProps {}
 export const TableListItem: React.FC<TableListItemProps> = () => {
     const tableColor = randomHSLA();
     return (
-        <AccordionItem value="item-1">
+        <AccordionItem value="item-1" className="rounded-md">
             <AccordionTrigger
                 className="hover:no-underline hover:bg-accent rounded-md px-2 border-l-[6px] py-0 data-[state=open]:rounded-b-none"
                 style={{
