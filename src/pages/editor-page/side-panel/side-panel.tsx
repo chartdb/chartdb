@@ -8,6 +8,7 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { TablesSection } from './tables-section/tables-section';
+import { RelationshipsSection } from './relationships-section/relationships-section';
 
 export interface SidePanelProps {}
 
@@ -15,12 +16,12 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     const [selected, setSelected] = React.useState('tables');
     return (
         <aside className="flex h-full flex-col overflow-hidden">
-            <div className="flex justify-center border-b">
+            <div className="flex justify-center border-b pt-0.5">
                 <Select
                     value={selected}
                     onValueChange={(value) => setSelected(value)}
                 >
-                    <SelectTrigger className="border-none shadow-none focus:border-transparent focus:ring-0">
+                    <SelectTrigger className="border-none rounded-none	 shadow-none focus:border-transparent focus:ring-0 hover:underline hover:bg-secondary">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -33,7 +34,11 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                     </SelectContent>
                 </Select>
             </div>
-            {selected === 'tables' ? <TablesSection /> : null}
+            {selected === 'tables' ? (
+                <TablesSection />
+            ) : (
+                <RelationshipsSection />
+            )}
         </aside>
     );
 };

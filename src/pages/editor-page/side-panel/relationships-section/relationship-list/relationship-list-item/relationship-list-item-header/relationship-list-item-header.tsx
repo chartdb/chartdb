@@ -1,13 +1,15 @@
 import React from 'react';
-import { CircleDotDashed, Pencil, EllipsisVertical } from 'lucide-react';
-import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/relationship-list-item-header-button';
+import { Pencil, EllipsisVertical } from 'lucide-react';
+import { ListItemHeaderButton } from '../../../../list-item-header-button/relationship-list-item-header-button';
 
-export interface TableListItemHeaderProps {}
+export interface RelationshipListItemHeaderProps {}
 
-export const TableListItemHeader: React.FC<TableListItemHeaderProps> = () => {
+export const RelationshipListItemHeader: React.FC<
+    RelationshipListItemHeaderProps
+> = () => {
     return (
         <div className="h-11 flex items-center justify-between flex-1 group">
-            <div>table_1</div>
+            <div>table_1_id_fk</div>
             <div className="flex flex-row-reverse">
                 <div>
                     <ListItemHeaderButton>
@@ -17,9 +19,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = () => {
                 <div className="hidden group-hover:flex flex-row-reverse">
                     <ListItemHeaderButton>
                         <Pencil />
-                    </ListItemHeaderButton>
-                    <ListItemHeaderButton>
-                        <CircleDotDashed />
                     </ListItemHeaderButton>
                 </div>
             </div>

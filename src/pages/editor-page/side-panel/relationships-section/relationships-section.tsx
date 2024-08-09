@@ -1,13 +1,13 @@
 import React from 'react';
-import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, ListCollapse } from 'lucide-react';
+import { ListCollapse } from 'lucide-react';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Input } from '@/components/input/input';
+import { RelationshipList } from './relationship-list/relationship-list';
 
-export interface TablesSectionProps {}
+export interface RelationshipsSectionProps {}
 
-export const TablesSection: React.FC<TablesSectionProps> = () => {
+export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
     return (
         <section className="flex flex-col px-2 overflow-hidden flex-1">
             <div className="flex items-center py-1 justify-between gap-4">
@@ -23,14 +23,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         className="h-8 focus-visible:ring-0 w-full"
                     />
                 </div>
-                <Button variant="secondary" className="text-xs h-8 p-2">
-                    <Table className="h-4" />
-                    Add Table
-                </Button>
             </div>
             <div className="flex flex-col flex-1 overflow-hidden">
                 <ScrollArea className="h-full">
-                    <TableList />
+                    <RelationshipList />
                 </ScrollArea>
             </div>
         </section>

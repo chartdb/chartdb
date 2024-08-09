@@ -109,9 +109,9 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     </Button>
                     <Button
                         variant="ghost"
-                        className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                        className="hover:bg-primary-foreground p-2 w-8 text-slate-500 hover:text-slate-700 h-8"
                     >
-                        <Trash2 className="h-3.5 text-red-700" />
+                        <Trash2 className="h-3.5 w-3.5 text-red-700" />
                     </Button>
                 </div>
             </div>
