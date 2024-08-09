@@ -38,7 +38,6 @@ export const RelationshipListItemContent: React.FC<
                         table_2(table_1_id)
                     </div>
                 </div>
-
                 <div className="flex flex-col gap-1 text-xs">
                     <div className="flex flex-row items-center gap-1">
                         <FileOutput className="h-4 w-4 text-slate-700" />
@@ -67,8 +66,6 @@ export const RelationshipListItemContent: React.FC<
                     </Select>
                 </div>
             </div>
-
-            {/* <Separator className="" /> */}
             <div className="flex items-center justify-center flex-1 pt-2">
                 <Button variant="ghost" className="text-xs h-8 p-2">
                     <Trash2 className="h-3.5 w-3.5 mr-1 text-red-700" />
