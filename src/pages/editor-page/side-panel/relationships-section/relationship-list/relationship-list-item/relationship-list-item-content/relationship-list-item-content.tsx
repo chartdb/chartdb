@@ -69,7 +69,7 @@ export const RelationshipListItemContent: React.FC<
             </div>
 
             {/* <Separator className="" /> */}
-            <div className="flex items-center justify-center flex-1">
+            <div className="flex items-center justify-center flex-1 pt-2">
                 <Button variant="ghost" className="text-xs h-8 p-2">
                     <Trash2 className="h-3.5 w-3.5 mr-1 text-red-700" />
                     <div className="text-red-700">Delete</div>

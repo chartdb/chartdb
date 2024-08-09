@@ -12,15 +12,6 @@ export const TableList: React.FC<TableListProps> = () => {
             className="flex flex-col w-full gap-1"
         >
             <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
-            <TableListItem />
         </Accordion>
     );
 };
