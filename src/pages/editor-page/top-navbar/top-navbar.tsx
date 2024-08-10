@@ -111,7 +111,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </div>
             <div className="flex flex-1 justify-center">
                 <Label>Diagrams/</Label>
-                <Label contentEditable>aaa</Label>
+                <Label contentEditable suppressContentEditableWarning>
+                    aaa
+                </Label>
             </div>
             <div className="flex flex-1 justify-end"></div>
         </nav>
