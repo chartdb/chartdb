@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { randomHSLA } from '@/lib/utils';
 import {
     Handle,
@@ -6,12 +6,15 @@ import {
     NodeProps,
     Node,
     useConnection,
+    useReactFlow,
+    useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import { Ellipsis, Trash2 } from 'lucide-react';
 
-export const LEFT_HANDLE_ID = 'left-handle';
-export const RIGHT_HANDLE_ID = 'right-handle';
+export const LEFT_HANDLE_ID_PREFIX = 'left-handle';
+export const RIGHT_HANDLE_ID_PREFIX = 'right-handle';
+export const TARGET_ID_PREFIX = 'target-';
 
 export type TableNodeProps = Node<Record<string, never>, 'table'>;
 
@@ -20,77 +23,63 @@ export const TableNode: React.FC<NodeProps<TableNodeProps>> = ({
     dragging,
     id,
 }) => {
-    // const { getEdges } = useReactFlow();
+    const { getEdges } = useReactFlow();
+    const updateNodeInternals = useUpdateNodeInternals();
     const connection = useConnection();
     const tableColor = randomHSLA();
     const focused = selected && !dragging;
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
-    // const edges = getEdges();
-    // const numberOfEdges = edges.filter((edge) => edge.target === id).length;
-    // console.log(numberOfEdges)
+    const edges = getEdges();
+    const numberOfEdges = edges.filter((edge) => edge.target === id).length;
+
+    useEffect(() => {
+        updateNodeInternals(id);
+    }, [id, updateNodeInternals, numberOfEdges]);
 
     const renderColumn = () => (
         <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-primary-foreground group last:rounded-b-lg">
-            {/* If handles are conditionally rendered and not present initially, you need to update the node internals https://reactflow.dev/docs/api/hooks/use-update-node-internals/ */}
-            {/* In this case we don't need to use useUpdateNodeInternals, since !isConnecting is true at the beginning and all handles are rendered initially. */}
             {!connection.inProgress && (
                 <>
                     <Handle
-                        // className="customHandle"
-                        id={RIGHT_HANDLE_ID}
+                        id={RIGHT_HANDLE_ID_PREFIX}
                         className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
                         position={Position.Right}
                         type="source"
                     />
                     <Handle
-                        // className="customHandle"
-                        id={LEFT_HANDLE_ID}
+                        id={LEFT_HANDLE_ID_PREFIX}
                         className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
                         position={Position.Left}
                         type="source"
                     />
                 </>
             )}
-            {/* We want to disable the target handle, if the connection was started from this node */}
             {(!connection.inProgress || isTarget) && (
-                <Handle
-                    className={
-                        isTarget
-                            ? '!w-full !h-full !absolute !top-0 !left-0 !rounded-none !border-none !transform-none !opacity-0'
-                            : `!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`
-                    }
-                    // style={
-                    //     isTarget
-                    //         ? {
-                    //               width: '100%',
-                    //               height: '100%',
-                    //             //   background: 'blue',
-                    //               position: 'absolute',
-                    //               top: 0,
-                    //               left: 0,
-                    //               borderRadius: 0,
-                    //               transform: 'none',
-                    //               border: 'none',
-                    //               // opacity: 0,
-                    //           }
-                    //         : {}
-                    // }
-                    // className="customHandle"
-                    position={Position.Left}
-                    type="target"
-                    isConnectableStart={false}
-                />
+                <>
+                    {Array.from(
+                        { length: numberOfEdges + 1 },
+                        (_, index) => index
+                    ).map((index) => (
+                        <Handle
+                            id={`${TARGET_ID_PREFIX}${index}`}
+                            key={`${TARGET_ID_PREFIX}${index}`}
+                            className={`!invisible`}
+                            position={Position.Left}
+                            type="target"
+                        />
+                    ))}
+                    <Handle
+                        id={`${TARGET_ID_PREFIX}${numberOfEdges}`}
+                        className={
+                            isTarget
+                                ? '!w-full !h-full !absolute !top-0 !left-0 !rounded-none !border-none !transform-none !opacity-0'
+                                : `!invisible`
+                        }
+                        position={Position.Left}
+                        type="target"
+                    />
+                </>
             )}
-
-            {/* <Handle
-                id="1"
-                className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
-                type="target"
-                isConnectableEnd={true}
-                isConnectableStart={true}
-                position={Position.Left}
-                isConnectable={true}
-            /> */}
             <div className="flex">id</div>
             <div className="flex">
                 <div className="text-muted-foreground flex group-hover:hidden">
@@ -105,15 +94,6 @@ export const TableNode: React.FC<NodeProps<TableNodeProps>> = ({
                     </Button>
                 </div>
             </div>
-            {/* <Handle
-                id="2"
-                className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
-                type="source"
-                position={Position.Right}
-                isConnectable={true}
-                isConnectableEnd={true}
-                isConnectableStart={true}
-            /> */}
         </div>
     );
 

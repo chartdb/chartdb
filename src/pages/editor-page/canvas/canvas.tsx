@@ -54,6 +54,8 @@ export const Canvas: React.FC<CanvasProps> = () => {
         [setEdges]
     );
 
+    console.log(edges);
+
     return (
         <div className="flex h-full">
             <ReactFlow

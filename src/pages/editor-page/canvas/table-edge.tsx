@@ -6,7 +6,7 @@ import {
     Position,
     useReactFlow,
 } from '@xyflow/react';
-import { RIGHT_HANDLE_ID } from './table-node';
+import { RIGHT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node';
 
 export const TableEdge: React.FC<EdgeProps> = ({
     id,
@@ -16,6 +16,7 @@ export const TableEdge: React.FC<EdgeProps> = ({
     targetY,
     source,
     target,
+    selected,
 }) => {
     const { getInternalNode, getEdge } = useReactFlow();
 
@@ -23,12 +24,19 @@ export const TableEdge: React.FC<EdgeProps> = ({
     const targetNode = getInternalNode(target);
     const edge = getEdge(id);
 
-    const sourceHandle: 'left' | 'right' =
-        edge?.sourceHandle === RIGHT_HANDLE_ID ? 'right' : 'left';
+    const edgeNumber = parseInt(
+        edge?.targetHandle?.slice?.(TARGET_ID_PREFIX.length) ?? '0'
+    );
+
+    const sourceHandle: 'left' | 'right' = edge?.sourceHandle?.startsWith?.(
+        RIGHT_HANDLE_ID_PREFIX
+    )
+        ? 'right'
+        : 'left';
 
     const sourceWidth = sourceNode?.measured.width ?? 0;
     const sourceLeftX =
-        sourceHandle === 'left' ? sourceX : sourceX - sourceWidth + 10;
+        sourceHandle === 'left' ? sourceX : sourceX - sourceWidth - 10;
     const sourceRightX =
         sourceHandle === 'left' ? sourceX + sourceWidth + 10 : sourceX;
 
@@ -79,7 +87,7 @@ export const TableEdge: React.FC<EdgeProps> = ({
                     sourceSide === 'left' ? Position.Left : Position.Right,
                 targetPosition:
                     targetSide === 'left' ? Position.Left : Position.Right,
-                offset: 20,
+                offset: (edgeNumber + 1) * 14,
             }),
         [
             sourceSide,
@@ -90,8 +98,15 @@ export const TableEdge: React.FC<EdgeProps> = ({
             targetRightX,
             sourceY,
             targetY,
+            edgeNumber,
         ]
     );
 
-    return <BaseEdge id={id} path={edgePath} className="!stroke-2" />;
+    return (
+        <BaseEdge
+            id={id}
+            path={edgePath}
+            className={`!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`}
+        />
+    );
 };
