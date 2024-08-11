@@ -11,14 +11,16 @@ import {
     AccordionContent,
 } from '@/components/accordion/accordion';
 import { Separator } from '@/components/separator/separator';
+import { DBTable } from '@/lib/domain/db-table';
 
 export interface TableListItemContentProps {
-    tableColor: string;
+    table: DBTable;
 }
 
 export const TableListItemContent: React.FC<TableListItemContentProps> = ({
-    tableColor,
+    table,
 }) => {
+    const { color } = table;
     const renderField = () => {
         return (
             <div className="flex flex-row p-1 justify-between flex-1">
@@ -122,7 +124,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         <div
             className="border-l-[6px] rounded-b-md px-1 flex flex-col gap-1"
             style={{
-                borderColor: tableColor,
+                borderColor: color,
             }}
         >
             <Accordion
