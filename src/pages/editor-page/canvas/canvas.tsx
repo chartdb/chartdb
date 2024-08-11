@@ -9,6 +9,7 @@ import {
     MiniMap,
     Controls,
     Edge,
+    Node,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TableNode } from './table-node';
@@ -16,24 +17,27 @@ import { TableEdge } from './table-edge';
 
 export interface CanvasProps {}
 
-const initialNodes = [
+const initialNodes: Node[] = [
     {
         id: '3',
         type: 'table',
         position: { x: 200, y: 200 },
         data: { label: '3' },
+        zIndex: 2,
     },
     {
         id: '1',
         type: 'table',
         position: { x: 400, y: 400 },
         data: { label: '1' },
+        zIndex: 2,
     },
     {
         id: '2',
         type: 'table',
         position: { x: 0, y: 0 },
         data: { label: '2' },
+        zIndex: 2,
     },
     // { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
     // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
@@ -54,15 +58,34 @@ export const Canvas: React.FC<CanvasProps> = () => {
         [setEdges]
     );
 
-    console.log(edges);
-
     return (
         <div className="flex h-full">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
+                onEdgesChange={(changes) => {
+                    const selectionChanges = changes.filter(
+                        (change) => change.type === 'select'
+                    );
+
+                    if (selectionChanges.length > 0) {
+                        setEdges((edges) =>
+                            edges.map((edge) => {
+                                edge.zIndex = selectionChanges.some(
+                                    (change) =>
+                                        change.id === edge.id && change.selected
+                                )
+                                    ? 1
+                                    : 0;
+
+                                return edge;
+                            })
+                        );
+                    }
+
+                    return onEdgesChange(changes);
+                }}
                 onConnect={onConnect}
                 proOptions={{
                     hideAttribution: true,
