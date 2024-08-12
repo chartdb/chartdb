@@ -13,13 +13,12 @@ export interface TableListItemProps {
 }
 
 export const TableListItem: React.FC<TableListItemProps> = ({ table }) => {
-    const { id, color } = table;
     return (
-        <AccordionItem value={id} className="rounded-md">
+        <AccordionItem value={table.id} className="rounded-md">
             <AccordionTrigger
                 className="hover:no-underline hover:bg-accent rounded-md px-2 border-l-[6px] py-0 data-[state=open]:rounded-b-none"
                 style={{
-                    borderColor: color,
+                    borderColor: table.color,
                 }}
             >
                 <TableListItemHeader table={table} />
