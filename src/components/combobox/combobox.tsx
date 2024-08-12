@@ -90,7 +90,7 @@ export function Combobox({
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-48 max-w-sm p-0">
+                <PopoverContent className="w-40 max-w-sm p-0">
                     <Command
                         filter={(value, search) => {
                             if (value.includes(search)) return 1;

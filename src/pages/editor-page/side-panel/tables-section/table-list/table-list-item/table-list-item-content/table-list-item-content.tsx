@@ -12,6 +12,15 @@ import {
 } from '@/components/accordion/accordion';
 import { Separator } from '@/components/separator/separator';
 import { DBTable } from '@/lib/domain/db-table';
+import { DBField, FieldType } from '@/lib/domain/db-field';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { dataTypeMap } from '@/lib/data/data-types';
+import { Toggle } from '@/components/toggle/toggle';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TableListItemContentProps {
     table: DBTable;
@@ -20,56 +29,78 @@ export interface TableListItemContentProps {
 export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     table,
 }) => {
+    const { databaseType, updateField } = useChartDB();
     const { color } = table;
-    const renderField = () => {
+
+    const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
+        label: type,
+        value: type,
+    }));
+
+    const RenderField = ({ field }: { field: DBField }) => {
         return (
             <div className="flex flex-row p-1 justify-between flex-1">
                 <div className="flex basis-8/12 gap-1">
                     <Input
+                        className="h-8 focus-visible:ring-0 basis-8/12"
                         type="text"
                         placeholder="Name"
-                        className="h-8 focus-visible:ring-0 basis-8/12"
+                        value={field.name}
+                        onChange={(e) =>
+                            updateField(table.id, field.id, {
+                                name: e.target.value,
+                            })
+                        }
                     />
                     <Combobox
                         className="flex h-8 basis-4/12"
                         mode="single"
-                        options={[
-                            {
-                                label: 'small_int',
-                                value: 'smallint',
-                            },
-                            {
-                                label: 'json',
-                                value: 'json',
-                            },
-                            {
-                                label: 'jsonb',
-                                value: 'jsonb',
-                            },
-                            {
-                                label: 'varchar',
-                                value: 'varchar',
-                            },
-                        ]}
+                        options={dataFieldOptions}
                         placeholder="Type"
-                        selected={''}
-                        onChange={(value) => console.log(value)}
+                        selected={field.type}
+                        onChange={(value) =>
+                            updateField(table.id, field.id, {
+                                type: value as FieldType,
+                            })
+                        }
                         emptyText="No types found."
                     />
                 </div>
-                <div className="flex">
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 text-xs h-8"
-                    >
-                        N
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
-                    >
-                        <KeyRound className="h-3.5" />
-                    </Button>
+                <div className="flex gap-1">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Toggle
+                                variant="default"
+                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 text-xs h-8"
+                                pressed={field.nullable}
+                                onPressedChange={(value) =>
+                                    updateField(table.id, field.id, {
+                                        nullable: value,
+                                    })
+                                }
+                            >
+                                N
+                            </Toggle>
+                        </TooltipTrigger>
+                        <TooltipContent>Nullable?</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Toggle
+                                variant="default"
+                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                                pressed={field.primaryKey}
+                                onPressedChange={(value) =>
+                                    updateField(table.id, field.id, {
+                                        primaryKey: value,
+                                    })
+                                }
+                            >
+                                <KeyRound className="h-3.5" />
+                            </Toggle>
+                        </TooltipTrigger>
+                        <TooltipContent>Primary Key</TooltipContent>
+                    </Tooltip>
                     <Button
                         variant="ghost"
                         className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
@@ -155,9 +186,9 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
-                        {renderField()}
-                        {renderField()}
-                        {renderField()}
+                        {table.fields.map((field) => (
+                            <RenderField field={field} key={field.id} />
+                        ))}
                     </AccordionContent>
                 </AccordionItem>
 
