@@ -1,6 +1,6 @@
-export const postgresTypes = ['bigint', 'bigserial'] as const;
-export const mysqlTypes = ['bigint', 'bigserial'] as const;
+export const postgresDataTypes = ['bigint', 'bigserial'] as const;
+export const mysqlDataTypes = ['bigint', 'bigserial'] as const;
 
 export const dataTypes = [
-    ...new Set([...postgresTypes, ...mysqlTypes]),
+    ...new Set([...postgresDataTypes, ...mysqlDataTypes]),
 ] as const;
