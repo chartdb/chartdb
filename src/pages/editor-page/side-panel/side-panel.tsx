@@ -21,7 +21,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                     value={selected}
                     onValueChange={(value) => setSelected(value)}
                 >
-                    <SelectTrigger className="border-none rounded-none	 shadow-none focus:border-transparent focus:ring-0 hover:underline hover:bg-secondary">
+                    <SelectTrigger className="border-none rounded-none shadow-none focus:border-transparent focus:ring-0 hover:underline hover:bg-secondary font-semibold">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
