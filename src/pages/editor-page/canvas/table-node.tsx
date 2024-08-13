@@ -10,7 +10,8 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { Ellipsis, Trash2 } from 'lucide-react';
+import { Ellipsis, Table2, Trash2 } from 'lucide-react';
+import { Label } from '@/components/label/label';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left-handle';
 export const RIGHT_HANDLE_ID_PREFIX = 'right-handle';
@@ -106,7 +107,10 @@ export const TableNode: React.FC<NodeProps<TableNodeProps>> = ({
                 style={{ backgroundColor: tableColor }}
             ></div>
             <div className="flex items-center h-9 bg-secondary px-2 justify-between group">
-                <div className="flex text-sm font-bold">table_1</div>
+                <div className="flex items-center gap-1">
+                    <Table2 className="h-3.5 w-3.5 text-gray-600" />
+                    <Label className="text-sm font-bold">table_1</Label>
+                </div>
                 <div className="flex-row hidden group-hover:flex">
                     <Button
                         variant="ghost"

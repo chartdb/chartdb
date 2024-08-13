@@ -13,11 +13,8 @@ export const convertToDecimal = (number: number) => {
     return number / Math.pow(10, digits); // Divide the number by 10^digits
 };
 
-// export const randomHSLA = () =>
-//     `hsla(${~~(360 * Math.random())}, 70%, 72%, 0.8)`;
-
-// creates randomHSLA using nanoid library instead of math.random
 export const randomHSLA = () =>
     `hsla(${~~(360 * convertToDecimal(parseInt(nanoid())))}, 70%, 72%, 0.8)`;
 
-export const emptyFn = () => {};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const emptyFn = (): any => undefined;

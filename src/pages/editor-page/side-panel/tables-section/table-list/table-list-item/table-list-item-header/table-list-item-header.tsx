@@ -32,7 +32,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const { updateTable, removeTable } = useChartDB();
+    const { updateTable, removeTable, createIndex, createField } = useChartDB();
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -68,11 +68,23 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                 <DropdownMenuLabel>Table Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="flex justify-between">
+                    <DropdownMenuItem
+                        className="flex justify-between"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            createField(table.id);
+                        }}
+                    >
                         Add field
                         <FileType2 className="w-3.5 h-3.5" />
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex justify-between">
+                    <DropdownMenuItem
+                        className="flex justify-between"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            createIndex(table.id);
+                        }}
+                    >
                         Add index
                         <FileKey2 className="w-3.5 h-3.5" />
                     </DropdownMenuItem>

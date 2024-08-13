@@ -34,6 +34,7 @@ interface ComboboxProps {
     onChange?: (event: string | string[]) => void; // Updated to handle multiple selections
     onCreate?: (value: string) => void;
     emptyText?: string;
+    popoverClassName?: string;
 }
 
 export function Combobox({
@@ -45,6 +46,7 @@ export function Combobox({
     emptyText,
     onChange,
     onCreate,
+    popoverClassName,
 }: ComboboxProps) {
     const [open, setOpen] = React.useState(false);
     const [query, setQuery] = React.useState<string>('');
@@ -90,7 +92,9 @@ export function Combobox({
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-40 max-w-sm p-0">
+                <PopoverContent
+                    className={cn('w-40 max-w-sm p-0', popoverClassName)}
+                >
                     <Command
                         filter={(value, search) => {
                             if (value.includes(search)) return 1;
