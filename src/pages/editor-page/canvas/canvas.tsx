@@ -78,7 +78,6 @@ export const Canvas: React.FC<CanvasProps> = () => {
                                 )
                                     ? 1
                                     : 0;
-
                                 return edge;
                             })
                         );
@@ -93,6 +92,10 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 fitView={false} // todo think about it
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
+                defaultEdgeOptions={{
+                    animated: true,
+                    type: 'table-edge',
+                }}
             >
                 <Controls />
                 <MiniMap

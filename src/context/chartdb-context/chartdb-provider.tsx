@@ -6,6 +6,7 @@ import { chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
+import { DBRelationship } from '@/lib/domain/db-relationship';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -14,6 +15,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         DatabaseType.GENERIC
     );
     const [tables, setTables] = React.useState<DBTable[]>([]);
+    const [relationships, setRelationships] = React.useState<DBRelationship[]>(
+        []
+    );
 
     const addTable = (table: DBTable) => {
         setTables((tables) => [...tables, table]);
@@ -186,11 +190,62 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         );
     };
 
+    const addRelationship = (relationship: DBRelationship) => {
+        setRelationships((relationships) => [...relationships, relationship]);
+    };
+
+    const createRelationship = ({
+        sourceTableId,
+        destinationTableId,
+        sourceFieldId,
+        destinationFieldId,
+    }: {
+        sourceTableId: string;
+        destinationTableId: string;
+        sourceFieldId: string;
+        destinationFieldId: string;
+    }) => {
+        const relationship: DBRelationship = {
+            id: nanoid(),
+            sourceTableId,
+            destinationTableId,
+            sourceFieldId,
+            destinationFieldId,
+            type: 'one-to-one',
+            createdAt: Date.now(),
+        };
+
+        addRelationship(relationship);
+
+        return relationship;
+    };
+
+    const getRelationship = (id: string) =>
+        relationships.find((relationship) => relationship.id === id) ?? null;
+
+    const removeRelationship = (id: string) => {
+        setRelationships((relationships) =>
+            relationships.filter((relationship) => relationship.id !== id)
+        );
+    };
+
+    const updateRelationship = (
+        id: string,
+        relationship: Partial<DBRelationship>
+    ) => {
+        setRelationships((relationships) =>
+            relationships.map((r) =>
+                r.id === id ? { ...r, ...relationship } : r
+            )
+        );
+    };
+
     return (
         <chartDBContext.Provider
             value={{
                 databaseType,
                 tables,
+                relationships,
                 setDatabaseType,
                 createTable,
                 addTable,
@@ -207,6 +262,11 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 getField,
                 getIndex,
                 updateIndex,
+                addRelationship,
+                createRelationship,
+                getRelationship,
+                removeRelationship,
+                updateRelationship,
             }}
         >
             {children}

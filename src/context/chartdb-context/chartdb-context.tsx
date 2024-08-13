@@ -4,10 +4,12 @@ import { emptyFn } from '@/lib/utils';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
+import { DBRelationship } from '@/lib/domain/db-relationship';
 
 export interface ChartDBContext {
     databaseType: DatabaseType;
     tables: DBTable[];
+    relationships: DBRelationship[];
 
     // Database type operations
     setDatabaseType: (databaseType: DatabaseType) => void;
@@ -40,11 +42,27 @@ export interface ChartDBContext {
         indexId: string,
         index: Partial<DBIndex>
     ) => void;
+
+    // Relationship operations
+    createRelationship: (params: {
+        sourceTableId: string;
+        destinationTableId: string;
+        sourceFieldId: string;
+        destinationFieldId: string;
+    }) => DBRelationship;
+    addRelationship: (relationship: DBRelationship) => void;
+    getRelationship: (id: string) => DBRelationship | null;
+    removeRelationship: (id: string) => void;
+    updateRelationship: (
+        id: string,
+        relationship: Partial<DBRelationship>
+    ) => void;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
     databaseType: DatabaseType.GENERIC,
     tables: [],
+    relationships: [],
 
     // Database type operations
     setDatabaseType: emptyFn,
@@ -69,4 +87,11 @@ export const chartDBContext = createContext<ChartDBContext>({
     getIndex: emptyFn,
     removeIndex: emptyFn,
     updateIndex: emptyFn,
+
+    // Relationship operations
+    createRelationship: emptyFn,
+    addRelationship: emptyFn,
+    getRelationship: emptyFn,
+    removeRelationship: emptyFn,
+    updateRelationship: emptyFn,
 });

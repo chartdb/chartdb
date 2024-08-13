@@ -36,12 +36,12 @@ export const TableEdge: React.FC<EdgeProps> = ({
 
     const sourceWidth = sourceNode?.measured.width ?? 0;
     const sourceLeftX =
-        sourceHandle === 'left' ? sourceX : sourceX - sourceWidth - 10;
+        sourceHandle === 'left' ? sourceX - 1 : sourceX - sourceWidth - 10;
     const sourceRightX =
         sourceHandle === 'left' ? sourceX + sourceWidth + 10 : sourceX;
 
     const targetWidth = targetNode?.measured.width ?? 0;
-    const targetLeftX = targetX;
+    const targetLeftX = targetX - 1;
     const targetRightX = targetX + targetWidth + 10;
 
     const { sourceSide, targetSide } = useMemo(() => {
