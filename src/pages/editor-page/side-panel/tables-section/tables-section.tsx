@@ -12,7 +12,6 @@ export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables } = useChartDB();
-    console.log('tables', tables);
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
