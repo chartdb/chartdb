@@ -70,6 +70,26 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         );
     };
 
+    const updateTablesState = (
+        updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
+    ) => {
+        setTables((prevTables) => {
+            const updatedTables = updateFn(prevTables);
+            return prevTables
+                .map((prevTable) => {
+                    const updatedTable = updatedTables.find(
+                        (t) => t.id === prevTable.id
+                    );
+                    return updatedTable
+                        ? { ...prevTable, ...updatedTable }
+                        : prevTable;
+                })
+                .filter((prevTable) =>
+                    updatedTables.some((t) => t.id === prevTable.id)
+                );
+        });
+    };
+
     const updateField = (
         tableId: string,
         fieldId: string,
@@ -261,6 +281,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 removeTable,
                 updateTable,
                 updateTables,
+                updateTablesState,
                 updateField,
                 removeField,
                 createField,

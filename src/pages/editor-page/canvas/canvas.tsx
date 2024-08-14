@@ -9,6 +9,7 @@ import {
     MiniMap,
     Controls,
     NodePositionChange,
+    NodeRemoveChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TableNode, TableNodeType } from './table-node';
@@ -23,7 +24,7 @@ const initialEdges: TableEdgeType[] = [];
 export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
-    const { tables, updateTables, createRelationship } = useChartDB();
+    const { tables, createRelationship, updateTablesState } = useChartDB();
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
 
@@ -71,14 +72,36 @@ export const Canvas: React.FC<CanvasProps> = () => {
                             (change) =>
                                 change.type === 'position' && !change.dragging
                         ) as NodePositionChange[];
+                    const removeChanges: NodeRemoveChange[] = changes.filter(
+                        (change) => change.type === 'remove'
+                    ) as NodeRemoveChange[];
 
-                    if (positionChanges.length > 0) {
-                        updateTables(
-                            positionChanges.map((change) => ({
-                                id: change.id,
-                                x: change.position?.x,
-                                y: change.position?.y,
-                            }))
+                    if (
+                        positionChanges.length > 0 ||
+                        removeChanges.length > 0
+                    ) {
+                        updateTablesState((currentTables) =>
+                            currentTables
+                                .map((currentTable) => {
+                                    const positionChange = positionChanges.find(
+                                        (change) =>
+                                            change.id === currentTable.id
+                                    );
+                                    if (positionChange) {
+                                        return {
+                                            id: currentTable.id,
+                                            x: positionChange.position?.x,
+                                            y: positionChange.position?.y,
+                                        };
+                                    }
+                                    return currentTable;
+                                })
+                                .filter(
+                                    (table) =>
+                                        !removeChanges.some(
+                                            (change) => change.id === table.id
+                                        )
+                                )
                         );
                     }
 

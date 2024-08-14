@@ -21,6 +21,9 @@ export interface ChartDBContext {
     removeTable: (id: string) => void;
     updateTable: (id: string, table: Partial<DBTable>) => void;
     updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => void;
+    updateTablesState: (
+        updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
+    ) => void;
 
     // Field operations
     getField: (tableId: string, fieldId: string) => DBField | null;
@@ -75,6 +78,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     addTable: emptyFn,
     removeTable: emptyFn,
     updateTable: emptyFn,
+    updateTablesState: emptyFn,
 
     // Field operations
     updateField: emptyFn,
