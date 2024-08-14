@@ -20,6 +20,7 @@ export interface ChartDBContext {
     getTable: (id: string) => DBTable | null;
     removeTable: (id: string) => void;
     updateTable: (id: string, table: Partial<DBTable>) => void;
+    updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => void;
 
     // Field operations
     getField: (tableId: string, fieldId: string) => DBField | null;
@@ -46,9 +47,9 @@ export interface ChartDBContext {
     // Relationship operations
     createRelationship: (params: {
         sourceTableId: string;
-        destinationTableId: string;
+        targetTableId: string;
         sourceFieldId: string;
-        destinationFieldId: string;
+        targetFieldId: string;
     }) => DBRelationship;
     addRelationship: (relationship: DBRelationship) => void;
     getRelationship: (id: string) => DBRelationship | null;
@@ -68,6 +69,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     setDatabaseType: emptyFn,
 
     // Table operations
+    updateTables: emptyFn,
     createTable: emptyFn,
     getTable: emptyFn,
     addTable: emptyFn,

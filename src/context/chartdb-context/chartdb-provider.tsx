@@ -1,7 +1,6 @@
 import React from 'react';
 import { DBTable } from '@/lib/domain/db-table';
-import { randomHSLA } from '@/lib/utils';
-import { nanoid } from 'nanoid';
+import { generateId, randomHSLA } from '@/lib/utils';
 import { chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
@@ -25,13 +24,13 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
     const createTable = () => {
         const table: DBTable = {
-            id: nanoid(),
+            id: generateId(),
             name: `table_${tables.length + 1}`,
             x: 0,
             y: 0,
             fields: [
                 {
-                    id: nanoid(),
+                    id: generateId(),
                     name: 'id',
                     type: 'bigint',
                     unique: true,
@@ -59,6 +58,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const updateTable = (id: string, table: Partial<DBTable>) => {
         setTables((tables) =>
             tables.map((t) => (t.id === id ? { ...t, ...table } : t))
+        );
+    };
+
+    const updateTables = (tables: PartialExcept<DBTable, 'id'>[]) => {
+        setTables((currentTables) =>
+            currentTables.map((table) => {
+                const updatedTable = tables.find((t) => t.id === table.id);
+                return updatedTable ? { ...table, ...updatedTable } : table;
+            })
         );
     };
 
@@ -112,7 +120,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const createField = (tableId: string) => {
         const table = getTable(tableId);
         const field: DBField = {
-            id: nanoid(),
+            id: generateId(),
             name: `field_${(table?.fields?.length ?? 0) + 1}`,
             type: 'bigint',
             unique: false,
@@ -154,7 +162,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const createIndex = (tableId: string) => {
         const table = getTable(tableId);
         const index: DBIndex = {
-            id: nanoid(),
+            id: generateId(),
             name: `index_${(table?.indexes?.length ?? 0) + 1}`,
             fieldIds: [],
             unique: false,
@@ -196,21 +204,21 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
     const createRelationship = ({
         sourceTableId,
-        destinationTableId,
+        targetTableId,
         sourceFieldId,
-        destinationFieldId,
+        targetFieldId,
     }: {
         sourceTableId: string;
-        destinationTableId: string;
+        targetTableId: string;
         sourceFieldId: string;
-        destinationFieldId: string;
+        targetFieldId: string;
     }) => {
         const relationship: DBRelationship = {
-            id: nanoid(),
+            id: generateId(),
             sourceTableId,
-            destinationTableId,
+            targetTableId,
             sourceFieldId,
-            destinationFieldId,
+            targetFieldId,
             type: 'one-to-one',
             createdAt: Date.now(),
         };
@@ -252,6 +260,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 getTable,
                 removeTable,
                 updateTable,
+                updateTables,
                 updateField,
                 removeField,
                 createField,

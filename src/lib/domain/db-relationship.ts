@@ -1,9 +1,9 @@
 export interface DBRelationship {
     id: string;
     sourceTableId: string;
-    destinationTableId: string;
+    targetTableId: string;
     sourceFieldId: string;
-    destinationFieldId: string;
+    targetFieldId: string;
     type: RelationshipType;
     createdAt: number;
 }

@@ -21,6 +21,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import { useReactFlow } from '@xyflow/react';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -29,6 +30,7 @@ export interface TableListItemHeaderProps {
 export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
+    const { fitView } = useReactFlow();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -51,6 +53,22 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     ) => {
         event.stopPropagation();
         setEditMode(true);
+    };
+
+    const focusOnTable = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        event.stopPropagation();
+        fitView({
+            duration: 500,
+            maxZoom: 1,
+            minZoom: 1,
+            nodes: [
+                {
+                    id: table.id,
+                },
+            ],
+        });
     };
 
     const deleteTableHandler = () => {
@@ -129,7 +147,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>
-                            <ListItemHeaderButton>
+                            <ListItemHeaderButton onClick={focusOnTable}>
                                 <CircleDotDashed />
                             </ListItemHeaderButton>
                         </div>

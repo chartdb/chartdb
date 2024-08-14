@@ -1,14 +1,23 @@
 import React, { useMemo } from 'react';
 import {
     BaseEdge,
+    Edge,
     EdgeProps,
     getSmoothStepPath,
     Position,
     useReactFlow,
 } from '@xyflow/react';
 import { RIGHT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node';
+import { DBRelationship } from '@/lib/domain/db-relationship';
 
-export const TableEdge: React.FC<EdgeProps> = ({
+export type TableEdgeType = Edge<
+    {
+        relationship: DBRelationship;
+    },
+    'table-edge'
+>;
+
+export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
     id,
     sourceX,
     sourceY,

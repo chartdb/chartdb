@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
     ReactFlow,
     useEdgesState,
@@ -8,54 +8,56 @@ import {
     BackgroundVariant,
     MiniMap,
     Controls,
-    Edge,
-    Node,
+    NodePositionChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { TableNode } from './table-node';
-import { TableEdge } from './table-edge';
+import { TableNode, TableNodeType } from './table-node';
+import { TableEdge, TableEdgeType } from './table-edge';
+import { useChartDB } from '@/hooks/use-chartdb';
+
+type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
+
+const initialNodes: TableNodeType[] = [];
+const initialEdges: TableEdgeType[] = [];
 
 export interface CanvasProps {}
 
-const initialNodes: Node[] = [
-    {
-        id: '3',
-        type: 'table',
-        position: { x: 200, y: 200 },
-        data: { label: '3' },
-        zIndex: 2,
-    },
-    {
-        id: '1',
-        type: 'table',
-        position: { x: 400, y: 400 },
-        data: { label: '1' },
-        zIndex: 2,
-    },
-    {
-        id: '2',
-        type: 'table',
-        position: { x: 0, y: 0 },
-        data: { label: '2' },
-        zIndex: 2,
-    },
-    // { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-    // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-];
-// const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-const initialEdges: Edge[] = [];
-
 export const Canvas: React.FC<CanvasProps> = () => {
+    const { tables, updateTables, createRelationship } = useChartDB();
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
 
-    const [nodes, , onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] =
+        useNodesState<TableNodeType>(initialNodes);
+    const [edges, setEdges, onEdgesChange] =
+        useEdgesState<TableEdgeType>(initialEdges);
+
+    useEffect(() => {
+        setNodes(
+            tables.map((table) => ({
+                id: table.id,
+                type: 'table',
+                position: { x: table.x, y: table.y },
+                data: {
+                    table,
+                },
+            }))
+        );
+    }, [tables, setNodes]);
 
     const onConnect = useCallback(
-        (params: Parameters<typeof addEdge>[0]) =>
-            setEdges((eds) => addEdge({ ...params, type: 'table-edge' }, eds)),
-        [setEdges]
+        (params: AddEdgeParams) => {
+            createRelationship({
+                sourceTableId: params.source,
+                targetTableId: params.target,
+                sourceFieldId: params.sourceHandle?.split('_')?.pop() ?? '',
+                targetFieldId: params.targetHandle?.split('_')?.pop() ?? '',
+            });
+            return setEdges((edges) =>
+                addEdge<TableEdgeType>({ ...params }, edges)
+            );
+        },
+        [setEdges, createRelationship]
     );
 
     return (
@@ -63,7 +65,25 @@ export const Canvas: React.FC<CanvasProps> = () => {
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={onNodesChange}
+                onNodesChange={(changes) => {
+                    const positionChanges: NodePositionChange[] =
+                        changes.filter(
+                            (change) =>
+                                change.type === 'position' && !change.dragging
+                        ) as NodePositionChange[];
+
+                    if (positionChanges.length > 0) {
+                        updateTables(
+                            positionChanges.map((change) => ({
+                                id: change.id,
+                                x: change.position?.x,
+                                y: change.position?.y,
+                            }))
+                        );
+                    }
+
+                    return onNodesChange(changes);
+                }}
                 onEdgesChange={(changes) => {
                     const selectionChanges = changes.filter(
                         (change) => change.type === 'select'

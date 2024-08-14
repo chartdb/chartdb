@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
-const nanoid = customAlphabet('1234567890', 18);
+
+const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz-', 23);
+const randonNumber = customAlphabet('1234567890', 18);
 
 import { twMerge } from 'tailwind-merge';
 
@@ -14,7 +16,9 @@ export const convertToDecimal = (number: number) => {
 };
 
 export const randomHSLA = () =>
-    `hsla(${~~(360 * convertToDecimal(parseInt(nanoid())))}, 70%, 72%, 0.8)`;
+    `hsla(${~~(360 * convertToDecimal(parseInt(randonNumber())))}, 70%, 72%, 0.8)`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const emptyFn = (): any => undefined;
+
+export const generateId = () => randomId();
