@@ -8,9 +8,10 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { DBRelationship } from '@/lib/domain/db-relationship';
+import { DBRelationship, RelationshipType } from '@/lib/domain/db-relationship';
+import { useReactFlow } from '@xyflow/react';
 import { FileMinus2, FileOutput, Trash2 } from 'lucide-react';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 export interface RelationshipListItemContentProps {
     relationship: DBRelationship;
@@ -19,7 +20,9 @@ export interface RelationshipListItemContentProps {
 export const RelationshipListItemContent: React.FC<
     RelationshipListItemContentProps
 > = ({ relationship }) => {
-    const { getTable, getField } = useChartDB();
+    const { getTable, getField, updateRelationship, removeRelationship } =
+        useChartDB();
+    const { deleteElements } = useReactFlow();
 
     const targetTable = getTable(relationship.targetTableId);
     const targetField = getField(
@@ -32,6 +35,14 @@ export const RelationshipListItemContent: React.FC<
         relationship.sourceTableId,
         relationship.sourceFieldId
     );
+
+    const deleteRelationshipHandler = useCallback(() => {
+        removeRelationship(relationship.id);
+        deleteElements({
+            edges: [{ id: relationship.id }],
+        });
+    }, [relationship.id, removeRelationship, deleteElements]);
+
     return (
         <div className="rounded-b-md px-1 flex flex-col my-1">
             <div className="flex flex-col gap-6">
@@ -67,7 +78,12 @@ export const RelationshipListItemContent: React.FC<
                         </div>
                     </div>
 
-                    <Select defaultValue={'one_to_one'}>
+                    <Select
+                        value={relationship.type}
+                        onValueChange={(value: RelationshipType) =>
+                            updateRelationship(relationship.id, { type: value })
+                        }
+                    >
                         <SelectTrigger className="h-8">
                             <SelectValue />
                         </SelectTrigger>
@@ -88,7 +104,11 @@ export const RelationshipListItemContent: React.FC<
                 </div>
             </div>
             <div className="flex items-center justify-center flex-1 pt-2">
-                <Button variant="ghost" className="text-xs h-8 p-2">
+                <Button
+                    variant="ghost"
+                    className="text-xs h-8 p-2"
+                    onClick={deleteRelationshipHandler}
+                >
                     <Trash2 className="h-3.5 w-3.5 mr-1 text-red-700" />
                     <div className="text-red-700">Delete</div>
                 </Button>
