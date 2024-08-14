@@ -10,6 +10,7 @@ import {
     Controls,
     NodePositionChange,
     NodeRemoveChange,
+    useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TableNode, TableNodeType } from './table-node';
@@ -24,7 +25,13 @@ const initialEdges: TableEdgeType[] = [];
 export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
-    const { tables, createRelationship, updateTablesState } = useChartDB();
+    const { getEdge } = useReactFlow();
+    const {
+        tables,
+        createRelationship,
+        updateTablesState,
+        removeRelationships,
+    } = useChartDB();
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
 
@@ -48,14 +55,17 @@ export const Canvas: React.FC<CanvasProps> = () => {
 
     const onConnect = useCallback(
         (params: AddEdgeParams) => {
-            createRelationship({
+            const relationship = createRelationship({
                 sourceTableId: params.source,
                 targetTableId: params.target,
                 sourceFieldId: params.sourceHandle?.split('_')?.pop() ?? '',
                 targetFieldId: params.targetHandle?.split('_')?.pop() ?? '',
             });
             return setEdges((edges) =>
-                addEdge<TableEdgeType>({ ...params }, edges)
+                addEdge<TableEdgeType>(
+                    { ...params, data: { relationship }, id: relationship.id },
+                    edges
+                )
             );
         },
         [setEdges, createRelationship]
@@ -108,6 +118,22 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     return onNodesChange(changes);
                 }}
                 onEdgesChange={(changes) => {
+                    const removeChanges: NodeRemoveChange[] = changes.filter(
+                        (change) => change.type === 'remove'
+                    ) as NodeRemoveChange[];
+
+                    const relationshipsToRemove: string[] = removeChanges
+                        .map(
+                            (change) =>
+                                (getEdge(change.id) as TableEdgeType)?.data
+                                    ?.relationship?.id
+                        )
+                        .filter((id) => !!id) as string[];
+
+                    if (relationshipsToRemove.length > 0) {
+                        removeRelationships(...relationshipsToRemove);
+                    }
+
                     const selectionChanges = changes.filter(
                         (change) => change.type === 'select'
                     );

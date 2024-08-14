@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@/components/button/button';
 import { ListCollapse } from 'lucide-react';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Input } from '@/components/input/input';
 import { RelationshipList } from './relationship-list/relationship-list';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { DBRelationship } from '@/lib/domain/db-relationship';
 
 export interface RelationshipsSectionProps {}
 
 export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
+    const { relationships } = useChartDB();
+    const [filterText, setFilterText] = React.useState('');
+
+    const filteredRelationships = useMemo(() => {
+        const filter: (relationship: DBRelationship) => boolean = (
+            relationship
+        ) =>
+            !filterText?.trim?.() ||
+            relationship.name.toLowerCase().includes(filterText.toLowerCase());
+
+        return relationships.filter(filter);
+    }, [relationships, filterText]);
+
     return (
         <section className="flex flex-col px-2 overflow-hidden flex-1">
             <div className="flex items-center py-1 justify-between gap-4">
@@ -21,12 +36,14 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                         type="text"
                         placeholder="Filter"
                         className="h-8 focus-visible:ring-0 w-full"
+                        value={filterText}
+                        onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
             </div>
             <div className="flex flex-col flex-1 overflow-hidden">
                 <ScrollArea className="h-full">
-                    <RelationshipList />
+                    <RelationshipList relationships={filteredRelationships} />
                 </ScrollArea>
             </div>
         </section>

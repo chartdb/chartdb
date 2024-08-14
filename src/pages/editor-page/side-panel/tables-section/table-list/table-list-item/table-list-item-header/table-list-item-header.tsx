@@ -6,6 +6,7 @@ import {
     Trash2,
     FileType2,
     FileKey2,
+    Check,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/relationship-list-item-header-button';
 import { DBTable } from '@/lib/domain/db-table';
@@ -30,11 +31,11 @@ export interface TableListItemHeaderProps {
 export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
-    const { fitView } = useReactFlow();
+    const { updateTable, removeTable, createIndex, createField } = useChartDB();
+    const { fitView, setNodes } = useReactFlow();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const { updateTable, removeTable, createIndex, createField } = useChartDB();
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -55,75 +56,92 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         setEditMode(true);
     };
 
-    const focusOnTable = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
-        fitView({
-            duration: 500,
-            maxZoom: 1,
-            minZoom: 1,
-            nodes: [
-                {
-                    id: table.id,
-                },
-            ],
-        });
-    };
+    const focusOnTable = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.stopPropagation();
+            setNodes((nodes) =>
+                nodes.map((node) =>
+                    node.id == table.id
+                        ? {
+                              ...node,
+                              selected: true,
+                          }
+                        : {
+                              ...node,
+                              selected: false,
+                          }
+                )
+            );
+            fitView({
+                duration: 500,
+                maxZoom: 1,
+                minZoom: 1,
+                nodes: [
+                    {
+                        id: table.id,
+                    },
+                ],
+            });
+        },
+        [fitView, table.id, setNodes]
+    );
 
-    const deleteTableHandler = () => {
+    const deleteTableHandler = useCallback(() => {
         removeTable(table.id);
-    };
+    }, [table.id, removeTable]);
 
-    const renderDropDownMenu = () => (
-        <DropdownMenu>
-            <DropdownMenuTrigger>
-                <ListItemHeaderButton>
-                    <EllipsisVertical />
-                </ListItemHeaderButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40">
-                <DropdownMenuLabel>Table Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem
-                        className="flex justify-between"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            createField(table.id);
-                        }}
-                    >
-                        Add field
-                        <FileType2 className="w-3.5 h-3.5" />
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        className="flex justify-between"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            createIndex(table.id);
-                        }}
-                    >
-                        Add index
-                        <FileKey2 className="w-3.5 h-3.5" />
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem
-                        onClick={deleteTableHandler}
-                        className="flex justify-between !text-red-700"
-                    >
-                        Delete table
-                        <Trash2 className="text-red-700 w-3.5 h-3.5" />
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+    const renderDropDownMenu = useCallback(
+        () => (
+            <DropdownMenu>
+                <DropdownMenuTrigger>
+                    <ListItemHeaderButton>
+                        <EllipsisVertical />
+                    </ListItemHeaderButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40">
+                    <DropdownMenuLabel>Table Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            className="flex justify-between"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                createField(table.id);
+                            }}
+                        >
+                            Add field
+                            <FileType2 className="w-3.5 h-3.5" />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="flex justify-between"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                createIndex(table.id);
+                            }}
+                        >
+                            Add index
+                            <FileKey2 className="w-3.5 h-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            onClick={deleteTableHandler}
+                            className="flex justify-between !text-red-700"
+                        >
+                            Delete table
+                            <Trash2 className="text-red-700 w-3.5 h-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        ),
+        [table.id, createField, createIndex, deleteTableHandler]
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 group">
-            <div>
+        <div className="h-11 flex items-center justify-between flex-1 gap-1 group">
+            <div className="flex flex-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -140,7 +158,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                 )}
             </div>
             <div className="flex flex-row-reverse">
-                {!editMode && (
+                {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
                         <div className="hidden group-hover:flex flex-row-reverse">
@@ -152,6 +170,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             </ListItemHeaderButton>
                         </div>
                     </>
+                ) : (
+                    <ListItemHeaderButton onClick={editTableName}>
+                        <Check />
+                    </ListItemHeaderButton>
                 )}
             </div>
         </div>

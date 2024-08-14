@@ -57,6 +57,7 @@ export interface ChartDBContext {
     addRelationship: (relationship: DBRelationship) => void;
     getRelationship: (id: string) => DBRelationship | null;
     removeRelationship: (id: string) => void;
+    removeRelationships: (...ids: string[]) => void;
     updateRelationship: (
         id: string,
         relationship: Partial<DBRelationship>
@@ -100,4 +101,5 @@ export const chartDBContext = createContext<ChartDBContext>({
     getRelationship: emptyFn,
     removeRelationship: emptyFn,
     updateRelationship: emptyFn,
+    removeRelationships: emptyFn,
 });

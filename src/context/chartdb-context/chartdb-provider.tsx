@@ -233,13 +233,16 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         sourceFieldId: string;
         targetFieldId: string;
     }) => {
+        const sourceTableName = getTable(sourceTableId)?.name ?? '';
+        const targetTableName = getTable(targetTableId)?.name ?? '';
         const relationship: DBRelationship = {
             id: generateId(),
+            name: `${sourceTableName}_${targetTableName}_fk`,
             sourceTableId,
             targetTableId,
             sourceFieldId,
             targetFieldId,
-            type: 'one-to-one',
+            type: 'one_to_one',
             createdAt: Date.now(),
         };
 
@@ -254,6 +257,14 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const removeRelationship = (id: string) => {
         setRelationships((relationships) =>
             relationships.filter((relationship) => relationship.id !== id)
+        );
+    };
+
+    const removeRelationships = (...ids: string[]) => {
+        setRelationships((relationships) =>
+            relationships.filter(
+                (relationship) => !ids.includes(relationship.id)
+            )
         );
     };
 
@@ -296,6 +307,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 createRelationship,
                 getRelationship,
                 removeRelationship,
+                removeRelationships,
                 updateRelationship,
             }}
         >

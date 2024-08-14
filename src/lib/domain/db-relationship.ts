@@ -1,5 +1,6 @@
 export interface DBRelationship {
     id: string;
+    name: string;
     sourceTableId: string;
     targetTableId: string;
     sourceFieldId: string;
@@ -9,7 +10,7 @@ export interface DBRelationship {
 }
 
 export type RelationshipType =
-    | 'one-to-one'
-    | 'one-to-many'
-    | 'many-to-one'
-    | 'many-to-many';
+    | 'one_to_one'
+    | 'one_to_many'
+    | 'many_to_one'
+    | 'many_to_many';
