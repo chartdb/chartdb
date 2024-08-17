@@ -9,7 +9,7 @@
 </p>
 
 <h3 align="center">
-  <a href="https://join.slack.com/t/chartdbcommunity/shared_invite/_1234">Community</a> |
+  <a href="https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg">Community</a> |
   <a href="https://www.chartdb.io">Website</a>
 </h3>
 
@@ -21,9 +21,9 @@
     <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs welcome!" />
   </a>
   <a href="https://join.slack.com/t/chartdbcommunity/shared_invite/_1234">
-    <img src="https://img.shields.io/badge/Join%20Slack-purple?logo=slack&link=https%3A%2F%2Fjoin.slack.com%2Ft%2Fchartdbcommunity%2Fshared_invite%2F_1234" alt="Slack community channel" />
+    <img src="https://img.shields.io/badge/Join%20Slack-purple?logo=slack&link=https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg" alt="Slack community channel" />
   </a>
-  <a href="https://twitter.com/ChartDB">
+  <a href="https://x.com/chartdb_io">
     <img src="https://img.shields.io/twitter/follow/ChartDB?style=social"/>
   </a>
 
@@ -33,7 +33,7 @@
 
 **🎉 ChartDB**:
 ChartDB is a powerful and intuitive database diagramming editor that runs as a SaaS application via a website.
-Effortlessly visualize and design your database schemas with a single **Smart Query** that fetches your entire database structure.
+Effortlessly visualize and design your database schemas with a single "**Smart Query**" that fetches your entire database structure.
 Customize your diagrams, export SQL scripts, and explore a full suite of features—all without the need to create an account.
 Dive into a seamless database design experience and discover the complete feature set here.
 
@@ -60,14 +60,14 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 
 ## 💚 Community & Support
 
-- [Slack](https://chartdb.io/slack) (For live discussion with the community and the ChartDB team)
+- [Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg) (For live discussion with the community and the ChartDB team)
 - [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
-- [Twitter](https://twitter.com/chartdb) (Get news fast)
+- [Twitter](https://x.com/chartdb_io) (Get news fast)
 
 ## Contributing
 
 We welcome community contributions, big or small, and are here to guide you along
-the way. Message us in the [ChartDB Community Slack](https://join.slack.com/t/chartdbcommunity/shared_invite/213123123213). Once you contribute, ping us in Slack and we'll send you some ChartDB swag!
+the way. Message us in the [ChartDB Community Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg). Once you contribute, ping us in Slack and we'll send you some ChartDB swag!
 
 For more information on how to contribute, please see our
 [Contributing Guide](/CONTRIBUTING.md).
@@ -79,4 +79,4 @@ Thank you for helping us make ChartDB better for everyone :heart:.
 
 ## License
 
-ChartDB is licensed under the [GNU Affero General Public License v3.0](LICENSE) and as commercial software.
+ChartDB is licensed under the [GNU Affero General Public License v3.0](LICENSE)
