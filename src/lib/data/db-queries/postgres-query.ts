@@ -1,4 +1,4 @@
-import { minimizeQuery } from './minimizeQuery';
+import { minimizeQuery } from './minimize-query';
 
 const rawPostgresQuery = `
 WITH fk_info AS (
@@ -113,5 +113,5 @@ select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
                   '], "server_name": "', '', '", "version": "', '',
             '"}') as " "
 from cols,indexes_metadata, tbls, config, views, fk_info;
-`
+`;
 export const postgresQuery = minimizeQuery(rawPostgresQuery);
