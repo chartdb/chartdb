@@ -38,7 +38,7 @@ export const EditorPage: React.FC = () => {
             }
         };
         loadDefaultDiagram();
-    }, [diagramId, openCreateDiagramDialog, config, navigate]);
+    }, [diagramId, openCreateDiagramDialog, config, navigate, loadDiagram]);
 
     return (
         <section className="bg-background h-screen w-screen flex flex-col">
