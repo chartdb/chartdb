@@ -6,12 +6,13 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
-import { Diagram } from '@/lib/domain/diagram';
+import { useData } from '@/hooks/use-data';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [diagramId, setDiagramId] = React.useState('');
+    const { getDiagram } = useData();
     const [diagramName, setDiagramName] = React.useState('New Diagram');
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
@@ -286,10 +287,21 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         );
     };
 
-    const loadDiagram = (diagramId: string) => {
-        // TODO: Implement loading diagram
-        console.log('Loading diagram', diagramId);
-        return Promise.resolve({} as Diagram);
+    const loadDiagram = async (diagramId: string) => {
+        const diagram = await getDiagram(diagramId, {
+            includeRelationships: true,
+            includeTables: true,
+        });
+
+        if (diagram) {
+            setDiagramId(diagram.id);
+            setDiagramName(diagram.name);
+            setDatabaseType(diagram.databaseType);
+            setTables(diagram.tables);
+            setRelationships(diagram.relationships);
+        }
+
+        return diagram;
     };
 
     return (

@@ -11,8 +11,10 @@ import { Canvas } from './canvas/canvas';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useConfig } from '@/hooks/use-config';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export const EditorPage: React.FC = () => {
+    const { loadDiagram } = useChartDB();
     const { openCreateDiagramDialog } = useCreateDiagramDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
@@ -23,14 +25,19 @@ export const EditorPage: React.FC = () => {
             return;
         }
 
-        if (diagramId) {
-            // load diagram
-            console.log('load diagram to memory');
-        } else if (!diagramId && config.defaultDiagramId) {
-            navigate(`/diagrams/${config.defaultDiagramId}`);
-        } else {
-            openCreateDiagramDialog();
-        }
+        const loadDefaultDiagram = async () => {
+            if (diagramId) {
+                const diagram = await loadDiagram(diagramId);
+                if (!diagram) {
+                    navigate('/');
+                }
+            } else if (!diagramId && config.defaultDiagramId) {
+                navigate(`/diagrams/${config.defaultDiagramId}`);
+            } else {
+                openCreateDiagramDialog();
+            }
+        };
+        loadDefaultDiagram();
     }, [diagramId, openCreateDiagramDialog, config, navigate]);
 
     return (

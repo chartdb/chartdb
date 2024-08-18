@@ -65,8 +65,28 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return await db.diagrams.toArray();
     };
 
-    const getDiagram = async (id: string): Promise<Diagram | undefined> => {
-        return await db.diagrams.get(id);
+    const getDiagram = async (
+        id: string,
+        options: {
+            includeTables?: boolean;
+            includeRelationships?: boolean;
+        } = { includeRelationships: false, includeTables: false }
+    ): Promise<Diagram | undefined> => {
+        const diagram = await db.diagrams.get(id);
+
+        if (!diagram) {
+            return undefined;
+        }
+
+        if (options.includeTables) {
+            diagram.tables = await listTables(id);
+        }
+
+        if (options.includeRelationships) {
+            diagram.relationships = await listRelationships(id);
+        }
+
+        return diagram;
     };
 
     const updateDiagram = async ({

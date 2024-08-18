@@ -17,6 +17,7 @@ import { Check, Pencil } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
+import ChartDBLogo from '@/assets/logo.png';
 
 export interface TopNavbarProps {}
 
@@ -46,9 +47,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setEditMode(true);
     };
     return (
-        <nav className="flex flex-row items-center justify-between px-4">
+        <nav className="flex flex-row items-center justify-between px-4 h-12">
             <div className="flex flex-1 justify-start gap-x-3">
-                <div className="flex font-primary items-center">chartDB</div>
+                <div className="flex font-primary items-center">
+                    <img src={ChartDBLogo} alt="chartDB" className="h-4" />
+                </div>
                 <div>
                     <Menubar className="border-none shadow-none">
                         <MenubarMenu>

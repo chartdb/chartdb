@@ -13,7 +13,13 @@ export interface DataContext {
     // Diagram operations
     addDiagram: (params: { diagram: Diagram }) => Promise<void>;
     listDiagrams: () => Promise<Diagram[]>;
-    getDiagram: (id: string) => Promise<Diagram | undefined>;
+    getDiagram: (
+        id: string,
+        options?: {
+            includeTables?: boolean;
+            includeRelationships?: boolean;
+        }
+    ) => Promise<Diagram | undefined>;
     updateDiagram: (params: {
         id: string;
         diagram: Partial<Diagram>;

@@ -17,7 +17,7 @@ export interface ChartDBContext {
     // General operations
     updateDiagramId: (id: string) => void;
     updateDiagramName: (name: string) => void;
-    loadDiagram: (diagramId: string) => Promise<Diagram | null>;
+    loadDiagram: (diagramId: string) => Promise<Diagram | undefined>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => void;
