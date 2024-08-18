@@ -5,6 +5,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
+import { Diagram } from '@/lib/domain/diagram';
 
 export interface ChartDBContext {
     diagramId: string;
@@ -16,6 +17,7 @@ export interface ChartDBContext {
     // General operations
     updateDiagramId: (id: string) => void;
     updateDiagramName: (name: string) => void;
+    loadDiagram: (diagramId: string) => Promise<Diagram | null>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => void;
@@ -80,6 +82,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     // General operations
     updateDiagramId: emptyFn,
     updateDiagramName: emptyFn,
+    loadDiagram: emptyFn,
 
     // Database type operations
     updateDatabaseType: emptyFn,

@@ -3,8 +3,13 @@ import { Diagram } from '@/lib/domain/diagram';
 import { emptyFn } from '@/lib/utils';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { DBTable } from '@/lib/domain/db-table';
+import { ChartDBConfig } from '@/lib/domain/config';
 
 export interface DataContext {
+    // Config operations
+    getConfig: () => Promise<ChartDBConfig | undefined>;
+    updateConfig: (config: Partial<ChartDBConfig>) => Promise<void>;
+
     // Diagram operations
     addDiagram: (params: { diagram: Diagram }) => Promise<void>;
     listDiagrams: () => Promise<Diagram[]>;
@@ -49,6 +54,9 @@ export interface DataContext {
 }
 
 export const dataContext = createContext<DataContext>({
+    getConfig: emptyFn,
+    updateConfig: emptyFn,
+
     addDiagram: emptyFn,
     listDiagrams: emptyFn,
     getDiagram: emptyFn,

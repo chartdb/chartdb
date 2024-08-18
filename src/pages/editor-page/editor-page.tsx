@@ -8,18 +8,30 @@ import {
 } from '@/components/resizable/resizable';
 import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
+import { useConfig } from '@/hooks/use-config';
 
 export const EditorPage: React.FC = () => {
     const { openCreateDiagramDialog } = useCreateDiagramDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
+    const { config } = useConfig();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!diagramId) {
+        if (!config) {
+            return;
+        }
+
+        if (diagramId) {
+            // load diagram
+            console.log('load diagram to memory');
+        } else if (!diagramId && config.defaultDiagramId) {
+            navigate(`/diagrams/${config.defaultDiagramId}`);
+        } else {
             openCreateDiagramDialog();
         }
-    }, [diagramId, openCreateDiagramDialog]);
+    }, [diagramId, openCreateDiagramDialog, config, navigate]);
 
     return (
         <section className="bg-background h-screen w-screen flex flex-col">

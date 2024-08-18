@@ -20,6 +20,7 @@ import { Diagram } from '@/lib/domain/diagram';
 import { generateId } from '@/lib/utils';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useNavigate } from 'react-router-dom';
+import { useConfig } from '@/hooks/use-config';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -37,6 +38,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         DatabaseType.GENERIC
     );
     const { closeCreateDiagramDialog } = useCreateDiagramDialog();
+    const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = React.useState('');
     const [step, setStep] = React.useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
@@ -48,7 +50,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     useEffect(() => {
         const fetchDiagrams = async () => {
             const diagrams = await listDiagrams();
-            console.log({ diagrams });
             setDiagramNumber(diagrams.length + 1);
         };
         fetchDiagrams();
@@ -63,6 +64,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             relationships: [],
         };
         await addDiagram({ diagram });
+        await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [
@@ -71,6 +73,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         addDiagram,
         closeCreateDiagramDialog,
         navigate,
+        updateConfig,
     ]);
 
     const renderDatabaseOption = useCallback((type: DatabaseType) => {

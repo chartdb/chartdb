@@ -4,6 +4,7 @@ import Dexie, { type EntityTable } from 'dexie';
 import { Diagram } from '@/lib/domain/diagram';
 import { DBTable } from '@/lib/domain/db-table';
 import { DBRelationship } from '@/lib/domain/db-relationship';
+import { ChartDBConfig } from '@/lib/domain/config';
 
 export const DataProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -21,6 +22,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
             DBRelationship & { diagramId: string },
             'id' // primary key "id" (for the typings only)
         >;
+        config: EntityTable<
+            ChartDBConfig & { id: number },
+            'id' // primary key "id" (for the typings only)
+        >;
     };
 
     // Schema declaration:
@@ -30,7 +35,27 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
             '++id, diagramId, name, x, y, fields, indexes, color, createdAt',
         db_relationships:
             '++id, diagramId, name, sourceTableId, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+        config: '++id, defaultDiagramId',
     });
+
+    db.on('ready', async () => {
+        const config = await getConfig();
+
+        if (!config) {
+            await db.config.add({
+                id: 1,
+                defaultDiagramId: '',
+            });
+        }
+    });
+
+    const getConfig = async (): Promise<ChartDBConfig | undefined> => {
+        return await db.config.get(1);
+    };
+
+    const updateConfig = async (config: Partial<ChartDBConfig>) => {
+        await db.config.update(1, config);
+    };
 
     const addDiagram = async ({ diagram }: { diagram: Diagram }) => {
         await db.diagrams.add(diagram);
@@ -167,6 +192,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     return (
         <dataContext.Provider
             value={{
+                getConfig,
+                updateConfig,
                 addDiagram,
                 listDiagrams,
                 getDiagram,

@@ -6,6 +6,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
+import { Diagram } from '@/lib/domain/diagram';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -285,6 +286,11 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         );
     };
 
+    const loadDiagram = (diagramId: string) => {
+        console.log('Loading diagram', diagramId);
+        return Promise.resolve({} as Diagram);
+    };
+
     return (
         <chartDBContext.Provider
             value={{
@@ -295,6 +301,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 relationships,
                 updateDiagramId,
                 updateDiagramName,
+                loadDiagram,
                 updateDatabaseType,
                 createTable,
                 addTable,
