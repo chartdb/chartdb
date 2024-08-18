@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     Menubar,
-    MenubarCheckboxItem,
     MenubarContent,
     MenubarItem,
     MenubarMenu,
@@ -13,10 +12,39 @@ import {
     MenubarTrigger,
 } from '@/components/menubar/menubar';
 import { Label } from '@/components/label/label';
+import { Button } from '@/components/button/button';
+import { Check, Pencil } from 'lucide-react';
+import { Input } from '@/components/input/input';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { useClickAway, useKeyPressEvent } from 'react-use';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
+    const { diagramName, updateDiagramName } = useChartDB();
+    const [editMode, setEditMode] = React.useState(false);
+    const [editedDiagramName, setEditedDiagramName] =
+        React.useState(diagramName);
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
+    const editDiagramName = useCallback(() => {
+        if (!editMode) return;
+        if (editedDiagramName.trim()) {
+            updateDiagramName(editedDiagramName.trim());
+        }
+
+        setEditMode(false);
+    }, [editedDiagramName, updateDiagramName, editMode]);
+
+    useClickAway(inputRef, editDiagramName);
+    useKeyPressEvent('Enter', editDiagramName);
+
+    const enterEditMode = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        event.stopPropagation();
+        setEditMode(true);
+    };
     return (
         <nav className="flex flex-row items-center justify-between px-4">
             <div className="flex flex-1 justify-start gap-x-3">
@@ -27,17 +55,27 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <MenubarTrigger>File</MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem>
-                                    New Tab{' '}
+                                    New
                                     <MenubarShortcut>⌘T</MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarItem>
-                                    New Window{' '}
+                                    New Window
                                     <MenubarShortcut>⌘N</MenubarShortcut>
                                 </MenubarItem>
-                                <MenubarItem disabled>
-                                    New Incognito Window
-                                </MenubarItem>
+                                <MenubarItem>Open</MenubarItem>
+                                <MenubarItem>Save</MenubarItem>
+                                <MenubarItem>Save as</MenubarItem>
                                 <MenubarSeparator />
+                                <MenubarItem>Export</MenubarItem>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        Export as
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem>PNG</MenubarItem>
+                                        <MenubarItem>JPG</MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
                                 <MenubarSub>
                                     <MenubarSubTrigger>Share</MenubarSubTrigger>
                                     <MenubarSubContent>
@@ -47,10 +85,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     </MenubarSubContent>
                                 </MenubarSub>
                                 <MenubarSeparator />
-                                <MenubarItem>
-                                    Print...{' '}
-                                    <MenubarShortcut>⌘P</MenubarShortcut>
-                                </MenubarItem>
+                                <MenubarItem>Exit</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>
@@ -63,57 +98,63 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>Find</MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem>
-                                            Search the web
-                                        </MenubarItem>
-                                        <MenubarSeparator />
-                                        <MenubarItem>Find...</MenubarItem>
-                                        <MenubarItem>Find Next</MenubarItem>
-                                        <MenubarItem>Find Previous</MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
+                                <MenubarItem>
+                                    Find <MenubarShortcut>⌘F</MenubarShortcut>
+                                </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarItem>Cut</MenubarItem>
-                                <MenubarItem>Copy</MenubarItem>
-                                <MenubarItem>Paste</MenubarItem>
+                                <MenubarItem>Clear</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>
-                            <MenubarTrigger>View</MenubarTrigger>
+                            <MenubarTrigger>Help</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarCheckboxItem>
-                                    Always Show Bookmarks Bar
-                                </MenubarCheckboxItem>
-                                <MenubarCheckboxItem checked>
-                                    Always Show Full URLs
-                                </MenubarCheckboxItem>
-                                <MenubarSeparator />
-                                <MenubarItem inset>
-                                    Reload <MenubarShortcut>⌘R</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem disabled inset>
-                                    Force Reload{' '}
-                                    <MenubarShortcut>⇧⌘R</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem inset>
-                                    Toggle Fullscreen
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem inset>Hide Sidebar</MenubarItem>
+                                <MenubarItem>Report a bug</MenubarItem>
+                                <MenubarItem>Visit ChartDB</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
                     </Menubar>
                 </div>
             </div>
-            <div className="flex flex-1 justify-center">
-                <Label>Diagrams/</Label>
-                <Label contentEditable suppressContentEditableWarning>
-                    aaa
-                </Label>
+            <div className="flex flex-row flex-1 justify-center items-center group">
+                <div className="flex">
+                    <Label>Diagrams/</Label>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                    {editMode ? (
+                        <>
+                            <Input
+                                ref={inputRef}
+                                autoFocus
+                                type="text"
+                                placeholder={diagramName}
+                                value={editedDiagramName}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                    setEditedDiagramName(e.target.value)
+                                }
+                                className="h-7 focus-visible:ring-0"
+                            />
+                            <Button
+                                variant="ghost"
+                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                onClick={editDiagramName}
+                            >
+                                <Check />
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Label>{diagramName}</Label>
+                            <Button
+                                variant="ghost"
+                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                onClick={enterEditMode}
+                            >
+                                <Pencil />
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
             <div className="flex flex-1 justify-end"></div>
         </nav>

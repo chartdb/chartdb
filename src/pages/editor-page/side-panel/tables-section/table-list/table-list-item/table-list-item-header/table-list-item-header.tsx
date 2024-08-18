@@ -40,7 +40,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const editTableName = useCallback(() => {
         if (!editMode) return;
         if (tableName.trim()) {
-            updateTable(table.id, { name: tableName });
+            updateTable(table.id, { name: tableName.trim() });
         }
 
         setEditMode(false);

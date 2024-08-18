@@ -4,18 +4,24 @@ import { NotFoundPage } from './pages/not-found-page/not-found-page';
 import { EditorPage } from './pages/editor-page/editor-page';
 import { ChartDBProvider } from './context/chartdb-context/chartdb-provider';
 import { ReactFlowProvider } from '@xyflow/react';
+import { DataProvider } from './context/data-context/data-provider';
+import { CreateDiagramDialogProvider } from './dialogs/create-diagram-dialog/create-diagram-dialog-provider';
 
 const routes: RouteObject[] = [
-    {
-        path: '/',
+    ...['', 'diagrams/:diagramId'].map((path) => ({
+        path,
         element: (
-            <ChartDBProvider>
-                <ReactFlowProvider>
-                    <EditorPage />
-                </ReactFlowProvider>
-            </ChartDBProvider>
+            <DataProvider>
+                <ChartDBProvider>
+                    <CreateDiagramDialogProvider>
+                        <ReactFlowProvider>
+                            <EditorPage />
+                        </ReactFlowProvider>
+                    </CreateDiagramDialogProvider>
+                </ChartDBProvider>
+            </DataProvider>
         ),
-    },
+    })),
     {
         path: '*',
         element: <NotFoundPage />,

@@ -40,7 +40,9 @@ export const RelationshipListItemHeader: React.FC<
     const editRelationshipName = useCallback(() => {
         if (!editMode) return;
         if (relationshipName.trim()) {
-            updateRelationship(relationship.id, { name: relationshipName });
+            updateRelationship(relationship.id, {
+                name: relationshipName.trim(),
+            });
         }
 
         setEditMode(false);

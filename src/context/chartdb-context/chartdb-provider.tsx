@@ -10,6 +10,8 @@ import { DBRelationship } from '@/lib/domain/db-relationship';
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
+    const [diagramId, setDiagramId] = React.useState('');
+    const [diagramName, setDiagramName] = React.useState('New Diagram');
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -17,6 +19,10 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [relationships, setRelationships] = React.useState<DBRelationship[]>(
         []
     );
+
+    const updateDatabaseType = setDatabaseType;
+    const updateDiagramId = setDiagramId;
+    const updateDiagramName = setDiagramName;
 
     const addTable = (table: DBTable) => {
         setTables((tables) => [...tables, table]);
@@ -282,10 +288,14 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     return (
         <chartDBContext.Provider
             value={{
+                diagramId,
+                diagramName,
                 databaseType,
                 tables,
                 relationships,
-                setDatabaseType,
+                updateDiagramId,
+                updateDiagramName,
+                updateDatabaseType,
                 createTable,
                 addTable,
                 getTable,

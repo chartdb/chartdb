@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import { Toolbar } from './toolbar/toolbar';
 import {
@@ -8,8 +8,19 @@ import {
 } from '@/components/resizable/resizable';
 import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
+import { useParams } from 'react-router-dom';
+import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 
 export const EditorPage: React.FC = () => {
+    const { openCreateDiagramDialog } = useCreateDiagramDialog();
+    const { diagramId } = useParams<{ diagramId: string }>();
+
+    useEffect(() => {
+        if (!diagramId) {
+            openCreateDiagramDialog();
+        }
+    }, [diagramId, openCreateDiagramDialog]);
+
     return (
         <section className="bg-background h-screen w-screen flex flex-col">
             <TopNavbar />

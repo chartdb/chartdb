@@ -13,6 +13,9 @@ export const dataTypeMap: Record<
     readonly (typeof dataTypes)[number][]
 > = {
     [DatabaseType.GENERIC]: genericDataTypes,
-    [DatabaseType.POSTGRES]: postgresDataTypes,
+    [DatabaseType.POSTGRESQL]: postgresDataTypes,
     [DatabaseType.MYSQL]: mysqlDataTypes,
+    [DatabaseType.SQL_SERVER]: [],
+    [DatabaseType.MARIADB]: [],
+    [DatabaseType.SQLITE]: [],
 } as const;

@@ -7,12 +7,18 @@ import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 
 export interface ChartDBContext {
+    diagramId: string;
+    diagramName: string;
     databaseType: DatabaseType;
     tables: DBTable[];
     relationships: DBRelationship[];
 
+    // General operations
+    updateDiagramId: (id: string) => void;
+    updateDiagramName: (name: string) => void;
+
     // Database type operations
-    setDatabaseType: (databaseType: DatabaseType) => void;
+    updateDatabaseType: (databaseType: DatabaseType) => void;
 
     // Table operations
     createTable: () => DBTable;
@@ -66,11 +72,17 @@ export interface ChartDBContext {
 
 export const chartDBContext = createContext<ChartDBContext>({
     databaseType: DatabaseType.GENERIC,
+    diagramName: 'New Diagram',
+    diagramId: '',
     tables: [],
     relationships: [],
 
+    // General operations
+    updateDiagramId: emptyFn,
+    updateDiagramName: emptyFn,
+
     // Database type operations
-    setDatabaseType: emptyFn,
+    updateDatabaseType: emptyFn,
 
     // Table operations
     updateTables: emptyFn,

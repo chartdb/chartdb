@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
 
-const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz-', 23);
+const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 const randonNumber = customAlphabet('1234567890', 18);
 
 import { twMerge } from 'tailwind-merge';
