@@ -20,6 +20,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({ table }) => {
                 style={{
                     borderColor: table.color,
                 }}
+                asChild
             >
                 <TableListItemHeader table={table} />
             </AccordionTrigger>

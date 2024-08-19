@@ -16,6 +16,7 @@ import '@xyflow/react/dist/style.css';
 import { TableNode, TableNodeType } from './table-node';
 import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -28,6 +29,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
     const { getEdge } = useReactFlow();
     const {
         tables,
+        relationships,
         createRelationship,
         updateTablesState,
         removeRelationships,
@@ -39,6 +41,29 @@ export const Canvas: React.FC<CanvasProps> = () => {
         useNodesState<TableNodeType>(initialNodes);
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<TableEdgeType>(initialEdges);
+
+    useEffect(() => {
+        const targetIndexes: Record<string, number> = relationships.reduce(
+            (acc, relationship) => {
+                acc[
+                    `${relationship.targetTableId}${relationship.targetFieldId}`
+                ] = 0;
+                return acc;
+            },
+            {} as Record<string, number>
+        );
+        setEdges(
+            relationships.map((relationship) => ({
+                id: relationship.id,
+                source: relationship.sourceTableId,
+                target: relationship.targetTableId,
+                sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                type: 'table-edge',
+                data: { relationship },
+            }))
+        );
+    }, [relationships, setEdges]);
 
     useEffect(() => {
         setNodes(

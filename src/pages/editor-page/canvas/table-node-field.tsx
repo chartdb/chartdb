@@ -3,7 +3,6 @@ import {
     Handle,
     Position,
     useConnection,
-    useReactFlow,
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
@@ -27,17 +26,15 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
     focused,
     tableNodeId,
 }) => {
-    const { removeField } = useChartDB();
-    const { getEdges } = useReactFlow();
+    const { removeField, relationships } = useChartDB();
     const updateNodeInternals = useUpdateNodeInternals();
     const connection = useConnection();
     const isTarget =
         connection.inProgress && connection.fromNode.id !== tableNodeId;
-    const edges = getEdges();
-    const numberOfEdgesToField = edges.filter(
-        (edge) =>
-            edge.target === tableNodeId &&
-            edge.targetHandle?.endsWith(`_${field.id}`)
+    const numberOfEdgesToField = relationships.filter(
+        (relationship) =>
+            relationship.targetTableId === tableNodeId &&
+            relationship.targetFieldId === field.id
     ).length;
 
     useEffect(() => {
@@ -49,13 +46,13 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
             {!connection.inProgress && (
                 <>
                     <Handle
-                        id={`${RIGHT_HANDLE_ID_PREFIX}_${field.id}`}
+                        id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
                         className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
                         position={Position.Right}
                         type="source"
                     />
                     <Handle
-                        id={`${LEFT_HANDLE_ID_PREFIX}_${field.id}`}
+                        id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
                         className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
                         position={Position.Left}
                         type="source"
@@ -65,12 +62,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
             {(!connection.inProgress || isTarget) && (
                 <>
                     {Array.from(
-                        { length: numberOfEdgesToField + 1 },
+                        { length: numberOfEdgesToField },
                         (_, index) => index
                     ).map((index) => (
                         <Handle
                             id={`${TARGET_ID_PREFIX}${index}_${field.id}`}
-                            key={`${TARGET_ID_PREFIX}${index}`}
+                            key={`${TARGET_ID_PREFIX}${index}_${field.id}`}
                             className={`!invisible`}
                             position={Position.Left}
                             type="target"

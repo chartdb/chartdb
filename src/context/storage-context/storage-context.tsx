@@ -5,7 +5,7 @@ import { DBRelationship } from '@/lib/domain/db-relationship';
 import { DBTable } from '@/lib/domain/db-table';
 import { ChartDBConfig } from '@/lib/domain/config';
 
-export interface DataContext {
+export interface StorageContext {
     // Config operations
     getConfig: () => Promise<ChartDBConfig | undefined>;
     updateConfig: (config: Partial<ChartDBConfig>) => Promise<void>;
@@ -59,7 +59,7 @@ export interface DataContext {
     listRelationships: (diagramId: string) => Promise<DBRelationship[]>;
 }
 
-export const dataContext = createContext<DataContext>({
+export const storageContext = createContext<StorageContext>({
     getConfig: emptyFn,
     updateConfig: emptyFn,
 

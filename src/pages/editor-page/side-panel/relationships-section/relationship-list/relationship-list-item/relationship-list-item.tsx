@@ -16,8 +16,11 @@ export const RelationshipListItem: React.FC<RelationshipListItemProps> = ({
     relationship,
 }) => {
     return (
-        <AccordionItem value="item-1" className="rounded-md">
-            <AccordionTrigger className="hover:no-underline hover:bg-accent rounded-md px-2 py-0 data-[state=open]:rounded-b-none">
+        <AccordionItem value={relationship.id} className="rounded-md">
+            <AccordionTrigger
+                asChild
+                className="hover:no-underline hover:bg-accent rounded-md px-2 py-0 data-[state=open]:rounded-b-none"
+            >
                 <RelationshipListItemHeader relationship={relationship} />
             </AccordionTrigger>
             <AccordionContent className="pb-0 p-1">

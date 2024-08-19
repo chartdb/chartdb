@@ -6,13 +6,13 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
-import { useData } from '@/hooks/use-data';
+import { useStorage } from '@/hooks/use-storage';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [diagramId, setDiagramId] = React.useState('');
-    const db = useData();
+    const db = useStorage();
     const [diagramName, setDiagramName] = React.useState('New Diagram');
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC

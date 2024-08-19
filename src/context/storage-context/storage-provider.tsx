@@ -1,12 +1,12 @@
 import React from 'react';
-import { DataContext, dataContext } from './data-context';
+import { StorageContext, storageContext } from './storage-context';
 import Dexie, { type EntityTable } from 'dexie';
 import { Diagram } from '@/lib/domain/diagram';
 import { DBTable } from '@/lib/domain/db-table';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { ChartDBConfig } from '@/lib/domain/config';
 
-export const DataProvider: React.FC<React.PropsWithChildren> = ({
+export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const db = new Dexie('ChartDB') as Dexie & {
@@ -49,19 +49,19 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         }
     });
 
-    const getConfig: DataContext['getConfig'] = async (): Promise<
+    const getConfig: StorageContext['getConfig'] = async (): Promise<
         ChartDBConfig | undefined
     > => {
         return await db.config.get(1);
     };
 
-    const updateConfig: DataContext['updateConfig'] = async (
+    const updateConfig: StorageContext['updateConfig'] = async (
         config: Partial<ChartDBConfig>
     ) => {
         await db.config.update(1, config);
     };
 
-    const addDiagram: DataContext['addDiagram'] = async ({
+    const addDiagram: StorageContext['addDiagram'] = async ({
         diagram,
     }: {
         diagram: Diagram;
@@ -69,13 +69,13 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.diagrams.add(diagram);
     };
 
-    const listDiagrams: DataContext['listDiagrams'] = async (): Promise<
+    const listDiagrams: StorageContext['listDiagrams'] = async (): Promise<
         Diagram[]
     > => {
         return await db.diagrams.toArray();
     };
 
-    const getDiagram: DataContext['getDiagram'] = async (
+    const getDiagram: StorageContext['getDiagram'] = async (
         id: string,
         options: {
             includeTables?: boolean;
@@ -99,7 +99,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return diagram;
     };
 
-    const updateDiagram: DataContext['updateDiagram'] = async ({
+    const updateDiagram: StorageContext['updateDiagram'] = async ({
         id,
         attributes,
     }: {
@@ -109,7 +109,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.diagrams.update(id, attributes);
     };
 
-    const deleteDiagram: DataContext['deleteDiagram'] = async (id: string) => {
+    const deleteDiagram: StorageContext['deleteDiagram'] = async (
+        id: string
+    ) => {
         await Promise.all([
             db.diagrams.delete(id),
             db.db_tables.where('diagramId').equals(id).delete(),
@@ -117,7 +119,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         ]);
     };
 
-    const addTable: DataContext['addTable'] = async ({
+    const addTable: StorageContext['addTable'] = async ({
         diagramId,
         table,
     }: {
@@ -130,7 +132,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         });
     };
 
-    const getTable: DataContext['getTable'] = async ({
+    const getTable: StorageContext['getTable'] = async ({
         id,
         diagramId,
     }: {
@@ -140,14 +142,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_tables.get({ id, diagramId });
     };
 
-    const updateTable: DataContext['updateTable'] = async ({
+    const updateTable: StorageContext['updateTable'] = async ({
         id,
         attributes,
     }) => {
         await db.db_tables.update(id, attributes);
     };
 
-    const deleteTable: DataContext['deleteTable'] = async ({
+    const deleteTable: StorageContext['deleteTable'] = async ({
         id,
         diagramId,
     }: {
@@ -157,7 +159,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_tables.where({ id, diagramId }).delete();
     };
 
-    const listTables: DataContext['listTables'] = async (
+    const listTables: StorageContext['listTables'] = async (
         diagramId: string
     ): Promise<DBTable[]> => {
         return await db.db_tables
@@ -166,7 +168,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
             .toArray();
     };
 
-    const addRelationship: DataContext['addRelationship'] = async ({
+    const addRelationship: StorageContext['addRelationship'] = async ({
         diagramId,
         relationship,
     }: {
@@ -179,7 +181,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         });
     };
 
-    const getRelationship: DataContext['getRelationship'] = async ({
+    const getRelationship: StorageContext['getRelationship'] = async ({
         id,
         diagramId,
     }: {
@@ -189,7 +191,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_relationships.get({ id, diagramId });
     };
 
-    const updateRelationship: DataContext['updateRelationship'] = async ({
+    const updateRelationship: StorageContext['updateRelationship'] = async ({
         id,
         attributes,
     }: {
@@ -199,7 +201,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_relationships.update(id, attributes);
     };
 
-    const deleteRelationship: DataContext['deleteRelationship'] = async ({
+    const deleteRelationship: StorageContext['deleteRelationship'] = async ({
         id,
         diagramId,
     }: {
@@ -209,7 +211,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_relationships.where({ id, diagramId }).delete();
     };
 
-    const listRelationships: DataContext['listRelationships'] = async (
+    const listRelationships: StorageContext['listRelationships'] = async (
         diagramId: string
     ): Promise<DBRelationship[]> => {
         return await db.db_relationships
@@ -219,7 +221,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     };
 
     return (
-        <dataContext.Provider
+        <storageContext.Provider
             value={{
                 getConfig,
                 updateConfig,
@@ -241,6 +243,6 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
             }}
         >
             {children}
-        </dataContext.Provider>
+        </storageContext.Provider>
     );
 };

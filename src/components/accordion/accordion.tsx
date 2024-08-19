@@ -37,9 +37,19 @@ const AccordionTrigger = React.forwardRef<
                 )}
                 {...props}
             >
-                {iconPosition === 'left' ? renderIcon() : null}
-                {children}
-                {iconPosition === 'right' ? renderIcon() : null}
+                {props.asChild ? (
+                    <div className="flex">
+                        {iconPosition === 'left' ? renderIcon() : null}
+                        {children}
+                        {iconPosition === 'right' ? renderIcon() : null}
+                    </div>
+                ) : (
+                    <>
+                        {iconPosition === 'left' ? renderIcon() : null}
+                        {children}
+                        {iconPosition === 'right' ? renderIcon() : null}
+                    </>
+                )}
             </AccordionPrimitive.Trigger>
         </AccordionPrimitive.Header>
     );

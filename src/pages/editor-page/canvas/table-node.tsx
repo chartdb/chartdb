@@ -6,10 +6,6 @@ import { Label } from '@/components/label/label';
 import { DBTable } from '@/lib/domain/db-table';
 import { TableNodeField } from './table-node-field';
 
-export const LEFT_HANDLE_ID_PREFIX = 'left_';
-export const RIGHT_HANDLE_ID_PREFIX = 'right_';
-export const TARGET_ID_PREFIX = 'target-';
-
 export type TableNodeType = Node<
     {
         table: DBTable;

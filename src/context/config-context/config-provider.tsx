@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { ConfigContext } from './config-context';
 
-import { useData } from '@/hooks/use-data';
+import { useStorage } from '@/hooks/use-storage';
 import { ChartDBConfig } from '@/lib/domain/config';
 
 export const ConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { getConfig, updateConfig: updateDataConfig } = useData();
+    const { getConfig, updateConfig: updateDataConfig } = useStorage();
     const [config, setConfig] = React.useState<ChartDBConfig | undefined>();
 
     useEffect(() => {

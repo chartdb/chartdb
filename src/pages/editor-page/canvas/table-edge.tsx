@@ -7,8 +7,9 @@ import {
     Position,
     useReactFlow,
 } from '@xyflow/react';
-import { RIGHT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node';
 import { DBRelationship } from '@/lib/domain/db-relationship';
+import { RIGHT_HANDLE_ID_PREFIX } from './table-node-field';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export type TableEdgeType = Edge<
     {
@@ -28,14 +29,19 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
     selected,
 }) => {
     const { getInternalNode, getEdge } = useReactFlow();
+    const { relationships } = useChartDB();
+
+    const edgeNumber = relationships
+        .filter(
+            (relationship) =>
+                relationship.targetTableId === target &&
+                relationship.sourceTableId === source
+        )
+        .findIndex((relationship) => relationship.id === id);
 
     const sourceNode = getInternalNode(source);
     const targetNode = getInternalNode(target);
     const edge = getEdge(id);
-
-    const edgeNumber = parseInt(
-        edge?.targetHandle?.slice?.(TARGET_ID_PREFIX.length) ?? '0'
-    );
 
     const sourceHandle: 'left' | 'right' = edge?.sourceHandle?.startsWith?.(
         RIGHT_HANDLE_ID_PREFIX

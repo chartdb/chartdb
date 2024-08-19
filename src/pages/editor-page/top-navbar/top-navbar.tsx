@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     Menubar,
     MenubarContent,
@@ -28,6 +28,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        setEditedDiagramName(diagramName);
+    }, [diagramName]);
+
     const editDiagramName = useCallback(() => {
         if (!editMode) return;
         if (editedDiagramName.trim()) {
@@ -50,7 +54,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         <nav className="flex flex-row items-center justify-between px-4 h-12">
             <div className="flex flex-1 justify-start gap-x-3">
                 <div className="flex font-primary items-center">
-                    <img src={ChartDBLogo} alt="chartDB" className="h-4" />
+                    <img
+                        src={ChartDBLogo}
+                        alt="chartDB"
+                        className="h-4 max-w-fit"
+                    />
                 </div>
                 <div>
                     <Menubar className="border-none shadow-none">
@@ -159,7 +167,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     )}
                 </div>
             </div>
-            <div className="flex flex-1 justify-end"></div>
+            <div className="hidden flex-1 justify-end sm:flex"></div>
         </nav>
     );
 };

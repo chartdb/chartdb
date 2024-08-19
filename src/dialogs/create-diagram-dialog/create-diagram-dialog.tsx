@@ -15,7 +15,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { getDatabaseLogo } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
-import { useData } from '@/hooks/use-data';
+import { useStorage } from '@/hooks/use-storage';
 import { Diagram } from '@/lib/domain/diagram';
 import { generateId } from '@/lib/utils';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
@@ -43,7 +43,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [step, setStep] = React.useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
-    const { listDiagrams, addDiagram } = useData();
+    const { listDiagrams, addDiagram } = useStorage();
     const [diagramNumber, setDiagramNumber] = React.useState<number>(1);
     const navigate = useNavigate();
 
