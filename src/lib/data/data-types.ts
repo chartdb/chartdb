@@ -42,6 +42,7 @@ export const postgresDataTypes = [
     // Character Types
     'char',
     'varchar',
+    'character varying',
     'text',
 
     // Binary Data Types
@@ -119,6 +120,9 @@ export const postgresDataTypes = [
     'regnamespace',
     'regconfig',
     'regdictionary',
+
+    // User Defined types
+    'user-defined',
 ] as const;
 export const mysqlDataTypes = [
     // Numeric Types

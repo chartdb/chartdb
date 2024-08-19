@@ -26,14 +26,23 @@ const rawPostgresQuery = '';
 //           contype = 'f'
 //           AND connamespace = 'public'::regnamespace) as x
 // ), pk_info AS (
-//   SELECT  'public' as schema_name,
+//   SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+//                                           ',"table":"', pk_table, '"',
+//                                           ',"column":"', pk_column, '"',
+//                                           ',"pk_def":"', pk_def,
+//                                           '"}')), ',') as pk_metadata
+//   FROM (
+//       SELECT
+//           'public' as schema_name,
 //           conrelid::regclass::text AS pk_table,
-//           array_length(string_to_array(substring(pg_get_constraintdef(oid) FROM '\((.*?)\)'), ','), 1) AS field_count,
-//           regexp_split_to_table(substring(pg_get_constraintdef(oid) FROM '\((.*)\)'),',') AS pk_column,
+//           unnest(string_to_array(substring(pg_get_constraintdef(oid) FROM '\((.*?)\)'), ',')) AS pk_column,
 //           pg_get_constraintdef(oid) as pk_def
-//   FROM pg_constraint c
-//   where connamespace = 'public'::regnamespace
-//           AND c.contype = 'p'
+//       FROM
+//           pg_constraint
+//       WHERE
+//           contype = 'p'
+//           AND connamespace = 'public'::regnamespace
+//   ) as y
 // ),
 // indexes_cols as (
 //   select tnsp.nspname                                                                        as schema_name,
@@ -63,14 +72,11 @@ const rawPostgresQuery = '';
 //   select array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
 //                                               '","table":"', cols.table_name,
 //                                               '","name":"', cols.column_name,
-//                                               '","type":"', replace(cols.data_type, '"', ''),
+//                                               '","type":"', LOWER(replace(cols.data_type, '"', '')),
 //                                               '","ordinal_position":"', cols.ordinal_position,
 //                                               '","nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
-//                                               ',"is_pk":', case when (pk_column is not null) then 'true' else 'false' end,
 //                                               ',"collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
 //     from information_schema.columns cols
-//     left join pk_info as pk
-//       on pk.schema_name = cols.table_schema and pk_table = cols.table_name and pk_column = cols.column_name
 //     where cols.table_schema not in ('information_schema', 'pg_catalog')
 // ), indexes_metadata as (
 //   select array_to_string(array_agg(CONCAT('{"schema":"', schema_name,
@@ -107,12 +113,13 @@ const rawPostgresQuery = '';
 //   where views.schemaname not in ('information_schema', 'pg_catalog')
 // )
 // select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
+//         '], "pk_info": [', COALESCE(pk_metadata, ''),
 //                   '], "columns": [', coalesce(cols_metadata, ''),
 //                   '], "indexes": [', coalesce(indexes_metadata, ''),
 //                   '], "tables":[', coalesce(tbls_metadata, ''),
 //                   '], "views":[', coalesce(views_metadata, ''),
 //                   '], "server_name": "', '', '", "version": "', '',
 //             '"}') as " "
-// from cols,indexes_metadata, tbls, config, views, fk_info;
+// from fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
 // `;
 export const postgresQuery = minimizeQuery(rawPostgresQuery);
