@@ -15,23 +15,23 @@ export interface ChartDBContext {
     relationships: DBRelationship[];
 
     // General operations
-    updateDiagramId: (id: string) => void;
-    updateDiagramName: (name: string) => void;
+    updateDiagramId: (id: string) => Promise<void>;
+    updateDiagramName: (name: string) => Promise<void>;
     loadDiagram: (diagramId: string) => Promise<Diagram | undefined>;
 
     // Database type operations
-    updateDatabaseType: (databaseType: DatabaseType) => void;
+    updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
 
     // Table operations
-    createTable: () => DBTable;
-    addTable: (table: DBTable) => void;
+    createTable: () => Promise<DBTable>;
+    addTable: (table: DBTable) => Promise<void>;
     getTable: (id: string) => DBTable | null;
-    removeTable: (id: string) => void;
-    updateTable: (id: string, table: Partial<DBTable>) => void;
-    updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => void;
+    removeTable: (id: string) => Promise<void>;
+    updateTable: (id: string, table: Partial<DBTable>) => Promise<void>;
+    updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => Promise<void>;
     updateTablesState: (
         updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
-    ) => void;
+    ) => Promise<void>;
 
     // Field operations
     getField: (tableId: string, fieldId: string) => DBField | null;
@@ -39,21 +39,21 @@ export interface ChartDBContext {
         tableId: string,
         fieldId: string,
         field: Partial<DBField>
-    ) => void;
-    removeField: (tableId: string, fieldId: string) => void;
-    createField: (tableId: string) => DBField;
-    addField: (tableId: string, field: DBField) => void;
+    ) => Promise<void>;
+    removeField: (tableId: string, fieldId: string) => Promise<void>;
+    createField: (tableId: string) => Promise<DBField>;
+    addField: (tableId: string, field: DBField) => Promise<void>;
 
     // Index operations
-    createIndex: (tableId: string) => DBIndex;
-    addIndex: (tableId: string, index: DBIndex) => void;
+    createIndex: (tableId: string) => Promise<DBIndex>;
+    addIndex: (tableId: string, index: DBIndex) => Promise<void>;
     getIndex: (tableId: string, indexId: string) => DBIndex | null;
-    removeIndex: (tableId: string, indexId: string) => void;
+    removeIndex: (tableId: string, indexId: string) => Promise<void>;
     updateIndex: (
         tableId: string,
         indexId: string,
         index: Partial<DBIndex>
-    ) => void;
+    ) => Promise<void>;
 
     // Relationship operations
     createRelationship: (params: {
@@ -61,15 +61,15 @@ export interface ChartDBContext {
         targetTableId: string;
         sourceFieldId: string;
         targetFieldId: string;
-    }) => DBRelationship;
-    addRelationship: (relationship: DBRelationship) => void;
+    }) => Promise<DBRelationship>;
+    addRelationship: (relationship: DBRelationship) => Promise<void>;
     getRelationship: (id: string) => DBRelationship | null;
-    removeRelationship: (id: string) => void;
-    removeRelationships: (...ids: string[]) => void;
+    removeRelationship: (id: string) => Promise<void>;
+    removeRelationships: (...ids: string[]) => Promise<void>;
     updateRelationship: (
         id: string,
         relationship: Partial<DBRelationship>
-    ) => void;
+    ) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({

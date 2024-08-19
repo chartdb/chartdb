@@ -22,7 +22,7 @@ export interface DataContext {
     ) => Promise<Diagram | undefined>;
     updateDiagram: (params: {
         id: string;
-        diagram: Partial<Diagram>;
+        attributes: Partial<Diagram>;
     }) => Promise<void>;
     deleteDiagram: (id: string) => Promise<void>;
 
@@ -34,7 +34,7 @@ export interface DataContext {
     }) => Promise<DBTable | undefined>;
     updateTable: (params: {
         id: string;
-        table: Partial<DBTable>;
+        attributes: Partial<DBTable>;
     }) => Promise<void>;
     deleteTable: (params: { diagramId: string; id: string }) => Promise<void>;
     listTables: (diagramId: string) => Promise<DBTable[]>;
@@ -50,7 +50,7 @@ export interface DataContext {
     }) => Promise<DBRelationship | undefined>;
     updateRelationship: (params: {
         id: string;
-        relationship: Partial<DBRelationship>;
+        attributes: Partial<DBRelationship>;
     }) => Promise<void>;
     deleteRelationship: (params: {
         diagramId: string;

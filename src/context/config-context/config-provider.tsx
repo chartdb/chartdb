@@ -19,7 +19,9 @@ export const ConfigProvider: React.FC<React.PropsWithChildren> = ({
         loadConfig();
     }, [getConfig]);
 
-    const updateConfig = async (config: Partial<ChartDBConfig>) => {
+    const updateConfig: ConfigContext['updateConfig'] = async (
+        config: Partial<ChartDBConfig>
+    ) => {
         await updateDataConfig(config);
         setConfig((prevConfig) =>
             prevConfig

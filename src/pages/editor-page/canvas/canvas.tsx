@@ -54,8 +54,8 @@ export const Canvas: React.FC<CanvasProps> = () => {
     }, [tables, setNodes]);
 
     const onConnect = useCallback(
-        (params: AddEdgeParams) => {
-            const relationship = createRelationship({
+        async (params: AddEdgeParams) => {
+            const relationship = await createRelationship({
                 sourceTableId: params.source,
                 targetTableId: params.target,
                 sourceFieldId: params.sourceHandle?.split('_')?.pop() ?? '',

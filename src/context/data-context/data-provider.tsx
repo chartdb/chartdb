@@ -1,5 +1,5 @@
 import React from 'react';
-import { dataContext } from './data-context';
+import { DataContext, dataContext } from './data-context';
 import Dexie, { type EntityTable } from 'dexie';
 import { Diagram } from '@/lib/domain/diagram';
 import { DBTable } from '@/lib/domain/db-table';
@@ -49,23 +49,33 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         }
     });
 
-    const getConfig = async (): Promise<ChartDBConfig | undefined> => {
+    const getConfig: DataContext['getConfig'] = async (): Promise<
+        ChartDBConfig | undefined
+    > => {
         return await db.config.get(1);
     };
 
-    const updateConfig = async (config: Partial<ChartDBConfig>) => {
+    const updateConfig: DataContext['updateConfig'] = async (
+        config: Partial<ChartDBConfig>
+    ) => {
         await db.config.update(1, config);
     };
 
-    const addDiagram = async ({ diagram }: { diagram: Diagram }) => {
+    const addDiagram: DataContext['addDiagram'] = async ({
+        diagram,
+    }: {
+        diagram: Diagram;
+    }) => {
         await db.diagrams.add(diagram);
     };
 
-    const listDiagrams = async (): Promise<Diagram[]> => {
+    const listDiagrams: DataContext['listDiagrams'] = async (): Promise<
+        Diagram[]
+    > => {
         return await db.diagrams.toArray();
     };
 
-    const getDiagram = async (
+    const getDiagram: DataContext['getDiagram'] = async (
         id: string,
         options: {
             includeTables?: boolean;
@@ -89,17 +99,17 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return diagram;
     };
 
-    const updateDiagram = async ({
-        diagram,
+    const updateDiagram: DataContext['updateDiagram'] = async ({
         id,
+        attributes,
     }: {
         id: string;
-        diagram: Partial<Diagram>;
+        attributes: Partial<Diagram>;
     }) => {
-        await db.diagrams.update(id, diagram);
+        await db.diagrams.update(id, attributes);
     };
 
-    const deleteDiagram = async (id: string) => {
+    const deleteDiagram: DataContext['deleteDiagram'] = async (id: string) => {
         await Promise.all([
             db.diagrams.delete(id),
             db.db_tables.where('diagramId').equals(id).delete(),
@@ -107,7 +117,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         ]);
     };
 
-    const addTable = async ({
+    const addTable: DataContext['addTable'] = async ({
         diagramId,
         table,
     }: {
@@ -120,7 +130,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         });
     };
 
-    const getTable = async ({
+    const getTable: DataContext['getTable'] = async ({
         id,
         diagramId,
     }: {
@@ -130,17 +140,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_tables.get({ id, diagramId });
     };
 
-    const updateTable = async ({
+    const updateTable: DataContext['updateTable'] = async ({
         id,
-        table,
-    }: {
-        id: string;
-        table: Partial<DBTable>;
+        attributes,
     }) => {
-        await db.db_tables.update(id, table);
+        await db.db_tables.update(id, attributes);
     };
 
-    const deleteTable = async ({
+    const deleteTable: DataContext['deleteTable'] = async ({
         id,
         diagramId,
     }: {
@@ -150,14 +157,16 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_tables.where({ id, diagramId }).delete();
     };
 
-    const listTables = async (diagramId: string): Promise<DBTable[]> => {
+    const listTables: DataContext['listTables'] = async (
+        diagramId: string
+    ): Promise<DBTable[]> => {
         return await db.db_tables
             .where('diagramId')
             .equals(diagramId)
             .toArray();
     };
 
-    const addRelationship = async ({
+    const addRelationship: DataContext['addRelationship'] = async ({
         diagramId,
         relationship,
     }: {
@@ -170,7 +179,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         });
     };
 
-    const getRelationship = async ({
+    const getRelationship: DataContext['getRelationship'] = async ({
         id,
         diagramId,
     }: {
@@ -180,17 +189,17 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_relationships.get({ id, diagramId });
     };
 
-    const updateRelationship = async ({
+    const updateRelationship: DataContext['updateRelationship'] = async ({
         id,
-        relationship,
+        attributes,
     }: {
         id: string;
-        relationship: Partial<DBRelationship>;
+        attributes: Partial<DBRelationship>;
     }) => {
-        await db.db_relationships.update(id, relationship);
+        await db.db_relationships.update(id, attributes);
     };
 
-    const deleteRelationship = async ({
+    const deleteRelationship: DataContext['deleteRelationship'] = async ({
         id,
         diagramId,
     }: {
@@ -200,7 +209,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_relationships.where({ id, diagramId }).delete();
     };
 
-    const listRelationships = async (
+    const listRelationships: DataContext['listRelationships'] = async (
         diagramId: string
     ): Promise<DBRelationship[]> => {
         return await db.db_relationships
