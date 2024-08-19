@@ -16,11 +16,11 @@ import { getDatabaseLogo } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
 import { useStorage } from '@/hooks/use-storage';
-import { Diagram } from '@/lib/domain/diagram';
-import { generateId } from '@/lib/utils';
+import { loadFromDatabaseMetadata } from '@/lib/domain/diagram';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
+import { DatabaseMetadata } from '@/lib/import-script-types/database-metadata';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -56,24 +56,25 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [listDiagrams, setDiagramNumber]);
 
     const createNewDiagram = useCallback(async () => {
-        const diagram: Diagram = {
-            id: generateId(),
-            name: `Diagram ${diagramNumber}`,
+        console.log('scriptResult: ', scriptResult);
+        const databaseMetadata: DatabaseMetadata = JSON.parse(scriptResult);
+        const diagram = loadFromDatabaseMetadata(
             databaseType,
-            tables: [],
-            relationships: [],
-        };
+            databaseMetadata
+        );
+        console.log('diagram: ', diagram);
+
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [
         databaseType,
-        diagramNumber,
         addDiagram,
         closeCreateDiagramDialog,
         navigate,
         updateConfig,
+        scriptResult,
     ]);
 
     const renderDatabaseOption = useCallback((type: DatabaseType) => {

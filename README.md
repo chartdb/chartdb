@@ -1,4 +1,3 @@
-
 <h1 align="center">
   <a href="https://chartdb.io"><img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo.png?raw=true" width="400" height="70" alt="ChartDB"></a>
 <br>
@@ -34,7 +33,7 @@
 **🎉 ChartDB**:
 ChartDB is a powerful and intuitive database diagramming editor that runs as a SaaS application via a website.
 Effortlessly visualize and design your database schemas with a single "**Smart Query**" that fetches your entire database structure.
-Customize your diagrams, export SQL scripts, and explore a full suite of features—all without the need to create an account.
+Customize your diagrams, export SQL scripts, and explore a full suite of features—all without creating an account.
 Dive into a seamless database design experience and discover the complete feature set here.
 
 ## Status
@@ -52,17 +51,17 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 
 ### Supported Databases
 
-- ✅ PostgresSQL
-- ✅ MySQL
-- ✅ SQL Server
-- ✅ MariaDB
-- ✅ SQL Lite
+-   ✅ PostgresSQL
+-   ✅ MySQL
+-   ✅ SQL Server
+-   ✅ MariaDB
+-   ✅ SQL Lite
 
 ## 💚 Community & Support
 
-- [Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg) (For live discussion with the community and the ChartDB team)
-- [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
-- [Twitter](https://x.com/chartdb_io) (Get news fast)
+-   [Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg) (For live discussion with the community and the ChartDB team)
+-   [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
+-   [Twitter](https://x.com/chartdb_io) (Get news fast)
 
 ## Contributing
 
