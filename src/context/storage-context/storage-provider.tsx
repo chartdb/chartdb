@@ -66,11 +66,33 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     }: {
         diagram: Diagram;
     }) => {
-        await db.diagrams.add({
+        // Extract tables and relationships from the diagram
+        const { tables, relationships } = diagram;
+
+        // Save the diagram without the tables and relationships
+        const diagramId = await db.diagrams.add({
             id: diagram.id,
             name: diagram.name,
             databaseType: diagram.databaseType,
         });
+
+        // Save each table associated with this diagram
+        if (tables && tables.length > 0) {
+            await Promise.all(
+                tables.map(async (table) => {
+                    await addTable({ diagramId, table });
+                })
+            );
+        }
+
+        // Save each relationship associated with this diagram
+        if (relationships && relationships.length > 0) {
+            await Promise.all(
+                relationships.map(async (relationship) => {
+                    await addRelationship({ diagramId, relationship });
+                })
+            );
+        }
     };
 
     const listDiagrams: StorageContext['listDiagrams'] = async (): Promise<
@@ -169,7 +191,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_tables
             .where('diagramId')
             .equals(diagramId)
-            .toArray();
+            .sortBy('name'); // Sort by the 'name' field
     };
 
     const addRelationship: StorageContext['addRelationship'] = async ({
