@@ -474,8 +474,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
-                setTables(diagram.tables);
-                setRelationships(diagram.relationships);
+                setTables(diagram?.tables ?? []);
+                setRelationships(diagram?.relationships ?? []);
             }
 
             return diagram;

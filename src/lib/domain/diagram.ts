@@ -6,6 +6,6 @@ export interface Diagram {
     id: string;
     name: string;
     databaseType: DatabaseType;
-    tables: DBTable[];
-    relationships: DBRelationship[];
+    tables?: DBTable[];
+    relationships?: DBRelationship[];
 }

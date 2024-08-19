@@ -66,7 +66,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     }: {
         diagram: Diagram;
     }) => {
-        await db.diagrams.add(diagram);
+        await db.diagrams.add({
+            id: diagram.id,
+            name: diagram.name,
+            databaseType: diagram.databaseType,
+        });
     };
 
     const listDiagrams: StorageContext['listDiagrams'] = async (): Promise<
