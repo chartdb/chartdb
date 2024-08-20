@@ -6,6 +6,7 @@ import { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import { generateId, randomHSLA } from '@/lib/utils';
 import { DBRelationship } from './db-relationship';
 import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
+import { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 
 export interface DBTable {
     id: string;
@@ -15,6 +16,7 @@ export interface DBTable {
     fields: DBField[];
     indexes: DBIndex[];
     color: string;
+    isView: boolean;
     createdAt: number;
 }
 
@@ -23,11 +25,13 @@ export const createTablesFromMetadata = ({
     columns,
     indexes,
     primaryKeys,
+    views,
 }: {
     tableInfos: TableInfo[];
     columns: ColumnInfo[];
     indexes: IndexInfo[];
     primaryKeys: PrimaryKeyInfo[];
+    views: ViewInfo[];
 }): DBTable[] => {
     return tableInfos.map((tableInfo: TableInfo) => {
         // Filter, make unique, and sort columns based on ordinal_position
@@ -82,6 +86,13 @@ export const createTablesFromMetadata = ({
             })
         );
 
+        // Determine if the current table is a view by checking against viewInfo
+        const isView = views.some(
+            (view) =>
+                view.schema === tableInfo.schema &&
+                view.view_name === tableInfo.table
+        );
+
         // Initial random positions; these will be adjusted later
         return {
             id: generateId(),
@@ -90,7 +101,8 @@ export const createTablesFromMetadata = ({
             y: Math.random() * 800, // Placeholder Y
             fields,
             indexes: dbIndexes,
-            color: randomHSLA(),
+            color: isView ? 'grey' : randomHSLA(),
+            isView: isView,
             createdAt: Date.now(),
         };
     });
