@@ -33,6 +33,7 @@ export const loadFromDatabaseMetadata = ({
         columns,
         indexes,
         fk_info: foreignKeys,
+        views: views,
     } = databaseMetadata;
 
     // First pass: Create tables without final positions
@@ -41,6 +42,7 @@ export const loadFromDatabaseMetadata = ({
         columns,
         indexes,
         primaryKeys,
+        views,
     });
 
     // First pass: Create relationships
@@ -52,9 +54,14 @@ export const loadFromDatabaseMetadata = ({
     // Second pass: Adjust table positions based on relationships
     const adjustedTables = adjustTablePositions({ tables, relationships });
 
-    const sortedTables = adjustedTables.sort((a, b) =>
-        a.name.localeCompare(b.name)
-    );
+    const sortedTables = adjustedTables.sort((a, b) => {
+        if (a.isView === b.isView) {
+            // Both are either tables or views, so sort alphabetically by name
+            return a.name.localeCompare(b.name);
+        }
+        // If one is a view and the other is not, put tables first
+        return a.isView ? 1 : -1;
+    });
 
     return {
         id: generateId(),
