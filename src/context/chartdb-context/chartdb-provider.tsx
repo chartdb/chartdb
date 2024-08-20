@@ -671,9 +671,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const removeRelationships: ChartDBContext['removeRelationships'] =
         useCallback(
             async (ids: string[], options = { updateHistory: true }) => {
-                const prevRelationships = relationships.filter(
-                    (relationship) => !ids.includes(relationship.id)
-                );
+                const prevRelationships = [
+                    ...relationships.filter((relationship) =>
+                        ids.includes(relationship.id)
+                    ),
+                ];
+
                 setRelationships((relationships) =>
                     relationships.filter(
                         (relationship) => !ids.includes(relationship.id)
