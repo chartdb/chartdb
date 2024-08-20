@@ -7,13 +7,22 @@ import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
+import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const [diagramId, setDiagramId] = React.useState('');
     const db = useStorage();
-    const [diagramName, setDiagramName] = React.useState('New Diagram');
+    const { setRedoStack, setUndoStack } = useRedoUndoStack();
+    console.log({ setRedoStack, setUndoStack });
+    // const [undoStack, setUndoStack] = React.useState<
+    //     {
+    //         action: string;
+    //         data: any;
+    //     }[]
+    // >([]);
+    const [diagramId, setDiagramId] = React.useState('');
+    const [diagramName, setDiagramName] = React.useState('');
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -22,35 +31,45 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
-    const updateDatabaseType: ChartDBContext['updateDatabaseType'] = async (
-        databaseType
-    ) => {
-        setDatabaseType(databaseType);
-        await db.updateDiagram({
-            id: diagramId,
-            attributes: {
-                databaseType,
+    const updateDatabaseType: ChartDBContext['updateDatabaseType'] =
+        useCallback(
+            async (databaseType) => {
+                setDatabaseType(databaseType);
+                await db.updateDiagram({
+                    id: diagramId,
+                    attributes: {
+                        databaseType,
+                    },
+                });
             },
-        });
-    };
-    const updateDiagramId: ChartDBContext['updateDiagramId'] = async (id) => {
-        const prevId = diagramId;
-        setDiagramId(id);
-        await db.updateDiagram({ id: prevId, attributes: { id } });
-    };
-    const updateDiagramName: ChartDBContext['updateDiagramName'] = async (
-        name
-    ) => {
-        setDiagramName(name);
-        await db.updateDiagram({ id: diagramId, attributes: { name } });
-    };
+            [db, diagramId, setDatabaseType]
+        );
+    const updateDiagramId: ChartDBContext['updateDiagramId'] = useCallback(
+        async (id) => {
+            const prevId = diagramId;
+            setDiagramId(id);
+            await db.updateDiagram({ id: prevId, attributes: { id } });
+        },
+        [db, diagramId, setDiagramId]
+    );
 
-    const addTable: ChartDBContext['addTable'] = (table: DBTable) => {
-        setTables((tables) => [...tables, table]);
-        return db.addTable({ diagramId, table });
-    };
+    const updateDiagramName: ChartDBContext['updateDiagramName'] = useCallback(
+        async (name) => {
+            setDiagramName(name);
+            await db.updateDiagram({ id: diagramId, attributes: { name } });
+        },
+        [db, diagramId, setDiagramName]
+    );
 
-    const createTable: ChartDBContext['createTable'] = async () => {
+    const addTable: ChartDBContext['addTable'] = useCallback(
+        (table: DBTable) => {
+            setTables((tables) => [...tables, table]);
+            return db.addTable({ diagramId, table });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const createTable: ChartDBContext['createTable'] = useCallback(async () => {
         const table: DBTable = {
             id: generateId(),
             name: `table_${tables.length + 1}`,
@@ -74,394 +93,426 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         await addTable(table);
 
         return table;
-    };
+    }, [addTable, tables]);
 
-    const getTable: ChartDBContext['getTable'] = (id: string) =>
-        tables.find((table) => table.id === id) ?? null;
+    const getTable: ChartDBContext['getTable'] = useCallback(
+        (id: string) => tables.find((table) => table.id === id) ?? null,
+        [tables]
+    );
 
-    const removeTable: ChartDBContext['removeTable'] = async (id: string) => {
-        setTables((tables) => tables.filter((table) => table.id !== id));
-        await db.deleteTable({ diagramId, id });
-    };
+    const removeTable: ChartDBContext['removeTable'] = useCallback(
+        async (id: string) => {
+            setTables((tables) => tables.filter((table) => table.id !== id));
+            await db.deleteTable({ diagramId, id });
+        },
+        [db, diagramId, setTables]
+    );
 
-    const updateTable: ChartDBContext['updateTable'] = async (
-        id: string,
-        table: Partial<DBTable>
-    ) => {
-        setTables((tables) =>
-            tables.map((t) => (t.id === id ? { ...t, ...table } : t))
-        );
-        await db.updateTable({ id, attributes: table });
-    };
-
-    const updateTables: ChartDBContext['updateTables'] = async (
-        tables: PartialExcept<DBTable, 'id'>[]
-    ) => {
-        setTables((currentTables) =>
-            currentTables.map((table) => {
-                const updatedTable = tables.find((t) => t.id === table.id);
-                return updatedTable ? { ...table, ...updatedTable } : table;
-            })
-        );
-
-        const promises = [];
-        for (const table of tables) {
-            promises.push(db.updateTable({ id: table.id, attributes: table }));
-        }
-
-        await Promise.all(promises);
-    };
-
-    const updateTablesState: ChartDBContext['updateTablesState'] = async (
-        updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
-    ) => {
-        const updatedTables = updateFn(tables);
-        setTables((prevTables) => {
-            const updatedTables = updateFn(prevTables);
-            return prevTables
-                .map((prevTable) => {
-                    const updatedTable = updatedTables.find(
-                        (t) => t.id === prevTable.id
-                    );
-                    return updatedTable
-                        ? { ...prevTable, ...updatedTable }
-                        : prevTable;
-                })
-                .filter((prevTable) =>
-                    updatedTables.some((t) => t.id === prevTable.id)
-                );
-        });
-
-        const promises = [];
-        for (const updatedTable of updatedTables) {
-            promises.push(
-                db.updateTable({
-                    id: updatedTable.id,
-                    attributes: updatedTable,
-                })
+    const updateTable: ChartDBContext['updateTable'] = useCallback(
+        async (id: string, table: Partial<DBTable>) => {
+            setTables((tables) =>
+                tables.map((t) => (t.id === id ? { ...t, ...table } : t))
             );
-        }
+            await db.updateTable({ id, attributes: table });
+        },
+        [db, setTables]
+    );
 
-        const tablesToDelete = tables.filter(
-            (table) => !updatedTables.some((t) => t.id === table.id)
-        );
+    // const updateTables: ChartDBContext['updateTables'] = useCallback(
+    //     async (tables: PartialExcept<DBTable, 'id'>[]) => {
+    //         setTables((currentTables) =>
+    //             currentTables.map((table) => {
+    //                 const updatedTable = tables.find((t) => t.id === table.id);
+    //                 return updatedTable ? { ...table, ...updatedTable } : table;
+    //             })
+    //         );
 
-        for (const table of tablesToDelete) {
-            promises.push(db.deleteTable({ diagramId, id: table.id }));
-        }
+    //         const promises = [];
+    //         for (const table of tables) {
+    //             promises.push(
+    //                 db.updateTable({ id: table.id, attributes: table })
+    //             );
+    //         }
 
-        await Promise.all(promises);
-    };
+    //         await Promise.all(promises);
+    //     },
+    //     [db, setTables]
+    // );
 
-    const updateField: ChartDBContext['updateField'] = async (
-        tableId: string,
-        fieldId: string,
-        field: Partial<DBField>
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? {
-                          ...table,
-                          fields: table.fields.map((f) =>
-                              f.id === fieldId ? { ...f, ...field } : f
-                          ),
-                      }
-                    : table
-            )
-        );
+    const updateTablesState: ChartDBContext['updateTablesState'] = useCallback(
+        async (
+            updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
+        ) => {
+            const updatedTables = updateFn(tables);
+            setTables((prevTables) => {
+                const updatedTables = updateFn(prevTables);
+                return prevTables
+                    .map((prevTable) => {
+                        const updatedTable = updatedTables.find(
+                            (t) => t.id === prevTable.id
+                        );
+                        return updatedTable
+                            ? { ...prevTable, ...updatedTable }
+                            : prevTable;
+                    })
+                    .filter((prevTable) =>
+                        updatedTables.some((t) => t.id === prevTable.id)
+                    );
+            });
 
-        const table = await db.getTable({ diagramId, id: tableId });
-        if (!table) {
-            return;
-        }
+            const promises = [];
+            for (const updatedTable of updatedTables) {
+                promises.push(
+                    db.updateTable({
+                        id: updatedTable.id,
+                        attributes: updatedTable,
+                    })
+                );
+            }
 
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...table,
-                fields: table.fields.map((f) =>
-                    f.id === fieldId ? { ...f, ...field } : f
-                ),
+            const tablesToDelete = tables.filter(
+                (table) => !updatedTables.some((t) => t.id === table.id)
+            );
+
+            for (const table of tablesToDelete) {
+                promises.push(db.deleteTable({ diagramId, id: table.id }));
+            }
+
+            await Promise.all(promises);
+        },
+        [db, tables, setTables, diagramId]
+    );
+
+    const updateField: ChartDBContext['updateField'] = useCallback(
+        async (tableId: string, fieldId: string, field: Partial<DBField>) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? {
+                              ...table,
+                              fields: table.fields.map((f) =>
+                                  f.id === fieldId ? { ...f, ...field } : f
+                              ),
+                          }
+                        : table
+                )
+            );
+
+            const table = await db.getTable({ diagramId, id: tableId });
+            if (!table) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...table,
+                    fields: table.fields.map((f) =>
+                        f.id === fieldId ? { ...f, ...field } : f
+                    ),
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const removeField: ChartDBContext['removeField'] = useCallback(
+        async (tableId: string, fieldId: string) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? {
+                              ...table,
+                              fields: table.fields.filter(
+                                  (f) => f.id !== fieldId
+                              ),
+                          }
+                        : table
+                )
+            );
+
+            const table = await db.getTable({ diagramId, id: tableId });
+            if (!table) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...table,
+                    fields: table.fields.filter((f) => f.id !== fieldId),
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const addField: ChartDBContext['addField'] = useCallback(
+        async (tableId: string, field: DBField) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? { ...table, fields: [...table.fields, field] }
+                        : table
+                )
+            );
+
+            const table = await db.getTable({ diagramId, id: tableId });
+
+            if (!table) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...table,
+                    fields: [...table.fields, field],
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const getField: ChartDBContext['getField'] = useCallback(
+        (tableId: string, fieldId: string) => {
+            const table = getTable(tableId);
+            return table?.fields.find((f) => f.id === fieldId) ?? null;
+        },
+        [getTable]
+    );
+
+    const createField: ChartDBContext['createField'] = useCallback(
+        async (tableId: string) => {
+            const table = getTable(tableId);
+            const field: DBField = {
+                id: generateId(),
+                name: `field_${(table?.fields?.length ?? 0) + 1}`,
+                type: 'bigint',
+                unique: false,
+                nullable: true,
+                primaryKey: false,
+                createdAt: Date.now(),
+            };
+
+            await addField(tableId, field);
+
+            return field;
+        },
+        [addField, getTable]
+    );
+
+    const addIndex: ChartDBContext['addIndex'] = useCallback(
+        async (tableId: string, index: DBIndex) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? { ...table, indexes: [...table.indexes, index] }
+                        : table
+                )
+            );
+
+            const dbTable = await db.getTable({ diagramId, id: tableId });
+            if (!dbTable) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...dbTable,
+                    indexes: [...dbTable.indexes, index],
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const removeIndex: ChartDBContext['removeIndex'] = useCallback(
+        async (tableId: string, indexId: string) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? {
+                              ...table,
+                              indexes: table.indexes.filter(
+                                  (i) => i.id !== indexId
+                              ),
+                          }
+                        : table
+                )
+            );
+
+            const dbTable = await db.getTable({
+                diagramId,
+                id: tableId,
+            });
+
+            if (!dbTable) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...dbTable,
+                    indexes: dbTable.indexes.filter((i) => i.id !== indexId),
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const createIndex: ChartDBContext['createIndex'] = useCallback(
+        async (tableId: string) => {
+            const table = getTable(tableId);
+            const index: DBIndex = {
+                id: generateId(),
+                name: `index_${(table?.indexes?.length ?? 0) + 1}`,
+                fieldIds: [],
+                unique: false,
+                createdAt: Date.now(),
+            };
+
+            await addIndex(tableId, index);
+
+            return index;
+        },
+        [addIndex, getTable]
+    );
+
+    const getIndex: ChartDBContext['getIndex'] = useCallback(
+        (tableId: string, indexId: string) => {
+            const table = getTable(tableId);
+            return table?.indexes.find((i) => i.id === indexId) ?? null;
+        },
+        [getTable]
+    );
+
+    const updateIndex: ChartDBContext['updateIndex'] = useCallback(
+        async (tableId: string, indexId: string, index: Partial<DBIndex>) => {
+            setTables((tables) =>
+                tables.map((table) =>
+                    table.id === tableId
+                        ? {
+                              ...table,
+                              indexes: table.indexes.map((i) =>
+                                  i.id === indexId ? { ...i, ...index } : i
+                              ),
+                          }
+                        : table
+                )
+            );
+
+            const dbTable = await db.getTable({ diagramId, id: tableId });
+
+            if (!dbTable) {
+                return;
+            }
+
+            await db.updateTable({
+                id: tableId,
+                attributes: {
+                    ...dbTable,
+                    indexes: dbTable.indexes.map((i) =>
+                        i.id === indexId ? { ...i, ...index } : i
+                    ),
+                },
+            });
+        },
+        [db, diagramId, setTables]
+    );
+
+    const addRelationship: ChartDBContext['addRelationship'] = useCallback(
+        async (relationship: DBRelationship) => {
+            setRelationships((relationships) => [
+                ...relationships,
+                relationship,
+            ]);
+
+            await db.addRelationship({ diagramId, relationship });
+        },
+        [db, diagramId, setRelationships]
+    );
+
+    const createRelationship: ChartDBContext['createRelationship'] =
+        useCallback(
+            async ({
+                sourceTableId,
+                targetTableId,
+                sourceFieldId,
+                targetFieldId,
+            }) => {
+                const sourceTableName = getTable(sourceTableId)?.name ?? '';
+                const targetTableName = getTable(targetTableId)?.name ?? '';
+                const relationship: DBRelationship = {
+                    id: generateId(),
+                    name: `${sourceTableName}_${targetTableName}_fk`,
+                    sourceTableId,
+                    targetTableId,
+                    sourceFieldId,
+                    targetFieldId,
+                    type: 'one_to_one',
+                    createdAt: Date.now(),
+                };
+
+                await addRelationship(relationship);
+
+                return relationship;
             },
-        });
-    };
-
-    const removeField: ChartDBContext['removeField'] = async (
-        tableId: string,
-        fieldId: string
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? {
-                          ...table,
-                          fields: table.fields.filter((f) => f.id !== fieldId),
-                      }
-                    : table
-            )
+            [addRelationship, getTable]
         );
 
-        const table = await db.getTable({ diagramId, id: tableId });
-        if (!table) {
-            return;
-        }
+    const getRelationship: ChartDBContext['getRelationship'] = useCallback(
+        (id: string) =>
+            relationships.find((relationship) => relationship.id === id) ??
+            null,
+        [relationships]
+    );
 
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...table,
-                fields: table.fields.filter((f) => f.id !== fieldId),
+    const removeRelationship: ChartDBContext['removeRelationship'] =
+        useCallback(
+            async (id: string) => {
+                setRelationships((relationships) =>
+                    relationships.filter(
+                        (relationship) => relationship.id !== id
+                    )
+                );
+
+                await db.deleteRelationship({ diagramId, id });
             },
-        });
-    };
-
-    const addField: ChartDBContext['addField'] = async (
-        tableId: string,
-        field: DBField
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? { ...table, fields: [...table.fields, field] }
-                    : table
-            )
+            [db, diagramId, setRelationships]
         );
 
-        const table = await db.getTable({ diagramId, id: tableId });
+    const removeRelationships: ChartDBContext['removeRelationships'] =
+        useCallback(
+            async (...ids: string[]) => {
+                setRelationships((relationships) =>
+                    relationships.filter(
+                        (relationship) => !ids.includes(relationship.id)
+                    )
+                );
 
-        if (!table) {
-            return;
-        }
-
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...table,
-                fields: [...table.fields, field],
+                await Promise.all(
+                    ids.map((id) => db.deleteRelationship({ diagramId, id }))
+                );
             },
-        });
-    };
-
-    const getField: ChartDBContext['getField'] = (
-        tableId: string,
-        fieldId: string
-    ) => {
-        const table = getTable(tableId);
-        return table?.fields.find((f) => f.id === fieldId) ?? null;
-    };
-
-    const createField: ChartDBContext['createField'] = async (
-        tableId: string
-    ) => {
-        const table = getTable(tableId);
-        const field: DBField = {
-            id: generateId(),
-            name: `field_${(table?.fields?.length ?? 0) + 1}`,
-            type: 'bigint',
-            unique: false,
-            nullable: true,
-            primaryKey: false,
-            createdAt: Date.now(),
-        };
-
-        await addField(tableId, field);
-
-        return field;
-    };
-
-    const addIndex: ChartDBContext['addIndex'] = async (
-        tableId: string,
-        index: DBIndex
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? { ...table, indexes: [...table.indexes, index] }
-                    : table
-            )
+            [db, diagramId, setRelationships]
         );
 
-        const dbTable = await db.getTable({ diagramId, id: tableId });
-        if (!dbTable) {
-            return;
-        }
+    const updateRelationship: ChartDBContext['updateRelationship'] =
+        useCallback(
+            async (id: string, relationship: Partial<DBRelationship>) => {
+                setRelationships((relationships) =>
+                    relationships.map((r) =>
+                        r.id === id ? { ...r, ...relationship } : r
+                    )
+                );
 
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...dbTable,
-                indexes: [...dbTable.indexes, index],
+                await db.updateRelationship({ id, attributes: relationship });
             },
-        });
-    };
-
-    const removeIndex: ChartDBContext['removeIndex'] = async (
-        tableId: string,
-        indexId: string
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? {
-                          ...table,
-                          indexes: table.indexes.filter(
-                              (i) => i.id !== indexId
-                          ),
-                      }
-                    : table
-            )
+            [db, setRelationships]
         );
-
-        const dbTable = await db.getTable({
-            diagramId,
-            id: tableId,
-        });
-
-        if (!dbTable) {
-            return;
-        }
-
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...dbTable,
-                indexes: dbTable.indexes.filter((i) => i.id !== indexId),
-            },
-        });
-    };
-
-    const createIndex: ChartDBContext['createIndex'] = async (
-        tableId: string
-    ) => {
-        const table = getTable(tableId);
-        const index: DBIndex = {
-            id: generateId(),
-            name: `index_${(table?.indexes?.length ?? 0) + 1}`,
-            fieldIds: [],
-            unique: false,
-            createdAt: Date.now(),
-        };
-
-        await addIndex(tableId, index);
-
-        return index;
-    };
-
-    const getIndex: ChartDBContext['getIndex'] = (
-        tableId: string,
-        indexId: string
-    ) => {
-        const table = getTable(tableId);
-        return table?.indexes.find((i) => i.id === indexId) ?? null;
-    };
-
-    const updateIndex: ChartDBContext['updateIndex'] = async (
-        tableId: string,
-        indexId: string,
-        index: Partial<DBIndex>
-    ) => {
-        setTables((tables) =>
-            tables.map((table) =>
-                table.id === tableId
-                    ? {
-                          ...table,
-                          indexes: table.indexes.map((i) =>
-                              i.id === indexId ? { ...i, ...index } : i
-                          ),
-                      }
-                    : table
-            )
-        );
-
-        const dbTable = await db.getTable({ diagramId, id: tableId });
-
-        if (!dbTable) {
-            return;
-        }
-
-        await db.updateTable({
-            id: tableId,
-            attributes: {
-                ...dbTable,
-                indexes: dbTable.indexes.map((i) =>
-                    i.id === indexId ? { ...i, ...index } : i
-                ),
-            },
-        });
-    };
-
-    const addRelationship: ChartDBContext['addRelationship'] = async (
-        relationship: DBRelationship
-    ) => {
-        setRelationships((relationships) => [...relationships, relationship]);
-
-        await db.addRelationship({ diagramId, relationship });
-    };
-
-    const createRelationship: ChartDBContext['createRelationship'] = async ({
-        sourceTableId,
-        targetTableId,
-        sourceFieldId,
-        targetFieldId,
-    }) => {
-        const sourceTableName = getTable(sourceTableId)?.name ?? '';
-        const targetTableName = getTable(targetTableId)?.name ?? '';
-        const relationship: DBRelationship = {
-            id: generateId(),
-            name: `${sourceTableName}_${targetTableName}_fk`,
-            sourceTableId,
-            targetTableId,
-            sourceFieldId,
-            targetFieldId,
-            type: 'one_to_one',
-            createdAt: Date.now(),
-        };
-
-        await addRelationship(relationship);
-
-        return relationship;
-    };
-
-    const getRelationship: ChartDBContext['getRelationship'] = (id: string) =>
-        relationships.find((relationship) => relationship.id === id) ?? null;
-
-    const removeRelationship: ChartDBContext['removeRelationship'] = async (
-        id: string
-    ) => {
-        setRelationships((relationships) =>
-            relationships.filter((relationship) => relationship.id !== id)
-        );
-
-        await db.deleteRelationship({ diagramId, id });
-    };
-
-    const removeRelationships: ChartDBContext['removeRelationships'] = async (
-        ...ids: string[]
-    ) => {
-        setRelationships((relationships) =>
-            relationships.filter(
-                (relationship) => !ids.includes(relationship.id)
-            )
-        );
-
-        await Promise.all(
-            ids.map((id) => db.deleteRelationship({ diagramId, id }))
-        );
-    };
-
-    const updateRelationship: ChartDBContext['updateRelationship'] = async (
-        id: string,
-        relationship: Partial<DBRelationship>
-    ) => {
-        setRelationships((relationships) =>
-            relationships.map((r) =>
-                r.id === id ? { ...r, ...relationship } : r
-            )
-        );
-
-        await db.updateRelationship({ id, attributes: relationship });
-    };
 
     const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
         async (diagramId: string) => {
@@ -507,7 +558,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 getTable,
                 removeTable,
                 updateTable,
-                updateTables,
+                // updateTables,
                 updateTablesState,
                 updateField,
                 removeField,

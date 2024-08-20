@@ -28,7 +28,7 @@ export interface ChartDBContext {
     getTable: (id: string) => DBTable | null;
     removeTable: (id: string) => Promise<void>;
     updateTable: (id: string, table: Partial<DBTable>) => Promise<void>;
-    updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => Promise<void>;
+    // updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => Promise<void>;
     updateTablesState: (
         updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
     ) => Promise<void>;
@@ -74,7 +74,7 @@ export interface ChartDBContext {
 
 export const chartDBContext = createContext<ChartDBContext>({
     databaseType: DatabaseType.GENERIC,
-    diagramName: 'New Diagram',
+    diagramName: '',
     diagramId: '',
     tables: [],
     relationships: [],
@@ -88,7 +88,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     updateDatabaseType: emptyFn,
 
     // Table operations
-    updateTables: emptyFn,
+    // updateTables: emptyFn,
     createTable: emptyFn,
     getTable: emptyFn,
     addTable: emptyFn,
