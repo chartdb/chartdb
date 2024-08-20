@@ -51,6 +51,7 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateTablesState: ({ redoData: { tables } }) => {
                 return updateTablesState(() => tables, {
                     updateHistory: false,
+                    forceOverride: true,
                 });
             },
             addField: ({ redoData: { tableId, field } }) => {
@@ -169,6 +170,7 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateTablesState: ({ undoData: { tables } }) => {
                 return updateTablesState(() => tables, {
                     updateHistory: false,
+                    forceOverride: true,
                 });
             },
             addIndex: ({ undoData: { tableId, indexId } }) => {
