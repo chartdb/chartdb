@@ -23,7 +23,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex flex-col w-48 bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
+            className={`flex flex-col w-56 bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
         >
             <div
                 className="h-2 rounded-t-lg"

@@ -85,9 +85,11 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                     />
                 </>
             )}
-            <div className="flex">{field.name}</div>
-            <div className="flex">
-                <div className="text-muted-foreground flex group-hover:hidden">
+            <div className="block w-2/3 text-left overflow-hidden whitespace-nowrap text-ellipsis">
+                {field.name}
+            </div>
+            <div className="flex justify-end w-1/3">
+                <div className="text-muted-foreground block group-hover:hidden text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis w-full">
                     {field.type}
                 </div>
                 <div className="flex-row hidden group-hover:flex">
