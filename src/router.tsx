@@ -7,6 +7,8 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { StorageProvider } from './context/storage-context/storage-provider';
 import { CreateDiagramDialogProvider } from './dialogs/create-diagram-dialog/create-diagram-dialog-provider';
 import { ConfigProvider } from './context/config-context/config-provider';
+import { HistoryProvider } from './context/history-context/history-provider';
+import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -14,13 +16,17 @@ const routes: RouteObject[] = [
         element: (
             <StorageProvider>
                 <ConfigProvider>
-                    <ChartDBProvider>
-                        <CreateDiagramDialogProvider>
-                            <ReactFlowProvider>
-                                <EditorPage />
-                            </ReactFlowProvider>
-                        </CreateDiagramDialogProvider>
-                    </ChartDBProvider>
+                    <RedoUndoStackProvider>
+                        <ChartDBProvider>
+                            <HistoryProvider>
+                                <CreateDiagramDialogProvider>
+                                    <ReactFlowProvider>
+                                        <EditorPage />
+                                    </ReactFlowProvider>
+                                </CreateDiagramDialogProvider>
+                            </HistoryProvider>
+                        </ChartDBProvider>
+                    </RedoUndoStackProvider>
                 </ConfigProvider>
             </StorageProvider>
         ),
