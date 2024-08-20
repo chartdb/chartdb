@@ -11,6 +11,8 @@ export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
     const [undoStack, setUndoStack] = React.useState<RedoUndoAction[]>([]);
     const [redoStack, setRedoStack] = React.useState<RedoUndoAction[]>([]);
 
+    console.log({ undoStack });
+
     const addRedoAction: RedoUndoStackContext['addRedoAction'] = useCallback(
         (action) => {
             setRedoStack((prev) => [...prev, action]);

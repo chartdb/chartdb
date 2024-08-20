@@ -67,10 +67,12 @@ export const RelationshipListItemHeader: React.FC<
                         ? {
                               ...edge,
                               selected: true,
+                              animated: true,
                           }
                         : {
                               ...edge,
                               selected: false,
+                              animated: false,
                           }
                 )
             );

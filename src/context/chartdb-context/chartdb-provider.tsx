@@ -699,7 +699,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     ids.map((id) => db.deleteRelationship({ diagramId, id }))
                 );
 
-                if (options.updateHistory) {
+                if (prevRelationships.length > 0 && options.updateHistory) {
                     addUndoAction({
                         action: 'removeRelationships',
                         redoData: { relationshipsIds: ids },
