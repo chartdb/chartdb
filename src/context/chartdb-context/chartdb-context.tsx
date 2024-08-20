@@ -16,7 +16,10 @@ export interface ChartDBContext {
 
     // General operations
     updateDiagramId: (id: string) => Promise<void>;
-    updateDiagramName: (name: string) => Promise<void>;
+    updateDiagramName: (
+        name: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     loadDiagram: (diagramId: string) => Promise<Diagram | undefined>;
 
     // Database type operations
@@ -24,13 +27,23 @@ export interface ChartDBContext {
 
     // Table operations
     createTable: () => Promise<DBTable>;
-    addTable: (table: DBTable) => Promise<void>;
+    addTable: (
+        table: DBTable,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     getTable: (id: string) => DBTable | null;
-    removeTable: (id: string) => Promise<void>;
-    updateTable: (id: string, table: Partial<DBTable>) => Promise<void>;
-    // updateTables: (tables: PartialExcept<DBTable, 'id'>[]) => Promise<void>;
+    removeTable: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateTable: (
+        id: string,
+        table: Partial<DBTable>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     updateTablesState: (
-        updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[]
+        updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[],
+        options?: { updateHistory: boolean }
     ) => Promise<void>;
 
     // Field operations
@@ -38,21 +51,39 @@ export interface ChartDBContext {
     updateField: (
         tableId: string,
         fieldId: string,
-        field: Partial<DBField>
+        field: Partial<DBField>,
+        options?: { updateHistory: boolean }
     ) => Promise<void>;
-    removeField: (tableId: string, fieldId: string) => Promise<void>;
+    removeField: (
+        tableId: string,
+        fieldId: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     createField: (tableId: string) => Promise<DBField>;
-    addField: (tableId: string, field: DBField) => Promise<void>;
+    addField: (
+        tableId: string,
+        field: DBField,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
 
     // Index operations
     createIndex: (tableId: string) => Promise<DBIndex>;
-    addIndex: (tableId: string, index: DBIndex) => Promise<void>;
+    addIndex: (
+        tableId: string,
+        index: DBIndex,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     getIndex: (tableId: string, indexId: string) => DBIndex | null;
-    removeIndex: (tableId: string, indexId: string) => Promise<void>;
+    removeIndex: (
+        tableId: string,
+        indexId: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     updateIndex: (
         tableId: string,
         indexId: string,
-        index: Partial<DBIndex>
+        index: Partial<DBIndex>,
+        options?: { updateHistory: boolean }
     ) => Promise<void>;
 
     // Relationship operations
@@ -62,13 +93,27 @@ export interface ChartDBContext {
         sourceFieldId: string;
         targetFieldId: string;
     }) => Promise<DBRelationship>;
-    addRelationship: (relationship: DBRelationship) => Promise<void>;
+    addRelationship: (
+        relationship: DBRelationship,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addRelationships: (
+        relationships: DBRelationship[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     getRelationship: (id: string) => DBRelationship | null;
-    removeRelationship: (id: string) => Promise<void>;
-    removeRelationships: (...ids: string[]) => Promise<void>;
+    removeRelationship: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeRelationships: (
+        ids: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     updateRelationship: (
         id: string,
-        relationship: Partial<DBRelationship>
+        relationship: Partial<DBRelationship>,
+        options?: { updateHistory: boolean }
     ) => Promise<void>;
 }
 
@@ -117,4 +162,5 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeRelationship: emptyFn,
     updateRelationship: emptyFn,
     removeRelationships: emptyFn,
+    addRelationships: emptyFn,
 });

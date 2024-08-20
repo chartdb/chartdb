@@ -156,7 +156,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                         .filter((id) => !!id) as string[];
 
                     if (relationshipsToRemove.length > 0) {
-                        removeRelationships(...relationshipsToRemove);
+                        removeRelationships(relationshipsToRemove);
                     }
 
                     const selectionChanges = changes.filter(

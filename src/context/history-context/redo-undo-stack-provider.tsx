@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { RedoUndoAction } from './redo-undo-action';
-import { redoUndoStackContext } from './redo-undo-stack-context';
+import {
+    RedoUndoStackContext,
+    redoUndoStackContext,
+} from './redo-undo-stack-context';
 
 export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -8,13 +11,38 @@ export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
     const [undoStack, setUndoStack] = React.useState<RedoUndoAction[]>([]);
     const [redoStack, setRedoStack] = React.useState<RedoUndoAction[]>([]);
 
+    const addRedoAction: RedoUndoStackContext['addRedoAction'] = useCallback(
+        (action) => {
+            setRedoStack((prev) => [...prev, action]);
+        },
+        [setRedoStack]
+    );
+
+    const addUndoAction: RedoUndoStackContext['addUndoAction'] = useCallback(
+        (action) => {
+            setUndoStack((prev) => [...prev, action]);
+        },
+        [setUndoStack]
+    );
+
+    const resetRedoStack: RedoUndoStackContext['resetRedoStack'] =
+        useCallback(() => {
+            setRedoStack([]);
+        }, [setRedoStack]);
+
+    const hasRedo = redoStack.length > 0;
+    const hasUndo = undoStack.length > 0;
+
     return (
         <redoUndoStackContext.Provider
             value={{
                 redoStack,
                 undoStack,
-                setRedoStack,
-                setUndoStack,
+                addRedoAction,
+                addUndoAction,
+                resetRedoStack,
+                hasRedo,
+                hasUndo,
             }}
         >
             {children}
