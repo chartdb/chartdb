@@ -18,6 +18,8 @@ import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
+import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
+import { useOpenDiagramDialog } from '@/hooks/use-open-diagram-dialog';
 
 export interface TopNavbarProps {}
 
@@ -27,6 +29,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
+
+    const { openCreateDiagramDialog } = useCreateDiagramDialog();
+    const { openOpenDiagramDialog } = useOpenDiagramDialog();
 
     useEffect(() => {
         setEditedDiagramName(diagramName);
@@ -50,6 +55,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         event.stopPropagation();
         setEditMode(true);
     };
+
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12">
             <div className="flex flex-1 justify-start gap-x-3">
@@ -65,7 +71,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <MenubarMenu>
                             <MenubarTrigger>File</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarItem>
+                                <MenubarItem onClick={openCreateDiagramDialog}>
                                     New
                                     <MenubarShortcut>⌘T</MenubarShortcut>
                                 </MenubarItem>
@@ -73,7 +79,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     New Window
                                     <MenubarShortcut>⌘N</MenubarShortcut>
                                 </MenubarItem>
-                                <MenubarItem>Open</MenubarItem>
+                                <MenubarItem onClick={openOpenDiagramDialog}>Open</MenubarItem>
                                 <MenubarItem>Save</MenubarItem>
                                 <MenubarItem>Save as</MenubarItem>
                                 <MenubarSeparator />
