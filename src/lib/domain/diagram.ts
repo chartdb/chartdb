@@ -1,7 +1,14 @@
-import { DatabaseMetadata } from '../import-script-types/database-metadata';
+import { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import { DatabaseType } from './database-type';
-import { DBRelationship, createRelationships } from './db-relationship';
-import { DBTable, adjustTablePositions, createTables } from './db-table';
+import {
+    DBRelationship,
+    createRelationshipsFromMetadata,
+} from './db-relationship';
+import {
+    DBTable,
+    adjustTablePositions,
+    createTablesFromMetadata,
+} from './db-table';
 import { generateId } from '@/lib/utils';
 export interface Diagram {
     id: string;
@@ -11,26 +18,39 @@ export interface Diagram {
     relationships?: DBRelationship[];
 }
 
-export const loadFromDatabaseMetadata = (
-    databaseType: DatabaseType,
-    dm: DatabaseMetadata
-): Diagram => {
+export const loadFromDatabaseMetadata = ({
+    databaseType,
+    databaseMetadata,
+    diagramNumber,
+}: {
+    databaseType: DatabaseType;
+    databaseMetadata: DatabaseMetadata;
+    diagramNumber: number;
+}): Diagram => {
     const {
-        fk_info: foreignKeys,
-        pk_info: PrimaryKeyInfo,
         tables: tableInfos,
+        pk_info: primaryKeys,
         columns,
         indexes,
-    } = dm;
+        fk_info: foreignKeys,
+    } = databaseMetadata;
 
     // First pass: Create tables without final positions
-    const tables = createTables(tableInfos, columns, indexes, PrimaryKeyInfo);
+    const tables = createTablesFromMetadata({
+        tableInfos,
+        columns,
+        indexes,
+        primaryKeys,
+    });
 
     // First pass: Create relationships
-    const relationships = createRelationships(foreignKeys, tables);
+    const relationships = createRelationshipsFromMetadata({
+        foreignKeys,
+        tables,
+    });
 
     // Second pass: Adjust table positions based on relationships
-    const adjustedTables = adjustTablePositions(tables, relationships);
+    const adjustedTables = adjustTablePositions({ tables, relationships });
 
     const sortedTables = adjustedTables.sort((a, b) =>
         a.name.localeCompare(b.name)
@@ -38,8 +58,8 @@ export const loadFromDatabaseMetadata = (
 
     return {
         id: generateId(),
-        name: dm.server_name || 'Unnamed Diagram',
-        databaseType: databaseType || DatabaseType.GENERIC,
+        name: databaseMetadata.server_name || `Diagram ${diagramNumber}`,
+        databaseType: databaseType ?? DatabaseType.GENERIC,
         tables: sortedTables,
         relationships,
     };
