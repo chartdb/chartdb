@@ -1,11 +1,11 @@
 import { DBIndex } from './db-index';
-import { DBField } from './db-field';
-import { TableInfo } from '../import-script-types/table-info';
-import { ColumnInfo } from '../import-script-types/column-info';
-import { IndexInfo } from '../import-script-types/index-info';
+import { DBField, FieldType } from './db-field';
+import { TableInfo } from '../data/import-metadata/metadata-types/table-info';
+import { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
+import { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import { generateId, randomHSLA } from '@/lib/utils';
 import { DBRelationship } from './db-relationship';
-import { PrimaryKeyInfo } from '../import-script-types/primary-key-info';
+import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 
 export interface DBTable {
     id: string;
@@ -18,12 +18,17 @@ export interface DBTable {
     createdAt: number;
 }
 
-export const createTables = (
-    tableInfos: TableInfo[],
-    columns: ColumnInfo[],
-    indexes: IndexInfo[],
-    primaryKeys: PrimaryKeyInfo[]
-): DBTable[] => {
+export const createTablesFromMetadata = ({
+    tableInfos,
+    columns,
+    indexes,
+    primaryKeys,
+}: {
+    tableInfos: TableInfo[];
+    columns: ColumnInfo[];
+    indexes: IndexInfo[];
+    primaryKeys: PrimaryKeyInfo[];
+}): DBTable[] => {
     return tableInfos.map((tableInfo: TableInfo) => {
         // Filter, make unique, and sort columns based on ordinal_position
         const uniqueColumns = new Map<string, ColumnInfo>();
@@ -49,27 +54,33 @@ export const createTables = (
             (idx) => idx.table === tableInfo.table
         );
 
-        const fields: DBField[] = sortedColumns.map((col: ColumnInfo) => ({
-            id: generateId(),
-            name: col.name,
-            type: col.type as any,
-            primaryKey: tablePrimaryKeys.some((pk) => pk.column === col.name),
-            unique: tableIndexes.some(
-                (idx) => idx.column === col.name && idx.unique
-            ),
-            nullable: col.nullable,
-            createdAt: Date.now(),
-        }));
+        const fields: DBField[] = sortedColumns.map(
+            (col: ColumnInfo): DBField => ({
+                id: generateId(),
+                name: col.name,
+                type: col.type as FieldType,
+                primaryKey: tablePrimaryKeys.some(
+                    (pk) => pk.column === col.name
+                ),
+                unique: tableIndexes.some(
+                    (idx) => idx.column === col.name && idx.unique
+                ),
+                nullable: col.nullable,
+                createdAt: Date.now(),
+            })
+        );
 
-        const dbIndexes: DBIndex[] = tableIndexes.map((idx: IndexInfo) => ({
-            id: generateId(),
-            name: idx.name,
-            unique: idx.unique,
-            fieldIds: fields
-                .filter((field) => field.name === idx.column)
-                .map((field) => field.id),
-            createdAt: Date.now(),
-        }));
+        const dbIndexes: DBIndex[] = tableIndexes.map(
+            (idx: IndexInfo): DBIndex => ({
+                id: generateId(),
+                name: idx.name,
+                unique: idx.unique,
+                fieldIds: fields
+                    .filter((field) => field.name === idx.column)
+                    .map((field) => field.id),
+                createdAt: Date.now(),
+            })
+        );
 
         // Initial random positions; these will be adjusted later
         return {
@@ -85,10 +96,13 @@ export const createTables = (
     });
 };
 
-export const adjustTablePositions = (
-    tables: DBTable[],
-    relationships: DBRelationship[]
-): DBTable[] => {
+export const adjustTablePositions = ({
+    relationships,
+    tables,
+}: {
+    tables: DBTable[];
+    relationships: DBRelationship[];
+}): DBTable[] => {
     const tableWidth = 200;
     const tableHeight = 300; // Approximate height of each table, adjust as needed
     const gapX = 55;

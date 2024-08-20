@@ -66,33 +66,28 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     }: {
         diagram: Diagram;
     }) => {
-        // Extract tables and relationships from the diagram
-        const { tables, relationships } = diagram;
+        const promises = [];
+        promises.push(
+            db.diagrams.add({
+                id: diagram.id,
+                name: diagram.name,
+                databaseType: diagram.databaseType,
+            })
+        );
 
-        // Save the diagram without the tables and relationships
-        const diagramId = await db.diagrams.add({
-            id: diagram.id,
-            name: diagram.name,
-            databaseType: diagram.databaseType,
-        });
+        const tables = diagram.tables ?? [];
+        promises.push(
+            ...tables.map((table) => addTable({ diagramId: diagram.id, table }))
+        );
 
-        // Save each table associated with this diagram
-        if (tables && tables.length > 0) {
-            await Promise.all(
-                tables.map(async (table) => {
-                    await addTable({ diagramId, table });
-                })
-            );
-        }
+        const relationships = diagram.relationships ?? [];
+        promises.push(
+            ...relationships.map((relationship) =>
+                addRelationship({ diagramId: diagram.id, relationship })
+            )
+        );
 
-        // Save each relationship associated with this diagram
-        if (relationships && relationships.length > 0) {
-            await Promise.all(
-                relationships.map(async (relationship) => {
-                    await addRelationship({ diagramId, relationship });
-                })
-            );
-        }
+        await Promise.all(promises);
     };
 
     const listDiagrams: StorageContext['listDiagrams'] = async (): Promise<
@@ -191,7 +186,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_tables
             .where('diagramId')
             .equals(diagramId)
-            .sortBy('name'); // Sort by the 'name' field
+            .sortBy('name');
     };
 
     const addRelationship: StorageContext['addRelationship'] = async ({

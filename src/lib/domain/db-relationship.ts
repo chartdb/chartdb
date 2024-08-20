@@ -1,4 +1,4 @@
-import { ForeignKeyInfo } from '../import-script-types/foreign-key-info';
+import { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
 import { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 
@@ -15,11 +15,14 @@ export interface DBRelationship {
 
 export type RelationshipType = 'one_to_one' | 'one_to_many' | 'many_to_one';
 
-export const createRelationships = (
-    fkInfo: ForeignKeyInfo[],
-    tables: DBTable[]
-): DBRelationship[] => {
-    return fkInfo
+export const createRelationshipsFromMetadata = ({
+    foreignKeys,
+    tables,
+}: {
+    foreignKeys: ForeignKeyInfo[];
+    tables: DBTable[];
+}): DBRelationship[] => {
+    return foreignKeys
         .map((fk: ForeignKeyInfo) => {
             const sourceTable = tables.find((table) => table.name === fk.table);
             const targetTable = tables.find(
