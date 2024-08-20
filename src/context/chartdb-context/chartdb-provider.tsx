@@ -181,18 +181,27 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         ) => {
             const updateTables = (prevTables: DBTable[]) => {
                 const updatedTables = updateFn(prevTables);
-                return prevTables
-                    .map((prevTable) => {
-                        const updatedTable = updatedTables.find(
-                            (t) => t.id === prevTable.id
-                        );
-                        return updatedTable
-                            ? { ...prevTable, ...updatedTable }
-                            : prevTable;
-                    })
-                    .filter((prevTable) =>
-                        updatedTables.some((t) => t.id === prevTable.id)
-                    );
+
+                const newTables = updatedTables.filter(
+                    (t) =>
+                        !prevTables.some((prevTable) => prevTable.id === t.id)
+                );
+
+                return [
+                    ...newTables,
+                    ...prevTables
+                        .map((prevTable) => {
+                            const updatedTable = updatedTables.find(
+                                (t) => t.id === prevTable.id
+                            );
+                            return updatedTable
+                                ? { ...prevTable, ...updatedTable }
+                                : prevTable;
+                        })
+                        .filter((prevTable) =>
+                            updatedTables.some((t) => t.id === prevTable.id)
+                        ),
+                ];
             };
 
             const prevTables = [...tables];

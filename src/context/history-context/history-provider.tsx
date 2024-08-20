@@ -214,8 +214,6 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             return;
         }
 
-        console.log('undo', action);
-
         const handler = undoActionHandlers[action.action];
         addRedoAction(action);
 
