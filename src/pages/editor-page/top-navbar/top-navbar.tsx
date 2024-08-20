@@ -22,7 +22,7 @@ import ChartDBLogo from '@/assets/logo.png';
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
-    const { diagramName, updateDiagramName } = useChartDB();
+    const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
     const [editMode, setEditMode] = React.useState(false);
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
@@ -50,6 +50,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         event.stopPropagation();
         setEditMode(true);
     };
+
+    const exportSql = useCallback(() => {
+        console.log('Export SQL');
+        console.log({ currentDiagram });
+    }, [currentDiagram]);
+
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12">
             <div className="flex flex-1 justify-start gap-x-3">
@@ -77,7 +83,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <MenubarItem>Save</MenubarItem>
                                 <MenubarItem>Save as</MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarItem>Export</MenubarItem>
+                                <MenubarItem onClick={exportSql}>
+                                    Export
+                                </MenubarItem>
                                 <MenubarSub>
                                     <MenubarSubTrigger>
                                         Export as

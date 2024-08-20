@@ -13,6 +13,7 @@ export interface ChartDBContext {
     databaseType: DatabaseType;
     tables: DBTable[];
     relationships: DBRelationship[];
+    currentDiagram: Diagram;
 
     // General operations
     updateDiagramId: (id: string) => Promise<void>;
@@ -123,6 +124,11 @@ export const chartDBContext = createContext<ChartDBContext>({
     diagramId: '',
     tables: [],
     relationships: [],
+    currentDiagram: {
+        id: '',
+        name: '',
+        databaseType: DatabaseType.GENERIC,
+    },
 
     // General operations
     updateDiagramId: emptyFn,

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { DBTable } from '@/lib/domain/db-table';
 import { generateId, randomHSLA } from '@/lib/utils';
 import { ChartDBContext, chartDBContext } from './chartdb-context';
@@ -8,6 +8,7 @@ import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
+import { Diagram } from '@/lib/domain/diagram';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -22,6 +23,17 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [tables, setTables] = React.useState<DBTable[]>([]);
     const [relationships, setRelationships] = React.useState<DBRelationship[]>(
         []
+    );
+
+    const currentDiagram: Diagram = useMemo(
+        () => ({
+            id: diagramId,
+            name: diagramName,
+            databaseType,
+            tables,
+            relationships,
+        }),
+        [diagramId, diagramName, databaseType, tables, relationships]
     );
 
     const updateDatabaseType: ChartDBContext['updateDatabaseType'] =
@@ -778,6 +790,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 databaseType,
                 tables,
                 relationships,
+                currentDiagram,
                 updateDiagramId,
                 updateDiagramName,
                 loadDiagram,
