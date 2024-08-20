@@ -108,6 +108,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             indexes: [],
             color: randomHSLA(),
             createdAt: Date.now(),
+            isView: false,
         };
         await addTable(table);
 
