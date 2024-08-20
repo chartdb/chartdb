@@ -20,7 +20,10 @@ import { loadFromDatabaseMetadata } from '@/lib/domain/diagram';
 import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
-import { DatabaseMetadata } from '@/lib/import-script-types/database-metadata';
+import {
+    DatabaseMetadata,
+    loadDatabaseMetadata,
+} from '@/lib/data/import-metadata/metadata-types/database-metadata';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -56,13 +59,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [listDiagrams, setDiagramNumber]);
 
     const createNewDiagram = useCallback(async () => {
-        console.log('scriptResult: ', scriptResult);
-        const databaseMetadata: DatabaseMetadata = JSON.parse(scriptResult);
-        const diagram = loadFromDatabaseMetadata(
+        const databaseMetadata: DatabaseMetadata =
+            loadDatabaseMetadata(scriptResult);
+
+        const diagram = loadFromDatabaseMetadata({
             databaseType,
-            databaseMetadata
-        );
-        console.log('diagram: ', diagram);
+            databaseMetadata,
+            diagramNumber,
+        });
 
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
@@ -75,6 +79,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         navigate,
         updateConfig,
         scriptResult,
+        diagramNumber,
     ]);
 
     const renderDatabaseOption = useCallback((type: DatabaseType) => {
