@@ -18,6 +18,8 @@ export const convertToDecimal = (number: number) => {
 export const randomHSLA = () =>
     `hsla(${~~(360 * convertToDecimal(parseInt(randonNumber())))}, 70%, 72%, 0.8)`;
 
+export const greyColor = 'hsla(0, 0%, 65%, 1)';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const emptyFn = (): any => undefined;
 

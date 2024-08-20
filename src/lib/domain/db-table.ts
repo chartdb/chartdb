@@ -3,7 +3,7 @@ import { DBField, FieldType } from './db-field';
 import { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
-import { generateId, randomHSLA } from '@/lib/utils';
+import { generateId, greyColor, randomHSLA } from '@/lib/utils';
 import { DBRelationship } from './db-relationship';
 import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
@@ -101,7 +101,7 @@ export const createTablesFromMetadata = ({
             y: Math.random() * 800, // Placeholder Y
             fields,
             indexes: dbIndexes,
-            color: isView ? 'grey' : randomHSLA(),
+            color: isView ? greyColor : randomHSLA(),
             isView: isView,
             createdAt: Date.now(),
         };
