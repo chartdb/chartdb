@@ -166,12 +166,12 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     if (selectionChanges.length > 0) {
                         setEdges((edges) =>
                             edges.map((edge) => {
-                                edge.zIndex = selectionChanges.some(
+                                const selected = selectionChanges.some(
                                     (change) =>
                                         change.id === edge.id && change.selected
-                                )
-                                    ? 1
-                                    : 0;
+                                );
+                                edge.zIndex = selected ? 1 : 0;
+                                edge.animated = selected;
                                 return edge;
                             })
                         );
@@ -187,7 +187,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 defaultEdgeOptions={{
-                    animated: true,
+                    animated: false,
                     type: 'table-edge',
                 }}
             >
