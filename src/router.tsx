@@ -9,26 +9,29 @@ import { CreateDiagramDialogProvider } from './dialogs/create-diagram-dialog/cre
 import { ConfigProvider } from './context/config-context/config-provider';
 import { HistoryProvider } from './context/history-context/history-provider';
 import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
+import { LayoutProvider } from './context/layout-context/layout-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
         path,
         element: (
-            <StorageProvider>
-                <ConfigProvider>
-                    <RedoUndoStackProvider>
-                        <ChartDBProvider>
-                            <HistoryProvider>
-                                <CreateDiagramDialogProvider>
-                                    <ReactFlowProvider>
-                                        <EditorPage />
-                                    </ReactFlowProvider>
-                                </CreateDiagramDialogProvider>
-                            </HistoryProvider>
-                        </ChartDBProvider>
-                    </RedoUndoStackProvider>
-                </ConfigProvider>
-            </StorageProvider>
+            <LayoutProvider>
+                <StorageProvider>
+                    <ConfigProvider>
+                        <RedoUndoStackProvider>
+                            <ChartDBProvider>
+                                <HistoryProvider>
+                                    <CreateDiagramDialogProvider>
+                                        <ReactFlowProvider>
+                                            <EditorPage />
+                                        </ReactFlowProvider>
+                                    </CreateDiagramDialogProvider>
+                                </HistoryProvider>
+                            </ChartDBProvider>
+                        </RedoUndoStackProvider>
+                    </ConfigProvider>
+                </StorageProvider>
+            </LayoutProvider>
         ),
     })),
     {

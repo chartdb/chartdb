@@ -1,10 +1,11 @@
 import React from 'react';
 import { NodeProps, Node } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { Ellipsis, Table2 } from 'lucide-react';
+import { Pencil, Table2 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import { DBTable } from '@/lib/domain/db-table';
 import { TableNodeField } from './table-node-field';
+import { useLayout } from '@/hooks/use-layout';
 
 export type TableNodeType = Node<
     {
@@ -19,7 +20,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     id,
     data: { table },
 }) => {
+    const { openTableFromSidebar, selectSidebarSection } = useLayout();
     const focused = !!selected && !dragging;
+
+    const openTableInEditor = () => {
+        selectSidebarSection('tables');
+        openTableFromSidebar(table.id);
+    };
 
     return (
         <div
@@ -38,8 +45,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     <Button
                         variant="ghost"
                         className="hover:bg-primary-foreground p-0 w-6 h-6 text-slate-500 hover:text-slate-700"
+                        onClick={openTableInEditor}
                     >
-                        <Ellipsis className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                     </Button>
                 </div>
             </div>
