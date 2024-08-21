@@ -25,6 +25,7 @@ import {
     loadDatabaseMetadata,
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { generateId } from '@/lib/utils';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -38,6 +39,7 @@ export interface CreateDiagramDialogProps {
 export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
 }) => {
+    const { diagramId } = useChartDB();
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -59,6 +61,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         fetchDiagrams();
     }, [listDiagrams, setDiagramNumber]);
 
+    const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
+
     const createNewDiagram = useCallback(async () => {
         let diagram: Diagram = {
             id: generateId(),
@@ -79,6 +83,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
+        setDiagramNumber(diagramNumber + 1);
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [
@@ -196,42 +201,58 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             case CreateDiagramDialogStep.SELECT_DATABASE:
                 return (
                     <DialogFooter className="flex !justify-between gap-2">
-                        <DialogClose asChild>
+                        {hasExistingDiagram ? (
+                            <DialogClose asChild>
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    // onClick={createNewDiagram}
+                                >
+                                    Cancel
+                                </Button>
+                            </DialogClose>
+                        ) : (
+                            <div></div>
+                        )}
+                        {/* <DialogClose asChild> */}
+                        <div className="flex gap-2">
                             <Button
                                 type="button"
-                                variant="secondary"
+                                variant="outline"
                                 onClick={createNewDiagram}
                             >
                                 Skip
                             </Button>
-                        </DialogClose>
-                        <DialogClose asChild>
                             <Button
                                 type="button"
                                 variant="default"
                                 disabled={databaseType === DatabaseType.GENERIC}
+                                onClick={() =>
+                                    setStep(
+                                        CreateDiagramDialogStep.IMPORT_DATABASE
+                                    )
+                                }
                             >
                                 Continue
                             </Button>
-                        </DialogClose>
+                        </div>
+                        {/* </DialogClose> */}
                     </DialogFooter>
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
                     <DialogFooter className="flex !justify-between gap-2">
-                        <DialogClose asChild>
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() =>
-                                    setStep(
-                                        CreateDiagramDialogStep.SELECT_DATABASE
-                                    )
-                                }
-                            >
-                                Back
-                            </Button>
-                        </DialogClose>
+                        {/* <DialogClose asChild> */}
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() =>
+                                setStep(CreateDiagramDialogStep.SELECT_DATABASE)
+                            }
+                        >
+                            Back
+                        </Button>
+                        {/* </DialogClose> */}
                         <div className="flex gap-2">
                             <DialogClose asChild>
                                 <Button
@@ -258,13 +279,30 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             default:
                 return null;
         }
-    }, [step, databaseType, scriptResult, createNewDiagram]);
+    }, [
+        step,
+        databaseType,
+        scriptResult,
+        createNewDiagram,
+        hasExistingDiagram,
+    ]);
 
     return (
-        <Dialog {...dialog}>
+        <Dialog
+            {...dialog}
+            onOpenChange={(open) => {
+                if (!hasExistingDiagram) {
+                    return;
+                }
+
+                if (!open) {
+                    closeCreateDiagramDialog();
+                }
+            }}
+        >
             <DialogContent
                 className="flex flex-col min-w-[500px] xl:min-w-[75vw] max-h-[80vh] overflow-y-auto"
-                showClose={false}
+                showClose={hasExistingDiagram}
             >
                 {renderHeader()}
                 {renderContent()}

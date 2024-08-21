@@ -18,11 +18,13 @@ import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
+import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
+    const { openCreateDiagramDialog } = useCreateDiagramDialog();
     const [editMode, setEditMode] = React.useState(false);
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
@@ -43,6 +45,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     useClickAway(inputRef, editDiagramName);
     useKeyPressEvent('Enter', editDiagramName);
+
+    const createNewDiagram = () => {
+        openCreateDiagramDialog();
+    };
 
     const enterEditMode = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -71,17 +77,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <MenubarMenu>
                             <MenubarTrigger>File</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarItem>
+                                <MenubarItem onClick={createNewDiagram}>
                                     New
                                     <MenubarShortcut>⌘T</MenubarShortcut>
                                 </MenubarItem>
-                                <MenubarItem>
-                                    New Window
-                                    <MenubarShortcut>⌘N</MenubarShortcut>
-                                </MenubarItem>
                                 <MenubarItem>Open</MenubarItem>
-                                <MenubarItem>Save</MenubarItem>
-                                <MenubarItem>Save as</MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarItem onClick={exportSql}>
                                     Export
@@ -93,14 +93,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     <MenubarSubContent>
                                         <MenubarItem>PNG</MenubarItem>
                                         <MenubarItem>JPG</MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSub>
-                                    <MenubarSubTrigger>Share</MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem>Email link</MenubarItem>
-                                        <MenubarItem>Messages</MenubarItem>
-                                        <MenubarItem>Notes</MenubarItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
                                 <MenubarSeparator />
