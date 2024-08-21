@@ -3,10 +3,11 @@ import { DBField, FieldType } from './db-field';
 import { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
-import { generateId, greyColor, randomHSLA } from '@/lib/utils';
+import { greyColor, randomColor } from '@/lib/colors';
 import { DBRelationship } from './db-relationship';
 import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
+import { generateId } from '../utils';
 
 export interface DBTable {
     id: string;
@@ -38,7 +39,11 @@ export const createTablesFromMetadata = ({
         // Filter, make unique, and sort columns based on ordinal_position
         const uniqueColumns = new Map<string, ColumnInfo>();
         columns
-            .filter((col) => col.table === tableInfo.table)
+            .filter(
+                (col) =>
+                    col.schema === tableInfo.schema &&
+                    col.table === tableInfo.table
+            )
             .forEach((col) => {
                 if (!uniqueColumns.has(col.name)) {
                     uniqueColumns.set(col.name, col);
@@ -46,9 +51,7 @@ export const createTablesFromMetadata = ({
             });
 
         const sortedColumns = Array.from(uniqueColumns.values()).sort(
-            (a, b) => {
-                return a.ordinal_position - b.ordinal_position;
-            }
+            (a, b) => a.ordinal_position - b.ordinal_position
         );
 
         const tablePrimaryKeys = primaryKeys.filter(
@@ -71,6 +74,16 @@ export const createTablesFromMetadata = ({
                     (idx) => idx.column === col.name && idx.unique
                 ),
                 nullable: col.nullable,
+                ...(col.character_maximum_length &&
+                col.character_maximum_length !== 'null'
+                    ? { character_maximum_length: col.character_maximum_length }
+                    : {}),
+                ...(col.precision?.precision
+                    ? { precision: col.precision.precision }
+                    : {}),
+                ...(col.precision?.scale ? { scale: col.precision.scale } : {}),
+                ...(col.default ? { default: col.default } : {}),
+                ...(col.collation ? { collation: col.collation } : {}),
                 createdAt: Date.now(),
             })
         );
@@ -102,7 +115,7 @@ export const createTablesFromMetadata = ({
             y: Math.random() * 800, // Placeholder Y
             fields,
             indexes: dbIndexes,
-            color: isView ? greyColor : randomHSLA(),
+            color: isView ? greyColor : randomColor(),
             isView: isView,
             createdAt: Date.now(),
         };

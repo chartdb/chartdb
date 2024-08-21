@@ -295,6 +295,12 @@ export const sqliteDataTypes = [
     // Date/Time Types (SQLite uses TEXT, REAL, or INTEGER types for dates and times)
     'date',
     'datetime',
+
+    'int',
+    'float',
+    'boolean',
+    'varchar',
+    'decimal',
 ] as const;
 
 export const dataTypes = [

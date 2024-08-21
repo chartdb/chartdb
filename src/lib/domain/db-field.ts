@@ -8,6 +8,11 @@ export interface DBField {
     unique: boolean;
     nullable: boolean;
     createdAt: number;
+    characterMaximumLength?: string;
+    precision?: number;
+    scale?: number;
+    default?: string;
+    collation?: string;
 }
 
 export type FieldType = (typeof dataTypes)[number];

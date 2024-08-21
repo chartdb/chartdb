@@ -12,7 +12,10 @@ export interface StorageContext {
 
     // Diagram operations
     addDiagram: (params: { diagram: Diagram }) => Promise<void>;
-    listDiagrams: () => Promise<Diagram[]>;
+    listDiagrams: (options?: {
+        includeTables?: boolean;
+        includeRelationships?: boolean;
+    }) => Promise<Diagram[]>;
     getDiagram: (
         id: string,
         options?: {

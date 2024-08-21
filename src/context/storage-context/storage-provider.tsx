@@ -92,10 +92,33 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         await Promise.all(promises);
     };
 
-    const listDiagrams: StorageContext['listDiagrams'] = async (): Promise<
-        Diagram[]
-    > => {
-        return await db.diagrams.toArray();
+    const listDiagrams: StorageContext['listDiagrams'] = async (
+        options: {
+            includeTables?: boolean;
+            includeRelationships?: boolean;
+        } = { includeRelationships: false, includeTables: false }
+    ): Promise<Diagram[]> => {
+        let diagrams = await db.diagrams.toArray();
+
+        if (options.includeTables) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.tables = await listTables(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
+        if (options.includeRelationships) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.relationships = await listRelationships(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
+        return diagrams;
     };
 
     const getDiagram: StorageContext['getDiagram'] = async (
@@ -248,10 +271,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     const listRelationships: StorageContext['listRelationships'] = async (
         diagramId: string
     ): Promise<DBRelationship[]> => {
-        return await db.db_relationships
-            .where('diagramId')
-            .equals(diagramId)
-            .toArray();
+        // Sort relationships alphabetically
+        return await (
+            await db.db_relationships
+                .where('diagramId')
+                .equals(diagramId)
+                .toArray()
+        ).sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
     };
 
     return (

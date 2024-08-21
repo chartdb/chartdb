@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { DBTable } from '@/lib/domain/db-table';
-import { generateId, randomHSLA } from '@/lib/utils';
+import { generateId } from '@/lib/utils';
+import { randomColor } from '@/lib/colors';
 import { ChartDBContext, chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBField } from '@/lib/domain/db-field';
@@ -151,7 +152,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 },
             ],
             indexes: [],
-            color: randomHSLA(),
+            color: randomColor(),
             createdAt: Date.now(),
             isView: false,
         };
@@ -718,11 +719,18 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 sourceFieldId,
                 targetFieldId,
             }) => {
-                const sourceTableName = getTable(sourceTableId)?.name ?? '';
-                const targetTableName = getTable(targetTableId)?.name ?? '';
+                const sourceTable = getTable(sourceTableId);
+                const sourceTableName = sourceTable?.name ?? '';
+
+                const sourceField = sourceTable?.fields.find(
+                    (field: { id: string }) => field.id === sourceFieldId
+                );
+
+                const sourceFieldName = sourceField?.name ?? '';
+
                 const relationship: DBRelationship = {
                     id: generateId(),
-                    name: `${sourceTableName}_${targetTableName}_fk`,
+                    name: `${sourceTableName}_${sourceFieldName}_fk`,
                     sourceTableId,
                     targetTableId,
                     sourceFieldId,

@@ -5,6 +5,7 @@
 
 <p align="center">
   <b>Open-source database diagrams editor</b> <br />
+  <b>No installations • No Database password required.</b> <br />
 </p>
 
 <h3 align="center">

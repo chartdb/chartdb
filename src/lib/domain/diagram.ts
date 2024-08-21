@@ -67,7 +67,9 @@ export const loadFromDatabaseMetadata = ({
 
     return {
         id: generateId(),
-        name: databaseMetadata.server_name || `Diagram ${diagramNumber}`,
+        name:
+            `${databaseMetadata.database_name}-db` ||
+            `Diagram ${diagramNumber}`,
         databaseType: databaseType ?? DatabaseType.GENERIC,
         tables: sortedTables,
         relationships,

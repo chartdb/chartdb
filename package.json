@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.51",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.0",
@@ -30,6 +31,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@uidotdev/usehooks": "^2.4.1",
     "@xyflow/react": "^12.0.4",
+    "ai": "^3.3.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

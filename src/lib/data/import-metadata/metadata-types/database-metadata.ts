@@ -11,7 +11,7 @@ export interface DatabaseMetadata {
     indexes: IndexInfo[];
     tables: TableInfo[];
     views: ViewInfo[];
-    server_name: string;
+    database_name: string;
     version: string;
 }
 

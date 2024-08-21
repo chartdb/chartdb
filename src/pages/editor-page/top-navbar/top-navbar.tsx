@@ -31,12 +31,17 @@ import {
     databaseSecondaryLogoMap,
     databaseTypeToLabelMap,
 } from '@/lib/databases';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
-    const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
+    const {
+        openCreateDiagramDialog,
+        openOpenDiagramDialog,
+        openExportSQLDialog,
+    } = useDialog();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
     const [editedDiagramName, setEditedDiagramName] =
@@ -74,11 +79,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setEditMode(true);
     };
 
-    const exportSql = useCallback(() => {
-        console.log('Export SQL');
-        console.log({ currentDiagram });
-    }, [currentDiagram]);
-
     const exportPNG = useCallback(() => {
         exportImage('png');
     }, [exportImage]);
@@ -93,6 +93,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     const openChartDBIO = useCallback(() => {
         window.open('https://chartdb.io', '_blank');
+    }, []);
+
+    const openJoinSlack = useCallback(() => {
+        window.open(
+            'https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg',
+            '_blank'
+        );
     }, []);
 
     return (
@@ -125,9 +132,81 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     Open
                                 </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarItem onClick={exportSql}>
-                                    Export
-                                </MenubarItem>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        Export SQL
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.GENERIC,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['generic']}
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.POSTGRESQL,
+                                                })
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'postgresql'
+                                                ]
+                                            }
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.MYSQL,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mysql']}
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.SQL_SERVER,
+                                                })
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'sql_server'
+                                                ]
+                                            }
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.MARIADB,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mariadb']}
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openExportSQLDialog({
+                                                    targetDatabaseType:
+                                                        DatabaseType.SQLITE,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['sqlite']}
+                                        </MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
                                 <MenubarSub>
                                     <MenubarSubTrigger>
                                         Export as
@@ -166,6 +245,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <MenubarContent>
                                 <MenubarItem onClick={openChartDBIO}>
                                     Visit ChartDB
+                                </MenubarItem>
+                                <MenubarItem onClick={openJoinSlack}>
+                                    Join us on Slack
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>

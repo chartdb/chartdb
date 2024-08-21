@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -9,6 +10,10 @@ export interface DialogContext {
     // Open diagram dialog
     openOpenDiagramDialog: () => void;
     closeOpenDiagramDialog: () => void;
+
+    // Export SQL dialog
+    openExportSQLDialog: (params: { targetDatabaseType: DatabaseType }) => void;
+    closeExportSQLDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -16,4 +21,6 @@ export const dialogContext = createContext<DialogContext>({
     closeCreateDiagramDialog: emptyFn,
     openOpenDiagramDialog: emptyFn,
     closeOpenDiagramDialog: emptyFn,
+    openExportSQLDialog: emptyFn,
+    closeExportSQLDialog: emptyFn,
 });
