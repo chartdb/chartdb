@@ -46,7 +46,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
 
     useEffect(() => {
         const fetchDiagrams = async () => {
-            const diagrams = await listDiagrams();
+            const diagrams = await listDiagrams({ includeTables: true });
             setDiagrams(
                 diagrams.sort(
                     (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
@@ -87,6 +87,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 <TableHead>Name</TableHead>
                                 <TableHead>Created at</TableHead>
                                 <TableHead>Last modified</TableHead>
+                                <TableHead>Tables count</TableHead>
                                 <TableHead>Type</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -119,6 +120,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                     </TableCell>
                                     <TableCell>
                                         {diagram.updatedAt.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell>
+                                        {diagram.tables?.length}
                                     </TableCell>
                                     <TableCell>
                                         {
