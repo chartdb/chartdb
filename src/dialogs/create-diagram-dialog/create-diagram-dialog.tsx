@@ -17,7 +17,6 @@ import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
 import { useStorage } from '@/hooks/use-storage';
 import { Diagram, loadFromDatabaseMetadata } from '@/lib/domain/diagram';
-import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import {
@@ -26,6 +25,7 @@ import {
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramDialog } from '@/hooks/use-dialog';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -43,7 +43,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog } = useCreateDiagramDialog();
+    const { closeCreateDiagramDialog } = useDiagramDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = React.useState('');
     const [step, setStep] = React.useState<CreateDiagramDialogStep>(

@@ -9,13 +9,13 @@ import {
 import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
 import { useConfig } from '@/hooks/use-config';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramDialog } from '@/hooks/use-dialog';
 
 export const EditorPage: React.FC = () => {
     const { loadDiagram } = useChartDB();
-    const { openCreateDiagramDialog } = useCreateDiagramDialog();
+    const { openCreateDiagramDialog } = useDiagramDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
     const navigate = useNavigate();

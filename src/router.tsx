@@ -5,11 +5,11 @@ import { EditorPage } from './pages/editor-page/editor-page';
 import { ChartDBProvider } from './context/chartdb-context/chartdb-provider';
 import { ReactFlowProvider } from '@xyflow/react';
 import { StorageProvider } from './context/storage-context/storage-provider';
-import { CreateDiagramDialogProvider } from './dialogs/create-diagram-dialog/create-diagram-dialog-provider';
 import { ConfigProvider } from './context/config-context/config-provider';
 import { HistoryProvider } from './context/history-context/history-provider';
 import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
 import { LayoutProvider } from './context/layout-context/layout-provider';
+import { DialogProvider } from './context/dialog-context/dialog-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -21,11 +21,11 @@ const routes: RouteObject[] = [
                         <RedoUndoStackProvider>
                             <ChartDBProvider>
                                 <HistoryProvider>
-                                    <CreateDiagramDialogProvider>
+                                    <DialogProvider>
                                         <ReactFlowProvider>
                                             <EditorPage />
                                         </ReactFlowProvider>
-                                    </CreateDiagramDialogProvider>
+                                    </DialogProvider>
                                 </HistoryProvider>
                             </ChartDBProvider>
                         </RedoUndoStackProvider>

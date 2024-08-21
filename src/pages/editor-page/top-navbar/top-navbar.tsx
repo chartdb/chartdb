@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Menubar,
     MenubarContent,
@@ -18,14 +18,14 @@ import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
-import { useCreateDiagramDialog } from '@/hooks/use-create-diagram-dialog';
+import { useDiagramDialog } from '@/hooks/use-dialog';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
-    const { openCreateDiagramDialog } = useCreateDiagramDialog();
-    const [editMode, setEditMode] = React.useState(false);
+    const { openCreateDiagramDialog } = useDiagramDialog();
+    const [editMode, setEditMode] = useState(false);
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
