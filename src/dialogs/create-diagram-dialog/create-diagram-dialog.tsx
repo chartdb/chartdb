@@ -25,7 +25,7 @@ import {
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useDiagramDialog } from '@/hooks/use-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -43,7 +43,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog } = useDiagramDialog();
+    const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = React.useState('');
     const [step, setStep] = React.useState<CreateDiagramDialogStep>(
@@ -59,7 +59,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             setDiagramNumber(diagrams.length + 1);
         };
         fetchDiagrams();
-    }, [listDiagrams, setDiagramNumber]);
+    }, [listDiagrams, setDiagramNumber, dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
@@ -68,6 +68,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             id: generateId(),
             name: `Diagram ${diagramNumber}`,
             databaseType: databaseType ?? DatabaseType.GENERIC,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
 
         if (scriptResult.trim().length !== 0) {
@@ -83,7 +85,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
-        setDiagramNumber(diagramNumber + 1);
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [

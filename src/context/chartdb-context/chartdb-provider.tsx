@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { DBTable } from '@/lib/domain/db-table';
 import { generateId, randomHSLA } from '@/lib/utils';
 import { ChartDBContext, chartDBContext } from './chartdb-context';
@@ -15,25 +15,35 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
     const db = useStorage();
     const { addUndoAction, resetRedoStack } = useRedoUndoStack();
-    const [diagramId, setDiagramId] = React.useState('');
-    const [diagramName, setDiagramName] = React.useState('');
-    const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
+    const [diagramId, setDiagramId] = useState('');
+    const [diagramName, setDiagramName] = useState('');
+    const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
+    const [diagramUpdatedAt, setDiagramUpdatedAt] = useState<Date>(new Date());
+    const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const [tables, setTables] = React.useState<DBTable[]>([]);
-    const [relationships, setRelationships] = React.useState<DBRelationship[]>(
-        []
-    );
+    const [tables, setTables] = useState<DBTable[]>([]);
+    const [relationships, setRelationships] = useState<DBRelationship[]>([]);
 
     const currentDiagram: Diagram = useMemo(
         () => ({
             id: diagramId,
             name: diagramName,
+            createdAt: diagramCreatedAt,
+            updatedAt: diagramUpdatedAt,
             databaseType,
             tables,
             relationships,
         }),
-        [diagramId, diagramName, databaseType, tables, relationships]
+        [
+            diagramId,
+            diagramName,
+            databaseType,
+            tables,
+            relationships,
+            diagramCreatedAt,
+            diagramUpdatedAt,
+        ]
     );
 
     const updateDatabaseType: ChartDBContext['updateDatabaseType'] =
@@ -62,7 +72,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         async (name, options = { updateHistory: true }) => {
             const prevName = diagramName;
             setDiagramName(name);
-            await db.updateDiagram({ id: diagramId, attributes: { name } });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await db.updateDiagram({
+                id: diagramId,
+                attributes: { name, updatedAt },
+            });
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -86,7 +101,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const addTable: ChartDBContext['addTable'] = useCallback(
         async (table: DBTable, options = { updateHistory: true }) => {
             setTables((tables) => [...tables, table]);
-            await db.addTable({ diagramId, table });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.addTable({ diagramId, table }),
+            ]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -136,7 +156,13 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         async (id: string, options = { updateHistory: true }) => {
             const table = getTable(id);
             setTables((tables) => tables.filter((table) => table.id !== id));
-            await db.deleteTable({ diagramId, id });
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.deleteTable({ diagramId, id }),
+            ]);
 
             if (!!table && options.updateHistory) {
                 addUndoAction({
@@ -160,7 +186,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setTables((tables) =>
                 tables.map((t) => (t.id === id ? { ...t, ...table } : t))
             );
-            await db.updateTable({ id, attributes: table });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({ id, attributes: table }),
+            ]);
 
             if (!!prevTable && options.updateHistory) {
                 addUndoAction({
@@ -171,7 +202,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 resetRedoStack();
             }
         },
-        [db, setTables, addUndoAction, resetRedoStack, getTable]
+        [db, setTables, addUndoAction, resetRedoStack, getTable, diagramId]
     );
 
     const updateTablesState: ChartDBContext['updateTablesState'] = useCallback(
@@ -222,6 +253,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 promises.push(db.deleteTable({ diagramId, id: table.id }));
             }
 
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            promises.push(
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } })
+            );
+
             await Promise.all(promises);
 
             if (options.updateHistory) {
@@ -270,15 +307,20 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...table,
-                    fields: table.fields.map((f) =>
-                        f.id === fieldId ? { ...f, ...field } : f
-                    ),
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...table,
+                        fields: table.fields.map((f) =>
+                            f.id === fieldId ? { ...f, ...field } : f
+                        ),
+                    },
+                }),
+            ]);
 
             if (!!prevField && options.updateHistory) {
                 addUndoAction({
@@ -321,13 +363,18 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...table,
-                    fields: table.fields.filter((f) => f.id !== fieldId),
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...table,
+                        fields: table.fields.filter((f) => f.id !== fieldId),
+                    },
+                }),
+            ]);
 
             if (!!prevField && options.updateHistory) {
                 addUndoAction({
@@ -361,13 +408,18 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...table,
-                    fields: [...table.fields, field],
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...table,
+                        fields: [...table.fields, field],
+                    },
+                }),
+            ]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -428,13 +480,18 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...dbTable,
-                    indexes: [...dbTable.indexes, index],
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...dbTable,
+                        indexes: [...dbTable.indexes, index],
+                    },
+                }),
+            ]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -477,13 +534,20 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...dbTable,
-                    indexes: dbTable.indexes.filter((i) => i.id !== indexId),
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...dbTable,
+                        indexes: dbTable.indexes.filter(
+                            (i) => i.id !== indexId
+                        ),
+                    },
+                }),
+            ]);
 
             if (!!prevIndex && options.updateHistory) {
                 addUndoAction({
@@ -542,15 +606,20 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
-            await db.updateTable({
-                id: tableId,
-                attributes: {
-                    ...dbTable,
-                    indexes: dbTable.indexes.map((i) =>
-                        i.id === indexId ? { ...i, ...index } : i
-                    ),
-                },
-            });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTable({
+                    id: tableId,
+                    attributes: {
+                        ...dbTable,
+                        indexes: dbTable.indexes.map((i) =>
+                            i.id === indexId ? { ...i, ...index } : i
+                        ),
+                    },
+                }),
+            ]);
 
             if (!!prevIndex && options.updateHistory) {
                 addUndoAction({
@@ -574,7 +643,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 relationship,
             ]);
 
-            await db.addRelationship({ diagramId, relationship });
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.addRelationship({ diagramId, relationship }),
+            ]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -598,11 +672,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 ...relationships,
             ]);
 
-            await Promise.all(
-                relationships.map((relationship) =>
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+
+            await Promise.all([
+                ...relationships.map((relationship) =>
                     db.addRelationship({ diagramId, relationship })
-                )
-            );
+                ),
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -663,7 +741,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     )
                 );
 
-                await db.deleteRelationship({ diagramId, id });
+                const updatedAt = new Date();
+                setDiagramUpdatedAt(updatedAt);
+                await Promise.all([
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    }),
+                    db.deleteRelationship({ diagramId, id }),
+                ]);
 
                 if (!!relationship && options.updateHistory) {
                     addUndoAction({
@@ -699,9 +785,17 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     )
                 );
 
-                await Promise.all(
-                    ids.map((id) => db.deleteRelationship({ diagramId, id }))
-                );
+                const updatedAt = new Date();
+                setDiagramUpdatedAt(updatedAt);
+                await Promise.all([
+                    ...ids.map((id) =>
+                        db.deleteRelationship({ diagramId, id })
+                    ),
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    }),
+                ]);
 
                 if (prevRelationships.length > 0 && options.updateHistory) {
                     addUndoAction({
@@ -736,7 +830,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     )
                 );
 
-                await db.updateRelationship({ id, attributes: relationship });
+                const updatedAt = new Date();
+                setDiagramUpdatedAt(updatedAt);
+                await Promise.all([
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    }),
+                    db.updateRelationship({ id, attributes: relationship }),
+                ]);
 
                 if (!!prevRelationship && options.updateHistory) {
                     addUndoAction({
@@ -756,6 +858,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 addUndoAction,
                 getRelationship,
                 resetRedoStack,
+                diagramId,
             ]
         );
 
@@ -772,6 +875,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setDatabaseType(diagram.databaseType);
                 setTables(diagram?.tables ?? []);
                 setRelationships(diagram?.relationships ?? []);
+                setDiagramCreatedAt(diagram.createdAt);
+                setDiagramUpdatedAt(diagram.updatedAt);
             }
 
             return diagram;
@@ -783,6 +888,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setDatabaseType,
             setTables,
             setRelationships,
+            setDiagramCreatedAt,
+            setDiagramUpdatedAt,
         ]
     );
 

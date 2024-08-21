@@ -18,13 +18,13 @@ import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
-import { useDiagramDialog } from '@/hooks/use-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
-    const { openCreateDiagramDialog } = useDiagramDialog();
+    const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const [editMode, setEditMode] = useState(false);
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
@@ -48,6 +48,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     const createNewDiagram = () => {
         openCreateDiagramDialog();
+    };
+
+    const openDiagram = () => {
+        openOpenDiagramDialog();
     };
 
     const enterEditMode = (
@@ -81,7 +85,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     New
                                     <MenubarShortcut>⌘T</MenubarShortcut>
                                 </MenubarItem>
-                                <MenubarItem>Open</MenubarItem>
+                                <MenubarItem onClick={openDiagram}>
+                                    Open
+                                </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarItem onClick={exportSql}>
                                     Export

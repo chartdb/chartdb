@@ -11,11 +11,11 @@ import { Canvas } from './canvas/canvas';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useDiagramDialog } from '@/hooks/use-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 export const EditorPage: React.FC = () => {
     const { loadDiagram } = useChartDB();
-    const { openCreateDiagramDialog } = useDiagramDialog();
+    const { openCreateDiagramDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
     const navigate = useNavigate();

@@ -30,7 +30,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
 
     // Schema declaration:
     db.version(1).stores({
-        diagrams: '++id, name, databaseType, tables, relationships',
+        diagrams: '++id, name, databaseType, createdAt, updatedAt',
         db_tables:
             '++id, diagramId, name, x, y, fields, indexes, color, createdAt',
         db_relationships:
@@ -72,6 +72,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 id: diagram.id,
                 name: diagram.name,
                 databaseType: diagram.databaseType,
+                createdAt: diagram.createdAt,
+                updatedAt: diagram.updatedAt,
             })
         );
 

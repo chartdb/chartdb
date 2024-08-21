@@ -16,6 +16,8 @@ export interface Diagram {
     databaseType: DatabaseType;
     tables?: DBTable[];
     relationships?: DBRelationship[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export const loadFromDatabaseMetadata = ({
@@ -69,5 +71,7 @@ export const loadFromDatabaseMetadata = ({
         databaseType: databaseType ?? DatabaseType.GENERIC,
         tables: sortedTables,
         relationships,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     };
 };

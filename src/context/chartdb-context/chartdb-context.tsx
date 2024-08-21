@@ -128,6 +128,8 @@ export const chartDBContext = createContext<ChartDBContext>({
         id: '',
         name: '',
         databaseType: DatabaseType.GENERIC,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     },
 
     // General operations
