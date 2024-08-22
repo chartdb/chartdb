@@ -31,6 +31,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     return (
         <div
             className={`flex flex-col w-full bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
+            onClick={(e) => {
+                if (e.detail === 2) {
+                    openTableInEditor();
+                }
+            }}
         >
             <NodeResizer
                 isVisible={focused}

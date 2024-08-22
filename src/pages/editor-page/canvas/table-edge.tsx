@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import {
-    BaseEdge,
     Edge,
     EdgeProps,
     getSmoothStepPath,
@@ -10,6 +9,8 @@ import {
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from './table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useLayout } from '@/hooks/use-layout';
+import { cn } from '@/lib/utils';
 
 export type TableEdgeType = Edge<
     {
@@ -29,7 +30,14 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
     selected,
 }) => {
     const { getInternalNode, getEdge } = useReactFlow();
+    const { openRelationshipFromSidebar, selectSidebarSection } = useLayout();
+
     const { relationships } = useChartDB();
+
+    const openRelationshipInEditor = () => {
+        selectSidebarSection('relationships');
+        openRelationshipFromSidebar(id);
+    };
 
     const edgeNumber = relationships
         .filter(
@@ -118,10 +126,38 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
     );
 
     return (
-        <BaseEdge
-            id={id}
-            path={edgePath}
-            className={`!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`}
-        />
+        <>
+            <path
+                id={id}
+                d={edgePath}
+                fill="none"
+                className={cn([
+                    'react-flow__edge-path',
+                    `!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`,
+                ])}
+                onClick={(e) => {
+                    if (e.detail === 2) {
+                        openRelationshipInEditor();
+                    }
+                }}
+            />
+            <path
+                d={edgePath}
+                fill="none"
+                strokeOpacity={0}
+                strokeWidth={20}
+                className="react-flow__edge-interaction"
+                onClick={(e) => {
+                    if (e.detail === 2) {
+                        openRelationshipInEditor();
+                    }
+                }}
+            />
+        </>
+        // <BaseEdge
+        //     id={id}
+        //     path={edgePath}
+        //     className={`!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`}
+        // />
     );
 };

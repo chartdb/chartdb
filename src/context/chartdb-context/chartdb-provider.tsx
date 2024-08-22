@@ -452,7 +452,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             const field: DBField = {
                 id: generateId(),
                 name: `field_${(table?.fields?.length ?? 0) + 1}`,
-                type: 'bigint',
+                type:
+                    databaseType === DatabaseType.SQLITE ? 'integer' : 'bigint',
                 unique: false,
                 nullable: true,
                 primaryKey: false,
@@ -463,7 +464,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
             return field;
         },
-        [addField, getTable]
+        [addField, getTable, databaseType]
     );
 
     const getIndex: ChartDBContext['getIndex'] = useCallback(

@@ -7,6 +7,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const [openedTableInSidebar, setOpenedTableInSidebar] = React.useState<
         string | undefined
     >();
+    const [openedRelationshipInSidebar, setOpenedRelationshipInSidebar] =
+        React.useState<string | undefined>();
     const [selectedSidebarSection, setSelectedSidebarSection] =
         React.useState<SidebarSection>('tables');
 
@@ -17,6 +19,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 selectedSidebarSection,
                 openTableFromSidebar: setOpenedTableInSidebar,
                 selectSidebarSection: setSelectedSidebarSection,
+                openedRelationshipInSidebar,
+                openRelationshipFromSidebar: setOpenedRelationshipInSidebar,
             }}
         >
             {children}
