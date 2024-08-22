@@ -21,6 +21,11 @@ import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
 import { useDialog } from '@/hooks/use-dialog';
 import { Badge } from '@/components/badge/badge';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TopNavbarProps {}
 
@@ -176,16 +181,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 </div>
             </div>
             <div className="hidden flex-1 justify-end sm:flex">
-                <Badge variant="secondary" className="flex gap-1">
-                    <Save className="h-4" />
-                    Last saved
-                    <TimeAgo
-                        datetime={currentDiagram.updatedAt}
-                        opts={{
-                            minInterval: 60,
-                        }}
-                    />
-                </Badge>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <Badge variant="secondary" className="flex gap-1">
+                            <Save className="h-4" />
+                            Last saved
+                            <TimeAgo datetime={currentDiagram.updatedAt} />
+                        </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {currentDiagram.updatedAt.toLocaleString()}
+                    </TooltipContent>
+                </Tooltip>
             </div>
         </nav>
     );
