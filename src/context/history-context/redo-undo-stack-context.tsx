@@ -8,6 +8,7 @@ export interface RedoUndoStackContext {
     addRedoAction: (action: RedoUndoAction) => void;
     addUndoAction: (action: RedoUndoAction) => void;
     resetRedoStack: () => void;
+    resetUndoStack: () => void;
     hasRedo: boolean;
     hasUndo: boolean;
 }
@@ -18,6 +19,7 @@ export const redoUndoStackContext = createContext<RedoUndoStackContext>({
     addRedoAction: emptyFn,
     addUndoAction: emptyFn,
     resetRedoStack: emptyFn,
+    resetUndoStack: emptyFn,
     hasRedo: false,
     hasUndo: false,
 });

@@ -30,6 +30,11 @@ export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
             setRedoStack([]);
         }, [setRedoStack]);
 
+    const resetUndoStack: RedoUndoStackContext['resetUndoStack'] =
+        useCallback(() => {
+            setUndoStack([]);
+        }, [setUndoStack]);
+
     const hasRedo = redoStack.length > 0;
     const hasUndo = undoStack.length > 0;
 
@@ -41,6 +46,7 @@ export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
                 addRedoAction,
                 addUndoAction,
                 resetRedoStack,
+                resetUndoStack,
                 hasRedo,
                 hasUndo,
             }}

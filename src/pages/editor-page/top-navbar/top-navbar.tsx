@@ -67,7 +67,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, [currentDiagram]);
 
     return (
-        <nav className="flex flex-row items-center justify-between px-4 h-12">
+        <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3">
                 <div className="flex font-primary items-center">
                     <img

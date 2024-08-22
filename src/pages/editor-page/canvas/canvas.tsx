@@ -17,6 +17,7 @@ import { TableNode, TableNodeType } from './table-node';
 import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
+import { Toolbar } from './toolbar/toolbar';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -191,7 +192,16 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     type: 'table-edge',
                 }}
             >
-                <Controls />
+                <Controls
+                    position="bottom-center"
+                    orientation="horizontal"
+                    showZoom={false}
+                    showFitView={false}
+                    showInteractive={false}
+                    className="!shadow-none"
+                >
+                    <Toolbar />
+                </Controls>
                 <MiniMap
                     style={{
                         width: 100,
