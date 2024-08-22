@@ -15,6 +15,8 @@ import { TableField } from './table-field/table-field';
 import { TableIndex } from './table-index/table-index';
 import { DBIndex } from '@/lib/domain/db-index';
 
+type AccordionItemValue = 'fields' | 'indexes';
+
 export interface TableListItemContentProps {
     table: DBTable;
 }
@@ -31,6 +33,21 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         updateIndex,
     } = useChartDB();
     const { color } = table;
+    const [selectedItems, setSelectedItems] = React.useState<
+        AccordionItemValue[]
+    >(['fields']);
+
+    const createIndexHandler = () => {
+        setSelectedItems((prev) => {
+            if (prev.includes('indexes')) {
+                return prev;
+            }
+
+            return [...prev, 'indexes'];
+        });
+
+        createIndex(table.id);
+    };
 
     return (
         <div
@@ -42,7 +59,10 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             <Accordion
                 type="multiple"
                 className="w-full"
-                defaultValue={['fields']}
+                value={selectedItems}
+                onValueChange={(value) =>
+                    setSelectedItems(value as AccordionItemValue[])
+                }
             >
                 <AccordionItem value="fields" className="border-y-0 mb-2">
                     <AccordionTrigger
@@ -103,7 +123,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         className="hover:bg-primary-foreground p-0 h-4 w-4  text-slate-500 hover:text-slate-700 text-xs"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            createIndex(table.id);
+                                            createIndexHandler();
                                         }}
                                     >
                                         <Plus className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
@@ -135,7 +155,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="text-xs h-8 p-2"
-                        onClick={() => createIndex(table.id)}
+                        onClick={createIndexHandler}
                     >
                         <FileKey2 className="h-4" />
                         Add Index
