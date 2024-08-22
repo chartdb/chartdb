@@ -49,7 +49,9 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
 
     const exportImage: ExportImageContext['exportImage'] = useCallback(
         async (type) => {
-            showLoader();
+            showLoader({
+                animated: false,
+            });
 
             setNodes((nodes) =>
                 nodes.map((node) => ({ ...node, selected: false }))
