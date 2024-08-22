@@ -158,10 +158,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarItem>
-                                    Find <MenubarShortcut>⌘F</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarSeparator />
                                 <MenubarItem>Clear</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
