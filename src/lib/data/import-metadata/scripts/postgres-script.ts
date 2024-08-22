@@ -71,10 +71,19 @@ cols as (
   select array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
                                               '","table":"', cols.table_name,
                                               '","name":"', cols.column_name,
-                                              '","type":"', LOWER(replace(cols.data_type, '"', '')),
                                               '","ordinal_position":"', cols.ordinal_position,
-                                              '","nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
-                                              ',"collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
+                                              '","type":"', LOWER(replace(cols.data_type, '"', '')),
+                                              '","character_maximum_length":"', COALESCE(cols.character_maximum_length::text, 'null'),
+                                              '","precision":',
+                                                  CASE
+                                                      WHEN cols.data_type = 'numeric' OR cols.data_type = 'decimal'
+                                                      THEN CONCAT('{"precision":', COALESCE(cols.numeric_precision::text, 'null'),
+                                                                  ',"scale":', COALESCE(cols.numeric_scale::text, 'null'), '}')
+                                                      ELSE 'null'
+                                                  END,
+                                              ',"nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
+                                              ',"default":"', COALESCE(cols.column_default, ''),
+                                              '","collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
     from information_schema.columns cols
     where cols.table_schema not in ('information_schema', 'pg_catalog')
 ), indexes_metadata as (
@@ -112,12 +121,12 @@ cols as (
   where views.schemaname not in ('information_schema', 'pg_catalog')
 )
 select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
-        '], "pk_info": [', COALESCE(pk_metadata, ''),
+                  '], "pk_info": [', COALESCE(pk_metadata, ''),
                   '], "columns": [', coalesce(cols_metadata, ''),
                   '], "indexes": [', coalesce(indexes_metadata, ''),
                   '], "tables":[', coalesce(tbls_metadata, ''),
                   '], "views":[', coalesce(views_metadata, ''),
-                  '], "server_name": "', '', '", "version": "', '',
+                  '], "database_name": "', current_database(), '', '", "version": "', '',
             '"}') as " "
 from fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
 `;
