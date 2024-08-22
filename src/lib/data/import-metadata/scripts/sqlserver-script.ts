@@ -1,7 +1,4 @@
-import { minimizeQuery } from './minimize-script';
-
-const rawSqlServerQuery = `
-WITH fk_info AS (
+export const sqlServerQuery = `WITH fk_info AS (
   SELECT
       JSON_QUERY(
           '[' + STRING_AGG(
@@ -178,4 +175,3 @@ SELECT JSON_QUERY(
       ', "version": ""}'
 ) AS full_json_result;
 `;
-export const SqlServerQuery = minimizeQuery(rawSqlServerQuery);

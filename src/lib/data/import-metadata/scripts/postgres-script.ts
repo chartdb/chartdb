@@ -1,7 +1,4 @@
-import { minimizeQuery } from './minimize-script';
-
-const rawPostgresQuery = `
-WITH fk_info AS (
+export const postgresQuery = `WITH fk_info AS (
   select array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
                                           ',"table":"', table_name, '"',
                                           ',"column":"', fk_column, '"',
@@ -130,4 +127,3 @@ select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
             '"}') as " "
 from fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
 `;
-export const postgresQuery = minimizeQuery(rawPostgresQuery);

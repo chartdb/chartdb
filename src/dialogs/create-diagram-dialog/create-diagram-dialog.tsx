@@ -21,16 +21,21 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import {
     DatabaseMetadata,
+    isDatabaseMetadata,
     loadDatabaseMetadata,
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
+import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
     IMPORT_DATABASE = 'IMPORT_DATABASE',
 }
+
+const errorScriptOutputMessage =
+    'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
 
 export interface CreateDiagramDialogProps {
     dialog: DialogProps;
@@ -46,6 +51,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = React.useState('');
+    const [errorMessage, setErrorMessage] = React.useState('');
     const [step, setStep] = React.useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
@@ -65,9 +71,34 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setStep(CreateDiagramDialogStep.SELECT_DATABASE);
         setDatabaseType(DatabaseType.GENERIC);
         setScriptResult('');
+        setErrorMessage('');
     }, [dialog.open]);
 
+    useEffect(() => {
+        if (scriptResult.trim().length === 0) {
+            setErrorMessage('');
+            return;
+        }
+
+        try {
+            const parsedResult = JSON.parse(scriptResult);
+
+            if (isDatabaseMetadata(parsedResult)) {
+                setErrorMessage('');
+            } else {
+                setErrorMessage(errorScriptOutputMessage);
+            }
+        } catch (error) {
+            setErrorMessage(errorScriptOutputMessage);
+        }
+    }, [scriptResult]);
+
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const inputValue = e.target.value;
+        setScriptResult(inputValue);
+    };
 
     const createNewDiagram = useCallback(async () => {
         let diagram: Diagram = {
@@ -78,7 +109,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        if (scriptResult.trim().length !== 0) {
+        if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
 
@@ -101,6 +132,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         updateConfig,
         scriptResult,
         diagramNumber,
+        errorMessage,
     ]);
 
     const renderDatabaseOption = useCallback((type: DatabaseType) => {
@@ -174,7 +206,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                             <p className="text-sm text-muted-foreground">
                                 1. Run this script in your database:
                             </p>
-                            <CodeSnippet className="max-h-40 w-full" />
+                            <CodeSnippet
+                                className="max-h-40 w-full"
+                                code={importMetadataScripts[databaseType]}
+                            />
                         </div>
                         <div className="flex flex-col gap-1 h-48">
                             <p className="text-sm text-muted-foreground">
@@ -184,10 +219,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 className="flex-1 w-full p-2 text-sm bg-muted-1 rounded-md"
                                 placeholder="Script result here..."
                                 value={scriptResult}
-                                onChange={(e) =>
-                                    setScriptResult(e.target.value)
-                                }
+                                onChange={handleInputChange}
                             />
+                            {errorMessage && (
+                                <p className="text-red-500 text-sm mt-2">
+                                    {errorMessage}
+                                </p>
+                            )}
                         </div>
                     </div>
                 );
@@ -195,10 +233,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 return null;
         }
     }, [
+        errorMessage,
         step,
         databaseType,
         scriptResult,
-        setScriptResult,
         renderDatabaseOption,
         setDatabaseType,
     ]);
@@ -274,7 +312,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 <Button
                                     type="button"
                                     variant="default"
-                                    disabled={scriptResult.trim().length === 0}
+                                    disabled={
+                                        scriptResult.trim().length === 0 ||
+                                        errorMessage.length > 0
+                                    }
                                     onClick={createNewDiagram}
                                 >
                                     Finish
@@ -292,6 +333,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         scriptResult,
         createNewDiagram,
         hasExistingDiagram,
+        errorMessage,
     ]);
 
     return (
