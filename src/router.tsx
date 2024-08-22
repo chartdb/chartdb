@@ -10,6 +10,7 @@ import { HistoryProvider } from './context/history-context/history-provider';
 import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
 import { LayoutProvider } from './context/layout-context/layout-provider';
 import { DialogProvider } from './context/dialog-context/dialog-provider';
+import { ExportImageProvider } from './context/export-image-context/export-image-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -23,7 +24,9 @@ const routes: RouteObject[] = [
                                 <HistoryProvider>
                                     <DialogProvider>
                                         <ReactFlowProvider>
-                                            <EditorPage />
+                                            <ExportImageProvider>
+                                                <EditorPage />
+                                            </ExportImageProvider>
                                         </ReactFlowProvider>
                                     </DialogProvider>
                                 </HistoryProvider>

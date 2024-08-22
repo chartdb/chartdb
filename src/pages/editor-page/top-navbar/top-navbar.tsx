@@ -26,6 +26,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useExportImage } from '@/hooks/use-export-image';
 
 export interface TopNavbarProps {}
 
@@ -33,6 +34,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const [editMode, setEditMode] = useState(false);
+    const { exportImage } = useExportImage();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -73,6 +75,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         console.log({ currentDiagram });
     }, [currentDiagram]);
 
+    const exportPNG = useCallback(() => {
+        exportImage('png');
+    }, [exportImage]);
+
+    const exportSVG = useCallback(() => {
+        exportImage('svg');
+    }, [exportImage]);
+
+    const exportJPG = useCallback(() => {
+        exportImage('jpeg');
+    }, [exportImage]);
+
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3">
@@ -104,8 +118,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         Export as
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
-                                        <MenubarItem>PNG</MenubarItem>
-                                        <MenubarItem>JPG</MenubarItem>
+                                        <MenubarItem onClick={exportPNG}>
+                                            PNG
+                                        </MenubarItem>
+                                        <MenubarItem onClick={exportJPG}>
+                                            JPG
+                                        </MenubarItem>
+                                        <MenubarItem onClick={exportSVG}>
+                                            SVG
+                                        </MenubarItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
                                 <MenubarSeparator />

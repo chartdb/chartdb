@@ -34,6 +34,7 @@
     "cmdk": "^1.0.0",
     "dexie": "^4.0.8",
     "eslint-config-airbnb-typescript": "^18.0.0",
+    "html-to-image": "^1.11.11",
     "lucide-react": "^0.424.0",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",
