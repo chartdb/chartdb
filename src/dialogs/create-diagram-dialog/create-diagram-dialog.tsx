@@ -12,7 +12,7 @@ import {
 import { DialogProps } from '@radix-ui/react-dialog';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { getDatabaseLogo } from '@/lib/databases';
+import { databaseLogoMap } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
 import { useStorage } from '@/hooks/use-storage';
@@ -104,7 +104,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     ]);
 
     const renderDatabaseOption = useCallback((type: DatabaseType) => {
-        const logo = getDatabaseLogo(type);
+        const logo = databaseLogoMap[type];
         return (
             <ToggleGroupItem
                 value={type}

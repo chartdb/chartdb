@@ -18,7 +18,8 @@ import {
 } from '@/components/table/table';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
-import { databaseTypeToLabel } from '@/lib/domain/database-type';
+import { databaseTypeToLabelMap } from '@/lib/databases';
+
 import { Diagram } from '@/lib/domain/diagram';
 import { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
@@ -120,9 +121,11 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                         {diagram.updatedAt.toLocaleString()}
                                     </TableCell>
                                     <TableCell>
-                                        {databaseTypeToLabel(
-                                            diagram.databaseType
-                                        )}
+                                        {
+                                            databaseTypeToLabelMap[
+                                                diagram.databaseType
+                                            ]
+                                        }
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -27,6 +27,10 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useExportImage } from '@/hooks/use-export-image';
+import {
+    databaseSecondaryLogoMap,
+    databaseTypeToLabelMap,
+} from '@/lib/databases';
 
 export interface TopNavbarProps {}
 
@@ -160,7 +164,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </Menubar>
                 </div>
             </div>
-            <div className="flex flex-row flex-1 justify-center items-center group">
+            <div className="flex flex-row flex-1 justify-center items-center group gap-2">
+                <Tooltip>
+                    <TooltipTrigger>
+                        <img
+                            src={
+                                databaseSecondaryLogoMap[
+                                    currentDiagram.databaseType
+                                ]
+                            }
+                            className="h-5 max-w-fit"
+                            alt="database"
+                        />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {databaseTypeToLabelMap[currentDiagram.databaseType]}
+                    </TooltipContent>
+                </Tooltip>
                 <div className="flex">
                     <Label>Diagrams/</Label>
                 </div>

@@ -85,6 +85,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             height: `${imageHeight}px`,
                             transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
                         },
+                        quality: 1,
                     }
                 );
 
