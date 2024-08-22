@@ -91,15 +91,26 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         exportImage('jpeg');
     }, [exportImage]);
 
+    const openChartDBIO = useCallback(() => {
+        window.open('https://chartdb.io', '_blank');
+    }, []);
+
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3">
                 <div className="flex font-primary items-center">
-                    <img
-                        src={ChartDBLogo}
-                        alt="chartDB"
-                        className="h-4 max-w-fit"
-                    />
+                    <a
+                        href="https://chartdb.io"
+                        target="_blank"
+                        className="cursor-pointer"
+                        rel="noreferrer"
+                    >
+                        <img
+                            src={ChartDBLogo}
+                            alt="chartDB"
+                            className="h-4 max-w-fit"
+                        />
+                    </a>
                 </div>
                 <div>
                     <Menubar className="border-none shadow-none">
@@ -157,8 +168,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <MenubarMenu>
                             <MenubarTrigger>Help</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarItem>Report a bug</MenubarItem>
-                                <MenubarItem>Visit ChartDB</MenubarItem>
+                                <MenubarItem onClick={openChartDBIO}>
+                                    Visit ChartDB
+                                </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
                     </Menubar>
