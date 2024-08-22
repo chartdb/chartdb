@@ -1,7 +1,4 @@
-import { minimizeQuery } from './minimize-script';
-
-const rawSqliteQuery = `
-WITH fk_info AS (
+export const sqliteQuery = `WITH fk_info AS (
   SELECT
       json_group_array(
           json_object(
@@ -158,10 +155,9 @@ replace(replace(replace(
           'indexes', (SELECT indexes_metadata FROM indexes_metadata),
           'tables', (SELECT tbls_metadata FROM tbls),
           'views', (SELECT views_metadata FROM views),
-          'database_name', PRAGMA database_list'',
+          'database_name', 'sqlite',
           'version', sqlite_version()
       ),
       '\\"', '"'),'"[', '['), ']"', ']'
 )AS database_info;
 `;
-export const SqliteQuery = minimizeQuery(rawSqliteQuery);

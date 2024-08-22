@@ -1,7 +1,4 @@
-import { minimizeQuery } from './minimize-script';
-
-const rawMySQLQuery = `
-WITH fk_info as (
+export const mySQLQuery = `WITH fk_info as (
   (SELECT (@fk_info:=NULL),
               (SELECT (0)
                FROM (SELECT kcu.table_schema,
@@ -131,4 +128,3 @@ WITH fk_info as (
             '", "version": "', VERSION(), '"}') AS CHAR) AS ''
  FROM fk_info, pk_info, cols, indexes, tbls, views);
 `;
-export const MySQLQuery = minimizeQuery(rawMySQLQuery);

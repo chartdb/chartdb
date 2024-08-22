@@ -15,6 +15,18 @@ export interface DatabaseMetadata {
     version: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isDatabaseMetadata = (obj: any): boolean => {
+    return (
+        Array.isArray(obj.fk_info) &&
+        Array.isArray(obj.pk_info) &&
+        Array.isArray(obj.columns) &&
+        Array.isArray(obj.indexes) &&
+        Array.isArray(obj.tables) &&
+        Array.isArray(obj.views)
+    );
+};
+
 export function loadDatabaseMetadata(jsonString: string): DatabaseMetadata {
     try {
         const parsedData: DatabaseMetadata = JSON.parse(jsonString);
