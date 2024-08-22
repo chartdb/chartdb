@@ -46,6 +46,16 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         ]
     );
 
+    const updateDiagramUpdatedAt: ChartDBContext['updateDiagramUpdatedAt'] =
+        useCallback(async () => {
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await db.updateDiagram({
+                id: diagramId,
+                attributes: { updatedAt },
+            });
+        }, [db, diagramId, setDiagramUpdatedAt]);
+
     const updateDatabaseType: ChartDBContext['updateDatabaseType'] =
         useCallback(
             async (databaseType) => {
@@ -906,12 +916,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 updateDiagramName,
                 loadDiagram,
                 updateDatabaseType,
+                updateDiagramUpdatedAt,
                 createTable,
                 addTable,
                 getTable,
                 removeTable,
                 updateTable,
-                // updateTables,
                 updateTablesState,
                 updateField,
                 removeField,

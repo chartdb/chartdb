@@ -61,6 +61,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         fetchDiagrams();
     }, [listDiagrams, setDiagramNumber, dialog.open]);
 
+    useEffect(() => {
+        setStep(CreateDiagramDialogStep.SELECT_DATABASE);
+        setDatabaseType(DatabaseType.GENERIC);
+        setScriptResult('');
+    }, [dialog.open]);
+
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
     const createNewDiagram = useCallback(async () => {

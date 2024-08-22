@@ -11,12 +11,14 @@ import {
     NodePositionChange,
     NodeRemoveChange,
     useReactFlow,
+    NodeDimensionChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TableNode, TableNodeType } from './table-node';
 import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
+import { Toolbar } from './toolbar/toolbar';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -74,6 +76,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 data: {
                     table,
                 },
+                width: table.width ?? 224,
             }))
         );
     }, [tables, setNodes]);
@@ -111,9 +114,15 @@ export const Canvas: React.FC<CanvasProps> = () => {
                         (change) => change.type === 'remove'
                     ) as NodeRemoveChange[];
 
+                    const sizeChanges: NodeDimensionChange[] = changes.filter(
+                        (change) =>
+                            change.type === 'dimensions' && change.resizing
+                    ) as NodeDimensionChange[];
+
                     if (
                         positionChanges.length > 0 ||
-                        removeChanges.length > 0
+                        removeChanges.length > 0 ||
+                        sizeChanges.length > 0
                     ) {
                         updateTablesState((currentTables) =>
                             currentTables
@@ -122,11 +131,29 @@ export const Canvas: React.FC<CanvasProps> = () => {
                                         (change) =>
                                             change.id === currentTable.id
                                     );
-                                    if (positionChange) {
+                                    const sizeChange = sizeChanges.find(
+                                        (change) =>
+                                            change.id === currentTable.id
+                                    );
+                                    if (positionChange || sizeChange) {
                                         return {
                                             id: currentTable.id,
-                                            x: positionChange.position?.x,
-                                            y: positionChange.position?.y,
+                                            ...(positionChange
+                                                ? {
+                                                      x: positionChange.position
+                                                          ?.x,
+                                                      y: positionChange.position
+                                                          ?.y,
+                                                  }
+                                                : {}),
+                                            ...(sizeChange
+                                                ? {
+                                                      width:
+                                                          sizeChange.dimensions
+                                                              ?.width ??
+                                                          currentTable.width,
+                                                  }
+                                                : {}),
                                         };
                                     }
                                     return currentTable;
@@ -179,11 +206,13 @@ export const Canvas: React.FC<CanvasProps> = () => {
 
                     return onEdgesChange(changes);
                 }}
+                maxZoom={5}
+                minZoom={0.1}
                 onConnect={onConnect}
                 proOptions={{
                     hideAttribution: true,
                 }}
-                fitView={false} // todo think about it
+                fitView={false}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 defaultEdgeOptions={{
@@ -191,7 +220,16 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     type: 'table-edge',
                 }}
             >
-                <Controls />
+                <Controls
+                    position="bottom-center"
+                    orientation="horizontal"
+                    showZoom={false}
+                    showFitView={false}
+                    showInteractive={false}
+                    className="!shadow-none"
+                >
+                    <Toolbar />
+                </Controls>
                 <MiniMap
                     style={{
                         width: 100,

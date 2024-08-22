@@ -18,6 +18,7 @@ export interface DBTable {
     color: string;
     isView: boolean;
     createdAt: number;
+    width?: number;
 }
 
 export const createTablesFromMetadata = ({

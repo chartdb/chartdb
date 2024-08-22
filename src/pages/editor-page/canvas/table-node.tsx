@@ -1,5 +1,5 @@
 import React from 'react';
-import { NodeProps, Node } from '@xyflow/react';
+import { NodeProps, Node, NodeResizer } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import { Pencil, Table2 } from 'lucide-react';
 import { Label } from '@/components/label/label';
@@ -30,8 +30,16 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex flex-col w-56 bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
+            className={`flex flex-col w-full bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
         >
+            <NodeResizer
+                isVisible={focused}
+                lineClassName="!border-none !w-2"
+                minWidth={224}
+                maxWidth={600}
+                shouldResize={(event) => event.dy === 0}
+                handleClassName="!hidden"
+            />
             <div
                 className="h-2 rounded-t-lg"
                 style={{ backgroundColor: table.color }}

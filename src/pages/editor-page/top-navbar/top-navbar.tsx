@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import TimeAgo from 'timeago-react';
 import {
     Menubar,
     MenubarContent,
@@ -13,12 +14,13 @@ import {
 } from '@/components/menubar/menubar';
 import { Label } from '@/components/label/label';
 import { Button } from '@/components/button/button';
-import { Check, Pencil } from 'lucide-react';
+import { Check, Pencil, Save } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
 import { useDialog } from '@/hooks/use-dialog';
+import { Badge } from '@/components/badge/badge';
 
 export interface TopNavbarProps {}
 
@@ -67,7 +69,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, [currentDiagram]);
 
     return (
-        <nav className="flex flex-row items-center justify-between px-4 h-12">
+        <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3">
                 <div className="flex font-primary items-center">
                     <img
@@ -173,7 +175,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     )}
                 </div>
             </div>
-            <div className="hidden flex-1 justify-end sm:flex"></div>
+            <div className="hidden flex-1 justify-end sm:flex">
+                <Badge variant="secondary" className="flex gap-1">
+                    <Save className="h-4" />
+                    Last saved
+                    <TimeAgo
+                        datetime={currentDiagram.updatedAt}
+                        opts={{
+                            minInterval: 60,
+                        }}
+                    />
+                </Badge>
+            </div>
         </nav>
     );
 };
