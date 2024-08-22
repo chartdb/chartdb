@@ -22,6 +22,7 @@ export interface ChartDBContext {
         options?: { updateHistory: boolean }
     ) => Promise<void>;
     loadDiagram: (diagramId: string) => Promise<Diagram | undefined>;
+    updateDiagramUpdatedAt: () => Promise<void>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
@@ -135,6 +136,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     // General operations
     updateDiagramId: emptyFn,
     updateDiagramName: emptyFn,
+    updateDiagramUpdatedAt: emptyFn,
     loadDiagram: emptyFn,
 
     // Database type operations

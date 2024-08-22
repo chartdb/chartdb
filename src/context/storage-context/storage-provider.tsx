@@ -32,7 +32,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     db.version(1).stores({
         diagrams: '++id, name, databaseType, createdAt, updatedAt',
         db_tables:
-            '++id, diagramId, name, x, y, fields, indexes, color, createdAt',
+            '++id, diagramId, name, x, y, fields, indexes, color, createdAt, width',
         db_relationships:
             '++id, diagramId, name, sourceTableId, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
         config: '++id, defaultDiagramId',

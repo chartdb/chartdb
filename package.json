@@ -43,7 +43,8 @@
     "react-router-dom": "^6.26.0",
     "react-use": "^17.5.1",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "timeago-react": "^3.0.6"
   },
   "devDependencies": {
     "@types/node": "^22.1.0",
