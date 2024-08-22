@@ -12,6 +12,8 @@ import {
     NodeRemoveChange,
     useReactFlow,
     NodeDimensionChange,
+    OnEdgesChange,
+    OnNodesChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TableNode, TableNodeType } from './table-node';
@@ -81,7 +83,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
         );
     }, [tables, setNodes]);
 
-    const onConnect = useCallback(
+    const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
             const relationship = await createRelationship({
                 sourceTableId: params.source,
@@ -99,116 +101,118 @@ export const Canvas: React.FC<CanvasProps> = () => {
         [setEdges, createRelationship]
     );
 
+    const onEdgesChangeHandler: OnEdgesChange<TableEdgeType> = useCallback(
+        (changes) => {
+            const removeChanges: NodeRemoveChange[] = changes.filter(
+                (change) => change.type === 'remove'
+            ) as NodeRemoveChange[];
+
+            const relationshipsToRemove: string[] = removeChanges
+                .map(
+                    (change) =>
+                        (getEdge(change.id) as TableEdgeType)?.data
+                            ?.relationship?.id
+                )
+                .filter((id) => !!id) as string[];
+
+            if (relationshipsToRemove.length > 0) {
+                removeRelationships(relationshipsToRemove);
+            }
+
+            const selectionChanges = changes.filter(
+                (change) => change.type === 'select'
+            );
+
+            if (selectionChanges.length > 0) {
+                setEdges((edges) =>
+                    edges.map((edge) => {
+                        const selected = selectionChanges.some(
+                            (change) => change.id === edge.id && change.selected
+                        );
+                        edge.zIndex = selected ? 1 : 0;
+                        edge.animated = selected;
+                        return edge;
+                    })
+                );
+            }
+
+            return onEdgesChange(changes);
+        },
+        [getEdge, onEdgesChange, removeRelationships, setEdges]
+    );
+
+    const onNodesChangeHandler: OnNodesChange<TableNodeType> = useCallback(
+        (changes) => {
+            const positionChanges: NodePositionChange[] = changes.filter(
+                (change) => change.type === 'position' && !change.dragging
+            ) as NodePositionChange[];
+            const removeChanges: NodeRemoveChange[] = changes.filter(
+                (change) => change.type === 'remove'
+            ) as NodeRemoveChange[];
+
+            const sizeChanges: NodeDimensionChange[] = changes.filter(
+                (change) => change.type === 'dimensions' && change.resizing
+            ) as NodeDimensionChange[];
+
+            if (
+                positionChanges.length > 0 ||
+                removeChanges.length > 0 ||
+                sizeChanges.length > 0
+            ) {
+                updateTablesState((currentTables) =>
+                    currentTables
+                        .map((currentTable) => {
+                            const positionChange = positionChanges.find(
+                                (change) => change.id === currentTable.id
+                            );
+                            const sizeChange = sizeChanges.find(
+                                (change) => change.id === currentTable.id
+                            );
+                            if (positionChange || sizeChange) {
+                                return {
+                                    id: currentTable.id,
+                                    ...(positionChange
+                                        ? {
+                                              x: positionChange.position?.x,
+                                              y: positionChange.position?.y,
+                                          }
+                                        : {}),
+                                    ...(sizeChange
+                                        ? {
+                                              width:
+                                                  sizeChange.dimensions
+                                                      ?.width ??
+                                                  currentTable.width,
+                                          }
+                                        : {}),
+                                };
+                            }
+                            return currentTable;
+                        })
+                        .filter(
+                            (table) =>
+                                !removeChanges.some(
+                                    (change) => change.id === table.id
+                                )
+                        )
+                );
+            }
+
+            return onNodesChange(changes);
+        },
+        [onNodesChange, updateTablesState]
+    );
+
     return (
         <div className="flex h-full">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={(changes) => {
-                    const positionChanges: NodePositionChange[] =
-                        changes.filter(
-                            (change) =>
-                                change.type === 'position' && !change.dragging
-                        ) as NodePositionChange[];
-                    const removeChanges: NodeRemoveChange[] = changes.filter(
-                        (change) => change.type === 'remove'
-                    ) as NodeRemoveChange[];
-
-                    const sizeChanges: NodeDimensionChange[] = changes.filter(
-                        (change) =>
-                            change.type === 'dimensions' && change.resizing
-                    ) as NodeDimensionChange[];
-
-                    if (
-                        positionChanges.length > 0 ||
-                        removeChanges.length > 0 ||
-                        sizeChanges.length > 0
-                    ) {
-                        updateTablesState((currentTables) =>
-                            currentTables
-                                .map((currentTable) => {
-                                    const positionChange = positionChanges.find(
-                                        (change) =>
-                                            change.id === currentTable.id
-                                    );
-                                    const sizeChange = sizeChanges.find(
-                                        (change) =>
-                                            change.id === currentTable.id
-                                    );
-                                    if (positionChange || sizeChange) {
-                                        return {
-                                            id: currentTable.id,
-                                            ...(positionChange
-                                                ? {
-                                                      x: positionChange.position
-                                                          ?.x,
-                                                      y: positionChange.position
-                                                          ?.y,
-                                                  }
-                                                : {}),
-                                            ...(sizeChange
-                                                ? {
-                                                      width:
-                                                          sizeChange.dimensions
-                                                              ?.width ??
-                                                          currentTable.width,
-                                                  }
-                                                : {}),
-                                        };
-                                    }
-                                    return currentTable;
-                                })
-                                .filter(
-                                    (table) =>
-                                        !removeChanges.some(
-                                            (change) => change.id === table.id
-                                        )
-                                )
-                        );
-                    }
-
-                    return onNodesChange(changes);
-                }}
-                onEdgesChange={(changes) => {
-                    const removeChanges: NodeRemoveChange[] = changes.filter(
-                        (change) => change.type === 'remove'
-                    ) as NodeRemoveChange[];
-
-                    const relationshipsToRemove: string[] = removeChanges
-                        .map(
-                            (change) =>
-                                (getEdge(change.id) as TableEdgeType)?.data
-                                    ?.relationship?.id
-                        )
-                        .filter((id) => !!id) as string[];
-
-                    if (relationshipsToRemove.length > 0) {
-                        removeRelationships(relationshipsToRemove);
-                    }
-
-                    const selectionChanges = changes.filter(
-                        (change) => change.type === 'select'
-                    );
-
-                    if (selectionChanges.length > 0) {
-                        setEdges((edges) =>
-                            edges.map((edge) => {
-                                const selected = selectionChanges.some(
-                                    (change) =>
-                                        change.id === edge.id && change.selected
-                                );
-                                edge.zIndex = selected ? 1 : 0;
-                                edge.animated = selected;
-                                return edge;
-                            })
-                        );
-                    }
-
-                    return onEdgesChange(changes);
-                }}
+                onNodesChange={onNodesChangeHandler}
+                onEdgesChange={onEdgesChangeHandler}
                 maxZoom={5}
                 minZoom={0.1}
-                onConnect={onConnect}
+                onConnect={onConnectHandler}
                 proOptions={{
                     hideAttribution: true,
                 }}
@@ -219,6 +223,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     animated: false,
                     type: 'table-edge',
                 }}
+                panOnScroll
             >
                 <Controls
                     position="bottom-center"
