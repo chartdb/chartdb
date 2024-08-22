@@ -12,6 +12,7 @@ import { useConfig } from '@/hooks/use-config';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
+import { Toaster } from '@/components/toast/toaster';
 
 export const EditorPage: React.FC = () => {
     const { loadDiagram } = useChartDB();
@@ -52,17 +53,20 @@ export const EditorPage: React.FC = () => {
     ]);
 
     return (
-        <section className="bg-background h-screen w-screen flex flex-col">
-            <TopNavbar />
-            <ResizablePanelGroup direction="horizontal">
-                <ResizablePanel defaultSize={25} minSize={25} maxSize={99}>
-                    <SidePanel />
-                </ResizablePanel>
-                <ResizableHandle />
-                <ResizablePanel defaultSize={75}>
-                    <Canvas />
-                </ResizablePanel>
-            </ResizablePanelGroup>
-        </section>
+        <>
+            <section className="bg-background h-screen w-screen flex flex-col">
+                <TopNavbar />
+                <ResizablePanelGroup direction="horizontal">
+                    <ResizablePanel defaultSize={25} minSize={25} maxSize={99}>
+                        <SidePanel />
+                    </ResizablePanel>
+                    <ResizableHandle />
+                    <ResizablePanel defaultSize={75}>
+                        <Canvas />
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </section>
+            <Toaster />
+        </>
     );
 };

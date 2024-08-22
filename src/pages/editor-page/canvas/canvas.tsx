@@ -21,6 +21,7 @@ import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
 import { Toolbar } from './toolbar/toolbar';
+import { useToast } from '@/components/toast/use-toast';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -31,12 +32,14 @@ export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
     const { getEdge } = useReactFlow();
+    const { toast } = useToast();
     const {
         tables,
         relationships,
         createRelationship,
         updateTablesState,
         removeRelationships,
+        getField,
     } = useChartDB();
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -85,11 +88,32 @@ export const Canvas: React.FC<CanvasProps> = () => {
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
+            const sourceTableId = params.source;
+            const targetTableId = params.target;
+            const sourceFieldId = params.sourceHandle?.split('_')?.pop() ?? '';
+            const targetFieldId = params.targetHandle?.split('_')?.pop() ?? '';
+            const sourceField = getField(sourceTableId, sourceFieldId);
+            const targetField = getField(targetTableId, targetFieldId);
+
+            if (!sourceField || !targetField) {
+                return;
+            }
+
+            if (sourceField.type !== targetField.type) {
+                toast({
+                    title: 'Field types do not match',
+                    variant: 'destructive',
+                    description:
+                        'Relationships can only be created between fields of the same type',
+                });
+                return;
+            }
+
             const relationship = await createRelationship({
-                sourceTableId: params.source,
-                targetTableId: params.target,
-                sourceFieldId: params.sourceHandle?.split('_')?.pop() ?? '',
-                targetFieldId: params.targetHandle?.split('_')?.pop() ?? '',
+                sourceTableId,
+                targetTableId,
+                sourceFieldId,
+                targetFieldId,
             });
             return setEdges((edges) =>
                 addEdge<TableEdgeType>(
@@ -98,7 +122,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 )
             );
         },
-        [setEdges, createRelationship]
+        [setEdges, createRelationship, getField, toast]
     );
 
     const onEdgesChangeHandler: OnEdgesChange<TableEdgeType> = useCallback(

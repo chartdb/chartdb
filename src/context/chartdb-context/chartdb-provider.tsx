@@ -140,7 +140,10 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 {
                     id: generateId(),
                     name: 'id',
-                    type: 'bigint',
+                    type:
+                        databaseType === DatabaseType.SQLITE
+                            ? 'integer'
+                            : 'bigint',
                     unique: true,
                     nullable: false,
                     primaryKey: true,
@@ -155,7 +158,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         await addTable(table);
 
         return table;
-    }, [addTable, tables]);
+    }, [addTable, tables, databaseType]);
 
     const getTable: ChartDBContext['getTable'] = useCallback(
         (id: string) => tables.find((table) => table.id === id) ?? null,
