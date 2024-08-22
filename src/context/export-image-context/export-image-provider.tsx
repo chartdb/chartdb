@@ -11,6 +11,7 @@ import {
     useReactFlow,
 } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 
 const imageWidth = 1024;
 const imageHeight = 768;
@@ -18,6 +19,7 @@ const imageHeight = 768;
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
+    const { hideLoader, showLoader } = useFullScreenLoader();
     const { getNodes, setNodes } = useReactFlow();
     const { diagramName } = useChartDB();
 
@@ -47,6 +49,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
 
     const exportImage: ExportImageContext['exportImage'] = useCallback(
         async (type) => {
+            showLoader();
+
             setNodes((nodes) =>
                 nodes.map((node) => ({ ...node, selected: false }))
             );
@@ -56,32 +60,44 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 nodesBounds,
                 imageWidth,
                 imageHeight,
-                0.5,
+                0.01,
                 2,
-                0
+                0.02
             );
 
             const imageCreateFn = imageCreatorMap[type];
 
-            const dataUrl = await imageCreateFn(
-                window.document.querySelector(
-                    '.react-flow__viewport'
-                ) as HTMLElement,
-                {
-                    ...(type === 'jpeg' ? { backgroundColor: '#ffffff' } : {}),
-                    width: imageWidth,
-                    height: imageHeight,
-                    style: {
-                        width: `${imageWidth}px`,
-                        height: `${imageHeight}px`,
-                        transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
-                    },
-                }
-            );
+            setTimeout(async () => {
+                const dataUrl = await imageCreateFn(
+                    window.document.querySelector(
+                        '.react-flow__viewport'
+                    ) as HTMLElement,
+                    {
+                        ...(type === 'jpeg' || type === 'png'
+                            ? { backgroundColor: '#ffffff' }
+                            : {}),
+                        width: imageWidth,
+                        height: imageHeight,
+                        style: {
+                            width: `${imageWidth}px`,
+                            height: `${imageHeight}px`,
+                            transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                        },
+                    }
+                );
 
-            downloadImage(dataUrl, type);
+                downloadImage(dataUrl, type);
+                hideLoader();
+            }, 0);
         },
-        [downloadImage, getNodes, imageCreatorMap, setNodes]
+        [
+            downloadImage,
+            getNodes,
+            imageCreatorMap,
+            setNodes,
+            showLoader,
+            hideLoader,
+        ]
     );
 
     return (

@@ -11,30 +11,33 @@ import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack
 import { LayoutProvider } from './context/layout-context/layout-provider';
 import { DialogProvider } from './context/dialog-context/dialog-provider';
 import { ExportImageProvider } from './context/export-image-context/export-image-provider';
+import { FullScreenLoaderProvider } from './context/full-screen-spinner-context/full-screen-spinner-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
         path,
         element: (
-            <LayoutProvider>
-                <StorageProvider>
-                    <ConfigProvider>
-                        <RedoUndoStackProvider>
-                            <ChartDBProvider>
-                                <HistoryProvider>
-                                    <DialogProvider>
-                                        <ReactFlowProvider>
-                                            <ExportImageProvider>
-                                                <EditorPage />
-                                            </ExportImageProvider>
-                                        </ReactFlowProvider>
-                                    </DialogProvider>
-                                </HistoryProvider>
-                            </ChartDBProvider>
-                        </RedoUndoStackProvider>
-                    </ConfigProvider>
-                </StorageProvider>
-            </LayoutProvider>
+            <FullScreenLoaderProvider>
+                <LayoutProvider>
+                    <StorageProvider>
+                        <ConfigProvider>
+                            <RedoUndoStackProvider>
+                                <ChartDBProvider>
+                                    <HistoryProvider>
+                                        <DialogProvider>
+                                            <ReactFlowProvider>
+                                                <ExportImageProvider>
+                                                    <EditorPage />
+                                                </ExportImageProvider>
+                                            </ReactFlowProvider>
+                                        </DialogProvider>
+                                    </HistoryProvider>
+                                </ChartDBProvider>
+                            </RedoUndoStackProvider>
+                        </ConfigProvider>
+                    </StorageProvider>
+                </LayoutProvider>
+            </FullScreenLoaderProvider>
         ),
     })),
     {
