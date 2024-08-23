@@ -31,14 +31,20 @@
 
 ---
 
-**🎉 ChartDB**:
-ChartDB is a powerful and intuitive database diagramming editor that runs as a SaaS application via a website.
-Effortlessly visualize and design your database schemas with a single "**Smart Query**" that fetches your entire database structure.
-Customize your diagrams, export SQL scripts, and explore a full suite of features—all without creating an account.
-Dive into a seamless database design experience and discover the complete feature set here.
+### 🎉 ChartDB
+ChartDB is a powerful, web-based database diagramming editor. 
+Instantly visualize your database schema with a single **"Smart Query."** Customize diagrams, export SQL scripts, and access all features—no account required. Experience seamless database design here.
 
-## Status
+**What it does**:
+1. **Instant Schema Import**  
+   Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
 
+2. **AI-Powered Export for Easy Migration**  
+   Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
+3. **Interactive Editing**  
+   Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
+
+### Status
 ChartDB is currently in Public Beta. Star and watch this repository to get notified of updates.
 
 ## 🚀 Getting Started
