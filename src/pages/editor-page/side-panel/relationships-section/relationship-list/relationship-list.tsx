@@ -24,7 +24,7 @@ export const RelationshipList: React.FC<TableListProps> = ({
 
     const scrollToRelationship = useCallback(
         (id: string) =>
-            refs[id].current?.scrollIntoView({
+            refs[id]?.current?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
             }),

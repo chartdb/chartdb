@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Button } from '@/components/button/button';
 import { ListCollapse } from 'lucide-react';
-import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Input } from '@/components/input/input';
 import { RelationshipList } from './relationship-list/relationship-list';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -41,10 +40,10 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                     />
                 </div>
             </div>
-            <div className="flex flex-col flex-1 overflow-hidden">
-                <ScrollArea className="h-full">
-                    <RelationshipList relationships={filteredRelationships} />
-                </ScrollArea>
+            <div className="flex flex-col flex-1 overflow-scroll">
+                {/* <ScrollArea className="h-full"> */}
+                <RelationshipList relationships={filteredRelationships} />
+                {/* </ScrollArea> */}
             </div>
         </section>
     );

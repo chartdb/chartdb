@@ -7,6 +7,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/select/select';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { DBRelationship, RelationshipType } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
@@ -47,27 +52,41 @@ export const RelationshipListItemContent: React.FC<
         <div className="rounded-b-md px-1 flex flex-col my-1">
             <div className="flex flex-col gap-6">
                 <div className="flex justify-between items-center gap-1 text-xs">
-                    <div className="flex flex-col gap-2 text-xs">
+                    <div className="flex flex-col gap-2 text-xs overflow-hidden">
                         <div className="flex flex-row items-center gap-1">
                             <FileMinus2 className="h-4 w-4 text-slate-700" />
                             <div className="font-bold text-slate-700">
                                 Primary
                             </div>
                         </div>
-                        <div className="text-sm">
-                            {targetTable?.name}({targetField?.name})
-                        </div>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className="text-sm  overflow-hidden whitespace-nowrap text-ellipsis ">
+                                    {targetTable?.name}({targetField?.name})
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {targetTable?.name}({targetField?.name})
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
-                    <div className="flex flex-col gap-2 text-xs">
+                    <div className="flex flex-col gap-2 text-xs overflow-hidden">
                         <div className="flex flex-row items-center gap-1">
                             <FileOutput className="h-4 w-4 text-slate-700" />
                             <div className="font-bold text-slate-700">
                                 Foreign
                             </div>
                         </div>
-                        <div className="text-sm">
-                            {sourceTable?.name}({sourceField?.name})
-                        </div>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className="text-sm  overflow-hidden whitespace-nowrap text-ellipsis ">
+                                    {sourceTable?.name}({sourceField?.name})
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {sourceTable?.name}({sourceField?.name})
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 text-xs">

@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
 import { Table, ListCollapse } from 'lucide-react';
-import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Input } from '@/components/input/input';
 
 import { DBTable } from '@/lib/domain/db-table';
@@ -48,10 +47,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     Add Table
                 </Button>
             </div>
-            <div className="flex flex-col flex-1 overflow-hidden">
-                <ScrollArea className="h-full">
-                    <TableList tables={filteredTables} />
-                </ScrollArea>
+            <div className="flex flex-col flex-1 overflow-scroll">
+                {/* <ScrollArea className="h-full !max-w-full"> */}
+                <TableList tables={filteredTables} />
+                {/* </ScrollArea> */}
             </div>
         </section>
     );

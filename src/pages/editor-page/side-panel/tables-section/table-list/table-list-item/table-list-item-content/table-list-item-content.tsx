@@ -90,7 +90,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                             </div>
                         </div>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-0 pt-1">
+                    <AccordionContent className="flex flex-col pb-0 pt-1">
                         {table.fields.map((field) => (
                             <TableField
                                 key={field.id}

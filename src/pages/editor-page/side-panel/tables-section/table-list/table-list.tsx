@@ -20,7 +20,7 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
 
     const scrollToTable = useCallback(
         (id: string) =>
-            refs[id].current?.scrollIntoView({
+            refs[id]?.current?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
             }),

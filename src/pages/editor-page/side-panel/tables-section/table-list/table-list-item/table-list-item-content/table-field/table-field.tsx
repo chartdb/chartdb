@@ -43,9 +43,9 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     return (
         <div className="flex flex-row p-1 justify-between flex-1">
-            <div className="flex basis-8/12 gap-1">
+            <div className="flex w-8/12 gap-1 justify-start overflow-hidden">
                 <Input
-                    className="h-8 focus-visible:ring-0 basis-8/12"
+                    className="h-8 focus-visible:ring-0 w-7/12 !overflow-hidden !whitespace-nowrap !text-ellipsis"
                     type="text"
                     placeholder="Name"
                     value={field.name}
@@ -56,7 +56,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     }
                 />
                 <Combobox
-                    className="flex h-8 basis-4/12"
+                    className="flex h-8 !w-5/12"
                     mode="single"
                     options={dataFieldOptions}
                     placeholder="Type"
@@ -69,7 +69,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     emptyText="No types found."
                 />
             </div>
-            <div className="flex gap-1">
+            <div className="flex w-4/12 gap-1 justify-end overflow-hidden">
                 <Tooltip>
                     <TooltipTrigger>
                         <Toggle
