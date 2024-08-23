@@ -17,7 +17,7 @@ import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export const EditorPage: React.FC = () => {
-    const { loadDiagram } = useChartDB();
+    const { loadDiagram, currentDiagram } = useChartDB();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog } = useDialog();
@@ -29,6 +29,10 @@ export const EditorPage: React.FC = () => {
 
     useEffect(() => {
         if (!config) {
+            return;
+        }
+
+        if (currentDiagram?.id === diagramId) {
             return;
         }
 
@@ -59,6 +63,7 @@ export const EditorPage: React.FC = () => {
         resetUndoStack,
         hideLoader,
         showLoader,
+        currentDiagram?.id,
     ]);
 
     return (

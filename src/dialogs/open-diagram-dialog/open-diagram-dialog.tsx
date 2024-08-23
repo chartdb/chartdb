@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import {
     Table,
     TableBody,
@@ -73,7 +74,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col min-w-[500px] xl:min-w-[75vw] max-h-[80vh] overflow-y-auto"
+                className="flex flex-col min-w-[100vw] xl:min-w-[70vw] max-h-[80vh] overflow-y-auto"
                 showClose
             >
                 <DialogHeader>
@@ -83,60 +84,62 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Created at</TableHead>
-                                <TableHead>Last modified</TableHead>
-                                <TableHead>Tables count</TableHead>
-                                <TableHead>Type</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {diagrams.map((diagram) => (
-                                <TableRow
-                                    key={diagram.id}
-                                    data-state={`${selectedDiagramId === diagram.id ? 'selected' : ''}`}
-                                    onClick={(e) => {
-                                        switch (e.detail) {
-                                            case 1:
-                                                setSelectedDiagramId(
-                                                    diagram.id
-                                                );
-                                                break;
-                                            case 2:
-                                                openDiagram(diagram.id);
-                                                closeOpenDiagramDialog();
-                                                break;
-                                            default:
-                                                setSelectedDiagramId(
-                                                    diagram.id
-                                                );
-                                        }
-                                    }}
-                                >
-                                    <TableCell>{diagram.name}</TableCell>
-                                    <TableCell>
-                                        {diagram.createdAt.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell>
-                                        {diagram.updatedAt.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell>
-                                        {diagram.tables?.length}
-                                    </TableCell>
-                                    <TableCell>
-                                        {
-                                            databaseTypeToLabelMap[
-                                                diagram.databaseType
-                                            ]
-                                        }
-                                    </TableCell>
+                    <ScrollArea className="h-80 w-full">
+                        <Table>
+                            <TableHeader className="sticky top-0 bg-background">
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Created at</TableHead>
+                                    <TableHead>Last modified</TableHead>
+                                    <TableHead>Tables count</TableHead>
+                                    <TableHead>Type</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {diagrams.map((diagram) => (
+                                    <TableRow
+                                        key={diagram.id}
+                                        data-state={`${selectedDiagramId === diagram.id ? 'selected' : ''}`}
+                                        onClick={(e) => {
+                                            switch (e.detail) {
+                                                case 1:
+                                                    setSelectedDiagramId(
+                                                        diagram.id
+                                                    );
+                                                    break;
+                                                case 2:
+                                                    openDiagram(diagram.id);
+                                                    closeOpenDiagramDialog();
+                                                    break;
+                                                default:
+                                                    setSelectedDiagramId(
+                                                        diagram.id
+                                                    );
+                                            }
+                                        }}
+                                    >
+                                        <TableCell>{diagram.name}</TableCell>
+                                        <TableCell>
+                                            {diagram.createdAt.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell>
+                                            {diagram.updatedAt.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell>
+                                            {diagram.tables?.length}
+                                        </TableCell>
+                                        <TableCell>
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    diagram.databaseType
+                                                ]
+                                            }
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </ScrollArea>
                 </div>
 
                 <DialogFooter className="flex !justify-between gap-2">
