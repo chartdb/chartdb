@@ -14,6 +14,16 @@ export interface DialogContext {
     // Export SQL dialog
     openExportSQLDialog: (params: { targetDatabaseType: DatabaseType }) => void;
     closeExportSQLDialog: () => void;
+
+    // Alert dialog
+    showAlert: (params: {
+        onAction: () => void;
+        title: string;
+        description: string;
+        actionLabel: string;
+        closeLabel: string;
+    }) => void;
+    closeAlert: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -23,4 +33,6 @@ export const dialogContext = createContext<DialogContext>({
     closeOpenDiagramDialog: emptyFn,
     openExportSQLDialog: emptyFn,
     closeExportSQLDialog: emptyFn,
+    closeAlert: emptyFn,
+    showAlert: emptyFn,
 });

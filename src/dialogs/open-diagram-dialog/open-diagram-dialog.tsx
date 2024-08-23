@@ -33,6 +33,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
 }) => {
     const { closeOpenDiagramDialog } = useDialog();
+    const { updateConfig } = useStorage();
     const navigate = useNavigate();
     const { listDiagrams } = useStorage();
     const [diagrams, setDiagrams] = useState<Diagram[]>([]);
@@ -57,7 +58,8 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     }, [listDiagrams, setDiagrams, dialog.open]);
 
     const openDiagram = (diagramId: string) => {
-        if (selectedDiagramId) {
+        if (diagramId) {
+            updateConfig({ defaultDiagramId: diagramId });
             navigate(`/diagrams/${diagramId}`);
         }
     };

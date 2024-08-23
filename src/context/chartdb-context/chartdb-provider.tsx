@@ -10,11 +10,13 @@ import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Diagram } from '@/lib/domain/diagram';
+import { useNavigate } from 'react-router-dom';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const db = useStorage();
+    const navigate = useNavigate();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
     const [diagramId, setDiagramId] = useState('');
@@ -64,6 +66,29 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 db.deleteDiagramRelationships(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
+
+    const deleteDiagram: ChartDBContext['deleteDiagram'] =
+        useCallback(async () => {
+            const [config] = await Promise.all([
+                db.getConfig(),
+                db.deleteDiagramTables(diagramId),
+                db.deleteDiagramRelationships(diagramId),
+                db.deleteDiagram(diagramId),
+            ]);
+
+            if (config?.defaultDiagramId === diagramId) {
+                const diagrams = await db.listDiagrams();
+
+                if (diagrams.length > 0) {
+                    const defaultDiagramId = diagrams[0].id;
+                    await db.updateConfig({ defaultDiagramId });
+                    navigate(`/diagrams/${defaultDiagramId}`);
+                } else {
+                    await db.updateConfig({ defaultDiagramId: '' });
+                    navigate('/diagrams');
+                }
+            }
+        }, [db, diagramId, navigate]);
 
     const updateDiagramUpdatedAt: ChartDBContext['updateDiagramUpdatedAt'] =
         useCallback(async () => {
@@ -947,6 +972,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 loadDiagram,
                 updateDatabaseType,
                 clearDiagramData,
+                deleteDiagram,
                 updateDiagramUpdatedAt,
                 createTable,
                 addTable,

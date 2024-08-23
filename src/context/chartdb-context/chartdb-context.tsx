@@ -24,6 +24,7 @@ export interface ChartDBContext {
     loadDiagram: (diagramId: string) => Promise<Diagram | undefined>;
     updateDiagramUpdatedAt: () => Promise<void>;
     clearDiagramData: () => Promise<void>;
+    deleteDiagram: () => Promise<void>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
@@ -140,12 +141,12 @@ export const chartDBContext = createContext<ChartDBContext>({
     updateDiagramUpdatedAt: emptyFn,
     loadDiagram: emptyFn,
     clearDiagramData: emptyFn,
+    deleteDiagram: emptyFn,
 
     // Database type operations
     updateDatabaseType: emptyFn,
 
     // Table operations
-    // updateTables: emptyFn,
     createTable: emptyFn,
     getTable: emptyFn,
     addTable: emptyFn,
