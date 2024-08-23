@@ -37,9 +37,9 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             }
 
             // Add precision and scale for numeric types
-            if (field.precision !== null && field.scale !== null) {
+            if (field.precision && field.scale) {
                 sqlScript += `(${field.precision}, ${field.scale})`;
-            } else if (field.precision !== null) {
+            } else if (field.precision) {
                 sqlScript += `(${field.precision})`;
             }
 
