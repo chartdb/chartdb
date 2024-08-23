@@ -12,9 +12,12 @@ export interface TableListItemProps {
     table: DBTable;
 }
 
-export const TableListItem: React.FC<TableListItemProps> = ({ table }) => {
+export const TableListItem = React.forwardRef<
+    React.ElementRef<typeof AccordionItem>,
+    TableListItemProps
+>(({ table }, ref) => {
     return (
-        <AccordionItem value={table.id} className="rounded-md">
+        <AccordionItem value={table.id} className="rounded-md" ref={ref}>
             <AccordionTrigger
                 className="hover:no-underline hover:bg-accent rounded-md px-2 border-l-[6px] py-0 data-[state=open]:rounded-b-none"
                 style={{
@@ -29,4 +32,6 @@ export const TableListItem: React.FC<TableListItemProps> = ({ table }) => {
             </AccordionContent>
         </AccordionItem>
     );
-};
+});
+
+TableListItem.displayName = 'TableListItem';

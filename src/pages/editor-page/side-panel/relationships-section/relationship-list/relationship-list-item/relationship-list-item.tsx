@@ -12,11 +12,12 @@ export interface RelationshipListItemProps {
     relationship: DBRelationship;
 }
 
-export const RelationshipListItem: React.FC<RelationshipListItemProps> = ({
-    relationship,
-}) => {
+export const RelationshipListItem = React.forwardRef<
+    React.ElementRef<typeof AccordionItem>,
+    RelationshipListItemProps
+>(({ relationship }, ref) => {
     return (
-        <AccordionItem value={relationship.id} className="rounded-md">
+        <AccordionItem value={relationship.id} className="rounded-md" ref={ref}>
             <AccordionTrigger
                 asChild
                 className="hover:no-underline hover:bg-accent rounded-md px-2 py-0 data-[state=open]:rounded-b-none"
@@ -28,4 +29,6 @@ export const RelationshipListItem: React.FC<RelationshipListItemProps> = ({
             </AccordionContent>
         </AccordionItem>
     );
-};
+});
+
+RelationshipListItem.displayName = 'RelationshipListItem';
