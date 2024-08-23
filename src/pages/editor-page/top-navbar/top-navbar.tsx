@@ -32,16 +32,28 @@ import {
     databaseTypeToLabelMap,
 } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/alert-dialog/alert-dialog';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
-    const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
+    const { diagramName, updateDiagramName, currentDiagram, clearDiagramData } =
+        useChartDB();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
         openExportSQLDialog,
     } = useDialog();
+    const [showClearAlert, setShowClearAlert] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
     const [editedDiagramName, setEditedDiagramName] =
@@ -79,6 +91,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setEditMode(true);
     };
 
+    const clearDiagramDataHandler = useCallback(async () => {
+        setShowClearAlert(false);
+        await clearDiagramData();
+    }, [clearDiagramData]);
+
     const exportPNG = useCallback(() => {
         exportImage('png');
     }, [exportImage]);
@@ -103,228 +120,279 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, []);
 
     return (
-        <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
-            <div className="flex flex-1 justify-start gap-x-3">
-                <div className="flex font-primary items-center">
-                    <a
-                        href="https://chartdb.io"
-                        target="_blank"
-                        className="cursor-pointer"
-                        rel="noreferrer"
-                    >
-                        <img
-                            src={ChartDBLogo}
-                            alt="chartDB"
-                            className="h-4 max-w-fit"
-                        />
-                    </a>
+        <>
+            <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
+                <div className="flex flex-1 justify-start gap-x-3">
+                    <div className="flex font-primary items-center">
+                        <a
+                            href="https://chartdb.io"
+                            target="_blank"
+                            className="cursor-pointer"
+                            rel="noreferrer"
+                        >
+                            <img
+                                src={ChartDBLogo}
+                                alt="chartDB"
+                                className="h-4 max-w-fit"
+                            />
+                        </a>
+                    </div>
+                    <div>
+                        <Menubar className="border-none shadow-none">
+                            <MenubarMenu>
+                                <MenubarTrigger>File</MenubarTrigger>
+                                <MenubarContent>
+                                    <MenubarItem onClick={createNewDiagram}>
+                                        New
+                                        <MenubarShortcut>⌘T</MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem onClick={openDiagram}>
+                                        Open
+                                    </MenubarItem>
+                                    <MenubarSeparator />
+                                    <MenubarSub>
+                                        <MenubarSubTrigger>
+                                            Export SQL
+                                        </MenubarSubTrigger>
+                                        <MenubarSubContent>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.GENERIC,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'generic'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.POSTGRESQL,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'postgresql'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.MYSQL,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'mysql'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.SQL_SERVER,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'sql_server'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.MARIADB,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'mariadb'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                            <MenubarItem
+                                                onClick={() =>
+                                                    openExportSQLDialog({
+                                                        targetDatabaseType:
+                                                            DatabaseType.SQLITE,
+                                                    })
+                                                }
+                                            >
+                                                {
+                                                    databaseTypeToLabelMap[
+                                                        'sqlite'
+                                                    ]
+                                                }
+                                            </MenubarItem>
+                                        </MenubarSubContent>
+                                    </MenubarSub>
+                                    <MenubarSub>
+                                        <MenubarSubTrigger>
+                                            Export as
+                                        </MenubarSubTrigger>
+                                        <MenubarSubContent>
+                                            <MenubarItem onClick={exportPNG}>
+                                                PNG
+                                            </MenubarItem>
+                                            <MenubarItem onClick={exportJPG}>
+                                                JPG
+                                            </MenubarItem>
+                                            <MenubarItem onClick={exportSVG}>
+                                                SVG
+                                            </MenubarItem>
+                                        </MenubarSubContent>
+                                    </MenubarSub>
+                                    <MenubarSeparator />
+                                    <MenubarItem>Exit</MenubarItem>
+                                </MenubarContent>
+                            </MenubarMenu>
+                            <MenubarMenu>
+                                <MenubarTrigger>Edit</MenubarTrigger>
+                                <MenubarContent>
+                                    <MenubarItem>
+                                        Undo{' '}
+                                        <MenubarShortcut>⌘Z</MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem>
+                                        Redo{' '}
+                                        <MenubarShortcut>⇧⌘Z</MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarSeparator />
+                                    <MenubarItem
+                                        onClick={() => setShowClearAlert(true)}
+                                    >
+                                        Clear
+                                    </MenubarItem>
+                                </MenubarContent>
+                            </MenubarMenu>
+                            <MenubarMenu>
+                                <MenubarTrigger>Help</MenubarTrigger>
+                                <MenubarContent>
+                                    <MenubarItem onClick={openChartDBIO}>
+                                        Visit ChartDB
+                                    </MenubarItem>
+                                    <MenubarItem onClick={openJoinSlack}>
+                                        Join us on Slack
+                                    </MenubarItem>
+                                </MenubarContent>
+                            </MenubarMenu>
+                        </Menubar>
+                    </div>
                 </div>
-                <div>
-                    <Menubar className="border-none shadow-none">
-                        <MenubarMenu>
-                            <MenubarTrigger>File</MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={createNewDiagram}>
-                                    New
-                                    <MenubarShortcut>⌘T</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem onClick={openDiagram}>
-                                    Open
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        Export SQL
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.GENERIC,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['generic']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.POSTGRESQL,
-                                                })
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'postgresql'
-                                                ]
-                                            }
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.MYSQL,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mysql']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.SQL_SERVER,
-                                                })
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'sql_server'
-                                                ]
-                                            }
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.MARIADB,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mariadb']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.SQLITE,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['sqlite']}
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        Export as
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem onClick={exportPNG}>
-                                            PNG
-                                        </MenubarItem>
-                                        <MenubarItem onClick={exportJPG}>
-                                            JPG
-                                        </MenubarItem>
-                                        <MenubarItem onClick={exportSVG}>
-                                            SVG
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSeparator />
-                                <MenubarItem>Exit</MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
-                            <MenubarTrigger>Edit</MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem>
-                                    Undo <MenubarShortcut>⌘Z</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem>
-                                    Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem>Clear</MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
-                            <MenubarTrigger>Help</MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={openChartDBIO}>
-                                    Visit ChartDB
-                                </MenubarItem>
-                                <MenubarItem onClick={openJoinSlack}>
-                                    Join us on Slack
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                    </Menubar>
-                </div>
-            </div>
-            <div className="flex flex-row flex-1 justify-center items-center group gap-2">
-                <Tooltip>
-                    <TooltipTrigger>
-                        <img
-                            src={
-                                databaseSecondaryLogoMap[
+                <div className="flex flex-row flex-1 justify-center items-center group gap-2">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <img
+                                src={
+                                    databaseSecondaryLogoMap[
+                                        currentDiagram.databaseType
+                                    ]
+                                }
+                                className="h-5 max-w-fit"
+                                alt="database"
+                            />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {
+                                databaseTypeToLabelMap[
                                     currentDiagram.databaseType
                                 ]
                             }
-                            className="h-5 max-w-fit"
-                            alt="database"
-                        />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {databaseTypeToLabelMap[currentDiagram.databaseType]}
-                    </TooltipContent>
-                </Tooltip>
-                <div className="flex">
-                    <Label>Diagrams/</Label>
+                        </TooltipContent>
+                    </Tooltip>
+                    <div className="flex">
+                        <Label>Diagrams/</Label>
+                    </div>
+                    <div className="flex flex-row items-center gap-1">
+                        {editMode ? (
+                            <>
+                                <Input
+                                    ref={inputRef}
+                                    autoFocus
+                                    type="text"
+                                    placeholder={diagramName}
+                                    value={editedDiagramName}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) =>
+                                        setEditedDiagramName(e.target.value)
+                                    }
+                                    className="h-7 focus-visible:ring-0"
+                                />
+                                <Button
+                                    variant="ghost"
+                                    className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                    onClick={editDiagramName}
+                                >
+                                    <Check />
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Label>{diagramName}</Label>
+                                <Button
+                                    variant="ghost"
+                                    className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                    onClick={enterEditMode}
+                                >
+                                    <Pencil />
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
-                <div className="flex flex-row items-center gap-1">
-                    {editMode ? (
-                        <>
-                            <Input
-                                ref={inputRef}
-                                autoFocus
-                                type="text"
-                                placeholder={diagramName}
-                                value={editedDiagramName}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                    setEditedDiagramName(e.target.value)
-                                }
-                                className="h-7 focus-visible:ring-0"
-                            />
-                            <Button
-                                variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
-                                onClick={editDiagramName}
-                            >
-                                <Check />
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Label>{diagramName}</Label>
-                            <Button
-                                variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
-                                onClick={enterEditMode}
-                            >
-                                <Pencil />
-                            </Button>
-                        </>
-                    )}
+                <div className="hidden flex-1 justify-end sm:flex">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Badge variant="secondary" className="flex gap-1">
+                                <Save className="h-4" />
+                                Last saved
+                                <TimeAgo datetime={currentDiagram.updatedAt} />
+                            </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {currentDiagram.updatedAt.toLocaleString()}
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
-            </div>
-            <div className="hidden flex-1 justify-end sm:flex">
-                <Tooltip>
-                    <TooltipTrigger>
-                        <Badge variant="secondary" className="flex gap-1">
-                            <Save className="h-4" />
-                            Last saved
-                            <TimeAgo datetime={currentDiagram.updatedAt} />
-                        </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {currentDiagram.updatedAt.toLocaleString()}
-                    </TooltipContent>
-                </Tooltip>
-            </div>
-        </nav>
+            </nav>
+            <AlertDialog open={showClearAlert}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete all the data in the diagram.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel
+                            onClick={() => setShowClearAlert(false)}
+                        >
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={clearDiagramDataHandler}>
+                            Clear
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
     );
 };

@@ -15,7 +15,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const db = useStorage();
-    const { addUndoAction, resetRedoStack } = useRedoUndoStack();
+    const { addUndoAction, resetRedoStack, resetUndoStack } =
+        useRedoUndoStack();
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
@@ -46,6 +47,23 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             diagramUpdatedAt,
         ]
     );
+
+    const clearDiagramData: ChartDBContext['clearDiagramData'] =
+        useCallback(async () => {
+            const updatedAt = new Date();
+            setTables([]);
+            setRelationships([]);
+            setDiagramUpdatedAt(updatedAt);
+
+            resetRedoStack();
+            resetUndoStack();
+
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.deleteDiagramTables(diagramId),
+                db.deleteDiagramRelationships(diagramId),
+            ]);
+        }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
     const updateDiagramUpdatedAt: ChartDBContext['updateDiagramUpdatedAt'] =
         useCallback(async () => {
@@ -928,6 +946,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 updateDiagramName,
                 loadDiagram,
                 updateDatabaseType,
+                clearDiagramData,
                 updateDiagramUpdatedAt,
                 createTable,
                 addTable,

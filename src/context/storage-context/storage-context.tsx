@@ -41,6 +41,7 @@ export interface StorageContext {
     }) => Promise<void>;
     deleteTable: (params: { diagramId: string; id: string }) => Promise<void>;
     listTables: (diagramId: string) => Promise<DBTable[]>;
+    deleteDiagramTables: (diagramId: string) => Promise<void>;
 
     // Relationships operations
     addRelationship: (params: {
@@ -60,6 +61,7 @@ export interface StorageContext {
         id: string;
     }) => Promise<void>;
     listRelationships: (diagramId: string) => Promise<DBRelationship[]>;
+    deleteDiagramRelationships: (diagramId: string) => Promise<void>;
 }
 
 export const storageContext = createContext<StorageContext>({
@@ -77,10 +79,12 @@ export const storageContext = createContext<StorageContext>({
     updateTable: emptyFn,
     deleteTable: emptyFn,
     listTables: emptyFn,
+    deleteDiagramTables: emptyFn,
 
     addRelationship: emptyFn,
     getRelationship: emptyFn,
     updateRelationship: emptyFn,
     deleteRelationship: emptyFn,
     listRelationships: emptyFn,
+    deleteDiagramRelationships: emptyFn,
 });

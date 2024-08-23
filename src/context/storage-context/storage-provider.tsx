@@ -188,6 +188,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         return await db.db_tables.get({ id, diagramId });
     };
 
+    const deleteDiagramTables: StorageContext['deleteDiagramTables'] = async (
+        diagramId: string
+    ) => {
+        await db.db_tables.where('diagramId').equals(diagramId).delete();
+    };
+
     const updateTable: StorageContext['updateTable'] = async ({
         id,
         attributes,
@@ -237,6 +243,14 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             diagramId,
         });
     };
+
+    const deleteDiagramRelationships: StorageContext['deleteDiagramRelationships'] =
+        async (diagramId: string) => {
+            await db.db_relationships
+                .where('diagramId')
+                .equals(diagramId)
+                .delete();
+        };
 
     const getRelationship: StorageContext['getRelationship'] = async ({
         id,
@@ -302,6 +316,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 updateRelationship,
                 deleteRelationship,
                 listRelationships,
+                deleteDiagramTables,
+                deleteDiagramRelationships,
             }}
         >
             {children}

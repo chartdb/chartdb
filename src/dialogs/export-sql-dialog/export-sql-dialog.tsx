@@ -45,6 +45,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     }, [targetDatabaseType, currentDiagram]);
 
     useEffect(() => {
+        if (!dialog.open) return;
         setScript(undefined);
         const fetchScript = async () => {
             const script = await exportSQLScript();
