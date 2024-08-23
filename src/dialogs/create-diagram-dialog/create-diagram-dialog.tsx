@@ -260,13 +260,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                             <div></div>
                         )}
                         {/* <DialogClose asChild> */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={createNewDiagram}
                             >
-                                Skip
+                                Create empty diagram
                             </Button>
                             <Button
                                 type="button"
@@ -288,24 +288,28 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 return (
                     <DialogFooter className="flex !justify-between gap-2">
                         {/* <DialogClose asChild> */}
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() =>
-                                setStep(CreateDiagramDialogStep.SELECT_DATABASE)
-                            }
-                        >
-                            Back
-                        </Button>
+                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() =>
+                                    setStep(
+                                        CreateDiagramDialogStep.SELECT_DATABASE
+                                    )
+                                }
+                            >
+                                Back
+                            </Button>
+                        </div>
                         {/* </DialogClose> */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                             <DialogClose asChild>
                                 <Button
                                     type="button"
-                                    variant="secondary"
+                                    variant="outline"
                                     onClick={createNewDiagram}
                                 >
-                                    Skip this step
+                                    Create empty diagram
                                 </Button>
                             </DialogClose>
                             <DialogClose asChild>
@@ -318,7 +322,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                     }
                                     onClick={createNewDiagram}
                                 >
-                                    Finish
+                                    Import
                                 </Button>
                             </DialogClose>
                         </div>

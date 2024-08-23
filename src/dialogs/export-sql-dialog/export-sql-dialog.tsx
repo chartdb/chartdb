@@ -85,14 +85,17 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <DialogHeader>
                     <DialogTitle>Export SQL</DialogTitle>
                     <DialogDescription>
-                        Export the SQL of the current diagram
+                        Export your diagram schema as SQL script
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
                     {(script?.length ?? 0) === 0 ? (
                         renderLoader()
                     ) : (
-                        <CodeSnippet code={script!} />
+                        <CodeSnippet
+                            className="max-h-96 w-full"
+                            code={script!}
+                        />
                     )}
                 </div>
 
