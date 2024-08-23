@@ -6,11 +6,13 @@ import { Input } from '@/components/input/input';
 
 import { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useLayout } from '@/hooks/use-layout';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables } = useChartDB();
+    const { closeAllTablesInSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
@@ -25,7 +27,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         <section className="flex flex-col px-2 overflow-hidden flex-1">
             <div className="flex items-center py-1 justify-between gap-4">
                 <div>
-                    <Button variant="ghost" className="p-0 h-8 w-8">
+                    <Button
+                        variant="ghost"
+                        className="p-0 h-8 w-8"
+                        onClick={closeAllTablesInSidebar}
+                    >
                         <ListCollapse className="w-4 h-4" />
                     </Button>
                 </div>

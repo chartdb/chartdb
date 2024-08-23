@@ -6,9 +6,11 @@ export type SidebarSection = 'tables' | 'relationships';
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
     openTableFromSidebar: (tableId: string) => void;
+    closeAllTablesInSidebar: () => void;
 
     openedRelationshipInSidebar: string | undefined;
     openRelationshipFromSidebar: (relationshipId: string) => void;
+    closeAllRelationshipsInSidebar: () => void;
 
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
@@ -20,7 +22,9 @@ export const layoutContext = createContext<LayoutContext>({
 
     openedRelationshipInSidebar: undefined,
     openRelationshipFromSidebar: emptyFn,
+    closeAllRelationshipsInSidebar: emptyFn,
 
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,
+    closeAllTablesInSidebar: emptyFn,
 });

@@ -5,12 +5,14 @@ import { Input } from '@/components/input/input';
 import { RelationshipList } from './relationship-list/relationship-list';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { DBRelationship } from '@/lib/domain/db-relationship';
+import { useLayout } from '@/hooks/use-layout';
 
 export interface RelationshipsSectionProps {}
 
 export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
     const { relationships } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
+    const { closeAllRelationshipsInSidebar } = useLayout();
 
     const filteredRelationships = useMemo(() => {
         const filter: (relationship: DBRelationship) => boolean = (
@@ -26,7 +28,11 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
         <section className="flex flex-col px-2 overflow-hidden flex-1">
             <div className="flex items-center py-1 justify-between gap-4">
                 <div>
-                    <Button variant="ghost" className="p-0 h-8 w-8">
+                    <Button
+                        variant="ghost"
+                        className="p-0 h-8 w-8"
+                        onClick={closeAllRelationshipsInSidebar}
+                    >
                         <ListCollapse className="w-4 h-4" />
                     </Button>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { layoutContext, SidebarSection } from './layout-context';
+import { LayoutContext, layoutContext, SidebarSection } from './layout-context';
 
 export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -12,6 +12,11 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const [selectedSidebarSection, setSelectedSidebarSection] =
         React.useState<SidebarSection>('tables');
 
+    const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
+        () => setOpenedTableInSidebar('');
+
+    const closeAllRelationshipsInSidebar: LayoutContext['closeAllRelationshipsInSidebar'] =
+        () => setOpenedRelationshipInSidebar('');
     return (
         <layoutContext.Provider
             value={{
@@ -21,6 +26,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 selectSidebarSection: setSelectedSidebarSection,
                 openedRelationshipInSidebar,
                 openRelationshipFromSidebar: setOpenedRelationshipInSidebar,
+                closeAllTablesInSidebar,
+                closeAllRelationshipsInSidebar,
             }}
         >
             {children}
