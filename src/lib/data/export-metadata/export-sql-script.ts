@@ -184,25 +184,11 @@ function alignForeignKeyDataTypes(diagram: Diagram) {
                 const targetSize = getMySQLDataTypeSize(targetField.type);
 
                 if (sourceSize > targetSize) {
-                    // Print a message indicating that the data type is being adjusted
-                    console.log(
-                        `Adjusting data type of '${targetTable.name}.${targetField.name}' from '${targetField.type}' to '${sourceField.type}' to match '${sourceTable.name}.${sourceField.name}'`
-                    );
-
                     // Adjust the child field data type to the larger data type
                     targetField.type = sourceField.type;
                 } else if (targetSize > sourceSize) {
-                    // Print a message indicating that the data type is being adjusted
-                    console.log(
-                        `Adjusting data type of '${targetTable.name}.${sourceField.name}' from '${sourceField.type}' to '${targetField.type}' to match '${targetTable.name}.${targetField.name}' ('${targetField.type}')`
-                    );
-
                     // Adjust the child field data type to the larger data type
                     sourceField.type = targetField.type;
-                } else {
-                    console.log(
-                        `same data type '${targetField.type}' = '${sourceField.type}'.`
-                    );
                 }
             }
         }
