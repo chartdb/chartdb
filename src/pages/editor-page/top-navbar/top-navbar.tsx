@@ -99,7 +99,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, [exportImage]);
 
     const openChartDBIO = useCallback(() => {
-        window.open('https://chartdb.io', '_blank');
+        window.location.href = 'https://chartdb.io';
     }, []);
 
     const openJoinSlack = useCallback(() => {
@@ -109,13 +109,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         );
     }, []);
 
+    const { updateDiagramUpdatedAt } = useChartDB();
+
+    const emojiAI = ' ✨';
+
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3">
                 <div className="flex font-primary items-center">
                     <a
                         href="https://chartdb.io"
-                        target="_blank"
                         className="cursor-pointer"
                         rel="noreferrer"
                     >
@@ -166,7 +169,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 databaseTypeToLabelMap[
                                                     'postgresql'
                                                 ]
-                                            }
+                                            }{emojiAI}
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -176,7 +179,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['mysql']}
+                                            {databaseTypeToLabelMap['mysql']}{emojiAI}
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -190,7 +193,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 databaseTypeToLabelMap[
                                                     'sql_server'
                                                 ]
-                                            }
+                                            }{emojiAI}
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -200,7 +203,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['mariadb']}
+                                            {databaseTypeToLabelMap['mariadb']}{emojiAI}
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -210,7 +213,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['sqlite']}
+                                            {databaseTypeToLabelMap['sqlite']}{emojiAI}
                                         </MenubarItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
@@ -349,7 +352,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <div className="hidden flex-1 justify-end sm:flex">
                 <Tooltip>
                     <TooltipTrigger>
-                        <Badge variant="secondary" className="flex gap-1">
+                        <Badge variant="secondary" className="flex gap-1" onClick={updateDiagramUpdatedAt}>
                             <Save className="h-4" />
                             Last saved
                             <TimeAgo datetime={currentDiagram.updatedAt} />

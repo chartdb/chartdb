@@ -124,6 +124,7 @@ export const exportSQL = async (
         model: openai('gpt-4o-mini-2024-07-18'),
         prompt: prompt,
     });
+    // const text = '';
 
     return text;
 };
@@ -259,7 +260,9 @@ const generateSQLPrompt = (databaseType: string, sqlScript: string) => {
         }[databaseType] || '';
 
     const additionalInstructions = `
-    Just answer with the script with no additional details. give the commands flat without markdown.
+    **Provide just the SQL commands without markdown tags.**
+
+    Just answer with the script with no additional details.
 
     No images are allowed. Do not try to generate or link images, including base64 data URLs.
 
