@@ -89,11 +89,11 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 
 ### Supported Databases
 
--   ✅ PostgresSQL
+-   ✅ PostgreSQL
 -   ✅ MySQL
 -   ✅ SQL Server
 -   ✅ MariaDB
--   ✅ SQL Lite
+-   ✅ SQLite
 
 ## 💚 Community & Support
 
