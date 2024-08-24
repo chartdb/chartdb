@@ -300,9 +300,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </Menubar>
                 </div>
             </div>
-            <div className="flex flex-row flex-1 justify-center items-center group gap-2">
+            <div className="flex flex-row flex-1 justify-center items-center group">
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger className="mr-2">
                         <img
                             src={
                                 databaseSecondaryLogoMap[
@@ -333,7 +333,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 onChange={(e) =>
                                     setEditedDiagramName(e.target.value)
                                 }
-                                className="h-7 focus-visible:ring-0"
+                                className="h-7 focus-visible:ring-0 ml-1"
                             />
                             <Button
                                 variant="ghost"
