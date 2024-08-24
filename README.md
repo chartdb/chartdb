@@ -9,7 +9,7 @@
 </p>
 
 <h3 align="center">
-  <a href="https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg">Community</a>  &bull;
+  <a href="https://discord.gg/QeFwyWSKwC">Community</a>  &bull;
   <a href="https://www.chartdb.io">Website</a>  &bull;
   <a href="https://app.chartdb.io">Demo</a>
 </h3>
@@ -21,8 +21,8 @@
   <a href="https://github.com/chartdb/chartdb/blob/main/CONTRIBUTING.md">
     <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs welcome!" />
   </a>
-  <a href="https://join.slack.com/t/chartdbcommunity/shared_invite/_1234">
-    <img src="https://img.shields.io/badge/Join%20Slack-purple?logo=slack&link=https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg" alt="Slack community channel" />
+  <a href="https://discord.gg/QeFwyWSKwC">
+    <img src="https://img.shields.io/discord/1277047413705670678?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord community channel" />
   </a>
   <a href="https://x.com/chartdb_io">
     <img src="https://img.shields.io/twitter/follow/ChartDB?style=social"/>
@@ -97,14 +97,14 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 
 ## 💚 Community & Support
 
--   [Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg) (For live discussion with the community and the ChartDB team)
+-   [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team)
 -   [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
 -   [Twitter](https://x.com/chartdb_io) (Get news fast)
 
 ## Contributing
 
 We welcome community contributions, big or small, and are here to guide you along
-the way. Message us in the [ChartDB Community Slack](https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg). Once you contribute, ping us in Slack and we'll send you some ChartDB swag!
+the way. Message us in the [ChartDB Community Discord](https://discord.gg/QeFwyWSKwC).
 
 For more information on how to contribute, please see our
 [Contributing Guide](/CONTRIBUTING.md).
