@@ -33,7 +33,7 @@
 ---
 
 <p align="center">
-  <img src="./images/public/ChartDB.gif">
+  <img src="./public/ChartDB.gif">
 </p>
 
 ### 🎉 ChartDB
