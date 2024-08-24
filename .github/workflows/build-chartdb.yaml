@@ -1,4 +1,4 @@
-name: build-client
+name: build-chartdb
 
 on:
     push:
@@ -15,7 +15,7 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
-            - name: Use Node.js 18.x
+            - name: Use Node.js 22.x
               uses: actions/setup-node@v4
               with:
                   node-version: 22.x
@@ -23,5 +23,5 @@ jobs:
                   cache-dependency-path: './package-lock.json'
             - name: Install
               run: npm ci
-            - name: Build client
+            - name: Build chartdb
               run: npm run build
