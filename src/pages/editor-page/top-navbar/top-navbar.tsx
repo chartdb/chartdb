@@ -247,7 +247,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarSub>
                                 <MenubarSeparator />
                                 <MenubarItem
-                                    className="!text-red-700"
                                     onClick={() =>
                                         showAlert({
                                             title: 'Delete Diagram',

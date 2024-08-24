@@ -6,6 +6,7 @@ import { RelationshipList } from './relationship-list/relationship-list';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useLayout } from '@/hooks/use-layout';
+import { EmptyState } from '@/components/empty-state/empty-state';
 
 export interface RelationshipsSectionProps {}
 
@@ -48,7 +49,15 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
             </div>
             <div className="flex flex-col flex-1 overflow-scroll">
                 {/* <ScrollArea className="h-full"> */}
-                <RelationshipList relationships={filteredRelationships} />
+                {relationships.length === 0 ? (
+                    <EmptyState
+                        title="No relationships"
+                        description="Create a relationship to connect tables"
+                        className="mt-20"
+                    />
+                ) : (
+                    <RelationshipList relationships={filteredRelationships} />
+                )}
                 {/* </ScrollArea> */}
             </div>
         </section>
