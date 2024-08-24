@@ -20,7 +20,7 @@ import {
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DialogProps } from '@radix-ui/react-dialog';
-import { WandSparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect } from 'react';
 
 export interface ExportSQLDialogProps {
@@ -59,10 +59,15 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
             <div className="flex flex-col gap-2">
                 <Spinner />
                 <div className="flex items-center justify-center gap-1">
-                    <WandSparkles className="h-5" />
-                    <Label>
-                        Generating SQL for{' '}
+                    <Sparkles className="h-5" />
+                    <Label className="text-lg">
+                        AI is generating SQL for{' '}
                         {databaseTypeToLabelMap[targetDatabaseType]}...
+                    </Label>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                    <Label className="text-sm">
+                        This should take up to 30 seconds.
                     </Label>
                 </div>
             </div>
@@ -85,7 +90,11 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <DialogHeader>
                     <DialogTitle>Export SQL</DialogTitle>
                     <DialogDescription>
-                        Export your diagram schema as SQL script
+                        {`Export your diagram schema to ${
+                            targetDatabaseType === DatabaseType.GENERIC
+                                ? 'SQL'
+                                : databaseTypeToLabelMap[targetDatabaseType]
+                        } script`}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
