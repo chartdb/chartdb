@@ -52,8 +52,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         ]
     );
 
-    console.log(JSON.stringify(currentDiagram));
-
     const clearDiagramData: ChartDBContext['clearDiagramData'] =
         useCallback(async () => {
             const updatedAt = new Date();
