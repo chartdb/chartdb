@@ -9,8 +9,9 @@
 </p>
 
 <h3 align="center">
-  <a href="https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg">Community</a> |
-  <a href="https://www.chartdb.io">Website</a>
+  <a href="https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg">Community</a>  &bull;
+  <a href="https://www.chartdb.io">Website</a>  &bull;
+  <a href="https://app.chartdb.io">Demo</a>
 </h3>
 
 <h4 align="center">
@@ -31,23 +32,46 @@
 
 ---
 
+<p align="center">
+  <img src="./images/public/ChartDB.gif">
+</p>
+
 ### 🎉 ChartDB
-ChartDB is a powerful, web-based database diagramming editor. 
+
+ChartDB is a powerful, web-based database diagramming editor.
 Instantly visualize your database schema with a single **"Smart Query."** Customize diagrams, export SQL scripts, and access all features—no account required. Experience seamless database design here.
 
 **What it does**:
-1. **Instant Schema Import**  
-   Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
 
-2. **AI-Powered Export for Easy Migration**  
-   Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
-3. **Interactive Editing**  
-   Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
+-   **Instant Schema Import**
+    Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
+
+-   **AI-Powered Export for Easy Migration**
+    Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
+-   **Interactive Editing**
+    Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
 
 ### Status
+
 ChartDB is currently in Public Beta. Star and watch this repository to get notified of updates.
 
-## 🚀 Getting Started
+## Getting Started
+
+### How To Use
+
+```bash
+npm install
+npm run dev
+```
+
+### Build
+
+```bash
+npm install
+npm run build
+```
+
+## Try it on our website
 
 1. Go to [ChartDB.io](https://chartdb.io)
 2. Click "Go to app"
