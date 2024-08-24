@@ -143,18 +143,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <div>
                                     Feel free to use your OPENAI_TOKEN, see the
                                     manual{' '}
-                                    <Button
-                                        variant="link"
-                                        className="text-pink-600 p-0"
-                                        onClick={() =>
-                                            window.open(
-                                                'https://github.com/chartdb/chartdb',
-                                                '_blank'
-                                            )
-                                        }
+                                    <a
+                                        href="https://github.com/chartdb/chartdb"
+                                        target="_blank"
+                                        className="text-pink-600 hover:underline"
+                                        rel="noreferrer"
                                     >
                                         here.
-                                    </Button>
+                                    </a>
                                 </div>
                             </div>
                         ),

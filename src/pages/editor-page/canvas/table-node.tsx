@@ -30,7 +30,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex flex-col w-full bg-slate-50 border-2 ${selected ? 'border-2 border-pink-600' : ''} rounded-lg shadow-sm`}
+            className={`flex flex-col w-full bg-slate-50 border-2 ${selected ? 'border-pink-600' : 'border-slate-500'} rounded-lg shadow-sm`}
             onClick={(e) => {
                 if (e.detail === 2) {
                     openTableInEditor();

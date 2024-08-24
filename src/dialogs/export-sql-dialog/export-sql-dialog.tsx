@@ -67,34 +67,25 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                     <Annoyed className="w-10 h-10" />
                     <Label className="text-sm">
                         Error generating SQL script. Please try again later or{' '}
-                        <Button
-                            variant="link"
-                            className="text-pink-600 p-0"
-                            onClick={() =>
-                                window.open(
-                                    'mailto:chartdb.io@gmail.com',
-                                    '_blank'
-                                )
-                            }
+                        <a
+                            href="mailto:chartdb.io@gmail.com"
+                            target="_blank"
+                            className="text-pink-600 hover:underline"
+                            rel="noreferrer"
                         >
-                            contact us
-                        </Button>
-                        .
+                            contact us.
+                        </a>
                     </Label>
                     <div>
                         Feel free to use your OPENAI_TOKEN, see the manual{' '}
-                        <Button
-                            variant="link"
-                            className="text-pink-600 p-0"
-                            onClick={() =>
-                                window.open(
-                                    'https://github.com/chartdb/chartdb',
-                                    '_blank'
-                                )
-                            }
+                        <a
+                            href="https://github.com/chartdb/chartdb"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-pink-600 hover:underline"
                         >
                             here.
-                        </Button>
+                        </a>
                     </div>
                 </div>
             </div>

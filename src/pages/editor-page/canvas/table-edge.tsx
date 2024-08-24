@@ -133,7 +133,7 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
                 fill="none"
                 className={cn([
                     'react-flow__edge-path',
-                    `!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`,
+                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-300'}`,
                 ])}
                 onClick={(e) => {
                     if (e.detail === 2) {
