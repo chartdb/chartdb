@@ -12,6 +12,7 @@ import { LayoutProvider } from './context/layout-context/layout-provider';
 import { DialogProvider } from './context/dialog-context/dialog-provider';
 import { ExportImageProvider } from './context/export-image-context/export-image-provider';
 import { FullScreenLoaderProvider } from './context/full-screen-spinner-context/full-screen-spinner-provider';
+import { ExamplesPage } from './pages/examples-page/examples-page';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -40,6 +41,14 @@ const routes: RouteObject[] = [
             </FullScreenLoaderProvider>
         ),
     })),
+    {
+        path: 'examples',
+        element: (
+            <StorageProvider>
+                <ExamplesPage />
+            </StorageProvider>
+        ),
+    },
     {
         path: '*',
         element: <NotFoundPage />,
