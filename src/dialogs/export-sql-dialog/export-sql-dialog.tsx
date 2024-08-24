@@ -139,8 +139,10 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <div className="flex flex-1 items-center justify-center">
                     {error ? (
                         renderError()
-                    ) : (script?.length ?? 0) === 0 ? (
+                    ) : script === undefined ? (
                         renderLoader()
+                    ) : script.length === 0 ? (
+                        renderError()
                     ) : (
                         <CodeSnippet
                             className="max-h-96 w-full"
