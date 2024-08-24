@@ -33,7 +33,7 @@
 ---
 
 <p align="center">
-  <img src="./public/ChartDB.gif">
+  <img width='700px' src="./public/ChartDB.gif">
 </p>
 
 ### 🎉 ChartDB
@@ -69,6 +69,13 @@ npm run dev
 ```bash
 npm install
 npm run build
+```
+
+Or like this if you want to have AI capabilities:
+
+```
+npm install
+VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
 ## Try it on our website
