@@ -105,9 +105,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         window.location.href = 'https://chartdb.io';
     }, []);
 
-    const openJoinSlack = useCallback(() => {
+    const openJoinDiscord = useCallback(() => {
         window.open(
-            'https://join.slack.com/t/chartdb/shared_invite/zt-2ourrlh5e-mKIHCRML3_~m_gHjD5EcUg',
+            'https://discord.gg/QeFwyWSKwC',
             '_blank'
         );
     }, []);
@@ -340,8 +340,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <MenubarItem onClick={openChartDBIO}>
                                     Visit ChartDB
                                 </MenubarItem>
-                                <MenubarItem onClick={openJoinSlack}>
-                                    Join us on Slack
+                                <MenubarItem onClick={openJoinDiscord}>
+                                    Join us on Discord
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
