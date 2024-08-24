@@ -4,7 +4,10 @@ import { CreateDiagramDialog } from '@/dialogs/create-diagram-dialog/create-diag
 import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import { ExportSQLDialog } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { BaseAlertDialog } from '@/dialogs/base-alert-dialog/base-alert-dialog';
+import {
+    BaseAlertDialog,
+    BaseAlertDialogProps,
+} from '@/dialogs/base-alert-dialog/base-alert-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -16,18 +19,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         targetDatabaseType: DatabaseType;
     }>({ targetDatabaseType: DatabaseType.GENERIC });
     const [showAlert, setShowAlert] = useState(false);
-    const [alertParams, setAlertParams] = useState<{
-        onAction: () => void;
-        title: string;
-        description: string;
-        actionLabel: string;
-        closeLabel: string;
-    }>({
-        onAction: () => {},
+    const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
         title: '',
-        description: '',
-        actionLabel: '',
-        closeLabel: '',
     });
 
     const openExportSQLDialogHandler: DialogContext['openExportSQLDialog'] =
@@ -40,14 +33,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     const showAlertHandler: DialogContext['showAlert'] = useCallback(
-        ({ onAction, title, description, actionLabel, closeLabel }) => {
-            setAlertParams({
-                onAction,
-                title,
-                description,
-                actionLabel,
-                closeLabel,
-            });
+        (params) => {
+            setAlertParams(params);
             setShowAlert(true);
         },
         [setShowAlert, setAlertParams]

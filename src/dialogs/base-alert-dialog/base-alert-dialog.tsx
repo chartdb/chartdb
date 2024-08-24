@@ -14,11 +14,12 @@ import { useDialog } from '@/hooks/use-dialog';
 
 export interface BaseAlertDialogProps {
     title: string;
-    description: string;
-    actionLabel: string;
-    closeLabel: string;
-    onAction: () => void;
-    dialog: AlertDialogProps;
+    description?: string;
+    actionLabel?: string;
+    closeLabel?: string;
+    onAction?: () => void;
+    dialog?: AlertDialogProps;
+    content?: React.ReactNode;
 }
 
 export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
@@ -28,10 +29,11 @@ export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
     closeLabel,
     onAction,
     dialog,
+    content,
 }) => {
     const { closeAlert } = useDialog();
     const alertHandler = useCallback(() => {
-        onAction();
+        onAction?.();
         closeAlert();
     }, [onAction, closeAlert]);
     return (
@@ -46,17 +48,24 @@ export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        {description}
-                    </AlertDialogDescription>
+                    {description && (
+                        <AlertDialogDescription>
+                            {description}
+                        </AlertDialogDescription>
+                    )}
+                    {content}
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel onClick={closeAlert}>
-                        {closeLabel}
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={alertHandler}>
-                        {actionLabel}
-                    </AlertDialogAction>
+                    {closeLabel && (
+                        <AlertDialogCancel onClick={closeAlert}>
+                            {closeLabel}
+                        </AlertDialogCancel>
+                    )}
+                    {actionLabel && (
+                        <AlertDialogAction onClick={alertHandler}>
+                            {actionLabel}
+                        </AlertDialogAction>
+                    )}
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

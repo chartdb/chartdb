@@ -32,6 +32,8 @@ import {
     databaseTypeToLabelMap,
 } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { useConfig } from '@/hooks/use-config';
+import { IS_CHARTDB_IO } from '@/lib/env';
 
 export interface TopNavbarProps {}
 
@@ -49,6 +51,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
     const [editedDiagramName, setEditedDiagramName] =
@@ -109,6 +112,69 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         );
     }, []);
 
+    const exportSQL = useCallback(
+        (databaseType: DatabaseType) => {
+            if (databaseType === DatabaseType.GENERIC) {
+                openExportSQLDialog({
+                    targetDatabaseType: DatabaseType.GENERIC,
+                });
+
+                return;
+            }
+
+            if (IS_CHARTDB_IO) {
+                const now = new Date();
+                const lastExportsInLastHalfHour =
+                    config?.exportActions?.filter(
+                        (date) =>
+                            now.getTime() - date.getTime() < 30 * 60 * 1000
+                    ) ?? [];
+
+                if (lastExportsInLastHalfHour.length >= 5) {
+                    showAlert({
+                        title: 'Export SQL Limit Reached',
+                        content: (
+                            <div className="flex text-sm gap-1 flex-col">
+                                <div>
+                                    We set a budget to allow the community to
+                                    check the feature. You have reached the
+                                    limit of 5 AI exports every 30min.
+                                </div>
+                                <div>
+                                    Feel free to use your OPENAI_TOKEN, see the
+                                    manual{' '}
+                                    <Button
+                                        variant="link"
+                                        className="text-pink-600 p-0"
+                                        onClick={() =>
+                                            window.open(
+                                                'https://github.com/chartdb/chartdb',
+                                                '_blank'
+                                            )
+                                        }
+                                    >
+                                        here.
+                                    </Button>
+                                </div>
+                            </div>
+                        ),
+                        closeLabel: 'Close',
+                    });
+                    return;
+                }
+
+                updateConfig({
+                    exportActions: [...lastExportsInLastHalfHour, now],
+                });
+            }
+
+            openExportSQLDialog({
+                targetDatabaseType: databaseType,
+            });
+        },
+        [config?.exportActions, updateConfig, showAlert, openExportSQLDialog]
+    );
+
     const emojiAI = '✨';
 
     return (
@@ -146,20 +212,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     <MenubarSubContent>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.GENERIC,
-                                                })
+                                                exportSQL(DatabaseType.GENERIC)
                                             }
                                         >
                                             {databaseTypeToLabelMap['generic']}
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.POSTGRESQL,
-                                                })
+                                                exportSQL(
+                                                    DatabaseType.POSTGRESQL
+                                                )
                                             }
                                         >
                                             {
@@ -173,10 +235,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.MYSQL,
-                                                })
+                                                exportSQL(DatabaseType.MYSQL)
                                             }
                                         >
                                             {databaseTypeToLabelMap['mysql']}
@@ -186,10 +245,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.SQL_SERVER,
-                                                })
+                                                exportSQL(
+                                                    DatabaseType.SQL_SERVER
+                                                )
                                             }
                                         >
                                             {
@@ -203,10 +261,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.MARIADB,
-                                                })
+                                                exportSQL(DatabaseType.MARIADB)
                                             }
                                         >
                                             {databaseTypeToLabelMap['mariadb']}
@@ -216,10 +271,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
-                                                openExportSQLDialog({
-                                                    targetDatabaseType:
-                                                        DatabaseType.SQLITE,
-                                                })
+                                                exportSQL(DatabaseType.SQLITE)
                                             }
                                         >
                                             {databaseTypeToLabelMap['sqlite']}

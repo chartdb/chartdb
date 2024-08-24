@@ -222,7 +222,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 onChange={handleInputChange}
                             />
                             {errorMessage && (
-                                <p className="text-red-500 text-sm mt-2">
+                                <p className="text-red-700 text-sm mt-2">
                                     {errorMessage}
                                 </p>
                             )}

@@ -6,6 +6,7 @@ import {
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { Spinner } from '@/components/spinner/spinner';
 import { Hourglass } from 'lucide-react';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 export const FullScreenLoaderProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -36,6 +37,7 @@ export const FullScreenLoaderProvider: React.FC<React.PropsWithChildren> = ({
             {children}
             <Dialog open={open}>
                 <DialogContent className="shadow-none bg-transparent border-none outline-none justify-center">
+                    <DialogTitle className="hidden"></DialogTitle>
                     <div className="bg-white w-fit p-3 rounded-xl">
                         {animated ? (
                             <Spinner size={'large'} />

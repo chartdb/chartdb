@@ -20,7 +20,7 @@ import {
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DialogProps } from '@radix-ui/react-dialog';
-import { Sparkles } from 'lucide-react';
+import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect } from 'react';
 
 export interface ExportSQLDialogProps {
@@ -35,6 +35,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const { closeExportSQLDialog } = useDialog();
     const { currentDiagram } = useChartDB();
     const [script, setScript] = React.useState<string>();
+    const [error, setError] = React.useState<boolean>(false);
 
     const exportSQLScript = useCallback(async () => {
         if (targetDatabaseType === DatabaseType.GENERIC) {
@@ -47,12 +48,59 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     useEffect(() => {
         if (!dialog.open) return;
         setScript(undefined);
+        setError(false);
         const fetchScript = async () => {
-            const script = await exportSQLScript();
-            setScript(script);
+            try {
+                const script = await exportSQLScript();
+                setScript(script);
+            } catch (e) {
+                setError(true);
+            }
         };
         fetchScript();
-    }, [dialog.open, setScript, exportSQLScript]);
+    }, [dialog.open, setScript, exportSQLScript, setError]);
+
+    const renderError = useCallback(
+        () => (
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-center flex-col text-sm gap-1">
+                    <Annoyed className="w-10 h-10" />
+                    <Label className="text-sm">
+                        Error generating SQL script. Please try again later or{' '}
+                        <Button
+                            variant="link"
+                            className="text-pink-600 p-0"
+                            onClick={() =>
+                                window.open(
+                                    'mailto:chartdb.io@gmail.com',
+                                    '_blank'
+                                )
+                            }
+                        >
+                            contact us
+                        </Button>
+                        .
+                    </Label>
+                    <div>
+                        Feel free to use your OPENAI_TOKEN, see the manual{' '}
+                        <Button
+                            variant="link"
+                            className="text-pink-600 p-0"
+                            onClick={() =>
+                                window.open(
+                                    'https://github.com/chartdb/chartdb',
+                                    '_blank'
+                                )
+                            }
+                        >
+                            here.
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        ),
+        []
+    );
 
     const renderLoader = useCallback(
         () => (
@@ -98,7 +146,9 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
-                    {(script?.length ?? 0) === 0 ? (
+                    {error ? (
+                        renderError()
+                    ) : (script?.length ?? 0) === 0 ? (
                         renderLoader()
                     ) : (
                         <CodeSnippet
