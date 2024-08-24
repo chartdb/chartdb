@@ -11,6 +11,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Diagram } from '@/lib/domain/diagram';
 import { useNavigate } from 'react-router-dom';
+import { useConfig } from '@/hooks/use-config';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -21,6 +22,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         useRedoUndoStack();
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
+    const { updateConfig } = useConfig();
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
     const [diagramUpdatedAt, setDiagramUpdatedAt] = useState<Date>(new Date());
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
@@ -69,6 +71,14 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
     const deleteDiagram: ChartDBContext['deleteDiagram'] =
         useCallback(async () => {
+            setDiagramId('');
+            setDiagramName('');
+            setDatabaseType(DatabaseType.GENERIC);
+            setTables([]);
+            setRelationships([]);
+            resetRedoStack();
+            resetUndoStack();
+
             const [config] = await Promise.all([
                 db.getConfig(),
                 db.deleteDiagramTables(diagramId),
@@ -81,14 +91,21 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
                 if (diagrams.length > 0) {
                     const defaultDiagramId = diagrams[0].id;
-                    await db.updateConfig({ defaultDiagramId });
+                    await updateConfig({ defaultDiagramId });
                     navigate(`/diagrams/${defaultDiagramId}`);
                 } else {
-                    await db.updateConfig({ defaultDiagramId: '' });
+                    await updateConfig({ defaultDiagramId: '' });
                     navigate('/');
                 }
             }
-        }, [db, diagramId, navigate]);
+        }, [
+            db,
+            diagramId,
+            navigate,
+            resetRedoStack,
+            resetUndoStack,
+            updateConfig,
+        ]);
 
     const updateDiagramUpdatedAt: ChartDBContext['updateDiagramUpdatedAt'] =
         useCallback(async () => {

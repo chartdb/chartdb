@@ -17,6 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/table/table';
+import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
 import { databaseTypeToLabelMap } from '@/lib/databases';
@@ -34,7 +35,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
 }) => {
     const { closeOpenDiagramDialog } = useDialog();
-    const { updateConfig } = useStorage();
+    const { updateConfig } = useConfig();
     const navigate = useNavigate();
     const { listDiagrams } = useStorage();
     const [diagrams, setDiagrams] = useState<Diagram[]>([]);

@@ -11,8 +11,9 @@ export interface EmptyStateProps {
 export const EmptyState = forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement> & EmptyStateProps
->(({ title, description, className }) => (
+>(({ title, description, className }, ref) => (
     <div
+        ref={ref}
         className={cn(
             'flex flex-col items-center justify-center space-y-1',
             className
@@ -25,3 +26,5 @@ export const EmptyState = forwardRef<
         </Label>
     </div>
 ));
+
+EmptyState.displayName = 'EmptyState';
