@@ -66,7 +66,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                     </Label>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                <Label className="text-sm">
+                    <Label className="text-sm">
                         This should take up to 30 seconds.
                     </Label>
                 </div>
@@ -90,11 +90,11 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <DialogHeader>
                     <DialogTitle>Export SQL</DialogTitle>
                     <DialogDescription>
-                        {(script?.length ?? 0) === 0 ? (
-                            'Export the SQL of the current diagram'
-                        ): (
-                            `${databaseTypeToLabelMap[targetDatabaseType]} - SQL code of the current diagram.`
-                        )}
+                        {`Export your diagram schema to ${
+                            targetDatabaseType === DatabaseType.GENERIC
+                                ? 'SQL'
+                                : databaseTypeToLabelMap[targetDatabaseType]
+                        } script`}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">

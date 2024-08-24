@@ -124,7 +124,6 @@ export const exportSQL = async (
         model: openai('gpt-4o-mini-2024-07-18'),
         prompt: prompt,
     });
-    // const text = '';
 
     return text;
 };

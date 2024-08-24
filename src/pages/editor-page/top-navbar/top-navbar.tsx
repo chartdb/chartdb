@@ -14,7 +14,7 @@ import {
 } from '@/components/menubar/menubar';
 import { Label } from '@/components/label/label';
 import { Button } from '@/components/button/button';
-import { Check, Pencil, Save } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
@@ -109,9 +109,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         );
     }, []);
 
-    const { updateDiagramUpdatedAt } = useChartDB();
-
-    const emojiAI = ' ✨';
+    const emojiAI = '✨';
 
     return (
         <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
@@ -136,7 +134,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <MenubarContent>
                                 <MenubarItem onClick={createNewDiagram}>
                                     New
-                                    <MenubarShortcut>⌘T</MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarItem onClick={openDiagram}>
                                     Open
@@ -169,7 +166,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 databaseTypeToLabelMap[
                                                     'postgresql'
                                                 ]
-                                            }{emojiAI}
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -179,7 +179,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['mysql']}{emojiAI}
+                                            {databaseTypeToLabelMap['mysql']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -193,7 +196,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 databaseTypeToLabelMap[
                                                     'sql_server'
                                                 ]
-                                            }{emojiAI}
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -203,7 +209,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['mariadb']}{emojiAI}
+                                            {databaseTypeToLabelMap['mariadb']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
                                         </MenubarItem>
                                         <MenubarItem
                                             onClick={() =>
@@ -213,7 +222,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                                 })
                                             }
                                         >
-                                            {databaseTypeToLabelMap['sqlite']}{emojiAI}
+                                            {databaseTypeToLabelMap['sqlite']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
                                         </MenubarItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
@@ -255,12 +267,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <MenubarMenu>
                             <MenubarTrigger>Edit</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarItem>
-                                    Undo <MenubarShortcut>⌘Z</MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem>
-                                    Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
-                                </MenubarItem>
+                                <MenubarItem>Undo</MenubarItem>
+                                <MenubarItem>Redo</MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarItem
                                     onClick={() =>
@@ -352,8 +360,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <div className="hidden flex-1 justify-end sm:flex">
                 <Tooltip>
                     <TooltipTrigger>
-                        <Badge variant="secondary" className="flex gap-1" onClick={updateDiagramUpdatedAt}>
-                            <Save className="h-4" />
+                        <Badge variant="secondary" className="flex gap-1">
                             Last saved
                             <TimeAgo datetime={currentDiagram.updatedAt} />
                         </Badge>
