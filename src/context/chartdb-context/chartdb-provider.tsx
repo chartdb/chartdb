@@ -85,7 +85,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     navigate(`/diagrams/${defaultDiagramId}`);
                 } else {
                     await db.updateConfig({ defaultDiagramId: '' });
-                    navigate('/diagrams');
+                    navigate('/');
                 }
             }
         }, [db, diagramId, navigate]);

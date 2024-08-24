@@ -2,3 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .react-flow.canvas-cursor-default .react-flow__pane {
+        @apply cursor-default;
+    }
+}

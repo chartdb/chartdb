@@ -189,7 +189,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 }
                             }}
                             type="single"
-                            className="grid grid-cols-3 grid-flow-row gap-6 xl:grid-cols-5"
+                            className="grid grid-cols-3 grid-flow-row gap-6"
                         >
                             {renderDatabaseOption(DatabaseType.MYSQL)}
                             {renderDatabaseOption(DatabaseType.POSTGRESQL)}
@@ -248,18 +248,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     <DialogFooter className="flex !justify-between gap-2">
                         {hasExistingDiagram ? (
                             <DialogClose asChild>
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    // onClick={createNewDiagram}
-                                >
+                                <Button type="button" variant="secondary">
                                     Cancel
                                 </Button>
                             </DialogClose>
                         ) : (
                             <div></div>
                         )}
-                        {/* <DialogClose asChild> */}
                         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
@@ -281,13 +276,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 Continue
                             </Button>
                         </div>
-                        {/* </DialogClose> */}
                     </DialogFooter>
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
                     <DialogFooter className="flex !justify-between gap-2">
-                        {/* <DialogClose asChild> */}
                         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
@@ -301,7 +294,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 Back
                             </Button>
                         </div>
-                        {/* </DialogClose> */}
                         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                             <DialogClose asChild>
                                 <Button
@@ -354,7 +346,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col min-w-[500px] xl:min-w-[75vw] max-h-[80vh] overflow-y-auto"
+                className="flex flex-col min-w-[500px] xl:min-w-[45vw] overflow-y-auto"
                 showClose={hasExistingDiagram}
             >
                 {renderHeader()}

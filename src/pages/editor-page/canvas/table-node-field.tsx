@@ -42,18 +42,18 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
     }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 
     return (
-        <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-primary-foreground group last:rounded-b-lg">
+        <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-slate-100 group last:rounded-b-lg">
             {!connection.inProgress && (
                 <>
                     <Handle
                         id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
-                        className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
+                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
                         position={Position.Right}
                         type="source"
                     />
                     <Handle
                         id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
-                        className={`!h-3 !w-3 !bg-slate-400 ${!focused ? '!invisible' : ''}`}
+                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
                         position={Position.Left}
                         type="source"
                     />

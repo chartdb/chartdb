@@ -30,7 +30,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex flex-col w-full bg-background border ${selected ? 'border-slate-400' : ''} rounded-lg shadow-sm`}
+            className={`flex flex-col w-full bg-slate-50 border-2 ${selected ? 'border-2 border-pink-600' : ''} rounded-lg shadow-sm`}
             onClick={(e) => {
                 if (e.detail === 2) {
                     openTableInEditor();
@@ -49,7 +49,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 className="h-2 rounded-t-lg"
                 style={{ backgroundColor: table.color }}
             ></div>
-            <div className="flex items-center h-9 bg-secondary px-2 justify-between group">
+            <div className="flex items-center h-9 bg-slate-200 px-2 justify-between group">
                 <div className="flex items-center gap-1">
                     <Table2 className="h-3.5 w-3.5 text-gray-600" />
                     <Label className="text-sm font-bold">{table.name}</Label>
