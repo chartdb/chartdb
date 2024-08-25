@@ -79,7 +79,7 @@ cols as (
                                                       ELSE 'null'
                                                   END,
                                               ',"nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
-                                              ',"default":"', COALESCE(cols.column_default, ''),
+                                              ',"default":"', COALESCE(replace(cols.column_default, '"', E'\\"'), ''),
                                               '","collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
     from information_schema.columns cols
     where cols.table_schema not in ('information_schema', 'pg_catalog')

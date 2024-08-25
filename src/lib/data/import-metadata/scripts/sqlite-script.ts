@@ -108,7 +108,7 @@ export const sqliteQuery = `WITH fk_info AS (
                       END
                   ELSE 'null'
               END,
-              'default', COALESCE(p.dflt_value, '')
+              'default', COALESCE(REPLACE(p.dflt_value, '"', '\\"'), '')
           )
       ) AS cols_metadata
   FROM
