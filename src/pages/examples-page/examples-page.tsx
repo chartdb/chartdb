@@ -25,7 +25,7 @@ export const ExamplesPage: React.FC = () => {
                 <div className="flex flex-row flex-1 justify-center items-center group"></div>
                 <div className="hidden flex-1 justify-end sm:flex"></div>
             </nav>
-            <div className="flex flex-col px-28 pt-3">
+            <div className="flex flex-col px-3 pt-3 text-center md:px-28 md:text-left">
                 <div className="text-2xl font-bold font-primary">Examples</div>
                 <div className="text-md font-primary mt-1 text-muted-foreground">
                     A collection of examples to help you get started with
