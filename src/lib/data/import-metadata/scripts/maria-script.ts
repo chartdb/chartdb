@@ -70,7 +70,7 @@ export const mariaDBQuery = `WITH fk_info as (
                     END,
                 ',"ordinal_position":"', cols.ordinal_position,
                 '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(cols.column_default, ''),
+                ',"default":"', IFNULL(REPLACE(cols.column_default, '"', '\\"'), ''),
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (
