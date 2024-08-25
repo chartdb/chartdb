@@ -49,7 +49,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
             />
             <div className="flex">
                 <Popover>
-                    <PopoverTrigger>
+                    <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
                             className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"

@@ -71,42 +71,46 @@ export const TableField: React.FC<TableFieldProps> = ({
             </div>
             <div className="flex w-4/12 gap-1 justify-end overflow-hidden">
                 <Tooltip>
-                    <TooltipTrigger>
-                        <Toggle
-                            variant="default"
-                            className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 text-xs h-8"
-                            pressed={field.nullable}
-                            onPressedChange={(value) =>
-                                updateField({
-                                    nullable: value,
-                                })
-                            }
-                        >
-                            N
-                        </Toggle>
+                    <TooltipTrigger asChild>
+                        <span>
+                            <Toggle
+                                variant="default"
+                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 text-xs h-8"
+                                pressed={field.nullable}
+                                onPressedChange={(value) =>
+                                    updateField({
+                                        nullable: value,
+                                    })
+                                }
+                            >
+                                N
+                            </Toggle>
+                        </span>
                     </TooltipTrigger>
                     <TooltipContent>Nullable?</TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                    <TooltipTrigger>
-                        <Toggle
-                            variant="default"
-                            className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
-                            pressed={field.primaryKey}
-                            onPressedChange={(value) =>
-                                updateField({
-                                    unique: value,
-                                    primaryKey: value,
-                                })
-                            }
-                        >
-                            <KeyRound className="h-3.5" />
-                        </Toggle>
+                    <TooltipTrigger asChild>
+                        <span>
+                            <Toggle
+                                variant="default"
+                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                                pressed={field.primaryKey}
+                                onPressedChange={(value) =>
+                                    updateField({
+                                        unique: value,
+                                        primaryKey: value,
+                                    })
+                                }
+                            >
+                                <KeyRound className="h-3.5" />
+                            </Toggle>
+                        </span>
                     </TooltipTrigger>
                     <TooltipContent>Primary Key</TooltipContent>
                 </Tooltip>
                 <Popover>
-                    <PopoverTrigger>
+                    <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
                             className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"

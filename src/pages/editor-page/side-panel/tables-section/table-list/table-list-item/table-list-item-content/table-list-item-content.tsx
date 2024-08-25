@@ -68,6 +68,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <AccordionTrigger
                         iconPosition="right"
                         className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
+                        asChild
                     >
                         <div className="flex items-center justify-between flex-1">
                             <div className="flex flex-row items-center gap-1">
@@ -110,6 +111,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <AccordionTrigger
                         iconPosition="right"
                         className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
+                        asChild
                     >
                         <div className="flex items-center justify-between flex-1">
                             <div className="flex flex-row items-center gap-1">
