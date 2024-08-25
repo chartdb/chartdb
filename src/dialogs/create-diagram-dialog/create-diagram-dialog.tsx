@@ -224,6 +224,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     </div>
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
+                const encodedQuery = importMetadataScripts[databaseType].replace(/\\/g, '\\\\');
                 return (
                     <div className="flex flex-1 flex-col w-full gap-6">
                         <div className="flex flex-col gap-1">
@@ -232,7 +233,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                             </p>
                             <CodeSnippet
                                 className="max-h-40 w-full"
-                                code={importMetadataScripts[databaseType]}
+                                code={encodedQuery}
                             />
                         </div>
                         <div className="flex flex-col gap-1 h-48">
