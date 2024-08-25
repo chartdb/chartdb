@@ -106,10 +106,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, []);
 
     const openJoinDiscord = useCallback(() => {
-        window.open(
-            'https://discord.gg/QeFwyWSKwC',
-            '_blank'
-        );
+        window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
 
     const exportSQL = useCallback(
