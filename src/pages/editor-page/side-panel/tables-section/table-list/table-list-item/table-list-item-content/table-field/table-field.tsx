@@ -95,6 +95,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                             pressed={field.primaryKey}
                             onPressedChange={(value) =>
                                 updateField({
+                                    unique: value,
                                     primaryKey: value,
                                 })
                             }
@@ -128,6 +129,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 </Label>
                                 <Checkbox
                                     checked={field.unique}
+                                    disabled={field.primaryKey}
                                     onCheckedChange={(value) =>
                                         updateField({
                                             unique: !!value,
