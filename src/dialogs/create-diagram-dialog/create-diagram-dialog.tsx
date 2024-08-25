@@ -28,6 +28,8 @@ import { generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
+import { Link } from '@/components/link/link';
+import { LayoutGrid } from 'lucide-react';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -148,6 +150,24 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         );
     }, []);
 
+    const renderExamplesOption = useCallback(
+        () => (
+            <div className="flex w-32 h-32 bg-pink-50 rounded-md items-center text-center flex-col py-3 border border-pink-600">
+                <div className="flex items-center flex-1">
+                    <Link href="/examples" className="text-sm text-primary">
+                        <LayoutGrid size={34} />
+                    </Link>
+                </div>
+                <div className="flex flex-col-reverse">
+                    <Link href="/examples" className="text-sm text-primary">
+                        check examples
+                    </Link>
+                </div>
+            </div>
+        ),
+        []
+    );
+
     const renderHeader = useCallback(() => {
         switch (step) {
             case CreateDiagramDialogStep.SELECT_DATABASE:
@@ -196,6 +216,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                             {renderDatabaseOption(DatabaseType.MARIADB)}
                             {renderDatabaseOption(DatabaseType.SQLITE)}
                             {renderDatabaseOption(DatabaseType.SQL_SERVER)}
+                            {renderExamplesOption()}
                         </ToggleGroup>
                     </div>
                 );
@@ -239,6 +260,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         scriptResult,
         renderDatabaseOption,
         setDatabaseType,
+        renderExamplesOption,
     ]);
 
     const renderFooter = useCallback(() => {
