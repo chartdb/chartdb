@@ -283,7 +283,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 variant="outline"
                                 onClick={createNewDiagram}
                             >
-                                Create empty diagram
+                                Empty diagram
                             </Button>
                             <Button
                                 type="button"
@@ -323,7 +323,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                     variant="outline"
                                     onClick={createNewDiagram}
                                 >
-                                    Create empty diagram
+                                    Empty diagram
                                 </Button>
                             </DialogClose>
                             <DialogClose asChild>
