@@ -200,7 +200,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         You are generating SQL scripts for creating database tables and sequences, handling primary keys, indices, and other table attributes.
         The following instructions will guide you in optimizing the scripts for the ${databaseType} dialect:
         - **Column Names**: Do **not** modify the names of columns. Ensure that all column names in the generated SQL script are exactly as provided in the input schema. If the input specifies a column name, it must appear in the output script unchanged.
-        - **Column Name Conflicts**: When a column name conflicts with a data type or reserved keyword (e.g., fulltext), escape the column name by enclosing it.
+        - **Column Name Conflicts**: When a column name conflicts with a data type or reserved keyword (e.g., fulltext, Primary, Column), escape the column name by enclosing it.
     `;
 
     const dialectInstructionMap: Record<DatabaseType, string> = {
@@ -231,6 +231,8 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **Identity Columns**: Always prefer using the \`IDENTITY\` keyword (e.g., \`INT IDENTITY(1,1)\`) for auto-incrementing primary key columns when possible.
         - **Conditional Logic**: Use a conditional block like \`IF NOT EXISTS (SELECT * FROM sys.objects WHERE ...)\` since SQL Server doesn’t support \`IF NOT EXISTS\` directly in \`CREATE\` statements.
         - **Avoid Unsupported Syntax**: Ensure the script does not include unsupported statements like \`CREATE TABLE IF NOT EXISTS\`.
+
+        **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., primary, column, table), escape the column name by enclosing it.
     `,
         mariadb: `
         - **Table Creation**: Use \`CREATE TABLE IF NOT EXISTS\` for creating tables. While creating the table structure, ensure that all foreign key columns use the correct data types as determined in the foreign key review.
