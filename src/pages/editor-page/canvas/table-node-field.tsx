@@ -89,11 +89,13 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                 {field.name}
             </div>
             <div className="flex justify-end w-2/3">
-                {field.primaryKey? (
+                {field.primaryKey ? (
                     <div className="text-muted-foreground block group-hover:hidden text-xs text-center overflow-hidden whitespace-nowrap text-ellipsis w-full">
                         Primary
                     </div>
-                ): ""}
+                ) : (
+                    ''
+                )}
                 <div className="text-muted-foreground block group-hover:hidden text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis w-full">
                     {field.type}
                 </div>
