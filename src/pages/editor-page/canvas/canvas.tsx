@@ -22,6 +22,10 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
+import { Pencil } from 'lucide-react';
+import { Button } from '@/components/button/button';
+import { useLayout } from '@/hooks/use-layout';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -41,6 +45,8 @@ export const Canvas: React.FC<CanvasProps> = () => {
         removeRelationships,
         getField,
     } = useChartDB();
+    const { showSidePanel } = useLayout();
+    const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
 
@@ -250,6 +256,23 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 }}
                 panOnScroll
             >
+                {!isDesktop ? (
+                    <Controls
+                        position="bottom-left"
+                        orientation="horizontal"
+                        showZoom={false}
+                        showFitView={false}
+                        showInteractive={false}
+                        className="!shadow-none"
+                    >
+                        <Button
+                            className="bg-pink-600 hover:bg-pink-500 w-11 h-11 p-2"
+                            onClick={showSidePanel}
+                        >
+                            <Pencil />
+                        </Button>
+                    </Controls>
+                ) : null}
                 <Controls
                     position="bottom-center"
                     orientation="horizontal"

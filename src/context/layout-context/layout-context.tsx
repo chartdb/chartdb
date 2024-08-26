@@ -14,6 +14,10 @@ export interface LayoutContext {
 
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
+
+    isSidePanelShowed: boolean;
+    hideSidePanel: () => void;
+    showSidePanel: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -27,4 +31,8 @@ export const layoutContext = createContext<LayoutContext>({
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,
     closeAllTablesInSidebar: emptyFn,
+
+    isSidePanelShowed: false,
+    hideSidePanel: emptyFn,
+    showSidePanel: emptyFn,
 });
