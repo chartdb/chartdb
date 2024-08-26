@@ -68,7 +68,7 @@ export const EditorPage: React.FC = () => {
 
     return (
         <>
-            <section className="bg-background h-screen w-screen flex flex-col">
+            <section className="bg-background h-screen w-screen flex flex-col overflow-x-hidden">
                 <TopNavbar />
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel

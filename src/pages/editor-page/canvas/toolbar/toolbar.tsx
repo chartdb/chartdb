@@ -44,29 +44,57 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
     };
 
     return (
-        <div className="px-1">
-            <Card className="shadow-none p-0 bg-secondary h-[44px]">
-                <CardContent className="p-1 flex flex-row h-full items-center">
-                    <ToolbarButton onClick={updateDiagramUpdatedAt}>
+        <div className="px-1 md:mb-0 mb-20">
+            <Card className="shadow-none p-0 bg-secondary">
+                <CardContent className="p-1 flex flex-col md:flex-row h-full items-center">
+                    <ToolbarButton
+                        className="p-2 md:p-1"
+                        onClick={updateDiagramUpdatedAt}
+                    >
                         <Save />
                     </ToolbarButton>
-                    <Separator orientation="vertical" />
-                    <ToolbarButton onClick={showAll}>
+                    <Separator
+                        orientation="vertical"
+                        className="md:block hidden"
+                    />
+                    <ToolbarButton className="p-2 md:p-1" onClick={showAll}>
                         <Scan />
                     </ToolbarButton>
-                    <Separator orientation="vertical" />
-                    <ToolbarButton onClick={zoomOutHandler}>
+                    <Separator
+                        orientation="vertical"
+                        className="md:block hidden"
+                    />
+                    <ToolbarButton
+                        className="p-2 md:p-1"
+                        onClick={zoomOutHandler}
+                    >
                         <ZoomOut />
                     </ToolbarButton>
-                    <ToolbarButton onClick={resetZoom}>{zoom}</ToolbarButton>
-                    <ToolbarButton onClick={zoomInHandler}>
+                    <ToolbarButton className="p-2 md:p-1" onClick={resetZoom}>
+                        {zoom}
+                    </ToolbarButton>
+                    <ToolbarButton
+                        className="p-2 md:p-1"
+                        onClick={zoomInHandler}
+                    >
                         <ZoomIn />
                     </ToolbarButton>
-                    <Separator orientation="vertical" />
-                    <ToolbarButton onClick={undo} disabled={!hasUndo}>
+                    <Separator
+                        orientation="vertical"
+                        className="md:block hidden"
+                    />
+                    <ToolbarButton
+                        className="p-2 md:p-1"
+                        onClick={undo}
+                        disabled={!hasUndo}
+                    >
                         <Undo />
                     </ToolbarButton>
-                    <ToolbarButton onClick={redo} disabled={!hasRedo}>
+                    <ToolbarButton
+                        className="p-2 md:p-1"
+                        onClick={redo}
+                        disabled={!hasRedo}
+                    >
                         <Redo />
                     </ToolbarButton>
                 </CardContent>

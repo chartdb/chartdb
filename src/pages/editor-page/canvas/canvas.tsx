@@ -31,6 +31,8 @@ const initialEdges: TableEdgeType[] = [];
 export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
+    const isMobile = window.innerWidth <= 767;
+
     const { getEdge } = useReactFlow();
     const { toast } = useToast();
     const {
@@ -262,8 +264,9 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 </Controls>
                 <MiniMap
                     style={{
-                        width: 100,
-                        height: 100,
+                        width: isMobile ? 60 : 100,
+                        height: isMobile ? 60 : 100,
+                        marginRight: '3.3rem',
                     }}
                 />
                 <Background
