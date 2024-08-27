@@ -173,13 +173,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const renderStars = useCallback(() => {
         return (
             <iframe
-                src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=large&text=false"
-                width="40"
-                height="30"
+                src={`https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=${isDesktop ? 'large' : 'small'}&text=false`}
+                width={isDesktop ? '40' : '25'}
+                height={isDesktop ? '30' : '20'}
                 title="GitHub"
             ></iframe>
         );
-    }, []);
+    }, [isDesktop]);
 
     const renderLastSaved = useCallback(() => {
         return (
@@ -269,7 +269,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const emojiAI = '✨';
 
     return (
-        <nav className="flex flex-col md:flex-row items-top md:items-center justify-between px-4 h-24 md:h-12 border-b">
+        <nav className="flex flex-col md:flex-row items-top md:items-center justify-between px-4 h-20 md:h-12 border-b">
             <div className="flex flex-1 justify-start gap-x-3 justify-between md:justify-normal">
                 <div className="flex font-primary items-top md:items-center py-[10px] md:py-0">
                     <a
