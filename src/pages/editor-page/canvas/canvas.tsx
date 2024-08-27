@@ -293,7 +293,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     </Controls>
                 ) : null}
                 <Controls
-                    position="bottom-center"
+                    position={isDesktop ? 'bottom-center' : 'top-center'}
                     orientation="horizontal"
                     showZoom={false}
                     showFitView={false}
@@ -304,8 +304,8 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 </Controls>
                 <MiniMap
                     style={{
-                        width: 100,
-                        height: 100,
+                        width: isDesktop ? 100 : 60,
+                        height: isDesktop ? 100 : 60,
                     }}
                 />
                 <Background

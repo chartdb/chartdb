@@ -270,7 +270,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     return (
         <nav className="flex flex-col md:flex-row items-top md:items-center justify-between px-4 h-20 md:h-12 border-b">
-            <div className="flex flex-1 justify-start gap-x-3 justify-between md:justify-normal">
+            <div className="flex flex-1 gap-x-3 justify-between md:justify-normal">
                 <div className="flex font-primary items-top md:items-center py-[10px] md:py-0">
                     <a
                         href="https://chartdb.io"
