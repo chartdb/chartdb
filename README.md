@@ -55,6 +55,14 @@ Instantly visualize your database schema with a single **"Smart Query."** Custom
 
 ChartDB is currently in Public Beta. Star and watch this repository to get notified of updates.
 
+### Supported Databases
+
+-   ✅ PostgreSQL
+-   ✅ MySQL
+-   ✅ SQL Server
+-   ✅ MariaDB
+-   ✅ SQLite
+
 ## Getting Started
 
 ### How To Use
@@ -87,13 +95,6 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 5. Copy and paste the resulting JSON set into ChartDB.
 6. Enjoy Viewing & Editing!
 
-### Supported Databases
-
--   ✅ PostgreSQL
--   ✅ MySQL
--   ✅ SQL Server
--   ✅ MariaDB
--   ✅ SQLite
 
 ## 💚 Community & Support
 
