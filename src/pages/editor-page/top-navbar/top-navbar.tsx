@@ -402,7 +402,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     )}
                 </div>
             </div>
-            <div className="hidden flex-1 justify-end sm:flex">
+            <div className="hidden flex-1 justify-end sm:flex items-center">
+                <iframe
+                    src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&count=true"
+                    width="100"
+                    height="20"
+                    title="GitHub"
+                ></iframe>
                 <Tooltip>
                     <TooltipTrigger>
                         <Badge variant="secondary" className="flex gap-1">
