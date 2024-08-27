@@ -40,7 +40,7 @@ export const mySQLQuery = `WITH fk_info as (
                        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
                        WHERE CONSTRAINT_NAME = 'PRIMARY'
                        GROUP BY TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME
-                       ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION) AS pk
+                       ORDER BY TABLE_SCHEMA, TABLE_NAME, MIN(ORDINAL_POSITION)) AS pk
                WHERE table_schema LIKE IFNULL(NULL, '%')
                AND table_schema = DATABASE()
                AND (0x00) IN (@pk_info:=CONCAT_WS(',', @pk_info, CONCAT('{"schema":"', table_schema,
