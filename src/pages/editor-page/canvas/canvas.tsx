@@ -26,6 +26,7 @@ import { Pencil } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { Badge } from '@/components/badge/badge';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -35,7 +36,7 @@ const initialEdges: TableEdgeType[] = [];
 export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
-    const { getEdge } = useReactFlow();
+    const { getEdge, getInternalNode } = useReactFlow();
     const { toast } = useToast();
     const {
         tables,
@@ -233,6 +234,9 @@ export const Canvas: React.FC<CanvasProps> = () => {
         [onNodesChange, updateTablesState]
     );
 
+    const isLoadingDOM =
+        tables.length > 0 ? !getInternalNode(tables[0].id) : false;
+
     return (
         <div className="flex h-full">
             <ReactFlow
@@ -256,6 +260,21 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 }}
                 panOnScroll
             >
+                {isLoadingDOM ? (
+                    <Controls
+                        position="top-center"
+                        orientation="horizontal"
+                        showZoom={false}
+                        showFitView={false}
+                        showInteractive={false}
+                        className="!shadow-none"
+                    >
+                        <Badge variant="default" className="bg-pink-600">
+                            Loading diagram...
+                        </Badge>
+                    </Controls>
+                ) : null}
+
                 {!isDesktop ? (
                     <Controls
                         position="bottom-left"
