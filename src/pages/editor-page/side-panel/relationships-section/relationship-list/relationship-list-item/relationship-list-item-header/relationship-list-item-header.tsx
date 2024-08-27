@@ -104,6 +104,8 @@ export const RelationshipListItemHeader: React.FC<
             relationship.targetTableId,
             setEdges,
             relationship.id,
+            isDesktop,
+            hideSidePanel,
         ]
     );
 

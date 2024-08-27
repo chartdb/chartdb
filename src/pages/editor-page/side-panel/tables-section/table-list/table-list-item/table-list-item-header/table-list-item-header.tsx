@@ -91,7 +91,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                 hideSidePanel();
             }
         },
-        [fitView, table.id, setNodes]
+        [fitView, table.id, setNodes, hideSidePanel, isDesktop]
     );
 
     const deleteTableHandler = useCallback(() => {
