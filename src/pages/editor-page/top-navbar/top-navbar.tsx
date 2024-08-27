@@ -173,9 +173,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const renderStars = useCallback(() => {
         return (
             <iframe
-                src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&count=true"
-                width="100"
-                height="20"
+                src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=large&text=false"
+                width="40"
+                height="30"
                 title="GitHub"
             ></iframe>
         );
@@ -448,9 +448,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="flex flex-row flex-1 justify-center items-center group">
                         {renderDiagramName()}
                     </div>
-                    <div className="hidden flex-1 justify-end sm:flex items-center">
-                        {renderStars()}
+                    <div className="hidden flex-1 justify-end sm:flex items-center gap-2">
                         {renderLastSaved()}
+                        {renderStars()}
                     </div>
                 </>
             ) : (
