@@ -6,7 +6,7 @@ import {
     Trash2,
     Check,
 } from 'lucide-react';
-import { ListItemHeaderButton } from '../../../../list-item-header-button/relationship-list-item-header-button';
+import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
