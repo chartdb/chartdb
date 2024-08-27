@@ -24,8 +24,8 @@ export const postgresQuery = `WITH fk_info AS (
 ), pk_info AS (
   SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
                                           ',"table":"', pk_table, '"',
-                                          ',"column":"', pk_column, '"',
-                                          ',"pk_def":"', pk_def,
+                                          ',"column":"', replace(pk_column, '"', ''), '"',
+                                          ',"pk_def":"', replace(pk_def, '"', ''),
                                           '"}')), ',') as pk_metadata
   FROM (
       SELECT
@@ -79,7 +79,7 @@ cols as (
                                                       ELSE 'null'
                                                   END,
                                               ',"nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
-                                              ',"default":"', COALESCE(replace(cols.column_default, '"', E'\\"'), ''),
+                                              ',"default":"', COALESCE(replace(replace(cols.column_default, '"', E'\\"'), '\\x', '\\\\x'), ''),
                                               '","collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
     from information_schema.columns cols
     where cols.table_schema not in ('information_schema', 'pg_catalog')
