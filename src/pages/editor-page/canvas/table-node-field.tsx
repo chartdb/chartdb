@@ -6,7 +6,7 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { Trash2 } from 'lucide-react';
+import { KeyRound, Trash2 } from 'lucide-react';
 
 import { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -88,15 +88,14 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
             <div className="block w-2/3 text-left overflow-hidden whitespace-nowrap text-ellipsis">
                 {field.name}
             </div>
-            <div className="flex justify-end w-2/3">
+            <div className="flex justify-end w-2/3 gap-2">
                 {field.primaryKey ? (
-                    <div className="text-muted-foreground block group-hover:hidden text-xs text-center overflow-hidden whitespace-nowrap text-ellipsis w-full">
-                        Primary
+                    <div className="text-muted-foreground group-hover:hidden">
+                        <KeyRound size={14} />
                     </div>
-                ) : (
-                    ''
-                )}
-                <div className="text-muted-foreground block group-hover:hidden text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis w-full">
+                ) : null}
+
+                <div className="text-muted-foreground group-hover:hidden content-center text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis">
                     {field.type}
                 </div>
                 <div className="flex-row hidden group-hover:flex">
