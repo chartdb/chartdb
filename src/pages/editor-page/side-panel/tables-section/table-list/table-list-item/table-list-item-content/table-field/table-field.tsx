@@ -56,20 +56,22 @@ export const TableField: React.FC<TableFieldProps> = ({
                     }
                 />
                 <Tooltip>
-                    <TooltipTrigger className="flex h-8 !w-5/12">
-                        <Combobox
-                            className="flex h-8 w-full"
-                            mode="single"
-                            options={dataFieldOptions}
-                            placeholder="Type"
-                            selected={field.type}
-                            onChange={(value) =>
-                                updateField({
-                                    type: value as FieldType,
-                                })
-                            }
-                            emptyText="No types found."
-                        />
+                    <TooltipTrigger className="flex h-8 !w-5/12" asChild>
+                        <span>
+                            <Combobox
+                                className="flex h-8 w-full"
+                                mode="single"
+                                options={dataFieldOptions}
+                                placeholder="Type"
+                                selected={field.type}
+                                onChange={(value) =>
+                                    updateField({
+                                        type: value as FieldType,
+                                    })
+                                }
+                                emptyText="No types found."
+                            />
+                        </span>
                     </TooltipTrigger>
                     <TooltipContent>{field.type}</TooltipContent>
                 </Tooltip>
