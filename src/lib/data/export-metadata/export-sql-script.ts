@@ -232,7 +232,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **Conditional Logic**: Use a conditional block like \`IF NOT EXISTS (SELECT * FROM sys.objects WHERE ...)\` since SQL Server doesn’t support \`IF NOT EXISTS\` directly in \`CREATE\` statements.
         - **Avoid Unsupported Syntax**: Ensure the script does not include unsupported statements like \`CREATE TABLE IF NOT EXISTS\`.
 
-        **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., primary, column, table), escape the column name by enclosing it.
+        **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., key, primary, column, table), escape the column name by enclosing it.
     `,
         mariadb: `
         - **Table Creation**: Use \`CREATE TABLE IF NOT EXISTS\` for creating tables. While creating the table structure, ensure that all foreign key columns use the correct data types as determined in the foreign key review.
