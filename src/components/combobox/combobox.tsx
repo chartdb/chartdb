@@ -102,7 +102,12 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                     >
                         <Command
                             filter={(value, search) => {
-                                if (value.includes(search)) return 1;
+                                if (
+                                    value
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                )
+                                    return 1;
                                 return 0;
                             }}
                             // shouldFilter={true}
