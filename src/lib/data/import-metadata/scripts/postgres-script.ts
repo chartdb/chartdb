@@ -29,7 +29,11 @@ export const postgresQuery = `WITH fk_info AS (
                                             '"}')), ',') as pk_metadata
     FROM (
             SELECT connamespace::regnamespace::text as schema_name,
-                conrelid::regclass::text AS pk_table,
+                CASE
+                    WHEN strpos(conrelid::regclass::text, '.') > 0
+                    THEN split_part(conrelid::regclass::text, '.', 2)
+                    ELSE conrelid::regclass::text
+                END AS pk_table,
                 unnest(string_to_array(substring(pg_get_constraintdef(oid) FROM '\\((.*?)\\)'), ',')) AS pk_column,
                 pg_get_constraintdef(oid) as pk_def
             FROM
