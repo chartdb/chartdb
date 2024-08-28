@@ -1047,7 +1047,7 @@ export const examples: Example[] = [
                 },
                 {
                     id: '96pa90b6estjx7i0edgu8nqe1',
-                    name: 'staffs',
+                    name: 'staff',
                     x: 599.08,
                     y: 512.8480000000001,
                     fields: [
@@ -1127,7 +1127,7 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: '6ecq3ky7s4lp1kyymf7q27lk9',
-                            name: 'staffs_pkey',
+                            name: 'staff_pkey',
                             unique: true,
                             fieldIds: ['e7kfdzkympiu6zdvpeurqxu6r'],
                             createdAt: Date.now(),
@@ -1357,7 +1357,7 @@ export const examples: Example[] = [
                 },
                 {
                     id: 'kk3bm81cmxpwvrx04np6tqgml',
-                    name: 'fk__staffs__store_id__4316f928',
+                    name: 'fk__staff__store_id__4316f928',
                     sourceTableId: '96pa90b6estjx7i0edgu8nqe1',
                     targetTableId: 'ttye5mdap1hl200egtjuwzl9m',
                     sourceFieldId: '34hmbf7inkgziqht8m369759i',
