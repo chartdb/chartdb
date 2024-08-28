@@ -66,7 +66,7 @@ export const createTablesFromMetadata = ({
             (col: ColumnInfo): DBField => ({
                 id: generateId(),
                 name: col.name,
-                type: { id: col.type.replace(' ', '_'), name: col.type },
+                type: { id: col.type.split(' ').join('_'), name: col.type },
                 primaryKey: tablePrimaryKeys.some(
                     (pk) => pk.column === col.name
                 ),

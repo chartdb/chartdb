@@ -57,11 +57,11 @@ export const postgresDataTypes: readonly DataType[] = [
     // Date/Time Types
     { name: 'date', id: 'date' },
     { name: 'timestamp', id: 'timestamp' },
-    { name: 'timestamp with time zone', id: 'timestamp_with time zone' },
-    { name: 'timestamp without time zone', id: 'timestamp_without time zone' },
+    { name: 'timestamp with time zone', id: 'timestamp_with_time_zone' },
+    { name: 'timestamp without time zone', id: 'timestamp_without_time_zone' },
     { name: 'time', id: 'time' },
-    { name: 'time with time zone', id: 'time_with time zone' },
-    { name: 'time without time zone', id: 'time_without time zone' },
+    { name: 'time with time zone', id: 'time_with_time_zone' },
+    { name: 'time without time zone', id: 'time_without_time_zone' },
     { name: 'interval', id: 'interval' },
 
     // Boolean Type

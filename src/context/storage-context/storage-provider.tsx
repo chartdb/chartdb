@@ -46,7 +46,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 for (const field of table.fields) {
                     field.type = {
                         // @ts-expect-error string before
-                        id: (field.type as string).replace(' ', '_'),
+                        id: (field.type as string).split(' ').join('_'),
                         // @ts-expect-error string before
                         name: field.type,
                     };
