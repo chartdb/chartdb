@@ -240,7 +240,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
     return (
         <div className="flex h-full">
             <ReactFlow
-                className="canvas-cursor-default"
+                className="canvas-cursor-default nodes-animated"
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChangeHandler}
