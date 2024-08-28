@@ -38,6 +38,22 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         config: '++id, defaultDiagramId',
     });
 
+    db.version(2).upgrade((tx) =>
+        tx
+            .table<DBTable & { diagramId: string }>('db_tables')
+            .toCollection()
+            .modify((table) => {
+                for (const field of table.fields) {
+                    field.type = {
+                        // @ts-expect-error string before
+                        id: (field.type as string).replace(' ', '_'),
+                        // @ts-expect-error string before
+                        name: field.type,
+                    };
+                }
+            })
+    );
+
     db.on('ready', async () => {
         const config = await getConfig();
 

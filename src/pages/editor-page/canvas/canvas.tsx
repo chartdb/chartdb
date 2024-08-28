@@ -106,7 +106,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 return;
             }
 
-            if (sourceField.type !== targetField.type) {
+            if (sourceField.type.id !== targetField.type.id) {
                 toast({
                     title: 'Field types do not match',
                     variant: 'destructive',
