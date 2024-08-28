@@ -1,7 +1,7 @@
 export const postgresQuery = `WITH fk_info AS (
     select array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
-                                            ',"table":"', table_name, '"',
-                                            ',"column":"', fk_column, '"',
+                                            ',"table":"', replace(table_name::text, '"', ''), '"',
+                                            ',"column":"', replace(fk_column::text, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name, '"',
                                             ',"reference_table":"', reference_table, '"',
                                             ',"reference_column":"', reference_column, '"',
@@ -23,7 +23,7 @@ export const postgresQuery = `WITH fk_info AS (
     ) as x
 ), pk_info AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
-                                            ',"table":"', pk_table, '"',
+                                            ',"table":"', replace(pk_table, '"', ''), '"',
                                             ',"column":"', replace(pk_column, '"', ''), '"',
                                             ',"pk_def":"', replace(pk_def, '"', ''),
                                             '"}')), ',') as pk_metadata
