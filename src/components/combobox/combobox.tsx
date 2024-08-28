@@ -179,9 +179,8 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                                                     <Check
                                                         className={cn(
                                                             'mr-2 h-4 w-4',
-                                                            selected.includes(
+                                                            selected ===
                                                                 option.value
-                                                            )
                                                                 ? 'opacity-100'
                                                                 : 'opacity-0'
                                                         )}

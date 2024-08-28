@@ -203,8 +203,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     name: 'id',
                     type:
                         databaseType === DatabaseType.SQLITE
-                            ? 'integer'
-                            : 'bigint',
+                            ? { id: 'integer', name: 'integer' }
+                            : { id: 'bigint', name: 'bigint' },
                     unique: true,
                     nullable: false,
                     primaryKey: true,
@@ -514,7 +514,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 id: generateId(),
                 name: `field_${(table?.fields?.length ?? 0) + 1}`,
                 type:
-                    databaseType === DatabaseType.SQLITE ? 'integer' : 'bigint',
+                    databaseType === DatabaseType.SQLITE
+                        ? { id: 'integer', name: 'integer' }
+                        : { id: 'bigint', name: 'bigint' },
                 unique: false,
                 nullable: true,
                 primaryKey: false,

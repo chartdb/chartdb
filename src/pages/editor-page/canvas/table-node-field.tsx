@@ -96,7 +96,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                 ) : null}
 
                 <div className="text-muted-foreground group-hover:hidden content-center text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis">
-                    {field.type}
+                    {field.type.name}
                 </div>
                 <div className="flex-row hidden group-hover:flex">
                     <Button
