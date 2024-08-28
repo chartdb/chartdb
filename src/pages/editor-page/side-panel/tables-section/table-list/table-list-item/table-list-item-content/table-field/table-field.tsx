@@ -44,17 +44,24 @@ export const TableField: React.FC<TableFieldProps> = ({
     return (
         <div className="flex flex-row p-1 justify-between flex-1">
             <div className="flex w-8/12 gap-1 justify-start overflow-hidden">
-                <Input
-                    className="h-8 focus-visible:ring-0 w-7/12 !overflow-hidden !whitespace-nowrap !text-ellipsis"
-                    type="text"
-                    placeholder="Name"
-                    value={field.name}
-                    onChange={(e) =>
-                        updateField({
-                            name: e.target.value,
-                        })
-                    }
-                />
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className="w-7/12">
+                            <Input
+                                className="h-8 focus-visible:ring-0 w-full !overflow-hidden !whitespace-nowrap !text-ellipsis"
+                                type="text"
+                                placeholder="Name"
+                                value={field.name}
+                                onChange={(e) =>
+                                    updateField({
+                                        name: e.target.value,
+                                    })
+                                }
+                            />
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>{field.name}</TooltipContent>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger className="flex h-8 !w-5/12" asChild>
                         <span>
