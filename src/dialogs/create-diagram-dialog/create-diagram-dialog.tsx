@@ -257,7 +257,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 </p>
                                 <ToggleGroup
                                     type="single"
-                                    className="gap-2"
+                                    className="gap-2 ml-1"
                                     value={
                                         !databaseEdition
                                             ? 'regular'
@@ -273,8 +273,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 >
                                     <ToggleGroupItem
                                         value="regular"
-                                        variant="default"
-                                        className="gap-1 h-6 p-0 px-2"
+                                        variant="outline"
+                                        className="gap-1 h-6 p-0 px-2 shadow-none"
                                     >
                                         <Avatar className="h-4 w-4">
                                             <AvatarImage
@@ -296,8 +296,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                             <ToggleGroupItem
                                                 value={edition}
                                                 key={edition}
-                                                variant="default"
-                                                className="gap-1 h-6 p-0 px-2"
+                                                variant="outline"
+                                                className="gap-1 h-6 p-0 px-2 shadow-none"
                                             >
                                                 <Avatar className="h-4 w-4">
                                                     <AvatarImage
