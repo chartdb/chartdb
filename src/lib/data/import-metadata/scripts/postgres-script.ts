@@ -1,75 +1,126 @@
-export const postgresQuery = `WITH fk_info AS (
-    select array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
-                                            ',"table":"', replace(table_name::text, '"', ''), '"',
-                                            ',"column":"', replace(fk_column::text, '"', ''), '"',
-                                            ',"foreign_key_name":"', foreign_key_name, '"',
-                                            ',"reference_table":"', reference_table, '"',
-                                            ',"reference_column":"', reference_column, '"',
-                                            ',"fk_def":"', fk_def,
-                                            '"}')), ',') as fk_metadata
-    from (
-        SELECT  connamespace::regnamespace::text as schema_name,
-                conname AS foreign_key_name,
-                conrelid::regclass AS table_name,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[1] AS fk_column,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[2] AS reference_table,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[3] AS reference_column,
-                pg_get_constraintdef(oid) as fk_def
-              FROM
-                pg_constraint
-              WHERE
-                contype = 'f'
-                AND connamespace::regnamespace::text not in ('information_schema', 'pg_catalog')
+// Define the database options type
+type DatabaseOption = 'regular' | 'supabase' | 'timescale';
+
+export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
+    // Define additional filters based on the database option
+    const supabaseFilters = `
+                AND connamespace::regnamespace::text NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+    `;
+
+    const supabaseTableFilter = `
+                AND cols.table_schema NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+    `;
+
+    const supabaseIndexesFilter = `
+                WHERE schema_name NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+    `;
+
+    const supabaseViewsFilter = `
+                AND views.schemaname NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+    `;
+
+    const timescaleFilters = `
                 AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
-    ) as x
-), pk_info AS (
-    SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
-                                            ',"table":"', replace(pk_table, '"', ''), '"',
-                                            ',"column":"', replace(pk_column, '"', ''), '"',
-                                            ',"pk_def":"', replace(pk_def, '"', ''),
-                                            '"}')), ',') as pk_metadata
-    FROM (
-            SELECT connamespace::regnamespace::text as schema_name,
-                CASE
-                    WHEN strpos(conrelid::regclass::text, '.') > 0
-                    THEN split_part(conrelid::regclass::text, '.', 2)
-                    ELSE conrelid::regclass::text
-                END AS pk_table,
-                unnest(string_to_array(substring(pg_get_constraintdef(oid) FROM '\\((.*?)\\)'), ',')) AS pk_column,
-                pg_get_constraintdef(oid) as pk_def
+    `;
+
+    const timescaleTableFilter = `
+                AND cols.table_schema !~ '^(timescaledb_|_timescaledb_)'
+                AND cols.table_name !~ '^(pg_stat_)'
+    `;
+
+    const timescaleIndexesFilter = `
+                WHERE schema_name !~ '^(timescaledb_|_timescaledb_)'
+    `;
+
+    const timescaleViewsFilter = `
+                AND views.schemaname !~ '^(timescaledb_|_timescaledb_)'
+    `;
+
+    // Define the base query
+    const query = `
+    WITH fk_info AS (
+        SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+                                                ',"table":"', replace(table_name::text, '"', ''), '"',
+                                                ',"column":"', replace(fk_column::text, '"', ''), '"',
+                                                ',"foreign_key_name":"', foreign_key_name, '"',
+                                                ',"reference_table":"', reference_table, '"',
+                                                ',"reference_column":"', reference_column, '"',
+                                                ',"fk_def":"', fk_def,
+                                                '"}')), ',') as fk_metadata
+        FROM (
+            SELECT  connamespace::regnamespace::text AS schema_name,
+                    conname AS foreign_key_name,
+                    conrelid::regclass AS table_name,
+                    (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[1] AS fk_column,
+                    (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[2] AS reference_table,
+                    (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[3] AS reference_column,
+                    pg_get_constraintdef(oid) as fk_def
             FROM
-              pg_constraint
+                pg_constraint
             WHERE
-              contype = 'p'
-              AND connamespace::regnamespace::text not in ('information_schema', 'pg_catalog')
-              AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
-    ) as y
-),
-indexes_cols as ( select tnsp.nspname                                                 as schema_name,
-                  trel.relname                                                        as table_name,
-                  pg_relation_size(tnsp.nspname || '.' || '"' || irel.relname || '"') as index_size,
-                  irel.relname                                                        as index_name,
-                  am.amname                                                           as index_type,
-                  a.attname                                                           as col_name,
-                  (case when i.indisunique = true then 'true' else 'false' end)       as is_unique,
-                  irel.reltuples                                                      as cardinality,
-                  1 + Array_position(i.indkey, a.attnum)                              as column_position,
-                  case o.OPTION & 1 when 1 then 'DESC' else 'ASC' end                 as direction,
-         CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END as is_partial_index
-                    from pg_index as i
-                             join pg_class as trel on trel.oid = i.indrelid
-                             join pg_namespace as tnsp on trel.relnamespace = tnsp.oid
-                             join pg_class as irel on irel.oid = i.indexrelid
-                             join pg_am as am on irel.relam = am.oid
-                             cross join lateral unnest (i.indkey)
-                    with ordinality as c (colnum, ordinality) left join lateral unnest (i.indoption)
-                    with ordinality as o (option, ordinality)
-                    on c.ordinality = o.ordinality join pg_attribute as a on trel.oid = a.attrelid and a.attnum = c.colnum
-                    where tnsp.nspname not like 'pg_%'
-                    group by tnsp.nspname, trel.relname, irel.relname, am.amname, i.indisunique, i.indexrelid, irel.reltuples, a.attname, array_position(i.indkey, a.attnum), o.OPTION, i.indpred
-),
-cols as (
-    select array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
+                contype = 'f'
+                AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
+                    databaseOption === 'timescale'
+                        ? timescaleFilters
+                        : databaseOption === 'supabase'
+                          ? supabaseFilters
+                          : ''
+                }
+        ) AS x
+    ), pk_info AS (
+        SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+                                                ',"table":"', replace(pk_table, '"', ''), '"',
+                                                ',"column":"', replace(pk_column, '"', ''), '"',
+                                                ',"pk_def":"', replace(pk_def, '"', ''),
+                                                '"}')), ',') AS pk_metadata
+        FROM (
+                SELECT connamespace::regnamespace::text AS schema_name,
+                    CASE
+                        WHEN strpos(conrelid::regclass::text, '.') > 0
+                        THEN split_part(conrelid::regclass::text, '.', 2)
+                        ELSE conrelid::regclass::text
+                    END AS pk_table,
+                    unnest(string_to_array(substring(pg_get_constraintdef(oid) FROM '\\((.*?)\\)'), ',')) AS pk_column,
+                    pg_get_constraintdef(oid) as pk_def
+                FROM
+                  pg_constraint
+                WHERE
+                  contype = 'p'
+                  AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
+                      databaseOption === 'timescale'
+                          ? timescaleFilters
+                          : databaseOption === 'supabase'
+                            ? supabaseFilters
+                            : ''
+                  }
+        ) AS y
+    ),
+    indexes_cols AS (
+        SELECT tnsp.nspname                                                 AS schema_name,
+              trel.relname                                                  AS table_name,
+              pg_relation_size(tnsp.nspname || '.' || '"' || irel.relname || '"') AS index_size,
+              irel.relname                                                  AS index_name,
+              am.amname                                                     AS index_type,
+              a.attname                                                     AS col_name,
+              (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)  AS is_unique,
+              irel.reltuples                                                AS cardinality,
+              1 + Array_position(i.indkey, a.attnum)                        AS column_position,
+              CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END           AS direction,
+              CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END    AS is_partial_index
+        FROM pg_index AS i
+            JOIN pg_class AS trel ON trel.oid = i.indrelid
+            JOIN pg_namespace AS tnsp ON trel.relnamespace = tnsp.oid
+            JOIN pg_class AS irel ON irel.oid = i.indexrelid
+            JOIN pg_am AS am ON irel.relam = am.oid
+            CROSS JOIN LATERAL unnest (i.indkey)
+            WITH ORDINALITY AS c (colnum, ordinality) LEFT JOIN LATERAL unnest (i.indoption)
+            WITH ORDINALITY AS o (option, ordinality)
+            ON c.ordinality = o.ordinality JOIN pg_attribute AS a ON trel.oid = a.attrelid AND a.attnum = c.colnum
+        WHERE tnsp.nspname NOT LIKE 'pg_%'
+        GROUP BY tnsp.nspname, trel.relname, irel.relname, am.amname, i.indisunique, i.indexrelid, irel.reltuples, a.attname, Array_position(i.indkey, a.attnum), o.OPTION, i.indpred
+    ),
+    cols AS (
+        SELECT array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
                                                 '","table":"', cols.table_name,
                                                 '","name":"', cols.column_name,
                                                 '","ordinal_position":"', cols.ordinal_position,
@@ -82,58 +133,78 @@ cols as (
                                                                     ',"scale":', COALESCE(cols.numeric_scale::text, 'null'), '}')
                                                         ELSE 'null'
                                                     END,
-                                                ',"nullable":', case when (cols.IS_NULLABLE = 'YES') then 'true' else 'false' end,
+                                                ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
                                                 ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
-                                                '","collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
-      from information_schema.columns cols
-      where cols.table_schema not in ('information_schema', 'pg_catalog')
-              and cols.table_schema !~ '^(timescaledb_|_timescaledb_)'
-              and cols.table_name !~ '^(pg_stat_)'
-), indexes_metadata as (
-    select array_to_string(array_agg(CONCAT('{"schema":"', schema_name,
-                                            '","table":"', table_name,
-                                            '","name":"', index_name,
-                                            '","column":"', replace(col_name :: text, '"', E'"'),
-                                            '","index_type":"', index_type,
-                                            '","cardinality":', cardinality,
-                                            ',"size":', index_size,
-                                            ',"unique":', is_unique,
-                                            ',"is_partial_index":', is_partial_index,
-                                            ',"direction":"', lower(direction),
-                                            '"}')), ',') as indexes_metadata
-          from indexes_cols x
-          where schema_name !~ '^(timescaledb_|_timescaledb_)'
-), tbls as (
-    select array_to_string(array_agg(CONCAT('{', '"schema":"', TABLE_SCHEMA, '",', '"table":"', TABLE_NAME, '",', '"rows":',
-                                      coalesce((select s.n_live_tup
-                                                from pg_stat_user_tables s
-                                                where tbls.TABLE_SCHEMA = s.schemaname and tbls.TABLE_NAME = s.relname),
-                                               0), ', "type":"', TABLE_TYPE, '",', '"engine":"",', '"collation":""}')),
-                     ',') as tbls_metadata
-      from information_schema.tables tbls
-      where tbls.TABLE_SCHEMA not in ('information_schema', 'pg_catalog')
-            and tbls.TABLE_SCHEMA !~ '^(timescaledb_|_timescaledb_)'
-            and tbls.TABLE_NAME !~ '^(pg_stat_)'
-), config as (
-    select array_to_string(
-                     array_agg(CONCAT('{"name":"', conf.name, '","value":"', replace(conf.setting, '"', E'"'), '"}')),
-                     ',') as config_metadata
-      from pg_settings conf
-), views as
-(
-    select array_to_string(array_agg(CONCAT('{"schema":"', views.schemaname, '","view_name":"', viewname, '"}')),
-                     ',') as views_metadata
-      from pg_views views
-    where views.schemaname not in ('information_schema', 'pg_catalog')
-            and views.schemaname !~ '^(timescaledb_|_timescaledb_)'
-)
-select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
-                    '], "pk_info": [', COALESCE(pk_metadata, ''),
-                    '], "columns": [', coalesce(cols_metadata, ''),
-                    '], "indexes": [', coalesce(indexes_metadata, ''),
-                    '], "tables":[', coalesce(tbls_metadata, ''),
-                    '], "views":[', coalesce(views_metadata, ''),
-                    '], "database_name": "', current_database(), '', '", "version": "', '',
-              '"}') as " "
-from fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
-`;
+                                                ',"collation":"', COALESCE(cols.COLLATION_NAME, ''), '"}')), ',') AS cols_metadata
+        FROM information_schema.columns cols
+        WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
+            databaseOption === 'timescale'
+                ? timescaleTableFilter
+                : databaseOption === 'supabase'
+                  ? supabaseTableFilter
+                  : ''
+        }
+    ), indexes_metadata AS (
+        SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name,
+                                                '","table":"', table_name,
+                                                '","name":"', index_name,
+                                                '","column":"', replace(col_name :: TEXT, '"', E'"'),
+                                                '","index_type":"', index_type,
+                                                '","cardinality":', cardinality,
+                                                ',"size":', index_size,
+                                                ',"unique":', is_unique,
+                                                ',"is_partial_index":', is_partial_index,
+                                                ',"direction":"', LOWER(direction),
+                                                '"}')), ',') AS indexes_metadata
+        FROM indexes_cols x ${
+            databaseOption === 'timescale'
+                ? timescaleIndexesFilter
+                : databaseOption === 'supabase'
+                  ? supabaseIndexesFilter
+                  : ''
+        }
+    ), tbls AS (
+        SELECT array_to_string(array_agg(CONCAT('{', '"schema":"', TABLE_SCHEMA, '",', '"table":"', TABLE_NAME, '",', '"rows":',
+                                          COALESCE((SELECT s.n_live_tup
+                                                    FROM pg_stat_user_tables s
+                                                    WHERE tbls.TABLE_SCHEMA = s.schemaname AND tbls.TABLE_NAME = s.relname),
+                                                   0), ', "type":"', TABLE_TYPE, '",', '"engine":"",', '"collation":""}')),
+                         ',') AS tbls_metadata
+        FROM information_schema.tables tbls
+        WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
+            databaseOption === 'timescale'
+                ? timescaleTableFilter
+                : databaseOption === 'supabase'
+                  ? supabaseTableFilter
+                  : ''
+        }
+    ), config AS (
+        SELECT array_to_string(
+                         array_agg(CONCAT('{"name":"', conf.name, '","value":"', replace(conf.setting, '"', E'"'), '"}')),
+                         ',') AS config_metadata
+        FROM pg_settings conf
+    ), views AS (
+        SELECT array_to_string(array_agg(CONCAT('{"schema":"', views.schemaname, '","view_name":"', viewname, '"}')),
+                         ',') AS views_metadata
+        FROM pg_views views
+        WHERE views.schemaname NOT IN ('information_schema', 'pg_catalog') ${
+            databaseOption === 'timescale'
+                ? timescaleViewsFilter
+                : databaseOption === 'supabase'
+                  ? supabaseViewsFilter
+                  : ''
+        }
+    )
+    SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
+                        '], "pk_info": [', COALESCE(pk_metadata, ''),
+                        '], "columns": [', COALESCE(cols_metadata, ''),
+                        '], "indexes": [', COALESCE(indexes_metadata, ''),
+                        '], "tables":[', COALESCE(tbls_metadata, ''),
+                        '], "views":[', COALESCE(views_metadata, ''),
+                        '], "database_name": "', CURRENT_DATABASE(), '', '", "version": "', '',
+                  '"}') AS " "
+    FROM fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
+    `;
+
+    return query;
+};
