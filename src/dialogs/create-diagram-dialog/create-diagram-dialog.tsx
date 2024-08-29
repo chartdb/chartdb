@@ -167,7 +167,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             <ToggleGroupItem
                 value={type}
                 aria-label="Toggle bold"
-                className="flex w-32 h-32"
+                className="flex w-22 h-22 md:w-32 md:h-32"
             >
                 <img src={logo} alt="PostgreSQL" />
             </ToggleGroupItem>
@@ -177,7 +177,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const renderExamplesOption = useCallback(
         () => (
             <div
-                className="flex w-32 h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
+                className="flex w-22 h-22 md:w-32 md:h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
                 onClick={() => window.open('/examples')}
             >
                 <div className="flex items-center flex-1">
@@ -187,7 +187,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 </div>
                 <div className="flex flex-col-reverse">
                     <Link href="/examples" className="text-sm text-primary">
-                        check examples
+                        Check Examples
                     </Link>
                 </div>
             </div>
@@ -251,7 +251,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 return (
                     <div className="flex flex-1 flex-col w-full gap-6">
                         {databaseTypeToEditionMap[databaseType].length > 0 ? (
-                            <div className="flex flex-row gap-1">
+                            <div className="flex flex-col md:flex-row gap-1">
                                 <p className="text-sm text-muted-foreground leading-6">
                                     Database edition:
                                 </p>
@@ -479,7 +479,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col min-w-[500px] xl:min-w-[45vw] overflow-y-auto"
+                className="flex flex-col w-[100vw] xl:min-w-[45vw] overflow-y-auto"
                 showClose={hasExistingDiagram}
             >
                 {renderHeader()}
