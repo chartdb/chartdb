@@ -36,6 +36,9 @@ import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
+import { useTheme } from '@/hooks/use-theme';
+import DarkModeToggle from '@/pages/editor-page/dark-mode-toggle/dark-mode-toggle';
+
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
@@ -56,6 +59,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
+    const { setTheme } = useTheme();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -180,6 +184,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             ></iframe>
         );
     }, [isDesktop]);
+
+    const renderDarkModeToggle = () => {
+        return <DarkModeToggle />;
+    };
 
     const renderLastSaved = useCallback(() => {
         return (
@@ -430,6 +438,37 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>
+                            <MenubarTrigger>View</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>Theme</MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem
+                                            onClick={() => setTheme('light')}
+                                        >
+                                            Light
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => setTheme('dark')}
+                                        >
+                                            Dark
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                localStorage.removeItem(
+                                                    'theme'
+                                                );
+
+                                                setTheme('system');
+                                            }}
+                                        >
+                                            System
+                                        </MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
+                            </MenubarContent>
+                        </MenubarMenu>
+                        <MenubarMenu>
                             <MenubarTrigger>Help</MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={openChartDBIO}>
@@ -451,6 +490,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="hidden flex-1 justify-end sm:flex items-center gap-2">
                         {renderLastSaved()}
                         {renderStars()}
+                        {renderDarkModeToggle()}
                     </div>
                 </>
             ) : (
@@ -463,6 +503,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </div>
                     <div className="flex justify-center items-center">
                         {renderStars()}
+                    </div>
+                    <div className="flex justify-center items-center">
+                        {renderDarkModeToggle()}
                     </div>
                 </div>
             )}
