@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     Dialog,
@@ -12,7 +12,7 @@ import {
 import { DialogProps } from '@radix-ui/react-dialog';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { databaseLogoMap } from '@/lib/databases';
+import { databaseLogoMap, databaseSecondaryLogoMap } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
 import { useStorage } from '@/hooks/use-storage';
@@ -30,6 +30,17 @@ import { useDialog } from '@/hooks/use-dialog';
 import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { Link } from '@/components/link/link';
 import { LayoutGrid } from 'lucide-react';
+import {
+    DatabaseEdition,
+    databaseEditionToImageMap,
+    databaseEditionToLabelMap,
+    databaseTypeToEditionMap,
+} from '@/lib/domain/database-edition';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/avatar/avatar';
 
 enum CreateDiagramDialogStep {
     SELECT_DATABASE = 'SELECT_DATABASE',
@@ -47,18 +58,21 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
 }) => {
     const { diagramId } = useChartDB();
-    const [databaseType, setDatabaseType] = React.useState<DatabaseType>(
+    const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
     const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
-    const [scriptResult, setScriptResult] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState('');
-    const [step, setStep] = React.useState<CreateDiagramDialogStep>(
+    const [scriptResult, setScriptResult] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [databaseEdition, setDatabaseEdition] = useState<
+        DatabaseEdition | undefined
+    >();
+    const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
     const { listDiagrams, addDiagram } = useStorage();
-    const [diagramNumber, setDiagramNumber] = React.useState<number>(1);
+    const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -72,6 +86,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     useEffect(() => {
         setStep(CreateDiagramDialogStep.SELECT_DATABASE);
         setDatabaseType(DatabaseType.GENERIC);
+        setDatabaseEdition(undefined);
         setScriptResult('');
         setErrorMessage('');
     }, [dialog.open]);
@@ -107,6 +122,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             id: generateId(),
             name: `Diagram ${diagramNumber}`,
             databaseType: databaseType ?? DatabaseType.GENERIC,
+            databaseEdition:
+                databaseEdition?.trim().length === 0
+                    ? undefined
+                    : databaseEdition,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
@@ -119,6 +138,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 databaseType,
                 databaseMetadata,
                 diagramNumber,
+                databaseEdition:
+                    databaseEdition?.trim().length === 0
+                        ? undefined
+                        : databaseEdition,
             });
         }
 
@@ -129,6 +152,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [
         databaseType,
         addDiagram,
+        databaseEdition,
         closeCreateDiagramDialog,
         navigate,
         updateConfig,
@@ -226,13 +250,96 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
                     <div className="flex flex-1 flex-col w-full gap-6">
+                        {databaseTypeToEditionMap[databaseType].length > 0 ? (
+                            <div className="flex flex-row gap-1">
+                                <p className="text-sm text-muted-foreground leading-6">
+                                    Database edition:
+                                </p>
+                                <ToggleGroup
+                                    type="single"
+                                    className="gap-2"
+                                    value={
+                                        !databaseEdition
+                                            ? 'regular'
+                                            : databaseEdition
+                                    }
+                                    onValueChange={(value) => {
+                                        setDatabaseEdition(
+                                            value === 'regular'
+                                                ? undefined
+                                                : (value as DatabaseEdition)
+                                        );
+                                    }}
+                                >
+                                    <ToggleGroupItem
+                                        value="regular"
+                                        variant="default"
+                                        className="gap-1 h-6 p-0 px-2"
+                                    >
+                                        <Avatar className="h-4 w-4">
+                                            <AvatarImage
+                                                src={
+                                                    databaseSecondaryLogoMap[
+                                                        databaseType
+                                                    ]
+                                                }
+                                                alt="Regular"
+                                            />
+                                            <AvatarFallback>
+                                                Regular
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        Regular
+                                    </ToggleGroupItem>
+                                    {databaseTypeToEditionMap[databaseType].map(
+                                        (edition) => (
+                                            <ToggleGroupItem
+                                                value={edition}
+                                                key={edition}
+                                                variant="default"
+                                                className="gap-1 h-6 p-0 px-2"
+                                            >
+                                                <Avatar className="h-4 w-4">
+                                                    <AvatarImage
+                                                        src={
+                                                            databaseEditionToImageMap[
+                                                                edition
+                                                            ]
+                                                        }
+                                                        alt={
+                                                            databaseEditionToLabelMap[
+                                                                edition
+                                                            ]
+                                                        }
+                                                    />
+                                                    <AvatarFallback>
+                                                        {
+                                                            databaseEditionToLabelMap[
+                                                                edition
+                                                            ]
+                                                        }
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                {
+                                                    databaseEditionToLabelMap[
+                                                        edition
+                                                    ]
+                                                }
+                                            </ToggleGroupItem>
+                                        )
+                                    )}
+                                </ToggleGroup>
+                            </div>
+                        ) : null}
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-muted-foreground">
                                 1. Run this script in your database:
                             </p>
                             <CodeSnippet
                                 className="max-h-40 w-full"
-                                code={importMetadataScripts[databaseType]}
+                                code={importMetadataScripts[databaseType]({
+                                    databaseEdition,
+                                })}
                             />
                         </div>
                         <div className="flex flex-col gap-1 h-48">
@@ -258,6 +365,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         }
     }, [
         errorMessage,
+        databaseEdition,
         step,
         databaseType,
         scriptResult,

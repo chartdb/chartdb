@@ -1,7 +1,15 @@
-// Define the database options type
-type DatabaseOption = 'regular' | 'supabase' | 'timescale';
+import {
+    DatabaseEdition,
+    databaseEditionToLabelMap,
+} from '@/lib/domain/database-edition';
 
-export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
+export const getPostgresQuery = (
+    options: {
+        databaseEdition?: DatabaseEdition;
+    } = {}
+): string => {
+    const databaseEdition: DatabaseEdition | undefined =
+        options.databaseEdition;
     // Define additional filters based on the database option
     const supabaseFilters = `
                 AND connamespace::regnamespace::text NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
@@ -37,8 +45,8 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
     `;
 
     // Define the base query
-    const query = `
-    WITH fk_info AS (
+    const query = `${`/* ${databaseEdition ? databaseEditionToLabelMap[databaseEdition] : 'PostgreSQL'} edition */`}
+    WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
         SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
                                                 ',"table":"', replace(table_name::text, '"', ''), '"',
                                                 ',"column":"', replace(fk_column::text, '"', ''), '"',
@@ -60,9 +68,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
             WHERE
                 contype = 'f'
                 AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                    databaseOption === 'timescale'
+                    databaseEdition === DatabaseEdition.TIMESCALE
                         ? timescaleFilters
-                        : databaseOption === 'supabase'
+                        : databaseEdition === DatabaseEdition.SUPABASE
                           ? supabaseFilters
                           : ''
                 }
@@ -87,9 +95,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                 WHERE
                   contype = 'p'
                   AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                      databaseOption === 'timescale'
+                      databaseEdition === DatabaseEdition.TIMESCALE
                           ? timescaleFilters
-                          : databaseOption === 'supabase'
+                          : databaseEdition === DatabaseEdition.SUPABASE
                             ? supabaseFilters
                             : ''
                   }
@@ -138,9 +146,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                                                 ',"collation":"', COALESCE(cols.COLLATION_NAME, ''), '"}')), ',') AS cols_metadata
         FROM information_schema.columns cols
         WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
-            databaseOption === 'timescale'
+            databaseEdition === DatabaseEdition.TIMESCALE
                 ? timescaleTableFilter
-                : databaseOption === 'supabase'
+                : databaseEdition === DatabaseEdition.SUPABASE
                   ? supabaseTableFilter
                   : ''
         }
@@ -157,9 +165,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                                                 ',"direction":"', LOWER(direction),
                                                 '"}')), ',') AS indexes_metadata
         FROM indexes_cols x ${
-            databaseOption === 'timescale'
+            databaseEdition === DatabaseEdition.TIMESCALE
                 ? timescaleIndexesFilter
-                : databaseOption === 'supabase'
+                : databaseEdition === DatabaseEdition.SUPABASE
                   ? supabaseIndexesFilter
                   : ''
         }
@@ -172,9 +180,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                          ',') AS tbls_metadata
         FROM information_schema.tables tbls
         WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
-            databaseOption === 'timescale'
+            databaseEdition === DatabaseEdition.TIMESCALE
                 ? timescaleTableFilter
-                : databaseOption === 'supabase'
+                : databaseEdition === DatabaseEdition.SUPABASE
                   ? supabaseTableFilter
                   : ''
         }
@@ -188,9 +196,9 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                          ',') AS views_metadata
         FROM pg_views views
         WHERE views.schemaname NOT IN ('information_schema', 'pg_catalog') ${
-            databaseOption === 'timescale'
+            databaseEdition === DatabaseEdition.TIMESCALE
                 ? timescaleViewsFilter
-                : databaseOption === 'supabase'
+                : databaseEdition === DatabaseEdition.SUPABASE
                   ? supabaseViewsFilter
                   : ''
         }
@@ -203,7 +211,7 @@ export const getPostgresQuery = (databaseOption?: DatabaseOption): string => {
                         '], "views":[', COALESCE(views_metadata, ''),
                         '], "database_name": "', CURRENT_DATABASE(), '', '", "version": "', '',
                   '"}') AS " "
-    FROM fk_info, pk_info, cols, indexes_metadata, tbls, config, views;
+    FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
     `;
 
     return query;
