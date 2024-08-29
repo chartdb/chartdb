@@ -270,7 +270,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         switch (step) {
             case CreateDiagramDialogStep.SELECT_DATABASE:
                 return (
-                    <DialogFooter className="flex !justify-between gap-2">
+                    <DialogFooter className="flex !justify-between gap-2 mt-4">
                         {hasExistingDiagram ? (
                             <DialogClose asChild>
                                 <Button type="button" variant="secondary">
@@ -305,7 +305,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
-                    <DialogFooter className="flex !justify-between gap-2">
+                    <DialogFooter className="flex !justify-between gap-2 mt-4">
                         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
