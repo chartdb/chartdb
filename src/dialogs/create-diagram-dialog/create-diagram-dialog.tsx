@@ -153,7 +153,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const renderExamplesOption = useCallback(
         () => (
             <div
-                className="flex w-32 h-32 bg-pink-50 rounded-md items-center text-center flex-col py-3 border border-pink-600 cursor-pointer"
+                className="flex w-32 h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
                 onClick={() => window.open('/examples')}
             >
                 <div className="flex items-center flex-1">
