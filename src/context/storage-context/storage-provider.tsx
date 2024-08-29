@@ -54,6 +54,16 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             })
     );
 
+    db.version(3).stores({
+        diagrams:
+            '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+        db_tables:
+            '++id, diagramId, name, x, y, fields, indexes, color, createdAt, width',
+        db_relationships:
+            '++id, diagramId, name, sourceTableId, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+        config: '++id, defaultDiagramId',
+    });
+
     db.on('ready', async () => {
         const config = await getConfig();
 
@@ -88,6 +98,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 id: diagram.id,
                 name: diagram.name,
                 databaseType: diagram.databaseType,
+                databaseEdition: diagram.databaseEdition,
                 createdAt: diagram.createdAt,
                 updatedAt: diagram.updatedAt,
             })

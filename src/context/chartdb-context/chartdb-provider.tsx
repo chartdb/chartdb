@@ -12,6 +12,7 @@ import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Diagram } from '@/lib/domain/diagram';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
+import { DatabaseEdition } from '@/lib/domain/database-edition';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -28,6 +29,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
+    const [databaseEdition, setDatabaseEdition] = useState<
+        DatabaseEdition | undefined
+    >();
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
 
@@ -38,6 +42,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             createdAt: diagramCreatedAt,
             updatedAt: diagramUpdatedAt,
             databaseType,
+            databaseEdition,
             tables,
             relationships,
         }),
@@ -45,6 +50,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             diagramId,
             diagramName,
             databaseType,
+            databaseEdition,
             tables,
             relationships,
             diagramCreatedAt,
@@ -74,6 +80,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setDiagramId('');
             setDiagramName('');
             setDatabaseType(DatabaseType.GENERIC);
+            setDatabaseEdition(undefined);
             setTables([]);
             setRelationships([]);
             resetRedoStack();
@@ -130,6 +137,21 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             },
             [db, diagramId, setDatabaseType]
         );
+
+    const updateDatabaseEdition: ChartDBContext['updateDatabaseEdition'] =
+        useCallback(
+            async (databaseEdition) => {
+                setDatabaseEdition(databaseEdition);
+                await db.updateDiagram({
+                    id: diagramId,
+                    attributes: {
+                        databaseEdition,
+                    },
+                });
+            },
+            [db, diagramId, setDatabaseEdition]
+        );
+
     const updateDiagramId: ChartDBContext['updateDiagramId'] = useCallback(
         async (id) => {
             const prevId = diagramId;
@@ -957,6 +979,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
+                setDatabaseEdition(diagram.databaseEdition);
                 setTables(diagram?.tables ?? []);
                 setRelationships(diagram?.relationships ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
@@ -970,6 +993,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setDiagramId,
             setDiagramName,
             setDatabaseType,
+            setDatabaseEdition,
             setTables,
             setRelationships,
             setDiagramCreatedAt,
@@ -990,6 +1014,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 updateDiagramName,
                 loadDiagram,
                 updateDatabaseType,
+                updateDatabaseEdition,
                 clearDiagramData,
                 deleteDiagram,
                 updateDiagramUpdatedAt,
