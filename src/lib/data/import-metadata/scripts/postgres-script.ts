@@ -20,6 +20,7 @@ export const postgresQuery = `WITH fk_info AS (
               WHERE
                 contype = 'f'
                 AND connamespace::regnamespace::text not in ('information_schema', 'pg_catalog')
+                AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
     ) as x
 ), pk_info AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
@@ -41,6 +42,7 @@ export const postgresQuery = `WITH fk_info AS (
             WHERE
               contype = 'p'
               AND connamespace::regnamespace::text not in ('information_schema', 'pg_catalog')
+              AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
     ) as y
 ),
 indexes_cols as ( select tnsp.nspname                                                 as schema_name,
@@ -85,6 +87,8 @@ cols as (
                                                 '","collation":"', coalesce(cols.COLLATION_NAME, ''), '"}')), ',') as cols_metadata
       from information_schema.columns cols
       where cols.table_schema not in ('information_schema', 'pg_catalog')
+              and cols.table_schema !~ '^(timescaledb_|_timescaledb_)'
+              and cols.table_name !~ '^(pg_stat_)'
 ), indexes_metadata as (
     select array_to_string(array_agg(CONCAT('{"schema":"', schema_name,
                                             '","table":"', table_name,
@@ -98,6 +102,7 @@ cols as (
                                             ',"direction":"', lower(direction),
                                             '"}')), ',') as indexes_metadata
           from indexes_cols x
+          where schema_name !~ '^(timescaledb_|_timescaledb_)'
 ), tbls as (
     select array_to_string(array_agg(CONCAT('{', '"schema":"', TABLE_SCHEMA, '",', '"table":"', TABLE_NAME, '",', '"rows":',
                                       coalesce((select s.n_live_tup
@@ -107,6 +112,8 @@ cols as (
                      ',') as tbls_metadata
       from information_schema.tables tbls
       where tbls.TABLE_SCHEMA not in ('information_schema', 'pg_catalog')
+            and tbls.TABLE_SCHEMA !~ '^(timescaledb_|_timescaledb_)'
+            and tbls.TABLE_NAME !~ '^(pg_stat_)'
 ), config as (
     select array_to_string(
                      array_agg(CONCAT('{"name":"', conf.name, '","value":"', replace(conf.setting, '"', E'"'), '"}')),
@@ -118,6 +125,7 @@ cols as (
                      ',') as views_metadata
       from pg_views views
     where views.schemaname not in ('information_schema', 'pg_catalog')
+            and views.schemaname !~ '^(timescaledb_|_timescaledb_)'
 )
 select CONCAT('{    "fk_info": [', coalesce(fk_metadata, ''),
                     '], "pk_info": [', COALESCE(pk_metadata, ''),
