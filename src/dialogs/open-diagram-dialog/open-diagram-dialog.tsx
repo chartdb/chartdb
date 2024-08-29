@@ -1,4 +1,5 @@
 import { Button } from '@/components/button/button';
+import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import {
     Dialog,
     DialogClose,
@@ -20,8 +21,6 @@ import {
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
-import { databaseTypeToLabelMap } from '@/lib/databases';
-
 import { Diagram } from '@/lib/domain/diagram';
 import { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
@@ -89,11 +88,11 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                         <Table>
                             <TableHeader className="sticky top-0 bg-background">
                                 <TableRow>
+                                    <TableHead />
                                     <TableHead>Name</TableHead>
                                     <TableHead>Created at</TableHead>
                                     <TableHead>Last modified</TableHead>
                                     <TableHead>Tables count</TableHead>
-                                    <TableHead>Type</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -119,6 +118,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             }
                                         }}
                                     >
+                                        <TableCell className="flex justify-center">
+                                            <DiagramIcon diagram={diagram} />
+                                        </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
                                         <TableCell>
                                             {diagram.createdAt.toLocaleString()}
@@ -128,13 +130,6 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                         </TableCell>
                                         <TableCell>
                                             {diagram.tables?.length}
-                                        </TableCell>
-                                        <TableCell>
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    diagram.databaseType
-                                                ]
-                                            }
                                         </TableCell>
                                     </TableRow>
                                 ))}
