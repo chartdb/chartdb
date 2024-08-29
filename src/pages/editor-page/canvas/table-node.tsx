@@ -20,7 +20,7 @@ export type TableNodeType = Node<
     'table'
 >;
 
-const MAX_TABLE_SIZE = 600;
+const MAX_TABLE_SIZE = 450;
 const MIN_TABLE_SIZE = 224;
 
 export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
