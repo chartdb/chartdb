@@ -21,6 +21,7 @@ export type TableNodeType = Node<
 >;
 
 const MAX_TABLE_SIZE = 450;
+const MID_TABLE_SIZE = 337;
 const MIN_TABLE_SIZE = 224;
 
 export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
@@ -40,9 +41,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     const expandTable = useCallback(() => {
         updateTable(table.id, {
-            width: MAX_TABLE_SIZE,
+            width:
+                (table.width ?? 224) < MID_TABLE_SIZE
+                    ? MID_TABLE_SIZE
+                    : MAX_TABLE_SIZE,
         });
-    }, [table.id, updateTable]);
+    }, [table.id, table.width, updateTable]);
 
     const shrinkTable = useCallback(() => {
         updateTable(table.id, {
