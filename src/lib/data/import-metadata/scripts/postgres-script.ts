@@ -56,7 +56,7 @@ export const getPostgresQuery = (
     // Define the base query
     const query = `${`/* ${databaseEdition ? databaseEditionToLabelMap[databaseEdition] : 'PostgreSQL'} edition */`}
 WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
-    SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+    SELECT array_to_string(array_agg(CONCAT('{"schema":"', replace(schema_name, '"', ''), '"',
                                             ',"table":"', replace(table_name::text, '"', ''), '"',
                                             ',"column":"', replace(fk_column::text, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name, '"',
@@ -67,7 +67,11 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
     FROM (
         SELECT  connamespace::regnamespace::text AS schema_name,
                 conname AS foreign_key_name,
-                conrelid::regclass AS table_name,
+                CASE
+                    WHEN strpos(conrelid::regclass::text, '.') > 0
+                    THEN split_part(conrelid::regclass::text, '.', 2)
+                    ELSE conrelid::regclass::text
+                END AS table_name,
                 (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
                 (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_table,
                 (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_column,
@@ -85,7 +89,7 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
             }
     ) AS x
 ), pk_info AS (
-    SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+    SELECT array_to_string(array_agg(CONCAT('{"schema":"', replace(schema_name, '"', ''), '"',
                                             ',"table":"', replace(pk_table, '"', ''), '"',
                                             ',"column":"', replace(pk_column, '"', ''), '"',
                                             ',"pk_def":"', replace(pk_def, '"', ''),
@@ -113,17 +117,17 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
     ) AS y
 ),
 indexes_cols AS (
-    SELECT tnsp.nspname                                                 AS schema_name,
-          trel.relname                                                  AS table_name,
-          pg_relation_size(tnsp.nspname || '.' || '"' || irel.relname || '"') AS index_size,
-          irel.relname                                                  AS index_name,
-          am.amname                                                     AS index_type,
-          a.attname                                                     AS col_name,
-          (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)  AS is_unique,
-          irel.reltuples                                                AS cardinality,
-          1 + Array_position(i.indkey, a.attnum)                        AS column_position,
-          CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END           AS direction,
-          CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END    AS is_partial_index
+    SELECT  tnsp.nspname                                                                AS schema_name,
+        trel.relname                                                                    AS table_name,
+            pg_relation_size('"' || tnsp.nspname || '".' || '"' || irel.relname || '"') AS index_size,
+            irel.relname                                                                AS index_name,
+            am.amname                                                                   AS index_type,
+            a.attname                                                                   AS col_name,
+            (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)               AS is_unique,
+            irel.reltuples                                                              AS cardinality,
+            1 + Array_position(i.indkey, a.attnum)                                      AS column_position,
+            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction,
+            CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END                  AS is_partial_index
     FROM pg_index AS i
         JOIN pg_class AS trel ON trel.oid = i.indrelid
         JOIN pg_namespace AS tnsp ON trel.relnamespace = tnsp.oid
