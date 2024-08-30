@@ -1,5 +1,9 @@
 <h1 align="center">
-  <a href="https://chartdb.io"><img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo.png?raw=true" width="400" height="70" alt="ChartDB"></a>
+  <a href="https://chartdb.io">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-dark.png?raw=true">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-light.png?raw=true">
+    <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo.png?raw=true" width="400" height="70" alt="ChartDB">
+  </a>
 <br>
 </h1>
 
