@@ -18,6 +18,10 @@ export interface LayoutContext {
     isSidePanelShowed: boolean;
     hideSidePanel: () => void;
     showSidePanel: () => void;
+
+    fullCanvasView: boolean;
+    hideFullCanvasView: () => void;
+    showFullCanvasView: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -35,4 +39,8 @@ export const layoutContext = createContext<LayoutContext>({
     isSidePanelShowed: false,
     hideSidePanel: emptyFn,
     showSidePanel: emptyFn,
+
+    fullCanvasView: true,
+    hideFullCanvasView: emptyFn,
+    showFullCanvasView: emptyFn,
 });

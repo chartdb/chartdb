@@ -33,11 +33,9 @@ type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 const initialNodes: TableNodeType[] = [];
 const initialEdges: TableEdgeType[] = [];
 
-export interface CanvasProps {
-    view: boolean;
-}
+export interface CanvasProps {}
 
-export const Canvas: React.FC<CanvasProps> = ({ view }) => {
+export const Canvas: React.FC<CanvasProps> = () => {
     const { getEdge, getInternalNode } = useReactFlow();
     const { toast } = useToast();
     const {
@@ -48,7 +46,7 @@ export const Canvas: React.FC<CanvasProps> = ({ view }) => {
         removeRelationships,
         getField,
     } = useChartDB();
-    const { showSidePanel } = useLayout();
+    const { showSidePanel, fullCanvasView } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -302,9 +300,9 @@ export const Canvas: React.FC<CanvasProps> = ({ view }) => {
                     showInteractive={false}
                     className="!shadow-none"
                 >
-                    {view ? <Toolbar /> : <></>}
+                    {fullCanvasView ? <Toolbar /> : <></>}
                 </Controls>
-                {view ? (
+                {fullCanvasView ? (
                     <MiniMap
                         style={{
                             width: isDesktop ? 100 : 60,

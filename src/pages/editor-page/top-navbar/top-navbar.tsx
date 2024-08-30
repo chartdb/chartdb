@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import TimeAgo from 'timeago-react';
 import {
     Menubar,
@@ -33,12 +33,11 @@ import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
+import { useLayout } from '@/hooks/use-layout';
 
-export interface TopNavbarProps {
-    setView: Dispatch<React.SetStateAction<boolean>>;
-}
+export interface TopNavbarProps {}
 
-export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
+export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const {
         diagramName,
         updateDiagramName,
@@ -56,6 +55,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
+    const { showFullCanvasView, hideFullCanvasView } = useLayout();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -116,9 +116,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
     ) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-expect-error
-        if (e.target.innerHTML == 'Show') setView(true);
+        if (e.target.innerHTML == 'Show') showFullCanvasView();
         else {
-            setView(false);
+            hideFullCanvasView();
         }
     };
 
@@ -426,17 +426,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>
-                            <MenubarTrigger>Help</MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={openChartDBIO}>
-                                    Visit ChartDB
-                                </MenubarItem>
-                                <MenubarItem onClick={openJoinDiscord}>
-                                    Join us on Discord
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
                             <MenubarTrigger>View</MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={handleChangeView}>
@@ -444,6 +433,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
                                 </MenubarItem>
                                 <MenubarItem onClick={handleChangeView}>
                                     Hide
+                                </MenubarItem>
+                            </MenubarContent>
+                        </MenubarMenu>
+                        <MenubarMenu>
+                            <MenubarTrigger>Help</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarItem onClick={openChartDBIO}>
+                                    Visit ChartDB
+                                </MenubarItem>
+                                <MenubarItem onClick={openJoinDiscord}>
+                                    Join us on Discord
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
