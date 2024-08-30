@@ -62,15 +62,15 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
                                             ',"foreign_key_name":"', foreign_key_name, '"',
                                             ',"reference_table":"', reference_table, '"',
                                             ',"reference_column":"', reference_column, '"',
-                                            ',"fk_def":"', fk_def,
+                                            ',"fk_def":"', replace(fk_def, '"', ''),
                                             '"}')), ',') as fk_metadata
     FROM (
         SELECT  connamespace::regnamespace::text AS schema_name,
                 conname AS foreign_key_name,
                 conrelid::regclass AS table_name,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[1] AS fk_column,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[2] AS reference_table,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[3] AS reference_column,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_table,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_column,
                 pg_get_constraintdef(oid) as fk_def
         FROM
             pg_constraint
