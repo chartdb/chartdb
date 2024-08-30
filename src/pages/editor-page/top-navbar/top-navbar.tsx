@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Dispatch, useCallback, useEffect, useState } from 'react';
 import TimeAgo from 'timeago-react';
 import {
     Menubar,
@@ -34,9 +34,11 @@ import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 
-export interface TopNavbarProps {}
+export interface TopNavbarProps {
+    setView: Dispatch<React.SetStateAction<boolean>>;
+}
 
-export const TopNavbar: React.FC<TopNavbarProps> = () => {
+export const TopNavbar: React.FC<TopNavbarProps> = ({ setView }) => {
     const {
         diagramName,
         updateDiagramName,
@@ -108,6 +110,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const openJoinDiscord = useCallback(() => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
+
+    const handleChangeView = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        if (e.target.innerHTML == 'Show') setView(true);
+        else {
+            setView(false);
+        }
+    };
 
     const exportSQL = useCallback(
         (databaseType: DatabaseType) => {
@@ -420,6 +433,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarItem>
                                 <MenubarItem onClick={openJoinDiscord}>
                                     Join us on Discord
+                                </MenubarItem>
+                            </MenubarContent>
+                        </MenubarMenu>
+                        <MenubarMenu>
+                            <MenubarTrigger>View</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarItem onClick={handleChangeView}>
+                                    Show
+                                </MenubarItem>
+                                <MenubarItem onClick={handleChangeView}>
+                                    Hide
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>

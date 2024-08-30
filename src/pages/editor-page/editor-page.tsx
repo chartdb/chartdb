@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import {
     ResizableHandle,
@@ -37,6 +37,7 @@ export const EditorPage: React.FC = () => {
     const { isLg } = useBreakpoint('lg');
     const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
+    const [view, setView] = useState(true);
 
     useEffect(() => {
         if (!config) {
@@ -82,21 +83,25 @@ export const EditorPage: React.FC = () => {
             <section
                 className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex flex-col overflow-x-hidden`}
             >
-                <TopNavbar />
+                <TopNavbar setView={setView} />
                 {isDesktop ? (
                     <ResizablePanelGroup direction="horizontal">
-                        <ResizablePanel
-                            defaultSize={isXl ? 25 : isLg ? 35 : 50}
-                            minSize={isXl ? 25 : isLg ? 35 : 50}
-                            maxSize={!isSidePanelShowed ? 99 : 0}
-                        >
-                            <SidePanel />
-                        </ResizablePanel>
+                        {view ? (
+                            <ResizablePanel
+                                defaultSize={isXl ? 25 : isLg ? 35 : 50}
+                                minSize={isXl ? 25 : isLg ? 35 : 50}
+                                maxSize={!isSidePanelShowed ? 99 : 0}
+                            >
+                                <SidePanel />
+                            </ResizablePanel>
+                        ) : (
+                            <></>
+                        )}
                         <ResizableHandle />
                         <ResizablePanel
                             defaultSize={isXl ? 75 : isLg ? 65 : 50}
                         >
-                            <Canvas />
+                            <Canvas view={view} />
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 ) : (
@@ -116,7 +121,7 @@ export const EditorPage: React.FC = () => {
                                 <SidePanel />
                             </DrawerContent>
                         </Drawer>
-                        <Canvas />
+                        <Canvas view={view} />
                     </>
                 )}
             </section>
