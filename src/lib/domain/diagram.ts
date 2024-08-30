@@ -1,4 +1,5 @@
 import { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
+import { DatabaseEdition } from './database-edition';
 import { DatabaseType } from './database-type';
 import {
     DBRelationship,
@@ -14,6 +15,7 @@ export interface Diagram {
     id: string;
     name: string;
     databaseType: DatabaseType;
+    databaseEdition?: DatabaseEdition;
     tables?: DBTable[];
     relationships?: DBRelationship[];
     createdAt: Date;
@@ -24,10 +26,12 @@ export const loadFromDatabaseMetadata = ({
     databaseType,
     databaseMetadata,
     diagramNumber,
+    databaseEdition,
 }: {
     databaseType: DatabaseType;
     databaseMetadata: DatabaseMetadata;
     diagramNumber: number;
+    databaseEdition?: DatabaseEdition;
 }): Diagram => {
     const {
         tables: tableInfos,
@@ -71,6 +75,7 @@ export const loadFromDatabaseMetadata = ({
             `${databaseMetadata.database_name}-db` ||
             `Diagram ${diagramNumber}`,
         databaseType: databaseType ?? DatabaseType.GENERIC,
+        databaseEdition,
         tables: sortedTables,
         relationships,
         createdAt: new Date(),

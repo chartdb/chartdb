@@ -6,7 +6,7 @@ import {
     Trash2,
     Check,
 } from 'lucide-react';
-import { ListItemHeaderButton } from '../../../../list-item-header-button/relationship-list-item-header-button';
+import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -21,6 +21,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Input } from '@/components/input/input';
+import { useLayout } from '@/hooks/use-layout';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export interface RelationshipListItemHeaderProps {
     relationship: DBRelationship;
@@ -31,7 +33,9 @@ export const RelationshipListItemHeader: React.FC<
 > = ({ relationship }) => {
     const { updateRelationship, removeRelationship } = useChartDB();
     const { fitView, deleteElements, setEdges } = useReactFlow();
+    const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
+    const { isMd: isDesktop } = useBreakpoint('md');
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
     );
@@ -89,6 +93,10 @@ export const RelationshipListItemHeader: React.FC<
                     },
                 ],
             });
+
+            if (!isDesktop) {
+                hideSidePanel();
+            }
         },
         [
             fitView,
@@ -96,6 +104,8 @@ export const RelationshipListItemHeader: React.FC<
             relationship.targetTableId,
             setEdges,
             relationship.id,
+            isDesktop,
+            hideSidePanel,
         ]
     );
 
@@ -154,7 +164,7 @@ export const RelationshipListItemHeader: React.FC<
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
-                        <div className="hidden group-hover:flex flex-row-reverse">
+                        <div className="flex md:hidden md:group-hover:flex flex-row-reverse">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>

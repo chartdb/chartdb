@@ -1,9 +1,9 @@
-import { dataTypes } from '../data/data-types';
+import { DataType } from '../data/data-types';
 
 export interface DBField {
     id: string;
     name: string;
-    type: FieldType;
+    type: DataType;
     primaryKey: boolean;
     unique: boolean;
     nullable: boolean;
@@ -14,5 +14,3 @@ export interface DBField {
     default?: string;
     collation?: string;
 }
-
-export type FieldType = (typeof dataTypes)[number];

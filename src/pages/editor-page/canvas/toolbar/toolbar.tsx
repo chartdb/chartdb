@@ -6,6 +6,11 @@ import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useOnViewportChange, useReactFlow } from '@xyflow/react';
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/tooltip/tooltip';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -47,28 +52,76 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
         <div className="px-1">
             <Card className="shadow-none p-0 bg-secondary h-[44px]">
                 <CardContent className="p-1 flex flex-row h-full items-center">
-                    <ToolbarButton onClick={updateDiagramUpdatedAt}>
-                        <Save />
-                    </ToolbarButton>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton onClick={updateDiagramUpdatedAt}>
+                                    <Save />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Save</TooltipContent>
+                    </Tooltip>
                     <Separator orientation="vertical" />
-                    <ToolbarButton onClick={showAll}>
-                        <Scan />
-                    </ToolbarButton>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton onClick={showAll}>
+                                    <Scan />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Show All</TooltipContent>
+                    </Tooltip>
                     <Separator orientation="vertical" />
-                    <ToolbarButton onClick={zoomOutHandler}>
-                        <ZoomOut />
-                    </ToolbarButton>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton onClick={zoomOutHandler}>
+                                    <ZoomOut />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Zoom Out</TooltipContent>
+                    </Tooltip>
                     <ToolbarButton onClick={resetZoom}>{zoom}</ToolbarButton>
-                    <ToolbarButton onClick={zoomInHandler}>
-                        <ZoomIn />
-                    </ToolbarButton>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton onClick={zoomInHandler}>
+                                    <ZoomIn />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Zoom In</TooltipContent>
+                    </Tooltip>
                     <Separator orientation="vertical" />
-                    <ToolbarButton onClick={undo} disabled={!hasUndo}>
-                        <Undo />
-                    </ToolbarButton>
-                    <ToolbarButton onClick={redo} disabled={!hasRedo}>
-                        <Redo />
-                    </ToolbarButton>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton
+                                    onClick={undo}
+                                    disabled={!hasUndo}
+                                >
+                                    <Undo />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Undo</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton
+                                    onClick={redo}
+                                    disabled={!hasRedo}
+                                >
+                                    <Redo />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>Redo</TooltipContent>
+                    </Tooltip>
                 </CardContent>
             </Card>
         </div>

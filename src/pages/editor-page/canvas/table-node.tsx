@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { NodeProps, Node, NodeResizer } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { Pencil, Table2 } from 'lucide-react';
+import {
+    ChevronsLeftRight,
+    ChevronsRightLeft,
+    Pencil,
+    Table2,
+} from 'lucide-react';
 import { Label } from '@/components/label/label';
 import { DBTable } from '@/lib/domain/db-table';
 import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export type TableNodeType = Node<
     {
@@ -14,12 +20,17 @@ export type TableNodeType = Node<
     'table'
 >;
 
+const MAX_TABLE_SIZE = 450;
+const MID_TABLE_SIZE = 337;
+const MIN_TABLE_SIZE = 224;
+
 export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     selected,
     dragging,
     id,
     data: { table },
 }) => {
+    const { updateTable } = useChartDB();
     const { openTableFromSidebar, selectSidebarSection } = useLayout();
     const focused = !!selected && !dragging;
 
@@ -27,6 +38,21 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
         selectSidebarSection('tables');
         openTableFromSidebar(table.id);
     };
+
+    const expandTable = useCallback(() => {
+        updateTable(table.id, {
+            width:
+                (table.width ?? 224) < MID_TABLE_SIZE
+                    ? MID_TABLE_SIZE
+                    : MAX_TABLE_SIZE,
+        });
+    }, [table.id, table.width, updateTable]);
+
+    const shrinkTable = useCallback(() => {
+        updateTable(table.id, {
+            width: MIN_TABLE_SIZE,
+        });
+    }, [table.id, updateTable]);
 
     return (
         <div
@@ -40,8 +66,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
             <NodeResizer
                 isVisible={focused}
                 lineClassName="!border-none !w-2"
-                minWidth={224}
-                maxWidth={600}
+                minWidth={MIN_TABLE_SIZE}
+                maxWidth={MAX_TABLE_SIZE}
                 shouldResize={(event) => event.dy === 0}
                 handleClassName="!hidden"
             />
@@ -61,6 +87,21 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                         onClick={openTableInEditor}
                     >
                         <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className="hover:bg-primary-foreground p-0 w-6 h-6 text-slate-500 hover:text-slate-700"
+                        onClick={
+                            table.width !== MAX_TABLE_SIZE
+                                ? expandTable
+                                : shrinkTable
+                        }
+                    >
+                        {table.width !== MAX_TABLE_SIZE ? (
+                            <ChevronsLeftRight className="h-4 w-4" />
+                        ) : (
+                            <ChevronsRightLeft className="h-4 w-4" />
+                        )}
                     </Button>
                 </div>
             </div>

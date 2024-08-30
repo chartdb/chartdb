@@ -6,6 +6,7 @@ import { DBField } from '@/lib/domain/db-field';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { Diagram } from '@/lib/domain/diagram';
+import { DatabaseEdition } from '@/lib/domain/database-edition';
 
 export interface ChartDBContext {
     diagramId: string;
@@ -28,6 +29,7 @@ export interface ChartDBContext {
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
+    updateDatabaseEdition: (databaseEdition?: DatabaseEdition) => Promise<void>;
 
     // Table operations
     createTable: () => Promise<DBTable>;
@@ -145,6 +147,7 @@ export const chartDBContext = createContext<ChartDBContext>({
 
     // Database type operations
     updateDatabaseType: emptyFn,
+    updateDatabaseEdition: emptyFn,
 
     // Table operations
     createTable: emptyFn,

@@ -26,6 +26,7 @@ import { Pencil } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { Badge } from '@/components/badge/badge';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -35,7 +36,7 @@ const initialEdges: TableEdgeType[] = [];
 export interface CanvasProps {}
 
 export const Canvas: React.FC<CanvasProps> = () => {
-    const { getEdge } = useReactFlow();
+    const { getEdge, getInternalNode } = useReactFlow();
     const { toast } = useToast();
     const {
         tables,
@@ -105,7 +106,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 return;
             }
 
-            if (sourceField.type !== targetField.type) {
+            if (sourceField.type.id !== targetField.type.id) {
                 toast({
                     title: 'Field types do not match',
                     variant: 'destructive',
@@ -233,10 +234,13 @@ export const Canvas: React.FC<CanvasProps> = () => {
         [onNodesChange, updateTablesState]
     );
 
+    const isLoadingDOM =
+        tables.length > 0 ? !getInternalNode(tables[0].id) : false;
+
     return (
         <div className="flex h-full">
             <ReactFlow
-                className="canvas-cursor-default"
+                className="canvas-cursor-default nodes-animated"
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChangeHandler}
@@ -256,6 +260,21 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 }}
                 panOnScroll
             >
+                {isLoadingDOM ? (
+                    <Controls
+                        position="top-center"
+                        orientation="horizontal"
+                        showZoom={false}
+                        showFitView={false}
+                        showInteractive={false}
+                        className="!shadow-none"
+                    >
+                        <Badge variant="default" className="bg-pink-600">
+                            Loading diagram...
+                        </Badge>
+                    </Controls>
+                ) : null}
+
                 {!isDesktop ? (
                     <Controls
                         position="bottom-left"
@@ -274,7 +293,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     </Controls>
                 ) : null}
                 <Controls
-                    position="bottom-center"
+                    position={isDesktop ? 'bottom-center' : 'top-center'}
                     orientation="horizontal"
                     showZoom={false}
                     showFitView={false}
@@ -285,8 +304,8 @@ export const Canvas: React.FC<CanvasProps> = () => {
                 </Controls>
                 <MiniMap
                     style={{
-                        width: 100,
-                        height: 100,
+                        width: isDesktop ? 100 : 60,
+                        height: isDesktop ? 100 : 60,
                     }}
                 />
                 <Background

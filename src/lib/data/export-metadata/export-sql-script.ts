@@ -3,6 +3,8 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY } from '@/lib/env';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { DBTable } from '@/lib/domain/db-table';
+import { DataType } from '../data-types';
 
 const openai = createOpenAI({
     apiKey: OPENAI_API_KEY,
@@ -29,7 +31,7 @@ export const exportBaseSQL = (diagram: Diagram): string => {
         sqlScript += `CREATE TABLE ${table.name} (\n`;
 
         table.fields.forEach((field, index) => {
-            sqlScript += `  ${field.name} ${field.type}`;
+            sqlScript += `  ${field.name} ${field.type.name}`;
 
             // Add size for character types
             if (field.characterMaximumLength) {
@@ -128,7 +130,7 @@ export const exportSQL = async (
     return text;
 };
 
-function getMySQLDataTypeSize(type: string) {
+function getMySQLDataTypeSize(type: DataType) {
     return (
         {
             tinyint: 1,
@@ -141,7 +143,7 @@ function getMySQLDataTypeSize(type: string) {
             decimal: 16,
             numeric: 16,
             // Add other relevant data types if needed
-        }[type.toLowerCase()] || 0
+        }[type.name.toLowerCase()] || 0
     );
 }
 
@@ -158,7 +160,7 @@ function alignForeignKeyDataTypes(diagram: Diagram) {
     }
 
     // Convert tables to a map for quick lookup
-    const tableMap = new Map();
+    const tableMap = new Map<string, DBTable>();
     tables.forEach((table) => {
         tableMap.set(table.id, table);
     });
@@ -232,7 +234,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **Conditional Logic**: Use a conditional block like \`IF NOT EXISTS (SELECT * FROM sys.objects WHERE ...)\` since SQL Server doesn’t support \`IF NOT EXISTS\` directly in \`CREATE\` statements.
         - **Avoid Unsupported Syntax**: Ensure the script does not include unsupported statements like \`CREATE TABLE IF NOT EXISTS\`.
 
-        **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., primary, column, table), escape the column name by enclosing it.
+        **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., key, primary, column, table), escape the column name by enclosing it.
     `,
         mariadb: `
         - **Table Creation**: Use \`CREATE TABLE IF NOT EXISTS\` for creating tables. While creating the table structure, ensure that all foreign key columns use the correct data types as determined in the foreign key review.

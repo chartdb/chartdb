@@ -8,7 +8,7 @@ import {
     FileKey2,
     Check,
 } from 'lucide-react';
-import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/relationship-list-item-header-button';
+import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -23,6 +23,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
 import { useReactFlow } from '@xyflow/react';
+import { useLayout } from '@/hooks/use-layout';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -33,8 +35,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 }) => {
     const { updateTable, removeTable, createIndex, createField } = useChartDB();
     const { fitView, setNodes } = useReactFlow();
+    const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
+    const { isMd: isDesktop } = useBreakpoint('md');
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     const editTableName = useCallback(() => {
@@ -82,8 +86,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     },
                 ],
             });
+
+            if (!isDesktop) {
+                hideSidePanel();
+            }
         },
-        [fitView, table.id, setNodes]
+        [fitView, table.id, setNodes, hideSidePanel, isDesktop]
     );
 
     const deleteTableHandler = useCallback(() => {
@@ -161,7 +169,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
-                        <div className="hidden group-hover:flex flex-row-reverse">
+                        <div className="flex md:hidden md:group-hover:flex flex-row-reverse">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>

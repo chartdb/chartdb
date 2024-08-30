@@ -1,5 +1,5 @@
 import { DBIndex } from './db-index';
-import { DBField, FieldType } from './db-field';
+import { DBField } from './db-field';
 import { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
@@ -66,7 +66,7 @@ export const createTablesFromMetadata = ({
             (col: ColumnInfo): DBField => ({
                 id: generateId(),
                 name: col.name,
-                type: col.type as FieldType,
+                type: { id: col.type.split(' ').join('_'), name: col.type },
                 primaryKey: tablePrimaryKeys.some(
                     (pk) => pk.column === col.name
                 ),

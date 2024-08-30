@@ -35,7 +35,7 @@ export const examples: Example[] = [
                         {
                             id: 'gaj3scrtaz46ezfmc162ingxf',
                             name: 'dept_no',
-                            type: 'char',
+                            type: { id: 'char', name: 'chat' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -46,7 +46,7 @@ export const examples: Example[] = [
                         {
                             id: 'pb0j4xvevy9dics5euelx7ay9',
                             name: 'dept_name',
-                            type: 'varchar',
+                            type: { id: 'varchar', name: 'varchar' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -84,7 +84,7 @@ export const examples: Example[] = [
                         {
                             id: 'wcgycjif09xrq0ly3txkq6ocu',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -93,7 +93,7 @@ export const examples: Example[] = [
                         {
                             id: 'jdw1yrh9xf1i7927gzs9pob2p',
                             name: 'dept_no',
-                            type: 'char',
+                            type: { id: 'char', name: 'chat' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -104,7 +104,7 @@ export const examples: Example[] = [
                         {
                             id: 'm3zu12iy2jmfraliisks0rqcv',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -113,7 +113,7 @@ export const examples: Example[] = [
                         {
                             id: 'yq4k0bqt39aap0956aejicud4',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -156,7 +156,7 @@ export const examples: Example[] = [
                         {
                             id: 'ecx2zbzdc5o54e04aeg7tlg54',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -165,7 +165,7 @@ export const examples: Example[] = [
                         {
                             id: 'v8plj7wq1cly03y178bysft2f',
                             name: 'dept_no',
-                            type: 'char',
+                            type: { id: 'char', name: 'chat' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -176,7 +176,7 @@ export const examples: Example[] = [
                         {
                             id: '3u0rfkvw0yokndqhfqx0nuzpi',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -185,7 +185,7 @@ export const examples: Example[] = [
                         {
                             id: 'xrcw2488t50shssn4vn3n6vad',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -228,7 +228,7 @@ export const examples: Example[] = [
                         {
                             id: '04csyx8ds9t3rh93txiqs4dm4',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -237,7 +237,7 @@ export const examples: Example[] = [
                         {
                             id: 'gnvcnj2i5jgktg7vauhveaorb',
                             name: 'birth_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -246,7 +246,7 @@ export const examples: Example[] = [
                         {
                             id: '8savn7ht0fogo4odxdhekrret',
                             name: 'first_name',
-                            type: 'varchar',
+                            type: { id: 'varchar', name: 'varchar' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -257,7 +257,7 @@ export const examples: Example[] = [
                         {
                             id: 'ol8kezsspmjx25avlf2dvic5q',
                             name: 'last_name',
-                            type: 'varchar',
+                            type: { id: 'varchar', name: 'varchar' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -268,7 +268,7 @@ export const examples: Example[] = [
                         {
                             id: 'jga5lfkkoxueqslcljj2vng9q',
                             name: 'gender',
-                            type: 'enum',
+                            type: { id: 'enum', name: 'enum' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -279,7 +279,7 @@ export const examples: Example[] = [
                         {
                             id: 'i0kgsun3nzrjpaz8ykwjgogyb',
                             name: 'hire_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -308,7 +308,7 @@ export const examples: Example[] = [
                         {
                             id: 'b8c9v5vtpbnt5tjzcd3iat85f',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -317,7 +317,7 @@ export const examples: Example[] = [
                         {
                             id: 'n654h28i8yeeadznzht9mjc8f',
                             name: 'salary',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -326,7 +326,7 @@ export const examples: Example[] = [
                         {
                             id: '0s10erufqpl6y3hpqmvbcneol',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -335,7 +335,7 @@ export const examples: Example[] = [
                         {
                             id: 'bwohji7dj67xpa6p5diyy6pis',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -344,7 +344,7 @@ export const examples: Example[] = [
                         {
                             id: 'orkgizf8qbmtly3rw5cbxtc2i',
                             name: 'price',
-                            type: 'decimal',
+                            type: { id: 'decimal', name: 'decimal' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -383,7 +383,7 @@ export const examples: Example[] = [
                         {
                             id: 'hr2gdoc0wtwvs4pfqo6m0fwc3',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -392,7 +392,7 @@ export const examples: Example[] = [
                         {
                             id: '5evr59tury66sayiu59esoc61',
                             name: 'title',
-                            type: 'varchar',
+                            type: { id: 'varchar', name: 'varchar' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -403,7 +403,7 @@ export const examples: Example[] = [
                         {
                             id: '0vs1nqvrb6t53niz5ns2eskre',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -412,7 +412,7 @@ export const examples: Example[] = [
                         {
                             id: 'n6csxwmdm60y920p5jovlx4c6',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -456,7 +456,7 @@ export const examples: Example[] = [
                         {
                             id: '8tz9jdtfrbbl4c0e7nthrj90g',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -465,7 +465,7 @@ export const examples: Example[] = [
                         {
                             id: 'fv7o6txqvmy2349aq3pg0hnkm',
                             name: 'dept_no',
-                            type: 'char',
+                            type: { id: 'char', name: 'chat' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -476,7 +476,7 @@ export const examples: Example[] = [
                         {
                             id: 'hneqjqobdvcumv91ymvqhv42a',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -485,7 +485,7 @@ export const examples: Example[] = [
                         {
                             id: 'n9yj0xtw6uu0aqn2ankvniuat',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -506,7 +506,7 @@ export const examples: Example[] = [
                         {
                             id: 'q3oiwd0p27bipsy4kg5dkxri0',
                             name: 'emp_no',
-                            type: 'int',
+                            type: { id: 'int', name: 'int' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -515,7 +515,7 @@ export const examples: Example[] = [
                         {
                             id: 'dxhqoscu6zk87ob7sfvxo7if4',
                             name: 'from_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -524,7 +524,7 @@ export const examples: Example[] = [
                         {
                             id: 'ys76pzey5i9twf13g2g0taju7',
                             name: 'to_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -623,7 +623,7 @@ export const examples: Example[] = [
                         {
                             id: '8vuje8jgqclyypvmeyud3ouq4',
                             name: 'brand_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -632,7 +632,10 @@ export const examples: Example[] = [
                         {
                             id: 'flh5ctnexia9lyglbkuyhxh95',
                             name: 'brand_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -661,7 +664,7 @@ export const examples: Example[] = [
                         {
                             id: '3y6v954bmnmrhsu88pegssisz',
                             name: 'category_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -670,7 +673,10 @@ export const examples: Example[] = [
                         {
                             id: 'vl9ulvujbutscyg2infgmglzt',
                             name: 'category_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -699,7 +705,7 @@ export const examples: Example[] = [
                         {
                             id: 'dtz6h71bnnnqqmc0gj4m7s4b2',
                             name: 'customer_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -708,7 +714,10 @@ export const examples: Example[] = [
                         {
                             id: 'fq6c72nmetvt5seuk8jgk05wn',
                             name: 'first_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -717,7 +726,10 @@ export const examples: Example[] = [
                         {
                             id: 'mfdk4z37kl5xbmfit19jo4dt8',
                             name: 'last_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -726,7 +738,10 @@ export const examples: Example[] = [
                         {
                             id: 'jki8n3ceyee7a5b54j59cis1p',
                             name: 'phone',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -735,7 +750,10 @@ export const examples: Example[] = [
                         {
                             id: 'ph08cg4s7kcr039ktrrvnd5vh',
                             name: 'email',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -744,7 +762,10 @@ export const examples: Example[] = [
                         {
                             id: 'kpg23k5h19ylb44nyjb6dk0f1',
                             name: 'street',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -753,7 +774,10 @@ export const examples: Example[] = [
                         {
                             id: 'xh1z8wlq5u956ymncg6076csu',
                             name: 'city',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -762,7 +786,10 @@ export const examples: Example[] = [
                         {
                             id: 'agxluhav42vjegabvqqmqj3ns',
                             name: 'state',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -771,7 +798,10 @@ export const examples: Example[] = [
                         {
                             id: '3fbdl91memmf72k4lcd18jp5z',
                             name: 'zip_code',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -800,7 +830,7 @@ export const examples: Example[] = [
                         {
                             id: 'rwt3l7vgvcn2wez9z78xrne2e',
                             name: 'order_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -809,7 +839,7 @@ export const examples: Example[] = [
                         {
                             id: 'vdet5tj4183tka3hjsk509a2u',
                             name: 'item_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -818,7 +848,7 @@ export const examples: Example[] = [
                         {
                             id: 'axsoc31dhpdmwcpqhqhasv3cp',
                             name: 'product_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -827,7 +857,7 @@ export const examples: Example[] = [
                         {
                             id: '074hvs58ube2jqfq0jwgsvewh',
                             name: 'quantity',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -836,7 +866,7 @@ export const examples: Example[] = [
                         {
                             id: 'rym2i78wnwo269remsx7l0d8j',
                             name: 'list_price',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -847,7 +877,7 @@ export const examples: Example[] = [
                         {
                             id: 'ddki77nrt4273hzl0cxfb7866',
                             name: 'discount',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -886,7 +916,7 @@ export const examples: Example[] = [
                         {
                             id: 'tp12zsqygr6q3di3iie5c69q4',
                             name: 'order_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -895,7 +925,7 @@ export const examples: Example[] = [
                         {
                             id: 'hlpqy2hgujo7pnjthvz3hlp8l',
                             name: 'customer_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -904,7 +934,7 @@ export const examples: Example[] = [
                         {
                             id: 'oa8h0um6s0tve41xtm6m5jy3i',
                             name: 'order_status',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -913,7 +943,7 @@ export const examples: Example[] = [
                         {
                             id: 'sfyzron57mn04r93jbmaw9wrq',
                             name: 'order_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -922,7 +952,7 @@ export const examples: Example[] = [
                         {
                             id: 'btv75he9gspes785kt2u50bid',
                             name: 'required_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -931,7 +961,7 @@ export const examples: Example[] = [
                         {
                             id: 'ne3lgf7ye5xp01udfolax63bc',
                             name: 'shipped_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -940,7 +970,7 @@ export const examples: Example[] = [
                         {
                             id: 'imvdw14raks3bmruzrom2m60a',
                             name: 'store_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -949,7 +979,7 @@ export const examples: Example[] = [
                         {
                             id: '18qplj4qqrdm7gamk6dzo4jqj',
                             name: 'staff_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -978,7 +1008,7 @@ export const examples: Example[] = [
                         {
                             id: 'cb7jt8iz26dtyiepk55irq4wj',
                             name: 'product_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -987,7 +1017,10 @@ export const examples: Example[] = [
                         {
                             id: 'l9m1kia46un788eih3rwvqyd8',
                             name: 'product_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -996,7 +1029,7 @@ export const examples: Example[] = [
                         {
                             id: '59bad3ogjluo7tr50id8m1s6n',
                             name: 'brand_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1005,7 +1038,7 @@ export const examples: Example[] = [
                         {
                             id: 'mo9o3q3fouk14i2095p381boh',
                             name: 'category_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1014,7 +1047,7 @@ export const examples: Example[] = [
                         {
                             id: '21x76j5hy9pjcqu69l8sxma7c',
                             name: 'model_year',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1023,7 +1056,7 @@ export const examples: Example[] = [
                         {
                             id: '9jjg1cdqk1ve28ycubjzl77pr',
                             name: 'list_price',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1047,14 +1080,14 @@ export const examples: Example[] = [
                 },
                 {
                     id: '96pa90b6estjx7i0edgu8nqe1',
-                    name: 'staffs',
+                    name: 'staff',
                     x: 599.08,
                     y: 512.8480000000001,
                     fields: [
                         {
                             id: 'e7kfdzkympiu6zdvpeurqxu6r',
                             name: 'staff_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1063,7 +1096,10 @@ export const examples: Example[] = [
                         {
                             id: 'wlupay9dk1uiacpaban7o715i',
                             name: 'first_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1072,7 +1108,10 @@ export const examples: Example[] = [
                         {
                             id: 'fnp0z3ra5vxgb4wzquipq6nc4',
                             name: 'last_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1081,7 +1120,10 @@ export const examples: Example[] = [
                         {
                             id: 'jbwdykfugbb1ds76q1rrdns06',
                             name: 'email',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1090,7 +1132,10 @@ export const examples: Example[] = [
                         {
                             id: 'nai29esllni2z8scno83v42hj',
                             name: 'phone',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1099,7 +1144,7 @@ export const examples: Example[] = [
                         {
                             id: '4lcsj6izwjoeu818c8thr7evv',
                             name: 'active',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1108,7 +1153,7 @@ export const examples: Example[] = [
                         {
                             id: '34hmbf7inkgziqht8m369759i',
                             name: 'store_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1117,7 +1162,7 @@ export const examples: Example[] = [
                         {
                             id: 'c3escvz9sc03nczds7mlg9orc',
                             name: 'manager_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1127,7 +1172,7 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: '6ecq3ky7s4lp1kyymf7q27lk9',
-                            name: 'staffs_pkey',
+                            name: 'staff_pkey',
                             unique: true,
                             fieldIds: ['e7kfdzkympiu6zdvpeurqxu6r'],
                             createdAt: Date.now(),
@@ -1146,7 +1191,7 @@ export const examples: Example[] = [
                         {
                             id: 'd40dt5g1thzuzndldviri2jxj',
                             name: 'store_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1155,7 +1200,7 @@ export const examples: Example[] = [
                         {
                             id: 'bmyqo12d6gdgsn1239atxb4qn',
                             name: 'product_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -1164,7 +1209,7 @@ export const examples: Example[] = [
                         {
                             id: 'dv8vw0cx3czqzrwnh6ltc8m81',
                             name: 'quantity',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1200,7 +1245,7 @@ export const examples: Example[] = [
                         {
                             id: 'dsout0pmyihlkq72108vs6655',
                             name: 'store_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1209,7 +1254,10 @@ export const examples: Example[] = [
                         {
                             id: 'evev1yq7p094mrn4falm4f0qt',
                             name: 'store_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1218,7 +1266,10 @@ export const examples: Example[] = [
                         {
                             id: 'vfzwzq6x6lju968kypx4kma6d',
                             name: 'phone',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1227,7 +1278,10 @@ export const examples: Example[] = [
                         {
                             id: 'nusy1gx426u5pkw87ct9fd6rf',
                             name: 'email',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1236,7 +1290,10 @@ export const examples: Example[] = [
                         {
                             id: 'svg0ztdsgldnj03oa4nji73yv',
                             name: 'street',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1245,7 +1302,10 @@ export const examples: Example[] = [
                         {
                             id: 'svrzlmenxv4rjrd5t1v73xxg9',
                             name: 'city',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1254,7 +1314,10 @@ export const examples: Example[] = [
                         {
                             id: 'v7ve5x0r5kphv84ylo5z14t2f',
                             name: 'state',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1263,7 +1326,10 @@ export const examples: Example[] = [
                         {
                             id: '2yk0ys92lzg21ywec5loo41f6',
                             name: 'zip_code',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1357,7 +1423,7 @@ export const examples: Example[] = [
                 },
                 {
                     id: 'kk3bm81cmxpwvrx04np6tqgml',
-                    name: 'fk__staffs__store_id__4316f928',
+                    name: 'fk__staff__store_id__4316f928',
                     sourceTableId: '96pa90b6estjx7i0edgu8nqe1',
                     targetTableId: 'ttye5mdap1hl200egtjuwzl9m',
                     sourceFieldId: '34hmbf7inkgziqht8m369759i',
@@ -1410,7 +1476,7 @@ export const examples: Example[] = [
                         {
                             id: 'xqx13khvb9m0vzfepcycizcai',
                             name: 'actor_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1420,7 +1486,10 @@ export const examples: Example[] = [
                         {
                             id: 'ik43za355bfu8v4f675ghg6rh',
                             name: 'first_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1430,7 +1499,10 @@ export const examples: Example[] = [
                         {
                             id: 'klzwtogtkw2vdwyx8t6kjfiw3',
                             name: 'last_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1440,7 +1512,10 @@ export const examples: Example[] = [
                         {
                             id: '8imotb3e7k9ad9bdm1q3yt1j7',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1477,7 +1552,7 @@ export const examples: Example[] = [
                         {
                             id: 'b0iylw1gbvp09vtpxdcs8d3zn',
                             name: 'address_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1488,7 +1563,10 @@ export const examples: Example[] = [
                         {
                             id: 'cldpviw1aa57zal77agjfum71',
                             name: 'address',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1498,7 +1576,10 @@ export const examples: Example[] = [
                         {
                             id: 'gzj8gb1css76cmxcb60evcymq',
                             name: 'address2',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1508,7 +1589,10 @@ export const examples: Example[] = [
                         {
                             id: '4neowl7rc20n7nriu09izvqqc',
                             name: 'district',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1518,7 +1602,7 @@ export const examples: Example[] = [
                         {
                             id: 'qjibly41tvbgo8icl3hndguwv',
                             name: 'city_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1527,7 +1611,10 @@ export const examples: Example[] = [
                         {
                             id: '7pc5yulufvcsuacmptq4qdd53',
                             name: 'postal_code',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1537,7 +1624,10 @@ export const examples: Example[] = [
                         {
                             id: '3ls3f1bxs4rv54lskwe7n2nnv',
                             name: 'phone',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1547,7 +1637,10 @@ export const examples: Example[] = [
                         {
                             id: 'v83ii1uivhk0n4p88nihbjv5b',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1584,7 +1677,7 @@ export const examples: Example[] = [
                         {
                             id: 'dhacvdae20ms5wc3inljozrz2',
                             name: 'category_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1595,7 +1688,10 @@ export const examples: Example[] = [
                         {
                             id: 'sm5uluh5x4787xoko5q6mmhdp',
                             name: 'name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1605,7 +1701,10 @@ export const examples: Example[] = [
                         {
                             id: '65vp8zp821127857yezwio7jq',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1635,7 +1734,7 @@ export const examples: Example[] = [
                         {
                             id: 'ozcebtrmnoar9spk7jq4b2gfz',
                             name: 'city_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1645,7 +1744,10 @@ export const examples: Example[] = [
                         {
                             id: 'trxo61qtmeooaad55kyxnisqm',
                             name: 'city',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1655,7 +1757,7 @@ export const examples: Example[] = [
                         {
                             id: 'lup9lgn5haghenay268urdr2v',
                             name: 'country_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1664,7 +1766,10 @@ export const examples: Example[] = [
                         {
                             id: 'mr8xwe32ytcbqkh5ujc5mq7o8',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1701,7 +1806,7 @@ export const examples: Example[] = [
                         {
                             id: 'jh3rnowvtvmu4qwbjn8s2wjnv',
                             name: 'country_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1712,7 +1817,10 @@ export const examples: Example[] = [
                         {
                             id: 'ttugkudyxkpkg2frv2zd0dp7h',
                             name: 'country',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1722,7 +1830,10 @@ export const examples: Example[] = [
                         {
                             id: 'rrz88qc7tcunmvhephk32lp9x',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1752,7 +1863,7 @@ export const examples: Example[] = [
                         {
                             id: '5as8lm61s6t2u9chbixfeyrmd',
                             name: 'customer_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1763,7 +1874,7 @@ export const examples: Example[] = [
                         {
                             id: 'ech331glim64ped91syweyley',
                             name: 'store_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1772,7 +1883,10 @@ export const examples: Example[] = [
                         {
                             id: 'zn000ibftpvgu19ri5mbaip9u',
                             name: 'first_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1782,7 +1896,10 @@ export const examples: Example[] = [
                         {
                             id: 'qe33c9dizsmkfzw8y4pzz19gp',
                             name: 'last_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1792,7 +1909,10 @@ export const examples: Example[] = [
                         {
                             id: 'cirbtorx4rxki2ivi7seiolls',
                             name: 'email',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1802,7 +1922,7 @@ export const examples: Example[] = [
                         {
                             id: 'clgb7yp0y3r7v2bs9vvz2i1g8',
                             name: 'address_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1811,7 +1931,7 @@ export const examples: Example[] = [
                         {
                             id: '86tvy4ffhbb5pd0e4id6h6j4a',
                             name: 'activebool',
-                            type: 'boolean',
+                            type: { id: 'boolean', name: 'boolean' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1821,7 +1941,7 @@ export const examples: Example[] = [
                         {
                             id: 'xpnedj3gh30ve8w61yp9j9q08',
                             name: 'create_date',
-                            type: 'date',
+                            type: { id: 'date', name: 'date' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1831,7 +1951,10 @@ export const examples: Example[] = [
                         {
                             id: '3sev3dleonsle0jy2vjca8fsv',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1841,7 +1964,7 @@ export const examples: Example[] = [
                         {
                             id: 'qgdyz8n4mzdgd4e337q0rl8ib',
                             name: 'active',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1891,7 +2014,7 @@ export const examples: Example[] = [
                         {
                             id: '9p7plypt0h2pi24sd1maglln2',
                             name: 'film_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -1901,7 +2024,10 @@ export const examples: Example[] = [
                         {
                             id: 'xou2sc3iqfl1dgd4st13vc7sg',
                             name: 'title',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1911,7 +2037,7 @@ export const examples: Example[] = [
                         {
                             id: 'abziwxx42f2vrqpdad0elu7o1',
                             name: 'description',
-                            type: 'text',
+                            type: { id: 'text', name: 'text' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1920,7 +2046,7 @@ export const examples: Example[] = [
                         {
                             id: '3ajcx2r2oiow6kwho1way2128',
                             name: 'release_year',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1929,7 +2055,7 @@ export const examples: Example[] = [
                         {
                             id: '6f0itpcv12zrs47p7ipwokear',
                             name: 'language_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1938,7 +2064,7 @@ export const examples: Example[] = [
                         {
                             id: 'ag5jstimbr5u5g1ldv2hl6x0g',
                             name: 'rental_duration',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1948,7 +2074,7 @@ export const examples: Example[] = [
                         {
                             id: 'ne3v1atnvtg0893em3pixtpa6',
                             name: 'rental_rate',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1960,7 +2086,7 @@ export const examples: Example[] = [
                         {
                             id: 'tz8mggxsxu3hehscd5qm1qsrj',
                             name: 'length',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1969,7 +2095,7 @@ export const examples: Example[] = [
                         {
                             id: 'e57b7z15iro655qi5omyr6f5k',
                             name: 'replacement_cost',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -1981,7 +2107,7 @@ export const examples: Example[] = [
                         {
                             id: 'kx70sye1cc8t19vy17nherzf3',
                             name: 'rating',
-                            type: 'user-defined',
+                            type: { id: 'user-defined', name: 'user-defined' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -1991,7 +2117,10 @@ export const examples: Example[] = [
                         {
                             id: 'a1oiiu5xtebzcmzcrfoyw86jf',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2001,7 +2130,7 @@ export const examples: Example[] = [
                         {
                             id: 'tckkm3gb2n0zmayt2qjarbg5x',
                             name: 'special_features',
-                            type: 'array',
+                            type: { id: 'array', name: 'array' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -2010,7 +2139,7 @@ export const examples: Example[] = [
                         {
                             id: 'eob427jyflq7za8ntjhjn1fln',
                             name: 'fulltext',
-                            type: 'tsvector',
+                            type: { id: 'tsvector', name: 'tsvector' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2060,7 +2189,7 @@ export const examples: Example[] = [
                         {
                             id: 'h3ugzzz8kx4tjvx3vpnk271gx',
                             name: 'actor_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2069,7 +2198,7 @@ export const examples: Example[] = [
                         {
                             id: 'fr9ql21vmr8s77z1if70ws897',
                             name: 'film_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2078,7 +2207,10 @@ export const examples: Example[] = [
                         {
                             id: 'jv8jgfxml7m08gjej8h5kjxq8',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2122,7 +2254,7 @@ export const examples: Example[] = [
                         {
                             id: '0i0bfvjxpfvhadfvmq04nccau',
                             name: 'film_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2131,7 +2263,7 @@ export const examples: Example[] = [
                         {
                             id: 'nx6hxsugb6xiirghsp4qzkk8j',
                             name: 'category_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2140,7 +2272,10 @@ export const examples: Example[] = [
                         {
                             id: 'enh72sktfhadc6jjg667sa8tz',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2177,7 +2312,7 @@ export const examples: Example[] = [
                         {
                             id: 'qjhszd97v59kifufel97hj33j',
                             name: 'inventory_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2188,7 +2323,7 @@ export const examples: Example[] = [
                         {
                             id: 'hln6zbas448889n2m2ogs81ev',
                             name: 'film_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2197,7 +2332,7 @@ export const examples: Example[] = [
                         {
                             id: 'jfyqemyo4jockaumlbg6ps19a',
                             name: 'store_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2206,7 +2341,10 @@ export const examples: Example[] = [
                         {
                             id: 'prclnzgowskz3koq16xl10tj1',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2250,7 +2388,7 @@ export const examples: Example[] = [
                         {
                             id: 'fp615hegqw52lssi3xnzx05rs',
                             name: 'language_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2261,7 +2399,7 @@ export const examples: Example[] = [
                         {
                             id: 'lng1oxspuc1hsny8x0sti0o72',
                             name: 'name',
-                            type: 'char',
+                            type: { id: 'char', name: 'chat' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2271,7 +2409,10 @@ export const examples: Example[] = [
                         {
                             id: 'sup8f0z7axc1h9idc8d5uqzc7',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2301,7 +2442,7 @@ export const examples: Example[] = [
                         {
                             id: 'r07b25xp5enas53osnkykhshc',
                             name: 'payment_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2312,7 +2453,7 @@ export const examples: Example[] = [
                         {
                             id: 'lxs0lq5udza79rzkp5ll732z8',
                             name: 'customer_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2321,7 +2462,7 @@ export const examples: Example[] = [
                         {
                             id: 'bnanwa6rwnbjnfkqrknpk1tqm',
                             name: 'staff_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2330,7 +2471,7 @@ export const examples: Example[] = [
                         {
                             id: 'rdjpkkl53bc1plf75wt2xtf0m',
                             name: 'rental_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2339,7 +2480,7 @@ export const examples: Example[] = [
                         {
                             id: 'gup5upslxkcv9nqu5r4qlc41v',
                             name: 'amount',
-                            type: 'numeric',
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2350,7 +2491,10 @@ export const examples: Example[] = [
                         {
                             id: 'w90qtt65qbwvjik6ayu17r01y',
                             name: 'payment_date',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2400,7 +2544,7 @@ export const examples: Example[] = [
                         {
                             id: 'up97wwftgf0b7b2td9p0jehjb',
                             name: 'rental_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2411,7 +2555,10 @@ export const examples: Example[] = [
                         {
                             id: '0z6e0xj8p7jze5v4jip4q2xci',
                             name: 'rental_date',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2420,7 +2567,7 @@ export const examples: Example[] = [
                         {
                             id: '6v1bgzlqyzzrjksnvtbwk50qt',
                             name: 'inventory_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2429,7 +2576,7 @@ export const examples: Example[] = [
                         {
                             id: 'yxldnw5n7mgk0uz5t1yar2fxb',
                             name: 'customer_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2438,7 +2585,10 @@ export const examples: Example[] = [
                         {
                             id: '43nw8h9mxi1jyiznwn28iblgw',
                             name: 'return_date',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -2447,7 +2597,7 @@ export const examples: Example[] = [
                         {
                             id: 'ba5gh63xkhulbh90royzndwgy',
                             name: 'staff_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2456,7 +2606,10 @@ export const examples: Example[] = [
                         {
                             id: '9vuky8e8fhrmtqjhz0k1lafbi',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2514,7 +2667,7 @@ export const examples: Example[] = [
                         {
                             id: 'vxnoi2w8ap9rcxm8e2jlkbkpa',
                             name: 'staff_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2524,7 +2677,10 @@ export const examples: Example[] = [
                         {
                             id: 'mzcg5j2iq708hxi0sndilef9v',
                             name: 'first_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2534,7 +2690,10 @@ export const examples: Example[] = [
                         {
                             id: '27noncs0jf6fxqnjbeod2vdi4',
                             name: 'last_name',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2544,7 +2703,7 @@ export const examples: Example[] = [
                         {
                             id: 'gef3s8gky0dx4hnh8u78glpbt',
                             name: 'address_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2553,7 +2712,10 @@ export const examples: Example[] = [
                         {
                             id: 'rjqlqzc59cnt2v1w0os5ryisz',
                             name: 'email',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -2563,7 +2725,7 @@ export const examples: Example[] = [
                         {
                             id: 'y53nwunyujmkitnw75vcodstd',
                             name: 'store_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2572,7 +2734,7 @@ export const examples: Example[] = [
                         {
                             id: 'ef2vi9r49wgwm1ku32mbf67ge',
                             name: 'active',
-                            type: 'boolean',
+                            type: { id: 'boolean', name: 'boolean' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2582,7 +2744,10 @@ export const examples: Example[] = [
                         {
                             id: '0jidh7w9ipnf0nddc0mdzljbt',
                             name: 'username',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2592,7 +2757,10 @@ export const examples: Example[] = [
                         {
                             id: 'ktwit7owb7p1j3ibqmh6yeomx',
                             name: 'password',
-                            type: 'character varying',
+                            type: {
+                                id: 'character_varying',
+                                name: 'character varying',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -2602,7 +2770,10 @@ export const examples: Example[] = [
                         {
                             id: 'q3wl36pn6sa5imtmbsinaahai',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2612,7 +2783,7 @@ export const examples: Example[] = [
                         {
                             id: 'og6rhsk3jxmgivvdmn9ur4nxg',
                             name: 'picture',
-                            type: 'bytea',
+                            type: { id: 'bytea', name: 'bytea' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -2641,7 +2812,7 @@ export const examples: Example[] = [
                         {
                             id: '93r7rr674bo09jhtv2imzdp6v',
                             name: 'store_id',
-                            type: 'integer',
+                            type: { id: 'integer', name: 'integer' },
                             primaryKey: true,
                             unique: true,
                             nullable: false,
@@ -2651,7 +2822,7 @@ export const examples: Example[] = [
                         {
                             id: 'jrsmkppymx89sbbeiudkv1bta',
                             name: 'manager_staff_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: true,
                             nullable: false,
@@ -2660,7 +2831,7 @@ export const examples: Example[] = [
                         {
                             id: 'u63mhszue97e96a9efvl8zs38',
                             name: 'address_id',
-                            type: 'smallint',
+                            type: { id: 'smallint', name: 'smallint' },
                             primaryKey: false,
                             unique: false,
                             nullable: false,
@@ -2669,7 +2840,10 @@ export const examples: Example[] = [
                         {
                             id: 'wulhhocqy6al49u1v1eprjws7',
                             name: 'last_update',
-                            type: 'timestamp without time zone',
+                            type: {
+                                id: 'timestamp_without_time_zone',
+                                name: 'timestamp without time zone',
+                            },
                             primaryKey: false,
                             unique: false,
                             nullable: false,

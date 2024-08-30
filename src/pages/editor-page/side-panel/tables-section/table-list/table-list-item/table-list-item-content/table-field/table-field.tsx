@@ -6,7 +6,7 @@ import { Button } from '@/components/button/button';
 import { KeyRound } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 
-import { DBField, FieldType } from '@/lib/domain/db-field';
+import { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { dataTypeMap } from '@/lib/data/data-types';
 import { Toggle } from '@/components/toggle/toggle';
@@ -37,41 +37,52 @@ export const TableField: React.FC<TableFieldProps> = ({
     const { databaseType } = useChartDB();
 
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
-        label: type,
-        value: type,
+        label: type.name,
+        value: type.id,
     }));
 
     return (
         <div className="flex flex-row p-1 justify-between flex-1">
             <div className="flex w-8/12 gap-1 justify-start overflow-hidden">
-                <Input
-                    className="h-8 focus-visible:ring-0 w-7/12 !overflow-hidden !whitespace-nowrap !text-ellipsis"
-                    type="text"
-                    placeholder="Name"
-                    value={field.name}
-                    onChange={(e) =>
-                        updateField({
-                            name: e.target.value,
-                        })
-                    }
-                />
                 <Tooltip>
-                    <TooltipTrigger className="flex h-8 !w-5/12">
-                        <Combobox
-                            className="flex h-8 w-full"
-                            mode="single"
-                            options={dataFieldOptions}
-                            placeholder="Type"
-                            selected={field.type}
-                            onChange={(value) =>
-                                updateField({
-                                    type: value as FieldType,
-                                })
-                            }
-                            emptyText="No types found."
-                        />
+                    <TooltipTrigger asChild>
+                        <span className="w-7/12">
+                            <Input
+                                className="h-8 focus-visible:ring-0 w-full !overflow-hidden !whitespace-nowrap !text-ellipsis"
+                                type="text"
+                                placeholder="Name"
+                                value={field.name}
+                                onChange={(e) =>
+                                    updateField({
+                                        name: e.target.value,
+                                    })
+                                }
+                            />
+                        </span>
                     </TooltipTrigger>
-                    <TooltipContent>{field.type}</TooltipContent>
+                    <TooltipContent>{field.name}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger className="flex h-8 !w-5/12" asChild>
+                        <span>
+                            <Combobox
+                                className="flex h-8 w-full"
+                                mode="single"
+                                options={dataFieldOptions}
+                                placeholder="Type"
+                                selected={field.type.id}
+                                onChange={(value) =>
+                                    updateField({
+                                        type: dataTypeMap[databaseType].find(
+                                            (v) => v.id === value
+                                        ),
+                                    })
+                                }
+                                emptyText="No types found."
+                            />
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>{field.type.name}</TooltipContent>
                 </Tooltip>
             </div>
             <div className="flex w-4/12 gap-1 justify-end overflow-hidden">

@@ -27,13 +27,12 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useExportImage } from '@/hooks/use-export-image';
-import {
-    databaseSecondaryLogoMap,
-    databaseTypeToLabelMap,
-} from '@/lib/databases';
+import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 
 export interface TopNavbarProps {}
 
@@ -51,6 +50,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
@@ -168,12 +168,93 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         [config?.exportActions, updateConfig, showAlert, openExportSQLDialog]
     );
 
+    const renderStars = useCallback(() => {
+        return (
+            <iframe
+                src={`https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=${isDesktop ? 'large' : 'small'}&text=false`}
+                width={isDesktop ? '40' : '25'}
+                height={isDesktop ? '30' : '20'}
+                title="GitHub"
+            ></iframe>
+        );
+    }, [isDesktop]);
+
+    const renderLastSaved = useCallback(() => {
+        return (
+            <Tooltip>
+                <TooltipTrigger>
+                    <Badge variant="secondary" className="flex gap-1">
+                        {isDesktop ? 'Last saved' : ''}
+                        <TimeAgo datetime={currentDiagram.updatedAt} />
+                    </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                    {currentDiagram.updatedAt.toLocaleString()}
+                </TooltipContent>
+            </Tooltip>
+        );
+    }, [currentDiagram.updatedAt, isDesktop]);
+
+    const renderDiagramName = useCallback(() => {
+        return (
+            <>
+                <DiagramIcon diagram={currentDiagram} />
+                <div className="flex">
+                    {isDesktop ? <Label>Diagrams/</Label> : null}
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                    {editMode ? (
+                        <>
+                            <Input
+                                ref={inputRef}
+                                autoFocus
+                                type="text"
+                                placeholder={diagramName}
+                                value={editedDiagramName}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                    setEditedDiagramName(e.target.value)
+                                }
+                                className="h-7 focus-visible:ring-0 ml-1"
+                            />
+                            <Button
+                                variant="ghost"
+                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                onClick={editDiagramName}
+                            >
+                                <Check />
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Label>{diagramName}</Label>
+                            <Button
+                                variant="ghost"
+                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                onClick={enterEditMode}
+                            >
+                                <Pencil />
+                            </Button>
+                        </>
+                    )}
+                </div>
+            </>
+        );
+    }, [
+        currentDiagram,
+        diagramName,
+        editDiagramName,
+        editMode,
+        editedDiagramName,
+        isDesktop,
+    ]);
+
     const emojiAI = '✨';
 
     return (
-        <nav className="flex flex-row items-center justify-between px-4 h-12 border-b">
-            <div className="flex flex-1 justify-start gap-x-3">
-                <div className="flex font-primary items-center">
+        <nav className="flex flex-col md:flex-row items-top md:items-center justify-between px-4 h-20 md:h-12 border-b">
+            <div className="flex flex-1 gap-x-3 justify-between md:justify-normal">
+                <div className="flex font-primary items-top md:items-center py-[10px] md:py-0">
                     <a
                         href="https://chartdb.io"
                         className="cursor-pointer"
@@ -345,76 +426,29 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </Menubar>
                 </div>
             </div>
-            <div className="flex flex-row flex-1 justify-center items-center group">
-                <Tooltip>
-                    <TooltipTrigger className="mr-2">
-                        <img
-                            src={
-                                databaseSecondaryLogoMap[
-                                    currentDiagram.databaseType
-                                ]
-                            }
-                            className="h-5 max-w-fit"
-                            alt="database"
-                        />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {databaseTypeToLabelMap[currentDiagram.databaseType]}
-                    </TooltipContent>
-                </Tooltip>
-                <div className="flex">
-                    <Label>Diagrams/</Label>
+            {isDesktop ? (
+                <>
+                    <div className="flex flex-row flex-1 justify-center items-center group">
+                        {renderDiagramName()}
+                    </div>
+                    <div className="hidden flex-1 justify-end sm:flex items-center gap-2">
+                        {renderLastSaved()}
+                        {renderStars()}
+                    </div>
+                </>
+            ) : (
+                <div className="flex flex-1 flex-row justify-between">
+                    <div className="flex justify-center">
+                        {renderLastSaved()}
+                    </div>
+                    <div className="flex flex-row flex-1 justify-center items-center group">
+                        {renderDiagramName()}
+                    </div>
+                    <div className="flex justify-center items-center">
+                        {renderStars()}
+                    </div>
                 </div>
-                <div className="flex flex-row items-center gap-1">
-                    {editMode ? (
-                        <>
-                            <Input
-                                ref={inputRef}
-                                autoFocus
-                                type="text"
-                                placeholder={diagramName}
-                                value={editedDiagramName}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                    setEditedDiagramName(e.target.value)
-                                }
-                                className="h-7 focus-visible:ring-0 ml-1"
-                            />
-                            <Button
-                                variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
-                                onClick={editDiagramName}
-                            >
-                                <Check />
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Label>{diagramName}</Label>
-                            <Button
-                                variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
-                                onClick={enterEditMode}
-                            >
-                                <Pencil />
-                            </Button>
-                        </>
-                    )}
-                </div>
-            </div>
-            <div className="hidden flex-1 justify-end sm:flex">
-                <Tooltip>
-                    <TooltipTrigger>
-                        <Badge variant="secondary" className="flex gap-1">
-                            Last saved
-                            <TimeAgo datetime={currentDiagram.updatedAt} />
-                        </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {currentDiagram.updatedAt.toLocaleString()}
-                    </TooltipContent>
-                </Tooltip>
-            </div>
+            )}
         </nav>
     );
 };
