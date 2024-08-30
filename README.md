@@ -88,6 +88,15 @@ npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
+### Running the Docker Container
+
+```bash
+docker build -t chartdb .
+docker run -p 8080:80 chartdb
+```
+
+Open your browser and navigate to `http://localhost:8080`.
+
 ## Try it on our website
 
 1. Go to [ChartDB.io](https://chartdb.io)
@@ -96,7 +105,6 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 4. Take the magic query and run it in your database.
 5. Copy and paste the resulting JSON set into ChartDB.
 6. Enjoy Viewing & Editing!
-
 
 ## 💚 Community & Support
 

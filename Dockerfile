@@ -1,13 +1,21 @@
-FROM node:22
+FROM node:22-alpine AS builder
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+# Use a lightweight web server to serve the production build
+FROM nginx:stable-alpine AS production
+
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+# Expose the default port for the Nginx web server
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
