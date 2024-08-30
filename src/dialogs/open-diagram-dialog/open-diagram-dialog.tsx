@@ -74,7 +74,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col w-[100vw] xl:min-w-[55vw] max-h-[80vh] overflow-y-auto"
+                className="flex flex-col md:w-[100vw] w-[90vw] xl:min-w-[55vw] max-h-[90vh] overflow-y-auto"
                 showClose
             >
                 <DialogHeader>
@@ -90,7 +90,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 <TableRow>
                                     <TableHead />
                                     <TableHead>Name</TableHead>
-                                    <TableHead>Created at</TableHead>
+                                    <TableHead className="sm:inline-flex items-center hidden">
+                                        Created at
+                                    </TableHead>
                                     <TableHead>Last modified</TableHead>
                                     <TableHead className="text-center">
                                         Tables
@@ -124,7 +126,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             <DiagramIcon diagram={diagram} />
                                         </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
-                                        <TableCell>
+                                        <TableCell className="sm:inline-flex items-center hidden">
                                             {diagram.createdAt.toLocaleString()}
                                         </TableCell>
                                         <TableCell>
