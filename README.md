@@ -63,19 +63,11 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 -   ✅ MariaDB
 -   ✅ SQLite
 
-
 ## Getting Started
 
-### How to use the cloud version of ChartDB
+Use the [cloud version](https://app.chartdb.io/) or deploy locally:
 
-1. Go to [ChartDB.io](https://chartdb.io)
-2. Click "Go to app"
-3. Choose the database that you are using.
-4. Take the magic query and run it in your database.
-5. Copy and paste the resulting JSON set into ChartDB.
-6. Enjoy Viewing & Editing!
-
-### How To Use ChartDB Locally
+### How To Use
 
 ```bash
 npm install
@@ -96,29 +88,23 @@ npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
-## How to run ChartDB within a Docker container
-
-### Prerequisites
-
-- Ensure you have [Docker](https://docs.docker.com/get-docker/) installed on your machine.
-
-### Building the Docker Image
-
-```bash
-docker build -t chartdb .
-```
-
 ### Running the Docker Container
 
 ```bash
+docker build -t chartdb .
 docker run -p 8080:80 chartdb
 ```
 
 Open your browser and navigate to `http://localhost:8080`.
 
+## Try it on our website
 
-Happy diagramming! 🎉
-
+1. Go to [ChartDB.io](https://chartdb.io)
+2. Click "Go to app"
+3. Choose the database that you are using.
+4. Take the magic query and run it in your database.
+5. Copy and paste the resulting JSON set into ChartDB.
+6. Enjoy Viewing & Editing!
 
 ## 💚 Community & Support
 
