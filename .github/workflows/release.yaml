@@ -1,4 +1,4 @@
-name: Release
+name: CI and Publish Docker Image
 
 on:
   push:
@@ -26,15 +26,12 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$(basename ${{ github.repository }}):latest
-          docker build . --tag $IMAGE_NAME
-          docker push $IMAGE_NAME
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/$(basename ${{ github.repository }}):latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
