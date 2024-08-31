@@ -62,7 +62,7 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 
 ### Supported Databases
 
--   ✅ PostgreSQL
+-   ✅ PostgreSQL (<img src="./src/assets/postgresql_logo_2.png" width="15"/> + <img src="./src/assets/supabase.png" alt="Supabase" width="15"/> + <img src="./src/assets/timescale.png" alt="Timescale" width="15"/> )
 -   ✅ MySQL
 -   ✅ SQL Server
 -   ✅ MariaDB
