@@ -54,6 +54,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
+    // const { setTheme } = useTheme();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -178,6 +179,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             ></iframe>
         );
     }, [isDesktop]);
+
+    // const renderDarkModeToggle = () => {
+    //     return <DarkModeToggle />;
+    // };
 
     const renderLastSaved = useCallback(() => {
         return (
@@ -412,6 +417,37 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
+                        {/* <MenubarMenu>
+                            <MenubarTrigger>View</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>Theme</MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem
+                                            onClick={() => setTheme('light')}
+                                        >
+                                            Light
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => setTheme('dark')}
+                                        >
+                                            Dark
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                localStorage.removeItem(
+                                                    'theme'
+                                                );
+
+                                                setTheme('system');
+                                            }}
+                                        >
+                                            System
+                                        </MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
+                            </MenubarContent>
+                        </MenubarMenu> */}
                         <MenubarMenu>
                             <MenubarTrigger>Help</MenubarTrigger>
                             <MenubarContent>
@@ -434,6 +470,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="hidden flex-1 justify-end sm:flex items-center gap-2">
                         {renderLastSaved()}
                         {renderStars()}
+                        {/* {renderDarkModeToggle()} */}
                     </div>
                 </>
             ) : (
@@ -447,6 +484,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="flex justify-center items-center">
                         {renderStars()}
                     </div>
+                    {/* <div className="flex justify-center items-center">
+                        {renderDarkModeToggle()}
+                    </div> */}
                 </div>
             )}
         </nav>

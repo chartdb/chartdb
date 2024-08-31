@@ -28,7 +28,9 @@ const routes: RouteObject[] = [
                                         <DialogProvider>
                                             <ReactFlowProvider>
                                                 <ExportImageProvider>
+                                                    {/* <ThemeProvider> */}
                                                     <EditorPage />
+                                                    {/* </ThemeProvider> */}
                                                 </ExportImageProvider>
                                             </ReactFlowProvider>
                                         </DialogProvider>
