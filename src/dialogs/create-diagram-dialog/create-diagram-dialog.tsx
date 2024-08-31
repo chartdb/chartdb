@@ -167,7 +167,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             <ToggleGroupItem
                 value={type}
                 aria-label="Toggle bold"
-                className="flex w-22 h-22 md:w-32 md:h-32"
+                className="flex w-20 h-20 md:w-32 md:h-32"
             >
                 <img src={logo} alt="PostgreSQL" />
             </ToggleGroupItem>
@@ -177,7 +177,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const renderExamplesOption = useCallback(
         () => (
             <div
-                className="flex w-22 h-22 md:w-32 md:h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
+                className="flex w-20 h-20 md:w-32 md:h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
                 onClick={() => window.open('/examples')}
             >
                 <div className="flex items-center flex-1">
@@ -186,8 +186,17 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     </Link>
                 </div>
                 <div className="flex flex-col-reverse">
-                    <Link href="/examples" className="text-sm text-primary">
+                    <Link
+                        href="/examples"
+                        className="hidden md:flex text-sm text-primary"
+                    >
                         Check Examples
+                    </Link>
+                    <Link
+                        href="/examples"
+                        className="flex md:hidden text-xs text-primary"
+                    >
+                        Examples
                     </Link>
                 </div>
             </div>
@@ -479,7 +488,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col w-[100vw] xl:min-w-[45vw] overflow-y-auto"
+                className="flex flex-col w-[90vw] xl:min-w-[45vw] overflow-y-auto"
                 showClose={hasExistingDiagram}
             >
                 {renderHeader()}
