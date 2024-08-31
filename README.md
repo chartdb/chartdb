@@ -1,6 +1,11 @@
 <h1 align="center">
-  <a href="https://chartdb.io"><img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo.png?raw=true" width="400" height="70" alt="ChartDB"></a>
-<br>
+  <a href="https://chartdb.io#gh-light-mode-only">
+    <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-light.png" width="400" height="70" alt="ChartDB">
+  </a>
+  <a href="https://chartdb.io##gh-dark-mode-only">
+    <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-dark.png" width="400" height="70" alt="ChartDB">
+  </a>
+  <br>
 </h1>
 
 <p align="center">
