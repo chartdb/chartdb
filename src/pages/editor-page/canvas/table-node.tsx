@@ -72,7 +72,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 handleClassName="!hidden"
             />
             <div
-                className="h-2 rounded-t-lg"
+                className="h-2 rounded-t-[6px]"
                 style={{ backgroundColor: table.color }}
             ></div>
             <div className="flex items-center h-9 bg-slate-200 px-2 justify-between group">

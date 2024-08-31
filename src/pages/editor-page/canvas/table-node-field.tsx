@@ -42,7 +42,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
     }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 
     return (
-        <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-slate-100 group last:rounded-b-lg">
+        <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-slate-100 group last:rounded-b-[6px]">
             {!connection.inProgress && (
                 <>
                     <Handle
