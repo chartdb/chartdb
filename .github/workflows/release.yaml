@@ -1,4 +1,4 @@
-name: CI and Publish Docker Image
+name: Release
 
 on:
   pull_request:
