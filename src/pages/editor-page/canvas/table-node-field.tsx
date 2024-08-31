@@ -85,7 +85,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                     />
                 </>
             )}
-            <div className="block w-2/3 text-left overflow-hidden whitespace-nowrap text-ellipsis">
+            <div className="block w-2/3 text-left overflow-hidden whitespace-nowrap text-ellipsis text-muted-foreground">
                 {field.name}
             </div>
             <div className="flex justify-end w-2/3 gap-2">

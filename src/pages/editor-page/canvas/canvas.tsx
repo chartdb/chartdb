@@ -312,7 +312,6 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     variant={BackgroundVariant.Dots}
                     gap={16}
                     size={1}
-                    bgColor="#ffffff"
                 />
             </ReactFlow>
         </div>
