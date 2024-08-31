@@ -76,11 +76,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 style={{ backgroundColor: table.color }}
             ></div>
             <div className="flex items-center h-9 bg-slate-200 px-2 justify-between group">
-                <div className="flex items-center gap-1">
-                    <Table2 className="h-3.5 w-3.5 text-gray-600" />
-                    <Label className="text-sm font-bold">{table.name}</Label>
+                <div className="flex items-center gap-1 min-w-0 flex-1">
+                    <Table2 className="h-3.5 w-3.5 text-gray-600 flex-shrink-0" />
+                    <Label className="text-sm font-bold truncate">
+                        {table.name}
+                    </Label>
                 </div>
-                <div className="flex-row hidden group-hover:flex">
+                <div className="flex-row hidden group-hover:flex flex-shrink-0">
                     <Button
                         variant="ghost"
                         className="hover:bg-primary-foreground p-0 w-6 h-6 text-slate-500 hover:text-slate-700"
