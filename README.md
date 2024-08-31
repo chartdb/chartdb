@@ -1,6 +1,11 @@
 <h1 align="center">
-  <a href="https://chartdb.io"><img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo.png?raw=true" width="400" height="70" alt="ChartDB"></a>
-<br>
+  <a href="https://chartdb.io#gh-light-mode-only">
+    <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-light.png" width="400" height="70" alt="ChartDB">
+  </a>
+  <a href="https://chartdb.io##gh-dark-mode-only">
+    <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-dark.png" width="400" height="70" alt="ChartDB">
+  </a>
+  <br>
 </h1>
 
 <p align="center">
@@ -88,6 +93,15 @@ npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
+### Running the Docker Container
+
+```bash
+docker build -t chartdb .
+docker run -p 8080:80 chartdb
+```
+
+Open your browser and navigate to `http://localhost:8080`.
+
 ## Try it on our website
 
 1. Go to [ChartDB.io](https://chartdb.io)
@@ -96,7 +110,6 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 4. Take the magic query and run it in your database.
 5. Copy and paste the resulting JSON set into ChartDB.
 6. Enjoy Viewing & Editing!
-
 
 ## 💚 Community & Support
 

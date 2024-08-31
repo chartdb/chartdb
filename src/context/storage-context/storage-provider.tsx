@@ -38,6 +38,32 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         config: '++id, defaultDiagramId',
     });
 
+    db.version(2).upgrade((tx) =>
+        tx
+            .table<DBTable & { diagramId: string }>('db_tables')
+            .toCollection()
+            .modify((table) => {
+                for (const field of table.fields) {
+                    field.type = {
+                        // @ts-expect-error string before
+                        id: (field.type as string).split(' ').join('_'),
+                        // @ts-expect-error string before
+                        name: field.type,
+                    };
+                }
+            })
+    );
+
+    db.version(3).stores({
+        diagrams:
+            '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+        db_tables:
+            '++id, diagramId, name, x, y, fields, indexes, color, createdAt, width',
+        db_relationships:
+            '++id, diagramId, name, sourceTableId, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+        config: '++id, defaultDiagramId',
+    });
+
     db.on('ready', async () => {
         const config = await getConfig();
 
@@ -72,6 +98,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 id: diagram.id,
                 name: diagram.name,
                 databaseType: diagram.databaseType,
+                databaseEdition: diagram.databaseEdition,
                 createdAt: diagram.createdAt,
                 updatedAt: diagram.updatedAt,
             })

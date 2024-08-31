@@ -27,14 +27,12 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useExportImage } from '@/hooks/use-export-image';
-import {
-    databaseSecondaryLogoMap,
-    databaseTypeToLabelMap,
-} from '@/lib/databases';
+import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 
 export interface TopNavbarProps {}
 
@@ -205,22 +203,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const renderDiagramName = useCallback(() => {
         return (
             <>
-                <Tooltip>
-                    <TooltipTrigger className="mr-2">
-                        <img
-                            src={
-                                databaseSecondaryLogoMap[
-                                    currentDiagram.databaseType
-                                ]
-                            }
-                            className="h-5 max-w-fit"
-                            alt="database"
-                        />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {databaseTypeToLabelMap[currentDiagram.databaseType]}
-                    </TooltipContent>
-                </Tooltip>
+                <DiagramIcon diagram={currentDiagram} />
                 <div className="flex">
                     {isDesktop ? <Label>Diagrams/</Label> : null}
                 </div>
@@ -263,7 +246,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </>
         );
     }, [
-        currentDiagram.databaseType,
+        currentDiagram,
         diagramName,
         editDiagramName,
         editMode,

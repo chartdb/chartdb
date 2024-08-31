@@ -1,4 +1,5 @@
 import { Button } from '@/components/button/button';
+import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import {
     Dialog,
     DialogClose,
@@ -20,8 +21,6 @@ import {
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
-import { databaseTypeToLabelMap } from '@/lib/databases';
-
 import { Diagram } from '@/lib/domain/diagram';
 import { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
@@ -75,7 +74,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col min-w-[100vw] xl:min-w-[70vw] max-h-[80vh] overflow-y-auto"
+                className="flex flex-col md:w-[100vw] w-[90vw] xl:min-w-[55vw] max-h-[90vh] overflow-y-auto"
                 showClose
             >
                 <DialogHeader>
@@ -89,11 +88,15 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                         <Table>
                             <TableHeader className="sticky top-0 bg-background">
                                 <TableRow>
+                                    <TableHead />
                                     <TableHead>Name</TableHead>
-                                    <TableHead>Created at</TableHead>
+                                    <TableHead className="sm:inline-flex items-center hidden">
+                                        Created at
+                                    </TableHead>
                                     <TableHead>Last modified</TableHead>
-                                    <TableHead>Tables count</TableHead>
-                                    <TableHead>Type</TableHead>
+                                    <TableHead className="text-center">
+                                        Tables
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -119,22 +122,18 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             }
                                         }}
                                     >
+                                        <TableCell className="flex justify-center">
+                                            <DiagramIcon diagram={diagram} />
+                                        </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
-                                        <TableCell>
+                                        <TableCell className="sm:inline-flex items-center hidden">
                                             {diagram.createdAt.toLocaleString()}
                                         </TableCell>
                                         <TableCell>
                                             {diagram.updatedAt.toLocaleString()}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="text-center">
                                             {diagram.tables?.length}
-                                        </TableCell>
-                                        <TableCell>
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    diagram.databaseType
-                                                ]
-                                            }
                                         </TableCell>
                                     </TableRow>
                                 ))}

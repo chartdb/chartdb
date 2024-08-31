@@ -8,7 +8,7 @@
     }
 
     .react-flow.nodes-animated .react-flow__node {
-        @apply transition-all;
-        @apply duration-300;
+        @apply transition-[width];
+        @apply duration-100;
     }
 }

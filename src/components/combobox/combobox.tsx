@@ -102,7 +102,12 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                     >
                         <Command
                             filter={(value, search) => {
-                                if (value.includes(search)) return 1;
+                                if (
+                                    value
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                )
+                                    return 1;
                                 return 0;
                             }}
                             // shouldFilter={true}
@@ -179,9 +184,8 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                                                     <Check
                                                         className={cn(
                                                             'mr-2 h-4 w-4',
-                                                            selected.includes(
+                                                            selected ===
                                                                 option.value
-                                                            )
                                                                 ? 'opacity-100'
                                                                 : 'opacity-0'
                                                         )}

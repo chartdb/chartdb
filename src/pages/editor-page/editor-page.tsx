@@ -105,7 +105,7 @@ export const EditorPage: React.FC = () => {
                             open={isSidePanelShowed}
                             onClose={() => hideSidePanel()}
                         >
-                            <DrawerContent className="h-full">
+                            <DrawerContent className="h-full" fullScreen>
                                 <DrawerHeader>
                                     <DrawerTitle>Manage Diagram</DrawerTitle>
                                     <DrawerDescription>

@@ -6,7 +6,7 @@ import { Button } from '@/components/button/button';
 import { KeyRound } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 
-import { DBField, FieldType } from '@/lib/domain/db-field';
+import { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { dataTypeMap } from '@/lib/data/data-types';
 import { Toggle } from '@/components/toggle/toggle';
@@ -37,8 +37,8 @@ export const TableField: React.FC<TableFieldProps> = ({
     const { databaseType } = useChartDB();
 
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
-        label: type,
-        value: type,
+        label: type.name,
+        value: type.id,
     }));
 
     return (
@@ -70,17 +70,19 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 mode="single"
                                 options={dataFieldOptions}
                                 placeholder="Type"
-                                selected={field.type}
+                                selected={field.type.id}
                                 onChange={(value) =>
                                     updateField({
-                                        type: value as FieldType,
+                                        type: dataTypeMap[databaseType].find(
+                                            (v) => v.id === value
+                                        ),
                                     })
                                 }
                                 emptyText="No types found."
                             />
                         </span>
                     </TooltipTrigger>
-                    <TooltipContent>{field.type}</TooltipContent>
+                    <TooltipContent>{field.type.name}</TooltipContent>
                 </Tooltip>
             </div>
             <div className="flex w-4/12 gap-1 justify-end overflow-hidden">
