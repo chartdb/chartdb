@@ -1,7 +1,7 @@
 name: CI and Publish Docker Image
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 jobs:
