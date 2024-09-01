@@ -1,6 +1,6 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import { getPostgresQuery } from './postgres-script';
-import { mySQLQuery } from './mysql-script';
+import { getMySQLQuery } from './mysql-script';
 import { sqliteQuery } from './sqlite-script';
 import { sqlServerQuery } from './sqlserver-script';
 import { mariaDBQuery } from './maria-script';
@@ -12,7 +12,7 @@ export const importMetadataScripts: Record<
 > = {
     [DatabaseType.GENERIC]: () => '',
     [DatabaseType.POSTGRESQL]: getPostgresQuery,
-    [DatabaseType.MYSQL]: () => mySQLQuery,
+    [DatabaseType.MYSQL]: getMySQLQuery,
     [DatabaseType.SQLITE]: () => sqliteQuery,
     [DatabaseType.SQL_SERVER]: () => sqlServerQuery,
     [DatabaseType.MARIADB]: () => mariaDBQuery,
