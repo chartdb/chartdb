@@ -93,7 +93,7 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                                 variant="outline"
                                 className="h-6 gap-1 p-0 px-2 shadow-none"
                             >
-                                <Avatar className="size-4">
+                                <Avatar className="size-4 rounded-none">
                                     <AvatarImage
                                         src={
                                             databaseSecondaryLogoMap[
