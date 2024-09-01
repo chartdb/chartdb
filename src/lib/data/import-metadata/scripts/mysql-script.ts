@@ -252,12 +252,12 @@ export const getMySQLQuery = (
                '","engine":"', IFNULL(tbls.ENGINE, ''),
                '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''), '"}')
     ) FROM (
-        SELECT TABLE_SCHEMA,
-               TABLE_NAME,
-               TABLE_ROWS,
-               TABLE_TYPE,
-               ENGINE,
-               TABLE_COLLATION
+        SELECT \`TABLE_SCHEMA\`,
+               \`TABLE_NAME\`,
+               \`TABLE_ROWS\`,
+               \`TABLE_TYPE\`,
+               \`ENGINE\`,
+               \`TABLE_COLLATION\`
         FROM information_schema.tables tbls
         WHERE tbls.table_schema = DATABASE()
     ) AS tbls), ''),
@@ -267,8 +267,8 @@ export const getMySQLQuery = (
                '","view_name":"', vws.view_name,
                '","definition":"', definition, '"}')
     ) FROM (
-        SELECT TABLE_SCHEMA,
-               TABLE_NAME AS view_name,
+        SELECT \`TABLE_SCHEMA\`,
+               \`TABLE_NAME\` AS view_name,
                '' AS definition
         FROM information_schema.views vws
         WHERE vws.table_schema = DATABASE()
@@ -277,11 +277,14 @@ export const getMySQLQuery = (
     '", "version": "', VERSION(), '"}') AS CHAR) AS ''
 `;
 
-    // Define the base query
+    // To avoid the nondeterministic truncation and ensure that your query results are consistent.
+    const beforeQuery = `SET SESSION group_concat_max_len = 1000000; -- large enough value to handle your expected result size
+`;
+
     const query =
         databaseEdition === DatabaseEdition.MYSQL_5_7
-            ? newMySQLQuery
-            : oldMySQLQuery;
+            ? `${beforeQuery}${oldMySQLQuery}`
+            : newMySQLQuery;
 
     return query;
 };
