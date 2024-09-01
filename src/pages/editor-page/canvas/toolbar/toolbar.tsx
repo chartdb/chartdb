@@ -50,8 +50,8 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
 
     return (
         <div className="px-1">
-            <Card className="shadow-none p-0 bg-secondary h-[44px]">
-                <CardContent className="p-1 flex flex-row h-full items-center">
+            <Card className="h-[44px] bg-secondary p-0 shadow-none">
+                <CardContent className="flex h-full flex-row items-center p-1">
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

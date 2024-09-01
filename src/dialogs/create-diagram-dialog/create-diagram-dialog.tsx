@@ -167,7 +167,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             <ToggleGroupItem
                 value={type}
                 aria-label="Toggle bold"
-                className="flex w-20 h-20 md:w-32 md:h-32"
+                className="flex size-20 md:size-32"
             >
                 <img src={logo} alt="PostgreSQL" />
             </ToggleGroupItem>
@@ -177,10 +177,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const renderExamplesOption = useCallback(
         () => (
             <div
-                className="flex w-20 h-20 md:w-32 md:h-32 rounded-md items-center text-center flex-col py-3 border cursor-pointer"
+                className="flex size-20 cursor-pointer flex-col items-center rounded-md border py-3 text-center md:size-32"
                 onClick={() => window.open('/examples')}
             >
-                <div className="flex items-center flex-1">
+                <div className="flex flex-1 items-center">
                     <Link href="/examples" className="text-sm text-primary">
                         <LayoutGrid size={34} />
                     </Link>
@@ -188,13 +188,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 <div className="flex flex-col-reverse">
                     <Link
                         href="/examples"
-                        className="hidden md:flex text-sm text-primary"
+                        className="hidden text-sm text-primary md:flex"
                     >
                         Check Examples
                     </Link>
                     <Link
                         href="/examples"
-                        className="flex md:hidden text-xs text-primary"
+                        className="flex text-xs text-primary md:hidden"
                     >
                         Examples
                     </Link>
@@ -245,7 +245,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 }
                             }}
                             type="single"
-                            className="grid grid-cols-3 grid-flow-row gap-6"
+                            className="grid grid-flow-row grid-cols-3 gap-6"
                         >
                             {renderDatabaseOption(DatabaseType.MYSQL)}
                             {renderDatabaseOption(DatabaseType.POSTGRESQL)}
@@ -258,15 +258,15 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
-                    <div className="flex flex-1 flex-col w-full gap-6">
+                    <div className="flex w-full flex-1 flex-col gap-6">
                         {databaseTypeToEditionMap[databaseType].length > 0 ? (
-                            <div className="flex flex-col md:flex-row gap-1">
-                                <p className="text-sm text-muted-foreground leading-6">
+                            <div className="flex flex-col gap-1 md:flex-row">
+                                <p className="text-sm leading-6 text-muted-foreground">
                                     Database edition:
                                 </p>
                                 <ToggleGroup
                                     type="single"
-                                    className="gap-2 ml-1"
+                                    className="ml-1 gap-2"
                                     value={
                                         !databaseEdition
                                             ? 'regular'
@@ -283,9 +283,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                     <ToggleGroupItem
                                         value="regular"
                                         variant="outline"
-                                        className="gap-1 h-6 p-0 px-2 shadow-none"
+                                        className="h-6 gap-1 p-0 px-2 shadow-none"
                                     >
-                                        <Avatar className="h-4 w-4">
+                                        <Avatar className="size-4">
                                             <AvatarImage
                                                 src={
                                                     databaseSecondaryLogoMap[
@@ -306,9 +306,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                                 value={edition}
                                                 key={edition}
                                                 variant="outline"
-                                                className="gap-1 h-6 p-0 px-2 shadow-none"
+                                                className="h-6 gap-1 p-0 px-2 shadow-none"
                                             >
-                                                <Avatar className="h-4 w-4">
+                                                <Avatar className="size-4">
                                                     <AvatarImage
                                                         src={
                                                             databaseEditionToImageMap[
@@ -351,18 +351,18 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 })}
                             />
                         </div>
-                        <div className="flex flex-col gap-1 h-48">
+                        <div className="flex h-48 flex-col gap-1">
                             <p className="text-sm text-muted-foreground">
                                 2. Paste the script result here:
                             </p>
                             <Textarea
-                                className="flex-1 w-full p-2 text-sm bg-muted-1 rounded-md"
+                                className="w-full flex-1 rounded-md bg-muted p-2 text-sm"
                                 placeholder="Script result here..."
                                 value={scriptResult}
                                 onChange={handleInputChange}
                             />
                             {errorMessage && (
-                                <p className="text-red-700 text-sm mt-2">
+                                <p className="mt-2 text-sm text-red-700">
                                     {errorMessage}
                                 </p>
                             )}
@@ -387,7 +387,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         switch (step) {
             case CreateDiagramDialogStep.SELECT_DATABASE:
                 return (
-                    <DialogFooter className="flex !justify-between gap-2 mt-4">
+                    <DialogFooter className="mt-4 flex !justify-between gap-2">
                         {hasExistingDiagram ? (
                             <DialogClose asChild>
                                 <Button type="button" variant="secondary">
@@ -422,7 +422,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 );
             case CreateDiagramDialogStep.IMPORT_DATABASE:
                 return (
-                    <DialogFooter className="flex !justify-between gap-2 mt-4">
+                    <DialogFooter className="mt-4 flex !justify-between gap-2">
                         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
@@ -488,7 +488,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col w-[90vw] xl:min-w-[45vw] overflow-y-auto"
+                className="flex w-[90vw] flex-col overflow-y-auto xl:min-w-[45vw]"
                 showClose={hasExistingDiagram}
             >
                 {renderHeader()}

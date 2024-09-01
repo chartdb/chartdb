@@ -51,7 +51,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
 
     return (
         <div
-            className="border-l-[6px] rounded-b-md px-1 flex flex-col gap-1"
+            className="flex flex-col gap-1 rounded-b-md border-l-[6px] px-1"
             style={{
                 borderColor: color,
             }}
@@ -64,28 +64,28 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     setSelectedItems(value as AccordionItemValue[])
                 }
             >
-                <AccordionItem value="fields" className="border-y-0 mb-2">
+                <AccordionItem value="fields" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
                         asChild
                     >
-                        <div className="flex items-center justify-between flex-1">
+                        <div className="flex flex-1 items-center justify-between">
                             <div className="flex flex-row items-center gap-1">
-                                <FileType2 className="h-4 w-4" />
+                                <FileType2 className="size-4" />
                                 Fields
                             </div>
                             <div className="flex flex-row-reverse">
-                                <div className="hidden group-hover:flex flex-row-reverse">
+                                <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="hover:bg-primary-foreground p-0 h-4 w-4  text-slate-500 hover:text-slate-700 text-xs"
+                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createField(table.id);
                                         }}
                                     >
-                                        <Plus className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                        <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
                                 </div>
                             </div>
@@ -110,25 +110,25 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="indexes" className="border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="p-0 px-2 text-xs text-slate-600 flex flex-1 hover:bg-secondary py-1 group"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
                         asChild
                     >
-                        <div className="flex items-center justify-between flex-1">
+                        <div className="flex flex-1 items-center justify-between">
                             <div className="flex flex-row items-center gap-1">
-                                <FileKey2 className="h-4 w-4" />
+                                <FileKey2 className="size-4" />
                                 Indexes
                             </div>
                             <div className="flex flex-row-reverse">
-                                <div className="hidden group-hover:flex flex-row-reverse">
+                                <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="hover:bg-primary-foreground p-0 h-4 w-4  text-slate-500 hover:text-slate-700 text-xs"
+                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createIndexHandler();
                                         }}
                                     >
-                                        <Plus className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                        <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
                                 </div>
                             </div>
@@ -152,11 +152,11 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 </AccordionItem>
             </Accordion>
             <Separator className="" />
-            <div className="flex items-center justify-between flex-1">
+            <div className="flex flex-1 items-center justify-between">
                 <div>
                     <Button
                         variant="outline"
-                        className="text-xs h-8 p-2"
+                        className="h-8 p-2 text-xs"
                         onClick={createIndexHandler}
                     >
                         <FileKey2 className="h-4" />
@@ -166,7 +166,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <div>
                     <Button
                         variant="outline"
-                        className="text-xs h-8 p-2"
+                        className="h-8 p-2 text-xs"
                         onClick={() => createField(table.id)}
                     >
                         <FileType2 className="h-4" />

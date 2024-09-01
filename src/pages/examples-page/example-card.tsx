@@ -43,13 +43,13 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
     return (
         <div
             onClick={utilizeExample}
-            className="h-96 rounded-xl flex flex-col w-full bg-slate-50 border-2 border-slate-500 hover:border-pink-600 shadow-sm cursor-pointer transition ease-in-out duration-300 hover:scale-[102%]"
+            className="flex h-96 w-full cursor-pointer flex-col rounded-xl border-2 border-slate-500 bg-slate-50 shadow-sm transition duration-300 ease-in-out hover:scale-[102%] hover:border-pink-600"
         >
             <div
                 className="h-4 rounded-t-xl"
                 style={{ backgroundColor: randomColor() }}
             ></div>
-            <div className="flex items-center h-12 bg-slate-200 px-2 justify-between">
+            <div className="flex h-12 items-center justify-between bg-slate-200 px-2">
                 <div className="flex items-center gap-2">
                     <Tooltip>
                         <TooltipTrigger className="mr-1">
@@ -71,17 +71,17 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                             }
                         </TooltipContent>
                     </Tooltip>
-                    <Label className="text-md font-bold cursor-pointer">
+                    <Label className="cursor-pointer text-base font-bold">
                         {example.name}
                     </Label>
                 </div>
-                <div className="flex-row flex">
+                <div className="flex flex-row">
                     <Button
                         variant="ghost"
-                        className="hover:bg-primary-foreground p-0 w-9 h-9 text-slate-500 hover:text-slate-700"
+                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                         // onClick={openTableInEditor}
                     >
-                        <Import className="h-5 w-5" />
+                        <Import className="size-5" />
                     </Button>
                 </div>
             </div>
@@ -90,7 +90,7 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                 alt={example.name}
                 className="w-fit border-b"
             />
-            <div className="flex p-2 text-md">{example.description}</div>
+            <div className="flex p-2 text-base">{example.description}</div>
         </div>
     );
 };

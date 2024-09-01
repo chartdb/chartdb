@@ -42,7 +42,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
     }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 
     return (
-        <div className="flex relative items-center h-8 text-sm px-3 border-t justify-between hover:bg-slate-100 group last:rounded-b-[6px]">
+        <div className="group relative flex h-8 items-center justify-between border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100">
             {!connection.inProgress && (
                 <>
                     <Handle
@@ -77,7 +77,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                         id={`${TARGET_ID_PREFIX}${numberOfEdgesToField}_${field.id}`}
                         className={
                             isTarget
-                                ? '!w-full !h-full !absolute !top-0 !left-0 !rounded-none !border-none !transform-none !opacity-0'
+                                ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
                                 : `!invisible`
                         }
                         position={Position.Left}
@@ -85,29 +85,27 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                     />
                 </>
             )}
-            <div className="block w-2/3 text-left overflow-hidden whitespace-nowrap text-ellipsis">
-                {field.name}
-            </div>
-            <div className="flex justify-end w-2/3 gap-2">
+            <div className="block w-2/3 truncate text-left">{field.name}</div>
+            <div className="flex w-2/3 justify-end gap-2">
                 {field.primaryKey ? (
                     <div className="text-muted-foreground group-hover:hidden">
                         <KeyRound size={14} />
                     </div>
                 ) : null}
 
-                <div className="text-muted-foreground group-hover:hidden content-center text-xs text-right overflow-hidden whitespace-nowrap text-ellipsis">
+                <div className="content-center truncate text-right text-xs text-muted-foreground group-hover:hidden">
                     {field.type.name}
                 </div>
-                <div className="flex-row hidden group-hover:flex">
+                <div className="hidden flex-row group-hover:flex">
                     <Button
                         variant="ghost"
-                        className="hover:bg-primary-foreground p-0 w-6 h-6"
+                        className="size-6 p-0 hover:bg-primary-foreground"
                         onClick={(e) => {
                             e.stopPropagation();
                             removeField(tableNodeId, field.id);
                         }}
                     >
-                        <Trash2 className="h-3.5 w-3.5 text-red-700" />
+                        <Trash2 className="size-3.5 text-red-700" />
                     </Button>
                 </div>
             </div>

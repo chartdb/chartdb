@@ -36,9 +36,9 @@ export const FullScreenLoaderProvider: React.FC<React.PropsWithChildren> = ({
         >
             {children}
             <Dialog open={open}>
-                <DialogContent className="shadow-none bg-transparent border-none outline-none justify-center">
+                <DialogContent className="justify-center border-none bg-transparent shadow-none outline-none">
                     <DialogTitle className="hidden"></DialogTitle>
-                    <div className="bg-white w-fit p-3 rounded-xl">
+                    <div className="w-fit rounded-xl bg-white p-3">
                         {animated ? (
                             <Spinner size={'large'} />
                         ) : (

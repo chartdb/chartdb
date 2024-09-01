@@ -132,7 +132,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     showAlert({
                         title: 'Export SQL Limit Reached',
                         content: (
-                            <div className="flex text-sm gap-1 flex-col">
+                            <div className="flex flex-col gap-1 text-sm">
                                 <div>
                                     We set a budget to allow the community to
                                     check the feature. You have reached the
@@ -220,11 +220,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 onChange={(e) =>
                                     setEditedDiagramName(e.target.value)
                                 }
-                                className="h-7 focus-visible:ring-0 ml-1"
+                                className="ml-1 h-7 focus-visible:ring-0"
                             />
                             <Button
                                 variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex"
                                 onClick={editDiagramName}
                             >
                                 <Check />
@@ -235,7 +235,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <Label>{diagramName}</Label>
                             <Button
                                 variant="ghost"
-                                className="hover:bg-primary-foreground p-2 w-7 h-7 text-slate-500 hover:text-slate-700 hidden group-hover:flex"
+                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex"
                                 onClick={enterEditMode}
                             >
                                 <Pencil />
@@ -257,9 +257,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const emojiAI = '✨';
 
     return (
-        <nav className="flex flex-col md:flex-row items-top md:items-center justify-between px-4 h-20 md:h-12 border-b">
-            <div className="flex flex-1 gap-x-3 justify-between md:justify-normal">
-                <div className="flex font-primary items-top md:items-center py-[10px] md:py-0">
+        <nav className="flex h-20 flex-col justify-between border-b px-4 md:h-12 md:flex-row md:items-center">
+            <div className="flex flex-1 justify-between gap-x-3 md:justify-normal">
+                <div className="flex py-[10px] font-primary md:items-center md:py-0">
                     <a
                         href="https://chartdb.io"
                         className="cursor-pointer"
@@ -464,10 +464,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </div>
             {isDesktop ? (
                 <>
-                    <div className="flex flex-row flex-1 justify-center items-center group">
+                    <div className="group flex flex-1 flex-row items-center justify-center">
                         {renderDiagramName()}
                     </div>
-                    <div className="hidden flex-1 justify-end sm:flex items-center gap-2">
+                    <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                         {renderLastSaved()}
                         {renderStars()}
                         {/* {renderDarkModeToggle()} */}
@@ -478,10 +478,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="flex justify-center">
                         {renderLastSaved()}
                     </div>
-                    <div className="flex flex-row flex-1 justify-center items-center group">
+                    <div className="group flex flex-1 flex-row items-center justify-center">
                         {renderDiagramName()}
                     </div>
-                    <div className="flex justify-center items-center">
+                    <div className="flex items-center justify-center">
                         {renderStars()}
                     </div>
                     {/* <div className="flex justify-center items-center">

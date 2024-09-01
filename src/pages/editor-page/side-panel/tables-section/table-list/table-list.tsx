@@ -37,7 +37,7 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
         <Accordion
             type="single"
             collapsible
-            className="flex flex-col w-full gap-1"
+            className="flex w-full flex-col gap-1"
             value={openedTableInSidebar}
             onValueChange={openTableFromSidebar}
         >

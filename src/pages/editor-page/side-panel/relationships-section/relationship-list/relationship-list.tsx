@@ -40,7 +40,7 @@ export const RelationshipList: React.FC<TableListProps> = ({
         <Accordion
             type="single"
             collapsible
-            className="flex flex-col w-full gap-1"
+            className="flex w-full flex-col gap-1"
             value={openedRelationshipInSidebar}
             onValueChange={openRelationshipFromSidebar}
         >

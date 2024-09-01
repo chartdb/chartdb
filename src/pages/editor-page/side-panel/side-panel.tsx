@@ -26,7 +26,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                         selectSidebarSection(value as SidebarSection)
                     }
                 >
-                    <SelectTrigger className="border-none rounded-none shadow-none focus:border-transparent focus:ring-0 hover:underline hover:bg-secondary font-semibold">
+                    <SelectTrigger className="rounded-none border-none font-semibold shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

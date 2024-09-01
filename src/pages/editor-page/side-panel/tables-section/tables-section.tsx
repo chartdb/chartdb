@@ -26,36 +26,36 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText]);
 
     return (
-        <section className="flex flex-col px-2 overflow-hidden flex-1">
-            <div className="flex items-center py-1 justify-between gap-4">
+        <section className="flex flex-1 flex-col overflow-hidden px-2">
+            <div className="flex items-center justify-between gap-4 py-1">
                 <div>
                     <Button
                         variant="ghost"
-                        className="p-0 h-8 w-8"
+                        className="size-8 p-0"
                         onClick={closeAllTablesInSidebar}
                     >
-                        <ListCollapse className="w-4 h-4" />
+                        <ListCollapse className="size-4" />
                     </Button>
                 </div>
                 <div className="flex-1">
                     <Input
                         type="text"
                         placeholder="Filter"
-                        className="h-8 focus-visible:ring-0 w-full"
+                        className="h-8 w-full focus-visible:ring-0"
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
                 <Button
                     variant="secondary"
-                    className="text-xs h-8 p-2"
+                    className="h-8 p-2 text-xs"
                     onClick={createTable}
                 >
                     <Table className="h-4" />
                     Add Table
                 </Button>
             </div>
-            <div className="flex flex-col flex-1 overflow-hidden">
+            <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
                     {tables.length === 0 ? (
                         <EmptyState

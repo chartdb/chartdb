@@ -63,8 +63,8 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const renderError = useCallback(
         () => (
             <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-center flex-col text-sm gap-1">
-                    <Annoyed className="w-10 h-10" />
+                <div className="flex flex-col items-center justify-center gap-1 text-sm">
+                    <Annoyed className="size-10" />
                     <Label className="text-sm">
                         Error generating SQL script. Please try again later or{' '}
                         <a
@@ -123,7 +123,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col min-w-[500px] xl:min-w-[75vw] max-h-[80vh] overflow-y-auto"
+                className="flex max-h-[80vh] min-w-[500px] flex-col overflow-y-auto xl:min-w-[75vw]"
                 showClose
             >
                 <DialogHeader>
