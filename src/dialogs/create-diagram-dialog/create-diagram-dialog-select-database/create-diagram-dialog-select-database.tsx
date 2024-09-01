@@ -13,7 +13,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { databaseLogoMap } from '@/lib/databases';
 import { Link } from '@/components/link/link';
 import { LayoutGrid } from 'lucide-react';
-import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
+import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 
 export interface CreateDiagramDialogSelectDatabaseProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;

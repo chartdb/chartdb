@@ -15,9 +15,9 @@ import { generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
-import { CreateDiagramDialogSelectDatabase } from './create-diagram-dialog-select-database';
+import { CreateDiagramDialogSelectDatabase } from './create-diagram-dialog-select-database/create-diagram-dialog-select-database';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
-import { CreateDiagramDialogImportDatabase } from './create-diagram-dialog-import-database';
+import { CreateDiagramDialogImportDatabase } from './create-diagram-dialog-import-database/create-diagram-dialog-import-database';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -142,7 +142,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex w-[90vw] flex-col overflow-y-auto xl:min-w-[45vw]"
+                className="flex w-[90vw] flex-col overflow-visible overflow-y-auto xl:min-w-[45vw]"
                 showClose={hasExistingDiagram}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (

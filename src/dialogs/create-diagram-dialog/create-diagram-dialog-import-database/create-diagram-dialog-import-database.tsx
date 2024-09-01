@@ -23,7 +23,8 @@ import {
     AvatarFallback,
     AvatarImage,
 } from '@/components/avatar/avatar';
-import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
+import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
+import { SSMSInfo } from './ssms-info/ssms-info';
 
 export interface CreateDiagramDialogImportDatabaseProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
@@ -143,9 +144,12 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                     </div>
                 ) : null}
                 <div className="flex flex-col gap-1">
-                    <p className="text-sm text-muted-foreground">
-                        1. Run this script in your database:
-                    </p>
+                    <div className="flex flex-col gap-1 text-sm text-muted-foreground md:flex-row md:justify-between">
+                        <div>1. Run this script in your database:</div>
+                        {databaseType === DatabaseType.SQL_SERVER && (
+                            <SSMSInfo />
+                        )}
+                    </div>
                     <CodeSnippet
                         className="max-h-40 w-full"
                         code={importMetadataScripts[databaseType]({
