@@ -33,6 +33,11 @@ import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
+import {
+    KeyboardShortcutAction,
+    keyboardShortcutsForOS,
+} from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
+import { useHistory } from '@/hooks/use-history';
 
 export interface TopNavbarProps {}
 
@@ -50,6 +55,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
@@ -398,8 +404,26 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <MenubarMenu>
                             <MenubarTrigger>Edit</MenubarTrigger>
                             <MenubarContent>
-                                <MenubarItem>Undo</MenubarItem>
-                                <MenubarItem>Redo</MenubarItem>
+                                <MenubarItem onClick={undo} disabled={!hasUndo}>
+                                    Undo
+                                    <MenubarShortcut>
+                                        {
+                                            keyboardShortcutsForOS[
+                                                KeyboardShortcutAction.UNDO
+                                            ].keyCombinationLabel
+                                        }
+                                    </MenubarShortcut>
+                                </MenubarItem>
+                                <MenubarItem onClick={redo} disabled={!hasRedo}>
+                                    Redo
+                                    <MenubarShortcut>
+                                        {
+                                            keyboardShortcutsForOS[
+                                                KeyboardShortcutAction.REDO
+                                            ].keyCombinationLabel
+                                        }
+                                    </MenubarShortcut>
+                                </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarItem
                                     onClick={() =>
