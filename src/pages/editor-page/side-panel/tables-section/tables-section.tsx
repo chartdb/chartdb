@@ -8,6 +8,7 @@ import { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 
 export interface TablesSectionProps {}
 
@@ -54,18 +55,18 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     Add Table
                 </Button>
             </div>
-            <div className="flex flex-col flex-1 overflow-scroll">
-                {/* <ScrollArea className="h-full !max-w-full"> */}
-                {tables.length === 0 ? (
-                    <EmptyState
-                        title="No tables"
-                        description="Create a table to get started"
-                        className="mt-20"
-                    />
-                ) : (
-                    <TableList tables={filteredTables} />
-                )}
-                {/* </ScrollArea> */}
+            <div className="flex flex-col flex-1 overflow-hidden">
+                <ScrollArea className="h-full">
+                    {tables.length === 0 ? (
+                        <EmptyState
+                            title="No tables"
+                            description="Create a table to get started"
+                            className="mt-20"
+                        />
+                    ) : (
+                        <TableList tables={filteredTables} />
+                    )}
+                </ScrollArea>
             </div>
         </section>
     );
