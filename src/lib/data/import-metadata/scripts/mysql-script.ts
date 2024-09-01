@@ -1,35 +1,45 @@
-export const mySQLQuery = `WITH fk_info as (
-  (SELECT (@fk_info:=NULL),
-              (SELECT (0)
-               FROM (SELECT kcu.table_schema,
-                kcu.table_name,
-                kcu.column_name as fk_column,
-                kcu.constraint_name as foreign_key_name,
-                kcu.referenced_table_name as reference_table,
-                kcu.referenced_column_name as reference_column,
-                CONCAT('FOREIGN KEY (', kcu.column_name, ') REFERENCES ',
-                       kcu.referenced_table_name, '(', kcu.referenced_column_name, ') ',
-                       'ON UPDATE ', rc.update_rule,
-                       ' ON DELETE ', rc.delete_rule) AS fk_def
-            FROM
-                information_schema.key_column_usage kcu
-            JOIN
-                information_schema.referential_constraints rc
-                ON kcu.constraint_name = rc.constraint_name
-                    AND kcu.table_schema = rc.constraint_schema
-                  AND kcu.table_name = rc.table_name
-            WHERE
-                kcu.referenced_table_name IS NOT NULL) as fk
-               WHERE table_schema LIKE IFNULL(NULL, '%')
-                   AND table_schema = DATABASE()
-                   AND (0x00) IN (@fk_info:=CONCAT_WS(',', @fk_info, CONCAT('{"schema":"',table_schema,
-                                               '","table":"',table_name,
-                                               '","column":"', IFNULL(fk_column, ''),
-                                                          '","foreign_key_name":"', IFNULL(foreign_key_name, ''),
-                                                          '","reference_table":"', IFNULL(reference_table, ''),
-                                                          '","reference_column":"', IFNULL(reference_column, ''),
-                                                          '","fk_def":"', IFNULL(fk_def, ''),
-                                               '"}')))))
+import { DatabaseEdition } from '@/lib/domain/database-edition';
+
+export const getMySQLQuery = (
+    options: {
+        databaseEdition?: DatabaseEdition;
+    } = {}
+): string => {
+    const databaseEdition: DatabaseEdition | undefined =
+        options.databaseEdition;
+
+    const newMySQLQuery = `WITH fk_info as (
+(SELECT (@fk_info:=NULL),
+    (SELECT (0)
+    FROM (SELECT kcu.table_schema,
+        kcu.table_name,
+        kcu.column_name as fk_column,
+        kcu.constraint_name as foreign_key_name,
+        kcu.referenced_table_name as reference_table,
+        kcu.referenced_column_name as reference_column,
+        CONCAT('FOREIGN KEY (', kcu.column_name, ') REFERENCES ',
+            kcu.referenced_table_name, '(', kcu.referenced_column_name, ') ',
+            'ON UPDATE ', rc.update_rule,
+            ' ON DELETE ', rc.delete_rule) AS fk_def
+    FROM
+        information_schema.key_column_usage kcu
+    JOIN
+        information_schema.referential_constraints rc
+        ON kcu.constraint_name = rc.constraint_name
+            AND kcu.table_schema = rc.constraint_schema
+        AND kcu.table_name = rc.table_name
+    WHERE
+        kcu.referenced_table_name IS NOT NULL) as fk
+    WHERE table_schema LIKE IFNULL(NULL, '%')
+        AND table_schema = DATABASE()
+        AND (0x00) IN (@fk_info:=CONCAT_WS(',', @fk_info, CONCAT('{"schema":"',table_schema,
+                                    '","table":"',table_name,
+                                    '","column":"', IFNULL(fk_column, ''),
+                                                '","foreign_key_name":"', IFNULL(foreign_key_name, ''),
+                                                '","reference_table":"', IFNULL(reference_table, ''),
+                                                '","reference_column":"', IFNULL(reference_column, ''),
+                                                '","fk_def":"', IFNULL(fk_def, ''),
+                                    '"}')))))
 ), pk_info AS (
     (SELECT (@pk_info:=NULL),
               (SELECT (0)
@@ -128,3 +138,150 @@ export const mySQLQuery = `WITH fk_info as (
             '", "version": "', VERSION(), '"}') AS CHAR) AS ''
  FROM fk_info, pk_info, cols, indexes, tbls, views);
 `;
+
+    const oldMySQLQuery = `SELECT CAST(CONCAT(
+    '{"fk_info": [',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(fk.table_schema as CHAR),
+               '","table":"', fk.table_name,
+               '","column":"', IFNULL(fk.fk_column, ''),
+               '","foreign_key_name":"', IFNULL(fk.foreign_key_name, ''),
+               '","reference_table":"', IFNULL(fk.reference_table, ''),
+               '","reference_column":"', IFNULL(fk.reference_column, ''),
+               '","fk_def":"', IFNULL(fk.fk_def, ''), '"}')
+    ) FROM (
+        SELECT kcu.table_schema,
+               kcu.table_name,
+               kcu.column_name AS fk_column,
+               kcu.constraint_name AS foreign_key_name,
+               kcu.referenced_table_name AS reference_table,
+               kcu.referenced_column_name AS reference_column,
+               CONCAT('FOREIGN KEY (', kcu.column_name, ') REFERENCES ',
+                      kcu.referenced_table_name, '(', kcu.referenced_column_name, ') ',
+                      'ON UPDATE ', rc.update_rule,
+                      ' ON DELETE ', rc.delete_rule) AS fk_def
+        FROM information_schema.key_column_usage kcu
+        JOIN information_schema.referential_constraints rc
+          ON kcu.constraint_name = rc.constraint_name
+         AND kcu.table_schema = rc.constraint_schema
+         AND kcu.table_name = rc.table_name
+        WHERE kcu.referenced_table_name IS NOT NULL
+          AND kcu.table_schema = DATABASE()
+    ) AS fk), ''),
+    '], "pk_info": [',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(pk.TABLE_SCHEMA as CHAR),
+               '","table":"', pk.pk_table,
+               '","column":"', pk.pk_column,
+               '","pk_def":"', IFNULL(pk.pk_def, ''), '"}')
+    ) FROM (
+        SELECT TABLE_SCHEMA,
+               TABLE_NAME AS pk_table,
+               COLUMN_NAME AS pk_column,
+               CONCAT('PRIMARY KEY (', GROUP_CONCAT(COLUMN_NAME ORDER BY ORDINAL_POSITION SEPARATOR ', '), ')') AS pk_def
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+        WHERE CONSTRAINT_NAME = 'PRIMARY'
+        GROUP BY TABLE_SCHEMA, TABLE_NAME
+    ) AS pk), ''),
+    '], "columns": [',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(cols.table_schema as CHAR),
+               '","table":"', cols.table_name,
+               '","name":"', REPLACE(cols.column_name, '"', '\\"'),
+               '","type":"', LOWER(cols.data_type),
+               '","character_maximum_length":"', IFNULL(cols.character_maximum_length, 'null'),
+               '","precision":',
+               IF(cols.data_type IN ('decimal', 'numeric'),
+                  CONCAT('{"precision":', IFNULL(cols.numeric_precision, 'null'),
+                         ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
+               ',"ordinal_position":"', cols.ordinal_position,
+               '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
+               ',"default":"', IFNULL(REPLACE(cols.column_default, '"', '\\"'), ''),
+               '","collation":"', IFNULL(cols.collation_name, ''), '"}')
+    ) FROM (
+        SELECT cols.table_schema,
+               cols.table_name,
+               cols.column_name,
+               LOWER(cols.data_type) AS data_type,
+               cols.character_maximum_length,
+               cols.numeric_precision,
+               cols.numeric_scale,
+               cols.ordinal_position,
+               cols.is_nullable,
+               cols.column_default,
+               cols.collation_name
+        FROM information_schema.columns cols
+        WHERE cols.table_schema = DATABASE()
+    ) AS cols), ''),
+    '], "indexes": [',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(idx.table_schema as CHAR),
+               '","table":"', idx.table_name,
+               '","name":"', idx.index_name,
+               '","size":"', IFNULL(
+                    (SELECT SUM(stat_value * @@innodb_page_size)
+                     FROM mysql.innodb_index_stats
+                     WHERE stat_name = 'size'
+                       AND index_name != 'PRIMARY'
+                       AND index_name = idx.index_name
+                       AND TABLE_NAME = idx.table_name
+                       AND database_name = idx.table_schema), -1),
+               '","column":"', idx.column_name,
+               '","index_type":"', LOWER(idx.index_type),
+               '","cardinality":', idx.cardinality,
+               ',"direction":"', (CASE WHEN idx.collation = 'D' THEN 'desc' ELSE 'asc' END),
+               '","unique":', IF(idx.non_unique = 1, 'false', 'true'), '}')
+    ) FROM (
+        SELECT indexes.table_schema,
+               indexes.table_name,
+               indexes.index_name,
+               indexes.column_name,
+               LOWER(indexes.index_type) AS index_type,
+               indexes.cardinality,
+               indexes.collation,
+               indexes.non_unique
+        FROM information_schema.statistics indexes
+        WHERE indexes.table_schema = DATABASE()
+    ) AS idx), ''),
+    '], "tables":[',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(tbls.TABLE_SCHEMA as CHAR),
+               '","table":"', tbls.TABLE_NAME,
+               '","rows":', IFNULL(tbls.TABLE_ROWS, 0),
+               ',"type":"', IFNULL(tbls.TABLE_TYPE, ''),
+               '","engine":"', IFNULL(tbls.ENGINE, ''),
+               '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''), '"}')
+    ) FROM (
+        SELECT TABLE_SCHEMA,
+               TABLE_NAME,
+               TABLE_ROWS,
+               TABLE_TYPE,
+               ENGINE,
+               TABLE_COLLATION
+        FROM information_schema.tables tbls
+        WHERE tbls.table_schema = DATABASE()
+    ) AS tbls), ''),
+    '], "views":[',
+    IFNULL((SELECT GROUP_CONCAT(
+        CONCAT('{"schema":"', cast(vws.TABLE_SCHEMA as CHAR),
+               '","view_name":"', vws.view_name,
+               '","definition":"', definition, '"}')
+    ) FROM (
+        SELECT TABLE_SCHEMA,
+               TABLE_NAME AS view_name,
+               '' AS definition
+        FROM information_schema.views vws
+        WHERE vws.table_schema = DATABASE()
+    ) AS vws), ''),
+    '], "database_name": "', DATABASE(),
+    '", "version": "', VERSION(), '"}') AS CHAR) AS ''
+`;
+
+    // Define the base query
+    const query =
+        databaseEdition === DatabaseEdition.MYSQL_5_7
+            ? newMySQLQuery
+            : oldMySQLQuery;
+
+    return query;
+};

@@ -81,9 +81,9 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
         WHERE
             contype = 'f'
             AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                databaseEdition === DatabaseEdition.TIMESCALE
+                databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
                     ? timescaleFilters
-                    : databaseEdition === DatabaseEdition.SUPABASE
+                    : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
                       ? supabaseFilters
                       : ''
             }
@@ -108,9 +108,9 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
             WHERE
               contype = 'p'
               AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                  databaseEdition === DatabaseEdition.TIMESCALE
+                  databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
                       ? timescaleFilters
-                      : databaseEdition === DatabaseEdition.SUPABASE
+                      : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
                         ? supabaseFilters
                         : ''
               }
@@ -159,9 +159,9 @@ cols AS (
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''), '"}')), ',') AS cols_metadata
     FROM information_schema.columns cols
     WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleColFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseColFilter
               : ''
     }
@@ -178,9 +178,9 @@ cols AS (
                                             ',"direction":"', LOWER(direction),
                                             '"}')), ',') AS indexes_metadata
     FROM indexes_cols x ${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleIndexesFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseIndexesFilter
               : ''
     }
@@ -193,9 +193,9 @@ cols AS (
                       ',') AS tbls_metadata
     FROM information_schema.tables tbls
     WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleTableFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseTableFilter
               : ''
     }
@@ -209,9 +209,9 @@ cols AS (
                       ',') AS views_metadata
     FROM pg_views views
     WHERE views.schemaname NOT IN ('information_schema', 'pg_catalog') ${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleViewsFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseViewsFilter
               : ''
     }

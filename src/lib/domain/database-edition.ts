@@ -3,25 +3,31 @@ import SupabaseImage from '@/assets/supabase.png';
 import TimescaleImage from '@/assets/timescale.png';
 
 export enum DatabaseEdition {
-    SUPABASE = 'supabase',
-    TIMESCALE = 'timescale',
+    POSTGRESQL_SUPABASE = 'supabase',
+    POSTGRESQL_TIMESCALE = 'timescale',
+
+    MYSQL_5_7 = 'mysql5.7',
 }
 
 export const databaseEditionToLabelMap: Record<DatabaseEdition, string> = {
-    [DatabaseEdition.SUPABASE]: 'Supabase',
-    [DatabaseEdition.TIMESCALE]: 'Timescale',
+    [DatabaseEdition.POSTGRESQL_SUPABASE]: 'Supabase',
+    [DatabaseEdition.POSTGRESQL_TIMESCALE]: 'Timescale',
+
+    [DatabaseEdition.MYSQL_5_7]: 'MySQL 5.7',
 };
 
 export const databaseEditionToImageMap: Record<DatabaseEdition, string> = {
-    [DatabaseEdition.SUPABASE]: SupabaseImage,
-    [DatabaseEdition.TIMESCALE]: TimescaleImage,
+    [DatabaseEdition.POSTGRESQL_SUPABASE]: SupabaseImage,
+    [DatabaseEdition.POSTGRESQL_TIMESCALE]: TimescaleImage,
+
+    [DatabaseEdition.MYSQL_5_7]: TimescaleImage,
 };
 
 export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
     {
         [DatabaseType.POSTGRESQL]: [
-            DatabaseEdition.SUPABASE,
-            DatabaseEdition.TIMESCALE,
+            DatabaseEdition.POSTGRESQL_SUPABASE,
+            DatabaseEdition.POSTGRESQL_TIMESCALE,
         ],
         [DatabaseType.MYSQL]: [],
         [DatabaseType.SQLITE]: [],
