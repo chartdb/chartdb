@@ -143,8 +143,8 @@ export const RelationshipListItemHeader: React.FC<
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 group">
-            <div className="flex flex-1">
+        <div className="h-11 flex items-center justify-between flex-1 group overflow-hidden">
+            <div className="flex flex-1 min-w-0">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -157,7 +157,7 @@ export const RelationshipListItemHeader: React.FC<
                         className="h-7 focus-visible:ring-0 w-full"
                     />
                 ) : (
-                    relationship.name
+                    <div className="truncate">{relationship.name}</div>
                 )}
             </div>
             <div className="flex flex-row-reverse">

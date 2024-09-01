@@ -15,7 +15,7 @@ export const EmptyState = forwardRef<
     <div
         ref={ref}
         className={cn(
-            'flex flex-col items-center justify-center space-y-1',
+            'flex flex-1 flex-col items-center justify-center space-y-1',
             className
         )}
     >
