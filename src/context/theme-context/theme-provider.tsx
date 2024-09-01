@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeContext } from './theme-context';
+import { EffectiveThemeType, ThemeContext, ThemeType } from './theme-context';
 
-type ThemeType = 'light' | 'dark' | 'system';
-
-const getSystemTheme = (): 'light' | 'dark' => {
-    if (
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
+const getSystemTheme = (): EffectiveThemeType => {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         return 'dark';
     }
     return 'light';
@@ -17,18 +12,12 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [theme, setTheme] = useState<ThemeType>(() => {
-        if (typeof window !== 'undefined') {
-            const savedTheme = localStorage.getItem(
-                'theme'
-            ) as ThemeType | null;
-            return savedTheme || 'system';
-        }
-        return 'system';
+        const savedTheme = localStorage.getItem('theme') as ThemeType | null;
+        return savedTheme || 'system';
     });
 
-    const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>(
-        getSystemTheme()
-    );
+    const [effectiveTheme, setEffectiveTheme] =
+        useState<EffectiveThemeType>(getSystemTheme());
 
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
