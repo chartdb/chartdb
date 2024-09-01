@@ -65,11 +65,11 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-full justify-between h-auto"
+                            className="h-auto w-full justify-between"
                         >
                             {selected && selected.length > 0 ? (
-                                <div className="relative mr-auto flex flex-grow flex-wrap items-center overflow-hidden">
-                                    <span className="overflow-hidden whitespace-nowrap text-ellipsis">
+                                <div className="relative mr-auto flex grow flex-wrap items-center overflow-hidden">
+                                    <span className="truncate">
                                         {mode === 'multiple' &&
                                         Array.isArray(selected)
                                             ? selected
@@ -94,7 +94,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                                     {placeholder ?? 'Select Item...'}
                                 </div>
                             )}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent

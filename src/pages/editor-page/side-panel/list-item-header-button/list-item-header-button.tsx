@@ -9,7 +9,7 @@ export const ListItemHeaderButton: React.FC<ButtonProps> = React.forwardRef<
         <Button
             ref={ref}
             variant="ghost"
-            className="hover:bg-primary-foreground hover:cursor-pointer p-2 w-8 h-8 text-slate-500 hover:text-slate-700"
+            className="size-8 p-2 text-slate-500 hover:cursor-pointer hover:bg-primary-foreground hover:text-slate-700"
             asChild
             {...props}
         />

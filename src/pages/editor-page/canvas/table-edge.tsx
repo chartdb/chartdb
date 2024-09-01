@@ -146,6 +146,7 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
                 fill="none"
                 strokeOpacity={0}
                 strokeWidth={20}
+                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="react-flow__edge-interaction"
                 onClick={(e) => {
                     if (e.detail === 2) {

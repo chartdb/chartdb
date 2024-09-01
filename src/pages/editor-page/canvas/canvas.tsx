@@ -285,7 +285,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
                         className="!shadow-none"
                     >
                         <Button
-                            className="bg-pink-600 hover:bg-pink-500 w-11 h-11 p-2"
+                            className="size-11 bg-pink-600 p-2 hover:bg-pink-500"
                             onClick={showSidePanel}
                         >
                             <Pencil />

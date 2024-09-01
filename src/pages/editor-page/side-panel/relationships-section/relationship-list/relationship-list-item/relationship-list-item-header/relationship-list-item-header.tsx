@@ -133,7 +133,7 @@ export const RelationshipListItemHeader: React.FC<
                             className="flex justify-between !text-red-700"
                         >
                             Delete
-                            <Trash2 className="text-red-700 w-3.5 h-3.5" />
+                            <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -143,8 +143,8 @@ export const RelationshipListItemHeader: React.FC<
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 group overflow-hidden">
-            <div className="flex flex-1 min-w-0">
+        <div className="group flex h-11 flex-1 items-center justify-between overflow-hidden">
+            <div className="flex min-w-0 flex-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -154,7 +154,7 @@ export const RelationshipListItemHeader: React.FC<
                         value={relationshipName}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setRelationshipName(e.target.value)}
-                        className="h-7 focus-visible:ring-0 w-full"
+                        className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
                     <div className="truncate">{relationship.name}</div>
@@ -164,7 +164,7 @@ export const RelationshipListItemHeader: React.FC<
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
-                        <div className="flex md:hidden md:group-hover:flex flex-row-reverse">
+                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>

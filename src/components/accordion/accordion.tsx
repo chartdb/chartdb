@@ -25,7 +25,7 @@ const AccordionTrigger = React.forwardRef<
     }
 >(({ className, children, iconPosition = 'left', ...props }, ref) => {
     const renderIcon = () => (
-        <ChevronDownIcon className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+        <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
     );
     return (
         <AccordionPrimitive.Header className="flex">

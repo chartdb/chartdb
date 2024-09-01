@@ -42,13 +42,13 @@ export const TableField: React.FC<TableFieldProps> = ({
     }));
 
     return (
-        <div className="flex flex-row p-1 justify-between flex-1">
-            <div className="flex w-8/12 gap-1 justify-start overflow-hidden">
+        <div className="flex flex-1 flex-row justify-between p-1">
+            <div className="flex w-8/12 justify-start gap-1 overflow-hidden">
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span className="w-7/12">
                             <Input
-                                className="h-8 focus-visible:ring-0 w-full !overflow-hidden !whitespace-nowrap !text-ellipsis"
+                                className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
                                 placeholder="Name"
                                 value={field.name}
@@ -85,13 +85,13 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <TooltipContent>{field.type.name}</TooltipContent>
                 </Tooltip>
             </div>
-            <div className="flex w-4/12 gap-1 justify-end overflow-hidden">
+            <div className="flex w-4/12 justify-end gap-1 overflow-hidden">
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
                             <Toggle
                                 variant="default"
-                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 text-xs h-8"
+                                className="h-8 w-[32px] p-2 text-xs text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                                 pressed={field.nullable}
                                 onPressedChange={(value) =>
                                     updateField({
@@ -110,7 +110,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <span>
                             <Toggle
                                 variant="default"
-                                className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                                className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                                 pressed={field.primaryKey}
                                 onPressedChange={(value) =>
                                     updateField({
@@ -129,18 +129,18 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                         >
-                            <Ellipsis className="h-3.5 w-3.5" />
+                            <Ellipsis className="size-3.5" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-52">
-                        <div className="flex gap-2 flex-col">
+                        <div className="flex flex-col gap-2">
                             <div className="text-sm font-semibold">
                                 Field Attributes
                             </div>
                             <Separator orientation="horizontal" />
-                            <div className="flex justify-between items-center">
+                            <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="width"
                                     className="text-gray-700"
@@ -160,10 +160,10 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <Separator orientation="horizontal" />
                             <Button
                                 variant="outline"
-                                className="flex !text-red-700 gap-2"
+                                className="flex gap-2 !text-red-700"
                                 onClick={removeField}
                             >
-                                <Trash2 className="text-red-700 w-3.5 h-3.5" />
+                                <Trash2 className="size-3.5 text-red-700" />
                                 Delete field
                             </Button>
                         </div>
