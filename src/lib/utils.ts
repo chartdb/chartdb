@@ -13,3 +13,14 @@ export function cn(...inputs: ClassValue[]) {
 export const emptyFn = (): any => undefined;
 
 export const generateId = () => randomId();
+
+export const getOperatingSystem = (): 'mac' | 'windows' | 'unknown' => {
+    const userAgent = window.navigator.userAgent;
+    if (userAgent.includes('Mac OS X')) {
+        return 'mac';
+    }
+    if (userAgent.includes('Windows')) {
+        return 'windows';
+    }
+    return 'unknown';
+};
