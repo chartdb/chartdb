@@ -474,16 +474,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </div>
                 </>
             ) : (
-                <div className="flex flex-1 flex-row justify-between">
-                    <div className="flex justify-center">
-                        {renderLastSaved()}
-                    </div>
-                    <div className="group flex flex-1 flex-row items-center justify-center">
+                <div className="flex flex-1 flex-row justify-between gap-2">
+                    <div className="group flex flex-1 flex-row items-center">
                         {renderDiagramName()}
                     </div>
-                    <div className="flex items-center justify-center">
-                        {renderStars()}
-                    </div>
+                    <div className="flex items-center">{renderLastSaved()}</div>
+                    <div className="flex items-center">{renderStars()}</div>
                     {/* <div className="flex justify-center items-center">
                         {renderDarkModeToggle()}
                     </div> */}
