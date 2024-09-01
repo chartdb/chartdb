@@ -20,7 +20,7 @@ export const RelationshipListItem = React.forwardRef<
         <AccordionItem value={relationship.id} className="rounded-md" ref={ref}>
             <AccordionTrigger
                 asChild
-                className="hover:no-underline hover:bg-accent rounded-md px-2 py-0 data-[state=open]:rounded-b-none"
+                className="hover:no-underline hover:bg-accent rounded-md px-2 py-0 data-[state=open]:rounded-b-none w-full"
             >
                 <RelationshipListItemHeader relationship={relationship} />
             </AccordionTrigger>

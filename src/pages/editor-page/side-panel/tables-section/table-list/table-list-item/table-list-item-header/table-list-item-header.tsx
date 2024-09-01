@@ -148,8 +148,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 gap-1 group">
-            <div className="flex flex-1">
+        <div className="h-11 flex items-center justify-between flex-1 gap-1 group overflow-hidden">
+            <div className="flex flex-1 min-w-0">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -162,7 +162,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 focus-visible:ring-0 w-full"
                     />
                 ) : (
-                    table.name
+                    <div className="truncate">{table.name}</div>
                 )}
             </div>
             <div className="flex flex-row-reverse">

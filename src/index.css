@@ -11,4 +11,8 @@
         @apply transition-[width];
         @apply duration-100;
     }
+
+    .scrollable-flex > div {
+        @apply !flex;
+    }
 }

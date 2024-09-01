@@ -19,7 +19,7 @@ export const TableListItem = React.forwardRef<
     return (
         <AccordionItem value={table.id} className="rounded-md" ref={ref}>
             <AccordionTrigger
-                className="hover:no-underline hover:bg-accent rounded-md px-2 border-l-[6px] py-0 data-[state=open]:rounded-b-none"
+                className="hover:no-underline hover:bg-accent rounded-md px-2 border-l-[6px] py-0 data-[state=open]:rounded-b-none w-full"
                 style={{
                     borderColor: table.color,
                 }}
