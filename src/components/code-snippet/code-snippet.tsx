@@ -7,17 +7,19 @@ export interface CodeSnippetProps {
     className?: string;
     codeProps?: CodeBlockProps;
     code: string;
+    language?: 'sql' | 'bash';
 }
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = ({
     className,
     codeProps,
     code,
+    language = 'sql',
 }) => {
     return (
         <div className={cn('flex flex-1', className)}>
             <CopyBlock
-                language="sql"
+                language={language}
                 text={code}
                 theme={atomOneDark}
                 customStyle={{
