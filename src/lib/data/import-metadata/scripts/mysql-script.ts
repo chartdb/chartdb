@@ -80,7 +80,7 @@ export const getMySQLQuery = (
                     END,
                 ',"ordinal_position":"', cols.ordinal_position,
                 '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(REPLACE(cols.column_default, '"', '\\"'), ''),
+                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), ''),
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (
@@ -135,7 +135,7 @@ export const getMySQLQuery = (
             '], "tables":[',IFNULL(@tbls,''),
             '], "views":[',IFNULL(@views,''),
             '], "database_name": "', DATABASE(),
-            '", "version": "', VERSION(), '"}') AS CHAR) AS ''
+            '", "version": "', VERSION(), '"}') AS CHAR) AS metadata_json_to_import
  FROM fk_info, pk_info, cols, indexes, tbls, views);
 `;
 
@@ -196,7 +196,7 @@ export const getMySQLQuery = (
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
                ',"ordinal_position":"', cols.ordinal_position,
                '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-               ',"default":"', IFNULL(REPLACE(cols.column_default, '"', '\\"'), ''),
+               ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
                '","collation":"', IFNULL(cols.collation_name, ''), '"}')
     ) FROM (
         SELECT cols.table_schema,
@@ -274,7 +274,7 @@ export const getMySQLQuery = (
         WHERE vws.table_schema = DATABASE()
     ) AS vws), ''),
     '], "database_name": "', DATABASE(),
-    '", "version": "', VERSION(), '"}') AS CHAR) AS ''
+    '", "version": "', VERSION(), '"}') AS CHAR) AS metadata_json_to_import
 `;
 
     // To avoid the nondeterministic truncation and ensure that your query results are consistent.

@@ -179,5 +179,5 @@ SELECT JSON_QUERY(
         ', "views": ' + ISNULL((SELECT cast(all_views_json as nvarchar(max)) FROM views), N'[]') +
         ', "database_name": "' + DB_NAME() + '"' +
         ', "version": ""}'
-) AS full_json_result;
+) AS metadata_json_to_import;
 `;
