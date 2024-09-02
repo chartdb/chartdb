@@ -158,8 +158,15 @@ cols AS (
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
                                             ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
-                                            '","collation":"', COALESCE(cols.COLLATION_NAME, ''), '"}')), ',') AS cols_metadata
+                                            '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
+                                            '","comment":"', COALESCE(dsc.description, ''), '"}')), ',') AS cols_metadata
     FROM information_schema.columns cols
+    LEFT JOIN pg_catalog.pg_class c
+        ON c.relname = cols.table_name
+    LEFT JOIN pg_catalog.pg_namespace n
+        ON n.oid = c.relnamespace AND n.nspname = cols.table_schema
+    LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
+                                        AND dsc.objsubid = cols.ordinal_position
     WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
         databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleColFilter
@@ -187,20 +194,29 @@ cols AS (
               : ''
     }
 ), tbls AS (
-    SELECT array_to_string(array_agg(CONCAT('{', '"schema":"', TABLE_SCHEMA, '",', '"table":"', TABLE_NAME, '",', '"rows":',
-                                      COALESCE((SELECT s.n_live_tup
+    SELECT array_to_string(array_agg(CONCAT('{',
+                        '"schema":"', tbls.TABLE_SCHEMA, '",',
+                        '"table":"', tbls.TABLE_NAME, '",',
+                        '"rows":', COALESCE((SELECT s.n_live_tup
                                                 FROM pg_stat_user_tables s
                                                 WHERE tbls.TABLE_SCHEMA = s.schemaname AND tbls.TABLE_NAME = s.relname),
-                                                0), ', "type":"', TABLE_TYPE, '",', '"engine":"",', '"collation":""}')),
-                      ',') AS tbls_metadata
-    FROM information_schema.tables tbls
-    WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
-        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-            ? timescaleTableFilter
-            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-              ? supabaseTableFilter
-              : ''
-    }
+                                                0), ', "type":"', tbls.TABLE_TYPE, '",', '"engine":"",', '"collation":"",',
+                        '"comment":"', COALESCE(dsc.description, ''), '"}'
+                )),
+                ',') AS tbls_metadata
+        FROM information_schema.tables tbls
+        LEFT JOIN pg_catalog.pg_class c ON c.relname = tbls.TABLE_NAME
+        LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                                            AND n.nspname = tbls.TABLE_SCHEMA
+        LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
+                                                AND dsc.objsubid = 0
+        WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
+            databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
+                ? timescaleTableFilter
+                : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
+                  ? supabaseTableFilter
+                  : ''
+        }
 ), config AS (
     SELECT array_to_string(
                       array_agg(CONCAT('{"name":"', conf.name, '","value":"', replace(conf.setting, '"', E'"'), '"}')),
