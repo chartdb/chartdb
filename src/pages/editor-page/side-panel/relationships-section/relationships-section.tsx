@@ -8,6 +8,7 @@ import { DBRelationship } from '@/lib/domain/db-relationship';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
+import { useTranslation } from 'react-i18next';
 
 export interface RelationshipsSectionProps {}
 
@@ -15,6 +16,7 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
     const { relationships } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRelationshipsInSidebar } = useLayout();
+    const { t } = useTranslation();
 
     const filteredRelationships = useMemo(() => {
         const filter: (relationship: DBRelationship) => boolean = (
@@ -41,7 +43,9 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                 <div className="flex-1">
                     <Input
                         type="text"
-                        placeholder="Filter"
+                        placeholder={t(
+                            'side_panel.relationships_section.filter'
+                        )}
                         className="h-8 w-full focus-visible:ring-0"
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
@@ -52,8 +56,12 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                 <ScrollArea className="h-full">
                     {relationships.length === 0 ? (
                         <EmptyState
-                            title="No relationships"
-                            description="Create a relationship to connect tables"
+                            title={t(
+                                'side_panel.relationships_section.empty_state.title'
+                            )}
+                            description={t(
+                                'side_panel.relationships_section.empty_state.description'
+                            )}
                             className="mt-20"
                         />
                     ) : (

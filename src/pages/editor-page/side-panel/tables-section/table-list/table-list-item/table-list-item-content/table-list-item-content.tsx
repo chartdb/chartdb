@@ -14,6 +14,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { TableField } from './table-field/table-field';
 import { TableIndex } from './table-index/table-index';
 import { DBIndex } from '@/lib/domain/db-index';
+import { useTranslation } from 'react-i18next';
 
 type AccordionItemValue = 'fields' | 'indexes';
 
@@ -32,6 +33,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         removeIndex,
         updateIndex,
     } = useChartDB();
+    const { t } = useTranslation();
     const { color } = table;
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
@@ -73,7 +75,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         <div className="flex flex-1 items-center justify-between">
                             <div className="flex flex-row items-center gap-1">
                                 <FileType2 className="size-4" />
-                                Fields
+                                {t('side_panel.tables_section.table.fields')}
                             </div>
                             <div className="flex flex-row-reverse">
                                 <div className="hidden flex-row-reverse group-hover:flex">
@@ -116,7 +118,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         <div className="flex flex-1 items-center justify-between">
                             <div className="flex flex-row items-center gap-1">
                                 <FileKey2 className="size-4" />
-                                Indexes
+                                {t('side_panel.tables_section.table.indexes')}
                             </div>
                             <div className="flex flex-row-reverse">
                                 <div className="hidden flex-row-reverse group-hover:flex">
@@ -160,7 +162,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         onClick={createIndexHandler}
                     >
                         <FileKey2 className="h-4" />
-                        Add Index
+                        {t('side_panel.tables_section.table.add_index')}
                     </Button>
                 </div>
                 <div>
@@ -170,7 +172,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         onClick={() => createField(table.id)}
                     >
                         <FileType2 className="h-4" />
-                        Add Field
+                        {t('side_panel.tables_section.table.add_field')}
                     </Button>
                 </div>
             </div>

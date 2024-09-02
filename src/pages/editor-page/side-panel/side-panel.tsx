@@ -11,11 +11,12 @@ import { TablesSection } from './tables-section/tables-section';
 import { RelationshipsSection } from './relationships-section/relationships-section';
 import { useLayout } from '@/hooks/use-layout';
 import { SidebarSection } from '@/context/layout-context/layout-context';
+import { useTranslation } from 'react-i18next';
 
 export interface SidePanelProps {}
 
 export const SidePanel: React.FC<SidePanelProps> = () => {
-    // const [selected, setSelected] = React.useState('tables');
+    const { t } = useTranslation();
     const { selectSidebarSection, selectedSidebarSection } = useLayout();
     return (
         <aside className="flex h-full flex-col overflow-hidden">
@@ -31,9 +32,13 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="tables">Tables</SelectItem>
+                            <SelectItem value="tables">
+                                {t('side_panel.tables_section.tables')}
+                            </SelectItem>
                             <SelectItem value="relationships">
-                                Relationships
+                                {t(
+                                    'side_panel.relationships_section.relationships'
+                                )}
                             </SelectItem>
                         </SelectGroup>
                     </SelectContent>

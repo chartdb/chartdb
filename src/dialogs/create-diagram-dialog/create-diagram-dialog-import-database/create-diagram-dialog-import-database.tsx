@@ -25,6 +25,7 @@ import {
 } from '@/components/avatar/avatar';
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { SSMSInfo } from './ssms-info/ssms-info';
+import { useTranslation } from 'react-i18next';
 
 export interface CreateDiagramDialogImportDatabaseProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
@@ -51,6 +52,7 @@ export const CreateDiagramDialogImportDatabase: React.FC<
     setDatabaseEdition,
     errorMessage,
 }) => {
+    const { t } = useTranslation();
     const handleInputChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             const inputValue = e.target.value;
@@ -62,10 +64,12 @@ export const CreateDiagramDialogImportDatabase: React.FC<
     const renderHeader = useCallback(() => {
         return (
             <DialogHeader>
-                <DialogTitle>Import your Database</DialogTitle>
+                <DialogTitle>
+                    {t('new_diagram_dialog.import_database.title')}
+                </DialogTitle>
             </DialogHeader>
         );
-    }, []);
+    }, [t]);
 
     const renderContent = useCallback(() => {
         return (
@@ -73,7 +77,9 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                 {databaseTypeToEditionMap[databaseType].length > 0 ? (
                     <div className="flex flex-col gap-1 md:flex-row">
                         <p className="text-sm leading-6 text-muted-foreground">
-                            Database edition:
+                            {t(
+                                'new_diagram_dialog.import_database.database_edition'
+                            )}
                         </p>
                         <ToggleGroup
                             type="single"
@@ -145,7 +151,9 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                 ) : null}
                 <div className="flex flex-col gap-1">
                     <div className="flex flex-col gap-1 text-sm text-muted-foreground md:flex-row md:justify-between">
-                        <div>1. Run this script in your database:</div>
+                        <div>
+                            1. {t('new_diagram_dialog.import_database.step_1')}
+                        </div>
                         {databaseType === DatabaseType.SQL_SERVER && (
                             <SSMSInfo />
                         )}
@@ -159,11 +167,13 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                 </div>
                 <div className="flex h-48 flex-col gap-1">
                     <p className="text-sm text-muted-foreground">
-                        2. Paste the script result here:
+                        2. {t('new_diagram_dialog.import_database.step_2')}
                     </p>
                     <Textarea
                         className="w-full flex-1 rounded-md bg-muted p-2 text-sm"
-                        placeholder="Script result here..."
+                        placeholder={t(
+                            'new_diagram_dialog.import_database.script_results_placeholder'
+                        )}
                         value={scriptResult}
                         onChange={handleInputChange}
                     />
@@ -182,6 +192,7 @@ export const CreateDiagramDialogImportDatabase: React.FC<
         handleInputChange,
         scriptResult,
         setDatabaseEdition,
+        t,
     ]);
 
     const renderFooter = useCallback(() => {
@@ -195,7 +206,7 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                             setStep(CreateDiagramDialogStep.SELECT_DATABASE)
                         }
                     >
-                        Back
+                        {t('new_diagram_dialog.back')}
                     </Button>
                 </div>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
@@ -205,7 +216,7 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                             variant="outline"
                             onClick={createNewDiagram}
                         >
-                            Empty diagram
+                            {t('new_diagram_dialog.empty_diagram')}
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
@@ -218,13 +229,13 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                             }
                             onClick={createNewDiagram}
                         >
-                            Import
+                            {t('new_diagram_dialog.import')}
                         </Button>
                     </DialogClose>
                 </div>
             </DialogFooter>
         );
-    }, [createNewDiagram, errorMessage.length, scriptResult, setStep]);
+    }, [createNewDiagram, errorMessage.length, scriptResult, setStep, t]);
 
     return (
         <>
