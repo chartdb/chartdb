@@ -7,6 +7,7 @@ export const en: ResourceLanguage = {
                 file: 'File',
                 new: 'New',
                 open: 'Open',
+                save: 'Save',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
                 delete_diagram: 'Delete Diagram',
