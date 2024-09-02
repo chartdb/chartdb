@@ -195,7 +195,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="secondary" className="flex gap-1">
-                        {isDesktop ? 'Last saved' : ''}
+                        {isDesktop ? 'Last saved' : 'Saved'}
                         <TimeAgo datetime={currentDiagram.updatedAt} />
                     </Badge>
                 </TooltipTrigger>
