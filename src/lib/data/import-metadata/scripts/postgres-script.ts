@@ -1,3 +1,4 @@
+import { DatabaseClient } from '@/lib/domain/database-clients';
 import {
     DatabaseEdition,
     databaseEditionToLabelMap,
@@ -6,6 +7,7 @@ import {
 export const getPostgresQuery = (
     options: {
         databaseEdition?: DatabaseEdition;
+        databaseClient?: DatabaseClient;
     } = {}
 ): string => {
     const databaseEdition: DatabaseEdition | undefined =
@@ -226,6 +228,12 @@ SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
               '"}') AS metadata_json_to_import
 FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
     `;
+
+    if (options.databaseClient === DatabaseClient.POSTGRESQL_PSQL) {
+        return `psql -h HOST_NAME -p PORT -U USER_NAME -d DATABASE_NAME -c "
+${query}
+" -t -A | pbcopy; LG='\\033[0;32m'; NC='\\033[0m'; echo "You got the resultset ($(pbpaste | wc -c | xargs) characters) in Copy/Paste. \${LG}Go back & paste in ChartDB :)\${NC}";`;
+    }
 
     return query;
 };

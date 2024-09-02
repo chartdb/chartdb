@@ -16,7 +16,7 @@ import { LayoutGrid } from 'lucide-react';
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { useTranslation } from 'react-i18next';
 
-export interface CreateDiagramDialogSelectDatabaseProps {
+export interface SelectDatabaseStepProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
     databaseType: DatabaseType;
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
@@ -24,9 +24,7 @@ export interface CreateDiagramDialogSelectDatabaseProps {
     createNewDiagram: () => void;
 }
 
-export const CreateDiagramDialogSelectDatabase: React.FC<
-    CreateDiagramDialogSelectDatabaseProps
-> = ({
+export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
     setStep,
     databaseType,
     setDatabaseType,

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
@@ -26,8 +26,14 @@ import {
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
+import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
+import {
+    DatabaseClient,
+    databaseClientToLabelMap,
+    databaseTypeToClientsMap,
+} from '@/lib/domain/database-clients';
 
-export interface CreateDiagramDialogImportDatabaseProps {
+export interface ImportDatabaseStepProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
     createNewDiagram: () => void;
     scriptResult: string;
@@ -40,9 +46,7 @@ export interface CreateDiagramDialogImportDatabaseProps {
     errorMessage: string;
 }
 
-export const CreateDiagramDialogImportDatabase: React.FC<
-    CreateDiagramDialogImportDatabaseProps
-> = ({
+export const ImportDatabaseStep: React.FC<ImportDatabaseStepProps> = ({
     setScriptResult,
     setStep,
     scriptResult,
@@ -52,6 +56,10 @@ export const CreateDiagramDialogImportDatabase: React.FC<
     setDatabaseEdition,
     errorMessage,
 }) => {
+    const databaseClients = databaseTypeToClientsMap[databaseType];
+    const [databaseClient, setDatabaseClient] = useState<
+        DatabaseClient | undefined
+    >();
     const { t } = useTranslation();
     const handleInputChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -158,12 +166,56 @@ export const CreateDiagramDialogImportDatabase: React.FC<
                             <SSMSInfo />
                         )}
                     </div>
-                    <CodeSnippet
-                        className="max-h-40 w-full"
-                        code={importMetadataScripts[databaseType]({
-                            databaseEdition,
-                        })}
-                    />
+                    {databaseTypeToClientsMap[databaseType].length > 0 ? (
+                        <Tabs
+                            value={
+                                !databaseClient ? 'dbclient' : databaseClient
+                            }
+                            onValueChange={(value) => {
+                                setDatabaseClient(
+                                    value === 'dbclient'
+                                        ? undefined
+                                        : (value as DatabaseClient)
+                                );
+                            }}
+                        >
+                            <div className="flex flex-1">
+                                <TabsList className="h-8 justify-start rounded-none rounded-t-sm ">
+                                    <TabsTrigger
+                                        value="dbclient"
+                                        className="h-6 w-20"
+                                    >
+                                        DB Client
+                                    </TabsTrigger>
+
+                                    {databaseClients?.map((client) => (
+                                        <TabsTrigger
+                                            key={client}
+                                            value={client}
+                                            className="h-6 !w-20"
+                                        >
+                                            {databaseClientToLabelMap[client]}
+                                        </TabsTrigger>
+                                    )) ?? []}
+                                </TabsList>
+                            </div>
+                            <CodeSnippet
+                                className="max-h-40 w-full"
+                                code={importMetadataScripts[databaseType]({
+                                    databaseEdition,
+                                    databaseClient,
+                                })}
+                                language={databaseClient ? 'bash' : 'sql'}
+                            />
+                        </Tabs>
+                    ) : (
+                        <CodeSnippet
+                            className="max-h-40 w-full"
+                            code={importMetadataScripts[databaseType]({
+                                databaseEdition,
+                            })}
+                        />
+                    )}
                 </div>
                 <div className="flex h-48 flex-col gap-1">
                     <p className="text-sm text-muted-foreground">
@@ -192,6 +244,8 @@ export const CreateDiagramDialogImportDatabase: React.FC<
         handleInputChange,
         scriptResult,
         setDatabaseEdition,
+        databaseClients,
+        databaseClient,
         t,
     ]);
 

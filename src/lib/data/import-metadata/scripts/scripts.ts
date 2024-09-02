@@ -5,10 +5,14 @@ import { sqliteQuery } from './sqlite-script';
 import { sqlServerQuery } from './sqlserver-script';
 import { mariaDBQuery } from './maria-script';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
+import { DatabaseClient } from '@/lib/domain/database-clients';
 
 export const importMetadataScripts: Record<
     DatabaseType,
-    (options?: { databaseEdition?: DatabaseEdition }) => string
+    (options?: {
+        databaseEdition?: DatabaseEdition;
+        databaseClient?: DatabaseClient;
+    }) => string
 > = {
     [DatabaseType.GENERIC]: () => '',
     [DatabaseType.POSTGRESQL]: getPostgresQuery,
