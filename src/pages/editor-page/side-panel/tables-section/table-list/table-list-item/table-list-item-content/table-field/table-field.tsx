@@ -23,6 +23,7 @@ import {
 import { Label } from '@/components/label/label';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
+import { Textarea } from '@/components/textarea/textarea';
 
 export interface TableFieldProps {
     field: DBField;
@@ -152,24 +153,48 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                             </div>
                             <Separator orientation="horizontal" />
-                            <div className="flex items-center justify-between">
-                                <Label
-                                    htmlFor="width"
-                                    className="text-gray-700"
-                                >
-                                    {t(
-                                        'side_panel.tables_section.table.field_actions.unique'
-                                    )}
-                                </Label>
-                                <Checkbox
-                                    checked={field.unique}
-                                    disabled={field.primaryKey}
-                                    onCheckedChange={(value) =>
-                                        updateField({
-                                            unique: !!value,
-                                        })
-                                    }
-                                />
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center justify-between">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-gray-700"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.unique'
+                                        )}
+                                    </Label>
+                                    <Checkbox
+                                        checked={field.unique}
+                                        disabled={field.primaryKey}
+                                        onCheckedChange={(value) =>
+                                            updateField({
+                                                unique: !!value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-gray-700"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.comments'
+                                        )}
+                                    </Label>
+                                    <Textarea
+                                        value={field.comments}
+                                        onChange={(e) =>
+                                            updateField({
+                                                comments: e.target.value,
+                                            })
+                                        }
+                                        placeholder={t(
+                                            'side_panel.tables_section.table.field_actions.no_comments'
+                                        )}
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                </div>
                             </div>
                             <Separator orientation="horizontal" />
                             <Button
