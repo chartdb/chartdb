@@ -223,7 +223,7 @@ SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
                     '], "tables":[', COALESCE(tbls_metadata, ''),
                     '], "views":[', COALESCE(views_metadata, ''),
                     '], "database_name": "', CURRENT_DATABASE(), '', '", "version": "', '',
-              '"}') AS " "
+              '"}') AS metadata_json_to_import
 FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
     `;
 
