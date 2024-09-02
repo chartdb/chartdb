@@ -49,6 +49,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         currentDiagram,
         clearDiagramData,
         deleteDiagram,
+        updateDiagramUpdatedAt,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -293,6 +294,25 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarItem>
                                 <MenubarItem onClick={openDiagram}>
                                     {t('menu.file.open')}
+                                    <MenubarShortcut>
+                                        {
+                                            keyboardShortcutsForOS[
+                                                KeyboardShortcutAction
+                                                    .OPEN_DIAGRAM
+                                            ].keyCombinationLabel
+                                        }
+                                    </MenubarShortcut>
+                                </MenubarItem>
+                                <MenubarItem onClick={updateDiagramUpdatedAt}>
+                                    {t('menu.file.save')}
+                                    <MenubarShortcut>
+                                        {
+                                            keyboardShortcutsForOS[
+                                                KeyboardShortcutAction
+                                                    .SAVE_DIAGRAM
+                                            ].keyCombinationLabel
+                                        }
+                                    </MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarSub>

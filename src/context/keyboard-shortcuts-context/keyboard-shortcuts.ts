@@ -3,6 +3,8 @@ import { getOperatingSystem } from '@/lib/utils';
 export enum KeyboardShortcutAction {
     REDO = 'redo',
     UNDO = 'undo',
+    OPEN_DIAGRAM = 'open_diagram',
+    SAVE_DIAGRAM = 'save_diagram',
 }
 
 export interface KeyboardShortcut {
@@ -30,6 +32,20 @@ export const keyboardShortcuts: Record<
         keyCombinationLabelWin: 'Ctrl+Z',
         keyCombinationMac: 'meta+z',
         keyCombinationWin: 'ctrl+z',
+    },
+    [KeyboardShortcutAction.OPEN_DIAGRAM]: {
+        action: KeyboardShortcutAction.OPEN_DIAGRAM,
+        keyCombinationLabelMac: '⌘O',
+        keyCombinationLabelWin: 'Ctrl+O',
+        keyCombinationMac: 'meta+o',
+        keyCombinationWin: 'ctrl+o',
+    },
+    [KeyboardShortcutAction.SAVE_DIAGRAM]: {
+        action: KeyboardShortcutAction.SAVE_DIAGRAM,
+        keyCombinationLabelMac: '⌘S',
+        keyCombinationLabelWin: 'Ctrl+S',
+        keyCombinationMac: 'meta+s',
+        keyCombinationWin: 'ctrl+s',
     },
 };
 
