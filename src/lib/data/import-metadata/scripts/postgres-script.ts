@@ -229,9 +229,11 @@ SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
 FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
     `;
 
+    const psqlPreCommand = `# *** Remember to change! (HOST_NAME, PORT, USER_NAME, DATABASE_NAME) *** \n`;
+
     if (options.databaseClient === DatabaseClient.POSTGRESQL_PSQL) {
-        return `psql -h HOST_NAME -p PORT -U USER_NAME -d DATABASE_NAME -c "
-${query}
+        return `${psqlPreCommand}psql -h HOST_NAME -p PORT -U USER_NAME -d DATABASE_NAME -c "
+${query.replace(/"/g, '\\"').replace(/\\\\/g, '\\\\\\').replace(/\\x/g, '\\\\x')}
 " -t -A | pbcopy; LG='\\033[0;32m'; NC='\\033[0m'; echo "You got the resultset ($(pbpaste | wc -c | xargs) characters) in Copy/Paste. \${LG}Go back & paste in ChartDB :)\${NC}";`;
     }
 
