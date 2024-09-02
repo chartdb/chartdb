@@ -13,6 +13,7 @@ import { Separator } from '@/components/separator/separator';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { Label } from '@/components/label/label';
 import { Input } from '@/components/input/input';
+import { useTranslation } from 'react-i18next';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -27,6 +28,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     updateIndex,
     removeIndex,
 }) => {
+    const { t } = useTranslation();
     const fieldOptions = fields.map((field) => ({
         label: field.name,
         value: field.id,
@@ -42,7 +44,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 popoverClassName="w-48"
                 mode="multiple"
                 options={fieldOptions}
-                placeholder="Select fields"
+                placeholder={t(
+                    'side_panel.tables_section.table.index_select_fields'
+                )}
                 selected={index.fieldIds}
                 onChange={updateIndexFields}
                 emptyText="No types found."
@@ -60,7 +64,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     <PopoverContent className="w-52">
                         <div className="flex flex-col gap-2">
                             <div className="text-sm font-semibold">
-                                Index Attributes
+                                {t(
+                                    'side_panel.tables_section.table.index_actions.title'
+                                )}
                             </div>
                             <Separator orientation="horizontal" />
                             <div className="flex flex-col gap-2">
@@ -68,7 +74,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     htmlFor="width"
                                     className="text-gray-700"
                                 >
-                                    Name
+                                    {t(
+                                        'side_panel.tables_section.table.index_actions.name'
+                                    )}
                                 </Label>
                                 <Input
                                     value={index.name}
@@ -84,7 +92,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     htmlFor="width"
                                     className="text-gray-700"
                                 >
-                                    Unique
+                                    {t(
+                                        'side_panel.tables_section.table.index_actions.unique'
+                                    )}
                                 </Label>
                                 <Checkbox
                                     checked={index.unique}
@@ -102,7 +112,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                 onClick={removeIndex}
                             >
                                 <Trash2 className="size-3.5 text-red-700" />
-                                Delete index
+                                {t(
+                                    'side_panel.tables_section.table.index_actions.delete_index'
+                                )}
                             </Button>
                         </div>
                     </PopoverContent>

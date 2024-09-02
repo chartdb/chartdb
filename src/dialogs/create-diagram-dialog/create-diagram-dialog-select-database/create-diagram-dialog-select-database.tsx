@@ -14,6 +14,7 @@ import { databaseLogoMap } from '@/lib/databases';
 import { Link } from '@/components/link/link';
 import { LayoutGrid } from 'lucide-react';
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
+import { useTranslation } from 'react-i18next';
 
 export interface CreateDiagramDialogSelectDatabaseProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
@@ -32,6 +33,7 @@ export const CreateDiagramDialogSelectDatabase: React.FC<
     hasExistingDiagram,
     createNewDiagram,
 }) => {
+    const { t } = useTranslation();
     const renderDatabaseOption = useCallback((type: DatabaseType) => {
         const logo = databaseLogoMap[type];
         return (
@@ -54,28 +56,34 @@ export const CreateDiagramDialogSelectDatabase: React.FC<
                     </div>
                     <div className="flex flex-col-reverse">
                         <div className="hidden text-sm text-primary md:flex">
-                            Check Examples
+                            {t(
+                                'new_diagram_dialog.database_selection.check_examples_long'
+                            )}
                         </div>
                         <div className="flex text-xs text-primary md:hidden">
-                            Examples
+                            {t(
+                                'new_diagram_dialog.database_selection.check_examples_short'
+                            )}
                         </div>
                     </div>
                 </div>
             </Link>
         ),
-        []
+        [t]
     );
 
     const renderHeader = useCallback(() => {
         return (
             <DialogHeader>
-                <DialogTitle>What is your Database?</DialogTitle>
+                <DialogTitle>
+                    {t('new_diagram_dialog.database_selection.title')}
+                </DialogTitle>
                 <DialogDescription>
-                    Each database has its own unique features and capabilities.
+                    {t('new_diagram_dialog.database_selection.description')}
                 </DialogDescription>
             </DialogHeader>
         );
-    }, []);
+    }, [t]);
 
     const renderContent = useCallback(() => {
         return (
@@ -116,7 +124,7 @@ export const CreateDiagramDialogSelectDatabase: React.FC<
                 {hasExistingDiagram ? (
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
-                            Cancel
+                            {t('new_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
                 ) : (
@@ -128,7 +136,7 @@ export const CreateDiagramDialogSelectDatabase: React.FC<
                         variant="outline"
                         onClick={createNewDiagram}
                     >
-                        Empty diagram
+                        {t('new_diagram_dialog.empty_diagram')}
                     </Button>
                     <Button
                         type="button"
@@ -138,12 +146,12 @@ export const CreateDiagramDialogSelectDatabase: React.FC<
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }
                     >
-                        Continue
+                        {t('new_diagram_dialog.continue')}
                     </Button>
                 </div>
             </DialogFooter>
         );
-    }, [createNewDiagram, databaseType, hasExistingDiagram, setStep]);
+    }, [createNewDiagram, databaseType, hasExistingDiagram, setStep, t]);
 
     return (
         <>

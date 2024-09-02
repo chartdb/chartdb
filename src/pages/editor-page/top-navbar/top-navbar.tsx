@@ -38,6 +38,7 @@ import {
     keyboardShortcutsForOS,
 } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useHistory } from '@/hooks/use-history';
+import { useTranslation } from 'react-i18next';
 
 export interface TopNavbarProps {}
 
@@ -55,6 +56,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
@@ -195,7 +197,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="secondary" className="flex gap-1">
-                        {isDesktop ? 'Last saved' : 'Saved'}
+                        {isDesktop ? t('last_saved') : t('saved')}
                         <TimeAgo datetime={currentDiagram.updatedAt} />
                     </Badge>
                 </TooltipTrigger>
@@ -204,14 +206,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 </TooltipContent>
             </Tooltip>
         );
-    }, [currentDiagram.updatedAt, isDesktop]);
+    }, [currentDiagram.updatedAt, isDesktop, t]);
 
     const renderDiagramName = useCallback(() => {
         return (
             <>
                 <DiagramIcon diagram={currentDiagram} />
                 <div className="flex">
-                    {isDesktop ? <Label>Diagrams/</Label> : null}
+                    {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
                 </div>
                 <div className="flex flex-row items-center gap-1">
                     {editMode ? (
@@ -258,6 +260,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         editMode,
         editedDiagramName,
         isDesktop,
+        t,
     ]);
 
     const emojiAI = '✨';
@@ -281,18 +284,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 <div>
                     <Menubar className="border-none shadow-none">
                         <MenubarMenu>
-                            <MenubarTrigger>File</MenubarTrigger>
+                            <MenubarTrigger>
+                                {t('menu.file.file')}
+                            </MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={createNewDiagram}>
-                                    New
+                                    {t('menu.file.new')}
                                 </MenubarItem>
                                 <MenubarItem onClick={openDiagram}>
-                                    Open
+                                    {t('menu.file.open')}
                                 </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarSub>
                                     <MenubarSubTrigger>
-                                        Export SQL
+                                        {t('menu.file.export_sql')}
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
                                         <MenubarItem
@@ -368,7 +373,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarSub>
                                 <MenubarSub>
                                     <MenubarSubTrigger>
-                                        Export as
+                                        {t('menu.file.export_as')}
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
                                         <MenubarItem onClick={exportPNG}>
@@ -386,26 +391,35 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <MenubarItem
                                     onClick={() =>
                                         showAlert({
-                                            title: 'Delete Diagram',
-                                            description:
-                                                'This action cannot be undone. This will permanently delete the diagram.',
-                                            actionLabel: 'Delete',
-                                            closeLabel: 'Cancel',
+                                            title: t(
+                                                'delete_diagram_alert.title'
+                                            ),
+                                            description: t(
+                                                'delete_diagram_alert.description'
+                                            ),
+                                            actionLabel: t(
+                                                'delete_diagram_alert.delete'
+                                            ),
+                                            closeLabel: t(
+                                                'delete_diagram_alert.cancel'
+                                            ),
                                             onAction: deleteDiagram,
                                         })
                                     }
                                 >
-                                    Delete Diagram
+                                    {t('menu.file.delete_diagram')}
                                 </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarItem>Exit</MenubarItem>
+                                <MenubarItem>{t('menu.file.exit')}</MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>
-                            <MenubarTrigger>Edit</MenubarTrigger>
+                            <MenubarTrigger>
+                                {t('menu.edit.edit')}
+                            </MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={undo} disabled={!hasUndo}>
-                                    Undo
+                                    {t('menu.edit.undo')}
                                     <MenubarShortcut>
                                         {
                                             keyboardShortcutsForOS[
@@ -415,7 +429,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     </MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarItem onClick={redo} disabled={!hasRedo}>
-                                    Redo
+                                    {t('menu.edit.redo')}
                                     <MenubarShortcut>
                                         {
                                             keyboardShortcutsForOS[
@@ -428,16 +442,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <MenubarItem
                                     onClick={() =>
                                         showAlert({
-                                            title: 'Clear Diagram',
-                                            description:
-                                                'This action cannot be undone. This will permanently delete all the data in the diagram.',
-                                            actionLabel: 'Clear',
-                                            closeLabel: 'Cancel',
+                                            title: t(
+                                                'clear_diagram_alert.title'
+                                            ),
+                                            description: t(
+                                                'clear_diagram_alert.description'
+                                            ),
+                                            actionLabel: t(
+                                                'clear_diagram_alert.clear'
+                                            ),
+                                            closeLabel: t(
+                                                'clear_diagram_alert.cancel'
+                                            ),
                                             onAction: clearDiagramData,
                                         })
                                     }
                                 >
-                                    Clear
+                                    {t('menu.edit.clear')}
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
@@ -473,13 +494,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             </MenubarContent>
                         </MenubarMenu> */}
                         <MenubarMenu>
-                            <MenubarTrigger>Help</MenubarTrigger>
+                            <MenubarTrigger>
+                                {t('menu.help.help')}
+                            </MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={openChartDBIO}>
-                                    Visit ChartDB
+                                    {t('menu.help.visit_website')}
                                 </MenubarItem>
                                 <MenubarItem onClick={openJoinDiscord}>
-                                    Join us on Discord
+                                    {t('menu.help.join_discord')}
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>

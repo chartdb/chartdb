@@ -25,6 +25,7 @@ import {
 import { useReactFlow } from '@xyflow/react';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useTranslation } from 'react-i18next';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -34,6 +35,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
     const { updateTable, removeTable, createIndex, createField } = useChartDB();
+    const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
     const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
@@ -107,7 +109,11 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>Table Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        {t(
+                            'side_panel.tables_section.table.table_actions.title'
+                        )}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
@@ -117,7 +123,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 createField(table.id);
                             }}
                         >
-                            Add field
+                            {t(
+                                'side_panel.tables_section.table.table_actions.add_field'
+                            )}
                             <FileType2 className="size-3.5" />
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -127,7 +135,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 createIndex(table.id);
                             }}
                         >
-                            Add index
+                            {t(
+                                'side_panel.tables_section.table.table_actions.add_index'
+                            )}
                             <FileKey2 className="size-3.5" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -137,14 +147,16 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             onClick={deleteTableHandler}
                             className="flex justify-between !text-red-700"
                         >
-                            Delete table
+                            {t(
+                                'side_panel.tables_section.table.table_actions.delete_table'
+                            )}
                             <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [table.id, createField, createIndex, deleteTableHandler]
+        [table.id, createField, createIndex, deleteTableHandler, t]
     );
 
     return (

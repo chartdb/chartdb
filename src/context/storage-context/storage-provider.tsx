@@ -68,9 +68,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         const config = await getConfig();
 
         if (!config) {
+            const diagrams = await db.diagrams.toArray();
+
             await db.config.add({
                 id: 1,
-                defaultDiagramId: '',
+                defaultDiagramId: diagrams?.[0]?.id ?? '',
             });
         }
     });

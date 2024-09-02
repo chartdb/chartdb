@@ -22,6 +22,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DialogProps } from '@radix-ui/react-dialog';
 import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 export interface ExportSQLDialogProps {
     dialog: DialogProps;
@@ -34,6 +35,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
 }) => {
     const { closeExportSQLDialog } = useDialog();
     const { currentDiagram } = useChartDB();
+    const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
 
@@ -66,26 +68,32 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <div className="flex flex-col items-center justify-center gap-1 text-sm">
                     <Annoyed className="size-10" />
                     <Label className="text-sm">
-                        Error generating SQL script. Please try again later or{' '}
-                        <a
-                            href="mailto:chartdb.io@gmail.com"
-                            target="_blank"
-                            className="text-pink-600 hover:underline"
-                            rel="noreferrer"
-                        >
-                            contact us.
-                        </a>
+                        <Trans
+                            i18nKey="export_sql_dialog.error.message" // optional -> fallbacks to defaults if not provided
+                            components={[
+                                <a
+                                    key={0}
+                                    href="mailto:chartdb.io@gmail.com"
+                                    target="_blank"
+                                    className="text-pink-600 hover:underline"
+                                    rel="noreferrer"
+                                />,
+                            ]}
+                        />
                     </Label>
                     <div>
-                        Feel free to use your OPENAI_TOKEN, see the manual{' '}
-                        <a
-                            href="https://github.com/chartdb/chartdb"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-pink-600 hover:underline"
-                        >
-                            here.
-                        </a>
+                        <Trans
+                            i18nKey="export_sql_dialog.error.description" // optional -> fallbacks to defaults if not provided
+                            components={[
+                                <a
+                                    key={0}
+                                    href="https://github.com/chartdb/chartdb"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-pink-600 hover:underline"
+                                />,
+                            ]}
+                        />
                     </div>
                 </div>
             </div>
@@ -100,18 +108,20 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <div className="flex items-center justify-center gap-1">
                     <Sparkles className="h-5" />
                     <Label className="text-lg">
-                        AI is generating SQL for{' '}
-                        {databaseTypeToLabelMap[targetDatabaseType]}...
+                        {t('export_sql_dialog.loading.text', {
+                            databaseType:
+                                databaseTypeToLabelMap[targetDatabaseType],
+                        })}
                     </Label>
                 </div>
                 <div className="flex items-center justify-center gap-1">
                     <Label className="text-sm">
-                        This should take up to 30 seconds.
+                        {t('export_sql_dialog.loading.description')}
                     </Label>
                 </div>
             </div>
         ),
-        [targetDatabaseType]
+        [targetDatabaseType, t]
     );
     return (
         <Dialog
@@ -127,13 +137,16 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 showClose
             >
                 <DialogHeader>
-                    <DialogTitle>Export SQL</DialogTitle>
+                    <DialogTitle>{t('export_sql_dialog.title')}</DialogTitle>
                     <DialogDescription>
-                        {`Export your diagram schema to ${
-                            targetDatabaseType === DatabaseType.GENERIC
-                                ? 'SQL'
-                                : databaseTypeToLabelMap[targetDatabaseType]
-                        } script`}
+                        {t('export_sql_dialog.description', {
+                            databaseType:
+                                targetDatabaseType === DatabaseType.GENERIC
+                                    ? 'SQL'
+                                    : databaseTypeToLabelMap[
+                                          targetDatabaseType
+                                      ],
+                        })}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
@@ -154,7 +167,9 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <DialogFooter className="flex !justify-between gap-2">
                     <div />
                     <DialogClose asChild>
-                        <Button type="button">Close</Button>
+                        <Button type="button">
+                            {t('export_sql_dialog.close')}
+                        </Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

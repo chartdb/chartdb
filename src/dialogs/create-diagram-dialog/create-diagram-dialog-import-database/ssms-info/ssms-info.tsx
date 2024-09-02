@@ -8,6 +8,7 @@ import { Info } from 'lucide-react';
 import React from 'react';
 import SSMSInstructions from '@/assets/ssms-instructions.png';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
+import { useTranslation } from 'react-i18next';
 
 export interface SSMSInfoProps {}
 
@@ -16,6 +17,7 @@ export const SSMSInfo = React.forwardRef<
     SSMSInfoProps
 >((props, ref) => {
     const [open, setOpen] = React.useState(false);
+    const { t } = useTranslation();
     return (
         <HoverCard
             open={open}
@@ -31,22 +33,32 @@ export const SSMSInfo = React.forwardRef<
                     }}
                 >
                     <Info size={14} />
-                    <Label className="text-xs">SSMS Instructions</Label>
+                    <Label className="text-xs">
+                        {t(
+                            'new_diagram_dialog.import_database.ssms_instructions.button_text'
+                        )}
+                    </Label>
                 </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
                 <div className="flex">
                     <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Instructions</h4>
+                        <h4 className="text-sm font-semibold">
+                            {t(
+                                'new_diagram_dialog.import_database.ssms_instructions.title'
+                            )}
+                        </h4>
                         <p className="text-xs text-muted-foreground">
                             <span className="font-semibold">1. </span>
-                            {
-                                'Go to Tools > Options > Query Results > SQL Server.'
-                            }
+                            {t(
+                                'new_diagram_dialog.import_database.ssms_instructions.step_1'
+                            )}
                         </p>
                         <p className="text-xs text-muted-foreground">
                             <span className="font-semibold">2. </span>
-                            {`If you're using "Results to Grid," change the Maximum Characters Retrieved for Non-XML data (set to 9999999).`}
+                            {t(
+                                'new_diagram_dialog.import_database.ssms_instructions.step_2'
+                            )}
                         </p>
                         <div className="flex items-center pt-2">
                             <ZoomableImage src={SSMSInstructions} />

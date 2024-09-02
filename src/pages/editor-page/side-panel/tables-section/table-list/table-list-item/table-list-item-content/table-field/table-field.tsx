@@ -22,6 +22,7 @@ import {
 } from '@/components/popover/popover';
 import { Label } from '@/components/label/label';
 import { Checkbox } from '@/components/checkbox/checkbox';
+import { useTranslation } from 'react-i18next';
 
 export interface TableFieldProps {
     field: DBField;
@@ -35,6 +36,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     removeField,
 }) => {
     const { databaseType } = useChartDB();
+    const { t } = useTranslation();
 
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
         label: type.name,
@@ -50,7 +52,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <Input
                                 className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
-                                placeholder="Name"
+                                placeholder={t(
+                                    'side_panel.tables_section.table.field_name'
+                                )}
                                 value={field.name}
                                 onChange={(e) =>
                                     updateField({
@@ -69,7 +73,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 className="flex h-8 w-full"
                                 mode="single"
                                 options={dataFieldOptions}
-                                placeholder="Type"
+                                placeholder={t(
+                                    'side_panel.tables_section.table.field_type'
+                                )}
                                 selected={field.type.id}
                                 onChange={(value) =>
                                     updateField({
@@ -103,7 +109,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                             </Toggle>
                         </span>
                     </TooltipTrigger>
-                    <TooltipContent>Nullable?</TooltipContent>
+                    <TooltipContent>
+                        {t('side_panel.tables_section.table.nullable')}
+                    </TooltipContent>
                 </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
@@ -123,7 +131,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                             </Toggle>
                         </span>
                     </TooltipTrigger>
-                    <TooltipContent>Primary Key</TooltipContent>
+                    <TooltipContent>
+                        {t('side_panel.tables_section.table.primary_key')}
+                    </TooltipContent>
                 </Tooltip>
                 <Popover>
                     <PopoverTrigger asChild>
@@ -137,7 +147,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <PopoverContent className="w-52">
                         <div className="flex flex-col gap-2">
                             <div className="text-sm font-semibold">
-                                Field Attributes
+                                {t(
+                                    'side_panel.tables_section.table.field_actions.title'
+                                )}
                             </div>
                             <Separator orientation="horizontal" />
                             <div className="flex items-center justify-between">
@@ -145,7 +157,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                     htmlFor="width"
                                     className="text-gray-700"
                                 >
-                                    Unique
+                                    {t(
+                                        'side_panel.tables_section.table.field_actions.unique'
+                                    )}
                                 </Label>
                                 <Checkbox
                                     checked={field.unique}
@@ -164,7 +178,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 onClick={removeField}
                             >
                                 <Trash2 className="size-3.5 text-red-700" />
-                                Delete field
+                                {t(
+                                    'side_panel.tables_section.table.field_actions.delete_field'
+                                )}
                             </Button>
                         </div>
                     </PopoverContent>

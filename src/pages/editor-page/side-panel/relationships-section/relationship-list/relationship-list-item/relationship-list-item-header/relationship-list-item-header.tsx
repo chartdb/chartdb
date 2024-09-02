@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/input/input';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useTranslation } from 'react-i18next';
 
 export interface RelationshipListItemHeaderProps {
     relationship: DBRelationship;
@@ -33,6 +34,7 @@ export const RelationshipListItemHeader: React.FC<
 > = ({ relationship }) => {
     const { updateRelationship, removeRelationship } = useChartDB();
     const { fitView, deleteElements, setEdges } = useReactFlow();
+    const { t } = useTranslation();
     const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -125,21 +127,27 @@ export const RelationshipListItemHeader: React.FC<
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        {t(
+                            'side_panel.relationships_section.relationship.relationship_actions.title'
+                        )}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             onClick={deleteRelationshipHandler}
                             className="flex justify-between !text-red-700"
                         >
-                            Delete
+                            {t(
+                                'side_panel.relationships_section.relationship.relationship_actions.delete_relationship'
+                            )}
                             <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [deleteRelationshipHandler]
+        [deleteRelationshipHandler, t]
     );
 
     return (
