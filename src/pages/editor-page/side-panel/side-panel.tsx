@@ -29,6 +29,9 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 >
                     <SelectTrigger className="rounded-none border-none font-semibold shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
                         <SelectValue />
+                        <div className="flex flex-1 justify-end px-2 text-xs font-normal text-muted-foreground">
+                            View all Options...
+                        </div>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
