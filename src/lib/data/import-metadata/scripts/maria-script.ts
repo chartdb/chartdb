@@ -36,7 +36,11 @@ export const mariaDBQuery = `WITH fk_info as (
                FROM (SELECT TABLE_SCHEMA,
                             TABLE_NAME AS pk_table,
                             COLUMN_NAME AS pk_column,
-                            CONCAT('PRIMARY KEY (', GROUP_CONCAT(COLUMN_NAME ORDER BY ORDINAL_POSITION SEPARATOR ', '), ')') AS pk_def
+                            (SELECT CONCAT('PRIMARY KEY (', GROUP_CONCAT(inc.COLUMN_NAME ORDER BY inc.ORDINAL_POSITION SEPARATOR ', '), ')')
+                               FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE as inc
+                               WHERE inc.CONSTRAINT_NAME = 'PRIMARY' and
+                                     outc.TABLE_SCHEMA = inc.TABLE_SCHEMA and
+                                     outc.TABLE_NAME = inc.TABLE_NAME) AS pk_def
                        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
                        WHERE CONSTRAINT_NAME = 'PRIMARY'
                        GROUP BY TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME
