@@ -43,11 +43,11 @@ export const FullScreenLoaderProvider: React.FC<React.PropsWithChildren> = ({
                 <DialogContent className="justify-center border-none bg-transparent shadow-none outline-none">
                     <DialogTitle className="hidden"></DialogTitle>
                     <DialogDescription className="hidden" />
-                    <div className="w-fit rounded-xl bg-white p-3">
+                    <div className="w-fit rounded-xl bg-primary-foreground p-3">
                         {animated ? (
-                            <Spinner size={'large'} />
+                            <Spinner size={'large'} className="text-primary" />
                         ) : (
-                            <Hourglass className="size-12" />
+                            <Hourglass className="size-12 text-primary" />
                         )}
                     </div>
                 </DialogContent>
