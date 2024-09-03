@@ -68,6 +68,18 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
         sqlScript += '\n);\n\n';
 
+        // Add table comment
+        if (table.comments) {
+            sqlScript += `COMMENT ON TABLE ${table.name} IS '${table.comments}';\n`;
+        }
+
+        table.fields.forEach((field) => {
+            // Add column comment
+            if (field.comments) {
+                sqlScript += `COMMENT ON COLUMN ${table.name}.${field.name} IS '${field.comments}';\n`;
+            }
+        });
+
         // Generate SQL for indexes
         table.indexes.forEach((index) => {
             const fieldNames = index.fieldIds
