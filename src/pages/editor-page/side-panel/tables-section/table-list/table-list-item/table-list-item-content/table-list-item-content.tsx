@@ -71,7 +71,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="fields" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">
@@ -83,7 +83,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
+                                        className="size-4 p-0 text-xs hover:bg-primary-foreground"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createField(table.id);
@@ -114,7 +114,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="indexes" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">
@@ -126,7 +126,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
+                                        className="size-4 p-0 text-xs hover:bg-primary-foreground"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createIndexHandler();
@@ -158,7 +158,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="comments" className="border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">

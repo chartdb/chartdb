@@ -9,7 +9,6 @@ import { Separator } from '@/components/separator/separator';
 import { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { dataTypeMap } from '@/lib/data/data-types';
-import { Toggle } from '@/components/toggle/toggle';
 import {
     Tooltip,
     TooltipContent,
@@ -24,6 +23,7 @@ import { Label } from '@/components/label/label';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
+import { TableFieldToggle } from './table-field-toggle';
 
 export interface TableFieldProps {
     field: DBField;
@@ -96,9 +96,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
-                            <Toggle
-                                variant="default"
-                                className="h-8 w-[32px] p-2 text-xs text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                            <TableFieldToggle
                                 pressed={field.nullable}
                                 onPressedChange={(value) =>
                                     updateField({
@@ -107,7 +105,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 }
                             >
                                 N
-                            </Toggle>
+                            </TableFieldToggle>
                         </span>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -117,9 +115,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
-                            <Toggle
-                                variant="default"
-                                className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                            <TableFieldToggle
                                 pressed={field.primaryKey}
                                 onPressedChange={(value) =>
                                     updateField({
@@ -129,7 +125,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 }
                             >
                                 <KeyRound className="h-3.5" />
-                            </Toggle>
+                            </TableFieldToggle>
                         </span>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -140,7 +136,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         >
                             <Ellipsis className="size-3.5" />
                         </Button>
@@ -157,7 +153,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 <div className="flex items-center justify-between">
                                     <Label
                                         htmlFor="width"
-                                        className="text-gray-700"
+                                        className="text-subtitle"
                                     >
                                         {t(
                                             'side_panel.tables_section.table.field_actions.unique'
@@ -176,7 +172,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 <div className="flex flex-col gap-2">
                                     <Label
                                         htmlFor="width"
-                                        className="text-gray-700"
+                                        className="text-subtitle"
                                     >
                                         {t(
                                             'side_panel.tables_section.table.field_actions.comments'

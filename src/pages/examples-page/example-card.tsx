@@ -78,7 +78,7 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                 <div className="flex flex-row">
                     <Button
                         variant="ghost"
-                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
                         // onClick={openTableInEditor}
                     >
                         <Import className="size-5" />

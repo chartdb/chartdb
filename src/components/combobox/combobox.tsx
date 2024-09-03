@@ -141,7 +141,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                             )}
 
                             <ScrollArea>
-                                <div className="max-h-80">
+                                <div className="max-h-80 w-full">
                                     <CommandGroup>
                                         <CommandList>
                                             {options.map((option) => (

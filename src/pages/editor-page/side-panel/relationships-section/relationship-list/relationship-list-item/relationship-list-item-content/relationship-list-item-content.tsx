@@ -56,8 +56,8 @@ export const RelationshipListItemContent: React.FC<
                 <div className="flex items-center justify-between gap-1 text-xs">
                     <div className="flex flex-col gap-2 overflow-hidden text-xs">
                         <div className="flex flex-row items-center gap-1">
-                            <FileMinus2 className="size-4 text-slate-700" />
-                            <div className="font-bold text-slate-700">
+                            <FileMinus2 className="size-4 text-subtitle" />
+                            <div className="font-bold text-subtitle">
                                 {t(
                                     'side_panel.relationships_section.relationship.primary'
                                 )}
@@ -76,8 +76,8 @@ export const RelationshipListItemContent: React.FC<
                     </div>
                     <div className="flex flex-col gap-2 overflow-hidden text-xs">
                         <div className="flex flex-row items-center gap-1">
-                            <FileOutput className="size-4 text-slate-700" />
-                            <div className="font-bold text-slate-700">
+                            <FileOutput className="size-4 text-subtitle" />
+                            <div className="font-bold text-subtitle">
                                 {t(
                                     'side_panel.relationships_section.relationship.foreign'
                                 )}
@@ -97,8 +97,8 @@ export const RelationshipListItemContent: React.FC<
                 </div>
                 <div className="flex flex-col gap-2 text-xs">
                     <div className="flex flex-row items-center gap-1">
-                        <FileOutput className="size-4 text-slate-700" />
-                        <div className="font-bold text-slate-700">
+                        <FileOutput className="size-4 text-subtitle" />
+                        <div className="font-bold text-subtitle">
                             {t(
                                 'side_panel.relationships_section.relationship.cardinality'
                             )}
