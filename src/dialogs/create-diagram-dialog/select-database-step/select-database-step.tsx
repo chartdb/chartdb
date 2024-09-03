@@ -10,11 +10,12 @@ import {
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { databaseLogoMap } from '@/lib/databases';
+import { databaseTypeToLabelMap, getDatabaseLogo } from '@/lib/databases';
 import { Link } from '@/components/link/link';
 import { LayoutGrid } from 'lucide-react';
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/hooks/use-theme';
 
 export interface SelectDatabaseStepProps {
     setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
@@ -32,18 +33,22 @@ export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
     createNewDiagram,
 }) => {
     const { t } = useTranslation();
-    const renderDatabaseOption = useCallback((type: DatabaseType) => {
-        const logo = databaseLogoMap[type];
-        return (
-            <ToggleGroupItem
-                value={type}
-                aria-label="Toggle bold"
-                className="flex size-20 md:size-32"
-            >
-                <img src={logo} alt="PostgreSQL" />
-            </ToggleGroupItem>
-        );
-    }, []);
+    const { effectiveTheme } = useTheme();
+    const renderDatabaseOption = useCallback(
+        (type: DatabaseType) => {
+            const logo = getDatabaseLogo(type, effectiveTheme);
+            return (
+                <ToggleGroupItem
+                    value={type}
+                    aria-label="Toggle bold"
+                    className="flex size-20 md:size-32"
+                >
+                    <img src={logo} alt={databaseTypeToLabelMap[type]} />
+                </ToggleGroupItem>
+            );
+        },
+        [effectiveTheme]
+    );
 
     const renderExamplesOption = useCallback(
         () => (

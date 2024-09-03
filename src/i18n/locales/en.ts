@@ -23,6 +23,7 @@ export const en: ResourceLanguage = {
                 view: 'View',
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
+                theme: 'Theme',
             },
             help: {
                 help: 'Help',
@@ -47,11 +48,19 @@ export const en: ResourceLanguage = {
             clear: 'Clear',
         },
 
+        theme: {
+            system: 'System',
+            light: 'Light',
+            dark: 'Dark',
+        },
+
         last_saved: 'Last saved',
         saved: 'Saved',
         diagrams: 'Diagrams',
+        loading_diagram: 'Loading diagram...',
 
         side_panel: {
+            view_all_options: 'View all Options...',
             tables_section: {
                 tables: 'Tables',
                 add_table: 'Add Table',
