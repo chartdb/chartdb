@@ -13,4 +13,5 @@ export interface DBField {
     scale?: number;
     default?: string;
     collation?: string;
+    comments?: string;
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Plus, FileType2, FileKey2 } from 'lucide-react';
+import { Plus, FileType2, FileKey2,MessageCircleMore } from 'lucide-react';
+
 import { Button } from '@/components/button/button';
 import {
     Accordion,
@@ -16,15 +17,20 @@ import { TableIndex } from './table-index/table-index';
 import { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
 import { ReorderableList } from '@/components/reorderablelist/reorderable-list';
+import { Textarea } from '@/components/textarea/textarea';
+
+type AccordionItemValue = 'fields' | 'indexes';
 
 export interface TableListItemContentProps {
     table: DBTable;
 }
-type AccordionItemValue = 'fields' | 'indexes';
+
+
 
 
 export const TableListItemContent: React.FC<TableListItemContentProps> = ({ table }) => {
     const { updateField, removeField, createField, createIndex, removeIndex, updateIndex, updateTablesState } = useChartDB();
+
     const { t } = useTranslation();
     const { color } = table;
     const [selectedItems, setSelectedItems] = useState<AccordionItemValue[]>(['fields']);
@@ -112,7 +118,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({ tabl
                     </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="indexes" className="border-y-0">
+                <AccordionItem value="indexes" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
                         className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
@@ -151,6 +157,35 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({ tabl
                                 fields={table.fields}
                             />
                         ))}
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="comments" className="border-y-0">
+                    <AccordionTrigger
+                        iconPosition="right"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-slate-600 hover:bg-secondary"
+                        asChild
+                    >
+                        <div className="flex flex-1 items-center justify-between">
+                            <div className="flex flex-row items-center gap-1">
+                                <MessageCircleMore className="size-4" />
+                                {t('side_panel.tables_section.table.comments')}
+                            </div>
+                        </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-0 pt-1">
+                        <Textarea
+                            value={table.comments}
+                            onChange={(e) =>
+                                updateTable(table.id, {
+                                    comments: e.target.value,
+                                })
+                            }
+                            placeholder={t(
+                                'side_panel.tables_section.table.no_comments'
+                            )}
+                            className="w-full rounded-md bg-muted text-sm focus-visible:ring-0"
+                        />
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>

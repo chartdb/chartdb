@@ -19,6 +19,11 @@ export const en: ResourceLanguage = {
                 redo: 'Redo',
                 clear: 'Clear',
             },
+            view: {
+                view: 'View',
+                show_sidebar: 'Show Sidebar',
+                hide_sidebar: 'Hide Sidebar',
+            },
             help: {
                 help: 'Help',
                 visit_website: 'Visit ChartDB',
@@ -51,12 +56,15 @@ export const en: ResourceLanguage = {
                 tables: 'Tables',
                 add_table: 'Add Table',
                 filter: 'Filter',
+                collapse: 'Collapse All',
 
                 table: {
                     fields: 'Fields',
                     nullable: 'Nullable?',
                     primary_key: 'Primary Key',
                     indexes: 'Indexes',
+                    comments: 'Comments',
+                    no_comments: 'No comments',
                     add_field: 'Add Field',
                     add_index: 'Add Index',
                     index_select_fields: 'Select fields',
@@ -65,6 +73,8 @@ export const en: ResourceLanguage = {
                     field_actions: {
                         title: 'Field Attributes',
                         unique: 'Unique',
+                        comments: 'Comments',
+                        no_comments: 'No comments',
                         delete_field: 'Delete Field',
                     },
                     index_actions: {
@@ -88,6 +98,7 @@ export const en: ResourceLanguage = {
             relationships_section: {
                 relationships: 'Relationships',
                 filter: 'Filter',
+                collapse: 'Collapse All',
                 relationship: {
                     primary: 'Primary',
                     foreign: 'Foreign',
