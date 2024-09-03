@@ -12,9 +12,8 @@ import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import {
     Tooltip,
-    TooltipTrigger,
     TooltipContent,
-    TooltipProvider,
+    TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 
 export interface TablesSectionProps {}
@@ -34,12 +33,12 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText]);
 
     return (
-        <TooltipProvider>
-            <section className="flex flex-1 flex-col overflow-hidden px-2">
-                <div className="flex items-center justify-between gap-4 py-1">
-                    <div>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
+        <section className="flex flex-1 flex-col overflow-hidden px-2">
+            <div className="flex items-center justify-between gap-4 py-1">
+                <div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
                                 <Button
                                     variant="ghost"
                                     className="size-8 p-0"
@@ -47,46 +46,48 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 >
                                     <ListCollapse className="size-4" />
                                 </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">Collapse</TooltipContent>
-                        </Tooltip>
-                    </div>
-                    <div className="flex-1">
-                        <Input
-                            type="text"
-                            placeholder={t('side_panel.tables_section.filter')}
-                            className="h-8 w-full focus-visible:ring-0"
-                            value={filterText}
-                            onChange={(e) => setFilterText(e.target.value)}
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('side_panel.tables_section.collapse')}
+                        </TooltipContent>
+                    </Tooltip>
+                </div>
+                <div className="flex-1">
+                    <Input
+                        type="text"
+                        placeholder={t('side_panel.tables_section.filter')}
+                        className="h-8 w-full focus-visible:ring-0"
+                        value={filterText}
+                        onChange={(e) => setFilterText(e.target.value)}
+                    />
+                </div>
+                <Button
+                    variant="secondary"
+                    className="h-8 p-2 text-xs"
+                    onClick={createTable}
+                >
+                    <Table className="h-4" />
+                    {t('side_panel.tables_section.add_table')}
+                </Button>
+            </div>
+            <div className="flex flex-1 flex-col overflow-hidden">
+                <ScrollArea className="h-full">
+                    {tables.length === 0 ? (
+                        <EmptyState
+                            title={t(
+                                'side_panel.tables_section.empty_state.title'
+                            )}
+                            description={t(
+                                'side_panel.tables_section.empty_state.description'
+                            )}
+                            className="mt-20"
                         />
-                    </div>
-                    <Button
-                        variant="secondary"
-                        className="h-8 p-2 text-xs"
-                        onClick={createTable}
-                    >
-                        <Table className="h-4" />
-                        {t('side_panel.tables_section.add_table')}
-                    </Button>
-                </div>
-                <div className="flex flex-1 flex-col overflow-hidden">
-                    <ScrollArea className="h-full">
-                        {tables.length === 0 ? (
-                            <EmptyState
-                                title={t(
-                                    'side_panel.tables_section.empty_state.title'
-                                )}
-                                description={t(
-                                    'side_panel.tables_section.empty_state.description'
-                                )}
-                                className="mt-20"
-                            />
-                        ) : (
-                            <TableList tables={filteredTables} />
-                        )}
-                    </ScrollArea>
-                </div>
-            </section>
-        </TooltipProvider>
+                    ) : (
+                        <TableList tables={filteredTables} />
+                    )}
+                </ScrollArea>
+            </div>
+        </section>
     );
 };

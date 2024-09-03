@@ -51,6 +51,7 @@ export const en: ResourceLanguage = {
                 tables: 'Tables',
                 add_table: 'Add Table',
                 filter: 'Filter',
+                collapse: 'Collapse All',
 
                 table: {
                     fields: 'Fields',
@@ -88,6 +89,7 @@ export const en: ResourceLanguage = {
             relationships_section: {
                 relationships: 'Relationships',
                 filter: 'Filter',
+                collapse: 'Collapse All',
                 relationship: {
                     primary: 'Primary',
                     foreign: 'Foreign',

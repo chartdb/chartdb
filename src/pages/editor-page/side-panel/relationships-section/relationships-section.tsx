@@ -9,6 +9,11 @@ import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface RelationshipsSectionProps {}
 
@@ -32,13 +37,22 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
         <section className="flex flex-1 flex-col overflow-hidden px-2">
             <div className="flex items-center justify-between gap-4 py-1">
                 <div>
-                    <Button
-                        variant="ghost"
-                        className="size-8 p-0"
-                        onClick={closeAllRelationshipsInSidebar}
-                    >
-                        <ListCollapse className="size-4" />
-                    </Button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <Button
+                                    variant="ghost"
+                                    className="size-8 p-0"
+                                    onClick={closeAllRelationshipsInSidebar}
+                                >
+                                    <ListCollapse className="size-4" />
+                                </Button>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('side_panel.relationships_section.collapse')}
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
                 <div className="flex-1">
                     <Input
