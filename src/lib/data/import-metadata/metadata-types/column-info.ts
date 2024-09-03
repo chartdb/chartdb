@@ -12,4 +12,5 @@ export interface ColumnInfo {
     } | null; // Nullable, not all types have precision
     default?: string | null; // Default value for the column, nullable
     collation?: string | null;
+    comment?: string | null;
 }

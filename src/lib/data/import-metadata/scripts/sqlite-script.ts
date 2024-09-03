@@ -159,5 +159,5 @@ replace(replace(replace(
           'version', sqlite_version()
       ),
       '\\"', '"'),'"[', '['), ']"', ']'
-)AS database_info;
+) AS metadata_json_to_import;
 `;

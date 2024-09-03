@@ -1,3 +1,4 @@
+import { DatabaseClient } from '@/lib/domain/database-clients';
 import {
     DatabaseEdition,
     databaseEditionToLabelMap,
@@ -6,6 +7,7 @@ import {
 export const getPostgresQuery = (
     options: {
         databaseEdition?: DatabaseEdition;
+        databaseClient?: DatabaseClient;
     } = {}
 ): string => {
     const databaseEdition: DatabaseEdition | undefined =
@@ -56,36 +58,40 @@ export const getPostgresQuery = (
     // Define the base query
     const query = `${`/* ${databaseEdition ? databaseEditionToLabelMap[databaseEdition] : 'PostgreSQL'} edition */`}
 WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
-    SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+    SELECT array_to_string(array_agg(CONCAT('{"schema":"', replace(schema_name, '"', ''), '"',
                                             ',"table":"', replace(table_name::text, '"', ''), '"',
                                             ',"column":"', replace(fk_column::text, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name, '"',
                                             ',"reference_table":"', reference_table, '"',
                                             ',"reference_column":"', reference_column, '"',
-                                            ',"fk_def":"', fk_def,
+                                            ',"fk_def":"', replace(fk_def, '"', ''),
                                             '"}')), ',') as fk_metadata
     FROM (
         SELECT  connamespace::regnamespace::text AS schema_name,
                 conname AS foreign_key_name,
-                conrelid::regclass AS table_name,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[1] AS fk_column,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[2] AS reference_table,
-                (regexp_matches(pg_get_constraintdef(oid), 'FOREIGN KEY \\((\\w+)\\) REFERENCES (\\w+)\\((\\w+)\\)', 'g'))[3] AS reference_column,
+                CASE
+                    WHEN strpos(conrelid::regclass::text, '.') > 0
+                    THEN split_part(conrelid::regclass::text, '.', 2)
+                    ELSE conrelid::regclass::text
+                END AS table_name,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_table,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_column,
                 pg_get_constraintdef(oid) as fk_def
         FROM
             pg_constraint
         WHERE
             contype = 'f'
             AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                databaseEdition === DatabaseEdition.TIMESCALE
+                databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
                     ? timescaleFilters
-                    : databaseEdition === DatabaseEdition.SUPABASE
+                    : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
                       ? supabaseFilters
                       : ''
             }
     ) AS x
 ), pk_info AS (
-    SELECT array_to_string(array_agg(CONCAT('{"schema":"', schema_name, '"',
+    SELECT array_to_string(array_agg(CONCAT('{"schema":"', replace(schema_name, '"', ''), '"',
                                             ',"table":"', replace(pk_table, '"', ''), '"',
                                             ',"column":"', replace(pk_column, '"', ''), '"',
                                             ',"pk_def":"', replace(pk_def, '"', ''),
@@ -104,26 +110,26 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
             WHERE
               contype = 'p'
               AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                  databaseEdition === DatabaseEdition.TIMESCALE
+                  databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
                       ? timescaleFilters
-                      : databaseEdition === DatabaseEdition.SUPABASE
+                      : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
                         ? supabaseFilters
                         : ''
               }
     ) AS y
 ),
 indexes_cols AS (
-    SELECT tnsp.nspname                                                 AS schema_name,
-          trel.relname                                                  AS table_name,
-          pg_relation_size(tnsp.nspname || '.' || '"' || irel.relname || '"') AS index_size,
-          irel.relname                                                  AS index_name,
-          am.amname                                                     AS index_type,
-          a.attname                                                     AS col_name,
-          (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)  AS is_unique,
-          irel.reltuples                                                AS cardinality,
-          1 + Array_position(i.indkey, a.attnum)                        AS column_position,
-          CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END           AS direction,
-          CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END    AS is_partial_index
+    SELECT  tnsp.nspname                                                                AS schema_name,
+        trel.relname                                                                    AS table_name,
+            pg_relation_size('"' || tnsp.nspname || '".' || '"' || irel.relname || '"') AS index_size,
+            irel.relname                                                                AS index_name,
+            am.amname                                                                   AS index_type,
+            a.attname                                                                   AS col_name,
+            (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)               AS is_unique,
+            irel.reltuples                                                              AS cardinality,
+            1 + Array_position(i.indkey, a.attnum)                                      AS column_position,
+            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction,
+            CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END                  AS is_partial_index
     FROM pg_index AS i
         JOIN pg_class AS trel ON trel.oid = i.indrelid
         JOIN pg_namespace AS tnsp ON trel.relnamespace = tnsp.oid
@@ -152,12 +158,19 @@ cols AS (
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
                                             ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
-                                            '","collation":"', COALESCE(cols.COLLATION_NAME, ''), '"}')), ',') AS cols_metadata
+                                            '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
+                                            '","comment":"', COALESCE(dsc.description, ''), '"}')), ',') AS cols_metadata
     FROM information_schema.columns cols
+    LEFT JOIN pg_catalog.pg_class c
+        ON c.relname = cols.table_name
+    LEFT JOIN pg_catalog.pg_namespace n
+        ON n.oid = c.relnamespace AND n.nspname = cols.table_schema
+    LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
+                                        AND dsc.objsubid = cols.ordinal_position
     WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleColFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseColFilter
               : ''
     }
@@ -174,27 +187,36 @@ cols AS (
                                             ',"direction":"', LOWER(direction),
                                             '"}')), ',') AS indexes_metadata
     FROM indexes_cols x ${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleIndexesFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseIndexesFilter
               : ''
     }
 ), tbls AS (
-    SELECT array_to_string(array_agg(CONCAT('{', '"schema":"', TABLE_SCHEMA, '",', '"table":"', TABLE_NAME, '",', '"rows":',
-                                      COALESCE((SELECT s.n_live_tup
+    SELECT array_to_string(array_agg(CONCAT('{',
+                        '"schema":"', tbls.TABLE_SCHEMA, '",',
+                        '"table":"', tbls.TABLE_NAME, '",',
+                        '"rows":', COALESCE((SELECT s.n_live_tup
                                                 FROM pg_stat_user_tables s
                                                 WHERE tbls.TABLE_SCHEMA = s.schemaname AND tbls.TABLE_NAME = s.relname),
-                                                0), ', "type":"', TABLE_TYPE, '",', '"engine":"",', '"collation":""}')),
-                      ',') AS tbls_metadata
-    FROM information_schema.tables tbls
-    WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
-        databaseEdition === DatabaseEdition.TIMESCALE
-            ? timescaleTableFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
-              ? supabaseTableFilter
-              : ''
-    }
+                                                0), ', "type":"', tbls.TABLE_TYPE, '",', '"engine":"",', '"collation":"",',
+                        '"comment":"', COALESCE(dsc.description, ''), '"}'
+                )),
+                ',') AS tbls_metadata
+        FROM information_schema.tables tbls
+        LEFT JOIN pg_catalog.pg_class c ON c.relname = tbls.TABLE_NAME
+        LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                                            AND n.nspname = tbls.TABLE_SCHEMA
+        LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
+                                                AND dsc.objsubid = 0
+        WHERE tbls.TABLE_SCHEMA NOT IN ('information_schema', 'pg_catalog') ${
+            databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
+                ? timescaleTableFilter
+                : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
+                  ? supabaseTableFilter
+                  : ''
+        }
 ), config AS (
     SELECT array_to_string(
                       array_agg(CONCAT('{"name":"', conf.name, '","value":"', replace(conf.setting, '"', E'"'), '"}')),
@@ -205,9 +227,9 @@ cols AS (
                       ',') AS views_metadata
     FROM pg_views views
     WHERE views.schemaname NOT IN ('information_schema', 'pg_catalog') ${
-        databaseEdition === DatabaseEdition.TIMESCALE
+        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleViewsFilter
-            : databaseEdition === DatabaseEdition.SUPABASE
+            : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
               ? supabaseViewsFilter
               : ''
     }
@@ -219,9 +241,17 @@ SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
                     '], "tables":[', COALESCE(tbls_metadata, ''),
                     '], "views":[', COALESCE(views_metadata, ''),
                     '], "database_name": "', CURRENT_DATABASE(), '', '", "version": "', '',
-              '"}') AS " "
+              '"}') AS metadata_json_to_import
 FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
     `;
+
+    const psqlPreCommand = `# *** Remember to change! (HOST_NAME, PORT, USER_NAME, DATABASE_NAME) *** \n`;
+
+    if (options.databaseClient === DatabaseClient.POSTGRESQL_PSQL) {
+        return `${psqlPreCommand}psql -h HOST_NAME -p PORT -U USER_NAME -d DATABASE_NAME -c "
+${query.replace(/"/g, '\\"').replace(/\\\\/g, '\\\\\\').replace(/\\x/g, '\\\\x')}
+" -t -A | pbcopy; LG='\\033[0;32m'; NC='\\033[0m'; echo "You got the resultset ($(pbpaste | wc -c | xargs) characters) in Copy/Paste. \${LG}Go back & paste in ChartDB :)\${NC}";`;
+    }
 
     return query;
 };

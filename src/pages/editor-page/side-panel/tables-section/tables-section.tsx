@@ -8,11 +8,14 @@ import { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
+import { useTranslation } from 'react-i18next';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables } = useChartDB();
+    const { t } = useTranslation();
     const { closeAllTablesInSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
 
@@ -25,47 +28,51 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText]);
 
     return (
-        <section className="flex flex-col px-2 overflow-hidden flex-1">
-            <div className="flex items-center py-1 justify-between gap-4">
+        <section className="flex flex-1 flex-col overflow-hidden px-2">
+            <div className="flex items-center justify-between gap-4 py-1">
                 <div>
                     <Button
                         variant="ghost"
-                        className="p-0 h-8 w-8"
+                        className="size-8 p-0"
                         onClick={closeAllTablesInSidebar}
                     >
-                        <ListCollapse className="w-4 h-4" />
+                        <ListCollapse className="size-4" />
                     </Button>
                 </div>
                 <div className="flex-1">
                     <Input
                         type="text"
-                        placeholder="Filter"
-                        className="h-8 focus-visible:ring-0 w-full"
+                        placeholder={t('side_panel.tables_section.filter')}
+                        className="h-8 w-full focus-visible:ring-0"
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
                 <Button
                     variant="secondary"
-                    className="text-xs h-8 p-2"
+                    className="h-8 p-2 text-xs"
                     onClick={createTable}
                 >
                     <Table className="h-4" />
-                    Add Table
+                    {t('side_panel.tables_section.add_table')}
                 </Button>
             </div>
-            <div className="flex flex-col flex-1 overflow-scroll">
-                {/* <ScrollArea className="h-full !max-w-full"> */}
-                {tables.length === 0 ? (
-                    <EmptyState
-                        title="No tables"
-                        description="Create a table to get started"
-                        className="mt-20"
-                    />
-                ) : (
-                    <TableList tables={filteredTables} />
-                )}
-                {/* </ScrollArea> */}
+            <div className="flex flex-1 flex-col overflow-hidden">
+                <ScrollArea className="h-full">
+                    {tables.length === 0 ? (
+                        <EmptyState
+                            title={t(
+                                'side_panel.tables_section.empty_state.title'
+                            )}
+                            description={t(
+                                'side_panel.tables_section.empty_state.description'
+                            )}
+                            className="mt-20"
+                        />
+                    ) : (
+                        <TableList tables={filteredTables} />
+                    )}
+                </ScrollArea>
             </div>
         </section>
     );

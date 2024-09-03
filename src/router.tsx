@@ -13,6 +13,7 @@ import { DialogProvider } from './context/dialog-context/dialog-provider';
 import { ExportImageProvider } from './context/export-image-context/export-image-provider';
 import { FullScreenLoaderProvider } from './context/full-screen-spinner-context/full-screen-spinner-provider';
 import { ExamplesPage } from './pages/examples-page/examples-page';
+import { KeyboardShortcutsProvider } from './context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -28,7 +29,11 @@ const routes: RouteObject[] = [
                                         <DialogProvider>
                                             <ReactFlowProvider>
                                                 <ExportImageProvider>
-                                                    <EditorPage />
+                                                    <KeyboardShortcutsProvider>
+                                                        {/* <ThemeProvider> */}
+                                                        <EditorPage />
+                                                        {/* </ThemeProvider> */}
+                                                    </KeyboardShortcutsProvider>
                                                 </ExportImageProvider>
                                             </ReactFlowProvider>
                                         </DialogProvider>

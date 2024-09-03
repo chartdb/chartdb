@@ -24,6 +24,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { Diagram } from '@/lib/domain/diagram';
 import { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export interface OpenDiagramDialogProps {
@@ -34,6 +35,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
 }) => {
     const { closeOpenDiagramDialog } = useDialog();
+    const { t } = useTranslation();
     const { updateConfig } = useConfig();
     const navigate = useNavigate();
     const { listDiagrams } = useStorage();
@@ -74,13 +76,13 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex flex-col w-[100vw] xl:min-w-[55vw] max-h-[80vh] overflow-y-auto"
+                className="flex max-h-[90vh] w-[90vw] flex-col overflow-y-auto md:w-screen xl:min-w-[55vw]"
                 showClose
             >
                 <DialogHeader>
-                    <DialogTitle>Open Diagram</DialogTitle>
+                    <DialogTitle>{t('open_diagram_dialog.title')}</DialogTitle>
                     <DialogDescription>
-                        Select a diagram to open from the list below.
+                        {t('open_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
@@ -89,11 +91,25 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                             <TableHeader className="sticky top-0 bg-background">
                                 <TableRow>
                                     <TableHead />
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Created at</TableHead>
-                                    <TableHead>Last modified</TableHead>
+                                    <TableHead>
+                                        {t(
+                                            'open_diagram_dialog.table_columns.name'
+                                        )}
+                                    </TableHead>
+                                    <TableHead className="hidden items-center sm:inline-flex">
+                                        {t(
+                                            'open_diagram_dialog.table_columns.created_at'
+                                        )}
+                                    </TableHead>
+                                    <TableHead>
+                                        {t(
+                                            'open_diagram_dialog.table_columns.last_modified'
+                                        )}
+                                    </TableHead>
                                     <TableHead className="text-center">
-                                        Tables
+                                        {t(
+                                            'open_diagram_dialog.table_columns.tables_count'
+                                        )}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -124,7 +140,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             <DiagramIcon diagram={diagram} />
                                         </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
-                                        <TableCell>
+                                        <TableCell className="hidden items-center sm:inline-flex">
                                             {diagram.createdAt.toLocaleString()}
                                         </TableCell>
                                         <TableCell>
@@ -143,7 +159,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 <DialogFooter className="flex !justify-between gap-2">
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
-                            Cancel
+                            {t('open_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
@@ -152,7 +168,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                             disabled={!selectedDiagramId}
                             onClick={() => openDiagram(selectedDiagramId ?? '')}
                         >
-                            Open
+                            {t('open_diagram_dialog.open')}
                         </Button>
                     </DialogClose>
                 </DialogFooter>

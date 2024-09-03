@@ -11,11 +11,12 @@ import { TablesSection } from './tables-section/tables-section';
 import { RelationshipsSection } from './relationships-section/relationships-section';
 import { useLayout } from '@/hooks/use-layout';
 import { SidebarSection } from '@/context/layout-context/layout-context';
+import { useTranslation } from 'react-i18next';
 
 export interface SidePanelProps {}
 
 export const SidePanel: React.FC<SidePanelProps> = () => {
-    // const [selected, setSelected] = React.useState('tables');
+    const { t } = useTranslation();
     const { selectSidebarSection, selectedSidebarSection } = useLayout();
     return (
         <aside className="flex h-full flex-col overflow-hidden">
@@ -26,14 +27,21 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                         selectSidebarSection(value as SidebarSection)
                     }
                 >
-                    <SelectTrigger className="border-none rounded-none shadow-none focus:border-transparent focus:ring-0 hover:underline hover:bg-secondary font-semibold">
+                    <SelectTrigger className="rounded-none border-none font-semibold shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
                         <SelectValue />
+                        <div className="flex flex-1 justify-end px-2 text-xs font-normal text-muted-foreground">
+                            View all Options...
+                        </div>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="tables">Tables</SelectItem>
+                            <SelectItem value="tables">
+                                {t('side_panel.tables_section.tables')}
+                            </SelectItem>
                             <SelectItem value="relationships">
-                                Relationships
+                                {t(
+                                    'side_panel.relationships_section.relationships'
+                                )}
                             </SelectItem>
                         </SelectGroup>
                     </SelectContent>

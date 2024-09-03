@@ -15,13 +15,13 @@ export const EmptyState = forwardRef<
     <div
         ref={ref}
         className={cn(
-            'flex flex-col items-center justify-center space-y-1',
+            'flex flex-1 flex-col items-center justify-center space-y-1',
             className
         )}
     >
         <img src={EmptyStateImage} alt="Empty state" className="w-32" />
-        <Label className="text-md">{title}</Label>
-        <Label className="font-normal text-muted-foreground text-sm">
+        <Label className="text-base">{title}</Label>
+        <Label className="text-sm font-normal text-muted-foreground">
             {description}
         </Label>
     </div>

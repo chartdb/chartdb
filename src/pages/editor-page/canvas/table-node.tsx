@@ -56,7 +56,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex flex-col w-full bg-slate-50 border-2 ${selected ? 'border-pink-600' : 'border-slate-500'} rounded-lg shadow-sm`}
+            className={`flex w-full flex-col border-2 bg-slate-50 ${selected ? 'border-pink-600' : 'border-slate-500'} rounded-lg shadow-sm`}
             onClick={(e) => {
                 if (e.detail === 2) {
                     openTableInEditor();
@@ -72,25 +72,27 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 handleClassName="!hidden"
             />
             <div
-                className="h-2 rounded-t-lg"
+                className="h-2 rounded-t-[6px]"
                 style={{ backgroundColor: table.color }}
             ></div>
-            <div className="flex items-center h-9 bg-slate-200 px-2 justify-between group">
-                <div className="flex items-center gap-1">
-                    <Table2 className="h-3.5 w-3.5 text-gray-600" />
-                    <Label className="text-sm font-bold">{table.name}</Label>
+            <div className="group flex h-9 items-center justify-between bg-slate-200 px-2">
+                <div className="flex min-w-0 flex-1 items-center gap-1">
+                    <Table2 className="size-3.5 shrink-0 text-gray-600" />
+                    <Label className="truncate text-sm font-bold">
+                        {table.name}
+                    </Label>
                 </div>
-                <div className="flex-row hidden group-hover:flex">
+                <div className="hidden shrink-0 flex-row group-hover:flex">
                     <Button
                         variant="ghost"
-                        className="hover:bg-primary-foreground p-0 w-6 h-6 text-slate-500 hover:text-slate-700"
+                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                         onClick={openTableInEditor}
                     >
-                        <Pencil className="h-4 w-4" />
+                        <Pencil className="size-4" />
                     </Button>
                     <Button
                         variant="ghost"
-                        className="hover:bg-primary-foreground p-0 w-6 h-6 text-slate-500 hover:text-slate-700"
+                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                         onClick={
                             table.width !== MAX_TABLE_SIZE
                                 ? expandTable
@@ -98,9 +100,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                         }
                     >
                         {table.width !== MAX_TABLE_SIZE ? (
-                            <ChevronsLeftRight className="h-4 w-4" />
+                            <ChevronsLeftRight className="size-4" />
                         ) : (
-                            <ChevronsRightLeft className="h-4 w-4" />
+                            <ChevronsRightLeft className="size-4" />
                         )}
                     </Button>
                 </div>

@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/input/input';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useTranslation } from 'react-i18next';
 
 export interface RelationshipListItemHeaderProps {
     relationship: DBRelationship;
@@ -33,6 +34,7 @@ export const RelationshipListItemHeader: React.FC<
 > = ({ relationship }) => {
     const { updateRelationship, removeRelationship } = useChartDB();
     const { fitView, deleteElements, setEdges } = useReactFlow();
+    const { t } = useTranslation();
     const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -125,26 +127,32 @@ export const RelationshipListItemHeader: React.FC<
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        {t(
+                            'side_panel.relationships_section.relationship.relationship_actions.title'
+                        )}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             onClick={deleteRelationshipHandler}
                             className="flex justify-between !text-red-700"
                         >
-                            Delete
-                            <Trash2 className="text-red-700 w-3.5 h-3.5" />
+                            {t(
+                                'side_panel.relationships_section.relationship.relationship_actions.delete_relationship'
+                            )}
+                            <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [deleteRelationshipHandler]
+        [deleteRelationshipHandler, t]
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 group">
-            <div className="flex flex-1">
+        <div className="group flex h-11 flex-1 items-center justify-between overflow-hidden">
+            <div className="flex min-w-0 flex-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -154,17 +162,17 @@ export const RelationshipListItemHeader: React.FC<
                         value={relationshipName}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setRelationshipName(e.target.value)}
-                        className="h-7 focus-visible:ring-0 w-full"
+                        className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    relationship.name
+                    <div className="truncate">{relationship.name}</div>
                 )}
             </div>
             <div className="flex flex-row-reverse">
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
-                        <div className="flex md:hidden md:group-hover:flex flex-row-reverse">
+                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>

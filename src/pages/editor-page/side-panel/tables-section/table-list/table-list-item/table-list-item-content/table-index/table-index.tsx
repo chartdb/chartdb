@@ -13,6 +13,7 @@ import { Separator } from '@/components/separator/separator';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { Label } from '@/components/label/label';
 import { Input } from '@/components/input/input';
+import { useTranslation } from 'react-i18next';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -27,6 +28,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     updateIndex,
     removeIndex,
 }) => {
+    const { t } = useTranslation();
     const fieldOptions = fields.map((field) => ({
         label: field.name,
         value: field.id,
@@ -36,13 +38,15 @@ export const TableIndex: React.FC<TableIndexProps> = ({
         updateIndex({ fieldIds: ids });
     };
     return (
-        <div className="flex flex-row p-1 justify-between flex-1 gap-2">
+        <div className="flex flex-1 flex-row justify-between gap-2 p-1">
             <Combobox
                 className="flex h-8 flex-1"
                 popoverClassName="w-48"
                 mode="multiple"
                 options={fieldOptions}
-                placeholder="Select fields"
+                placeholder={t(
+                    'side_panel.tables_section.table.index_select_fields'
+                )}
                 selected={index.fieldIds}
                 onChange={updateIndexFields}
                 emptyText="No types found."
@@ -52,15 +56,17 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="hover:bg-primary-foreground p-2 w-[32px] text-slate-500 hover:text-slate-700 h-8"
+                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                         >
-                            <Ellipsis className="h-3.5 w-3.5" />
+                            <Ellipsis className="size-3.5" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-52">
-                        <div className="flex gap-2 flex-col">
+                        <div className="flex flex-col gap-2">
                             <div className="text-sm font-semibold">
-                                Index Attributes
+                                {t(
+                                    'side_panel.tables_section.table.index_actions.title'
+                                )}
                             </div>
                             <Separator orientation="horizontal" />
                             <div className="flex flex-col gap-2">
@@ -68,7 +74,9 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     htmlFor="width"
                                     className="text-gray-700"
                                 >
-                                    Name
+                                    {t(
+                                        'side_panel.tables_section.table.index_actions.name'
+                                    )}
                                 </Label>
                                 <Input
                                     value={index.name}
@@ -79,12 +87,14 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     }
                                 />
                             </div>
-                            <div className="flex justify-between items-center mt-2">
+                            <div className="mt-2 flex items-center justify-between">
                                 <Label
                                     htmlFor="width"
                                     className="text-gray-700"
                                 >
-                                    Unique
+                                    {t(
+                                        'side_panel.tables_section.table.index_actions.unique'
+                                    )}
                                 </Label>
                                 <Checkbox
                                     checked={index.unique}
@@ -98,11 +108,13 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                             <Separator orientation="horizontal" />
                             <Button
                                 variant="outline"
-                                className="flex !text-red-700 gap-2"
+                                className="flex gap-2 !text-red-700"
                                 onClick={removeIndex}
                             >
-                                <Trash2 className="text-red-700 w-3.5 h-3.5" />
-                                Delete index
+                                <Trash2 className="size-3.5 text-red-700" />
+                                {t(
+                                    'side_panel.tables_section.table.index_actions.delete_index'
+                                )}
                             </Button>
                         </div>
                     </PopoverContent>

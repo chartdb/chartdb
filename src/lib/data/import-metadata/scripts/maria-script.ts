@@ -70,7 +70,7 @@ export const mariaDBQuery = `WITH fk_info as (
                     END,
                 ',"ordinal_position":"', cols.ordinal_position,
                 '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(REPLACE(cols.column_default, '"', '\\"'), ''),
+                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (
@@ -125,6 +125,6 @@ export const mariaDBQuery = `WITH fk_info as (
             '], "tables":[',IFNULL(@tbls,''),
             '], "views":[',IFNULL(@views,''),
             '], "database_name": "', DATABASE(),
-            '", "version": "', VERSION(), '"}') AS CHAR) AS ''
+            '", "version": "', VERSION(), '"}') AS CHAR) AS metadata_json_to_import
  FROM fk_info, pk_info, cols, indexes, tbls, views);
 `;

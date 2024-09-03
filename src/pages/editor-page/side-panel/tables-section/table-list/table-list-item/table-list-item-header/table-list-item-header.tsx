@@ -25,6 +25,7 @@ import {
 import { useReactFlow } from '@xyflow/react';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useTranslation } from 'react-i18next';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -34,6 +35,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
     const { updateTable, removeTable, createIndex, createField } = useChartDB();
+    const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
     const { hideSidePanel } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
@@ -107,7 +109,11 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>Table Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        {t(
+                            'side_panel.tables_section.table.table_actions.title'
+                        )}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
@@ -117,8 +123,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 createField(table.id);
                             }}
                         >
-                            Add field
-                            <FileType2 className="w-3.5 h-3.5" />
+                            {t(
+                                'side_panel.tables_section.table.table_actions.add_field'
+                            )}
+                            <FileType2 className="size-3.5" />
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex justify-between"
@@ -127,8 +135,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 createIndex(table.id);
                             }}
                         >
-                            Add index
-                            <FileKey2 className="w-3.5 h-3.5" />
+                            {t(
+                                'side_panel.tables_section.table.table_actions.add_index'
+                            )}
+                            <FileKey2 className="size-3.5" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
@@ -137,19 +147,21 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             onClick={deleteTableHandler}
                             className="flex justify-between !text-red-700"
                         >
-                            Delete table
-                            <Trash2 className="text-red-700 w-3.5 h-3.5" />
+                            {t(
+                                'side_panel.tables_section.table.table_actions.delete_table'
+                            )}
+                            <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [table.id, createField, createIndex, deleteTableHandler]
+        [table.id, createField, createIndex, deleteTableHandler, t]
     );
 
     return (
-        <div className="h-11 flex items-center justify-between flex-1 gap-1 group">
-            <div className="flex flex-1">
+        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
+            <div className="flex min-w-0 flex-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -159,17 +171,17 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         value={tableName}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setTableName(e.target.value)}
-                        className="h-7 focus-visible:ring-0 w-full"
+                        className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    table.name
+                    <div className="truncate">{table.name}</div>
                 )}
             </div>
             <div className="flex flex-row-reverse">
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
-                        <div className="flex md:hidden md:group-hover:flex flex-row-reverse">
+                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>

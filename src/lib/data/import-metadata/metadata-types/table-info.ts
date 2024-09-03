@@ -5,4 +5,5 @@ export interface TableInfo {
     type: string;
     engine: string;
     collation: string;
+    comment?: string;
 }
