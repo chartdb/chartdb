@@ -39,6 +39,7 @@ import {
 } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
+import { useLayout } from '@/hooks/use-layout';
 
 export interface TopNavbarProps {}
 
@@ -57,13 +58,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
-    // const { setTheme } = useTheme();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -189,10 +190,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         );
     }, [isDesktop]);
 
-    // const renderDarkModeToggle = () => {
-    //     return <DarkModeToggle />;
-    // };
-
     const renderLastSaved = useCallback(() => {
         return (
             <Tooltip>
@@ -264,10 +261,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         t,
     ]);
 
+    const showOrHideSidePanel = useCallback(() => {
+        if (isSidePanelShowed) {
+            hideSidePanel();
+        } else {
+            showSidePanel();
+        }
+    }, [isSidePanelShowed, showSidePanel, hideSidePanel]);
+
     const emojiAI = '✨';
 
     return (
-        <nav className="flex h-20 flex-col justify-between border-b px-4 md:h-12 md:flex-row md:items-center">
+        <nav className="flex h-20 flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
             <div className="flex flex-1 justify-between gap-x-3 md:justify-normal">
                 <div className="flex py-[10px] font-primary md:items-center md:py-0">
                     <a
@@ -482,37 +487,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
-                        {/* <MenubarMenu>
-                            <MenubarTrigger>View</MenubarTrigger>
+                        <MenubarMenu>
+                            <MenubarTrigger>
+                                {t('menu.view.view')}
+                            </MenubarTrigger>
                             <MenubarContent>
-                                <MenubarSub>
-                                    <MenubarSubTrigger>Theme</MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem
-                                            onClick={() => setTheme('light')}
-                                        >
-                                            Light
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() => setTheme('dark')}
-                                        >
-                                            Dark
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() => {
-                                                localStorage.removeItem(
-                                                    'theme'
-                                                );
-
-                                                setTheme('system');
-                                            }}
-                                        >
-                                            System
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
+                                <MenubarItem onClick={showOrHideSidePanel}>
+                                    {isSidePanelShowed
+                                        ? t('menu.view.hide_sidebar')
+                                        : t('menu.view.show_sidebar')}
+                                </MenubarItem>
                             </MenubarContent>
-                        </MenubarMenu> */}
+                        </MenubarMenu>
                         <MenubarMenu>
                             <MenubarTrigger>
                                 {t('menu.help.help')}
@@ -537,7 +523,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                         {renderLastSaved()}
                         {renderStars()}
-                        {/* {renderDarkModeToggle()} */}
                     </div>
                 </>
             ) : (
@@ -547,9 +532,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </div>
                     <div className="flex items-center">{renderLastSaved()}</div>
                     <div className="flex items-center">{renderStars()}</div>
-                    {/* <div className="flex justify-center items-center">
-                        {renderDarkModeToggle()}
-                    </div> */}
                 </div>
             )}
         </nav>

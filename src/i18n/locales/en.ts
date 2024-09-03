@@ -19,6 +19,11 @@ export const en: ResourceLanguage = {
                 redo: 'Redo',
                 clear: 'Clear',
             },
+            view: {
+                view: 'View',
+                show_sidebar: 'Show Sidebar',
+                hide_sidebar: 'Hide Sidebar',
+            },
             help: {
                 help: 'Help',
                 visit_website: 'Visit ChartDB',
