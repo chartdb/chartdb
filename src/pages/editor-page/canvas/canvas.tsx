@@ -285,7 +285,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     animated: false,
                     type: 'table-edge',
                 }}
-                panOnScroll
             >
                 {isLoadingDOM ? (
                     <Controls
