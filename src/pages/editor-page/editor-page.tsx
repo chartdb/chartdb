@@ -27,7 +27,7 @@ import { Separator } from '@/components/separator/separator';
 
 export const EditorPage: React.FC = () => {
     const { loadDiagram, currentDiagram } = useChartDB();
-    const { isSidePanelShowed, hideSidePanel, fullCanvasView } = useLayout();
+    const { isSidePanelShowed, hideSidePanel } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog } = useDialog();
@@ -85,17 +85,13 @@ export const EditorPage: React.FC = () => {
                 <TopNavbar />
                 {isDesktop ? (
                     <ResizablePanelGroup direction="horizontal">
-                        {fullCanvasView ? (
-                            <ResizablePanel
-                                defaultSize={isXl ? 25 : isLg ? 35 : 50}
-                                minSize={isXl ? 25 : isLg ? 35 : 50}
-                                maxSize={!isSidePanelShowed ? 99 : 0}
-                            >
-                                <SidePanel />
-                            </ResizablePanel>
-                        ) : (
-                            <></>
-                        )}
+                        <ResizablePanel
+                            defaultSize={isXl ? 25 : isLg ? 35 : 50}
+                            minSize={isXl ? 25 : isLg ? 35 : 50}
+                            maxSize={isSidePanelShowed ? 99 : 0}
+                        >
+                            <SidePanel />
+                        </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel
                             defaultSize={isXl ? 75 : isLg ? 65 : 50}

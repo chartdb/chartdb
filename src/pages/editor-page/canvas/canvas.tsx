@@ -24,7 +24,6 @@ import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
 import { Pencil } from 'lucide-react';
 import { Button } from '@/components/button/button';
-import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
 
@@ -46,7 +45,6 @@ export const Canvas: React.FC<CanvasProps> = () => {
         removeRelationships,
         getField,
     } = useChartDB();
-    const { showSidePanel, fullCanvasView } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -300,18 +298,14 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     showInteractive={false}
                     className="!shadow-none"
                 >
-                    {fullCanvasView ? <Toolbar /> : <></>}
+                    <Toolbar /> : <></>
                 </Controls>
-                {fullCanvasView ? (
-                    <MiniMap
-                        style={{
-                            width: isDesktop ? 100 : 60,
-                            height: isDesktop ? 100 : 60,
-                        }}
-                    />
-                ) : (
-                    <></>
-                )}
+                <MiniMap
+                    style={{
+                        width: isDesktop ? 100 : 60,
+                        height: isDesktop ? 100 : 60,
+                    }}
+                />
                 <Background
                     variant={BackgroundVariant.Dots}
                     gap={16}

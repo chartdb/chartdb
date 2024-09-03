@@ -64,7 +64,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
-    const { showFullCanvasView, hideFullCanvasView } = useLayout();
+    const { showSidePanel, hideSidePanel } = useLayout();
     // const { setTheme } = useTheme();
 
     const [editedDiagramName, setEditedDiagramName] =
@@ -127,9 +127,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     ) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-expect-error
-        if (e.target.innerHTML == 'Show') showFullCanvasView();
+        if (e.target.innerHTML == 'Show Side Panel') showSidePanel();
         else {
-            hideFullCanvasView();
+            hideSidePanel();
         }
     };
 
@@ -531,10 +531,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <MenubarTrigger>View</MenubarTrigger>
                             <MenubarContent>
                                 <MenubarItem onClick={handleChangeView}>
-                                    Show
+                                    Show Side Panel
                                 </MenubarItem>
                                 <MenubarItem onClick={handleChangeView}>
-                                    Hide
+                                    Hide Side Panel
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>

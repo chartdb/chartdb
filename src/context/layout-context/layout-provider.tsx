@@ -13,7 +13,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<SidebarSection>('tables');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(false);
-    const [fullCanvasView, setFullCanvasView] = React.useState<boolean>(true);
 
     const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
         () => setOpenedTableInSidebar('');
@@ -27,11 +26,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const showSidePanel: LayoutContext['showSidePanel'] = () =>
         setIsSidePanelShowed(true);
 
-    const hideFullCanvasView: LayoutContext['hideFullCanvasView'] = () =>
-        setFullCanvasView(false);
-
-    const showFullCanvasView: LayoutContext['showFullCanvasView'] = () =>
-        setFullCanvasView(true);
     return (
         <layoutContext.Provider
             value={{
@@ -46,9 +40,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 isSidePanelShowed,
                 hideSidePanel,
                 showSidePanel,
-                fullCanvasView,
-                hideFullCanvasView,
-                showFullCanvasView,
             }}
         >
             {children}
