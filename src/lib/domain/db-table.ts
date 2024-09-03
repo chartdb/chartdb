@@ -86,6 +86,7 @@ export const createTablesFromMetadata = ({
                 ...(col.default ? { default: col.default } : {}),
                 ...(col.collation ? { collation: col.collation } : {}),
                 createdAt: Date.now(),
+                comments: col.comment ? col.comment : undefined,
             })
         );
 
@@ -119,6 +120,7 @@ export const createTablesFromMetadata = ({
             color: isView ? greyColor : randomColor(),
             isView: isView,
             createdAt: Date.now(),
+            comments: tableInfo.comment ? tableInfo.comment : undefined,
         };
     });
 };
