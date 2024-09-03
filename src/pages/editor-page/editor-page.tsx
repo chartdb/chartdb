@@ -89,6 +89,7 @@ export const EditorPage: React.FC = () => {
                             defaultSize={isXl ? 25 : isLg ? 35 : 50}
                             minSize={isXl ? 25 : isLg ? 35 : 50}
                             maxSize={isSidePanelShowed ? 99 : 0}
+                            className="transition-[flex-grow] duration-200"
                         >
                             <SidePanel />
                         </ResizablePanel>
