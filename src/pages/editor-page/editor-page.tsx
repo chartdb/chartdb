@@ -88,7 +88,7 @@ export const EditorPage: React.FC = () => {
                         <ResizablePanel
                             defaultSize={isXl ? 25 : isLg ? 35 : 50}
                             minSize={isXl ? 25 : isLg ? 35 : 50}
-                            maxSize={!isSidePanelShowed ? 99 : 0}
+                            maxSize={isSidePanelShowed ? 99 : 0}
                         >
                             <SidePanel />
                         </ResizablePanel>
