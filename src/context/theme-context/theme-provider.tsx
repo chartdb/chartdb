@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { EffectiveThemeType, ThemeContext, ThemeType } from './theme-context';
-
-const getSystemTheme = (): EffectiveThemeType => {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-    }
-    return 'light';
-};
+import { useMediaQuery } from 'react-responsive';
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -15,32 +9,19 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
         const savedTheme = localStorage.getItem('theme') as ThemeType | null;
         return savedTheme || 'system';
     });
+    const isDarkSystemTheme = useMediaQuery({
+        query: '(prefers-color-scheme: dark)',
+    });
+
+    const systemTheme = isDarkSystemTheme ? 'dark' : 'light';
 
     const [effectiveTheme, setEffectiveTheme] =
-        useState<EffectiveThemeType>(getSystemTheme());
-
-    useEffect(() => {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-        const handleChange = () => {
-            if (theme === 'system') {
-                setEffectiveTheme(getSystemTheme());
-            }
-        };
-
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, [theme]);
+        useState<EffectiveThemeType>(systemTheme);
 
     useEffect(() => {
         localStorage.setItem('theme', theme);
-        if (theme === 'system') {
-            setEffectiveTheme(getSystemTheme());
-        } else {
-            setEffectiveTheme(theme);
-        }
-    }, [theme]);
+        setEffectiveTheme(theme === 'system' ? systemTheme : theme);
+    }, [theme, systemTheme]);
 
     useEffect(() => {
         if (effectiveTheme === 'dark') {

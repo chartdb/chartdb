@@ -56,7 +56,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         >
                             <Ellipsis className="size-3.5" />
                         </Button>
@@ -72,7 +72,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                             <div className="flex flex-col gap-2">
                                 <Label
                                     htmlFor="width"
-                                    className="text-gray-700"
+                                    className="text-subtitle"
                                 >
                                     {t(
                                         'side_panel.tables_section.table.index_actions.name'
@@ -90,7 +90,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                             <div className="mt-2 flex items-center justify-between">
                                 <Label
                                     htmlFor="width"
-                                    className="text-gray-700"
+                                    className="text-subtitle"
                                 >
                                     {t(
                                         'side_panel.tables_section.table.index_actions.unique'
