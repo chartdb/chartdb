@@ -58,6 +58,8 @@ export const en: ResourceLanguage = {
                     nullable: 'Nullable?',
                     primary_key: 'Primary Key',
                     indexes: 'Indexes',
+                    comments: 'Comments',
+                    no_comments: 'No comments',
                     add_field: 'Add Field',
                     add_index: 'Add Index',
                     index_select_fields: 'Select fields',
@@ -66,6 +68,8 @@ export const en: ResourceLanguage = {
                     field_actions: {
                         title: 'Field Attributes',
                         unique: 'Unique',
+                        comments: 'Comments',
+                        no_comments: 'No comments',
                         delete_field: 'Delete Field',
                     },
                     index_actions: {
