@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, FileType2, FileKey2 } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
@@ -15,48 +15,50 @@ import { TableField } from './table-field/table-field';
 import { TableIndex } from './table-index/table-index';
 import { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
-
-type AccordionItemValue = 'fields' | 'indexes';
+import { ReorderableList } from '@/components/reorderablelist/reorderable-list';
 
 export interface TableListItemContentProps {
     table: DBTable;
 }
+type AccordionItemValue = 'fields' | 'indexes';
 
-export const TableListItemContent: React.FC<TableListItemContentProps> = ({
-    table,
-}) => {
-    const {
-        updateField,
-        removeField,
-        createField,
-        createIndex,
-        removeIndex,
-        updateIndex,
-    } = useChartDB();
+
+export const TableListItemContent: React.FC<TableListItemContentProps> = ({ table }) => {
+    const { updateField, removeField, createField, createIndex, removeIndex, updateIndex, updateTablesState } = useChartDB();
     const { t } = useTranslation();
     const { color } = table;
-    const [selectedItems, setSelectedItems] = React.useState<
-        AccordionItemValue[]
-    >(['fields']);
+    const [selectedItems, setSelectedItems] = useState<AccordionItemValue[]>(['fields']);
+    const [fields, setFields] = useState<DBField[]>(table.fields);
+
+    const updateFieldOrder = (newFields: DBField[]) => {
+        setFields(newFields);
+        updateTablesState((tables: DBTable[]) => {
+            return tables.map(tableItem => {
+                if (tableItem.id === table.id) {
+                    return {
+                        ...tableItem,
+                        fields: newFields
+                    };
+                }
+                return tableItem;
+            });
+        });
+    };
 
     const createIndexHandler = () => {
         setSelectedItems((prev) => {
             if (prev.includes('indexes')) {
                 return prev;
             }
-
             return [...prev, 'indexes'];
         });
-
         createIndex(table.id);
     };
 
     return (
         <div
             className="flex flex-col gap-1 rounded-b-md border-l-[6px] px-1"
-            style={{
-                borderColor: color,
-            }}
+            style={{ borderColor: color }}
         >
             <Accordion
                 type="multiple"
@@ -81,7 +83,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
+                                        className="size-4 p-0 text-xs text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createField(table.id);
@@ -94,18 +96,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col pb-0 pt-1">
-                        {table.fields.map((field) => (
-                            <TableField
-                                key={field.id}
-                                field={field}
-                                updateField={(attrs: Partial<DBField>) =>
-                                    updateField(table.id, field.id, attrs)
-                                }
-                                removeField={() =>
-                                    removeField(table.id, field.id)
-                                }
-                            />
-                        ))}
+                        <ReorderableList
+                            items={fields}
+                            onReorder={updateFieldOrder}
+                            renderItem={(field) => (
+                                <TableField
+                                    field={field}
+                                    updateField={(attrs: Partial<DBField>) =>
+                                        updateField(table.id, field.id, attrs)
+                                    }
+                                    removeField={() => removeField(table.id, field.id)}
+                                />
+                            )}
+                        />
                     </AccordionContent>
                 </AccordionItem>
 
@@ -124,7 +127,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 <div className="hidden flex-row-reverse group-hover:flex">
                                     <Button
                                         variant="ghost"
-                                        className="size-4 p-0 text-xs text-slate-500  hover:bg-primary-foreground hover:text-slate-700"
+                                        className="size-4 p-0 text-xs text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createIndexHandler();
@@ -141,9 +144,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                             <TableIndex
                                 key={index.id}
                                 index={index}
-                                removeIndex={() =>
-                                    removeIndex(table.id, index.id)
-                                }
+                                removeIndex={() => removeIndex(table.id, index.id)}
                                 updateIndex={(attrs: Partial<DBIndex>) =>
                                     updateIndex(table.id, index.id, attrs)
                                 }
