@@ -27,12 +27,20 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
 
     const showSidePanel: LayoutContext['showSidePanel'] = () =>
         setIsSidePanelShowed(true);
+
+    const openTableFromSidebar: LayoutContext['openTableFromSidebar'] = (
+        tableId
+    ) => {
+        showSidePanel();
+        setSelectedSidebarSection('tables');
+        setOpenedTableInSidebar(tableId);
+    };
     return (
         <layoutContext.Provider
             value={{
                 openedTableInSidebar,
                 selectedSidebarSection,
-                openTableFromSidebar: setOpenedTableInSidebar,
+                openTableFromSidebar,
                 selectSidebarSection: setSelectedSidebarSection,
                 openedRelationshipInSidebar,
                 openRelationshipFromSidebar: setOpenedRelationshipInSidebar,
