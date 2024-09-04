@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { NodeProps, Node, NodeResizer } from '@xyflow/react';
+import { NodeProps, Node, NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
     ChevronsLeftRight,
@@ -12,6 +12,7 @@ import { DBTable } from '@/lib/domain/db-table';
 import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { TableEdgeType } from './table-edge';
 
 export type TableNodeType = Node<
     {
@@ -31,7 +32,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     data: { table },
 }) => {
     const { updateTable } = useChartDB();
+    const edges = useStore((store) => store.edges) as TableEdgeType[];
     const { openTableFromSidebar, selectSidebarSection } = useLayout();
+
+    const selectedEdges = edges.filter(
+        (edge) => (edge.source === id || edge.target === id) && edge.selected
+    );
+
     const focused = !!selected && !dragging;
 
     const openTableInEditor = () => {
@@ -113,6 +120,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     focused={focused}
                     tableNodeId={id}
                     field={field}
+                    highlighted={selectedEdges.some(
+                        (edge) =>
+                            edge.data?.relationship.sourceFieldId ===
+                                field.id ||
+                            edge.data?.relationship.targetFieldId === field.id
+                    )}
                 />
             ))}
         </div>
