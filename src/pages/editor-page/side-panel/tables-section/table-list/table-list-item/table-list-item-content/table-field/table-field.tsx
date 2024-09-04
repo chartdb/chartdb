@@ -59,10 +59,12 @@ export const TableField: React.FC<TableFieldProps> = ({
             ref={setNodeRef}
             style={style}
             {...attributes}
-            {...listeners}
         >
             <div className="flex w-8/12 items-center justify-start gap-1 overflow-hidden">
-                <GripVertical className="size-3 shrink-0 cursor-move text-muted-foreground" />
+                <GripVertical
+                    className="size-3 shrink-0 cursor-move text-muted-foreground"
+                    {...listeners}
+                />
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span className="w-5/12">
