@@ -16,6 +16,7 @@ import {
 import { useStorage } from '@/hooks/use-storage';
 import { Diagram } from '@/lib/domain/diagram';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/hooks/use-theme';
 
 export interface ExampleCardProps {
     example: Example;
@@ -23,6 +24,7 @@ export interface ExampleCardProps {
 
 export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
     const navigate = useNavigate();
+    const { effectiveTheme } = useTheme();
     const { addDiagram, deleteDiagram } = useStorage();
     const { diagram } = example;
     const utilizeExample = useCallback(async () => {
@@ -43,13 +45,13 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
     return (
         <div
             onClick={utilizeExample}
-            className="flex h-96 w-full cursor-pointer flex-col rounded-xl border-2 border-slate-500 bg-slate-50 shadow-sm transition duration-300 ease-in-out hover:scale-[102%] hover:border-pink-600"
+            className="flex h-96 w-full cursor-pointer flex-col rounded-xl border-2 border-slate-500 bg-slate-50 shadow-sm transition duration-300 ease-in-out hover:scale-[102%] hover:border-pink-600 dark:border-slate-700 dark:bg-slate-950"
         >
             <div
-                className="h-4 rounded-t-xl"
+                className="h-4 rounded-t-[10px]"
                 style={{ backgroundColor: randomColor() }}
             ></div>
-            <div className="flex h-12 items-center justify-between bg-slate-200 px-2">
+            <div className="flex h-12 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                 <div className="flex items-center gap-2">
                     <Tooltip>
                         <TooltipTrigger className="mr-1">
@@ -78,15 +80,18 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                 <div className="flex flex-row">
                     <Button
                         variant="ghost"
-                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
-                        // onClick={openTableInEditor}
+                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                     >
                         <Import className="size-5" />
                     </Button>
                 </div>
             </div>
             <img
-                src={example.image}
+                src={
+                    effectiveTheme === 'dark'
+                        ? example.imageDark
+                        : example.image
+                }
                 alt={example.name}
                 className="w-fit border-b"
             />

@@ -12,6 +12,7 @@ import {
     TooltipContent,
 } from '@/components/tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/button/button';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -86,7 +87,13 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                         </TooltipTrigger>
                         <TooltipContent>{t('toolbar.zoom_out')}</TooltipContent>
                     </Tooltip>
-                    <ToolbarButton onClick={resetZoom}>{zoom}</ToolbarButton>
+                    <Button
+                        variant="ghost"
+                        onClick={resetZoom}
+                        className="w-[60px] p-2 hover:bg-primary-foreground"
+                    >
+                        {zoom}
+                    </Button>
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

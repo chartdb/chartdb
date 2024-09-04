@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import TimeAgo from 'timeago-react';
 import {
     Menubar,
+    MenubarCheckboxItem,
     MenubarContent,
     MenubarItem,
     MenubarMenu,
@@ -19,6 +20,7 @@ import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import ChartDBLogo from '@/assets/logo.png';
+import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useDialog } from '@/hooks/use-dialog';
 import { Badge } from '@/components/badge/badge';
 import {
@@ -40,6 +42,7 @@ import {
 import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
+import { useTheme } from '@/hooks/use-theme';
 
 export interface TopNavbarProps {}
 
@@ -58,7 +61,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         showAlert,
     } = useDialog();
+    const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
+    const { effectiveTheme } = useTheme();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -230,7 +235,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             />
                             <Button
                                 variant="ghost"
-                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex"
+                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
                                 onClick={editDiagramName}
                             >
                                 <Check />
@@ -241,7 +246,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             <Label>{diagramName}</Label>
                             <Button
                                 variant="ghost"
-                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex"
+                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
                                 onClick={enterEditMode}
                             >
                                 <Pencil />
@@ -281,7 +286,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         rel="noreferrer"
                     >
                         <img
-                            src={ChartDBLogo}
+                            src={
+                                effectiveTheme === 'light'
+                                    ? ChartDBLogo
+                                    : ChartDBDarkLogo
+                            }
                             alt="chartDB"
                             className="h-4 max-w-fit"
                         />
@@ -497,6 +506,32 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ? t('menu.view.hide_sidebar')
                                         : t('menu.view.show_sidebar')}
                                 </MenubarItem>
+                                <MenubarSeparator />
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        {t('menu.view.theme')}
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarCheckboxItem
+                                            checked={theme === 'system'}
+                                            onClick={() => setTheme('system')}
+                                        >
+                                            {t('theme.system')}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            checked={theme === 'light'}
+                                            onClick={() => setTheme('light')}
+                                        >
+                                            {t('theme.light')}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            checked={theme === 'dark'}
+                                            onClick={() => setTheme('dark')}
+                                        >
+                                            {t('theme.dark')}
+                                        </MenubarCheckboxItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
                             </MenubarContent>
                         </MenubarMenu>
                         <MenubarMenu>

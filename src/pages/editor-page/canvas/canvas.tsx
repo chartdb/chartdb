@@ -27,6 +27,8 @@ import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
+import { useTheme } from '@/hooks/use-theme';
+import { useTranslation } from 'react-i18next';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -38,6 +40,7 @@ export interface CanvasProps {}
 export const Canvas: React.FC<CanvasProps> = () => {
     const { getEdge, getInternalNode } = useReactFlow();
     const { toast } = useToast();
+    const { t } = useTranslation();
     const {
         tables,
         relationships,
@@ -47,6 +50,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
         getField,
     } = useChartDB();
     const { showSidePanel } = useLayout();
+    const { effectiveTheme } = useTheme();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -240,6 +244,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
     return (
         <div className="flex h-full">
             <ReactFlow
+                colorMode={effectiveTheme}
                 className="canvas-cursor-default nodes-animated"
                 nodes={nodes}
                 edges={edges}
@@ -269,8 +274,11 @@ export const Canvas: React.FC<CanvasProps> = () => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Badge variant="default" className="bg-pink-600">
-                            Loading diagram...
+                        <Badge
+                            variant="default"
+                            className="bg-pink-600 text-white"
+                        >
+                            {t('loading_diagram')}
                         </Badge>
                     </Controls>
                 ) : null}
@@ -312,7 +320,6 @@ export const Canvas: React.FC<CanvasProps> = () => {
                     variant={BackgroundVariant.Dots}
                     gap={16}
                     size={1}
-                    bgColor="#ffffff"
                 />
             </ReactFlow>
         </div>

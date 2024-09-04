@@ -56,7 +56,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
 
     return (
         <div
-            className={`flex w-full flex-col border-2 bg-slate-50 ${selected ? 'border-pink-600' : 'border-slate-500'} rounded-lg shadow-sm`}
+            className={`flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 ${selected ? 'border-pink-600' : 'border-slate-500 dark:border-slate-700'} rounded-lg shadow-sm`}
             onClick={(e) => {
                 if (e.detail === 2) {
                     openTableInEditor();
@@ -75,9 +75,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 className="h-2 rounded-t-[6px]"
                 style={{ backgroundColor: table.color }}
             ></div>
-            <div className="group flex h-9 items-center justify-between bg-slate-200 px-2">
-                <div className="flex min-w-0 flex-1 items-center gap-1">
-                    <Table2 className="size-3.5 shrink-0 text-gray-600" />
+            <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                     <Label className="truncate text-sm font-bold">
                         {table.name}
                     </Label>
@@ -85,14 +85,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 <div className="hidden shrink-0 flex-row group-hover:flex">
                     <Button
                         variant="ghost"
-                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                         onClick={openTableInEditor}
                     >
                         <Pencil className="size-4" />
                     </Button>
                     <Button
                         variant="ghost"
-                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700"
+                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                         onClick={
                             table.width !== MAX_TABLE_SIZE
                                 ? expandTable
