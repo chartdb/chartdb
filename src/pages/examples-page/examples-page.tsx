@@ -1,9 +1,12 @@
 import React from 'react';
 import ChartDBLogo from '@/assets/logo.png';
+import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { examples } from './examples-data/examples-data';
 import { ExampleCard } from './example-card';
+import { useTheme } from '@/hooks/use-theme';
 
 export const ExamplesPage: React.FC = () => {
+    const { effectiveTheme } = useTheme();
     return (
         <section className="flex w-screen flex-col bg-background">
             <nav className="flex h-12 flex-row items-center justify-between border-b px-4">
@@ -15,7 +18,11 @@ export const ExamplesPage: React.FC = () => {
                             rel="noreferrer"
                         >
                             <img
-                                src={ChartDBLogo}
+                                src={
+                                    effectiveTheme === 'light'
+                                        ? ChartDBLogo
+                                        : ChartDBDarkLogo
+                                }
                                 alt="chartDB"
                                 className="h-4 max-w-fit"
                             />

@@ -51,7 +51,9 @@ const routes: RouteObject[] = [
         path: 'examples',
         element: (
             <StorageProvider>
-                <ExamplesPage />
+                <ThemeProvider>
+                    <ExamplesPage />
+                </ThemeProvider>
             </StorageProvider>
         ),
     },

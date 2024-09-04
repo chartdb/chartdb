@@ -1,7 +1,10 @@
 import { Diagram } from '@/lib/domain/diagram';
 import EmployeeExample from '../../../assets/examples/employees_example.png';
+import EmployeeExampleDark from '../../../assets/examples/employees_example_dark.png';
 import BikeStoresExample from '../../../assets/examples/bike_stores_example.png';
+import BikeStoresExampleDark from '../../../assets/examples/bike_stores_example_dark.png';
 import DVDRentalExample from '../../../assets/examples/dvd_rental_example.png';
+import DVDRentalExampleDark from '../../../assets/examples/dvd_rental_example_dark.png';
 import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface Example {
@@ -9,6 +12,7 @@ export interface Example {
     name: string;
     description: string;
     image: string;
+    imageDark: string;
     diagram: Diagram;
 }
 
@@ -19,6 +23,7 @@ export const examples: Example[] = [
         description:
             'A schema for database of employees, departments, and salaries.',
         image: EmployeeExample,
+        imageDark: EmployeeExampleDark,
         diagram: {
             id: 'diagramexample01',
             name: 'employees-db',
@@ -607,6 +612,7 @@ export const examples: Example[] = [
         description:
             'A schema for database of bike stores, brands, categories, and customers.',
         image: BikeStoresExample,
+        imageDark: BikeStoresExampleDark,
         diagram: {
             id: 'diagramexample02',
             name: 'bike_stores-db',
@@ -1458,6 +1464,7 @@ export const examples: Example[] = [
         id: '3',
         name: 'DVD Rental schema',
         image: DVDRentalExample,
+        imageDark: DVDRentalExampleDark,
         description:
             'A schema for database of a DVD rental store, including customers, films, actors, staff, and stores.',
         diagram: {
