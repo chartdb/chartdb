@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ellipsis, Trash2 } from 'lucide-react';
+import { Ellipsis, GripVertical, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Combobox } from '@/components/combobox/combobox';
 import { Button } from '@/components/button/button';
@@ -24,6 +24,8 @@ import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { TableFieldToggle } from './table-field-toggle';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export interface TableFieldProps {
     field: DBField;
@@ -38,18 +40,32 @@ export const TableField: React.FC<TableFieldProps> = ({
 }) => {
     const { databaseType } = useChartDB();
     const { t } = useTranslation();
+    const { attributes, listeners, setNodeRef, transform, transition } =
+        useSortable({ id: field.id });
 
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
         label: type.name,
         value: type.id,
     }));
 
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     return (
-        <div className="flex flex-1 flex-row justify-between p-1">
-            <div className="flex w-8/12 justify-start gap-1 overflow-hidden">
+        <div
+            className="flex flex-1 flex-row justify-between p-1"
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+        >
+            <div className="flex w-8/12 items-center justify-start gap-1 overflow-hidden">
+                <GripVertical className="size-3 shrink-0 cursor-move text-muted-foreground" />
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <span className="w-7/12">
+                        <span className="w-5/12">
                             <Input
                                 className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"

@@ -16,6 +16,19 @@ import { TableIndex } from './table-index/table-index';
 import { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 
 type AccordionItemValue = 'fields' | 'indexes';
 
@@ -40,6 +53,21 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
     >(['fields']);
+    const sensors = useSensors(useSensor(PointerSensor));
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (active?.id !== over?.id && !!over && !!active) {
+            const items = table.fields;
+            const oldIndex = items.findIndex((item) => item.id === active.id);
+            const newIndex = items.findIndex((item) => item.id === over.id);
+
+            updateTable(table.id, {
+                fields: arrayMove(items, oldIndex, newIndex),
+            });
+        }
+    };
 
     const createIndexHandler = () => {
         setSelectedItems((prev) => {
@@ -96,18 +124,35 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col pb-0 pt-1">
-                        {table.fields.map((field) => (
-                            <TableField
-                                key={field.id}
-                                field={field}
-                                updateField={(attrs: Partial<DBField>) =>
-                                    updateField(table.id, field.id, attrs)
-                                }
-                                removeField={() =>
-                                    removeField(table.id, field.id)
-                                }
-                            />
-                        ))}
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext
+                                items={table.fields}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {table.fields.map((field) => (
+                                    <TableField
+                                        key={field.id}
+                                        field={field}
+                                        updateField={(
+                                            attrs: Partial<DBField>
+                                        ) =>
+                                            updateField(
+                                                table.id,
+                                                field.id,
+                                                attrs
+                                            )
+                                        }
+                                        removeField={() =>
+                                            removeField(table.id, field.id)
+                                        }
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
                     </AccordionContent>
                 </AccordionItem>
 
