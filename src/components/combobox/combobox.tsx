@@ -35,6 +35,7 @@ interface ComboboxProps {
     onCreate?: (value: string) => void;
     emptyText?: string;
     popoverClassName?: string;
+    buttonClassName?: string;
 }
 
 export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
@@ -49,6 +50,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
             onChange,
             onCreate,
             popoverClassName,
+            buttonClassName,
         },
         ref
     ) => {
@@ -65,7 +67,10 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="h-auto w-full justify-between"
+                            className={cn(
+                                'h-auto w-full justify-between',
+                                buttonClassName
+                            )}
                         >
                             {selected && selected.length > 0 ? (
                                 <div className="relative mr-auto flex grow flex-wrap items-center overflow-hidden">
@@ -184,8 +189,18 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
                                                     <Check
                                                         className={cn(
                                                             'mr-2 h-4 w-4',
-                                                            selected ===
-                                                                option.value
+                                                            (mode ===
+                                                                'multiple' &&
+                                                                Array.isArray(
+                                                                    selected
+                                                                ) &&
+                                                                selected.includes(
+                                                                    option.value
+                                                                )) ||
+                                                                (mode ===
+                                                                    'single' &&
+                                                                    selected ===
+                                                                        option.value)
                                                                 ? 'opacity-100'
                                                                 : 'opacity-0'
                                                         )}
