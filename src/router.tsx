@@ -5,6 +5,7 @@ import { EditorPage } from './pages/editor-page/editor-page';
 import { ChartDBProvider } from './context/chartdb-context/chartdb-provider';
 import { ReactFlowProvider } from '@xyflow/react';
 import { StorageProvider } from './context/storage-context/storage-provider';
+import { ScrollProvider } from './context/scroll-context/scroll-provider';
 import { ConfigProvider } from './context/config-context/config-provider';
 import { HistoryProvider } from './context/history-context/history-provider';
 import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
@@ -29,13 +30,15 @@ const routes: RouteObject[] = [
                                     <HistoryProvider>
                                         <ThemeProvider>
                                             <DialogProvider>
-                                                <ReactFlowProvider>
-                                                    <ExportImageProvider>
-                                                        <KeyboardShortcutsProvider>
-                                                            <EditorPage />
-                                                        </KeyboardShortcutsProvider>
-                                                    </ExportImageProvider>
-                                                </ReactFlowProvider>
+                                                <ScrollProvider>
+                                                    <ReactFlowProvider>
+                                                        <ExportImageProvider>
+                                                            <KeyboardShortcutsProvider>
+                                                                <EditorPage />
+                                                            </KeyboardShortcutsProvider>
+                                                        </ExportImageProvider>
+                                                    </ReactFlowProvider>
+                                                </ScrollProvider>
                                             </DialogProvider>
                                         </ThemeProvider>
                                     </HistoryProvider>

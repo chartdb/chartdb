@@ -23,6 +23,7 @@ export const es: LanguageTranslation = {
                 view: 'Ver',
                 show_sidebar: 'Mostrar Barra Lateral',
                 hide_sidebar: 'Ocultar Barra Lateral',
+                zoom_on_scroll: 'Zoom al desplazarse',
                 theme: 'Tema',
                 change_language: 'Idioma',
             },

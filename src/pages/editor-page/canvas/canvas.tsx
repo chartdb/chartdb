@@ -31,6 +31,7 @@ import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
 import { DBTable } from '@/lib/domain/db-table';
+import { useScrollAction } from '@/hooks/use-scroll-action';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -64,6 +65,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
+    const { effectiveScrollAction } = useScrollAction();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -285,6 +287,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     animated: false,
                     type: 'table-edge',
                 }}
+                panOnScroll={effectiveScrollAction === 'pan'}
             >
                 {isLoadingDOM ? (
                     <Controls
