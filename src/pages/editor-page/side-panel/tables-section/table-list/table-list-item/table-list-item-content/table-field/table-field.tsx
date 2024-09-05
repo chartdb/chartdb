@@ -65,7 +65,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     className="flex w-4 shrink-0 cursor-move items-center justify-center"
                     {...listeners}
                 >
-                    <GripVertical className="size-3  text-muted-foreground" />
+                    <GripVertical className="size-3.5  text-muted-foreground" />
                 </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
