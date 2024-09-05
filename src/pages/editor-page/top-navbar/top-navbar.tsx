@@ -276,9 +276,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     const emojiAI = '✨';
 
-    const changeLanguage = useCallback((language: string) => {
-        i18n.changeLanguage(language);
-    }, []);
+    const changeLanguage = useCallback(
+        (language: string) => {
+            i18n.changeLanguage(language);
+        },
+        [i18n]
+    );
 
     return (
         <nav className="flex h-20 flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
