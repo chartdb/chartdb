@@ -115,7 +115,7 @@ export const EditorPage: React.FC = () => {
                                     </DrawerDescription>
                                 </DrawerHeader>
                                 <Separator orientation="horizontal" />
-                                <SidePanel />
+                                <SidePanel data-vaul-no-drag />
                             </DrawerContent>
                         </Drawer>
                         <Canvas />

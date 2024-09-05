@@ -55,7 +55,7 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     return (
         <div
-            className="flex flex-1 flex-row justify-between p-1"
+            className="flex flex-1 touch-none flex-row justify-between p-1"
             ref={setNodeRef}
             style={style}
             {...attributes}
