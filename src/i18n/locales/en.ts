@@ -24,6 +24,7 @@ export const en: ResourceLanguage = {
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
                 theme: 'Theme',
+                change_language: 'Change Language',
             },
             help: {
                 help: 'Help',
