@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import {
     ResizableHandle,
@@ -24,6 +24,7 @@ import {
     DrawerTitle,
 } from '@/components/drawer/drawer';
 import { Separator } from '@/components/separator/separator';
+import { Diagram } from '@/lib/domain/diagram';
 
 export const EditorPage: React.FC = () => {
     const { loadDiagram, currentDiagram } = useChartDB();
@@ -37,6 +38,7 @@ export const EditorPage: React.FC = () => {
     const { isLg } = useBreakpoint('lg');
     const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
+    const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
 
     useEffect(() => {
         if (!config) {
@@ -49,6 +51,7 @@ export const EditorPage: React.FC = () => {
 
         const loadDefaultDiagram = async () => {
             if (diagramId) {
+                setInitialDiagram(undefined);
                 showLoader();
                 resetRedoStack();
                 resetUndoStack();
@@ -56,6 +59,7 @@ export const EditorPage: React.FC = () => {
                 if (!diagram) {
                     navigate('/');
                 }
+                setInitialDiagram(diagram);
                 hideLoader();
             } else if (!diagramId && config.defaultDiagramId) {
                 navigate(`/diagrams/${config.defaultDiagramId}`);
@@ -98,7 +102,9 @@ export const EditorPage: React.FC = () => {
                         <ResizablePanel
                             defaultSize={isXl ? 75 : isLg ? 65 : 50}
                         >
-                            <Canvas />
+                            <Canvas
+                                initialTables={initialDiagram?.tables ?? []}
+                            />
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 ) : (
@@ -118,7 +124,7 @@ export const EditorPage: React.FC = () => {
                                 <SidePanel data-vaul-no-drag />
                             </DrawerContent>
                         </Drawer>
-                        <Canvas />
+                        <Canvas initialTables={initialDiagram?.tables ?? []} />
                     </>
                 )}
             </section>

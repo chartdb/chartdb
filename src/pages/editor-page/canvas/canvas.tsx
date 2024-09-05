@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
     ReactFlow,
     useEdgesState,
@@ -16,7 +16,8 @@ import {
     OnNodesChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { TableNode, TableNodeType } from './table-node';
+import equal from 'fast-deep-equal';
+import { MIN_TABLE_SIZE, TableNode, TableNodeType } from './table-node';
 import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
@@ -29,16 +30,28 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
+import { DBTable } from '@/lib/domain/db-table';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
-const initialNodes: TableNodeType[] = [];
 const initialEdges: TableEdgeType[] = [];
 
-export interface CanvasProps {}
+const tableToTableNode = (table: DBTable): TableNodeType => ({
+    id: table.id,
+    type: 'table',
+    position: { x: table.x, y: table.y },
+    data: {
+        table,
+    },
+    width: table.width ?? MIN_TABLE_SIZE,
+});
 
-export const Canvas: React.FC<CanvasProps> = () => {
-    const { getEdge, getInternalNode } = useReactFlow();
+export interface CanvasProps {
+    initialTables: DBTable[];
+}
+
+export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
+    const { getEdge, getInternalNode, fitView } = useReactFlow();
     const { toast } = useToast();
     const { t } = useTranslation();
     const {
@@ -54,11 +67,30 @@ export const Canvas: React.FC<CanvasProps> = () => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
+    const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
-    const [nodes, setNodes, onNodesChange] =
-        useNodesState<TableNodeType>(initialNodes);
+    const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
+        initialTables.map(tableToTableNode)
+    );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<TableEdgeType>(initialEdges);
+
+    useEffect(() => {
+        setIsInitialLoadingNodes(true);
+    }, [initialTables]);
+
+    useEffect(() => {
+        const initialNodes = initialTables.map(tableToTableNode);
+        if (equal(initialNodes, nodes)) {
+            setIsInitialLoadingNodes(false);
+        }
+    }, [initialTables, nodes]);
+
+    useEffect(() => {
+        if (!isInitialLoadingNodes) {
+            setTimeout(() => fitView({ maxZoom: 1, duration: 0 }), 0);
+        }
+    }, [isInitialLoadingNodes, fitView]);
 
     useEffect(() => {
         const targetIndexes: Record<string, number> = relationships.reduce(
@@ -84,17 +116,7 @@ export const Canvas: React.FC<CanvasProps> = () => {
     }, [relationships, setEdges]);
 
     useEffect(() => {
-        setNodes(
-            tables.map((table) => ({
-                id: table.id,
-                type: 'table',
-                position: { x: table.x, y: table.y },
-                data: {
-                    table,
-                },
-                width: table.width ?? 224,
-            }))
-        );
+        setNodes(tables.map(tableToTableNode));
     }, [tables, setNodes]);
 
     const onConnectHandler = useCallback(
