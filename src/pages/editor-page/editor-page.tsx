@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import {
     ResizableHandle,
@@ -37,6 +37,7 @@ export const EditorPage: React.FC = () => {
     const { isLg } = useBreakpoint('lg');
     const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
+    const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(true);
 
     useEffect(() => {
         if (!config) {
@@ -82,7 +83,11 @@ export const EditorPage: React.FC = () => {
             <section
                 className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex flex-col overflow-x-hidden`}
             >
-                <TopNavbar />
+                {/* // if not open new diagram dialog then shoud be closeCreateDiagramDialog */}
+                <TopNavbar
+                    dialog={{ open: openNewDiagramDialog }}
+                    setDialogOpen={setOpenNewDiagramDialog}
+                />
                 {isDesktop ? (
                     <ResizablePanelGroup direction="horizontal">
                         <ResizablePanel

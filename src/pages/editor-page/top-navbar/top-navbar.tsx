@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import TimeAgo from 'timeago-react';
+import TimeAgo from 'timeago-react'; //
 import {
     Menubar,
     MenubarContent,
@@ -39,35 +39,206 @@ import {
 } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useHistory } from '@/hooks/use-history';
 
-export interface TopNavbarProps {}
+import { CreateDiagramDialogImportDatabase } from '@/dialogs/create-diagram-dialog/create-diagram-dialog-import-database/create-diagram-dialog-import-database';
+import { DialogProps } from '@radix-ui/react-dialog';
+import { DatabaseEdition } from '@/lib/domain/database-edition';
+import { CreateDiagramDialogStep } from '@/dialogs/create-diagram-dialog/create-diagram-dialog-step';
+import { useStorage } from '@/hooks/use-storage';
+import { useNavigate } from 'react-router-dom';
+import {
+    DatabaseMetadata,
+    isDatabaseMetadata,
+    loadDatabaseMetadata,
+} from '@/lib/data/import-metadata/metadata-types/database-metadata';
+import { Dialog, DialogContent } from '@/components/dialog/dialog';
+import { Diagram, loadFromDatabaseMetadata } from '@/lib/domain/diagram';
+import { generateId } from '@/lib/utils';
+export interface TopNavbarProps {
+    dialog: DialogProps;
+    setDialogOpen: (open: boolean) => void;
+}
 
-export const TopNavbar: React.FC<TopNavbarProps> = () => {
+export const TopNavbar: React.FC<TopNavbarProps> = ({
+    dialog,
+    setDialogOpen,
+}) => {
     const {
         diagramName,
         updateDiagramName,
         currentDiagram,
         clearDiagramData,
         deleteDiagram,
+        diagramId,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
         openExportSQLDialog,
         showAlert,
+        closeCreateDiagramDialog,
     } = useDialog();
+    const errorScriptOutputMessage =
+        'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
+    const [databaseType, setDatabaseType] = useState<DatabaseType>(
+        DatabaseType.MYSQL
+    );
+    const [scriptResult, setScriptResult] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [databaseEdition, setDatabaseEdition] = useState<
+        DatabaseEdition | undefined
+    >();
+    const [, setStep] = useState<CreateDiagramDialogStep>(
+        CreateDiagramDialogStep.SELECT_DATABASE
+    );
+    const { listDiagrams, addDiagram } = useStorage();
+    const [diagramNumber, setDiagramNumber] = useState<number>(1);
+    const navigate = useNavigate();
+    const [showDialog, setShowDialog] = useState(false);
+
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
     const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
-    // const { setTheme } = useTheme();
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+        const fetchDiagrams = async () => {
+            const diagrams = await listDiagrams();
+            setDiagramNumber(diagrams.length + 1);
+            setShowDialog(false);
+        };
+        fetchDiagrams();
+    }, [listDiagrams, setDiagramNumber, dialog.open]);
+
+    useEffect(() => {
+        setStep(CreateDiagramDialogStep.SELECT_DATABASE);
+        setDatabaseType(DatabaseType.MYSQL);
+        setDatabaseEdition(undefined);
+        setScriptResult('');
+        setErrorMessage('');
+        setDialogOpen(true);
+    }, [setDialogOpen, dialog.open]);
+
+    useEffect(() => {
         setEditedDiagramName(diagramName);
     }, [diagramName]);
+
+    useEffect(() => {
+        if (scriptResult.trim().length === 0) {
+            setErrorMessage('');
+            return;
+        }
+
+        try {
+            const parsedResult = JSON.parse(scriptResult);
+
+            if (isDatabaseMetadata(parsedResult)) {
+                setErrorMessage('');
+            } else {
+                setErrorMessage(errorScriptOutputMessage);
+            }
+        } catch (error) {
+            setErrorMessage(errorScriptOutputMessage);
+        }
+    }, [scriptResult]);
+    const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
+    const createNewDiagramScript = useCallback(async () => {
+        let diagram: Diagram = {
+            id: generateId(),
+            name: `Diagram ${diagramNumber}`,
+            databaseType: databaseType ?? DatabaseType.MYSQL,
+            databaseEdition:
+                databaseEdition?.trim().length === 0
+                    ? undefined
+                    : databaseEdition,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
+            const databaseMetadata: DatabaseMetadata =
+                loadDatabaseMetadata(scriptResult);
+
+            diagram = loadFromDatabaseMetadata({
+                databaseType,
+                databaseMetadata,
+                diagramNumber,
+                databaseEdition:
+                    databaseEdition?.trim().length === 0
+                        ? undefined
+                        : databaseEdition,
+            });
+        }
+
+        await addDiagram({ diagram });
+        await updateConfig({ defaultDiagramId: diagram.id });
+        closeCreateDiagramDialog();
+        navigate(`/diagrams/${diagram.id}`);
+    }, [
+        databaseType,
+        addDiagram,
+        databaseEdition,
+        closeCreateDiagramDialog,
+        navigate,
+        updateConfig,
+        scriptResult,
+        diagramNumber,
+        errorMessage,
+    ]);
+    const createNewDiagram = useCallback(() => {
+        openCreateDiagramDialog();
+    }, [openCreateDiagramDialog]);
+
+    const renderDialog = useCallback(() => {
+        return (
+            <Dialog
+                {...dialog}
+                onOpenChange={(open) => {
+                    if (hasExistingDiagram) {
+                        setDialogOpen(false);
+                        return;
+                    }
+
+                    if (open) {
+                        console.log('erewrewr');
+                        closeCreateDiagramDialog();
+                    }
+                }}
+            >
+                <DialogContent
+                    className="flex w-[90vw] flex-col overflow-visible xl:min-w-[45vw]"
+                    showClose={hasExistingDiagram}
+                >
+                    <CreateDiagramDialogImportDatabase
+                        createNewDiagram={createNewDiagramScript}
+                        databaseEdition={databaseEdition}
+                        databaseType={databaseType}
+                        errorMessage={errorMessage}
+                        scriptResult={scriptResult}
+                        setDatabaseEdition={setDatabaseEdition}
+                        setStep={setStep}
+                        setScriptResult={setScriptResult}
+                    />
+                </DialogContent>
+            </Dialog>
+        );
+    }, [
+        dialog,
+        setDialogOpen,
+        hasExistingDiagram,
+        createNewDiagramScript,
+        databaseType,
+        databaseEdition,
+        errorMessage,
+        scriptResult,
+        setDatabaseEdition,
+        setStep,
+        setScriptResult,
+        closeCreateDiagramDialog,
+    ]);
 
     const editDiagramName = useCallback(() => {
         if (!editMode) return;
@@ -80,10 +251,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     useClickAway(inputRef, editDiagramName);
     useKeyPressEvent('Enter', editDiagramName);
-
-    const createNewDiagram = () => {
-        openCreateDiagramDialog();
-    };
 
     const openDiagram = () => {
         openOpenDiagramDialog();
@@ -116,11 +283,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
 
+    const handleImportDatabase = (type: DatabaseType) => {
+        setShowDialog(true);
+        setDatabaseType(type);
+    };
     const exportSQL = useCallback(
         (databaseType: DatabaseType) => {
-            if (databaseType === DatabaseType.GENERIC) {
+            if (databaseType === DatabaseType.MYSQL) {
                 openExportSQLDialog({
-                    targetDatabaseType: DatabaseType.GENERIC,
+                    targetDatabaseType: DatabaseType.MYSQL,
                 });
 
                 return;
@@ -292,14 +463,85 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 <MenubarSeparator />
                                 <MenubarSub>
                                     <MenubarSubTrigger>
-                                        Export SQL
+                                        Import Database
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
                                         <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(DatabaseType.GENERIC)
-                                            }
+                                            onClick={() => {
+                                                handleImportDatabase(
+                                                    DatabaseType.POSTGRESQL
+                                                );
+                                            }}
                                         >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'postgresql'
+                                                ]
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                handleImportDatabase(
+                                                    DatabaseType.MYSQL
+                                                );
+                                            }}
+                                        >
+                                            {databaseTypeToLabelMap['mysql']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                handleImportDatabase(
+                                                    DatabaseType.SQL_SERVER
+                                                );
+                                            }}
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'sql_server'
+                                                ]
+                                            }
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                handleImportDatabase(
+                                                    DatabaseType.MARIADB
+                                                );
+                                            }}
+                                        >
+                                            {databaseTypeToLabelMap['mariadb']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() => {
+                                                handleImportDatabase(
+                                                    DatabaseType.SQLITE
+                                                );
+                                            }}
+                                        >
+                                            {databaseTypeToLabelMap['sqlite']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        Export SQL
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem>
                                             {databaseTypeToLabelMap['generic']}
                                         </MenubarItem>
                                         <MenubarItem
@@ -484,6 +726,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             </MenubarContent>
                         </MenubarMenu>
                     </Menubar>
+                    {showDialog && renderDialog()}
                 </div>
             </div>
             {isDesktop ? (
