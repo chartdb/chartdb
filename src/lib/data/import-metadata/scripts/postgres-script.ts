@@ -74,9 +74,10 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
                     THEN split_part(conrelid::regclass::text, '.', 2)
                     ELSE conrelid::regclass::text
                 END AS table_name,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_table,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES "?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_column,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_schema,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_table,
+                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[4] AS reference_column,
                 pg_get_constraintdef(oid) as fk_def
         FROM
             pg_constraint
