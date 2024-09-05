@@ -45,6 +45,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
 import { enMetadata } from '@/i18n/locales/en';
 import { esMetadata } from '@/i18n/locales/es';
+import { useScrollAction } from '@/hooks/use-scroll-action';
 
 export interface TopNavbarProps {}
 
@@ -65,6 +66,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
+    const { scrollAction, setScrollAction } = useScrollAction();
     const { effectiveTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -275,6 +277,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             showSidePanel();
         }
     }, [isSidePanelShowed, showSidePanel, hideSidePanel]);
+
+    const setPanOrZoomScrollAction = useCallback(() => {
+        if (scrollAction === 'zoom') {
+            setScrollAction('pan');
+        } else {
+            setScrollAction('zoom');
+        }
+    }, [scrollAction, setScrollAction]);
 
     const emojiAI = '✨';
 
@@ -515,6 +525,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ? t('menu.view.hide_sidebar')
                                         : t('menu.view.show_sidebar')}
                                 </MenubarItem>
+                                <MenubarSeparator />
+                                <MenubarCheckboxItem
+                                    checked={scrollAction === 'zoom'}
+                                    onClick={setPanOrZoomScrollAction}
+                                >
+                                    {t('menu.view.zoom_on_scroll')}
+                                </MenubarCheckboxItem>
                                 <MenubarSeparator />
                                 <MenubarSub>
                                     <MenubarSubTrigger>
