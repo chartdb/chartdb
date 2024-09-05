@@ -62,6 +62,7 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
                                             ',"table":"', replace(table_name::text, '"', ''), '"',
                                             ',"column":"', replace(fk_column::text, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name, '"',
+                                            ',"reference_schema":"', COALESCE(reference_schema, 'public'), '"',
                                             ',"reference_table":"', reference_table, '"',
                                             ',"reference_column":"', reference_column, '"',
                                             ',"fk_def":"', replace(fk_def, '"', ''),
