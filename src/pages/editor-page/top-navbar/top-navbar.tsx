@@ -64,7 +64,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
@@ -275,6 +275,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, [isSidePanelShowed, showSidePanel, hideSidePanel]);
 
     const emojiAI = '✨';
+
+    const changeLanguage = useCallback((language: string) => {
+        i18n.changeLanguage(language);
+    }, []);
 
     return (
         <nav className="flex h-20 flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
@@ -529,6 +533,24 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             onClick={() => setTheme('dark')}
                                         >
                                             {t('theme.dark')}
+                                        </MenubarCheckboxItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
+                                <MenubarSeparator />
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        {t('menu.view.change_language')}
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarCheckboxItem
+                                            onClick={() => changeLanguage('en')}
+                                        >
+                                            English
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            onClick={() => changeLanguage('es')}
+                                        >
+                                            Español
                                         </MenubarCheckboxItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
