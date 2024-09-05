@@ -43,6 +43,8 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
+import { enMetadata } from '@/i18n/locales/en';
+import { esMetadata } from '@/i18n/locales/es';
 
 export interface TopNavbarProps {}
 
@@ -546,14 +548,26 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
                                         <MenubarCheckboxItem
-                                            onClick={() => changeLanguage('en')}
+                                            onClick={() =>
+                                                changeLanguage(enMetadata.code)
+                                            }
+                                            checked={
+                                                i18n.language ===
+                                                enMetadata.code
+                                            }
                                         >
-                                            English
+                                            {enMetadata.name}
                                         </MenubarCheckboxItem>
                                         <MenubarCheckboxItem
-                                            onClick={() => changeLanguage('es')}
+                                            onClick={() =>
+                                                changeLanguage(esMetadata.code)
+                                            }
+                                            checked={
+                                                i18n.language ===
+                                                esMetadata.code
+                                            }
                                         >
-                                            Español
+                                            {esMetadata.name}
                                         </MenubarCheckboxItem>
                                     </MenubarSubContent>
                                 </MenubarSub>

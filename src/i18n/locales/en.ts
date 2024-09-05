@@ -1,6 +1,6 @@
-import { ResourceLanguage } from 'i18next';
+import { LanguageMetadata } from '../types';
 
-export const en: ResourceLanguage = {
+export const en = {
     translation: {
         menu: {
             file: {
@@ -24,7 +24,7 @@ export const en: ResourceLanguage = {
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
                 theme: 'Theme',
-                change_language: 'Change Language',
+                change_language: 'Language',
             },
             help: {
                 help: 'Help',
@@ -201,4 +201,9 @@ export const en: ResourceLanguage = {
             many_to_one: 'Many to One',
         },
     },
+};
+
+export const enMetadata: LanguageMetadata = {
+    name: 'English',
+    code: 'en',
 };
