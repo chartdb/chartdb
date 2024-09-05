@@ -33,7 +33,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText]);
 
     return (
-        <section className="flex flex-1 flex-col overflow-hidden px-2">
+        <section
+            className="flex flex-1 flex-col overflow-hidden px-2"
+            data-vaul-no-drag
+        >
             <div className="flex items-center justify-between gap-4 py-1">
                 <div>
                     <Tooltip>
