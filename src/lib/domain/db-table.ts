@@ -12,6 +12,7 @@ import { generateId } from '../utils';
 export interface DBTable {
     id: string;
     name: string;
+    schema?: string;
     x: number;
     y: number;
     fields: DBField[];
@@ -109,10 +110,16 @@ export const createTablesFromMetadata = ({
                 view.view_name === tableInfo.table
         );
 
+        const schema =
+            (tableInfo.schema ?? '').trim() === ''
+                ? undefined
+                : tableInfo.schema;
+
         // Initial random positions; these will be adjusted later
         return {
             id: generateId(),
             name: tableInfo.table,
+            schema,
             x: Math.random() * 1000, // Placeholder X
             y: Math.random() * 800, // Placeholder Y
             fields,

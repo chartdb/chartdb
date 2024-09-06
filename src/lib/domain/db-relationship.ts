@@ -5,7 +5,9 @@ import { generateId } from '@/lib/utils';
 export interface DBRelationship {
     id: string;
     name: string;
+    sourceSchema?: string;
     sourceTableId: string;
+    targetSchema?: string;
     targetTableId: string;
     sourceFieldId: string;
     targetFieldId: string;
@@ -24,9 +26,21 @@ export const createRelationshipsFromMetadata = ({
 }): DBRelationship[] => {
     return foreignKeys
         .map((fk: ForeignKeyInfo) => {
-            const sourceTable = tables.find((table) => table.name === fk.table);
+            const schema =
+                (fk.schema ?? '').trim() === '' ? undefined : fk.schema;
+            const sourceTable = tables.find(
+                (table) => table.name === fk.table && table.schema === schema
+            );
+
+            const targetSchema =
+                (fk.reference_schema ?? '').trim() === ''
+                    ? undefined
+                    : fk.reference_schema;
+
             const targetTable = tables.find(
-                (table) => table.name === fk.reference_table
+                (table) =>
+                    table.name === fk.reference_table &&
+                    table.schema === targetSchema
             );
             const sourceField = sourceTable?.fields.find(
                 (field) => field.name === fk.column
@@ -39,13 +53,15 @@ export const createRelationshipsFromMetadata = ({
                 return {
                     id: generateId(),
                     name: fk.foreign_key_name,
+                    sourceSchema: schema,
+                    targetSchema: targetSchema,
                     sourceTableId: sourceTable.id,
                     targetTableId: targetTable.id,
                     sourceFieldId: sourceField.id,
                     targetFieldId: targetField.id,
                     type: 'many_to_one', // This could be adjusted based on your logic
                     createdAt: Date.now(),
-                };
+                } as DBRelationship;
             }
 
             return null;
