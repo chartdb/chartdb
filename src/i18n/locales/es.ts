@@ -56,6 +56,11 @@ export const es: LanguageTranslation = {
             dark: 'Oscuro',
         },
 
+        zoom: {
+            on: 'Encendido',
+            off: 'Apagado',
+        },
+
         last_saved: 'Último guardado',
         saved: 'Guardado',
         diagrams: 'Diagramas',
