@@ -278,14 +278,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         }
     }, [isSidePanelShowed, showSidePanel, hideSidePanel]);
 
-    const setPanOrZoomScrollAction = useCallback(() => {
-        if (scrollAction === 'zoom') {
-            setScrollAction('pan');
-        } else {
-            setScrollAction('zoom');
-        }
-    }, [scrollAction, setScrollAction]);
-
     const emojiAI = '✨';
 
     const changeLanguage = useCallback(
@@ -526,12 +518,29 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         : t('menu.view.show_sidebar')}
                                 </MenubarItem>
                                 <MenubarSeparator />
-                                <MenubarCheckboxItem
-                                    checked={scrollAction === 'zoom'}
-                                    onClick={setPanOrZoomScrollAction}
-                                >
-                                    {t('menu.view.zoom_on_scroll')}
-                                </MenubarCheckboxItem>
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        {t('menu.view.zoom_on_scroll')}
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarCheckboxItem
+                                            checked={scrollAction === 'zoom'}
+                                            onClick={() =>
+                                                setScrollAction('zoom')
+                                            }
+                                        >
+                                            {t('zoom.on')}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            checked={scrollAction === 'pan'}
+                                            onClick={() =>
+                                                setScrollAction('pan')
+                                            }
+                                        >
+                                            {t('zoom.off')}
+                                        </MenubarCheckboxItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
                                 <MenubarSeparator />
                                 <MenubarSub>
                                     <MenubarSubTrigger>

@@ -56,6 +56,11 @@ export const en = {
             dark: 'Dark',
         },
 
+        zoom: {
+            on: 'On',
+            off: 'Off',
+        },
+
         last_saved: 'Last saved',
         saved: 'Saved',
         diagrams: 'Diagrams',
