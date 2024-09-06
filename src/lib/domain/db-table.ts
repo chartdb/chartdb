@@ -60,9 +60,14 @@ export const createTablesFromMetadata = ({
             (pk) => pk.table === tableInfo.table
         );
 
-        const tableIndexes = indexes.filter(
-            (idx) => idx.table === tableInfo.table
-        );
+        const tableIndexes = indexes.filter((idx) => {
+            const indexSchema =
+                (idx.schema ?? '').trim() === '' ? undefined : idx.schema;
+            return (
+                idx.table === tableInfo.table &&
+                indexSchema === tableInfo.schema
+            );
+        });
 
         const fields: DBField[] = sortedColumns.map(
             (col: ColumnInfo): DBField => ({
