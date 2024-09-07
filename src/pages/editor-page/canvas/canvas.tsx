@@ -65,7 +65,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { effectiveScrollAction } = useScrollAction();
+    const { scrollAction } = useScrollAction();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -287,7 +287,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     animated: false,
                     type: 'table-edge',
                 }}
-                panOnScroll={effectiveScrollAction === 'pan'}
+                panOnScroll={scrollAction === 'pan'}
             >
                 {isLoadingDOM ? (
                     <Controls

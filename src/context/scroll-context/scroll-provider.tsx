@@ -11,19 +11,12 @@ export const ScrollProvider: React.FC<React.PropsWithChildren> = ({
         return savedAction || 'pan';
     });
 
-    const [effectiveScrollAction, setEffectiveScrollAction] =
-        useState<ScrollActionType>('pan');
-
     useEffect(() => {
-        console.log('coucou');
         localStorage.setItem('scrollAction', scrollAction);
-        setEffectiveScrollAction(scrollAction);
     }, [scrollAction]);
 
     return (
-        <ScrollContext.Provider
-            value={{ scrollAction, setScrollAction, effectiveScrollAction }}
-        >
+        <ScrollContext.Provider value={{ scrollAction, setScrollAction }}>
             {children}
         </ScrollContext.Provider>
     );
