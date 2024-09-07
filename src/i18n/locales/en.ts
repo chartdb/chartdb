@@ -23,7 +23,7 @@ export const en = {
                 view: 'View',
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
-                zoom_on_scroll: 'Zoom on scroll',
+                zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 change_language: 'Language',
             },
