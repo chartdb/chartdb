@@ -147,6 +147,7 @@ export const en = {
             show_all: 'Show All',
             undo: 'Undo',
             redo: 'Redo',
+            reorder_diagram: 'Reorder Diagram',
         },
 
         new_diagram_dialog: {

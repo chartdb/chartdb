@@ -147,6 +147,7 @@ export const es: LanguageTranslation = {
             show_all: 'Mostrar Todo',
             undo: 'Deshacer',
             redo: 'Rehacer',
+            reorder_diagram: 'Reordenar Diagrama',
         },
 
         new_diagram_dialog: {

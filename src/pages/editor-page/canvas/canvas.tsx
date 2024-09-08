@@ -23,16 +23,21 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil } from 'lucide-react';
+import { Pencil, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
-import { DBTable } from '@/lib/domain/db-table';
+import { DBTable, adjustTablePositions } from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/tooltip/tooltip';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -278,6 +283,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const isLoadingDOM =
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
 
+    const reorderTables = useCallback(() => {
+        const newTables = adjustTablePositions({ relationships, tables });
+        setNodes(newTables.map(tableToTableNode));
+        fitView({ padding: 0.2, duration: 1000 });
+    }, [relationships, tables, setNodes, fitView]);
+
     return (
         <div className="flex h-full">
             <ReactFlow
@@ -302,7 +313,31 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 }}
                 panOnScroll={scrollAction === 'pan'}
             >
-                {isLoadingDOM ? (
+                <Controls
+                    position="top-left"
+                    showZoom={false}
+                    showFitView={false}
+                    showInteractive={false}
+                    className="!shadow-none"
+                >
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <Button
+                                    variant="secondary"
+                                    className="size-8 p-1 shadow-none"
+                                    onClick={reorderTables}
+                                >
+                                    <LayoutGrid className="size-4" />
+                                </Button>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('toolbar.reorder_diagram')}
+                        </TooltipContent>
+                    </Tooltip>
+                </Controls>
+                    {isLoadingDOM ? (
                     <Controls
                         position="top-center"
                         orientation="horizontal"
