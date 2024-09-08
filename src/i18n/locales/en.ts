@@ -65,6 +65,9 @@ export const en = {
         saved: 'Saved',
         diagrams: 'Diagrams',
         loading_diagram: 'Loading diagram...',
+        deselect_all: 'Deselect All',
+        select_all: 'Select All',
+        clear: 'Clear',
 
         side_panel: {
             view_all_options: 'View all Options...',

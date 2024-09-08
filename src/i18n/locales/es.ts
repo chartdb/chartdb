@@ -65,6 +65,9 @@ export const es: LanguageTranslation = {
         saved: 'Guardado',
         diagrams: 'Diagramas',
         loading_diagram: 'Cargando diagrama...',
+        deselect_all: 'Deselect All', // TODO: Translate
+        select_all: 'Select All', // TODO: Translate
+        clear: 'Clear', // TODO: Translate
 
         side_panel: {
             view_all_options: 'Ver todas las opciones...',

@@ -17,6 +17,7 @@ import {
     PopoverTrigger,
 } from '@/components/popover/popover';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
+import { useTranslation } from 'react-i18next';
 
 export interface SelectBoxOption {
     value: string;
@@ -61,6 +62,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
     ) => {
         const [searchTerm, setSearchTerm] = React.useState<string>('');
         const [isOpen, setIsOpen] = React.useState(false);
+        const { t } = useTranslation();
 
         const handleSelect = React.useCallback(
             (selectedValue: string) => {
@@ -161,7 +163,9 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                         handleClear();
                                     }}
                                 >
-                                    <span className="text-xs">Clear</span>
+                                    <span className="text-xs">
+                                        {t('clear')}
+                                    </span>
                                     {/* <Cross2Icon className="size-4" /> */}
                                 </div>
                             ) : (
@@ -201,7 +205,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                         className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-xs text-muted-foreground hover:text-foreground"
                                         onClick={() => onSelectAll?.()}
                                     >
-                                        Select All
+                                        {t('select_all')}
                                     </div>
                                 )}
                             {!searchTerm &&
@@ -212,7 +216,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                         className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-xs text-muted-foreground hover:text-foreground"
                                         onClick={() => onDeselectAll?.()}
                                     >
-                                        Deselect All
+                                        {t('deselect_all')}
                                     </div>
                                 )}
                         </div>
