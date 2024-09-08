@@ -1,7 +1,6 @@
 import React from 'react';
 import { Ellipsis, GripVertical, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
-import { Combobox } from '@/components/combobox/combobox';
 import { Button } from '@/components/button/button';
 import { KeyRound } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
@@ -26,6 +25,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import { TableFieldToggle } from './table-field-toggle';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { SelectBox } from '@/components/select-box/select-box';
 
 export interface TableFieldProps {
     field: DBField;
@@ -90,14 +90,13 @@ export const TableField: React.FC<TableFieldProps> = ({
                 <Tooltip>
                     <TooltipTrigger className="flex h-8 !w-5/12" asChild>
                         <span>
-                            <Combobox
-                                className="flex h-8 w-full"
-                                mode="single"
+                            <SelectBox
+                                className="flex h-8 min-h-8 w-full"
                                 options={dataFieldOptions}
                                 placeholder={t(
                                     'side_panel.tables_section.table.field_type'
                                 )}
-                                selected={field.type.id}
+                                value={field.type.id}
                                 onChange={(value) =>
                                     updateField({
                                         type: dataTypeMap[databaseType].find(
@@ -105,7 +104,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         ),
                                     })
                                 }
-                                emptyText="No types found."
+                                emptyPlaceholder={t(
+                                    'side_panel.tables_section.table.no_types_found'
+                                )}
                             />
                         </span>
                     </TooltipTrigger>

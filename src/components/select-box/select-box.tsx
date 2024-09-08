@@ -37,8 +37,7 @@ interface SelectBoxProps {
     oneLine?: boolean;
     selectAll?: boolean;
     deselectAll?: boolean;
-    onSelectAll?: () => void;
-    onDeselectAll?: () => void;
+    clearText?: string;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -55,8 +54,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             oneLine,
             selectAll,
             deselectAll,
-            onSelectAll,
-            onDeselectAll,
+            clearText,
         },
         ref
     ) => {
@@ -81,8 +79,16 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         const handleClear = React.useCallback(() => {
+            if (!multiple) return;
+
             onChange?.(multiple ? [] : '');
         }, [multiple, onChange]);
+
+        const handleSelectAll = React.useCallback(() => {
+            if (!multiple) return;
+            const allIds = options.map((option) => option.value);
+            onChange?.(allIds);
+        }, [multiple, onChange, options]);
 
         const selectedMultipleOptions = React.useMemo(
             () =>
@@ -146,8 +152,13 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                         selectedMultipleOptions
                                     )
                                 ) : (
-                                    options.find((opt) => opt.value === value)
-                                        ?.label
+                                    <div className="block w-full min-w-0 shrink-0 truncate">
+                                        {
+                                            options.find(
+                                                (opt) => opt.value === value
+                                            )?.label
+                                        }
+                                    </div>
                                 )
                             ) : (
                                 <span className="mr-auto text-muted-foreground">
@@ -156,17 +167,20 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             )}
                         </div>
                         <div className="flex items-center self-stretch pl-1 text-muted-foreground/60 hover:text-foreground [&>div]:flex [&>div]:items-center [&>div]:self-stretch">
-                            {value && value.length > 0 ? (
+                            {value && value.length > 0 && multiple ? (
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault();
                                         handleClear();
                                     }}
                                 >
-                                    <span className="text-xs">
-                                        {t('clear')}
-                                    </span>
-                                    {/* <Cross2Icon className="size-4" /> */}
+                                    {clearText ? (
+                                        <span className="text-xs">
+                                            {clearText}
+                                        </span>
+                                    ) : (
+                                        <Cross2Icon className="size-3.5" />
+                                    )}
                                 </div>
                             ) : (
                                 <div>
@@ -177,10 +191,16 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     </div>
                 </PopoverTrigger>
                 <PopoverContent
-                    className="w-[var(--radix-popover-trigger-width)] p-0"
-                    align="start"
+                    className="w-fit min-w-[var(--radix-popover-trigger-width)] p-0"
+                    align="center"
                 >
-                    <Command>
+                    <Command
+                        filter={(value, search) =>
+                            value.toLowerCase().includes(search.toLowerCase())
+                                ? 1
+                                : 0
+                        }
+                    >
                         <div className="relative">
                             <CommandInput
                                 value={searchTerm}
@@ -203,7 +223,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                 !isAllSelected && (
                                     <div
                                         className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-xs text-muted-foreground hover:text-foreground"
-                                        onClick={() => onSelectAll?.()}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleSelectAll();
+                                        }}
                                     >
                                         {t('select_all')}
                                     </div>
@@ -214,7 +237,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                 isAllSelected && (
                                     <div
                                         className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-xs text-muted-foreground hover:text-foreground"
-                                        onClick={() => onDeselectAll?.()}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleClear();
+                                        }}
                                     >
                                         {t('deselect_all')}
                                     </div>
@@ -255,7 +281,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                             <CheckIcon />
                                                         </div>
                                                     )}
-                                                    <div className="flex items-center">
+                                                    <div className="flex items-center truncate">
                                                         <span>
                                                             {option.label}
                                                         </span>

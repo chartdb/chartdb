@@ -70,6 +70,10 @@ export const en = {
         clear: 'Clear',
 
         side_panel: {
+            schema: 'Schema:',
+            filter_by_schema: 'Filter by schema',
+            search_schema: 'Search schema...',
+            no_schemas_found: 'No schemas found.',
             view_all_options: 'View all Options...',
             tables_section: {
                 tables: 'Tables',
@@ -87,6 +91,7 @@ export const en = {
                     add_field: 'Add Field',
                     add_index: 'Add Index',
                     index_select_fields: 'Select fields',
+                    no_types_found: 'No types found',
                     field_name: 'Name',
                     field_type: 'Type',
                     field_actions: {
