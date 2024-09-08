@@ -7,14 +7,19 @@ import { DBIndex } from '@/lib/domain/db-index';
 import { DBRelationship } from '@/lib/domain/db-relationship';
 import { Diagram } from '@/lib/domain/diagram';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
+import { DBSchema } from '@/lib/domain/db-schema';
 
 export interface ChartDBContext {
     diagramId: string;
     diagramName: string;
     databaseType: DatabaseType;
     tables: DBTable[];
+    schemas: DBSchema[];
     relationships: DBRelationship[];
     currentDiagram: Diagram;
+
+    filteredSchemas?: string[];
+    filterSchemas: (schemaIds: string[]) => void;
 
     // General operations
     updateDiagramId: (id: string) => Promise<void>;
@@ -129,6 +134,9 @@ export const chartDBContext = createContext<ChartDBContext>({
     diagramId: '',
     tables: [],
     relationships: [],
+    schemas: [],
+    filteredSchemas: [],
+    filterSchemas: emptyFn,
     currentDiagram: {
         id: '',
         name: '',

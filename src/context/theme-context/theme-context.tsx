@@ -1,13 +1,13 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
 
-export type ThemeType = 'light' | 'dark' | 'system';
-export type EffectiveThemeType = Exclude<ThemeType, 'system'>;
+export type Theme = 'light' | 'dark' | 'system';
+export type EffectiveTheme = Exclude<Theme, 'system'>;
 
 export interface ThemeContext {
-    theme: ThemeType;
-    setTheme: (theme: ThemeType) => void;
-    effectiveTheme: EffectiveThemeType;
+    theme: Theme;
+    setTheme: (theme: Theme) => void;
+    effectiveTheme: EffectiveTheme;
 }
 
 export const ThemeContext = createContext<ThemeContext>({

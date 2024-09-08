@@ -22,6 +22,7 @@ export interface DBTable {
     createdAt: number;
     width?: number;
     comments?: string;
+    hidden?: boolean;
 }
 
 export const createTablesFromMetadata = ({
