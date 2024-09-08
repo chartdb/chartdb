@@ -13,12 +13,16 @@ import { Diagram } from '@/lib/domain/diagram';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
+import { DBSchema, schemaNameToSchemaId } from '@/lib/domain/db-schema';
+import { useLocalConfig } from '@/hooks/use-local-config';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const db = useStorage();
     const navigate = useNavigate();
+    const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
     const [diagramId, setDiagramId] = useState('');
@@ -34,6 +38,56 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     >();
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
+
+    const defaultSchemaName = defaultSchemas[databaseType];
+
+    const schemas = useMemo(
+        () =>
+            databaseType === DatabaseType.POSTGRESQL ||
+            databaseType === DatabaseType.SQL_SERVER
+                ? [
+                      ...new Set(
+                          tables
+                              .map((table) => table.schema)
+                              .filter((schema) => !!schema) as string[]
+                      ),
+                  ]
+                      .sort((a, b) =>
+                          a === defaultSchemaName ? -1 : a.localeCompare(b)
+                      )
+                      .map(
+                          (schema): DBSchema => ({
+                              id: schemaNameToSchemaId(schema),
+                              name: schema,
+                              tableCount: tables.filter(
+                                  (table) => table.schema === schema
+                              ).length,
+                          })
+                      )
+                : [],
+        [tables, defaultSchemaName, databaseType]
+    );
+
+    const filterSchemas: ChartDBContext['filterSchemas'] = useCallback(
+        (schemaIds) => {
+            setSchemasFilter((prev) => ({
+                ...prev,
+                [diagramId]: schemaIds,
+            }));
+        },
+        [diagramId, setSchemasFilter]
+    );
+
+    const filteredSchemas: ChartDBContext['filteredSchemas'] = useMemo(
+        () =>
+            schemas.length > 0
+                ? (schemasFilter[diagramId] ?? [
+                      schemas.find((s) => s.name === defaultSchemaName)?.id ??
+                          schemas[0]?.id,
+                  ])
+                : undefined,
+        [schemasFilter, diagramId, schemas, defaultSchemaName]
+    );
 
     const currentDiagram: Diagram = useMemo(
         () => ({
@@ -1010,6 +1064,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 tables,
                 relationships,
                 currentDiagram,
+                schemas,
+                filteredSchemas,
+                filterSchemas,
                 updateDiagramId,
                 updateDiagramName,
                 loadDiagram,

@@ -18,20 +18,29 @@ import {
 export interface RelationshipsSectionProps {}
 
 export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
-    const { relationships } = useChartDB();
+    const { relationships, filteredSchemas } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRelationshipsInSidebar } = useLayout();
     const { t } = useTranslation();
 
     const filteredRelationships = useMemo(() => {
-        const filter: (relationship: DBRelationship) => boolean = (
+        const filterName: (relationship: DBRelationship) => boolean = (
             relationship
         ) =>
             !filterText?.trim?.() ||
             relationship.name.toLowerCase().includes(filterText.toLowerCase());
 
-        return relationships.filter(filter);
-    }, [relationships, filterText]);
+        const filterSchema: (relationship: DBRelationship) => boolean = (
+            relationship
+        ) =>
+            !filteredSchemas ||
+            !relationship.sourceSchema ||
+            !relationship.targetSchema ||
+            (filteredSchemas.includes(relationship.sourceSchema) &&
+                filteredSchemas.includes(relationship.targetSchema));
+
+        return relationships.filter(filterSchema).filter(filterName);
+    }, [relationships, filterText, filteredSchemas]);
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">

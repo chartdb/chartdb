@@ -45,7 +45,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
 import { enMetadata } from '@/i18n/locales/en';
 import { esMetadata } from '@/i18n/locales/es';
-import { useScrollAction } from '@/hooks/use-scroll-action';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface TopNavbarProps {}
 
@@ -66,7 +66,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
-    const { scrollAction, setScrollAction } = useScrollAction();
+    const { scrollAction, setScrollAction } = useLocalConfig();
     const { effectiveTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();

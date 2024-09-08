@@ -31,13 +31,17 @@ import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
 import { DBTable } from '@/lib/domain/db-table';
-import { useScrollAction } from '@/hooks/use-scroll-action';
+import { useLocalConfig } from '@/hooks/use-local-config';
+import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
 const initialEdges: TableEdgeType[] = [];
 
-const tableToTableNode = (table: DBTable): TableNodeType => ({
+const tableToTableNode = (
+    table: DBTable,
+    filteredSchemas?: string[]
+): TableNodeType => ({
     id: table.id,
     type: 'table',
     position: { x: table.x, y: table.y },
@@ -45,6 +49,10 @@ const tableToTableNode = (table: DBTable): TableNodeType => ({
         table,
     },
     width: table.width ?? MIN_TABLE_SIZE,
+    hidden:
+        !!table.schema &&
+        !!filteredSchemas &&
+        !filteredSchemas.includes(schemaNameToSchemaId(table.schema)),
 });
 
 export interface CanvasProps {
@@ -53,6 +61,7 @@ export interface CanvasProps {
 
 export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { getEdge, getInternalNode, fitView } = useReactFlow();
+    const { filteredSchemas } = useChartDB();
     const { toast } = useToast();
     const { t } = useTranslation();
     const {
@@ -65,14 +74,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction } = useScrollAction();
+    const { scrollAction } = useLocalConfig();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
-        initialTables.map(tableToTableNode)
+        initialTables.map((table) => tableToTableNode(table, filteredSchemas))
     );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<TableEdgeType>(initialEdges);
@@ -82,11 +91,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [initialTables]);
 
     useEffect(() => {
-        const initialNodes = initialTables.map(tableToTableNode);
+        const initialNodes = initialTables.map((table) =>
+            tableToTableNode(table, filteredSchemas)
+        );
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
-    }, [initialTables, nodes]);
+    }, [initialTables, nodes, filteredSchemas]);
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
@@ -118,8 +129,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [relationships, setEdges]);
 
     useEffect(() => {
-        setNodes(tables.map(tableToTableNode));
-    }, [tables, setNodes]);
+        setNodes(
+            tables.map((table) => tableToTableNode(table, filteredSchemas))
+        );
+    }, [tables, setNodes, filteredSchemas]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {

@@ -5,7 +5,6 @@ import { EditorPage } from './pages/editor-page/editor-page';
 import { ChartDBProvider } from './context/chartdb-context/chartdb-provider';
 import { ReactFlowProvider } from '@xyflow/react';
 import { StorageProvider } from './context/storage-context/storage-provider';
-import { ScrollProvider } from './context/scroll-context/scroll-provider';
 import { ConfigProvider } from './context/config-context/config-provider';
 import { HistoryProvider } from './context/history-context/history-provider';
 import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
@@ -16,6 +15,7 @@ import { FullScreenLoaderProvider } from './context/full-screen-spinner-context/
 import { ExamplesPage } from './pages/examples-page/examples-page';
 import { KeyboardShortcutsProvider } from './context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 import { ThemeProvider } from './context/theme-context/theme-provider';
+import { LocalConfigProvider } from './context/local-config-context/local-config-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -23,14 +23,14 @@ const routes: RouteObject[] = [
         element: (
             <FullScreenLoaderProvider>
                 <LayoutProvider>
-                    <StorageProvider>
-                        <ConfigProvider>
-                            <RedoUndoStackProvider>
-                                <ChartDBProvider>
-                                    <HistoryProvider>
-                                        <ThemeProvider>
-                                            <DialogProvider>
-                                                <ScrollProvider>
+                    <LocalConfigProvider>
+                        <StorageProvider>
+                            <ConfigProvider>
+                                <RedoUndoStackProvider>
+                                    <ChartDBProvider>
+                                        <HistoryProvider>
+                                            <ThemeProvider>
+                                                <DialogProvider>
                                                     <ReactFlowProvider>
                                                         <ExportImageProvider>
                                                             <KeyboardShortcutsProvider>
@@ -38,14 +38,14 @@ const routes: RouteObject[] = [
                                                             </KeyboardShortcutsProvider>
                                                         </ExportImageProvider>
                                                     </ReactFlowProvider>
-                                                </ScrollProvider>
-                                            </DialogProvider>
-                                        </ThemeProvider>
-                                    </HistoryProvider>
-                                </ChartDBProvider>
-                            </RedoUndoStackProvider>
-                        </ConfigProvider>
-                    </StorageProvider>
+                                                </DialogProvider>
+                                            </ThemeProvider>
+                                        </HistoryProvider>
+                                    </ChartDBProvider>
+                                </RedoUndoStackProvider>
+                            </ConfigProvider>
+                        </StorageProvider>
+                    </LocalConfigProvider>
                 </LayoutProvider>
             </FullScreenLoaderProvider>
         ),
@@ -53,11 +53,13 @@ const routes: RouteObject[] = [
     {
         path: 'examples',
         element: (
-            <StorageProvider>
-                <ThemeProvider>
-                    <ExamplesPage />
-                </ThemeProvider>
-            </StorageProvider>
+            <LocalConfigProvider>
+                <StorageProvider>
+                    <ThemeProvider>
+                        <ExamplesPage />
+                    </ThemeProvider>
+                </StorageProvider>
+            </LocalConfigProvider>
         ),
     },
     {

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { EffectiveThemeType, ThemeContext, ThemeType } from './theme-context';
+import { EffectiveTheme, ThemeContext } from './theme-context';
 import { useMediaQuery } from 'react-responsive';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const [theme, setTheme] = useState<ThemeType>(() => {
-        const savedTheme = localStorage.getItem('theme') as ThemeType | null;
-        return savedTheme || 'system';
-    });
+    const { theme, setTheme } = useLocalConfig();
     const isDarkSystemTheme = useMediaQuery({
         query: '(prefers-color-scheme: dark)',
     });
@@ -16,10 +14,9 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
     const systemTheme = isDarkSystemTheme ? 'dark' : 'light';
 
     const [effectiveTheme, setEffectiveTheme] =
-        useState<EffectiveThemeType>(systemTheme);
+        useState<EffectiveTheme>(systemTheme);
 
     useEffect(() => {
-        localStorage.setItem('theme', theme);
         setEffectiveTheme(theme === 'system' ? systemTheme : theme);
     }, [theme, systemTheme]);
 

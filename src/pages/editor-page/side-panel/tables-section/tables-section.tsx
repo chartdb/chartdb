@@ -19,18 +19,23 @@ import {
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables } = useChartDB();
+    const { createTable, tables, filteredSchemas } = useChartDB();
     const { t } = useTranslation();
     const { closeAllTablesInSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
-        const filter: (table: DBTable) => boolean = (table) =>
+        const filterTableName: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
-        return tables.filter(filter);
-    }, [tables, filterText]);
+        const filterSchema: (table: DBTable) => boolean = (table) =>
+            !filteredSchemas ||
+            !table.schema ||
+            filteredSchemas.includes(table.schema);
+
+        return tables.filter(filterSchema).filter(filterTableName);
+    }, [tables, filterText, filteredSchemas]);
 
     return (
         <section

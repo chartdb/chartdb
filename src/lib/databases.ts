@@ -15,7 +15,7 @@ import SqliteLogo2 from '@/assets/sqlite_logo_2.png';
 import SqlServerLogo2 from '@/assets/sql_server_logo_2.png';
 import GeneralDBLogo2 from '@/assets/general_db_logo_2.png';
 import { DatabaseType } from './domain/database-type';
-import { EffectiveThemeType } from '@/context/theme-context/theme-context';
+import { EffectiveTheme } from '@/context/theme-context/theme-context';
 
 export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: 'Generic',
@@ -46,7 +46,7 @@ export const databaseDarkLogoMap: Record<DatabaseType, string> = {
 
 export const getDatabaseLogo = (
     databaseType: DatabaseType,
-    theme: EffectiveThemeType
+    theme: EffectiveTheme
 ) =>
     theme === 'dark'
         ? databaseDarkLogoMap[databaseType]
