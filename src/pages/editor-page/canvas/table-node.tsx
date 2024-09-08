@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { NodeProps, Node, NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
@@ -34,6 +34,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     const { updateTable } = useChartDB();
     const edges = useStore((store) => store.edges) as TableEdgeType[];
     const { openTableFromSidebar, selectSidebarSection } = useLayout();
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const selectedEdges = edges.filter(
         (edge) => (edge.source === id || edge.target === id) && edge.selected
@@ -61,9 +62,20 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
         });
     }, [table.id, updateTable]);
 
+    const toggleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    const visibleFields = isExpanded ? table.fields : table.fields.slice(0, 10);
+    const hiddenFieldsCount = table.fields.length - 10;
+
     return (
         <div
-            className={`flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 ${selected ? 'border-pink-600' : 'border-slate-500 dark:border-slate-700'} rounded-lg shadow-sm`}
+            className={`flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 ${
+                selected
+                    ? 'border-pink-600'
+                    : 'border-slate-500 dark:border-slate-700'
+            } rounded-lg shadow-sm`}
             onClick={(e) => {
                 if (e.detail === 2) {
                     openTableInEditor();
@@ -114,20 +126,41 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     </Button>
                 </div>
             </div>
-            {table.fields.map((field) => (
-                <TableNodeField
-                    key={field.id}
-                    focused={focused}
-                    tableNodeId={id}
-                    field={field}
-                    highlighted={selectedEdges.some(
-                        (edge) =>
-                            edge.data?.relationship.sourceFieldId ===
-                                field.id ||
-                            edge.data?.relationship.targetFieldId === field.id
-                    )}
-                />
-            ))}
+            <div className="flex flex-col">
+                {visibleFields.map((field) => (
+                    <TableNodeField
+                        key={field.id}
+                        tableNodeId={id}
+                        field={field}
+                        focused={focused}
+                        highlighted={selectedEdges.some(
+                            (edge) =>
+                                edge.sourceHandle?.endsWith(field.id) ||
+                                edge.targetHandle?.endsWith(field.id)
+                        )}
+                    />
+                ))}
+                {!isExpanded && hiddenFieldsCount > 0 && (
+                    <div
+                        className="flex h-8 cursor-pointer items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700"
+                        onClick={toggleExpand}
+                    >
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                            ... {hiddenFieldsCount} more fields
+                        </span>
+                    </div>
+                )}
+                {isExpanded && (
+                    <div
+                        className="flex h-8 cursor-pointer items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700"
+                        onClick={toggleExpand}
+                    >
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                            Show less
+                        </span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
