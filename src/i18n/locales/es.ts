@@ -70,6 +70,10 @@ export const es: LanguageTranslation = {
         clear: 'Clear', // TODO: Translate
 
         side_panel: {
+            schema: 'Schema:', // TODO: Translate
+            filter_by_schema: 'Filter by schema', // TODO: Translate
+            search_schema: 'Search schema...', // TODO: Translate
+            no_schemas_found: 'No schemas found.', // TODO: Translate
             view_all_options: 'Ver todas las opciones...',
             tables_section: {
                 tables: 'Tablas',
@@ -89,6 +93,7 @@ export const es: LanguageTranslation = {
                     index_select_fields: 'Seleccionar campos',
                     field_name: 'Nombre',
                     field_type: 'Tipo',
+                    no_types_found: 'No types found', // TODO: Translate
                     field_actions: {
                         title: 'Atributos del Campo',
                         unique: 'Único',

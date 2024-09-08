@@ -34,20 +34,12 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
         [schemas]
     );
 
-    const deselectAllSchemas = () => {
-        filterSchemas([]);
-    };
-
-    const selectAllSchemas = () => {
-        filterSchemas(schemas.map((schema) => schema.id));
-    };
-
     return (
         <aside className="flex h-full flex-col overflow-hidden">
             {schemasOptions.length > 0 && (
                 <div className="flex items-center justify-center border-b pl-3 pt-0.5">
                     <div className="shrink-0 text-sm font-semibold">
-                        Schema:
+                        {t('side_panel.schema')}
                     </div>
                     <div className="flex min-w-0 flex-1">
                         <SelectBox
@@ -60,11 +52,10 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                             onChange={(values) => {
                                 filterSchemas(values as string[]);
                             }}
-                            onSelectAll={selectAllSchemas}
-                            onDeselectAll={deselectAllSchemas}
-                            placeholder="Filter by schema"
-                            inputPlaceholder="Search schema"
-                            emptyPlaceholder="No schema found."
+                            placeholder={t('side_panel.filter_by_schema')}
+                            inputPlaceholder={t('side_panel.search_schema')}
+                            emptyPlaceholder={t('side_panel.no_schemas_found')}
+                            clearText={t('clear')}
                             multiple
                         />
                     </div>

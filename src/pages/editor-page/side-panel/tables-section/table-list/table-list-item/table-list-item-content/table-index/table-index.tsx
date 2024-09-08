@@ -1,6 +1,5 @@
 import React from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
-import { Combobox } from '@/components/combobox/combobox';
 import { Button } from '@/components/button/button';
 import { DBIndex } from '@/lib/domain/db-index';
 import { DBField } from '@/lib/domain/db-field';
@@ -14,6 +13,7 @@ import { Checkbox } from '@/components/checkbox/checkbox';
 import { Label } from '@/components/label/label';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
+import { SelectBox } from '@/components/select-box/select-box';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -39,19 +39,21 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     };
     return (
         <div className="flex flex-1 flex-row justify-between gap-2 p-1">
-            <Combobox
-                className="flex h-8 flex-1"
-                popoverClassName="w-48"
-                mode="multiple"
+            <SelectBox
+                className="flex h-8 min-h-8 min-w-0 flex-1"
+                multiple
+                oneLine
                 options={fieldOptions}
                 placeholder={t(
                     'side_panel.tables_section.table.index_select_fields'
                 )}
-                selected={index.fieldIds}
+                value={index.fieldIds}
                 onChange={updateIndexFields}
-                emptyText="No types found."
+                emptyPlaceholder={t(
+                    'side_panel.tables_section.table.no_types_found'
+                )}
             />
-            <div className="flex">
+            <div className="flex shrink-0">
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
