@@ -50,6 +50,14 @@ export const en = {
             clear: 'Clear',
         },
 
+        reorder_diagram_alert: {
+            title: 'Reorder Diagram',
+            description:
+                'This action will rearrange all tables in the diagram. Do you want to continue?',
+            reorder: 'Reorder',
+            cancel: 'Cancel',
+        },
+
         theme: {
             system: 'System',
             light: 'Light',

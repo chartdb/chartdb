@@ -50,6 +50,14 @@ export const es: LanguageTranslation = {
             clear: 'Limpiar',
         },
 
+        reorder_diagram_alert: {
+            title: 'Reordenar Diagrama',
+            description:
+                'Esta acción reorganizará todas las tablas en el diagrama. ¿Deseas continuar?',
+            reorder: 'Reordenar',
+            cancel: 'Cancelar',
+        },
+
         theme: {
             system: 'Sistema',
             light: 'Claro',

@@ -41,6 +41,7 @@ import {
     TooltipTrigger,
     TooltipContent,
 } from '@/components/tooltip/tooltip';
+import { useDialog } from '@/hooks/use-dialog';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -80,6 +81,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
     const { scrollAction } = useLocalConfig();
+    const { showAlert } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -280,6 +282,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         [onNodesChange, updateTablesState]
     );
 
+    const isLoadingDOM =
+        tables.length > 0 ? !getInternalNode(tables[0].id) : false;
+
     const reorderTables = useCallback(() => {
         const newTables = adjustTablePositions({
             relationships,
@@ -300,8 +305,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         );
     }, [filteredSchemas, relationships, tables, updateTablesState]);
 
-    const isLoadingDOM =
-        tables.length > 0 ? !getInternalNode(tables[0].id) : false;
+    const showReorderConfirmation = useCallback(() => {
+        showAlert({
+            title: t('reorder_diagram_alert.title'),
+            description: t('reorder_diagram_alert.description'),
+            actionLabel: t('reorder_diagram_alert.reorder'),
+            closeLabel: t('reorder_diagram_alert.cancel'),
+            onAction: reorderTables,
+        });
+    }, [t, showAlert, reorderTables]);
 
     return (
         <div className="flex h-full">
@@ -340,7 +352,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 <Button
                                     variant="secondary"
                                     className="size-8 p-1 shadow-none"
-                                    onClick={reorderTables}
+                                    onClick={showReorderConfirmation}
                                 >
                                     <LayoutGrid className="size-4" />
                                 </Button>
