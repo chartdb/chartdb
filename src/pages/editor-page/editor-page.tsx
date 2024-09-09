@@ -33,7 +33,7 @@ export const EditorPage: React.FC = () => {
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
-    const { config } = useConfig();
+    const { config, updateConfig } = useConfig();
     const navigate = useNavigate();
     const { isLg } = useBreakpoint('lg');
     const { isXl } = useBreakpoint('xl');
@@ -62,7 +62,15 @@ export const EditorPage: React.FC = () => {
                 setInitialDiagram(diagram);
                 hideLoader();
             } else if (!diagramId && config.defaultDiagramId) {
-                navigate(`/diagrams/${config.defaultDiagramId}`);
+                const diagram = await loadDiagram(config.defaultDiagramId);
+                if (!diagram) {
+                    await updateConfig({
+                        defaultDiagramId: '',
+                    });
+                    navigate('/');
+                } else {
+                    navigate(`/diagrams/${config.defaultDiagramId}`);
+                }
             } else {
                 openCreateDiagramDialog();
             }
@@ -79,6 +87,7 @@ export const EditorPage: React.FC = () => {
         hideLoader,
         showLoader,
         currentDiagram?.id,
+        updateConfig,
     ]);
 
     return (
