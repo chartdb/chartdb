@@ -141,10 +141,25 @@ export const createTablesFromMetadata = ({
 export const adjustTablePositions = ({
     relationships,
     tables,
+    filteredSchemas,
 }: {
     tables: DBTable[];
     relationships: DBRelationship[];
+    filteredSchemas?: string[];
 }): DBTable[] => {
+    const filteredTables = filteredSchemas
+        ? tables.filter(
+              (table) => !table.schema || filteredSchemas.includes(table.schema)
+          )
+        : tables;
+
+    // Filter relationships to only include those between filtered tables
+    const filteredRelationships = relationships.filter(
+        (rel) =>
+            filteredTables.some((t) => t.id === rel.sourceTableId) &&
+            filteredTables.some((t) => t.id === rel.targetTableId)
+    );
+
     const tableWidth = 200;
     const tableHeight = 300;
     const gapX = 100;
@@ -154,7 +169,7 @@ export const adjustTablePositions = ({
 
     // Create a map of table connections
     const tableConnections = new Map<string, Set<string>>();
-    relationships.forEach((rel) => {
+    filteredRelationships.forEach((rel) => {
         if (!tableConnections.has(rel.sourceTableId)) {
             tableConnections.set(rel.sourceTableId, new Set());
         }
@@ -166,7 +181,7 @@ export const adjustTablePositions = ({
     });
 
     // Sort tables by number of connections
-    const sortedTables = [...tables].sort(
+    const sortedTables = [...filteredTables].sort(
         (a, b) =>
             (tableConnections.get(b.id)?.size || 0) -
             (tableConnections.get(a.id)?.size || 0)
@@ -241,7 +256,7 @@ export const adjustTablePositions = ({
 
         connectedTables.forEach((connectedTableId) => {
             if (!positionedTables.has(connectedTableId)) {
-                const connectedTable = tables.find(
+                const connectedTable = filteredTables.find(
                     (t) => t.id === connectedTableId
                 );
                 if (connectedTable) {
@@ -265,8 +280,8 @@ export const adjustTablePositions = ({
         }
     });
 
-    // Apply positions to tables
-    tables.forEach((table) => {
+    // Apply positions to filtered tables
+    filteredTables.forEach((table) => {
         const position = tablePositions.get(table.id);
         if (position) {
             table.x = position.x;
@@ -274,5 +289,5 @@ export const adjustTablePositions = ({
         }
     });
 
-    return tables;
+    return tables; // Return all tables, but only filtered ones are positioned
 };
