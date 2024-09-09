@@ -1,4 +1,5 @@
 import { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
+import { schemaNameToSchemaId } from './db-schema';
 import { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 
@@ -16,6 +17,20 @@ export interface DBRelationship {
 }
 
 export type RelationshipType = 'one_to_one' | 'one_to_many' | 'many_to_one';
+
+export const shouldShowRelationshipBySchemaFilter = (
+    relationship: DBRelationship,
+    filteredSchemas?: string[]
+): boolean =>
+    !filteredSchemas ||
+    !relationship.sourceSchema ||
+    !relationship.targetSchema ||
+    (filteredSchemas.includes(
+        schemaNameToSchemaId(relationship.sourceSchema)
+    ) &&
+        filteredSchemas.includes(
+            schemaNameToSchemaId(relationship.targetSchema)
+        ));
 
 export const createRelationshipsFromMetadata = ({
     foreignKeys,

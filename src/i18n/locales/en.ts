@@ -223,14 +223,6 @@ export const en = {
             one_to_many: 'One to Many',
             many_to_one: 'Many to One',
         },
-
-        toast: {
-            reorder: {
-                title: 'Tables reordered',
-                description: 'Click undo to revert changes',
-                undo: 'Undo',
-            },
-        },
     },
 };
 
