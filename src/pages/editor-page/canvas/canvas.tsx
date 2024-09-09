@@ -38,6 +38,7 @@ import {
     TooltipTrigger,
     TooltipContent,
 } from '@/components/tooltip/tooltip';
+import { useDialog } from '@/hooks/use-dialog';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -80,6 +81,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
     const { scrollAction } = useLocalConfig();
+    const { showAlert } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
@@ -283,11 +285,80 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const isLoadingDOM =
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
 
+    const showReorderConfirmation = useCallback(() => {
+        showAlert({
+            title: t('reorder_diagram_alert.title'),
+            description: t('reorder_diagram_alert.description'),
+            actionLabel: t('reorder_diagram_alert.reorder'),
+            closeLabel: t('reorder_diagram_alert.cancel'),
+            onAction: () => {
+                const originalTables = tables.map((table) => ({ ...table }));
+                const newTables = adjustTablePositions({
+                    relationships,
+                    tables,
+                    filteredSchemas,
+                });
+                updateTablesState(() => newTables, {
+                    updateHistory: false,
+                    forceOverride: true,
+                });
+                setNodes(
+                    newTables.map((table) =>
+                        tableToTableNode(table, filteredSchemas)
+                    )
+                );
+                fitView({ padding: 0.2, duration: 1000 });
+
+                const { dismiss } = toast({
+                    title: t('toast.reorder.title'),
+                    description: t('toast.reorder.description'),
+                    duration: 15000,
+                    action: (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                                updateTablesState(() => originalTables, {
+                                    updateHistory: false,
+                                    forceOverride: true,
+                                });
+                                setNodes(
+                                    originalTables.map((table) =>
+                                        tableToTableNode(table, filteredSchemas)
+                                    )
+                                );
+                                setTimeout(
+                                    () =>
+                                        fitView({
+                                            padding: 0.2,
+                                            duration: 1000,
+                                        }),
+                                    0
+                                );
+                                dismiss();
+                            }}
+                        >
+                            {t('toast.reorder.undo')}
+                        </Button>
+                    ),
+                });
+            },
+        });
+    }, [
+        showAlert,
+        t,
+        relationships,
+        tables,
+        updateTablesState,
+        setNodes,
+        fitView,
+        toast,
+        filteredSchemas,
+    ]);
+
     const reorderTables = useCallback(() => {
-        const newTables = adjustTablePositions({ relationships, tables });
-        setNodes(newTables.map(tableToTableNode));
-        fitView({ padding: 0.2, duration: 1000 });
-    }, [relationships, tables, setNodes, fitView]);
+        showReorderConfirmation();
+    }, [showReorderConfirmation]);
 
     return (
         <div className="flex h-full">
@@ -337,7 +408,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         </TooltipContent>
                     </Tooltip>
                 </Controls>
-                    {isLoadingDOM ? (
+                {isLoadingDOM ? (
                     <Controls
                         position="top-center"
                         orientation="horizontal"

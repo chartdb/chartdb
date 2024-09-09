@@ -50,6 +50,14 @@ export const en = {
             clear: 'Clear',
         },
 
+        reorder_diagram_alert: {
+            title: 'Reorder Diagram',
+            description:
+                'This action will rearrange all tables in the diagram. Do you want to continue?',
+            reorder: 'Reorder',
+            cancel: 'Cancel',
+        },
+
         theme: {
             system: 'System',
             light: 'Light',
@@ -214,6 +222,14 @@ export const en = {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',
             many_to_one: 'Many to One',
+        },
+
+        toast: {
+            reorder: {
+                title: 'Tables reordered',
+                description: 'Click undo to revert changes',
+                undo: 'Undo',
+            },
         },
     },
 };
