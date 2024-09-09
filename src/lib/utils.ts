@@ -24,3 +24,5 @@ export const getOperatingSystem = (): 'mac' | 'windows' | 'unknown' => {
     }
     return 'unknown';
 };
+
+export const deepCopy = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));

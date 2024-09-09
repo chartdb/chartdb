@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { DBTable } from '@/lib/domain/db-table';
-import { generateId } from '@/lib/utils';
+import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
 import { ChartDBContext, chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -380,8 +380,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     );
             };
 
-            const prevTables = [...tables];
-            // const updatedTablesAttrs = updateFn(tables);
+            const prevTables = deepCopy(tables);
             const updatedTables = updateTables(tables);
             setTables(updateTables);
 

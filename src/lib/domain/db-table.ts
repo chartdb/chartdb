@@ -7,7 +7,8 @@ import { greyColor, randomColor } from '@/lib/colors';
 import { DBRelationship } from './db-relationship';
 import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
-import { generateId } from '../utils';
+import { deepCopy, generateId } from '../utils';
+import { schemaNameToSchemaId } from './db-schema';
 
 export interface DBTable {
     id: string;
@@ -24,6 +25,14 @@ export interface DBTable {
     comments?: string;
     hidden?: boolean;
 }
+
+export const shouldShowTablesBySchemaFilter = (
+    table: DBTable,
+    filteredSchemas?: string[]
+): boolean =>
+    !filteredSchemas ||
+    !table.schema ||
+    filteredSchemas.includes(schemaNameToSchemaId(table.schema));
 
 export const createTablesFromMetadata = ({
     tableInfos,
@@ -139,25 +148,20 @@ export const createTablesFromMetadata = ({
 };
 
 export const adjustTablePositions = ({
-    relationships,
-    tables,
-    filteredSchemas,
+    relationships: inputRelationships,
+    tables: inputTables,
 }: {
     tables: DBTable[];
     relationships: DBRelationship[];
-    filteredSchemas?: string[];
 }): DBTable[] => {
-    const filteredTables = filteredSchemas
-        ? tables.filter(
-              (table) => !table.schema || filteredSchemas.includes(table.schema)
-          )
-        : tables;
+    const tables = deepCopy(inputTables);
+    const relationships = deepCopy(inputRelationships);
 
     // Filter relationships to only include those between filtered tables
     const filteredRelationships = relationships.filter(
         (rel) =>
-            filteredTables.some((t) => t.id === rel.sourceTableId) &&
-            filteredTables.some((t) => t.id === rel.targetTableId)
+            tables.some((t) => t.id === rel.sourceTableId) &&
+            tables.some((t) => t.id === rel.targetTableId)
     );
 
     const tableWidth = 200;
@@ -181,7 +185,7 @@ export const adjustTablePositions = ({
     });
 
     // Sort tables by number of connections
-    const sortedTables = [...filteredTables].sort(
+    const sortedTables = [...tables].sort(
         (a, b) =>
             (tableConnections.get(b.id)?.size || 0) -
             (tableConnections.get(a.id)?.size || 0)
@@ -256,7 +260,7 @@ export const adjustTablePositions = ({
 
         connectedTables.forEach((connectedTableId) => {
             if (!positionedTables.has(connectedTableId)) {
-                const connectedTable = filteredTables.find(
+                const connectedTable = tables.find(
                     (t) => t.id === connectedTableId
                 );
                 if (connectedTable) {
@@ -281,7 +285,7 @@ export const adjustTablePositions = ({
     });
 
     // Apply positions to filtered tables
-    filteredTables.forEach((table) => {
+    tables.forEach((table) => {
         const position = tablePositions.get(table.id);
         if (position) {
             table.x = position.x;

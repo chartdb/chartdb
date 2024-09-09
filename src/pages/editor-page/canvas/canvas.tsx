@@ -30,9 +30,12 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
-import { DBTable, adjustTablePositions } from '@/lib/domain/db-table';
+import {
+    DBTable,
+    adjustTablePositions,
+    shouldShowTablesBySchemaFilter,
+} from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import {
     Tooltip,
     TooltipTrigger,
@@ -55,10 +58,7 @@ const tableToTableNode = (
         table,
     },
     width: table.width ?? MIN_TABLE_SIZE,
-    hidden:
-        !!table.schema &&
-        !!filteredSchemas &&
-        !filteredSchemas.includes(schemaNameToSchemaId(table.schema)),
+    hidden: !shouldShowTablesBySchemaFilter(table, filteredSchemas),
 });
 
 export interface CanvasProps {
@@ -285,80 +285,35 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const isLoadingDOM =
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
 
+    const reorderTables = useCallback(() => {
+        const newTables = adjustTablePositions({
+            relationships,
+            tables: tables.filter((table) =>
+                shouldShowTablesBySchemaFilter(table, filteredSchemas)
+            ),
+        });
+
+        updateTablesState((currentTables) =>
+            currentTables.map((table) => {
+                const newTable = newTables.find((t) => t.id === table.id);
+                return {
+                    id: table.id,
+                    x: newTable?.x ?? table.x,
+                    y: newTable?.y ?? table.y,
+                };
+            })
+        );
+    }, [filteredSchemas, relationships, tables, updateTablesState]);
+
     const showReorderConfirmation = useCallback(() => {
         showAlert({
             title: t('reorder_diagram_alert.title'),
             description: t('reorder_diagram_alert.description'),
             actionLabel: t('reorder_diagram_alert.reorder'),
             closeLabel: t('reorder_diagram_alert.cancel'),
-            onAction: () => {
-                const originalTables = tables.map((table) => ({ ...table }));
-                const newTables = adjustTablePositions({
-                    relationships,
-                    tables,
-                    filteredSchemas,
-                });
-                updateTablesState(() => newTables, {
-                    updateHistory: false,
-                    forceOverride: true,
-                });
-                setNodes(
-                    newTables.map((table) =>
-                        tableToTableNode(table, filteredSchemas)
-                    )
-                );
-                fitView({ padding: 0.2, duration: 1000 });
-
-                const { dismiss } = toast({
-                    title: t('toast.reorder.title'),
-                    description: t('toast.reorder.description'),
-                    duration: 15000,
-                    action: (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                                updateTablesState(() => originalTables, {
-                                    updateHistory: false,
-                                    forceOverride: true,
-                                });
-                                setNodes(
-                                    originalTables.map((table) =>
-                                        tableToTableNode(table, filteredSchemas)
-                                    )
-                                );
-                                setTimeout(
-                                    () =>
-                                        fitView({
-                                            padding: 0.2,
-                                            duration: 1000,
-                                        }),
-                                    0
-                                );
-                                dismiss();
-                            }}
-                        >
-                            {t('toast.reorder.undo')}
-                        </Button>
-                    ),
-                });
-            },
+            onAction: reorderTables,
         });
-    }, [
-        showAlert,
-        t,
-        relationships,
-        tables,
-        updateTablesState,
-        setNodes,
-        fitView,
-        toast,
-        filteredSchemas,
-    ]);
-
-    const reorderTables = useCallback(() => {
-        showReorderConfirmation();
-    }, [showReorderConfirmation]);
+    }, [t, showAlert, reorderTables]);
 
     return (
         <div className="flex h-full">
@@ -397,7 +352,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 <Button
                                     variant="secondary"
                                     className="size-8 p-1 shadow-none"
-                                    onClick={reorderTables}
+                                    onClick={showReorderConfirmation}
                                 >
                                     <LayoutGrid className="size-4" />
                                 </Button>

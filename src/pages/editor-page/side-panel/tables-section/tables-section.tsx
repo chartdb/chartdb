@@ -4,7 +4,7 @@ import { Button } from '@/components/button/button';
 import { Table, ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
 
-import { DBTable } from '@/lib/domain/db-table';
+import { DBTable, shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
@@ -30,9 +30,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
         const filterSchema: (table: DBTable) => boolean = (table) =>
-            !filteredSchemas ||
-            !table.schema ||
-            filteredSchemas.includes(table.schema);
+            shouldShowTablesBySchemaFilter(table, filteredSchemas);
 
         return tables.filter(filterSchema).filter(filterTableName);
     }, [tables, filterText, filteredSchemas]);
