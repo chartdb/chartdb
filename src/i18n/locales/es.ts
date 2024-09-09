@@ -224,14 +224,6 @@ export const es: LanguageTranslation = {
             one_to_many: 'Uno a Muchos',
             many_to_one: 'Muchos a Uno',
         },
-
-        toast: {
-            reorder: {
-                title: 'Tablas reordenadas',
-                description: 'Haz clic en deshacer para revertir los cambios',
-                undo: 'Deshacer',
-            },
-        },
     },
 };
 
