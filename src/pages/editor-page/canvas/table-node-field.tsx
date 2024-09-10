@@ -45,7 +45,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
 
     return (
         <div
-            className={`group relative flex h-8 items-center justify-between gap-0.5 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${highlighted ? 'bg-pink-100 dark:bg-pink-900' : ''} transition-colors`}
+            className={`group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${highlighted ? 'bg-pink-100 dark:bg-pink-900' : ''} transition-colors`}
         >
             {!connection.inProgress && (
                 <>
@@ -90,7 +90,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                 </>
             )}
             <div className="block truncate text-left">{field.name}</div>
-            <div className="flex shrink-0 justify-end gap-2">
+            <div className="flex justify-end gap-2 truncate hover:shrink-0">
                 {field.primaryKey ? (
                     <div className="text-muted-foreground group-hover:hidden">
                         <KeyRound size={14} />
