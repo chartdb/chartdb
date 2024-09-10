@@ -76,6 +76,8 @@ export const en = {
         deselect_all: 'Deselect All',
         select_all: 'Select All',
         clear: 'Clear',
+        show_more: 'Show More',
+        show_less: 'Show Less',
 
         side_panel: {
             schema: 'Schema:',

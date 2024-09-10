@@ -76,6 +76,8 @@ export const es: LanguageTranslation = {
         deselect_all: 'Deselect All', // TODO: Translate
         select_all: 'Select All', // TODO: Translate
         clear: 'Clear', // TODO: Translate
+        show_more: 'Show More', // TODO: Translate
+        show_less: 'Show Less', // TODO: Translate
 
         side_panel: {
             schema: 'Schema:', // TODO: Translate
