@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
 import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
@@ -47,9 +47,13 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
         });
     };
 
-    const showAll = () => {
-        fitView({ duration: zoomDuration });
-    };
+    const showAll = useCallback(() => {
+        fitView({
+            duration: 500,
+            padding: 0.1,
+            maxZoom: 0.8,
+        });
+    }, [fitView]);
 
     return (
         <div className="px-1">
