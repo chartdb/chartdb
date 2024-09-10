@@ -90,7 +90,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = ({
                 </>
             )}
             <div className="block truncate text-left">{field.name}</div>
-            <div className="flex justify-end gap-2 truncate hover:shrink-0">
+            <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
                 {field.primaryKey ? (
                     <div className="text-muted-foreground group-hover:hidden">
                         <KeyRound size={14} />
