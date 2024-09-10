@@ -15,6 +15,8 @@ import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { TableEdgeType } from './table-edge';
+import { DBField } from '@/lib/domain/db-field';
+import { useTranslation } from 'react-i18next';
 
 export type TableNodeType = Node<
     {
@@ -26,6 +28,7 @@ export type TableNodeType = Node<
 export const MAX_TABLE_SIZE = 450;
 export const MID_TABLE_SIZE = 337;
 export const MIN_TABLE_SIZE = 224;
+export const TABLE_MINIMIZED_FIELDS = 10;
 
 export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     selected,
@@ -33,10 +36,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     id,
     data: { table },
 }) => {
-    const { updateTable } = useChartDB();
+    const { updateTable, relationships } = useChartDB();
     const edges = useStore((store) => store.edges) as TableEdgeType[];
     const { openTableFromSidebar, selectSidebarSection } = useLayout();
     const [expanded, setExpanded] = useState(false);
+    const { t } = useTranslation();
 
     const selectedEdges = edges.filter(
         (edge) => (edge.source === id || edge.target === id) && edge.selected
@@ -68,22 +72,47 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
         setExpanded(!expanded);
     };
 
+    const isMustDisplayedField = useCallback(
+        (field: DBField) => {
+            return (
+                relationships.some(
+                    (relationship) =>
+                        relationship.sourceFieldId === field.id ||
+                        relationship.targetFieldId === field.id
+                ) || field.primaryKey
+            );
+        },
+        [relationships]
+    );
+
     const visibleFields = useMemo(() => {
         if (expanded) {
             return table.fields;
         }
 
-        const pkFields = table.fields.filter((field) => field.primaryKey);
-        const nonPkFields = table.fields.filter((field) => !field.primaryKey);
-
-        const visiblePkFields = pkFields.slice(0, 10);
-        const remainingSlots = 10 - visiblePkFields.length;
-        const visibleNonPkFields = nonPkFields.slice(0, remainingSlots);
-
-        return [...visiblePkFields, ...visibleNonPkFields].sort(
-            (a, b) => table.fields.indexOf(a) - table.fields.indexOf(b)
+        const mustDisplayedFields = table.fields.filter((field) =>
+            isMustDisplayedField(field)
         );
-    }, [expanded, table.fields]);
+        const nonMustDisplayedFields = table.fields.filter(
+            (field) => !isMustDisplayedField(field)
+        );
+
+        const visibleMustDisplayedFields = mustDisplayedFields.slice(
+            0,
+            TABLE_MINIMIZED_FIELDS
+        );
+        const remainingSlots =
+            TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
+        const visibleNonMustDisplayedFields = nonMustDisplayedFields.slice(
+            0,
+            remainingSlots
+        );
+
+        return [
+            ...visibleMustDisplayedFields,
+            ...visibleNonMustDisplayedFields,
+        ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
+    }, [expanded, table.fields, isMustDisplayedField]);
 
     return (
         <div
@@ -139,11 +168,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 </div>
             </div>
             <div
-                className="overflow-hidden transition-[max-height] duration-300 ease-in-out"
+                className="transition-[max-height] duration-150 ease-in-out"
                 style={{
                     maxHeight: expanded
-                        ? `${table.fields.length * 32}px`
-                        : '320px',
+                        ? `${table.fields.length * 2}rem` // h-8 per field
+                        : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                 }}
             >
                 {table.fields.map((field) => (
@@ -163,20 +192,20 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     />
                 ))}
             </div>
-            {table.fields.length > 10 && (
+            {table.fields.length > TABLE_MINIMIZED_FIELDS && (
                 <div
-                    className="flex cursor-pointer items-center justify-center py-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
                     onClick={toggleExpand}
                 >
                     {expanded ? (
                         <>
-                            <ChevronUp className="mr-1 size-4" />
-                            Show Less
+                            <ChevronUp className="mr-1 size-3.5" />
+                            {t('show_less')}
                         </>
                     ) : (
                         <>
-                            <ChevronDown className="mr-1 size-4" />
-                            Show More
+                            <ChevronDown className="mr-1 size-3.5" />
+                            {t('show_more')}
                         </>
                     )}
                 </div>
