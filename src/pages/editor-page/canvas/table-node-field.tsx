@@ -44,10 +44,10 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             <div
                 className={`group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${
                     highlighted ? 'bg-pink-100 dark:bg-pink-900' : ''
-                } transition-all duration-150 ease-in-out ${
+                } transition-all duration-200 ease-in-out ${
                     visible
                         ? 'max-h-8 opacity-100'
-                        : 'max-h-0 overflow-hidden opacity-0'
+                        : 'z-0 max-h-0 overflow-hidden opacity-0'
                 }`}
             >
                 {!connection.inProgress && (

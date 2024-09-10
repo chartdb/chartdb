@@ -168,7 +168,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                 </div>
             </div>
             <div
-                className="transition-[max-height] duration-150 ease-in-out"
+                className="transition-[max-height] duration-200 ease-in-out"
                 style={{
                     maxHeight: expanded
                         ? `${table.fields.length * 2}rem` // h-8 per field
@@ -194,7 +194,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
             </div>
             {table.fields.length > TABLE_MINIMIZED_FIELDS && (
                 <div
-                    className="flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="z-10 flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                     onClick={toggleExpand}
                 >
                     {expanded ? (
