@@ -15,6 +15,7 @@ export const getMySQLQuery = (
         kcu.table_name,
         kcu.column_name as fk_column,
         kcu.constraint_name as foreign_key_name,
+        kcu.referenced_table_schema as reference_schema,
         kcu.referenced_table_name as reference_table,
         kcu.referenced_column_name as reference_column,
         CONCAT('FOREIGN KEY (', kcu.column_name, ') REFERENCES ',
@@ -36,6 +37,7 @@ export const getMySQLQuery = (
                                     '","table":"',table_name,
                                     '","column":"', IFNULL(fk_column, ''),
                                                 '","foreign_key_name":"', IFNULL(foreign_key_name, ''),
+                                                '","reference_schema":"', IFNULL(reference_schema, ''),
                                                 '","reference_table":"', IFNULL(reference_table, ''),
                                                 '","reference_column":"', IFNULL(reference_column, ''),
                                                 '","fk_def":"', IFNULL(fk_def, ''),
@@ -151,6 +153,7 @@ export const getMySQLQuery = (
                '","column":"', IFNULL(fk.fk_column, ''),
                '","foreign_key_name":"', IFNULL(fk.foreign_key_name, ''),
                '","reference_table":"', IFNULL(fk.reference_table, ''),
+               '","reference_schema":"', IFNULL(fk.reference_schema, ''),
                '","reference_column":"', IFNULL(fk.reference_column, ''),
                '","fk_def":"', IFNULL(fk.fk_def, ''), '"}')
     ) FROM (
@@ -158,6 +161,7 @@ export const getMySQLQuery = (
                kcu.table_name,
                kcu.column_name AS fk_column,
                kcu.constraint_name AS foreign_key_name,
+               kcu.referenced_table_schema as reference_schema,
                kcu.referenced_table_name AS reference_table,
                kcu.referenced_column_name AS reference_column,
                CONCAT('FOREIGN KEY (', kcu.column_name, ') REFERENCES ',

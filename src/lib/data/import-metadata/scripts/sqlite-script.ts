@@ -7,6 +7,7 @@ export const sqliteQuery = `WITH fk_info AS (
               'column', fk."from",
               'foreign_key_name',
                   'fk_' || m.name || '_' || fk."from" || '_' || fk."table" || '_' || fk."to",  -- Generated foreign key name
+              'reference_schema', '', -- SQLite does not have schemas
               'reference_table', fk."table",
               'reference_column', fk."to",
               'fk_def',
