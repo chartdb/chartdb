@@ -14,6 +14,7 @@ import {
     NodeDimensionChange,
     OnEdgesChange,
     OnNodesChange,
+    NodeSelectChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -279,18 +280,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
             }
 
-            const selectedChange = changes.find(
-                (change) => change.type === 'select' && change.selected
-            );
-            if (selectedChange && 'id' in selectedChange) {
+            const selectChange = changes.find(
+                (change) => change.type === 'select'
+            ) as NodeSelectChange | undefined;
+
+            if (selectChange) {
                 setSelectedTableId(
-                    selectedChange.selected ? selectedChange.id : null
+                    selectChange.selected ? selectChange.id : null
                 );
+            }
+
+            // Handle drag end
+            const dragEndChange = changes.find(
+                (change) =>
+                    change.type === 'position' && change.dragging === false
+            );
+            if (dragEndChange) {
+                setSelectedTableId(null);
             }
 
             return onNodesChange(changes);
         },
-        [onNodesChange, updateTablesState]
+        [onNodesChange, updateTablesState, setSelectedTableId]
     );
 
     const isLoadingDOM =
@@ -372,15 +383,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     ),
                     style: {
                         ...edge.style,
-                        stroke: relatedRelationships.some(
-                            (rel) => rel.id === edge.id
-                        )
-                            ? '#ec4899'
-                            : edge.style?.stroke,
+                        stroke: '#ec4899', // Pink color for all edges when a table is selected
+                        strokeWidth: 2,
                     },
                 }))
             );
         } else {
+            // Reset all highlights when no table is selected
             setNodes((nodes) =>
                 nodes.map((node) => ({
                     ...node,
@@ -397,7 +406,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     animated: false,
                     style: {
                         ...edge.style,
-                        stroke: edge.style?.stroke,
+                        stroke: undefined, // Reset to default color
+                        strokeWidth: undefined,
+                        strokeDasharray: 'none',
                     },
                 }))
             );
