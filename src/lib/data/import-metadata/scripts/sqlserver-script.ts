@@ -9,6 +9,7 @@ const sqlServerQuery = `WITH fk_info AS (
                             '", "table": "' + COALESCE(REPLACE(kcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                             '", "column": "' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                             '", "foreign_key_name": "' + COALESCE(REPLACE(kcu.CONSTRAINT_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "reference_schema": "' + COALESCE(REPLACE(rcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                             '", "reference_table": "' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                             '", "reference_column": "' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                             '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
@@ -195,6 +196,7 @@ const sqlServer2016AndBelowQuery = `WITH fk_info AS (
                                     '", "table": "' + COALESCE(REPLACE(kcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                                     '", "column": "' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                                     '", "foreign_key_name": "' + COALESCE(REPLACE(kcu.CONSTRAINT_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "reference_schema": "' + COALESCE(REPLACE(rcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                                     '", "reference_table": "' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                                     '", "reference_column": "' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                                     '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
