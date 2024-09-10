@@ -6,6 +6,8 @@ import {
     ChevronsRightLeft,
     Pencil,
     Table2,
+    ChevronDown,
+    ChevronUp,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import { DBTable } from '@/lib/domain/db-table';
@@ -136,26 +138,47 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     </Button>
                 </div>
             </div>
-            {visibleFields.map((field) => (
-                <TableNodeField
-                    key={field.id}
-                    focused={focused}
-                    tableNodeId={id}
-                    field={field}
-                    highlighted={selectedEdges.some(
-                        (edge) =>
-                            edge.data?.relationship.sourceFieldId ===
-                                field.id ||
-                            edge.data?.relationship.targetFieldId === field.id
-                    )}
-                />
-            ))}
+            <div
+                className="overflow-hidden transition-[max-height] duration-300 ease-in-out"
+                style={{
+                    maxHeight: expanded
+                        ? `${table.fields.length * 32}px`
+                        : '320px',
+                }}
+            >
+                {table.fields.map((field) => (
+                    <TableNodeField
+                        key={field.id}
+                        focused={focused}
+                        tableNodeId={id}
+                        field={field}
+                        highlighted={selectedEdges.some(
+                            (edge) =>
+                                edge.data?.relationship.sourceFieldId ===
+                                    field.id ||
+                                edge.data?.relationship.targetFieldId ===
+                                    field.id
+                        )}
+                        visible={visibleFields.includes(field)}
+                    />
+                ))}
+            </div>
             {table.fields.length > 10 && (
                 <div
-                    className="flex cursor-pointer items-center justify-center py-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="flex cursor-pointer items-center justify-center py-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                     onClick={toggleExpand}
                 >
-                    {expanded ? 'Show Less' : 'Show More'}
+                    {expanded ? (
+                        <>
+                            <ChevronUp className="mr-1 size-4" />
+                            Show Less
+                        </>
+                    ) : (
+                        <>
+                            <ChevronDown className="mr-1 size-4" />
+                            Show More
+                        </>
+                    )}
                 </div>
             )}
         </div>
