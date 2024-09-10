@@ -93,6 +93,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<TableEdgeType>(initialEdges);
 
+    const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
+
     useEffect(() => {
         setIsInitialLoadingNodes(true);
     }, [initialTables]);
@@ -277,6 +279,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
             }
 
+            const selectedChange = changes.find(
+                (change) => change.type === 'select' && change.selected
+            );
+            if (selectedChange && 'id' in selectedChange) {
+                setSelectedTableId(
+                    selectedChange.selected ? selectedChange.id : null
+                );
+            }
+
             return onNodesChange(changes);
         },
         [onNodesChange, updateTablesState]
@@ -314,6 +325,84 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             onAction: reorderTables,
         });
     }, [t, showAlert, reorderTables]);
+
+    useEffect(() => {
+        if (selectedTableId) {
+            const relatedRelationships = relationships.filter(
+                (rel) =>
+                    rel.sourceTableId === selectedTableId ||
+                    rel.targetTableId === selectedTableId
+            );
+
+            const highlightedFieldIds = new Set(
+                relatedRelationships.flatMap((rel) => [
+                    rel.sourceFieldId,
+                    rel.targetFieldId,
+                ])
+            );
+
+            const relatedTableIds = new Set(
+                relatedRelationships.flatMap((rel) => [
+                    rel.sourceTableId,
+                    rel.targetTableId,
+                ])
+            );
+
+            setNodes((nodes) =>
+                nodes.map((node) => ({
+                    ...node,
+                    data: {
+                        ...node.data,
+                        highlightedFields: relatedTableIds.has(node.id)
+                            ? node.data.table.fields
+                                  .filter((field) =>
+                                      highlightedFieldIds.has(field.id)
+                                  )
+                                  .map((field) => field.id)
+                            : [],
+                    },
+                }))
+            );
+
+            setEdges((edges) =>
+                edges.map((edge) => ({
+                    ...edge,
+                    animated: relatedRelationships.some(
+                        (rel) => rel.id === edge.id
+                    ),
+                    style: {
+                        ...edge.style,
+                        stroke: relatedRelationships.some(
+                            (rel) => rel.id === edge.id
+                        )
+                            ? '#ec4899'
+                            : edge.style?.stroke,
+                    },
+                }))
+            );
+        } else {
+            setNodes((nodes) =>
+                nodes.map((node) => ({
+                    ...node,
+                    data: {
+                        ...node.data,
+                        highlightedFields: [],
+                    },
+                }))
+            );
+
+            setEdges((edges) =>
+                edges.map((edge) => ({
+                    ...edge,
+                    animated: false,
+                    style: {
+                        ...edge.style,
+                        stroke: edge.style?.stroke,
+                    },
+                }))
+            );
+        }
+    }, [selectedTableId, relationships, setNodes, setEdges]);
 
     return (
         <div className="flex h-full">

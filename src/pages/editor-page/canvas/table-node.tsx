@@ -34,7 +34,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     selected,
     dragging,
     id,
-    data: { table },
+    data: { table, highlightedFields },
 }) => {
     const { updateTable, relationships } = useChartDB();
     const edges = useStore((store) => store.edges) as TableEdgeType[];
@@ -86,33 +86,40 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     );
 
     const visibleFields = useMemo(() => {
-        if (expanded) {
-            return table.fields;
-        }
+        const fields = expanded
+            ? table.fields
+            : (() => {
+                  const mustDisplayedFields = table.fields.filter((field) =>
+                      isMustDisplayedField(field)
+                  );
+                  const nonMustDisplayedFields = table.fields.filter(
+                      (field) => !isMustDisplayedField(field)
+                  );
 
-        const mustDisplayedFields = table.fields.filter((field) =>
-            isMustDisplayedField(field)
-        );
-        const nonMustDisplayedFields = table.fields.filter(
-            (field) => !isMustDisplayedField(field)
-        );
+                  const visibleMustDisplayedFields = mustDisplayedFields.slice(
+                      0,
+                      TABLE_MINIMIZED_FIELDS
+                  );
+                  const remainingSlots =
+                      TABLE_MINIMIZED_FIELDS -
+                      visibleMustDisplayedFields.length;
+                  const visibleNonMustDisplayedFields =
+                      nonMustDisplayedFields.slice(0, remainingSlots);
 
-        const visibleMustDisplayedFields = mustDisplayedFields.slice(
-            0,
-            TABLE_MINIMIZED_FIELDS
-        );
-        const remainingSlots =
-            TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
-        const visibleNonMustDisplayedFields = nonMustDisplayedFields.slice(
-            0,
-            remainingSlots
-        );
+                  return [
+                      ...visibleMustDisplayedFields,
+                      ...visibleNonMustDisplayedFields,
+                  ].sort(
+                      (a, b) =>
+                          table.fields.indexOf(a) - table.fields.indexOf(b)
+                  );
+              })();
 
-        return [
-            ...visibleMustDisplayedFields,
-            ...visibleNonMustDisplayedFields,
-        ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
-    }, [expanded, table.fields, isMustDisplayedField]);
+        return fields.map((field) => ({
+            ...field,
+            highlighted: highlightedFields?.includes(field.id) || false,
+        }));
+    }, [expanded, table.fields, isMustDisplayedField, highlightedFields]);
 
     return (
         <div
@@ -175,20 +182,23 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                         : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                 }}
             >
-                {table.fields.map((field) => (
+                {visibleFields.map((field) => (
                     <TableNodeField
                         key={field.id}
                         focused={focused}
                         tableNodeId={id}
                         field={field}
-                        highlighted={selectedEdges.some(
-                            (edge) =>
-                                edge.data?.relationship.sourceFieldId ===
-                                    field.id ||
-                                edge.data?.relationship.targetFieldId ===
-                                    field.id
-                        )}
-                        visible={visibleFields.includes(field)}
+                        highlighted={
+                            field.highlighted ||
+                            selectedEdges.some(
+                                (edge) =>
+                                    edge.data?.relationship.sourceFieldId ===
+                                        field.id ||
+                                    edge.data?.relationship.targetFieldId ===
+                                        field.id
+                            )
+                        }
+                        visible={true}
                     />
                 ))}
             </div>
