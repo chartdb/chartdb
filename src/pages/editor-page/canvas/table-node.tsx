@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { NodeProps, Node, NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
@@ -34,6 +34,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     const { updateTable } = useChartDB();
     const edges = useStore((store) => store.edges) as TableEdgeType[];
     const { openTableFromSidebar, selectSidebarSection } = useLayout();
+    const [expanded, setExpanded] = useState(false);
 
     const selectedEdges = edges.filter(
         (edge) => (edge.source === id || edge.target === id) && edge.selected
@@ -60,6 +61,27 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
             width: MIN_TABLE_SIZE,
         });
     }, [table.id, updateTable]);
+
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    };
+
+    const visibleFields = useMemo(() => {
+        if (expanded) {
+            return table.fields;
+        }
+
+        const pkFields = table.fields.filter((field) => field.primaryKey);
+        const nonPkFields = table.fields.filter((field) => !field.primaryKey);
+
+        const visiblePkFields = pkFields.slice(0, 10);
+        const remainingSlots = 10 - visiblePkFields.length;
+        const visibleNonPkFields = nonPkFields.slice(0, remainingSlots);
+
+        return [...visiblePkFields, ...visibleNonPkFields].sort(
+            (a, b) => table.fields.indexOf(a) - table.fields.indexOf(b)
+        );
+    }, [expanded, table.fields]);
 
     return (
         <div
@@ -114,7 +136,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     </Button>
                 </div>
             </div>
-            {table.fields.map((field) => (
+            {visibleFields.map((field) => (
                 <TableNodeField
                     key={field.id}
                     focused={focused}
@@ -128,6 +150,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                     )}
                 />
             ))}
+            {table.fields.length > 10 && (
+                <div
+                    className="flex cursor-pointer items-center justify-center py-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    onClick={toggleExpand}
+                >
+                    {expanded ? 'Show Less' : 'Show More'}
+                </div>
+            )}
         </div>
     );
 };
