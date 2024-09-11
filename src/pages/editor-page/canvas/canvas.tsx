@@ -14,7 +14,7 @@ import {
     NodeDimensionChange,
     OnEdgesChange,
     OnNodesChange,
-    NodeSelectChange,
+    NodeSelectionChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -282,7 +282,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
             const selectChange = changes.find(
                 (change) => change.type === 'select'
-            ) as NodeSelectChange | undefined;
+            ) as NodeSelectionChange | undefined;
 
             if (selectChange) {
                 setSelectedTableId(
@@ -376,17 +376,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             );
 
             setEdges((edges) =>
-                edges.map((edge) => ({
-                    ...edge,
-                    animated: relatedRelationships.some(
+                edges.map((edge) => {
+                    const isRelated = relatedRelationships.some(
                         (rel) => rel.id === edge.id
-                    ),
-                    style: {
-                        ...edge.style,
-                        stroke: '#ec4899', // Pink color for all edges when a table is selected
-                        strokeWidth: 2,
-                    },
-                }))
+                    );
+                    return {
+                        ...edge,
+                        animated: isRelated,
+                        style: {
+                            ...edge.style,
+                            stroke: isRelated ? '#ec4899' : undefined,
+                            strokeWidth: isRelated ? 2 : undefined,
+                            strokeDasharray: undefined,
+                        },
+                    };
+                })
             );
         } else {
             // Reset all highlights when no table is selected
@@ -406,9 +410,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     animated: false,
                     style: {
                         ...edge.style,
-                        stroke: undefined, // Reset to default color
+                        stroke: undefined,
                         strokeWidth: undefined,
-                        strokeDasharray: 'none',
+                        strokeDasharray: undefined,
                     },
                 }))
             );

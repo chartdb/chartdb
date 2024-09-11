@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 export type TableNodeType = Node<
     {
         table: DBTable;
+        highlightedFields?: string[];
     },
     'table'
 >;
