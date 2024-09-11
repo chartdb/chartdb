@@ -66,7 +66,11 @@ export interface CanvasProps {
 }
 
 export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
-    const { getEdge, getInternalNode, fitView } = useReactFlow();
+    const { getEdge, getInternalNode, fitView, getEdges } = useReactFlow();
+    const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
+    const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
+        string[]
+    >([]);
     const { filteredSchemas } = useChartDB();
     const { toast } = useToast();
     const { t } = useTranslation();
@@ -136,6 +140,46 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [relationships, setEdges]);
 
     useEffect(() => {
+        setSelectedTableIds(
+            nodes.filter((node) => node.selected).map((node) => node.id)
+        );
+    }, [nodes, setSelectedTableIds]);
+
+    useEffect(() => {
+        setSelectedRelationshipIds(
+            edges.filter((edge) => edge.selected).map((edge) => edge.id)
+        );
+    }, [edges, setSelectedRelationshipIds]);
+
+    useEffect(() => {
+        const tablesSelectedEdges = getEdges()
+            .filter(
+                (edge) =>
+                    selectedTableIds.includes(edge.source) ||
+                    selectedTableIds.includes(edge.target)
+            )
+            .map((edge) => edge.id);
+
+        const allSelectedEdges = [
+            ...tablesSelectedEdges,
+            ...selectedRelationshipIds,
+        ];
+
+        setEdges((edges) =>
+            edges.map((edge) => {
+                const selected = allSelectedEdges.includes(edge.id);
+
+                return {
+                    ...edge,
+                    selected,
+                    animated: selected,
+                    zIndex: selected ? 1 : 0,
+                };
+            })
+        );
+    }, [selectedRelationshipIds, selectedTableIds, setEdges, getEdges]);
+
+    useEffect(() => {
         setNodes(
             tables.map((table) => tableToTableNode(table, filteredSchemas))
         );
@@ -198,26 +242,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 removeRelationships(relationshipsToRemove);
             }
 
-            const selectionChanges = changes.filter(
-                (change) => change.type === 'select'
-            );
-
-            if (selectionChanges.length > 0) {
-                setEdges((edges) =>
-                    edges.map((edge) => {
-                        const selected = selectionChanges.some(
-                            (change) => change.id === edge.id && change.selected
-                        );
-                        edge.zIndex = selected ? 1 : 0;
-                        edge.animated = selected;
-                        return edge;
-                    })
-                );
-            }
-
             return onEdgesChange(changes);
         },
-        [getEdge, onEdgesChange, removeRelationships, setEdges]
+        [getEdge, onEdgesChange, removeRelationships]
     );
 
     const onNodesChangeHandler: OnNodesChange<TableNodeType> = useCallback(
