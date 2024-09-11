@@ -250,6 +250,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         await db.db_tables.update(id, attributes);
     };
 
+    const putTable: StorageContext['putTable'] = async ({
+        diagramId,
+        table,
+    }) => {
+        await db.db_tables.put({ ...table, diagramId });
+    };
+
     const deleteTable: StorageContext['deleteTable'] = async ({
         id,
         diagramId,
@@ -358,6 +365,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 addTable,
                 getTable,
                 updateTable,
+                putTable,
                 deleteTable,
                 listTables,
                 addRelationship,

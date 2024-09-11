@@ -93,7 +93,7 @@ export const EditorPage: React.FC = () => {
     return (
         <>
             <section
-                className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex flex-col overflow-x-hidden`}
+                className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
             >
                 <TopNavbar />
                 {isDesktop ? (

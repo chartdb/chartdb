@@ -130,8 +130,11 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addTable: ({ undoData: { tableId } }) => {
                 return removeTable(tableId, { updateHistory: false });
             },
-            removeTable: ({ undoData: { table } }) => {
-                return addTable(table, { updateHistory: false });
+            removeTable: async ({ undoData: { table, relationships } }) => {
+                await Promise.all([
+                    addTable(table, { updateHistory: false }),
+                    addRelationships(relationships, { updateHistory: false }),
+                ]);
             },
             updateTable: ({ undoData: { tableId, table } }) => {
                 return updateTable(tableId, table, { updateHistory: false });
@@ -167,11 +170,16 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
-            updateTablesState: ({ undoData: { tables } }) => {
-                return updateTablesState(() => tables, {
-                    updateHistory: false,
-                    forceOverride: true,
-                });
+            updateTablesState: async ({
+                undoData: { tables, relationships },
+            }) => {
+                await Promise.all([
+                    updateTablesState(() => tables, {
+                        updateHistory: false,
+                        forceOverride: true,
+                    }),
+                    addRelationships(relationships, { updateHistory: false }),
+                ]);
             },
             addIndex: ({ undoData: { tableId, indexId } }) => {
                 return removeIndex(tableId, indexId, { updateHistory: false });

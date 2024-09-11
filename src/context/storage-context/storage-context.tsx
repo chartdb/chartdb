@@ -39,6 +39,7 @@ export interface StorageContext {
         id: string;
         attributes: Partial<DBTable>;
     }) => Promise<void>;
+    putTable: (params: { diagramId: string; table: DBTable }) => Promise<void>;
     deleteTable: (params: { diagramId: string; id: string }) => Promise<void>;
     listTables: (diagramId: string) => Promise<DBTable[]>;
     deleteDiagramTables: (diagramId: string) => Promise<void>;
@@ -77,6 +78,7 @@ export const storageContext = createContext<StorageContext>({
     addTable: emptyFn,
     getTable: emptyFn,
     updateTable: emptyFn,
+    putTable: emptyFn,
     deleteTable: emptyFn,
     listTables: emptyFn,
     deleteDiagramTables: emptyFn,
