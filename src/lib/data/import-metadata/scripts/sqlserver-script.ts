@@ -105,7 +105,8 @@ indexes AS (
                 '", "column_name": "' + COALESCE(REPLACE(c.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                 '", "index_type": "' + LOWER(i.type_desc) COLLATE SQL_Latin1_General_CP1_CI_AS +
                 '", "is_unique": ' + CASE WHEN i.is_unique = 1 THEN 'true' ELSE 'false' END +
-                ', "direction": "' + CASE WHEN ic.is_descending_key = 1 THEN 'desc' ELSE 'asc' END COLLATE SQL_Latin1_General_CP1_CI_AS + '"}'
+                ', "direction": "' + CASE WHEN ic.is_descending_key = 1 THEN 'desc' ELSE 'asc' END COLLATE SQL_Latin1_General_CP1_CI_AS +
+                '", "column_position": ' + CAST(ic.key_ordinal AS nvarchar(max)) + N'}'
             )
             ), ','
         ) + N']' AS all_indexes_json
@@ -305,7 +306,8 @@ indexes AS (
                         '", "column_name": "' + COALESCE(REPLACE(c.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
                         '", "index_type": "' + LOWER(i.type_desc) COLLATE SQL_Latin1_General_CP1_CI_AS +
                         '", "is_unique": ' + CASE WHEN i.is_unique = 1 THEN 'true' ELSE 'false' END +
-                        ', "direction": "' + CASE WHEN ic.is_descending_key = 1 THEN 'desc' ELSE 'asc' END COLLATE SQL_Latin1_General_CP1_CI_AS + '"}'
+                        ', "direction": "' + CASE WHEN ic.is_descending_key = 1 THEN 'desc' ELSE 'asc' END COLLATE SQL_Latin1_General_CP1_CI_AS +
+                        '", "column_position": ' + CAST(ic.key_ordinal AS nvarchar(max)) + N'}'
                     )
                 )
                 FROM

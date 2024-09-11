@@ -8,7 +8,10 @@ import { DBRelationship } from './db-relationship';
 import { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 import { deepCopy, generateId } from '../utils';
-import { schemaNameToSchemaId } from './db-schema';
+import {
+    schemaNameToDomainSchemaName,
+    schemaNameToSchemaId,
+} from './db-schema';
 
 export interface DBTable {
     id: string;
@@ -48,12 +51,13 @@ export const createTablesFromMetadata = ({
     views: ViewInfo[];
 }): DBTable[] => {
     return tableInfos.map((tableInfo: TableInfo) => {
+        const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
         // Filter, make unique, and sort columns based on ordinal_position
         const uniqueColumns = new Map<string, ColumnInfo>();
         columns
             .filter(
                 (col) =>
-                    col.schema === tableInfo.schema &&
+                    schemaNameToDomainSchemaName(col.schema) === tableSchema &&
                     col.table === tableInfo.table
             )
             .forEach((col) => {
@@ -66,29 +70,57 @@ export const createTablesFromMetadata = ({
             (a, b) => a.ordinal_position - b.ordinal_position
         );
 
-        const tablePrimaryKeys = primaryKeys.filter(
-            (pk) => pk.table === tableInfo.table
-        );
+        const tablePrimaryKeys = primaryKeys
+            .filter(
+                (pk) =>
+                    pk.table === tableInfo.table &&
+                    schemaNameToDomainSchemaName(pk.schema) === tableSchema
+            )
+            .map((pk) => pk.column.trim());
 
         const tableIndexes = indexes.filter((idx) => {
-            const indexSchema =
-                (idx.schema ?? '').trim() === '' ? undefined : idx.schema;
-            return (
-                idx.table === tableInfo.table &&
-                indexSchema === tableInfo.schema
-            );
+            const indexSchema = schemaNameToDomainSchemaName(idx.schema);
+
+            return idx.table === tableInfo.table && indexSchema === tableSchema;
         });
+
+        // Aggregate indexes with multiple columns
+        const aggregatedIndexes = tableIndexes.reduce(
+            (acc, idx) => {
+                const key = `${idx.schema}_${idx.name}`;
+                if (!acc[key]) {
+                    acc[key] = {
+                        ...idx,
+                        columns: [
+                            { name: idx.column, position: idx.column_position },
+                        ],
+                    };
+                } else {
+                    acc[key].columns.push({
+                        name: idx.column,
+                        position: idx.column_position,
+                    });
+                }
+                return acc;
+            },
+            {} as Record<
+                string,
+                Omit<IndexInfo, 'column'> & {
+                    columns: { name: string; position: number }[];
+                }
+            >
+        );
 
         const fields: DBField[] = sortedColumns.map(
             (col: ColumnInfo): DBField => ({
                 id: generateId(),
                 name: col.name,
                 type: { id: col.type.split(' ').join('_'), name: col.type },
-                primaryKey: tablePrimaryKeys.some(
-                    (pk) => pk.column === col.name
-                ),
-                unique: tableIndexes.some(
-                    (idx) => idx.column === col.name && idx.unique
+                primaryKey: tablePrimaryKeys.includes(col.name),
+                unique: Object.values(aggregatedIndexes).some(
+                    (idx) =>
+                        idx.unique &&
+                        idx.columns.some((c) => c.name === col.name)
                 ),
                 nullable: col.nullable,
                 ...(col.character_maximum_length &&
@@ -106,14 +138,15 @@ export const createTablesFromMetadata = ({
             })
         );
 
-        const dbIndexes: DBIndex[] = tableIndexes.map(
-            (idx: IndexInfo): DBIndex => ({
+        const dbIndexes: DBIndex[] = Object.values(aggregatedIndexes).map(
+            (idx): DBIndex => ({
                 id: generateId(),
                 name: idx.name,
                 unique: idx.unique,
-                fieldIds: fields
-                    .filter((field) => field.name === idx.column)
-                    .map((field) => field.id),
+                fieldIds: idx.columns
+                    .sort((a, b) => a.position - b.position)
+                    .map((c) => fields.find((f) => f.name === c.name)?.id)
+                    .filter((id): id is string => id !== undefined),
                 createdAt: Date.now(),
             })
         );
@@ -121,20 +154,15 @@ export const createTablesFromMetadata = ({
         // Determine if the current table is a view by checking against viewInfo
         const isView = views.some(
             (view) =>
-                view.schema === tableInfo.schema &&
+                schemaNameToDomainSchemaName(view.schema) === tableSchema &&
                 view.view_name === tableInfo.table
         );
-
-        const schema =
-            (tableInfo.schema ?? '').trim() === ''
-                ? undefined
-                : tableInfo.schema;
 
         // Initial random positions; these will be adjusted later
         return {
             id: generateId(),
             name: tableInfo.table,
-            schema,
+            schema: tableSchema,
             x: Math.random() * 1000, // Placeholder X
             y: Math.random() * 800, // Placeholder Y
             fields,

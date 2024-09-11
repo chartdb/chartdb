@@ -43,7 +43,7 @@ export const mariaDBQuery = `WITH fk_info as (
                                WHERE inc.CONSTRAINT_NAME = 'PRIMARY' and
                                      outc.TABLE_SCHEMA = inc.TABLE_SCHEMA and
                                      outc.TABLE_NAME = inc.TABLE_NAME) AS pk_def
-                       FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                       FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE as outc
                        WHERE CONSTRAINT_NAME = 'PRIMARY'
                        GROUP BY TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME
                        ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION) AS pk
