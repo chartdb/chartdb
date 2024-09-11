@@ -43,7 +43,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     const { t } = useTranslation();
 
     const selectedEdges = edges.filter(
-        (edge) => (edge.source === id || edge.target === id) && edge.selected
+        (edge) =>
+            (edge.source === id || edge.target === id) &&
+            (edge.selected || edge.data?.highlighted)
     );
 
     const focused = !!selected && !dragging;

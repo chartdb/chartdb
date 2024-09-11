@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 export type TableEdgeType = Edge<
     {
         relationship: DBRelationship;
+        highlighted?: boolean;
     },
     'table-edge'
 >;

@@ -140,16 +140,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [relationships, setEdges]);
 
     useEffect(() => {
-        setSelectedTableIds(
-            nodes.filter((node) => node.selected).map((node) => node.id)
-        );
-    }, [nodes, setSelectedTableIds]);
+        const selectedNodesIds = nodes
+            .filter((node) => node.selected)
+            .map((node) => node.id);
+
+        if (equal(selectedNodesIds, selectedTableIds)) {
+            return;
+        }
+
+        setSelectedTableIds(selectedNodesIds);
+    }, [nodes, setSelectedTableIds, selectedTableIds]);
 
     useEffect(() => {
-        setSelectedRelationshipIds(
-            edges.filter((edge) => edge.selected).map((edge) => edge.id)
-        );
-    }, [edges, setSelectedRelationshipIds]);
+        const selectedEdgesIds = edges
+            .filter((edge) => edge.selected)
+            .map((edge) => edge.id);
+
+        if (equal(selectedEdgesIds, selectedRelationshipIds)) {
+            return;
+        }
+
+        setSelectedRelationshipIds(selectedEdgesIds);
+    }, [edges, setSelectedRelationshipIds, selectedRelationshipIds]);
 
     useEffect(() => {
         const tablesSelectedEdges = getEdges()
@@ -171,7 +183,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
                 return {
                     ...edge,
-                    selected,
+                    data: {
+                        ...edge.data!,
+                        highlighted: selected,
+                    },
                     animated: selected,
                     zIndex: selected ? 1 : 0,
                 };
