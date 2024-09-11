@@ -21,10 +21,11 @@ export interface TableNodeFieldProps {
     focused: boolean;
     highlighted: boolean;
     visible: boolean;
+    isView: boolean;
 }
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
-    ({ field, focused, tableNodeId, highlighted, visible }) => {
+    ({ field, focused, tableNodeId, highlighted, visible, isView }) => {
         const { removeField, relationships } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
