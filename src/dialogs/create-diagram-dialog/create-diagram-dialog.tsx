@@ -11,7 +11,7 @@ import {
     isDatabaseMetadata,
     loadDatabaseMetadata,
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
-import { generateId } from '@/lib/utils';
+import { generateDiagramId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -86,7 +86,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const createNewDiagram = useCallback(async () => {
         let diagram: Diagram = {
-            id: generateId(),
+            id: generateDiagramId(),
             name: `Diagram ${diagramNumber}`,
             databaseType: databaseType ?? DatabaseType.GENERIC,
             databaseEdition:

@@ -10,7 +10,7 @@ import {
     adjustTablePositions,
     createTablesFromMetadata,
 } from './db-table';
-import { generateId } from '@/lib/utils';
+import { generateDiagramId } from '@/lib/utils';
 export interface Diagram {
     id: string;
     name: string;
@@ -70,7 +70,7 @@ export const loadFromDatabaseMetadata = ({
     });
 
     return {
-        id: generateId(),
+        id: generateDiagramId(),
         name:
             `${databaseMetadata.database_name}-db` ||
             `Diagram ${diagramNumber}`,
