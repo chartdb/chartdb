@@ -4,6 +4,7 @@ import { customAlphabet } from 'nanoid';
 const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 
 import { twMerge } from 'tailwind-merge';
+const UUID_KEY = 'uuid';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -13,6 +14,17 @@ export function cn(...inputs: ClassValue[]) {
 export const emptyFn = (): any => undefined;
 
 export const generateId = () => randomId();
+
+export const generateDiagramId = () => {
+    let prefix = localStorage.getItem(UUID_KEY);
+
+    if (!prefix) {
+        prefix = randomId(8);
+        localStorage.setItem(UUID_KEY, prefix);
+    }
+
+    return `${prefix}${randomId(4)}`;
+};
 
 export const getOperatingSystem = (): 'mac' | 'windows' | 'unknown' => {
     const userAgent = window.navigator.userAgent;
