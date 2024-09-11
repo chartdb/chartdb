@@ -33,13 +33,13 @@ type RedoUndoActionAddTable = RedoUndoActionBase<
 type RedoUndoActionRemoveTable = RedoUndoActionBase<
     'removeTable',
     { tableId: string },
-    { table: DBTable }
+    { table: DBTable; relationships: DBRelationship[] }
 >;
 
 type RedoUndoActionUpdateTablesState = RedoUndoActionBase<
     'updateTablesState',
     { tables: DBTable[] },
-    { tables: DBTable[] }
+    { tables: DBTable[]; relationships: DBRelationship[] }
 >;
 
 type RedoUndoActionAddField = RedoUndoActionBase<
