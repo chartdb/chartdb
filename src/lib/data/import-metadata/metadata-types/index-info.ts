@@ -9,4 +9,5 @@ export interface IndexInfo {
     unique: boolean;
     is_partial_index: boolean;
     direction: string;
+    column_position: number;
 }

@@ -3,7 +3,10 @@ import { StorageContext, storageContext } from './storage-context';
 import Dexie, { type EntityTable } from 'dexie';
 import { Diagram } from '@/lib/domain/diagram';
 import { DBTable } from '@/lib/domain/db-table';
-import { DBRelationship } from '@/lib/domain/db-relationship';
+import {
+    DBRelationship,
+    determineCardinalities,
+} from '@/lib/domain/db-relationship';
 import { ChartDBConfig } from '@/lib/domain/config';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
@@ -83,6 +86,25 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
         config: '++id, defaultDiagramId',
     });
+
+    db.version(6).upgrade((tx) =>
+        tx
+            .table<DBRelationship & { diagramId: string }>('db_relationships')
+            .toCollection()
+            .modify((relationship, ref) => {
+                const {
+                    sourceCardinality,
+                    targetCardinality,
+                } = // @ts-expect-error string before
+                    determineCardinalities(relationship.type ?? 'one_to_one');
+
+                relationship.sourceCardinality = sourceCardinality;
+                relationship.targetCardinality = targetCardinality;
+
+                // @ts-expect-error string before
+                delete ref.value.type;
+            })
+    );
 
     db.on('ready', async () => {
         const config = await getConfig();

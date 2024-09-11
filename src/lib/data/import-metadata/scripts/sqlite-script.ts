@@ -59,7 +59,8 @@ export const sqliteQuery = `WITH fk_info AS (
               'cardinality', '',  -- SQLite does not provide cardinality
               'size', '',  -- SQLite does not provide index size
               'unique', (CASE WHEN idx."unique" = 1 THEN 'true' ELSE 'false' END),
-              'direction', ''  -- SQLite does not provide direction info
+              'direction', '',  -- SQLite does not provide direction info
+              'column_position', ic.seqno + 1  -- Adding 1 to convert from zero-based to one-based index
           )
       ) AS indexes_metadata
   FROM

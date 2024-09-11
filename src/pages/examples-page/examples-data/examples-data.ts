@@ -550,7 +550,9 @@ export const examples: Example[] = [
                     targetTableId: '1c03hu41ko98myywerwbazeli',
                     sourceFieldId: 'wcgycjif09xrq0ly3txkq6ocu',
                     targetFieldId: '04csyx8ds9t3rh93txiqs4dm4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -560,7 +562,9 @@ export const examples: Example[] = [
                     targetTableId: '6e70s6dhdfnve9xljbih6bo7x',
                     sourceFieldId: 'jdw1yrh9xf1i7927gzs9pob2p',
                     targetFieldId: 'gaj3scrtaz46ezfmc162ingxf',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -570,7 +574,9 @@ export const examples: Example[] = [
                     targetTableId: '1c03hu41ko98myywerwbazeli',
                     sourceFieldId: 'ecx2zbzdc5o54e04aeg7tlg54',
                     targetFieldId: '04csyx8ds9t3rh93txiqs4dm4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -580,7 +586,9 @@ export const examples: Example[] = [
                     targetTableId: '6e70s6dhdfnve9xljbih6bo7x',
                     sourceFieldId: 'v8plj7wq1cly03y178bysft2f',
                     targetFieldId: 'gaj3scrtaz46ezfmc162ingxf',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -590,7 +598,9 @@ export const examples: Example[] = [
                     targetTableId: '1c03hu41ko98myywerwbazeli',
                     sourceFieldId: 'b8c9v5vtpbnt5tjzcd3iat85f',
                     targetFieldId: '04csyx8ds9t3rh93txiqs4dm4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -600,7 +610,9 @@ export const examples: Example[] = [
                     targetTableId: '1c03hu41ko98myywerwbazeli',
                     sourceFieldId: 'hr2gdoc0wtwvs4pfqo6m0fwc3',
                     targetFieldId: '04csyx8ds9t3rh93txiqs4dm4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
             ],
@@ -1364,7 +1376,9 @@ export const examples: Example[] = [
                     targetTableId: 'yu2ncqamkaipx5h6sl9fxfm92',
                     sourceFieldId: 'rwt3l7vgvcn2wez9z78xrne2e',
                     targetFieldId: 'tp12zsqygr6q3di3iie5c69q4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1374,7 +1388,9 @@ export const examples: Example[] = [
                     targetTableId: 'bne5dz6bso1vq001e5up9ga8h',
                     sourceFieldId: 'axsoc31dhpdmwcpqhqhasv3cp',
                     targetFieldId: 'cb7jt8iz26dtyiepk55irq4wj',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1384,7 +1400,9 @@ export const examples: Example[] = [
                     targetTableId: 'ejeh9q8ea25j1g4ud9io5nsnx',
                     sourceFieldId: 'hlpqy2hgujo7pnjthvz3hlp8l',
                     targetFieldId: 'dtz6h71bnnnqqmc0gj4m7s4b2',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1394,7 +1412,9 @@ export const examples: Example[] = [
                     targetTableId: '96pa90b6estjx7i0edgu8nqe1',
                     sourceFieldId: '18qplj4qqrdm7gamk6dzo4jqj',
                     targetFieldId: 'e7kfdzkympiu6zdvpeurqxu6r',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1404,7 +1424,9 @@ export const examples: Example[] = [
                     targetTableId: 'ttye5mdap1hl200egtjuwzl9m',
                     sourceFieldId: 'imvdw14raks3bmruzrom2m60a',
                     targetFieldId: 'dsout0pmyihlkq72108vs6655',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1414,7 +1436,9 @@ export const examples: Example[] = [
                     targetTableId: 'meqq3ly4klrjs9fc1d9s66msd',
                     sourceFieldId: '59bad3ogjluo7tr50id8m1s6n',
                     targetFieldId: '8vuje8jgqclyypvmeyud3ouq4',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1424,7 +1448,9 @@ export const examples: Example[] = [
                     targetTableId: 'gkpmaqlbh1ye2eiob45hfqcs9',
                     sourceFieldId: 'mo9o3q3fouk14i2095p381boh',
                     targetFieldId: '3y6v954bmnmrhsu88pegssisz',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1434,7 +1460,9 @@ export const examples: Example[] = [
                     targetTableId: 'ttye5mdap1hl200egtjuwzl9m',
                     sourceFieldId: '34hmbf7inkgziqht8m369759i',
                     targetFieldId: 'dsout0pmyihlkq72108vs6655',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1444,7 +1472,9 @@ export const examples: Example[] = [
                     targetTableId: 'bne5dz6bso1vq001e5up9ga8h',
                     sourceFieldId: 'bmyqo12d6gdgsn1239atxb4qn',
                     targetFieldId: 'cb7jt8iz26dtyiepk55irq4wj',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -1454,7 +1484,9 @@ export const examples: Example[] = [
                     targetTableId: 'ttye5mdap1hl200egtjuwzl9m',
                     sourceFieldId: 'd40dt5g1thzuzndldviri2jxj',
                     targetFieldId: 'dsout0pmyihlkq72108vs6655',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
             ],
@@ -2887,7 +2919,9 @@ export const examples: Example[] = [
                     targetTableId: '6zd90tcbey5t4s8robbviqus8',
                     sourceFieldId: 'clgb7yp0y3r7v2bs9vvz2i1g8',
                     targetFieldId: 'b0iylw1gbvp09vtpxdcs8d3zn',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2897,7 +2931,9 @@ export const examples: Example[] = [
                     targetTableId: 'fsqbyg9qles1fl937pizwve95',
                     sourceFieldId: 'h3ugzzz8kx4tjvx3vpnk271gx',
                     targetFieldId: 'xqx13khvb9m0vzfepcycizcai',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2907,7 +2943,9 @@ export const examples: Example[] = [
                     targetTableId: 'e31vevdt598z8mpv13egvkjnj',
                     sourceFieldId: 'fr9ql21vmr8s77z1if70ws897',
                     targetFieldId: '9p7plypt0h2pi24sd1maglln2',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2917,7 +2955,9 @@ export const examples: Example[] = [
                     targetTableId: '4pxqynu5v3vugzy12sfh4ozvu',
                     sourceFieldId: 'nx6hxsugb6xiirghsp4qzkk8j',
                     targetFieldId: 'dhacvdae20ms5wc3inljozrz2',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2927,7 +2967,9 @@ export const examples: Example[] = [
                     targetTableId: 'e31vevdt598z8mpv13egvkjnj',
                     sourceFieldId: '0i0bfvjxpfvhadfvmq04nccau',
                     targetFieldId: '9p7plypt0h2pi24sd1maglln2',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2937,7 +2979,9 @@ export const examples: Example[] = [
                     targetTableId: 'fctm9t2gjxte1920akz69jkqt',
                     sourceFieldId: '6f0itpcv12zrs47p7ipwokear',
                     targetFieldId: 'fp615hegqw52lssi3xnzx05rs',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2947,7 +2991,9 @@ export const examples: Example[] = [
                     targetTableId: 'l908eu1k0odh5u4mq6ge61udi',
                     sourceFieldId: 'qjibly41tvbgo8icl3hndguwv',
                     targetFieldId: 'ozcebtrmnoar9spk7jq4b2gfz',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2957,7 +3003,9 @@ export const examples: Example[] = [
                     targetTableId: '1tzllhzmb8tkgafbmcguqf5vn',
                     sourceFieldId: 'lup9lgn5haghenay268urdr2v',
                     targetFieldId: 'jh3rnowvtvmu4qwbjn8s2wjnv',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2967,7 +3015,9 @@ export const examples: Example[] = [
                     targetTableId: 'e31vevdt598z8mpv13egvkjnj',
                     sourceFieldId: 'hln6zbas448889n2m2ogs81ev',
                     targetFieldId: '9p7plypt0h2pi24sd1maglln2',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2977,7 +3027,9 @@ export const examples: Example[] = [
                     targetTableId: 'v5c8d2z2r7czjjb6yqfhrzca7',
                     sourceFieldId: 'lxs0lq5udza79rzkp5ll732z8',
                     targetFieldId: '5as8lm61s6t2u9chbixfeyrmd',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2987,7 +3039,9 @@ export const examples: Example[] = [
                     targetTableId: '08ck6xgxm97m8fr757f3c1u8i',
                     sourceFieldId: 'rdjpkkl53bc1plf75wt2xtf0m',
                     targetFieldId: 'up97wwftgf0b7b2td9p0jehjb',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -2997,7 +3051,9 @@ export const examples: Example[] = [
                     targetTableId: 'xkeb7oj02sbn5oyoo2f66wmnz',
                     sourceFieldId: 'bnanwa6rwnbjnfkqrknpk1tqm',
                     targetFieldId: 'vxnoi2w8ap9rcxm8e2jlkbkpa',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3007,7 +3063,9 @@ export const examples: Example[] = [
                     targetTableId: 'v5c8d2z2r7czjjb6yqfhrzca7',
                     sourceFieldId: 'yxldnw5n7mgk0uz5t1yar2fxb',
                     targetFieldId: '5as8lm61s6t2u9chbixfeyrmd',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3017,7 +3075,9 @@ export const examples: Example[] = [
                     targetTableId: '2cjhyrtpinfa705eilfeeurtc',
                     sourceFieldId: '6v1bgzlqyzzrjksnvtbwk50qt',
                     targetFieldId: 'qjhszd97v59kifufel97hj33j',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3027,7 +3087,9 @@ export const examples: Example[] = [
                     targetTableId: 'xkeb7oj02sbn5oyoo2f66wmnz',
                     sourceFieldId: 'ba5gh63xkhulbh90royzndwgy',
                     targetFieldId: 'vxnoi2w8ap9rcxm8e2jlkbkpa',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3037,7 +3099,9 @@ export const examples: Example[] = [
                     targetTableId: '6zd90tcbey5t4s8robbviqus8',
                     sourceFieldId: 'gef3s8gky0dx4hnh8u78glpbt',
                     targetFieldId: 'b0iylw1gbvp09vtpxdcs8d3zn',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3047,7 +3111,9 @@ export const examples: Example[] = [
                     targetTableId: '6zd90tcbey5t4s8robbviqus8',
                     sourceFieldId: 'u63mhszue97e96a9efvl8zs38',
                     targetFieldId: 'b0iylw1gbvp09vtpxdcs8d3zn',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
                 {
@@ -3057,7 +3123,9 @@ export const examples: Example[] = [
                     targetTableId: 'xkeb7oj02sbn5oyoo2f66wmnz',
                     sourceFieldId: 'jrsmkppymx89sbbeiudkv1bta',
                     targetFieldId: 'vxnoi2w8ap9rcxm8e2jlkbkpa',
-                    type: 'many_to_one',
+
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 },
             ],

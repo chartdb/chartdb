@@ -110,7 +110,8 @@ export const getMySQLQuery = (
                                                       '","index_type":"', LOWER(indexes.index_type),
                                                       '","cardinality":', indexes.cardinality,
                                                       ',"direction":"', (CASE WHEN indexes.collation = 'D' THEN 'desc' ELSE 'asc' END),
-                                                      '","unique":', IF(indexes.non_unique = 1, 'false', 'true'), '}')))))
+                                                      '","column_position":', indexes.seq_in_index,
+                                                      ',"unique":', IF(indexes.non_unique = 1, 'false', 'true'), '}')))))
 ), tbls as
 (
   (SELECT (@tbls:=NULL),
@@ -244,7 +245,8 @@ export const getMySQLQuery = (
                '","index_type":"', LOWER(idx.index_type),
                '","cardinality":', idx.cardinality,
                ',"direction":"', (CASE WHEN idx.collation = 'D' THEN 'desc' ELSE 'asc' END),
-               '","unique":', IF(idx.non_unique = 1, 'false', 'true'), '}')
+               '","column_position":', idx.seq_in_index,
+               ',"unique":', IF(idx.non_unique = 1, 'false', 'true'), '}')
     ) FROM (
         SELECT indexes.table_schema,
                indexes.table_name,
@@ -253,7 +255,8 @@ export const getMySQLQuery = (
                LOWER(indexes.index_type) AS index_type,
                indexes.cardinality,
                indexes.collation,
-               indexes.non_unique
+               indexes.non_unique,
+               indexes.seq_in_index
         FROM information_schema.statistics indexes
         WHERE indexes.table_schema = DATABASE()
     ) AS idx), ''),

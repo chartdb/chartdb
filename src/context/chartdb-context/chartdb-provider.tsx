@@ -930,7 +930,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     targetTableId,
                     sourceFieldId,
                     targetFieldId,
-                    type: 'one_to_one',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
                     createdAt: Date.now(),
                 };
 

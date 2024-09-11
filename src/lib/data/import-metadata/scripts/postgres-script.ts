@@ -186,6 +186,7 @@ cols AS (
                                             ',"size":', index_size,
                                             ',"unique":', is_unique,
                                             ',"is_partial_index":', is_partial_index,
+                                            ',"column_position":', column_position,
                                             ',"direction":"', LOWER(direction),
                                             '"}')), ',') AS indexes_metadata
     FROM indexes_cols x ${
