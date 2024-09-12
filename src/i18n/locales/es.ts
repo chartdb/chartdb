@@ -21,6 +21,8 @@ export const es: LanguageTranslation = {
             },
             view: {
                 view: 'Ver',
+                hide_cardinality: 'Ocultar Cardinalidad',
+                show_cardinality: 'Mostrar Cardinalidad',
                 show_sidebar: 'Mostrar Barra Lateral',
                 hide_sidebar: 'Ocultar Barra Lateral',
                 zoom_on_scroll: 'Zoom al Desplazarse',

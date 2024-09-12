@@ -6,34 +6,47 @@ import {
 } from './local-config-context';
 import { Theme } from '../theme-context/theme-context';
 
+const themeKey = 'theme';
+const scrollActionKey = 'scroll_action';
+const schemasFilterKey = 'schemas_filter';
+const showCardinalityKey = 'show_cardinality';
+
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [theme, setTheme] = React.useState<Theme>(
-        (localStorage.getItem('theme') as Theme) || 'system'
+        (localStorage.getItem(themeKey) as Theme) || 'system'
     );
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
-        (localStorage.getItem('scroll_action') as ScrollAction) || 'pan'
+        (localStorage.getItem(scrollActionKey) as ScrollAction) || 'pan'
     );
 
     const [schemasFilter, setSchemasFilter] = React.useState<SchemasFilter>(
         JSON.parse(
-            localStorage.getItem('schemas_filter') || '{}'
+            localStorage.getItem(schemasFilterKey) || '{}'
         ) as SchemasFilter
     );
 
+    const [showCardinality, setShowCardinality] = React.useState<boolean>(
+        (localStorage.getItem(showCardinalityKey) || 'true') === 'true'
+    );
+
     useEffect(() => {
-        localStorage.setItem('theme', theme);
+        localStorage.setItem(themeKey, theme);
     }, [theme]);
 
     useEffect(() => {
-        localStorage.setItem('scroll_action', scrollAction);
+        localStorage.setItem(scrollActionKey, scrollAction);
     }, [scrollAction]);
 
     useEffect(() => {
-        localStorage.setItem('schemas_filter', JSON.stringify(schemasFilter));
+        localStorage.setItem(schemasFilterKey, JSON.stringify(schemasFilter));
     }, [schemasFilter]);
+
+    useEffect(() => {
+        localStorage.setItem(showCardinalityKey, showCardinality.toString());
+    }, [showCardinality]);
 
     return (
         <LocalConfigContext.Provider
@@ -44,6 +57,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setScrollAction,
                 schemasFilter,
                 setSchemasFilter,
+                showCardinality,
+                setShowCardinality,
             }}
         >
             {children}
