@@ -42,6 +42,7 @@ import {
     TooltipContent,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
+import { MarkerDefinitions } from './marker-definitions';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -358,7 +359,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [t, showAlert, reorderTables]);
 
     return (
-        <div className="flex h-full">
+        <div className="relative flex h-full">
             <ReactFlow
                 colorMode={effectiveTheme}
                 className="canvas-cursor-default nodes-animated"
@@ -462,6 +463,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     size={1}
                 />
             </ReactFlow>
+            <MarkerDefinitions />
         </div>
     );
 };

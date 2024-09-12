@@ -134,8 +134,8 @@ export const en = {
                 filter: 'Filter',
                 collapse: 'Collapse All',
                 relationship: {
-                    primary: 'Primary',
-                    foreign: 'Foreign',
+                    primary: 'Primary Table',
+                    foreign: 'Referenced Table',
                     cardinality: 'Cardinality',
                     delete_relationship: 'Delete',
                     relationship_actions: {
