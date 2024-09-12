@@ -30,6 +30,6 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     schemasFilter: {},
     setSchemasFilter: emptyFn,
 
-    showCardinality: true,
+    showCardinality: false,
     setShowCardinality: emptyFn,
 });
