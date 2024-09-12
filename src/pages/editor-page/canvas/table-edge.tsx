@@ -29,11 +29,14 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
     source,
     target,
     selected,
+    data,
 }) => {
     const { getInternalNode, getEdge } = useReactFlow();
     const { openRelationshipFromSidebar, selectSidebarSection } = useLayout();
 
     const { relationships } = useChartDB();
+
+    const relationship = data?.relationship;
 
     const openRelationshipInEditor = () => {
         selectSidebarSection('relationships');
@@ -126,11 +129,22 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
         ]
     );
 
+    const sourceMarker =
+        relationship?.sourceCardinality === 'one'
+            ? `cardinality_one_${sourceSide}`
+            : `cardinality_many_${sourceSide}`;
+    const targetMarker =
+        relationship?.targetCardinality === 'one'
+            ? `cardinality_one_${targetSide}`
+            : `cardinality_many_${targetSide}`;
+
     return (
         <>
             <path
                 id={id}
                 d={edgePath}
+                markerStart={`url(#${sourceMarker})`}
+                markerEnd={`url(#${targetMarker})`}
                 fill="none"
                 className={cn([
                     'react-flow__edge-path',
@@ -159,6 +173,8 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
         // <BaseEdge
         //     id={id}
         //     path={edgePath}
+        //     markerStart="url(#cardinality_one)"
+        //     markerEnd="url(#cardinality_one)"
         //     className={`!stroke-2 ${selected ? '!stroke-slate-500' : '!stroke-slate-300'}`}
         // />
     );
