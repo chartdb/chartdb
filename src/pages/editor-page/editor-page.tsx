@@ -60,6 +60,7 @@ export const EditorPage: React.FC = () => {
                     navigate('/');
                 }
                 setInitialDiagram(diagram);
+                document.title = `ChartDB - ${diagram!.name}`;
                 hideLoader();
             } else if (!diagramId && config.defaultDiagramId) {
                 const diagram = await loadDiagram(config.defaultDiagramId);

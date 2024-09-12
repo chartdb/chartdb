@@ -116,7 +116,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
-        document.title = `ChartDB - ${diagram.name}`;
     }, [
         databaseType,
         addDiagram,
