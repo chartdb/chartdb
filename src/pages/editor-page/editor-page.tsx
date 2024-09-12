@@ -90,6 +90,14 @@ export const EditorPage: React.FC = () => {
         updateConfig,
     ]);
 
+    useEffect(() => {
+        if (currentDiagram?.name) {
+            document.title = `ChartDB - ${currentDiagram.name}`;
+        } else {
+            document.title = 'ChartDB';
+        }
+    }, [currentDiagram?.name]);
+
     return (
         <>
             <section
