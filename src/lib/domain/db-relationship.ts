@@ -72,9 +72,22 @@ export const createRelationshipsFromMetadata = ({
                 (field) => field.name === fk.reference_column
             );
 
+            const isSourceTablePKComplex =
+                (sourceTable?.fields.filter((field) => field.primaryKey) ?? [])
+                    .length > 1;
+            const isTargetTablePKComplex =
+                (targetTable?.fields.filter((field) => field.primaryKey) ?? [])
+                    .length > 1;
+
             if (sourceTable && targetTable && sourceField && targetField) {
-                const sourceCardinality = determineCardinality(sourceField);
-                const targetCardinality = determineCardinality(targetField);
+                const sourceCardinality = determineCardinality(
+                    sourceField,
+                    isSourceTablePKComplex
+                );
+                const targetCardinality = determineCardinality(
+                    targetField,
+                    isTargetTablePKComplex
+                );
                 const type = determineRelationshipType({
                     sourceCardinality,
                     targetCardinality,
@@ -101,8 +114,13 @@ export const createRelationshipsFromMetadata = ({
         .filter((rel) => rel !== null) as DBRelationship[];
 };
 
-const determineCardinality = (field: DBField): Cardinality => {
-    return field.unique || field.primaryKey ? 'one' : 'many';
+const determineCardinality = (
+    field: DBField,
+    isTablePKComplex: boolean
+): Cardinality => {
+    return field.unique || (field.primaryKey && !isTablePKComplex)
+        ? 'one'
+        : 'many';
 };
 
 export const determineRelationshipType = ({

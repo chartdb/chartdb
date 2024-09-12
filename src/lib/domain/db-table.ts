@@ -120,7 +120,8 @@ export const createTablesFromMetadata = ({
                 unique: Object.values(aggregatedIndexes).some(
                     (idx) =>
                         idx.unique &&
-                        idx.columns.some((c) => c.name === col.name)
+                        idx.columns.length === 1 &&
+                        idx.columns[0].name === col.name
                 ),
                 nullable: col.nullable,
                 ...(col.character_maximum_length &&
