@@ -66,7 +66,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
-    const { scrollAction, setScrollAction } = useLocalConfig();
+    const {
+        scrollAction,
+        setScrollAction,
+        setShowCardinality,
+        showCardinality,
+    } = useLocalConfig();
     const { effectiveTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -277,6 +282,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             showSidePanel();
         }
     }, [isSidePanelShowed, showSidePanel, hideSidePanel]);
+
+    const showOrHideCardinality = useCallback(() => {
+        setShowCardinality(!showCardinality);
+    }, [showCardinality, setShowCardinality]);
 
     const emojiAI = '✨';
 
@@ -516,6 +525,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     {isSidePanelShowed
                                         ? t('menu.view.hide_sidebar')
                                         : t('menu.view.show_sidebar')}
+                                </MenubarItem>
+                                <MenubarItem onClick={showOrHideCardinality}>
+                                    {showCardinality
+                                        ? t('menu.view.hide_cardinality')
+                                        : t('menu.view.show_cardinality')}
                                 </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarSub>

@@ -23,6 +23,8 @@ export const en = {
                 view: 'View',
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
+                hide_cardinality: 'Hide Cardinality',
+                show_cardinality: 'Show Cardinality',
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 change_language: 'Language',

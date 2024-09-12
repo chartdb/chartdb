@@ -63,9 +63,9 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
 
     const sourceWidth = sourceNode?.measured.width ?? 0;
     const sourceLeftX =
-        sourceHandle === 'left' ? sourceX - 1 : sourceX - sourceWidth - 10;
+        sourceHandle === 'left' ? sourceX + 3 : sourceX - sourceWidth - 10;
     const sourceRightX =
-        sourceHandle === 'left' ? sourceX + sourceWidth + 10 : sourceX;
+        sourceHandle === 'left' ? sourceX + sourceWidth + 9 : sourceX;
 
     const targetWidth = targetNode?.measured.width ?? 0;
     const targetLeftX = targetX - 1;

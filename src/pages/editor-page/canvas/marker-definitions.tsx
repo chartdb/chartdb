@@ -1,14 +1,21 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Cardinality } from '@/lib/domain/db-relationship';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const MarkerDefinitions: React.FC = () => {
+    const { showCardinality } = useLocalConfig();
     const cardinalityOptions: Record<Cardinality, string> = {
         one: '1',
         many: 'N',
     };
 
     const sideOptions: ('left' | 'right')[] = ['left', 'right'];
+
+    if (!showCardinality) {
+        return null;
+    }
+
     return (
         <svg className="absolute left-0 top-0 z-0 size-0">
             <defs>
@@ -26,11 +33,11 @@ export const MarkerDefinitions: React.FC = () => {
                             <circle
                                 cx="8"
                                 cy="8"
-                                r="6"
+                                r="5"
                                 className={cn([
                                     'fill-muted-foreground',
                                     'stroke-background',
-                                    'stroke-[1.5]',
+                                    'stroke-[0.5]',
                                 ])}
                             />
                             <text

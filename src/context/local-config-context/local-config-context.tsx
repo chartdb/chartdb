@@ -15,6 +15,9 @@ export interface LocalConfigContext {
 
     schemasFilter: SchemasFilter;
     setSchemasFilter: React.Dispatch<React.SetStateAction<SchemasFilter>>;
+
+    showCardinality: boolean;
+    setShowCardinality: (showCardinality: boolean) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -26,4 +29,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     schemasFilter: {},
     setSchemasFilter: emptyFn,
+
+    showCardinality: true,
+    setShowCardinality: emptyFn,
 });
