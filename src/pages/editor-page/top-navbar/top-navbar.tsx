@@ -91,7 +91,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         if (!editMode) return;
         if (editedDiagramName.trim()) {
             updateDiagramName(editedDiagramName.trim());
-            document.title = `ChartDB - ${editedDiagramName.trim()}`;
         }
         setEditMode(false);
     }, [editedDiagramName, updateDiagramName, editMode]);
