@@ -60,7 +60,6 @@ export const EditorPage: React.FC = () => {
                     navigate('/');
                 }
                 setInitialDiagram(diagram);
-                document.title = `ChartDB - ${diagram!.name}`;
                 hideLoader();
             } else if (!diagramId && config.defaultDiagramId) {
                 const diagram = await loadDiagram(config.defaultDiagramId);
@@ -90,14 +89,6 @@ export const EditorPage: React.FC = () => {
         currentDiagram?.id,
         updateConfig,
     ]);
-
-    useEffect(() => {
-        if (currentDiagram?.name) {
-            document.title = `ChartDB - ${currentDiagram.name}`;
-        } else {
-            document.title = 'ChartDB';
-        }
-    }, [currentDiagram?.name]);
 
     return (
         <>

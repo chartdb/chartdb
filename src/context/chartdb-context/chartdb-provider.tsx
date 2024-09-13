@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
@@ -40,6 +40,14 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
 
     const defaultSchemaName = defaultSchemas[databaseType];
+
+    useEffect(() => {
+        if (diagramName) {
+            document.title = `ChartDB - ${diagramName}`;
+        } else {
+            document.title = 'ChartDB';
+        }
+    }, [diagramName]);
 
     const schemas = useMemo(
         () =>
