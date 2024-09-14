@@ -38,6 +38,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     >();
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
+    const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 1 });
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -276,11 +277,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const createTable: ChartDBContext['createTable'] = useCallback(async () => {
+        const padding = 150; // Add some padding from the edge
+        const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
+        const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
+
         const table: DBTable = {
             id: generateId(),
             name: `table_${tables.length + 1}`,
-            x: 0,
-            y: 0,
+            x: centerX,
+            y: centerY,
             fields: [
                 {
                     id: generateId(),
@@ -303,7 +308,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         await addTable(table);
 
         return table;
-    }, [addTable, tables, databaseType]);
+    }, [viewport, tables.length, databaseType, addTable]);
 
     const getTable: ChartDBContext['getTable'] = useCallback(
         (id: string) => tables.find((table) => table.id === id) ?? null,
@@ -1121,6 +1126,13 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         ]
     );
 
+    const updateViewport = useCallback(
+        (newViewport: { x: number; y: number; zoom: number }) => {
+            setViewport(newViewport);
+        },
+        []
+    );
+
     return (
         <chartDBContext.Provider
             value={{
@@ -1164,6 +1176,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 removeRelationship,
                 removeRelationships,
                 updateRelationship,
+                updateViewport,
             }}
         >
             {children}
