@@ -1130,7 +1130,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const updateViewport = useCallback(
-        (newViewport: { x: number; y: number; zoom: number }) => {
+        async (newViewport: { x: number; y: number; zoom: number }) => {
             setViewport(newViewport);
         },
         []
