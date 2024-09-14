@@ -39,7 +39,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
 
     const handleCreateTable = async () => {
         setFilterText('');
-        const padding = 150;
+        const padding = 80;
         const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
         const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
 
