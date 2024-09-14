@@ -52,6 +52,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 emptyPlaceholder={t(
                     'side_panel.tables_section.table.no_types_found'
                 )}
+                keepOrder
             />
             <div className="flex shrink-0">
                 <Popover>
