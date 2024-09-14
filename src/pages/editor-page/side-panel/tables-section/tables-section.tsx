@@ -15,13 +15,15 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useViewport } from '@xyflow/react';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables, filteredSchemas } = useChartDB();
+    const viewport = useViewport();
     const { t } = useTranslation();
-    const { closeAllTablesInSidebar } = useLayout();
+    const { closeAllTablesInSidebar, openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
@@ -36,8 +38,16 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText, filteredSchemas]);
 
     const handleCreateTable = async () => {
-        await createTable();
-        setFilterText(''); // Clear the filter to ensure the new table is visible
+        setFilterText('');
+        const padding = 150;
+        const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
+        const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
+
+        const table = await createTable({
+            x: centerX,
+            y: centerY,
+        });
+        openTableFromSidebar(table.id);
     };
 
     return (

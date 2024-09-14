@@ -37,7 +37,9 @@ export interface ChartDBContext {
     updateDatabaseEdition: (databaseEdition?: DatabaseEdition) => Promise<void>;
 
     // Table operations
-    createTable: () => Promise<DBTable>;
+    createTable: (
+        attributes?: Partial<Omit<DBTable, 'id'>>
+    ) => Promise<DBTable>;
     addTable: (
         table: DBTable,
         options?: { updateHistory: boolean }
@@ -126,12 +128,6 @@ export interface ChartDBContext {
         relationship: Partial<DBRelationship>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
-
-    updateViewport: (viewport: {
-        x: number;
-        y: number;
-        zoom: number;
-    }) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -170,7 +166,6 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeTable: emptyFn,
     updateTable: emptyFn,
     updateTablesState: emptyFn,
-    updateViewport: emptyFn,
 
     // Field operations
     updateField: emptyFn,
