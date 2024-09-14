@@ -29,7 +29,9 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
 
     useEffect(() => {
         if (openedTableInSidebar) {
-            scrollToTable(openedTableInSidebar);
+            setTimeout(() => {
+                scrollToTable(openedTableInSidebar);
+            }, 100);
         }
     }, [openedTableInSidebar, scrollToTable]);
 

@@ -16,6 +16,7 @@ import { DatabaseEdition } from '@/lib/domain/database-edition';
 import { DBSchema, schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useLayout } from '@/hooks/use-layout';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -39,6 +40,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
     const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 1 });
+    const { openTableFromSidebar } = useLayout();
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -306,9 +308,10 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             isView: false,
         };
         await addTable(table);
+        openTableFromSidebar(table.id);
 
         return table;
-    }, [viewport, tables.length, databaseType, addTable]);
+    }, [viewport, tables.length, databaseType, addTable, openTableFromSidebar]);
 
     const getTable: ChartDBContext['getTable'] = useCallback(
         (id: string) => tables.find((table) => table.id === id) ?? null,
