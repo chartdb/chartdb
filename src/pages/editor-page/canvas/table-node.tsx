@@ -92,11 +92,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
             return table.fields;
         }
 
-        const mustDisplayedFields = table.fields.filter((field) =>
+        const mustDisplayedFields = table.fields.filter((field: DBField) =>
             isMustDisplayedField(field)
         );
         const nonMustDisplayedFields = table.fields.filter(
-            (field) => !isMustDisplayedField(field)
+            (field: DBField) => !isMustDisplayedField(field)
         );
 
         const visibleMustDisplayedFields = mustDisplayedFields.slice(
@@ -177,7 +177,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                         : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                 }}
             >
-                {table.fields.map((field) => (
+                {table.fields.map((field: DBField) => (
                     <TableNodeField
                         key={field.id}
                         focused={focused}
