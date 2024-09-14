@@ -14,7 +14,6 @@ import {
     NodeDimensionChange,
     OnEdgesChange,
     OnNodesChange,
-    useViewport,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -92,12 +91,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
-    const { x, y, zoom } = useViewport();
-    const { updateViewport } = useChartDB();
-
-    useEffect(() => {
-        updateViewport({ x, y, zoom });
-    }, [x, y, zoom, updateViewport]);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))

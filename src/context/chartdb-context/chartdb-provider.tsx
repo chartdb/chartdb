@@ -16,7 +16,6 @@ import { DatabaseEdition } from '@/lib/domain/database-edition';
 import { DBSchema, schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { useLayout } from '@/hooks/use-layout';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -39,8 +38,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     >();
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
-    const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 1 });
-    const { openTableFromSidebar } = useLayout();
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -278,40 +275,39 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         [db, diagramId, setTables, addUndoAction, resetRedoStack]
     );
 
-    const createTable: ChartDBContext['createTable'] = useCallback(async () => {
-        const padding = 150; // Add some padding from the edge
-        const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
-        const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
+    const createTable: ChartDBContext['createTable'] = useCallback(
+        async (attributes) => {
+            const table: DBTable = {
+                id: generateId(),
+                name: `table_${tables.length + 1}`,
+                x: 0,
+                y: 0,
+                fields: [
+                    {
+                        id: generateId(),
+                        name: 'id',
+                        type:
+                            databaseType === DatabaseType.SQLITE
+                                ? { id: 'integer', name: 'integer' }
+                                : { id: 'bigint', name: 'bigint' },
+                        unique: true,
+                        nullable: false,
+                        primaryKey: true,
+                        createdAt: Date.now(),
+                    },
+                ],
+                indexes: [],
+                color: randomColor(),
+                createdAt: Date.now(),
+                isView: false,
+                ...attributes,
+            };
+            await addTable(table);
 
-        const table: DBTable = {
-            id: generateId(),
-            name: `table_${tables.length + 1}`,
-            x: centerX,
-            y: centerY,
-            fields: [
-                {
-                    id: generateId(),
-                    name: 'id',
-                    type:
-                        databaseType === DatabaseType.SQLITE
-                            ? { id: 'integer', name: 'integer' }
-                            : { id: 'bigint', name: 'bigint' },
-                    unique: true,
-                    nullable: false,
-                    primaryKey: true,
-                    createdAt: Date.now(),
-                },
-            ],
-            indexes: [],
-            color: randomColor(),
-            createdAt: Date.now(),
-            isView: false,
-        };
-        await addTable(table);
-        openTableFromSidebar(table.id);
-
-        return table;
-    }, [viewport, tables.length, databaseType, addTable, openTableFromSidebar]);
+            return table;
+        },
+        [addTable, tables, databaseType]
+    );
 
     const getTable: ChartDBContext['getTable'] = useCallback(
         (id: string) => tables.find((table) => table.id === id) ?? null,
@@ -1129,13 +1125,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         ]
     );
 
-    const updateViewport = useCallback(
-        async (newViewport: { x: number; y: number; zoom: number }) => {
-            setViewport(newViewport);
-        },
-        []
-    );
-
     return (
         <chartDBContext.Provider
             value={{
@@ -1179,7 +1168,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 removeRelationship,
                 removeRelationships,
                 updateRelationship,
-                updateViewport,
             }}
         >
             {children}
