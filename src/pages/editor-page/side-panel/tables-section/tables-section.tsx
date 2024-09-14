@@ -35,6 +35,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         return tables.filter(filterSchema).filter(filterTableName);
     }, [tables, filterText, filteredSchemas]);
 
+    const handleCreateTable = async () => {
+        await createTable();
+        setFilterText(''); // Clear the filter to ensure the new table is visible
+    };
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -71,7 +76,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 <Button
                     variant="secondary"
                     className="h-8 p-2 text-xs"
-                    onClick={createTable}
+                    onClick={handleCreateTable}
                 >
                     <Table className="h-4" />
                     {t('side_panel.tables_section.add_table')}
