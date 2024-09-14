@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Accordion } from '@/components/accordion/accordion';
 import { TableListItem } from './table-list-item/table-list-item';
 import { DBTable } from '@/lib/domain/db-table';
@@ -27,11 +27,11 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
         [refs]
     );
 
-    useEffect(() => {
+    const handleScrollToTable = useCallback(() => {
         if (openedTableInSidebar) {
             scrollToTable(openedTableInSidebar);
         }
-    }, [openedTableInSidebar, scrollToTable]);
+    }, [scrollToTable, openedTableInSidebar]);
 
     return (
         <Accordion
@@ -40,6 +40,7 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
             className="flex w-full flex-col gap-1"
             value={openedTableInSidebar}
             onValueChange={openTableFromSidebar}
+            onAnimationEnd={handleScrollToTable}
         >
             {tables.map((table) => (
                 <TableListItem
