@@ -11,6 +11,7 @@ import { RIGHT_HANDLE_ID_PREFIX } from './table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
+import { getCardinalityMarkerId } from './canvas-utils';
 
 export type TableEdgeType = Edge<
     {
@@ -129,15 +130,16 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
         ]
     );
 
-    const sourceMarker =
-        relationship?.sourceCardinality === 'one'
-            ? `cardinality_one_${sourceSide}`
-            : `cardinality_many_${sourceSide}`;
-    const targetMarker =
-        relationship?.targetCardinality === 'one'
-            ? `cardinality_one_${targetSide}`
-            : `cardinality_many_${targetSide}`;
-
+    const sourceMarker = getCardinalityMarkerId({
+        cardinality: relationship?.sourceCardinality ?? 'one',
+        selected: selected ?? false,
+        side: sourceSide as 'left' | 'right',
+    });
+    const targetMarker = getCardinalityMarkerId({
+        cardinality: relationship?.targetCardinality ?? 'one',
+        selected: selected ?? false,
+        side: targetSide as 'left' | 'right',
+    });
     return (
         <>
             <path
