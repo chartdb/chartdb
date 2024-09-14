@@ -39,6 +39,7 @@ interface SelectBoxProps {
     deselectAll?: boolean;
     clearText?: string;
     showClear?: boolean;
+    keepOrder?: boolean;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -57,6 +58,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             deselectAll,
             clearText,
             showClear,
+            keepOrder,
         },
         ref
     ) => {
@@ -99,6 +101,14 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         (option) =>
                             Array.isArray(value) && value.includes(option.value)
                     )
+                    .sort((a, b) => {
+                        if (keepOrder && Array.isArray(value)) {
+                            return (
+                                value.indexOf(a.value) - value.indexOf(b.value)
+                            );
+                        }
+                        return 0;
+                    })
                     .map((option) => (
                         <span
                             key={option.value}
@@ -116,7 +126,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             </span>
                         </span>
                     )),
-            [options, value, handleSelect, oneLine]
+            [options, value, handleSelect, oneLine, keepOrder]
         );
 
         const isAllSelected = React.useMemo(
