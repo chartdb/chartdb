@@ -38,6 +38,7 @@ interface SelectBoxProps {
     selectAll?: boolean;
     deselectAll?: boolean;
     clearText?: string;
+    showClear?: boolean;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -55,6 +56,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             selectAll,
             deselectAll,
             clearText,
+            showClear,
         },
         ref
     ) => {
@@ -167,7 +169,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             )}
                         </div>
                         <div className="flex items-center self-stretch pl-1 text-muted-foreground/60 hover:text-foreground [&>div]:flex [&>div]:items-center [&>div]:self-stretch">
-                            {value && value.length > 0 && multiple ? (
+                            {value &&
+                            value.length > 0 &&
+                            multiple &&
+                            showClear ? (
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault();

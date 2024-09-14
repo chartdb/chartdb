@@ -55,7 +55,6 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                             placeholder={t('side_panel.filter_by_schema')}
                             inputPlaceholder={t('side_panel.search_schema')}
                             emptyPlaceholder={t('side_panel.no_schemas_found')}
-                            clearText={t('clear')}
                             multiple
                         />
                     </div>
