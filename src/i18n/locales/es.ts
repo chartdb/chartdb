@@ -33,6 +33,7 @@ export const es: LanguageTranslation = {
                 help: 'Ayuda',
                 visit_website: 'Visitar ChartDB',
                 join_discord: 'Únete a nosotros en Discord',
+                schedule_a_call: '¡Habla con nosotros!',
             },
         },
 

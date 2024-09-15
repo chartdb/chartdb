@@ -33,6 +33,7 @@ export const en = {
                 help: 'Help',
                 visit_website: 'Visit ChartDB',
                 join_discord: 'Join us on Discord',
+                schedule_a_call: 'Talk with us!',
             },
         },
 
