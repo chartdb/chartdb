@@ -4,6 +4,7 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from '@/components/context-menu/context-menu';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useReactFlow } from '@xyflow/react';
 import React, { useCallback } from 'react';
@@ -15,6 +16,8 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const { createTable } = useChartDB();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
+
+    const { isMd: isDesktop } = useBreakpoint('md');
 
     const createTableHandler = useCallback(
         (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -30,6 +33,11 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         },
         [createTable, screenToFlowPosition]
     );
+
+    if (!isDesktop) {
+        return <>{children}</>;
+    }
+
     return (
         <ContextMenu>
             <ContextMenuTrigger>{children}</ContextMenuTrigger>

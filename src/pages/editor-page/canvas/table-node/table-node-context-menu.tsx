@@ -4,6 +4,7 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from '@/components/context-menu/context-menu';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { DBTable } from '@/lib/domain/db-table';
@@ -20,6 +21,7 @@ export const TableNodeContextMenu: React.FC<
     const { removeTable } = useChartDB();
     const { openTableFromSidebar } = useLayout();
     const { t } = useTranslation();
+    const { isMd: isDesktop } = useBreakpoint('md');
 
     const editTableHandler = useCallback(() => {
         openTableFromSidebar(table.id);
@@ -28,6 +30,10 @@ export const TableNodeContextMenu: React.FC<
     const removeTableHandler = useCallback(() => {
         removeTable(table.id);
     }, [removeTable, table.id]);
+
+    if (!isDesktop) {
+        return <>{children}</>;
+    }
     return (
         <ContextMenu>
             <ContextMenuTrigger>{children}</ContextMenuTrigger>
