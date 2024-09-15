@@ -42,7 +42,6 @@ export const TableIndex: React.FC<TableIndexProps> = ({
             <SelectBox
                 className="flex h-8 min-h-8 min-w-0 flex-1"
                 multiple
-                onAnimationEnd={(e) => e.stopPropagation()}
                 oneLine
                 options={fieldOptions}
                 placeholder={t(
