@@ -41,6 +41,7 @@ interface SelectBoxProps {
     showClear?: boolean;
     keepOrder?: boolean;
     disabled?: boolean;
+    onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -61,6 +62,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             showClear,
             keepOrder,
             disabled,
+            onAnimationEnd,
         },
         ref
     ) => {
@@ -210,6 +212,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                 <PopoverContent
                     className="w-fit min-w-[var(--radix-popover-trigger-width)] p-0"
                     align="center"
+                    onAnimationEnd={onAnimationEnd}
                 >
                     <Command
                         filter={(value, search) =>
