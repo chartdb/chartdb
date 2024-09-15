@@ -17,10 +17,17 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
-import { MIN_TABLE_SIZE, TableNode, TableNodeType } from './table-node';
+import {
+    MIN_TABLE_SIZE,
+    TableNode,
+    TableNodeType,
+} from './table-node/table-node';
 import { TableEdge, TableEdgeType } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { LEFT_HANDLE_ID_PREFIX, TARGET_ID_PREFIX } from './table-node-field';
+import {
+    LEFT_HANDLE_ID_PREFIX,
+    TARGET_ID_PREFIX,
+} from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
 import { Pencil, LayoutGrid } from 'lucide-react';
@@ -43,6 +50,7 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
 import { MarkerDefinitions } from './marker-definitions';
+import { CanvasContextMenu } from './canvas-context-menu';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -359,111 +367,113 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [t, showAlert, reorderTables]);
 
     return (
-        <div className="relative flex h-full">
-            <ReactFlow
-                colorMode={effectiveTheme}
-                className="canvas-cursor-default nodes-animated"
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChangeHandler}
-                onEdgesChange={onEdgesChangeHandler}
-                maxZoom={5}
-                minZoom={0.1}
-                onConnect={onConnectHandler}
-                proOptions={{
-                    hideAttribution: true,
-                }}
-                fitView={false}
-                nodeTypes={nodeTypes}
-                edgeTypes={edgeTypes}
-                defaultEdgeOptions={{
-                    animated: false,
-                    type: 'table-edge',
-                }}
-                panOnScroll={scrollAction === 'pan'}
-            >
-                <Controls
-                    position="top-left"
-                    showZoom={false}
-                    showFitView={false}
-                    showInteractive={false}
-                    className="!shadow-none"
-                >
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span>
-                                <Button
-                                    variant="secondary"
-                                    className="size-8 p-1 shadow-none"
-                                    onClick={showReorderConfirmation}
-                                >
-                                    <LayoutGrid className="size-4" />
-                                </Button>
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            {t('toolbar.reorder_diagram')}
-                        </TooltipContent>
-                    </Tooltip>
-                </Controls>
-                {isLoadingDOM ? (
-                    <Controls
-                        position="top-center"
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Badge
-                            variant="default"
-                            className="bg-pink-600 text-white"
-                        >
-                            {t('loading_diagram')}
-                        </Badge>
-                    </Controls>
-                ) : null}
-
-                {!isDesktop ? (
-                    <Controls
-                        position="bottom-left"
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Button
-                            className="size-11 bg-pink-600 p-2 hover:bg-pink-500"
-                            onClick={showSidePanel}
-                        >
-                            <Pencil />
-                        </Button>
-                    </Controls>
-                ) : null}
-                <Controls
-                    position={isDesktop ? 'bottom-center' : 'top-center'}
-                    orientation="horizontal"
-                    showZoom={false}
-                    showFitView={false}
-                    showInteractive={false}
-                    className="!shadow-none"
-                >
-                    <Toolbar />
-                </Controls>
-                <MiniMap
-                    style={{
-                        width: isDesktop ? 100 : 60,
-                        height: isDesktop ? 100 : 60,
+        <CanvasContextMenu>
+            <div className="relative flex h-full">
+                <ReactFlow
+                    colorMode={effectiveTheme}
+                    className="canvas-cursor-default nodes-animated"
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChangeHandler}
+                    onEdgesChange={onEdgesChangeHandler}
+                    maxZoom={5}
+                    minZoom={0.1}
+                    onConnect={onConnectHandler}
+                    proOptions={{
+                        hideAttribution: true,
                     }}
-                />
-                <Background
-                    variant={BackgroundVariant.Dots}
-                    gap={16}
-                    size={1}
-                />
-            </ReactFlow>
-            <MarkerDefinitions />
-        </div>
+                    fitView={false}
+                    nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
+                    defaultEdgeOptions={{
+                        animated: false,
+                        type: 'table-edge',
+                    }}
+                    panOnScroll={scrollAction === 'pan'}
+                >
+                    <Controls
+                        position="top-left"
+                        showZoom={false}
+                        showFitView={false}
+                        showInteractive={false}
+                        className="!shadow-none"
+                    >
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span>
+                                    <Button
+                                        variant="secondary"
+                                        className="size-8 p-1 shadow-none"
+                                        onClick={showReorderConfirmation}
+                                    >
+                                        <LayoutGrid className="size-4" />
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {t('toolbar.reorder_diagram')}
+                            </TooltipContent>
+                        </Tooltip>
+                    </Controls>
+                    {isLoadingDOM ? (
+                        <Controls
+                            position="top-center"
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <Badge
+                                variant="default"
+                                className="bg-pink-600 text-white"
+                            >
+                                {t('loading_diagram')}
+                            </Badge>
+                        </Controls>
+                    ) : null}
+
+                    {!isDesktop ? (
+                        <Controls
+                            position="bottom-left"
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <Button
+                                className="size-11 bg-pink-600 p-2 hover:bg-pink-500"
+                                onClick={showSidePanel}
+                            >
+                                <Pencil />
+                            </Button>
+                        </Controls>
+                    ) : null}
+                    <Controls
+                        position={isDesktop ? 'bottom-center' : 'top-center'}
+                        orientation="horizontal"
+                        showZoom={false}
+                        showFitView={false}
+                        showInteractive={false}
+                        className="!shadow-none"
+                    >
+                        <Toolbar />
+                    </Controls>
+                    <MiniMap
+                        style={{
+                            width: isDesktop ? 100 : 60,
+                            height: isDesktop ? 100 : 60,
+                        }}
+                    />
+                    <Background
+                        variant={BackgroundVariant.Dots}
+                        gap={16}
+                        size={1}
+                    />
+                </ReactFlow>
+                <MarkerDefinitions />
+            </div>
+        </CanvasContextMenu>
     );
 };

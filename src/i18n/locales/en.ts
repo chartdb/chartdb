@@ -228,6 +228,15 @@ export const en = {
             many_to_one: 'Many to One',
             many_to_many: 'Many to Many',
         },
+
+        canvas_context_menu: {
+            new_table: 'New Table',
+        },
+
+        table_node_context_menu: {
+            edit_table: 'Edit Table',
+            delete_table: 'Delete Table',
+        },
     },
 };
 

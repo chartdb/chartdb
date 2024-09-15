@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     Edge,
     EdgeProps,
@@ -7,7 +7,7 @@ import {
     useReactFlow,
 } from '@xyflow/react';
 import { DBRelationship } from '@/lib/domain/db-relationship';
-import { RIGHT_HANDLE_ID_PREFIX } from './table-node-field';
+import { RIGHT_HANDLE_ID_PREFIX } from './table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
@@ -39,18 +39,22 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
 
     const relationship = data?.relationship;
 
-    const openRelationshipInEditor = () => {
+    const openRelationshipInEditor = useCallback(() => {
         selectSidebarSection('relationships');
         openRelationshipFromSidebar(id);
-    };
+    }, [id, openRelationshipFromSidebar, selectSidebarSection]);
 
-    const edgeNumber = relationships
-        .filter(
-            (relationship) =>
-                relationship.targetTableId === target &&
-                relationship.sourceTableId === source
-        )
-        .findIndex((relationship) => relationship.id === id);
+    const edgeNumber = useMemo(
+        () =>
+            relationships
+                .filter(
+                    (relationship) =>
+                        relationship.targetTableId === target &&
+                        relationship.sourceTableId === source
+                )
+                .findIndex((relationship) => relationship.id === id),
+        [relationships, id, source, target]
+    );
 
     const sourceNode = getInternalNode(source);
     const targetNode = getInternalNode(target);
@@ -130,16 +134,24 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
         ]
     );
 
-    const sourceMarker = getCardinalityMarkerId({
-        cardinality: relationship?.sourceCardinality ?? 'one',
-        selected: selected ?? false,
-        side: sourceSide as 'left' | 'right',
-    });
-    const targetMarker = getCardinalityMarkerId({
-        cardinality: relationship?.targetCardinality ?? 'one',
-        selected: selected ?? false,
-        side: targetSide as 'left' | 'right',
-    });
+    const sourceMarker = useMemo(
+        () =>
+            getCardinalityMarkerId({
+                cardinality: relationship?.sourceCardinality ?? 'one',
+                selected: selected ?? false,
+                side: sourceSide as 'left' | 'right',
+            }),
+        [relationship?.sourceCardinality, selected, sourceSide]
+    );
+    const targetMarker = useMemo(
+        () =>
+            getCardinalityMarkerId({
+                cardinality: relationship?.targetCardinality ?? 'one',
+                selected: selected ?? false,
+                side: targetSide as 'left' | 'right',
+            }),
+        [relationship?.targetCardinality, selected, targetSide]
+    );
     return (
         <>
             <path

@@ -229,6 +229,15 @@ export const es: LanguageTranslation = {
             many_to_one: 'Muchos a Uno',
             many_to_many: 'Muchos a Muchos',
         },
+
+        canvas_context_menu: {
+            new_table: 'Nueva Tabla',
+        },
+
+        table_node_context_menu: {
+            edit_table: 'Editar Tabla',
+            delete_table: 'Eliminar Tabla',
+        },
     },
 };
 
