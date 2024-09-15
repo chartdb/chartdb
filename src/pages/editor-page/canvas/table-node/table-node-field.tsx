@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
     Handle,
     Position,
@@ -28,16 +28,30 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const { removeField, relationships } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
-        const isTarget =
-            connection.inProgress && connection.fromNode.id !== tableNodeId;
-        const numberOfEdgesToField = relationships.filter(
-            (relationship) =>
-                relationship.targetTableId === tableNodeId &&
-                relationship.targetFieldId === field.id
-        ).length;
+        const isTarget = useMemo(
+            () =>
+                connection.inProgress && connection.fromNode.id !== tableNodeId,
+            [connection, tableNodeId]
+        );
+        const numberOfEdgesToField = useMemo(
+            () =>
+                relationships.filter(
+                    (relationship) =>
+                        relationship.targetTableId === tableNodeId &&
+                        relationship.targetFieldId === field.id
+                ).length,
+            [relationships, tableNodeId, field.id]
+        );
+
+        const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
 
         useEffect(() => {
-            updateNodeInternals(tableNodeId);
+            if (
+                previousNumberOfEdgesToFieldRef.current !== numberOfEdgesToField
+            ) {
+                updateNodeInternals(tableNodeId);
+                previousNumberOfEdgesToFieldRef.current = numberOfEdgesToField;
+            }
         }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 
         return (

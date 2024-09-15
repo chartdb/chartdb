@@ -19,6 +19,10 @@ export interface DialogContext {
     // Alert dialog
     showAlert: (params: BaseAlertDialogProps) => void;
     closeAlert: () => void;
+
+    // Create relationship dialog
+    openCreateRelationshipDialog: () => void;
+    closeCreateRelationshipDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -30,4 +34,6 @@ export const dialogContext = createContext<DialogContext>({
     closeExportSQLDialog: emptyFn,
     closeAlert: emptyFn,
     showAlert: emptyFn,
+    closeCreateRelationshipDialog: emptyFn,
+    openCreateRelationshipDialog: emptyFn,
 });

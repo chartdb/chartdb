@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
 import { Table, ListCollapse } from 'lucide-react';
@@ -37,7 +37,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         return tables.filter(filterSchema).filter(filterTableName);
     }, [tables, filterText, filteredSchemas]);
 
-    const handleCreateTable = async () => {
+    const handleCreateTable = useCallback(async () => {
         setFilterText('');
         const padding = 80;
         const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
@@ -48,7 +48,14 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             y: centerY,
         });
         openTableFromSidebar(table.id);
-    };
+    }, [
+        createTable,
+        openTableFromSidebar,
+        setFilterText,
+        viewport.x,
+        viewport.y,
+        viewport.zoom,
+    ]);
 
     return (
         <section

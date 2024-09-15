@@ -30,15 +30,15 @@ const routes: RouteObject[] = [
                                     <ChartDBProvider>
                                         <HistoryProvider>
                                             <ThemeProvider>
-                                                <DialogProvider>
-                                                    <ReactFlowProvider>
+                                                <ReactFlowProvider>
+                                                    <DialogProvider>
                                                         <ExportImageProvider>
                                                             <KeyboardShortcutsProvider>
                                                                 <EditorPage />
                                                             </KeyboardShortcutsProvider>
                                                         </ExportImageProvider>
-                                                    </ReactFlowProvider>
-                                                </DialogProvider>
+                                                    </DialogProvider>
+                                                </ReactFlowProvider>
                                             </ThemeProvider>
                                         </HistoryProvider>
                                     </ChartDBProvider>

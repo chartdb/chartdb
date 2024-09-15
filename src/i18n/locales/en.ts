@@ -134,6 +134,7 @@ export const en = {
             relationships_section: {
                 relationships: 'Relationships',
                 filter: 'Filter',
+                add_relationship: 'Add Relationship',
                 collapse: 'Collapse All',
                 relationship: {
                     primary: 'Primary Table',
@@ -222,6 +223,22 @@ export const en = {
             },
         },
 
+        create_relationship_dialog: {
+            title: 'Create Relationship',
+            primary_table: 'Primary Table',
+            primary_field: 'Primary Field',
+            referenced_table: 'Referenced Table',
+            referenced_field: 'Referenced Field',
+            primary_table_placeholder: 'Select table',
+            primary_field_placeholder: 'Select field',
+            referenced_table_placeholder: 'Select table',
+            referenced_field_placeholder: 'Select field',
+            no_tables_found: 'No tables found',
+            no_fields_found: 'No fields found',
+            create: 'Create',
+            cancel: 'Cancel',
+        },
+
         relationship_type: {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',
@@ -231,6 +248,7 @@ export const en = {
 
         canvas_context_menu: {
             new_table: 'New Table',
+            new_relationship: 'New Relationship',
         },
 
         table_node_context_menu: {

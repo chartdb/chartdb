@@ -40,6 +40,7 @@ interface SelectBoxProps {
     clearText?: string;
     showClear?: boolean;
     keepOrder?: boolean;
+    disabled?: boolean;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -59,6 +60,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             clearText,
             showClear,
             keepOrder,
+            disabled,
         },
         ref
     ) => {
@@ -138,11 +140,11 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         return (
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <Popover open={isOpen} onOpenChange={setIsOpen} modal={true}>
                 <PopoverTrigger asChild>
                     <div
                         className={cn(
-                            'flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring',
+                            `flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring ${disabled ? 'bg-muted pointer-events-none' : ''}`,
                             className
                         )}
                     >
@@ -268,7 +270,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         <ScrollArea>
                             <div className="max-h-64 w-full">
                                 <CommandGroup>
-                                    <CommandList className="max-h-64 w-full">
+                                    <CommandList className="max-h-fit w-full">
                                         {options.map((option) => {
                                             const isSelected =
                                                 Array.isArray(value) &&
