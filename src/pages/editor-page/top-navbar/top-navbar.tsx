@@ -133,6 +133,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
 
+    const openCalendly = useCallback(() => {
+        window.open('https://calendly.com/fishner/15min', '_blank');
+    }, []);
+
     const exportSQL = useCallback(
         (databaseType: DatabaseType) => {
             if (databaseType === DatabaseType.GENERIC) {
@@ -622,6 +626,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 </MenubarItem>
                                 <MenubarItem onClick={openJoinDiscord}>
                                     {t('menu.help.join_discord')}
+                                </MenubarItem>
+                                <MenubarItem onClick={openCalendly}>
+                                    {t('menu.help.schedule_a_call')}
                                 </MenubarItem>
                             </MenubarContent>
                         </MenubarMenu>
