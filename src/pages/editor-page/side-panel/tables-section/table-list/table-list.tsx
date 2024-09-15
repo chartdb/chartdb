@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Accordion } from '@/components/accordion/accordion';
 import { TableListItem } from './table-list-item/table-list-item';
 import { DBTable } from '@/lib/domain/db-table';
@@ -10,12 +10,17 @@ export interface TableListProps {
 
 export const TableList: React.FC<TableListProps> = ({ tables }) => {
     const { openTableFromSidebar, openedTableInSidebar } = useLayout();
-    const refs = tables.reduce(
-        (acc, table) => {
-            acc[table.id] = React.createRef();
-            return acc;
-        },
-        {} as Record<string, React.RefObject<HTMLDivElement>>
+    const lastOpenedTable = React.useRef<string | null>(null);
+    const refs = useMemo(
+        () =>
+            tables.reduce(
+                (acc, table) => {
+                    acc[table.id] = React.createRef();
+                    return acc;
+                },
+                {} as Record<string, React.RefObject<HTMLDivElement>>
+            ),
+        [tables]
     );
 
     const scrollToTable = useCallback(
@@ -28,7 +33,11 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
     );
 
     const handleScrollToTable = useCallback(() => {
-        if (openedTableInSidebar) {
+        if (
+            openedTableInSidebar &&
+            lastOpenedTable.current !== openedTableInSidebar
+        ) {
+            lastOpenedTable.current = openedTableInSidebar;
             scrollToTable(openedTableInSidebar);
         }
     }, [scrollToTable, openedTableInSidebar]);
