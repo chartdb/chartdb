@@ -27,7 +27,7 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
         (id: string) =>
             refs[id]?.current?.scrollIntoView({
                 behavior: 'smooth',
-                block: 'center',
+                block: 'start',
             }),
         [refs]
     );
