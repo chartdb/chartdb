@@ -20,7 +20,12 @@ import {
     RelationshipType,
 } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
-import { FileMinus2, FileOutput, Trash2 } from 'lucide-react';
+import {
+    FileMinus2,
+    FileOutput,
+    Trash2,
+    ChevronsLeftRightEllipsis,
+} from 'lucide-react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -79,9 +84,9 @@ export const RelationshipListItemContent: React.FC<
         <div className="my-1 flex flex-col rounded-b-md px-1">
             <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between gap-1 text-xs">
-                    <div className="flex flex-col gap-2 overflow-hidden text-xs">
+                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
                         <div className="flex flex-row items-center gap-1">
-                            <FileMinus2 className="size-4 text-subtitle" />
+                            <FileOutput className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
                                     'side_panel.relationships_section.relationship.primary'
@@ -90,7 +95,7 @@ export const RelationshipListItemContent: React.FC<
                         </div>
                         <Tooltip>
                             <TooltipTrigger>
-                                <div className="truncate  text-sm ">
+                                <div className="truncate text-left text-sm">
                                     {sourceTable?.name}({sourceField?.name})
                                 </div>
                             </TooltipTrigger>
@@ -99,9 +104,9 @@ export const RelationshipListItemContent: React.FC<
                             </TooltipContent>
                         </Tooltip>
                     </div>
-                    <div className="flex flex-col gap-2 overflow-hidden text-xs">
+                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
                         <div className="flex flex-row items-center gap-1">
-                            <FileOutput className="size-4 text-subtitle" />
+                            <FileMinus2 className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
                                     'side_panel.relationships_section.relationship.foreign'
@@ -110,7 +115,7 @@ export const RelationshipListItemContent: React.FC<
                         </div>
                         <Tooltip>
                             <TooltipTrigger>
-                                <div className="truncate  text-sm ">
+                                <div className="truncate text-left text-sm	">
                                     {targetTable?.name}({targetField?.name})
                                 </div>
                             </TooltipTrigger>
@@ -122,7 +127,7 @@ export const RelationshipListItemContent: React.FC<
                 </div>
                 <div className="flex flex-col gap-2 text-xs">
                     <div className="flex flex-row items-center gap-1">
-                        <FileOutput className="size-4 text-subtitle" />
+                        <ChevronsLeftRightEllipsis className="size-4 text-subtitle" />
                         <div className="font-bold text-subtitle">
                             {t(
                                 'side_panel.relationships_section.relationship.cardinality'

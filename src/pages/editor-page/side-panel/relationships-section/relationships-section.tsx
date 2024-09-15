@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
 import { ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
@@ -12,11 +12,13 @@ import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
+import { Workflow } from 'lucide-react';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface RelationshipsSectionProps {}
 
@@ -25,6 +27,7 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRelationshipsInSidebar } = useLayout();
     const { t } = useTranslation();
+    const { openCreateRelationshipDialog } = useDialog();
 
     const filteredRelationships = useMemo(() => {
         const filterName: (relationship: DBRelationship) => boolean = (
@@ -40,6 +43,11 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
 
         return relationships.filter(filterSchema).filter(filterName);
     }, [relationships, filterText, filteredSchemas]);
+
+    const handleCreateRelationship = useCallback(async () => {
+        setFilterText('');
+        openCreateRelationshipDialog();
+    }, [openCreateRelationshipDialog, setFilterText]);
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">
@@ -73,6 +81,14 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
+                <Button
+                    variant="secondary"
+                    className="h-8 p-2 text-xs"
+                    onClick={handleCreateRelationship}
+                >
+                    <Workflow className="h-4" />
+                    {t('side_panel.relationships_section.add_relationship')}
+                </Button>
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">

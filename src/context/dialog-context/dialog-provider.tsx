@@ -8,6 +8,7 @@ import {
     BaseAlertDialog,
     BaseAlertDialogProps,
 } from '@/dialogs/base-alert-dialog/base-alert-dialog';
+import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -18,6 +19,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [openExportSQLDialogParams, setOpenExportSQLDialogParams] = useState<{
         targetDatabaseType: DatabaseType;
     }>({ targetDatabaseType: DatabaseType.GENERIC });
+    const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
+        useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
         title: '',
@@ -55,6 +58,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 showAlert: showAlertHandler,
                 closeAlert: closeAlertHandler,
+                openCreateRelationshipDialog: () =>
+                    setOpenCreateRelationshipDialog(true),
+                closeCreateRelationshipDialog: () =>
+                    setOpenCreateRelationshipDialog(false),
             }}
         >
             {children}
@@ -65,6 +72,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 {...openExportSQLDialogParams}
             />
             <BaseAlertDialog dialog={{ open: showAlert }} {...alertParams} />
+            <CreateRelationshipDialog
+                dialog={{ open: openCreateRelationshipDialog }}
+            />
         </dialogContext.Provider>
     );
 };
