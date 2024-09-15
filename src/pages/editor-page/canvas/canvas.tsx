@@ -232,20 +232,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 return;
             }
 
-            const relationship = await createRelationship({
+            createRelationship({
                 sourceTableId,
                 targetTableId,
                 sourceFieldId,
                 targetFieldId,
             });
-            return setEdges((edges) =>
-                addEdge<TableEdgeType>(
-                    { ...params, data: { relationship }, id: relationship.id },
-                    edges
-                )
-            );
+            // return setEdges((edges) =>
+            //     addEdge<TableEdgeType>(
+            //         { ...params, data: { relationship }, id: relationship.id },
+            //         edges
+            //     )
+            // );
         },
-        [setEdges, createRelationship, getField, toast]
+        [createRelationship, getField, toast]
     );
 
     const onEdgesChangeHandler: OnEdgesChange<TableEdgeType> = useCallback(

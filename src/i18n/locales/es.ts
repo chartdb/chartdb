@@ -134,6 +134,7 @@ export const es: LanguageTranslation = {
             },
             relationships_section: {
                 relationships: 'Relaciones',
+                add_relationship: 'Agregar Relación',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todo',
                 relationship: {
@@ -224,6 +225,22 @@ export const es: LanguageTranslation = {
             },
         },
 
+        create_relationship_dialog: {
+            cancel: 'Cancelar',
+            create: 'Crear',
+            no_fields_found: 'No se encontraron campos',
+            no_tables_found: 'No se encontraron tablas',
+            primary_field: 'Campo Primario',
+            primary_table: 'Tabla Primaria',
+            primary_table_placeholder: 'Seleccionar tabla',
+            primary_field_placeholder: 'Seleccionar campo',
+            referenced_field: 'Campo Referenciado',
+            referenced_field_placeholder: 'Seleccionar campo',
+            referenced_table: 'Tabla Referenciada',
+            referenced_table_placeholder: 'Seleccionar tabla',
+            title: 'Crear Relación',
+        },
+
         relationship_type: {
             one_to_one: 'Uno a Uno',
             one_to_many: 'Uno a Muchos',
@@ -233,6 +250,7 @@ export const es: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Nueva Tabla',
+            new_relationship: 'Nueva Relación',
         },
 
         table_node_context_menu: {
