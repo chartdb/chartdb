@@ -79,33 +79,33 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         type="source"
                     />
                 </>
-                {/*)}
-                {(!connection.inProgress || isTarget) && ( */}
-                <>
-                    {Array.from(
-                        { length: numberOfEdgesToField },
-                        (_, index) => index
-                    ).map((index) => (
+                {/* )} */}
+                {(!connection.inProgress || isTarget) && (
+                    <>
+                        {Array.from(
+                            { length: numberOfEdgesToField },
+                            (_, index) => index
+                        ).map((index) => (
+                            <Handle
+                                id={`${TARGET_ID_PREFIX}${index}_${field.id}`}
+                                key={`${TARGET_ID_PREFIX}${index}_${field.id}`}
+                                className={`!invisible`}
+                                position={Position.Left}
+                                type="target"
+                            />
+                        ))}
                         <Handle
-                            id={`${TARGET_ID_PREFIX}${index}_${field.id}`}
-                            key={`${TARGET_ID_PREFIX}${index}_${field.id}`}
-                            className={`!invisible`}
+                            id={`${TARGET_ID_PREFIX}${numberOfEdgesToField}_${field.id}`}
+                            className={
+                                isTarget
+                                    ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
+                                    : `!invisible`
+                            }
                             position={Position.Left}
                             type="target"
                         />
-                    ))}
-                    <Handle
-                        id={`${TARGET_ID_PREFIX}${numberOfEdgesToField}_${field.id}`}
-                        className={
-                            isTarget
-                                ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
-                                : `!invisible`
-                        }
-                        position={Position.Left}
-                        type="target"
-                    />
-                </>
-                {/* )} */}
+                    </>
+                )}
                 <div className="block truncate text-left">{field.name}</div>
                 <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
                     {field.primaryKey ? (
