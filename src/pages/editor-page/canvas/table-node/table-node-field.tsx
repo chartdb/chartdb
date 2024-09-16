@@ -21,11 +21,11 @@ export interface TableNodeFieldProps {
     focused: boolean;
     highlighted: boolean;
     visible: boolean;
-    isView: boolean;
+    isConnectable: boolean;
 }
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
-    ({ field, focused, tableNodeId, highlighted, visible, isView }) => {
+    ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
         const { removeField, relationships } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
@@ -65,23 +65,23 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         : 'z-0 max-h-0 overflow-hidden opacity-0'
                 }`}
             >
-                {/* {!connection.inProgress && ( */}
-                <>
-                    <Handle
-                        id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
-                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
-                        position={Position.Right}
-                        type="source"
-                    />
-                    <Handle
-                        id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
-                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
-                        position={Position.Left}
-                        type="source"
-                    />
-                </>
-                {/* )} */}
-                {(!connection.inProgress || isTarget) && (
+                {isConnectable && (
+                    <>
+                        <Handle
+                            id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
+                            position={Position.Right}
+                            type="source"
+                        />
+                        <Handle
+                            id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
+                            position={Position.Left}
+                            type="source"
+                        />
+                    </>
+                )}
+                {(!connection.inProgress || isTarget) && isConnectable && (
                     <>
                         {Array.from(
                             { length: numberOfEdgesToField },
