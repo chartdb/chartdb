@@ -193,6 +193,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                                         field.id
                             )}
                             visible={visibleFields.includes(field)}
+                            isConnectable={!table.isView}
                         />
                     ))}
                 </div>
