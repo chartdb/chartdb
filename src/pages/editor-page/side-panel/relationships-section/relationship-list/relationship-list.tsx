@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Accordion } from '@/components/accordion/accordion';
 import { RelationshipListItem } from './relationship-list-item/relationship-list-item';
 import { DBRelationship } from '@/lib/domain/db-relationship';
@@ -13,6 +13,7 @@ export const RelationshipList: React.FC<TableListProps> = ({
 }) => {
     const { openRelationshipFromSidebar, openedRelationshipInSidebar } =
         useLayout();
+    const lastOpenedRelationship = React.useRef<string | null>(null);
 
     const refs = relationships.reduce(
         (acc, relationship) => {
@@ -26,16 +27,21 @@ export const RelationshipList: React.FC<TableListProps> = ({
         (id: string) =>
             refs[id]?.current?.scrollIntoView({
                 behavior: 'smooth',
-                block: 'center',
+                block: 'start',
             }),
         [refs]
     );
 
-    useEffect(() => {
-        if (openedRelationshipInSidebar) {
+    const handleScrollToRelationship = useCallback(() => {
+        if (
+            openedRelationshipInSidebar &&
+            lastOpenedRelationship.current !== openedRelationshipInSidebar
+        ) {
+            lastOpenedRelationship.current = openedRelationshipInSidebar;
             scrollToRelationship(openedRelationshipInSidebar);
         }
-    }, [openedRelationshipInSidebar, scrollToRelationship]);
+    }, [scrollToRelationship, openedRelationshipInSidebar]);
+
     return (
         <Accordion
             type="single"
@@ -43,6 +49,7 @@ export const RelationshipList: React.FC<TableListProps> = ({
             className="flex w-full flex-col gap-1"
             value={openedRelationshipInSidebar}
             onValueChange={openRelationshipFromSidebar}
+            onAnimationEnd={handleScrollToRelationship}
         >
             {relationships.map((relationship) => (
                 <RelationshipListItem
