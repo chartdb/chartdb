@@ -30,7 +30,7 @@ export const loadFromDatabaseMetadata = ({
 }: {
     databaseType: DatabaseType;
     databaseMetadata: DatabaseMetadata;
-    diagramNumber: number;
+    diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
 }): Diagram => {
     const {
@@ -71,9 +71,11 @@ export const loadFromDatabaseMetadata = ({
 
     return {
         id: generateDiagramId(),
-        name:
-            `${databaseMetadata.database_name}-db` ||
-            `Diagram ${diagramNumber}`,
+        name: databaseMetadata.database_name
+            ? `${databaseMetadata.database_name}-db`
+            : diagramNumber
+              ? `Diagram ${diagramNumber}`
+              : 'New Diagram',
         databaseType: databaseType ?? DatabaseType.GENERIC,
         databaseEdition,
         tables: sortedTables,

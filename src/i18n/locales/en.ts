@@ -8,6 +8,7 @@ export const en = {
                 new: 'New',
                 open: 'Open',
                 save: 'Save',
+                import_database: 'Import Database',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
                 delete_diagram: 'Delete Diagram',
@@ -238,6 +239,25 @@ export const en = {
             no_fields_found: 'No fields found',
             create: 'Create',
             cancel: 'Cancel',
+        },
+
+        import_database_dialog: {
+            title: 'Import to Current Diagram',
+            override_alert: {
+                title: 'Import Database',
+                content: {
+                    alert: 'Importing this diagram will affect existing tables and relationships.',
+                    new_tables:
+                        '<bold>{{newTablesNumber}}</bold> new tables will be added.',
+                    new_relationships:
+                        '<bold>{{newRelationshipsNumber}}</bold> new relationships will be created.',
+                    tables_override:
+                        '<bold>{{tablesOverrideNumber}}</bold> tables will be overwritten.',
+                    proceed: 'Do you want to proceed?',
+                },
+                import: 'Import',
+                cancel: 'Cancel',
+            },
         },
 
         relationship_type: {

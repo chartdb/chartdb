@@ -62,6 +62,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
         openExportSQLDialog,
+        openImportDatabaseDialog,
         showAlert,
     } = useDialog();
     const { setTheme, theme } = useTheme();
@@ -351,6 +352,72 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         }
                                     </MenubarShortcut>
                                 </MenubarItem>
+                                <MenubarSeparator />
+                                <MenubarSub>
+                                    <MenubarSubTrigger>
+                                        {t('menu.file.import_database')}
+                                    </MenubarSubTrigger>
+                                    <MenubarSubContent>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.POSTGRESQL,
+                                                })
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'postgresql'
+                                                ]
+                                            }
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.MYSQL,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mysql']}
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.SQL_SERVER,
+                                                })
+                                            }
+                                        >
+                                            {
+                                                databaseTypeToLabelMap[
+                                                    'sql_server'
+                                                ]
+                                            }
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.MARIADB,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['mariadb']}
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.SQLITE,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['sqlite']}
+                                        </MenubarItem>
+                                    </MenubarSubContent>
+                                </MenubarSub>
                                 <MenubarSeparator />
                                 <MenubarSub>
                                     <MenubarSubTrigger>

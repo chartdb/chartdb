@@ -8,19 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import {
     DatabaseMetadata,
-    isDatabaseMetadata,
     loadDatabaseMetadata,
 } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { generateDiagramId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { DatabaseEdition } from '@/lib/domain/database-edition';
-import { SelectDatabaseStep } from './select-database-step/select-database-step';
+import { SelectDatabase } from './select-database/select-database';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
-import { ImportDatabaseStep } from './import-database-step/import-database-step';
-
-const errorScriptOutputMessage =
-    'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
+import { ImportDatabase } from '../common/import-database/import-database';
+import { useTranslation } from 'react-i18next';
 
 export interface CreateDiagramDialogProps {
     dialog: DialogProps;
@@ -30,13 +27,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
 }) => {
     const { diagramId } = useChartDB();
+    const { t } = useTranslation();
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
     const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [databaseEdition, setDatabaseEdition] = useState<
         DatabaseEdition | undefined
     >();
@@ -60,57 +57,23 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
         setScriptResult('');
-        setErrorMessage('');
     }, [dialog.open]);
-
-    useEffect(() => {
-        if (scriptResult.trim().length === 0) {
-            setErrorMessage('');
-            return;
-        }
-
-        try {
-            const parsedResult = JSON.parse(scriptResult);
-
-            if (isDatabaseMetadata(parsedResult)) {
-                setErrorMessage('');
-            } else {
-                setErrorMessage(errorScriptOutputMessage);
-            }
-        } catch (error) {
-            setErrorMessage(errorScriptOutputMessage);
-        }
-    }, [scriptResult]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
-    const createNewDiagram = useCallback(async () => {
-        let diagram: Diagram = {
-            id: generateDiagramId(),
-            name: `Diagram ${diagramNumber}`,
-            databaseType: databaseType ?? DatabaseType.GENERIC,
+    const importNewDiagram = useCallback(async () => {
+        const databaseMetadata: DatabaseMetadata =
+            loadDatabaseMetadata(scriptResult);
+
+        const diagram = loadFromDatabaseMetadata({
+            databaseType,
+            databaseMetadata,
+            diagramNumber,
             databaseEdition:
                 databaseEdition?.trim().length === 0
                     ? undefined
                     : databaseEdition,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
-            const databaseMetadata: DatabaseMetadata =
-                loadDatabaseMetadata(scriptResult);
-
-            diagram = loadFromDatabaseMetadata({
-                databaseType,
-                databaseMetadata,
-                diagramNumber,
-                databaseEdition:
-                    databaseEdition?.trim().length === 0
-                        ? undefined
-                        : databaseEdition,
-            });
-        }
+        });
 
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
@@ -125,7 +88,33 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         updateConfig,
         scriptResult,
         diagramNumber,
-        errorMessage,
+    ]);
+
+    const createEmptyDiagram = useCallback(async () => {
+        const diagram: Diagram = {
+            id: generateDiagramId(),
+            name: `Diagram ${diagramNumber}`,
+            databaseType: databaseType ?? DatabaseType.GENERIC,
+            databaseEdition:
+                databaseEdition?.trim().length === 0
+                    ? undefined
+                    : databaseEdition,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        await addDiagram({ diagram });
+        await updateConfig({ defaultDiagramId: diagram.id });
+        closeCreateDiagramDialog();
+        navigate(`/diagrams/${diagram.id}`);
+    }, [
+        databaseType,
+        addDiagram,
+        databaseEdition,
+        closeCreateDiagramDialog,
+        navigate,
+        updateConfig,
+        diagramNumber,
     ]);
 
     return (
@@ -146,23 +135,28 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 showClose={hasExistingDiagram}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
-                    <SelectDatabaseStep
-                        createNewDiagram={createNewDiagram}
+                    <SelectDatabase
+                        createNewDiagram={createEmptyDiagram}
                         databaseType={databaseType}
                         hasExistingDiagram={hasExistingDiagram}
                         setDatabaseType={setDatabaseType}
-                        setStep={setStep}
+                        onContinue={() =>
+                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
+                        }
                     />
                 ) : (
-                    <ImportDatabaseStep
-                        createNewDiagram={createNewDiagram}
+                    <ImportDatabase
+                        onImport={importNewDiagram}
+                        onCreateEmptyDiagram={createEmptyDiagram}
                         databaseEdition={databaseEdition}
                         databaseType={databaseType}
-                        errorMessage={errorMessage}
                         scriptResult={scriptResult}
                         setDatabaseEdition={setDatabaseEdition}
-                        setStep={setStep}
+                        goBack={() =>
+                            setStep(CreateDiagramDialogStep.SELECT_DATABASE)
+                        }
                         setScriptResult={setScriptResult}
+                        title={t('new_diagram_dialog.import_database.title')}
                     />
                 )}
             </DialogContent>

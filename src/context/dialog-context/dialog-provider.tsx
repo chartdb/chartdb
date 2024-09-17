@@ -9,6 +9,7 @@ import {
     BaseAlertDialogProps,
 } from '@/dialogs/base-alert-dialog/base-alert-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
+import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-database-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -21,6 +22,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     }>({ targetDatabaseType: DatabaseType.GENERIC });
     const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
         useState(false);
+    const [openImportDatabaseDialog, setOpenImportDatabaseDialog] =
+        useState(false);
+    const [openImportDatabaseDialogParams, setOpenImportDatabaseDialogParams] =
+        useState<{ databaseType: DatabaseType }>({
+            databaseType: DatabaseType.GENERIC,
+        });
     const [showAlert, setShowAlert] = useState(false);
     const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
         title: '',
@@ -33,6 +40,15 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 setOpenExportSQLDialogParams({ targetDatabaseType });
             },
             [setOpenExportSQLDialog]
+        );
+
+    const openImportDatabaseDialogHandler: DialogContext['openImportDatabaseDialog'] =
+        useCallback(
+            ({ databaseType }) => {
+                setOpenImportDatabaseDialog(true);
+                setOpenImportDatabaseDialogParams({ databaseType });
+            },
+            [setOpenImportDatabaseDialog]
         );
 
     const showAlertHandler: DialogContext['showAlert'] = useCallback(
@@ -62,6 +78,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenCreateRelationshipDialog(true),
                 closeCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(false),
+                openImportDatabaseDialog: openImportDatabaseDialogHandler,
+                closeImportDatabaseDialog: () =>
+                    setOpenImportDatabaseDialog(false),
             }}
         >
             {children}
@@ -74,6 +93,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <BaseAlertDialog dialog={{ open: showAlert }} {...alertParams} />
             <CreateRelationshipDialog
                 dialog={{ open: openCreateRelationshipDialog }}
+            />
+            <ImportDatabaseDialog
+                dialog={{ open: openImportDatabaseDialog }}
+                {...openImportDatabaseDialogParams}
             />
         </dialogContext.Provider>
     );

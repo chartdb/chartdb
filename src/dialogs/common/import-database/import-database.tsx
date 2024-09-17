@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -23,7 +24,6 @@ import {
     AvatarFallback,
     AvatarImage,
 } from '@/components/avatar/avatar';
-import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
@@ -32,10 +32,15 @@ import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';
+import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 
-export interface ImportDatabaseStepProps {
-    setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
-    createNewDiagram: () => void;
+const errorScriptOutputMessage =
+    'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
+
+export interface ImportDatabaseProps {
+    goBack?: () => void;
+    onImport: () => void;
+    onCreateEmptyDiagram?: () => void;
     scriptResult: string;
     setScriptResult: React.Dispatch<React.SetStateAction<string>>;
     databaseType: DatabaseType;
@@ -43,24 +48,54 @@ export interface ImportDatabaseStepProps {
     setDatabaseEdition: React.Dispatch<
         React.SetStateAction<DatabaseEdition | undefined>
     >;
-    errorMessage: string;
+    keepDialogAfterImport?: boolean;
+    title: string;
 }
 
-export const ImportDatabaseStep: React.FC<ImportDatabaseStepProps> = ({
+export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     setScriptResult,
-    setStep,
+    goBack,
     scriptResult,
-    createNewDiagram,
+    onImport,
+    onCreateEmptyDiagram,
     databaseType,
     databaseEdition,
     setDatabaseEdition,
-    errorMessage,
+    keepDialogAfterImport,
+    title,
 }) => {
     const databaseClients = databaseTypeToClientsMap[databaseType];
+    const [errorMessage, setErrorMessage] = useState('');
     const [databaseClient, setDatabaseClient] = useState<
         DatabaseClient | undefined
     >();
     const { t } = useTranslation();
+
+    useEffect(() => {
+        if (scriptResult.trim().length === 0) {
+            setErrorMessage('');
+            return;
+        }
+
+        try {
+            const parsedResult = JSON.parse(scriptResult);
+
+            if (isDatabaseMetadata(parsedResult)) {
+                setErrorMessage('');
+            } else {
+                setErrorMessage(errorScriptOutputMessage);
+            }
+        } catch (error) {
+            setErrorMessage(errorScriptOutputMessage);
+        }
+    }, [scriptResult]);
+
+    const handleImport = useCallback(() => {
+        if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
+            onImport();
+        }
+    }, [errorMessage.length, onImport, scriptResult]);
+
     const handleInputChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             const inputValue = e.target.value;
@@ -72,12 +107,11 @@ export const ImportDatabaseStep: React.FC<ImportDatabaseStepProps> = ({
     const renderHeader = useCallback(() => {
         return (
             <DialogHeader>
-                <DialogTitle>
-                    {t('new_diagram_dialog.import_database.title')}
-                </DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogDescription className="hidden" />
             </DialogHeader>
         );
-    }, [t]);
+    }, [title]);
 
     const renderContent = useCallback(() => {
         return (
@@ -253,27 +287,30 @@ export const ImportDatabaseStep: React.FC<ImportDatabaseStepProps> = ({
         return (
             <DialogFooter className="mt-4 flex !justify-between gap-2">
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() =>
-                            setStep(CreateDiagramDialogStep.SELECT_DATABASE)
-                        }
-                    >
-                        {t('new_diagram_dialog.back')}
-                    </Button>
-                </div>
-                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
-                    <DialogClose asChild>
+                    {goBack && (
                         <Button
                             type="button"
-                            variant="outline"
-                            onClick={createNewDiagram}
+                            variant="secondary"
+                            onClick={goBack}
                         >
-                            {t('new_diagram_dialog.empty_diagram')}
+                            {t('new_diagram_dialog.back')}
                         </Button>
-                    </DialogClose>
-                    <DialogClose asChild>
+                    )}
+                </div>
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
+                    {onCreateEmptyDiagram && (
+                        <DialogClose asChild>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={onCreateEmptyDiagram}
+                            >
+                                {t('new_diagram_dialog.empty_diagram')}
+                            </Button>
+                        </DialogClose>
+                    )}
+
+                    {keepDialogAfterImport ? (
                         <Button
                             type="button"
                             variant="default"
@@ -281,15 +318,37 @@ export const ImportDatabaseStep: React.FC<ImportDatabaseStepProps> = ({
                                 scriptResult.trim().length === 0 ||
                                 errorMessage.length > 0
                             }
-                            onClick={createNewDiagram}
+                            onClick={handleImport}
                         >
                             {t('new_diagram_dialog.import')}
                         </Button>
-                    </DialogClose>
+                    ) : (
+                        <DialogClose asChild>
+                            <Button
+                                type="button"
+                                variant="default"
+                                disabled={
+                                    scriptResult.trim().length === 0 ||
+                                    errorMessage.length > 0
+                                }
+                                onClick={handleImport}
+                            >
+                                {t('new_diagram_dialog.import')}
+                            </Button>
+                        </DialogClose>
+                    )}
                 </div>
             </DialogFooter>
         );
-    }, [createNewDiagram, errorMessage.length, scriptResult, setStep, t]);
+    }, [
+        handleImport,
+        keepDialogAfterImport,
+        onCreateEmptyDiagram,
+        errorMessage.length,
+        scriptResult,
+        goBack,
+        t,
+    ]);
 
     return (
         <>
