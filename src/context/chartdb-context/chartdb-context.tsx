@@ -44,9 +44,17 @@ export interface ChartDBContext {
         table: DBTable,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+    addTables: (
+        tables: DBTable[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
     getTable: (id: string) => DBTable | null;
     removeTable: (
         id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeTables: (
+        ids: string[],
         options?: { updateHistory: boolean }
     ) => Promise<void>;
     updateTable: (
@@ -163,7 +171,9 @@ export const chartDBContext = createContext<ChartDBContext>({
     createTable: emptyFn,
     getTable: emptyFn,
     addTable: emptyFn,
+    addTables: emptyFn,
     removeTable: emptyFn,
+    removeTables: emptyFn,
     updateTable: emptyFn,
     updateTablesState: emptyFn,
 

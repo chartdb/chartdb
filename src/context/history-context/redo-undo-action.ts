@@ -30,10 +30,22 @@ type RedoUndoActionAddTable = RedoUndoActionBase<
     { tableId: string }
 >;
 
+type RedoUndoActionAddTables = RedoUndoActionBase<
+    'addTables',
+    { tables: DBTable[] },
+    { tableIds: string[] }
+>;
+
 type RedoUndoActionRemoveTable = RedoUndoActionBase<
     'removeTable',
     { tableId: string },
     { table: DBTable; relationships: DBRelationship[] }
+>;
+
+type RedoUndoActionRemoveTables = RedoUndoActionBase<
+    'removeTables',
+    { tableIds: string[] },
+    { tables: DBTable[]; relationships: DBRelationship[] }
 >;
 
 type RedoUndoActionUpdateTablesState = RedoUndoActionBase<
@@ -110,7 +122,9 @@ type RedoUndoActionRemoveRelationships = RedoUndoActionBase<
 
 export type RedoUndoAction =
     | RedoUndoActionAddTable
+    | RedoUndoActionAddTables
     | RedoUndoActionRemoveTable
+    | RedoUndoActionRemoveTables
     | RedoUndoActionUpdateTable
     | RedoUndoActionUpdateDiagramName
     | RedoUndoActionUpdateTablesState

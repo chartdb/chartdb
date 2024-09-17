@@ -23,6 +23,10 @@ export interface DialogContext {
     // Create relationship dialog
     openCreateRelationshipDialog: () => void;
     closeCreateRelationshipDialog: () => void;
+
+    // Import database dialog
+    openImportDatabaseDialog: (params: { databaseType: DatabaseType }) => void;
+    closeImportDatabaseDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -36,4 +40,6 @@ export const dialogContext = createContext<DialogContext>({
     showAlert: emptyFn,
     closeCreateRelationshipDialog: emptyFn,
     openCreateRelationshipDialog: emptyFn,
+    openImportDatabaseDialog: emptyFn,
+    closeImportDatabaseDialog: emptyFn,
 });

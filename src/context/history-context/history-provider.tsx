@@ -17,7 +17,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
     } = useRedoUndoStack();
     const {
         addTable,
+        addTables,
         removeTable,
+        removeTables,
         updateTable,
         updateDiagramName,
         removeField,
@@ -42,8 +44,14 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addTable: ({ redoData: { table } }) => {
                 return addTable(table, { updateHistory: false });
             },
+            addTables: ({ redoData: { tables } }) => {
+                return addTables(tables, { updateHistory: false });
+            },
             removeTable: ({ redoData: { tableId } }) => {
                 return removeTable(tableId, { updateHistory: false });
+            },
+            removeTables: ({ redoData: { tableIds } }) => {
+                return removeTables(tableIds, { updateHistory: false });
             },
             updateTable: ({ redoData: { tableId, table } }) => {
                 return updateTable(tableId, table, { updateHistory: false });
@@ -104,7 +112,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         }),
         [
             addTable,
+            addTables,
             removeTable,
+            removeTables,
             updateTable,
             updateDiagramName,
             removeField,
@@ -130,9 +140,18 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addTable: ({ undoData: { tableId } }) => {
                 return removeTable(tableId, { updateHistory: false });
             },
+            addTables: ({ undoData: { tableIds } }) => {
+                return removeTables(tableIds, { updateHistory: false });
+            },
             removeTable: async ({ undoData: { table, relationships } }) => {
                 await Promise.all([
                     addTable(table, { updateHistory: false }),
+                    addRelationships(relationships, { updateHistory: false }),
+                ]);
+            },
+            removeTables: async ({ undoData: { tables, relationships } }) => {
+                await Promise.all([
+                    addTables(tables, { updateHistory: false }),
                     addRelationships(relationships, { updateHistory: false }),
                 ]);
             },
@@ -200,7 +219,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         }),
         [
             addTable,
+            addTables,
             removeTable,
+            removeTables,
             updateTable,
             updateDiagramName,
             removeField,

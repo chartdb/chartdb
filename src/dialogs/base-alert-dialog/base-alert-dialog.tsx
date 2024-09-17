@@ -19,6 +19,7 @@ export interface BaseAlertDialogProps {
     closeLabel?: string;
     onAction?: () => void;
     dialog?: AlertDialogProps;
+    onClose?: () => void;
     content?: React.ReactNode;
 }
 
@@ -30,8 +31,15 @@ export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
     onAction,
     dialog,
     content,
+    onClose,
 }) => {
     const { closeAlert } = useDialog();
+
+    const closeAlertHandler = useCallback(() => {
+        onClose?.();
+        closeAlert();
+    }, [onClose, closeAlert]);
+
     const alertHandler = useCallback(() => {
         onAction?.();
         closeAlert();
@@ -57,7 +65,7 @@ export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     {closeLabel && (
-                        <AlertDialogCancel onClick={closeAlert}>
+                        <AlertDialogCancel onClick={closeAlertHandler}>
                             {closeLabel}
                         </AlertDialogCancel>
                     )}

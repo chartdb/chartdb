@@ -13,20 +13,19 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap, getDatabaseLogo } from '@/lib/databases';
 import { Link } from '@/components/link/link';
 import { LayoutGrid } from 'lucide-react';
-import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/use-theme';
 
-export interface SelectDatabaseStepProps {
-    setStep: React.Dispatch<React.SetStateAction<CreateDiagramDialogStep>>;
+export interface SelectDatabaseProps {
+    onContinue: () => void;
     databaseType: DatabaseType;
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
     hasExistingDiagram: boolean;
     createNewDiagram: () => void;
 }
 
-export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
-    setStep,
+export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
+    onContinue,
     databaseType,
     setDatabaseType,
     hasExistingDiagram,
@@ -98,7 +97,7 @@ export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
                             setDatabaseType(DatabaseType.GENERIC);
                         } else {
                             setDatabaseType(value);
-                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE);
+                            onContinue();
                         }
                     }}
                     type="single"
@@ -118,7 +117,7 @@ export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
         renderDatabaseOption,
         renderExamplesOption,
         setDatabaseType,
-        setStep,
+        onContinue,
     ]);
 
     const renderFooter = useCallback(() => {
@@ -145,16 +144,14 @@ export const SelectDatabaseStep: React.FC<SelectDatabaseStepProps> = ({
                         type="button"
                         variant="default"
                         disabled={databaseType === DatabaseType.GENERIC}
-                        onClick={() =>
-                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
-                        }
+                        onClick={onContinue}
                     >
                         {t('new_diagram_dialog.continue')}
                     </Button>
                 </div>
             </DialogFooter>
         );
-    }, [createNewDiagram, databaseType, hasExistingDiagram, setStep, t]);
+    }, [createNewDiagram, databaseType, hasExistingDiagram, onContinue, t]);
 
     return (
         <>

@@ -8,6 +8,7 @@ export const es: LanguageTranslation = {
                 new: 'Nuevo',
                 open: 'Abrir',
                 save: 'Guardar',
+                import_database: 'Importar Base de Datos',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
                 delete_diagram: 'Eliminar Diagrama',
@@ -239,6 +240,25 @@ export const es: LanguageTranslation = {
             referenced_table: 'Tabla Referenciada',
             referenced_table_placeholder: 'Seleccionar tabla',
             title: 'Crear Relación',
+        },
+
+        import_database_dialog: {
+            title: 'Importar a Diagrama Actual',
+            override_alert: {
+                title: 'Importar Base de Datos',
+                content: {
+                    alert: 'Importar este diagrama afectará las tablas y relaciones existentes.',
+                    new_tables:
+                        '<bold>{{newTablesNumber}}</bold> nuevas tablas se agregarán.',
+                    new_relationships:
+                        '<bold>{{newRelationshipsNumber}}</bold> nuevas relaciones se crearán.',
+                    tables_override:
+                        '<bold>{{tablesOverrideNumber}}</bold> tablas se sobrescribirán.',
+                    proceed: '¿Deseas continuar?',
+                },
+                import: 'Importar',
+                cancel: 'Cancelar',
+            },
         },
 
         relationship_type: {
