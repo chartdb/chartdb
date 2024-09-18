@@ -38,3 +38,14 @@ export const getOperatingSystem = (): 'mac' | 'windows' | 'unknown' => {
 };
 
 export const deepCopy = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
+
+export const debounce = <T extends (...args: Parameters<T>) => ReturnType<T>>(
+    func: T,
+    waitFor: number
+) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>): void => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), waitFor);
+    };
+};
