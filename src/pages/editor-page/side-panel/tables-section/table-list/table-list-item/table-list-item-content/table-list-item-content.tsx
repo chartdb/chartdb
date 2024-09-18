@@ -29,6 +29,7 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { ColorPicker } from './color-picker/color-picker';
 
 type AccordionItemValue = 'fields' | 'indexes';
 
@@ -231,7 +232,11 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             </Accordion>
             <Separator className="" />
             <div className="flex flex-1 items-center justify-between">
-                <div>
+                <ColorPicker
+                    color={color}
+                    onChange={(color) => updateTable(table.id, { color })}
+                />
+                <div className="flex gap-1">
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
@@ -240,8 +245,6 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         <FileKey2 className="h-4" />
                         {t('side_panel.tables_section.table.add_index')}
                     </Button>
-                </div>
-                <div>
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
