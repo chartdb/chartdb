@@ -86,16 +86,23 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         [diagramId, setSchemasFilter]
     );
 
-    const filteredSchemas: ChartDBContext['filteredSchemas'] = useMemo(
-        () =>
-            schemas.length > 0
-                ? (schemasFilter[diagramId] ?? [
-                      schemas.find((s) => s.name === defaultSchemaName)?.id ??
-                          schemas[0]?.id,
-                  ])
-                : undefined,
-        [schemasFilter, diagramId, schemas, defaultSchemaName]
-    );
+    const filteredSchemas: ChartDBContext['filteredSchemas'] = useMemo(() => {
+        if (schemas.length === 0) {
+            return undefined;
+        }
+
+        const schemasFilterFromCache =
+            (schemasFilter[diagramId] ?? []).length === 0
+                ? undefined // in case of empty filter, skip cache
+                : schemasFilter[diagramId];
+
+        return (
+            schemasFilterFromCache ?? [
+                schemas.find((s) => s.name === defaultSchemaName)?.id ??
+                    schemas[0]?.id,
+            ]
+        );
+    }, [schemasFilter, diagramId, schemas, defaultSchemaName]);
 
     const currentDiagram: Diagram = useMemo(
         () => ({

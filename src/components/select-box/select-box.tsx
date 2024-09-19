@@ -18,6 +18,7 @@ import {
 } from '@/components/popover/popover';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 export interface SelectBoxOption {
     value: string;
@@ -41,6 +42,8 @@ interface SelectBoxProps {
     showClear?: boolean;
     keepOrder?: boolean;
     disabled?: boolean;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -61,12 +64,26 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             showClear,
             keepOrder,
             disabled,
+            open,
+            onOpenChange: setOpen,
         },
         ref
     ) => {
         const [searchTerm, setSearchTerm] = React.useState<string>('');
-        const [isOpen, setIsOpen] = React.useState(false);
+        const [isOpen, setIsOpen] = React.useState(open ?? false);
         const { t } = useTranslation();
+
+        useEffect(() => {
+            setIsOpen(open ?? false);
+        }, [open]);
+
+        const onOpenChange = React.useCallback(
+            (isOpen: boolean) => {
+                setOpen?.(isOpen);
+                setIsOpen(isOpen);
+            },
+            [setOpen]
+        );
 
         const handleSelect = React.useCallback(
             (selectedValue: string) => {
@@ -140,7 +157,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         return (
-            <Popover open={isOpen} onOpenChange={setIsOpen} modal={true}>
+            <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
                 <PopoverTrigger asChild>
                     <div
                         className={cn(

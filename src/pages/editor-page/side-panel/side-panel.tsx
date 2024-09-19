@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     Select,
     SelectContent,
@@ -20,7 +20,13 @@ export interface SidePanelProps {}
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const { t } = useTranslation();
     const { schemas, filterSchemas, filteredSchemas } = useChartDB();
-    const { selectSidebarSection, selectedSidebarSection } = useLayout();
+    const {
+        selectSidebarSection,
+        selectedSidebarSection,
+        isSelectSchemaOpen,
+        openSelectSchema,
+        closeSelectSchema,
+    } = useLayout();
 
     const schemasOptions: SelectBoxOption[] = useMemo(
         () =>
@@ -32,6 +38,17 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 })
             ),
         [schemas]
+    );
+
+    const setIsSelectSchemaOpen = useCallback(
+        (open: boolean) => {
+            if (open) {
+                openSelectSchema();
+            } else {
+                closeSelectSchema();
+            }
+        },
+        [openSelectSchema, closeSelectSchema]
     );
 
     return (
@@ -56,6 +73,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                             inputPlaceholder={t('side_panel.search_schema')}
                             emptyPlaceholder={t('side_panel.no_schemas_found')}
                             multiple
+                            open={isSelectSchemaOpen}
+                            onOpenChange={setIsSelectSchemaOpen}
                         />
                     </div>
                 </div>

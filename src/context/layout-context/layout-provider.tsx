@@ -15,6 +15,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<SidebarSection>('tables');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(isDesktop);
+    const [isSelectSchemaOpen, setIsSelectSchemaOpen] =
+        React.useState<boolean>(false);
 
     const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
         () => setOpenedTableInSidebar('');
@@ -42,6 +44,12 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             setSelectedSidebarSection('relationships');
             setOpenedRelationshipInSidebar(relationshipId);
         };
+
+    const openSelectSchema: LayoutContext['openSelectSchema'] = () =>
+        setIsSelectSchemaOpen(true);
+
+    const closeSelectSchema: LayoutContext['closeSelectSchema'] = () =>
+        setIsSelectSchemaOpen(false);
     return (
         <layoutContext.Provider
             value={{
@@ -56,6 +64,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 isSidePanelShowed,
                 hideSidePanel,
                 showSidePanel,
+                isSelectSchemaOpen,
+                openSelectSchema,
+                closeSelectSchema,
             }}
         >
             {children}

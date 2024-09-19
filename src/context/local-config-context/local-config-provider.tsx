@@ -32,6 +32,19 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         (localStorage.getItem(showCardinalityKey) || 'false') === 'true'
     );
 
+    const [hideMultiSchemaNotification, setHideMultiSchemaNotification] =
+        React.useState<boolean>(
+            (localStorage.getItem('hide_multi_schema_notification') ||
+                'false') === 'true'
+        );
+
+    useEffect(() => {
+        localStorage.setItem(
+            'hide_multi_schema_notification',
+            hideMultiSchemaNotification.toString()
+        );
+    }, [hideMultiSchemaNotification]);
+
     useEffect(() => {
         localStorage.setItem(themeKey, theme);
     }, [theme]);
@@ -59,6 +72,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setSchemasFilter,
                 showCardinality,
                 setShowCardinality,
+                hideMultiSchemaNotification,
+                setHideMultiSchemaNotification,
             }}
         >
             {children}
