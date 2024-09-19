@@ -261,6 +261,15 @@ export const es: LanguageTranslation = {
             },
         },
 
+        multiple_schemas_alert: {
+            title: 'Múltiples Esquemas',
+            description:
+                '{{schemasCount}} esquemas en este diagrama, Actualmente mostrando: {{formattedSchemas}}.',
+            dont_show_again: 'No mostrar de nuevo',
+            change_schema: 'Cambiar',
+            none: 'nada',
+        },
+
         relationship_type: {
             one_to_one: 'Uno a Uno',
             one_to_many: 'Uno a Muchos',

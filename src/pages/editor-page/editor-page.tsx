@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import {
     ResizableHandle,
@@ -16,6 +16,7 @@ import { Toaster } from '@/components/toast/toaster';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useLayout } from '@/hooks/use-layout';
+import { useToast } from '@/components/toast/use-toast';
 import {
     Drawer,
     DrawerContent,
@@ -25,10 +26,14 @@ import {
 } from '@/components/drawer/drawer';
 import { Separator } from '@/components/separator/separator';
 import { Diagram } from '@/lib/domain/diagram';
+import { ToastAction } from '@/components/toast/toast';
+import { useLocalConfig } from '@/hooks/use-local-config';
+import { useTranslation } from 'react-i18next';
 
 export const EditorPage: React.FC = () => {
-    const { loadDiagram, currentDiagram } = useChartDB();
-    const { isSidePanelShowed, hideSidePanel } = useLayout();
+    const { loadDiagram, currentDiagram, schemas, filteredSchemas } =
+        useChartDB();
+    const { isSidePanelShowed, hideSidePanel, openSelectSchema } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog } = useDialog();
@@ -39,6 +44,10 @@ export const EditorPage: React.FC = () => {
     const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
+    const { hideMultiSchemaNotification, setHideMultiSchemaNotification } =
+        useLocalConfig();
+    const { toast } = useToast();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!config) {
@@ -88,6 +97,66 @@ export const EditorPage: React.FC = () => {
         showLoader,
         currentDiagram?.id,
         updateConfig,
+    ]);
+
+    const lastDiagramId = useRef<string>('');
+
+    useEffect(() => {
+        if (lastDiagramId.current === currentDiagram.id) {
+            return;
+        }
+
+        lastDiagramId.current = currentDiagram.id;
+        if (schemas.length > 1 && !hideMultiSchemaNotification) {
+            const formattedSchemas = !filteredSchemas
+                ? t('multiple_schemas_alert.none')
+                : filteredSchemas
+                      .map((filteredSchema) =>
+                          schemas.find((schema) => schema.id === filteredSchema)
+                      )
+                      .map((schema) => `'${schema?.name}'`)
+                      .join(', ');
+            toast({
+                duration: 5500,
+                title: t('multiple_schemas_alert.title'),
+                description: t('multiple_schemas_alert.description', {
+                    schemasCount: schemas.length,
+                    formattedSchemas,
+                }),
+                variant: 'default',
+                layout: 'column',
+                className:
+                    'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4',
+                action: (
+                    <div className="flex justify-between gap-1">
+                        <ToastAction
+                            altText="Don't show this notification again"
+                            className="flex-nowrap"
+                            onClick={() => setHideMultiSchemaNotification(true)}
+                        >
+                            {t('multiple_schemas_alert.dont_show_again')}
+                        </ToastAction>
+                        <ToastAction
+                            onClick={() => openSelectSchema()}
+                            altText="Change the schema"
+                            className="border border-pink-600 bg-pink-600 text-white hover:bg-pink-500"
+                        >
+                            {t('multiple_schemas_alert.change_schema')}
+                        </ToastAction>
+                    </div>
+                ),
+            });
+        }
+    }, [
+        schemas,
+        filteredSchemas,
+        toast,
+        currentDiagram.id,
+        diagramId,
+        openSelectSchema,
+        t,
+        hideMultiSchemaNotification,
+        setHideMultiSchemaNotification,
     ]);
 
     return (

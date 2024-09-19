@@ -19,19 +19,25 @@ export function Toaster() {
                 title,
                 description,
                 action,
+                layout = 'row',
                 ...props
             }) {
                 return (
                     <Toast key={id} {...props}>
-                        <div className="grid gap-1">
+                        <div
+                            className={`grid gap-1${layout === 'column' ? ' w-full' : ''}`}
+                        >
                             {title && <ToastTitle>{title}</ToastTitle>}
                             {description && (
                                 <ToastDescription>
                                     {description}
                                 </ToastDescription>
                             )}
+                            {layout === 'column' ? (
+                                <div className="mt-2">{action}</div>
+                            ) : null}
                         </div>
-                        {action}
+                        {layout === 'row' ? action : null}
                         <ToastClose />
                     </Toast>
                 );
