@@ -65,7 +65,7 @@ export const en = {
         multiple_schemas_alert: {
             title: 'Multiple Schemas',
             description:
-                '{{schemasCount}} schemas on this diagram, currently showing: {{formattedSchemas}}.',
+                '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
             dont_show_again: "Don't show again",
             change_schema: 'Change',
             none: 'none',
