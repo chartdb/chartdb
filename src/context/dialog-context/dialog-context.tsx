@@ -1,7 +1,9 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import type { DatabaseType } from '@/lib/domain/database-type';
 import type { BaseAlertDialogProps } from '@/dialogs/base-alert-dialog/base-alert-dialog';
+import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
+import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
+import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -13,7 +15,7 @@ export interface DialogContext {
     closeOpenDiagramDialog: () => void;
 
     // Export SQL dialog
-    openExportSQLDialog: (params: { targetDatabaseType: DatabaseType }) => void;
+    openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
     closeExportSQLDialog: () => void;
 
     // Alert dialog
@@ -25,8 +27,16 @@ export interface DialogContext {
     closeCreateRelationshipDialog: () => void;
 
     // Import database dialog
-    openImportDatabaseDialog: (params: { databaseType: DatabaseType }) => void;
+    openImportDatabaseDialog: (
+        params: Omit<ImportDatabaseDialogProps, 'dialog'>
+    ) => void;
     closeImportDatabaseDialog: () => void;
+
+    // Change table schema dialog
+    openTableSchemaDialog: (
+        params: Omit<TableSchemaDialogProps, 'dialog'>
+    ) => void;
+    closeTableSchemaDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -42,4 +52,6 @@ export const dialogContext = createContext<DialogContext>({
     openCreateRelationshipDialog: emptyFn,
     openImportDatabaseDialog: emptyFn,
     closeImportDatabaseDialog: emptyFn,
+    openTableSchemaDialog: emptyFn,
+    closeTableSchemaDialog: emptyFn,
 });

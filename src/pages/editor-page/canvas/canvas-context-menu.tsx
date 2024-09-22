@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable } = useChartDB();
-    const { openCreateRelationshipDialog } = useDialog();
+    const { createTable, filteredSchemas, schemas } = useChartDB();
+    const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
 
@@ -28,12 +28,37 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            createTable({
-                x: position.x,
-                y: position.y,
-            });
+            if ((filteredSchemas?.length ?? 0) > 1) {
+                openTableSchemaDialog({
+                    onConfirm: (schema) =>
+                        createTable({
+                            x: position.x,
+                            y: position.y,
+                            schema,
+                        }),
+                    schemas: schemas.filter((schema) =>
+                        filteredSchemas?.includes(schema.id)
+                    ),
+                });
+            } else {
+                const schema =
+                    filteredSchemas?.length === 1
+                        ? schemas.find((s) => s.id === filteredSchemas[0])?.name
+                        : undefined;
+                createTable({
+                    x: position.x,
+                    y: position.y,
+                    schema,
+                });
+            }
         },
-        [createTable, screenToFlowPosition]
+        [
+            createTable,
+            screenToFlowPosition,
+            openTableSchemaDialog,
+            schemas,
+            filteredSchemas,
+        ]
     );
 
     const createRelationshipHandler = useCallback(() => {

@@ -123,6 +123,7 @@ export const es: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Acciones de la Tabla',
+                        change_schema: 'Cambiar Esquema',
                         add_field: 'Agregar Campo',
                         add_index: 'Agregar Índice',
                         delete_table: 'Eliminar Tabla',
@@ -259,6 +260,21 @@ export const es: LanguageTranslation = {
                 import: 'Importar',
                 cancel: 'Cancelar',
             },
+        },
+
+        new_table_schema_dialog: {
+            title: 'Seleccionar Esquema',
+            description:
+                'Actualmente se muestran múltiples esquemas. Selecciona uno para la nueva tabla.',
+            cancel: 'Cancelar',
+            confirm: 'Confirmar',
+        },
+
+        update_table_schema_dialog: {
+            title: 'Cambiar Esquema',
+            description: 'Actualizar esquema de la tabla "{{tableName}}"',
+            cancel: 'Cancelar',
+            confirm: 'Cambiar',
         },
 
         multiple_schemas_alert: {
