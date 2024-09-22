@@ -22,14 +22,12 @@ import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
-import type { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { BaseDialogProps } from '../common/base-dialog-props';
 
-export interface OpenDiagramDialogProps {
-    dialog: DialogProps;
-}
+export interface OpenDiagramDialogProps extends BaseDialogProps {}
 
 export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,

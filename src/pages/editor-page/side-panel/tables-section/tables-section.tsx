@@ -17,11 +17,13 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useViewport } from '@xyflow/react';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, filteredSchemas } = useChartDB();
+    const { createTable, tables, filteredSchemas, schemas } = useChartDB();
+    const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
     const { closeAllTablesInSidebar, openTableFromSidebar } = useLayout();
@@ -38,24 +40,52 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         return tables.filter(filterSchema).filter(filterTableName);
     }, [tables, filterText, filteredSchemas]);
 
+    const createTableWithLocation = useCallback(
+        async (schema?: string) => {
+            const padding = 80;
+            const centerX =
+                -viewport.x / viewport.zoom + padding / viewport.zoom;
+            const centerY =
+                -viewport.y / viewport.zoom + padding / viewport.zoom;
+            const table = await createTable({
+                x: centerX,
+                y: centerY,
+                schema,
+            });
+            openTableFromSidebar(table.id);
+        },
+        [
+            createTable,
+            openTableFromSidebar,
+            viewport.x,
+            viewport.y,
+            viewport.zoom,
+        ]
+    );
+
     const handleCreateTable = useCallback(async () => {
         setFilterText('');
-        const padding = 80;
-        const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
-        const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
 
-        const table = await createTable({
-            x: centerX,
-            y: centerY,
-        });
-        openTableFromSidebar(table.id);
+        if ((filteredSchemas?.length ?? 0) > 1) {
+            openTableSchemaDialog({
+                onConfirm: createTableWithLocation,
+                schemas: schemas.filter((schema) =>
+                    filteredSchemas?.includes(schema.id)
+                ),
+            });
+        } else {
+            const schema =
+                filteredSchemas?.length === 1
+                    ? schemas.find((s) => s.id === filteredSchemas[0])?.name
+                    : undefined;
+            createTableWithLocation(schema);
+        }
     }, [
-        createTable,
-        openTableFromSidebar,
+        createTableWithLocation,
+        filteredSchemas,
+        openTableSchemaDialog,
+        schemas,
         setFilterText,
-        viewport.x,
-        viewport.y,
-        viewport.zoom,
     ]);
 
     return (

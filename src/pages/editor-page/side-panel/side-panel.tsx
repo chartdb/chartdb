@@ -54,7 +54,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
 
     return (
         <aside className="flex h-full flex-col overflow-hidden">
-            {schemasOptions.length > 0 && (
+            {schemasOptions.length > 0 ? (
                 <div className="flex items-center justify-center border-b pl-3 pt-0.5">
                     <div className="shrink-0 text-sm font-semibold">
                         {t('side_panel.schema')}
@@ -79,7 +79,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                         />
                     </div>
                 </div>
-            )}
+            ) : null}
 
             <div className="flex justify-center border-b pt-0.5">
                 <Select

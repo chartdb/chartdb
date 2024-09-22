@@ -9,7 +9,6 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { useDialog } from '@/hooks/use-dialog';
-import type { DialogProps } from '@radix-ui/react-dialog';
 import { FileOutput, FileMinus2, FileType2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -17,13 +16,12 @@ import type { SelectBoxOption } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
+import type { BaseDialogProps } from '../common/base-dialog-props';
 
 const ErrorMessageRelationshipFieldsNotSameType =
     'Relationships can only be created between fields of the same type';
 
-export interface CreateRelationshipDialogProps {
-    dialog: DialogProps;
-}
+export interface CreateRelationshipDialogProps extends BaseDialogProps {}
 
 export const CreateRelationshipDialog: React.FC<
     CreateRelationshipDialogProps

@@ -3,12 +3,17 @@ import type { DialogContext } from './dialog-context';
 import { dialogContext } from './dialog-context';
 import { CreateDiagramDialog } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
+import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { ExportSQLDialog } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { BaseAlertDialogProps } from '@/dialogs/base-alert-dialog/base-alert-dialog';
 import { BaseAlertDialog } from '@/dialogs/base-alert-dialog/base-alert-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
+import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-database-dialog';
+import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
+import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
+import { emptyFn } from '@/lib/utils';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -16,17 +21,21 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [openOpenDiagramDialog, setOpenOpenDiagramDialog] = useState(false);
     const [openExportSQLDialog, setOpenExportSQLDialog] = useState(false);
-    const [openExportSQLDialogParams, setOpenExportSQLDialogParams] = useState<{
-        targetDatabaseType: DatabaseType;
-    }>({ targetDatabaseType: DatabaseType.GENERIC });
+    const [exportSQLDialogParams, setExportSQLDialogParams] = useState<
+        Omit<ExportSQLDialogProps, 'dialog'>
+    >({ targetDatabaseType: DatabaseType.GENERIC });
     const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
         useState(false);
     const [openImportDatabaseDialog, setOpenImportDatabaseDialog] =
         useState(false);
-    const [openImportDatabaseDialogParams, setOpenImportDatabaseDialogParams] =
-        useState<{ databaseType: DatabaseType }>({
+    const [importDatabaseDialogParams, setImportDatabaseDialogParams] =
+        useState<Omit<ImportDatabaseDialogProps, 'dialog'>>({
             databaseType: DatabaseType.GENERIC,
         });
+    const [openTableSchemaDialog, setOpenTableSchemaDialog] = useState(false);
+    const [tableSchemaDialogParams, setTableSchemaDialogParams] = useState<
+        Omit<TableSchemaDialogProps, 'dialog'>
+    >({ schemas: [], onConfirm: emptyFn });
     const [showAlert, setShowAlert] = useState(false);
     const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
         title: '',
@@ -36,7 +45,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         useCallback(
             ({ targetDatabaseType }) => {
                 setOpenExportSQLDialog(true);
-                setOpenExportSQLDialogParams({ targetDatabaseType });
+                setExportSQLDialogParams({ targetDatabaseType });
             },
             [setOpenExportSQLDialog]
         );
@@ -45,9 +54,18 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         useCallback(
             ({ databaseType }) => {
                 setOpenImportDatabaseDialog(true);
-                setOpenImportDatabaseDialogParams({ databaseType });
+                setImportDatabaseDialogParams({ databaseType });
             },
             [setOpenImportDatabaseDialog]
+        );
+
+    const openTableSchemaDialogHandler: DialogContext['openTableSchemaDialog'] =
+        useCallback(
+            (params) => {
+                setOpenTableSchemaDialog(true);
+                setTableSchemaDialogParams(params);
+            },
+            [setOpenTableSchemaDialog]
         );
 
     const showAlertHandler: DialogContext['showAlert'] = useCallback(
@@ -80,6 +98,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 openImportDatabaseDialog: openImportDatabaseDialogHandler,
                 closeImportDatabaseDialog: () =>
                     setOpenImportDatabaseDialog(false),
+                openTableSchemaDialog: openTableSchemaDialogHandler,
+                closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
             }}
         >
             {children}
@@ -87,7 +107,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <OpenDiagramDialog dialog={{ open: openOpenDiagramDialog }} />
             <ExportSQLDialog
                 dialog={{ open: openExportSQLDialog }}
-                {...openExportSQLDialogParams}
+                {...exportSQLDialogParams}
             />
             <BaseAlertDialog dialog={{ open: showAlert }} {...alertParams} />
             <CreateRelationshipDialog
@@ -95,7 +115,11 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             />
             <ImportDatabaseDialog
                 dialog={{ open: openImportDatabaseDialog }}
-                {...openImportDatabaseDialogParams}
+                {...importDatabaseDialogParams}
+            />
+            <TableSchemaDialog
+                dialog={{ open: openTableSchemaDialog }}
+                {...tableSchemaDialogParams}
             />
         </dialogContext.Provider>
     );

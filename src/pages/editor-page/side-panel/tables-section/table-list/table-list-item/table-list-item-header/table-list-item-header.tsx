@@ -7,6 +7,7 @@ import {
     FileType2,
     FileKey2,
     Check,
+    Group,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -26,6 +27,7 @@ import { useReactFlow } from '@xyflow/react';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -34,7 +36,15 @@ export interface TableListItemHeaderProps {
 export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
-    const { updateTable, removeTable, createIndex, createField } = useChartDB();
+    const {
+        updateTable,
+        removeTable,
+        createIndex,
+        createField,
+        schemas,
+        filteredSchemas,
+    } = useChartDB();
+    const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
     const { hideSidePanel } = useLayout();
@@ -100,6 +110,21 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         removeTable(table.id);
     }, [table.id, removeTable]);
 
+    const updateTableSchema = useCallback(
+        (schema: string) => {
+            updateTable(table.id, { schema });
+        },
+        [table.id, updateTable]
+    );
+
+    const changeSchema = useCallback(() => {
+        openTableSchemaDialog({
+            table,
+            schemas,
+            onConfirm: updateTableSchema,
+        });
+    }, [openTableSchemaDialog, table, schemas, updateTableSchema]);
+
     const renderDropDownMenu = useCallback(
         () => (
             <DropdownMenu>
@@ -108,16 +133,35 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         <EllipsisVertical />
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-40">
+                <DropdownMenuContent className="w-fit">
                     <DropdownMenuLabel>
                         {t(
                             'side_panel.tables_section.table.table_actions.title'
                         )}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {schemas.length > 0 ? (
+                        <>
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    className="flex justify-between gap-4"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        changeSchema();
+                                    }}
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.table_actions.change_schema'
+                                    )}
+                                    <Group className="size-3.5" />
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+                        </>
+                    ) : null}
                     <DropdownMenuGroup>
                         <DropdownMenuItem
-                            className="flex justify-between"
+                            className="flex justify-between gap-4"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 createField(table.id);
@@ -129,7 +173,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             <FileType2 className="size-3.5" />
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            className="flex justify-between"
+                            className="flex justify-between gap-4"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 createIndex(table.id);
@@ -156,8 +200,22 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [table.id, createField, createIndex, deleteTableHandler, t]
+        [
+            table.id,
+            createField,
+            createIndex,
+            deleteTableHandler,
+            t,
+            changeSchema,
+            schemas.length,
+        ]
     );
+
+    let schemaToDisplay;
+
+    if (schemas.length > 1 && !!filteredSchemas && filteredSchemas.length > 1) {
+        schemaToDisplay = table.schema;
+    }
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
@@ -174,7 +232,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    <div className="truncate">{table.name}</div>
+                    <div className="truncate">
+                        {table.name}
+                        <span className="text-xs text-muted-foreground">
+                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
+                        </span>
+                    </div>
                 )}
             </div>
             <div className="flex flex-row-reverse">

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
-import type { DialogProps } from '@radix-ui/react-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
@@ -17,10 +16,9 @@ import { SelectDatabase } from './select-database/select-database';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { ImportDatabase } from '../common/import-database/import-database';
 import { useTranslation } from 'react-i18next';
+import type { BaseDialogProps } from '../common/base-dialog-props';
 
-export interface CreateDiagramDialogProps {
-    dialog: DialogProps;
-}
+export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
 export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,

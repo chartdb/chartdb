@@ -132,6 +132,7 @@ export const en = {
                     },
                     table_actions: {
                         title: 'Table Actions',
+                        change_schema: 'Change Schema',
                         add_field: 'Add Field',
                         add_index: 'Add Index',
                         delete_table: 'Delete Table',
@@ -267,6 +268,21 @@ export const en = {
                 import: 'Import',
                 cancel: 'Cancel',
             },
+        },
+
+        new_table_schema_dialog: {
+            title: 'Select Schema',
+            description:
+                'Multiple schemas are currently displayed. Select one for the new table.',
+            cancel: 'Cancel',
+            confirm: 'Confirm',
+        },
+
+        update_table_schema_dialog: {
+            title: 'Change Schema',
+            description: 'Update table "{{tableName}}" schema',
+            cancel: 'Cancel',
+            confirm: 'Change',
         },
 
         relationship_type: {
