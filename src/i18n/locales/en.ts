@@ -1,4 +1,4 @@
-import { LanguageMetadata } from '../types';
+import type { LanguageMetadata } from '../types';
 
 export const en = {
     translation: {

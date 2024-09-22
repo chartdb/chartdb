@@ -1,12 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-    Edge,
-    EdgeProps,
-    getSmoothStepPath,
-    Position,
-    useReactFlow,
-} from '@xyflow/react';
-import { DBRelationship } from '@/lib/domain/db-relationship';
+import type { Edge, EdgeProps } from '@xyflow/react';
+import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from './table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';

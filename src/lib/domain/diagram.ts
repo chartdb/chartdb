@@ -1,15 +1,10 @@
-import { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
-import { DatabaseEdition } from './database-edition';
+import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
+import type { DatabaseEdition } from './database-edition';
 import { DatabaseType } from './database-type';
-import {
-    DBRelationship,
-    createRelationshipsFromMetadata,
-} from './db-relationship';
-import {
-    DBTable,
-    adjustTablePositions,
-    createTablesFromMetadata,
-} from './db-table';
+import type { DBRelationship } from './db-relationship';
+import { createRelationshipsFromMetadata } from './db-relationship';
+import type { DBTable } from './db-table';
+import { adjustTablePositions, createTablesFromMetadata } from './db-table';
 import { generateDiagramId } from '@/lib/utils';
 export interface Diagram {
     id: string;

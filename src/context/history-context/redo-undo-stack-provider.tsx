@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react';
-import { RedoUndoAction } from './redo-undo-action';
-import {
-    RedoUndoStackContext,
-    redoUndoStackContext,
-} from './redo-undo-stack-context';
+import type { RedoUndoAction } from './redo-undo-action';
+import type { RedoUndoStackContext } from './redo-undo-stack-context';
+import { redoUndoStackContext } from './redo-undo-stack-context';
 
 export const RedoUndoStackProvider: React.FC<React.PropsWithChildren> = ({
     children,

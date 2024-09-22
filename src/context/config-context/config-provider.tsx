@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ConfigContext } from './config-context';
 
 import { useStorage } from '@/hooks/use-storage';
-import { ChartDBConfig } from '@/lib/domain/config';
+import type { ChartDBConfig } from '@/lib/domain/config';
 
 export const ConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,

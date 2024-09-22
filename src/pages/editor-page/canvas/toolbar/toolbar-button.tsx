@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, ButtonProps } from '@/components/button/button';
+import type { ButtonProps } from '@/components/button/button';
+import { Button } from '@/components/button/button';
 
 export const ToolbarButton = React.forwardRef<
     React.ElementRef<typeof Button>,

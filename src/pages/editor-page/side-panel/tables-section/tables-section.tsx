@@ -4,7 +4,8 @@ import { Button } from '@/components/button/button';
 import { Table, ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
 
-import { DBTable, shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
+import type { DBTable } from '@/lib/domain/db-table';
+import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';

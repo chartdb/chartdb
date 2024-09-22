@@ -9,7 +9,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/alert-dialog/alert-dialog';
-import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
+import type { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 
 export interface BaseAlertDialogProps {

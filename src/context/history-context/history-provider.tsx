@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { historyContext } from './history-context';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
-import { RedoUndoActionHandlers } from './redo-undo-action';
+import type { RedoUndoActionHandlers } from './redo-undo-action';
 
 export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
     children,

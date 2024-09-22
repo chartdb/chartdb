@@ -1,5 +1,6 @@
 import React from 'react';
-import { LayoutContext, layoutContext, SidebarSection } from './layout-context';
+import type { LayoutContext, SidebarSection } from './layout-context';
+import { layoutContext } from './layout-context';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export const LayoutProvider: React.FC<React.PropsWithChildren> = ({

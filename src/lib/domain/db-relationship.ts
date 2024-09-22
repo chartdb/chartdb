@@ -1,10 +1,10 @@
-import { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
-import { DBField } from './db-field';
+import type { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
+import type { DBField } from './db-field';
 import {
     schemaNameToDomainSchemaName,
     schemaNameToSchemaId,
 } from './db-schema';
-import { DBTable } from './db-table';
+import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 
 export interface DBRelationship {

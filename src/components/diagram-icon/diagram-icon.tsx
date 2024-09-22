@@ -1,5 +1,5 @@
 import React from 'react';
-import { Diagram } from '@/lib/domain/diagram';
+import type { Diagram } from '@/lib/domain/diagram';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 import {
     databaseEditionToImageMap,

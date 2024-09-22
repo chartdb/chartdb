@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
-import {
-    LocalConfigContext,
-    SchemasFilter,
-    ScrollAction,
-} from './local-config-context';
-import { Theme } from '../theme-context/theme-context';
+import type { SchemasFilter, ScrollAction } from './local-config-context';
+import { LocalConfigContext } from './local-config-context';
+import type { Theme } from '../theme-context/theme-context';
 
 const themeKey = 'theme';
 const scrollActionKey = 'scroll_action';

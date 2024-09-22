@@ -1,9 +1,9 @@
 import { createContext } from 'react';
-import { Diagram } from '@/lib/domain/diagram';
+import type { Diagram } from '@/lib/domain/diagram';
 import { emptyFn } from '@/lib/utils';
-import { DBRelationship } from '@/lib/domain/db-relationship';
-import { DBTable } from '@/lib/domain/db-table';
-import { ChartDBConfig } from '@/lib/domain/config';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { ChartDBConfig } from '@/lib/domain/config';
 
 export interface StorageContext {
     // Config operations

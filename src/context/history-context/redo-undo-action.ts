@@ -1,8 +1,8 @@
-import { DBTable } from '@/lib/domain/db-table';
-import { ChartDBContext } from '../chartdb-context/chartdb-context';
-import { DBField } from '@/lib/domain/db-field';
-import { DBIndex } from '@/lib/domain/db-index';
-import { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { ChartDBContext } from '../chartdb-context/chartdb-context';
+import type { DBField } from '@/lib/domain/db-field';
+import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 
 type Action = keyof ChartDBContext;
 

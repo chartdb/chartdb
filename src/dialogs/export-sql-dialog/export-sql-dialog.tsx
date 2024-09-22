@@ -19,7 +19,7 @@ import {
 } from '@/lib/data/export-metadata/export-sql-script';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { DialogProps } from '@radix-ui/react-dialog';
+import type { DialogProps } from '@radix-ui/react-dialog';
 import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';

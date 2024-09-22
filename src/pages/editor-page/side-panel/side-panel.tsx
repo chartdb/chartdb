@@ -10,9 +10,10 @@ import {
 import { TablesSection } from './tables-section/tables-section';
 import { RelationshipsSection } from './relationships-section/relationships-section';
 import { useLayout } from '@/hooks/use-layout';
-import { SidebarSection } from '@/context/layout-context/layout-context';
+import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { useTranslation } from 'react-i18next';
-import { SelectBox, SelectBoxOption } from '@/components/select-box/select-box';
+import type { SelectBoxOption } from '@/components/select-box/select-box';
+import { SelectBox } from '@/components/select-box/select-box';
 import { useChartDB } from '@/hooks/use-chartdb';
 
 export interface SidePanelProps {}

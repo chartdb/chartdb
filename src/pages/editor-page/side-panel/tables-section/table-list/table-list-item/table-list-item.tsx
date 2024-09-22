@@ -6,7 +6,7 @@ import {
 } from '@/components/accordion/accordion';
 import { TableListItemHeader } from './table-list-item-header/table-list-item-header';
 import { TableListItemContent } from './table-list-item-content/table-list-item-content';
-import { DBTable } from '@/lib/domain/db-table';
+import type { DBTable } from '@/lib/domain/db-table';
 
 export interface TableListItemProps {
     table: DBTable;
