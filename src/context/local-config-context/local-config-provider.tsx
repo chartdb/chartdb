@@ -7,6 +7,9 @@ const themeKey = 'theme';
 const scrollActionKey = 'scroll_action';
 const schemasFilterKey = 'schemas_filter';
 const showCardinalityKey = 'show_cardinality';
+const hideMultiSchemaNotificationKey = 'hide_multi_schema_notification';
+const githubRepoOpenedKey = 'github_repo_opened';
+const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -31,13 +34,33 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
 
     const [hideMultiSchemaNotification, setHideMultiSchemaNotification] =
         React.useState<boolean>(
-            (localStorage.getItem('hide_multi_schema_notification') ||
+            (localStorage.getItem(hideMultiSchemaNotificationKey) ||
                 'false') === 'true'
+        );
+
+    const [githubRepoOpened, setGithubRepoOpened] = React.useState<boolean>(
+        (localStorage.getItem(githubRepoOpenedKey) || 'false') === 'true'
+    );
+
+    const [starUsDialogLastOpen, setStarUsDialogLastOpen] =
+        React.useState<number>(
+            parseInt(localStorage.getItem(starUsDialogLastOpenKey) || '0')
         );
 
     useEffect(() => {
         localStorage.setItem(
-            'hide_multi_schema_notification',
+            starUsDialogLastOpenKey,
+            starUsDialogLastOpen.toString()
+        );
+    }, [starUsDialogLastOpen]);
+
+    useEffect(() => {
+        localStorage.setItem(githubRepoOpenedKey, githubRepoOpened.toString());
+    }, [githubRepoOpened]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            hideMultiSchemaNotificationKey,
             hideMultiSchemaNotification.toString()
         );
     }, [hideMultiSchemaNotification]);
@@ -71,6 +94,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setShowCardinality,
                 hideMultiSchemaNotification,
                 setHideMultiSchemaNotification,
+                setGithubRepoOpened,
+                githubRepoOpened,
+                starUsDialogLastOpen,
+                setStarUsDialogLastOpen,
             }}
         >
             {children}

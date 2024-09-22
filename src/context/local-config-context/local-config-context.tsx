@@ -23,6 +23,12 @@ export interface LocalConfigContext {
     setHideMultiSchemaNotification: (
         hideMultiSchemaNotification: boolean
     ) => void;
+
+    githubRepoOpened: boolean;
+    setGithubRepoOpened: (githubRepoOpened: boolean) => void;
+
+    starUsDialogLastOpen: number;
+    setStarUsDialogLastOpen: (lastOpen: number) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -40,4 +46,10 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     hideMultiSchemaNotification: false,
     setHideMultiSchemaNotification: emptyFn,
+
+    githubRepoOpened: false,
+    setGithubRepoOpened: emptyFn,
+
+    starUsDialogLastOpen: 0,
+    setStarUsDialogLastOpen: emptyFn,
 });

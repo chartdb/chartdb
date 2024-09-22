@@ -30,13 +30,16 @@ import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useTranslation } from 'react-i18next';
 
+const OPEN_STAR_US_AFTER_SECONDS = 30;
+const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
+
 export const EditorPage: React.FC = () => {
     const { loadDiagram, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
     const { isSidePanelShowed, hideSidePanel, openSelectSchema } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
-    const { openCreateDiagramDialog } = useDialog();
+    const { openCreateDiagramDialog, openStarUsDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config, updateConfig } = useConfig();
     const navigate = useNavigate();
@@ -44,8 +47,13 @@ export const EditorPage: React.FC = () => {
     const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
-    const { hideMultiSchemaNotification, setHideMultiSchemaNotification } =
-        useLocalConfig();
+    const {
+        hideMultiSchemaNotification,
+        setHideMultiSchemaNotification,
+        starUsDialogLastOpen,
+        setStarUsDialogLastOpen,
+        githubRepoOpened,
+    } = useLocalConfig();
     const { toast } = useToast();
     const { t } = useTranslation();
 
@@ -97,6 +105,27 @@ export const EditorPage: React.FC = () => {
         showLoader,
         currentDiagram?.id,
         updateConfig,
+    ]);
+
+    useEffect(() => {
+        if (!currentDiagram?.id || githubRepoOpened) {
+            return;
+        }
+
+        if (
+            new Date().getTime() - starUsDialogLastOpen >
+            1000 * 60 * 60 * 24 * SHOW_STAR_US_AGAIN_AFTER_DAYS
+        ) {
+            const lastOpen = new Date().getTime();
+            setStarUsDialogLastOpen(lastOpen);
+            setTimeout(openStarUsDialog, OPEN_STAR_US_AFTER_SECONDS * 1000);
+        }
+    }, [
+        currentDiagram?.id,
+        githubRepoOpened,
+        openStarUsDialog,
+        setStarUsDialogLastOpen,
+        starUsDialogLastOpen,
     ]);
 
     const lastDiagramId = useRef<string>('');

@@ -285,6 +285,14 @@ export const en = {
             confirm: 'Change',
         },
 
+        star_us_dialog: {
+            title: 'Help us improve!',
+            description:
+                "Would you like to star us on GitHub? It's just a click away!",
+            close: 'Not now',
+            confirm: 'Of course!',
+        },
+
         relationship_type: {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',
