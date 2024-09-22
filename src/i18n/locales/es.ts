@@ -277,6 +277,14 @@ export const es: LanguageTranslation = {
             confirm: 'Cambiar',
         },
 
+        star_us_dialog: {
+            title: '¡Ayúdanos a mejorar!',
+            description:
+                '¿Te gusta ChartDB? Por favor, danos una estrella en GitHub.',
+            close: 'Ahora no',
+            confirm: '¡Claro!',
+        },
+
         multiple_schemas_alert: {
             title: 'Múltiples Esquemas',
             description:

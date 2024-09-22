@@ -166,7 +166,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <DialogFooter className="flex !justify-between gap-2">
                     <div />
                     <DialogClose asChild>
-                        <Button type="button">
+                        <Button type="button" variant="secondary">
                             {t('export_sql_dialog.close')}
                         </Button>
                     </DialogClose>

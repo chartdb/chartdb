@@ -14,6 +14,7 @@ import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-da
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
+import { StarUsDialog } from '@/dialogs/star-us-dialog/star-us-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -40,6 +41,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
         title: '',
     });
+    const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
 
     const openExportSQLDialogHandler: DialogContext['openExportSQLDialog'] =
         useCallback(
@@ -100,6 +102,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenImportDatabaseDialog(false),
                 openTableSchemaDialog: openTableSchemaDialogHandler,
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
+                openStarUsDialog: () => setOpenStarUsDialog(true),
+                closeStarUsDialog: () => setOpenStarUsDialog(false),
             }}
         >
             {children}
@@ -121,6 +125,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 dialog={{ open: openTableSchemaDialog }}
                 {...tableSchemaDialogParams}
             />
+            <StarUsDialog dialog={{ open: openStarUsDialog }} />
         </dialogContext.Provider>
     );
 };
