@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
 import {
     ResizableHandle,
@@ -36,7 +36,12 @@ const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
 export const EditorPage: React.FC = () => {
     const { loadDiagram, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
-    const { isSidePanelShowed, hideSidePanel, openSelectSchema } = useLayout();
+    const {
+        isSidePanelShowed,
+        hideSidePanel,
+        openSelectSchema,
+        showSidePanel,
+    } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog, openStarUsDialog } = useDialog();
@@ -130,6 +135,14 @@ export const EditorPage: React.FC = () => {
 
     const lastDiagramId = useRef<string>('');
 
+    const handleChangeSchema = useCallback(async () => {
+        showSidePanel();
+        if (!isDesktop) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+        openSelectSchema();
+    }, [openSelectSchema, showSidePanel, isDesktop]);
+
     useEffect(() => {
         if (lastDiagramId.current === currentDiagram.id) {
             return;
@@ -166,7 +179,7 @@ export const EditorPage: React.FC = () => {
                             {t('multiple_schemas_alert.dont_show_again')}
                         </ToastAction>
                         <ToastAction
-                            onClick={() => openSelectSchema()}
+                            onClick={() => handleChangeSchema()}
                             altText="Change the schema"
                             className="border border-pink-600 bg-pink-600 text-white hover:bg-pink-500"
                         >
@@ -184,6 +197,7 @@ export const EditorPage: React.FC = () => {
         diagramId,
         openSelectSchema,
         t,
+        handleChangeSchema,
         hideMultiSchemaNotification,
         setHideMultiSchemaNotification,
     ]);
