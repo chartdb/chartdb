@@ -13,11 +13,13 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
-import {
+import type {
     DBRelationship,
+    RelationshipType,
+} from '@/lib/domain/db-relationship';
+import {
     determineCardinalities,
     determineRelationshipType,
-    RelationshipType,
 } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import {

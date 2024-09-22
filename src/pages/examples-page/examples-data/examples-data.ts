@@ -1,4 +1,4 @@
-import { Diagram } from '@/lib/domain/diagram';
+import type { Diagram } from '@/lib/domain/diagram';
 import EmployeeExample from '../../../assets/examples/employees_example.png';
 import EmployeeExampleDark from '../../../assets/examples/employees_example_dark.png';
 import BikeStoresExample from '../../../assets/examples/bike_stores_example.png';

@@ -25,7 +25,7 @@ import {
     DrawerTitle,
 } from '@/components/drawer/drawer';
 import { Separator } from '@/components/separator/separator';
-import { Diagram } from '@/lib/domain/diagram';
+import type { Diagram } from '@/lib/domain/diagram';
 import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useTranslation } from 'react-i18next';

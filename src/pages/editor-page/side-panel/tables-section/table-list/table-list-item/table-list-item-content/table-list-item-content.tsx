@@ -8,21 +8,21 @@ import {
     AccordionContent,
 } from '@/components/accordion/accordion';
 import { Separator } from '@/components/separator/separator';
-import { DBTable } from '@/lib/domain/db-table';
-import { DBField } from '@/lib/domain/db-field';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { TableField } from './table-field/table-field';
 import { TableIndex } from './table-index/table-index';
-import { DBIndex } from '@/lib/domain/db-index';
+import type { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
+import type { DragEndEvent } from '@dnd-kit/core';
 import {
     DndContext,
     closestCenter,
     PointerSensor,
     useSensor,
     useSensors,
-    DragEndEvent,
 } from '@dnd-kit/core';
 import {
     arrayMove,

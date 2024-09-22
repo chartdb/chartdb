@@ -1,18 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
-import { ListCollapse } from 'lucide-react';
+import { ListCollapse, Workflow } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { RelationshipList } from './relationship-list/relationship-list';
 import { useChartDB } from '@/hooks/use-chartdb';
-import {
-    DBRelationship,
-    shouldShowRelationshipBySchemaFilter,
-} from '@/lib/domain/db-relationship';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
+import { shouldShowRelationshipBySchemaFilter } from '@/lib/domain/db-relationship';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
-import { Workflow } from 'lucide-react';
 import {
     Tooltip,
     TooltipContent,

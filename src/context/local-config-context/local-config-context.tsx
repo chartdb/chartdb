@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import { Theme } from '../theme-context/theme-context';
+import type { Theme } from '../theme-context/theme-context';
 
 export type ScrollAction = 'pan' | 'zoom';
 

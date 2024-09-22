@@ -1,4 +1,4 @@
-import { en } from './locales/en';
+import type { en } from './locales/en';
 
 export type LanguageTranslation = typeof en;
 

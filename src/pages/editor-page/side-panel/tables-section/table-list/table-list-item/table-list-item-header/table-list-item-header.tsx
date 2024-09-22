@@ -9,7 +9,7 @@ import {
     Check,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
-import { DBTable } from '@/lib/domain/db-table';
+import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';

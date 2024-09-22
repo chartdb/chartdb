@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/button/button';
 import { KeyRound, Trash2 } from 'lucide-react';
 
-import { DBField } from '@/lib/domain/db-field';
+import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_';

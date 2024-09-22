@@ -21,8 +21,8 @@ import {
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
-import { Diagram } from '@/lib/domain/diagram';
-import { DialogProps } from '@radix-ui/react-dialog';
+import type { Diagram } from '@/lib/domain/diagram';
+import type { DialogProps } from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

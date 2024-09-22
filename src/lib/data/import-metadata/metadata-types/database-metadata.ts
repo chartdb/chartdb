@@ -1,9 +1,9 @@
-import { ForeignKeyInfo } from './foreign-key-info';
-import { PrimaryKeyInfo } from './primary-key-info';
-import { ColumnInfo } from './column-info';
-import { IndexInfo } from './index-info';
-import { TableInfo } from './table-info';
-import { ViewInfo } from './view-info';
+import type { ForeignKeyInfo } from './foreign-key-info';
+import type { PrimaryKeyInfo } from './primary-key-info';
+import type { ColumnInfo } from './column-info';
+import type { IndexInfo } from './index-info';
+import type { TableInfo } from './table-info';
+import type { ViewInfo } from './view-info';
 export interface DatabaseMetadata {
     fk_info: ForeignKeyInfo[];
     pk_info: PrimaryKeyInfo[];

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Ellipsis, GripVertical, Trash2 } from 'lucide-react';
+import { Ellipsis, GripVertical, Trash2, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
-import { KeyRound } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 
-import { DBField } from '@/lib/domain/db-field';
+import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { dataTypeMap } from '@/lib/data/data-types';
 import {

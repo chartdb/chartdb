@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import { ChartDBConfig } from '@/lib/domain/config';
+import type { ChartDBConfig } from '@/lib/domain/config';
 
 export interface ConfigContext {
     config?: ChartDBConfig;

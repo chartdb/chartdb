@@ -1,8 +1,6 @@
 import React from 'react';
-import {
-    FullScreenLoaderContext,
-    fullScreenLoaderContext,
-} from './full-screen-spinner-context';
+import type { FullScreenLoaderContext } from './full-screen-spinner-context';
+import { fullScreenLoaderContext } from './full-screen-spinner-context';
 import {
     Dialog,
     DialogContent,

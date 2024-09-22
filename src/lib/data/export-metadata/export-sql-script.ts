@@ -1,10 +1,10 @@
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
-import { Diagram } from '../../domain/diagram';
+import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY } from '@/lib/env';
-import { DatabaseType } from '@/lib/domain/database-type';
-import { DBTable } from '@/lib/domain/db-table';
-import { DataType } from '../data-types';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { DataType } from '../data-types';
 
 const openai = createOpenAI({
     apiKey: OPENAI_API_KEY,

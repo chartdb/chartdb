@@ -1,8 +1,8 @@
 import React from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button/button';
-import { DBIndex } from '@/lib/domain/db-index';
-import { DBField } from '@/lib/domain/db-field';
+import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBField } from '@/lib/domain/db-field';
 import {
     Popover,
     PopoverContent,

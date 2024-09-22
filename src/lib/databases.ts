@@ -15,7 +15,7 @@ import SqliteLogo2 from '@/assets/sqlite_logo_2.png';
 import SqlServerLogo2 from '@/assets/sql_server_logo_2.png';
 import GeneralDBLogo2 from '@/assets/general_db_logo_2.png';
 import { DatabaseType } from './domain/database-type';
-import { EffectiveTheme } from '@/context/theme-context/theme-context';
+import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 
 export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: 'Generic',

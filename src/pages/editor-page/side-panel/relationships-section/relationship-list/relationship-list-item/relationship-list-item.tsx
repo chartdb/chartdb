@@ -6,7 +6,7 @@ import {
 } from '@/components/accordion/accordion';
 import { RelationshipListItemHeader } from './relationship-list-item-header/relationship-list-item-header';
 import { RelationshipListItemContent } from './relationship-list-item-content/relationship-list-item-content';
-import { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 
 export interface RelationshipListItemProps {
     relationship: DBRelationship;

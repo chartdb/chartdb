@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Cardinality } from '@/lib/domain/db-relationship';
+import type { Cardinality } from '@/lib/domain/db-relationship';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { getCardinalityMarkerId } from './canvas-utils';
 

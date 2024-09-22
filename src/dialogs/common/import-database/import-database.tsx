@@ -13,8 +13,8 @@ import { databaseSecondaryLogoMap } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
 import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
+import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import {
-    DatabaseEdition,
     databaseEditionToImageMap,
     databaseEditionToLabelMap,
     databaseTypeToEditionMap,
@@ -27,8 +27,8 @@ import {
 import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
+import type { DatabaseClient } from '@/lib/domain/database-clients';
 import {
-    DatabaseClient,
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import { DatabaseType } from '@/lib/domain/database-type';
-import { BaseAlertDialogProps } from '@/dialogs/base-alert-dialog/base-alert-dialog';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import type { BaseAlertDialogProps } from '@/dialogs/base-alert-dialog/base-alert-dialog';
 
 export interface DialogContext {
     // Create diagram dialog

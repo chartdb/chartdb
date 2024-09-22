@@ -9,11 +9,12 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { useDialog } from '@/hooks/use-dialog';
-import { DialogProps } from '@radix-ui/react-dialog';
+import type { DialogProps } from '@radix-ui/react-dialog';
 import { FileOutput, FileMinus2, FileType2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { SelectBox, SelectBoxOption } from '@/components/select-box/select-box';
+import type { SelectBoxOption } from '@/components/select-box/select-box';
+import { SelectBox } from '@/components/select-box/select-box';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
 

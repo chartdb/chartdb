@@ -1,28 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-    ReactFlow,
-    useEdgesState,
-    useNodesState,
+import type {
     addEdge,
-    Background,
-    BackgroundVariant,
-    MiniMap,
-    Controls,
     NodePositionChange,
     NodeRemoveChange,
-    useReactFlow,
     NodeDimensionChange,
     OnEdgesChange,
     OnNodesChange,
 } from '@xyflow/react';
+import {
+    ReactFlow,
+    useEdgesState,
+    useNodesState,
+    Background,
+    BackgroundVariant,
+    MiniMap,
+    Controls,
+    useReactFlow,
+} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
-import {
-    MIN_TABLE_SIZE,
-    TableNode,
-    TableNodeType,
-} from './table-node/table-node';
-import { TableEdge, TableEdgeType } from './table-edge';
+import type { TableNodeType } from './table-node/table-node';
+import { MIN_TABLE_SIZE, TableNode } from './table-node/table-node';
+import type { TableEdgeType } from './table-edge';
+import { TableEdge } from './table-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import {
     LEFT_HANDLE_ID_PREFIX,
@@ -37,8 +37,8 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
+import type { DBTable } from '@/lib/domain/db-table';
 import {
-    DBTable,
     adjustTablePositions,
     shouldShowTablesBySchemaFilter,
 } from '@/lib/domain/db-table';

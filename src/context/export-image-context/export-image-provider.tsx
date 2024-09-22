@@ -1,9 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-    ExportImageContext,
-    exportImageContext,
-    ImageType,
-} from './export-image-context';
+import type { ExportImageContext, ImageType } from './export-image-context';
+import { exportImageContext } from './export-image-context';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
 import {
     getNodesBounds,
