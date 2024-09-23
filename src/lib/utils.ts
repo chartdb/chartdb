@@ -15,13 +15,19 @@ export const emptyFn = (): any => undefined;
 
 export const generateId = () => randomId();
 
-export const generateDiagramId = () => {
-    let prefix = localStorage.getItem(UUID_KEY);
+export const getWorkspaceId = (): string => {
+    let workspaceId = localStorage.getItem(UUID_KEY);
 
-    if (!prefix) {
-        prefix = randomId(8);
-        localStorage.setItem(UUID_KEY, prefix);
+    if (!workspaceId) {
+        workspaceId = randomId(8);
+        localStorage.setItem(UUID_KEY, workspaceId);
     }
+
+    return workspaceId;
+};
+
+export const generateDiagramId = () => {
+    const prefix = getWorkspaceId();
 
     return `${prefix}${randomId(4)}`;
 };
