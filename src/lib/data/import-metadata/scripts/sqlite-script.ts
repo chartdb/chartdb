@@ -28,7 +28,7 @@ export const sqliteQuery = `WITH fk_info AS (
               'schema', '',  -- SQLite does not have schemas
               'table', pk.table_name,
               'field_count', pk.field_count,
-              'pk_column', pk.pk_column,
+              'column', pk.pk_column,
               'pk_def', 'PRIMARY KEY (' || pk.pk_column || ')'
           )
       ) AS pk_metadata
