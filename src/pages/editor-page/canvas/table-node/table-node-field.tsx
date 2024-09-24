@@ -6,9 +6,10 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { KeyRound, Trash2 } from 'lucide-react';
+import { Bookmark, KeyRound, Snowflake, Trash2 } from 'lucide-react';
 
 import type { DBField } from '@/lib/domain/db-field';
+import type { DBIndex } from '@/lib/domain/db-index';
 import { useChartDB } from '@/hooks/use-chartdb';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_';
@@ -22,10 +23,19 @@ export interface TableNodeFieldProps {
     highlighted: boolean;
     visible: boolean;
     isConnectable: boolean;
+    allIndices: DBIndex[];
 }
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
-    ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
+    ({
+        field,
+        focused,
+        tableNodeId,
+        highlighted,
+        visible,
+        isConnectable,
+        allIndices,
+    }) => {
         const { removeField, relationships } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
@@ -107,11 +117,27 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         />
                     </>
                 )}
-                <div className="block truncate text-left">{field.name}</div>
+                <div className="block truncate text-left">
+                    {field.name}
+                    {field.nullable ? (
+                        <span className="text-muted-foreground">?</span>
+                    ) : null}
+                </div>
                 <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
-                    {field.primaryKey ? (
+                    {field.primaryKey ||
+                    field.unique ||
+                    allIndices.find(
+                        (v) =>
+                            v.fieldIds.length == 1 && v.fieldIds[0] == field.id
+                    ) ? (
                         <div className="text-muted-foreground group-hover:hidden">
-                            <KeyRound size={14} />
+                            {field.primaryKey ? (
+                                <KeyRound size={14} />
+                            ) : field.unique ? (
+                                <Snowflake size={14} />
+                            ) : (
+                                <Bookmark size={14} />
+                            )}
                         </div>
                     ) : null}
 

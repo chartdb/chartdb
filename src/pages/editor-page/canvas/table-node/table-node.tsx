@@ -195,6 +195,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
                             )}
                             visible={visibleFields.includes(field)}
                             isConnectable={!table.isView}
+                            allIndices={table.indexes}
                         />
                     ))}
                 </div>
