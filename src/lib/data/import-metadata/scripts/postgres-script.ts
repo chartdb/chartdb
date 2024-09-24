@@ -165,7 +165,7 @@ cols AS (
     FROM information_schema.columns cols
     LEFT JOIN pg_catalog.pg_class c
         ON c.relname = cols.table_name
-    LEFT JOIN pg_catalog.pg_namespace n
+    JOIN pg_catalog.pg_namespace n
         ON n.oid = c.relnamespace AND n.nspname = cols.table_schema
     LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
                                         AND dsc.objsubid = cols.ordinal_position
@@ -209,7 +209,7 @@ cols AS (
                 ',') AS tbls_metadata
         FROM information_schema.tables tbls
         LEFT JOIN pg_catalog.pg_class c ON c.relname = tbls.TABLE_NAME
-        LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
                                             AND n.nspname = tbls.TABLE_SCHEMA
         LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
                                                 AND dsc.objsubid = 0
