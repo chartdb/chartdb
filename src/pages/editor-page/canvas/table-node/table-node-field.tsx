@@ -53,6 +53,13 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 ).length,
             [relationships, tableNodeId, field.id]
         );
+        const singleIndex = useMemo(
+            () =>
+                allIndices.find(
+                    (v) => v.fieldIds.length == 1 && v.fieldIds[0] == field.id
+                ),
+            [allIndices, field.id]
+        );
 
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
 
@@ -124,16 +131,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     ) : null}
                 </div>
                 <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
-                    {field.primaryKey ||
-                    field.unique ||
-                    allIndices.find(
-                        (v) =>
-                            v.fieldIds.length == 1 && v.fieldIds[0] == field.id
-                    ) ? (
+                    {field.primaryKey || field.unique || singleIndex ? (
                         <div className="text-muted-foreground group-hover:hidden">
                             {field.primaryKey ? (
                                 <KeyRound size={14} />
-                            ) : field.unique ? (
+                            ) : field.unique ||
+                              (singleIndex && singleIndex.unique) ? (
                                 <Snowflake size={14} />
                             ) : (
                                 <Bookmark size={14} />
