@@ -99,7 +99,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
-
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
     );
@@ -273,6 +272,26 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onNodesChangeHandler: OnNodesChange<TableNodeType> = useCallback(
         (changes) => {
+            changes.forEach((change) => {
+                if (
+                    change.type === 'dimensions' &&
+                    'dimensions' in change &&
+                    change.dimensions
+                ) {
+                    setNodes((nds) =>
+                        nds.map((node) =>
+                            node.id === change.id
+                                ? {
+                                      ...node,
+                                      width: change.dimensions.width,
+                                      height: change.dimensions.height,
+                                  }
+                                : node
+                        )
+                    );
+                }
+            });
+
             const positionChanges: NodePositionChange[] = changes.filter(
                 (change) => change.type === 'position' && !change.dragging
             ) as NodePositionChange[];
@@ -328,9 +347,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
             }
 
+            changes.forEach((change) => {
+                if (
+                    change.type === 'dimensions' &&
+                    'dimensions' in change &&
+                    change.dimensions
+                ) {
+                    setNodes((nds) =>
+                        nds.map((node) =>
+                            node.id === change.id
+                                ? { ...node, ...change.dimensions }
+                                : node
+                        )
+                    );
+                }
+            });
+
             return onNodesChange(changes);
         },
-        [onNodesChange, updateTablesState]
+        [onNodesChange, updateTablesState, setNodes]
     );
 
     const isLoadingDOM =
