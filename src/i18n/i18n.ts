@@ -3,11 +3,13 @@ import { initReactI18next } from 'react-i18next';
 import { en, enMetadata } from './locales/en';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
+import { de } from './locales/de';
 
 const resources = {
     en,
     es,
     fr,
+    de,
 };
 
 i18n.use(initReactI18next).init({
