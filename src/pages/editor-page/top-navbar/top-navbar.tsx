@@ -116,16 +116,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setEditMode(true);
     };
 
-    const exportPNG = useCallback(() => {
-        exportImage('png');
-    }, [exportImage]);
-
     const exportSVG = useCallback(() => {
-        exportImage('svg');
-    }, [exportImage]);
-
-    const exportJPG = useCallback(() => {
-        exportImage('jpeg');
+        exportImage('svg', 1);
     }, [exportImage]);
 
     const openChartDBIO = useCallback(() => {
@@ -300,6 +292,48 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             i18n.changeLanguage(language);
         },
         [i18n]
+    );
+
+    const handleHighResExport = useCallback(
+        (format: 'png' | 'jpg') => {
+            showAlert({
+                title: t('export_high_res.title'),
+                content: (
+                    <div className="flex flex-col gap-4">
+                        <p>{t('export_high_res.description')}</p>
+                        <Select
+                            onValueChange={(value) =>
+                                exportImage(format, Number(value))
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue
+                                    placeholder={t(
+                                        'export_high_res.select_scale'
+                                    )}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="1">
+                                    {t('export_high_res.scale_1x')}
+                                </SelectItem>
+                                <SelectItem value="2">
+                                    {t('export_high_res.scale_2x')}
+                                </SelectItem>
+                                <SelectItem value="3">
+                                    {t('export_high_res.scale_3x')}
+                                </SelectItem>
+                                <SelectItem value="4">
+                                    {t('export_high_res.scale_4x')}
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                ),
+                closeLabel: 'Cancel',
+            });
+        },
+        [exportImage, showAlert, t]
     );
 
     return (
@@ -502,10 +536,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         {t('menu.file.export_as')}
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
-                                        <MenubarItem onClick={exportPNG}>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                handleHighResExport('png')
+                                            }
+                                        >
                                             PNG
                                         </MenubarItem>
-                                        <MenubarItem onClick={exportJPG}>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                handleHighResExport('jpg')
+                                            }
+                                        >
                                             JPG
                                         </MenubarItem>
                                         <MenubarItem onClick={exportSVG}>

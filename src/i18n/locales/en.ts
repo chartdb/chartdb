@@ -309,6 +309,18 @@ export const en = {
             edit_table: 'Edit Table',
             delete_table: 'Delete Table',
         },
+
+        export_high_res: {
+            title: 'Export High Resolution Image',
+            description: 'Choose the scale factor for export:',
+            select_scale: 'Select scale',
+            scale_1x: '1x Regular',
+            scale_2x: '2x (Recommended)',
+            scale_3x: '3x',
+            scale_4x: '4x',
+            export_png: 'Export High-Res PNG',
+            export_jpg: 'Export High-Res JPG',
+        },
     },
 };
 
