@@ -323,6 +323,14 @@ export const es: LanguageTranslation = {
             edit_table: 'Editar Tabla',
             delete_table: 'Eliminar Tabla',
         },
+
+        field_type_change: {
+            relationship_title: 'Cambiar Campos Relacionados',
+            relationship_description:
+                'Este campo es parte de una o más relaciones. Cambiar su tipo afectará a los campos relacionados en otras tablas. ¿Desea continuar?',
+            change_all: 'Cambiar Todo',
+            cancel: 'Cancelar',
+        },
     },
 };
 
