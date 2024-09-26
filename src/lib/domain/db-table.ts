@@ -348,3 +348,52 @@ export const adjustTablePositions = ({
 
     return tables;
 };
+
+export const shouldReorderTables = (tables: DBTable[]): boolean => {
+    const tableWidth = 200;
+    const tableHeight = 200;
+    const gapThreshold = 500;
+
+    // Sort tables by x and y coordinates
+    const sortedTablesX = [...tables].sort((a, b) => a.x - b.x);
+    const sortedTablesY = [...tables].sort((a, b) => a.y - b.y);
+
+    for (let i = 0; i < tables.length; i++) {
+        for (let j = i + 1; j < tables.length; j++) {
+            const table1 = tables[i];
+            const table2 = tables[j];
+
+            // Check for overlap
+            if (
+                Math.abs(table1.x - table2.x) < tableWidth &&
+                Math.abs(table1.y - table2.y) < tableHeight
+            ) {
+                return true;
+            }
+
+            // Check for large gaps in X direction
+            const gapX = table2.x - (table1.x + tableWidth);
+            if (gapX > gapThreshold) {
+                const tablesInBetweenX = sortedTablesX.filter(
+                    (t) => t.x > table1.x + tableWidth && t.x < table2.x
+                );
+                if (tablesInBetweenX.length === 0) {
+                    return true;
+                }
+            }
+
+            // Check for large gaps in Y direction
+            const gapY = table2.y - (table1.y + tableHeight);
+            if (gapY > gapThreshold) {
+                const tablesInBetweenY = sortedTablesY.filter(
+                    (t) => t.y > table1.y + tableHeight && t.y < table2.y
+                );
+                if (tablesInBetweenY.length === 0) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+};
