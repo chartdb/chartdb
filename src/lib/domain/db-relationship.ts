@@ -156,15 +156,3 @@ export const determineCardinalities = (
             return { sourceCardinality: 'many', targetCardinality: 'many' };
     }
 };
-
-export const getRelationshipsForField = (
-    relationships: DBRelationship[],
-    tableId: string,
-    fieldId: string
-): DBRelationship[] => {
-    return relationships.filter(
-        (rel) =>
-            (rel.sourceTableId === tableId && rel.sourceFieldId === fieldId) ||
-            (rel.targetTableId === tableId && rel.targetFieldId === fieldId)
-    );
-};
