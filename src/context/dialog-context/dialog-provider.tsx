@@ -15,61 +15,82 @@ import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
 import { StarUsDialog } from '@/dialogs/star-us-dialog/star-us-dialog';
+import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
+import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [openOpenDiagramDialog, setOpenOpenDiagramDialog] = useState(false);
+
+    const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
+        useState(false);
+    const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
+
+    // Export image dialog
+    const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
+    const [exportImageDialogParams, setExportImageDialogParams] = useState<
+        Omit<ExportImageDialogProps, 'dialog'>
+    >({ format: 'png' });
+    const openExportImageDialogHandler: DialogContext['openExportImageDialog'] =
+        useCallback(
+            (params) => {
+                setExportImageDialogParams(params);
+                setOpenExportImageDialog(true);
+            },
+            [setOpenExportImageDialog]
+        );
+
+    // Export SQL dialog
     const [openExportSQLDialog, setOpenExportSQLDialog] = useState(false);
     const [exportSQLDialogParams, setExportSQLDialogParams] = useState<
         Omit<ExportSQLDialogProps, 'dialog'>
     >({ targetDatabaseType: DatabaseType.GENERIC });
-    const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
-        useState(false);
+    const openExportSQLDialogHandler: DialogContext['openExportSQLDialog'] =
+        useCallback(
+            ({ targetDatabaseType }) => {
+                setExportSQLDialogParams({ targetDatabaseType });
+                setOpenExportSQLDialog(true);
+            },
+            [setOpenExportSQLDialog]
+        );
+
+    // Import database dialog
     const [openImportDatabaseDialog, setOpenImportDatabaseDialog] =
         useState(false);
     const [importDatabaseDialogParams, setImportDatabaseDialogParams] =
         useState<Omit<ImportDatabaseDialogProps, 'dialog'>>({
             databaseType: DatabaseType.GENERIC,
         });
-    const [openTableSchemaDialog, setOpenTableSchemaDialog] = useState(false);
-    const [tableSchemaDialogParams, setTableSchemaDialogParams] = useState<
-        Omit<TableSchemaDialogProps, 'dialog'>
-    >({ schemas: [], onConfirm: emptyFn });
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
-        title: '',
-    });
-    const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
-
-    const openExportSQLDialogHandler: DialogContext['openExportSQLDialog'] =
-        useCallback(
-            ({ targetDatabaseType }) => {
-                setOpenExportSQLDialog(true);
-                setExportSQLDialogParams({ targetDatabaseType });
-            },
-            [setOpenExportSQLDialog]
-        );
-
     const openImportDatabaseDialogHandler: DialogContext['openImportDatabaseDialog'] =
         useCallback(
             ({ databaseType }) => {
-                setOpenImportDatabaseDialog(true);
                 setImportDatabaseDialogParams({ databaseType });
+                setOpenImportDatabaseDialog(true);
             },
             [setOpenImportDatabaseDialog]
         );
 
+    // Table schema dialog
+    const [openTableSchemaDialog, setOpenTableSchemaDialog] = useState(false);
+    const [tableSchemaDialogParams, setTableSchemaDialogParams] = useState<
+        Omit<TableSchemaDialogProps, 'dialog'>
+    >({ schemas: [], onConfirm: emptyFn });
     const openTableSchemaDialogHandler: DialogContext['openTableSchemaDialog'] =
         useCallback(
             (params) => {
-                setOpenTableSchemaDialog(true);
                 setTableSchemaDialogParams(params);
+                setOpenTableSchemaDialog(true);
             },
             [setOpenTableSchemaDialog]
         );
 
+    // Alert dialog
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
+        title: '',
+    });
     const showAlertHandler: DialogContext['showAlert'] = useCallback(
         (params) => {
             setAlertParams(params);
@@ -77,7 +98,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         },
         [setShowAlert, setAlertParams]
     );
-
     const closeAlertHandler = useCallback(() => {
         setShowAlert(false);
     }, [setShowAlert]);
@@ -104,6 +124,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
+                closeExportImageDialog: () => setOpenExportImageDialog(false),
+                openExportImageDialog: openExportImageDialogHandler,
             }}
         >
             {children}
@@ -126,6 +148,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 {...tableSchemaDialogParams}
             />
             <StarUsDialog dialog={{ open: openStarUsDialog }} />
+            <ExportImageDialog
+                dialog={{ open: openExportImageDialog }}
+                {...exportImageDialogParams}
+            />
         </dialogContext.Provider>
     );
 };

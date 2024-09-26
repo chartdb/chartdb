@@ -66,6 +66,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         openImportDatabaseDialog,
         showAlert,
+        openExportImageDialog,
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -119,6 +120,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const exportSVG = useCallback(() => {
         exportImage('svg', 1);
     }, [exportImage]);
+
+    const exportPNG = useCallback(() => {
+        openExportImageDialog({
+            format: 'png',
+        });
+    }, [openExportImageDialog]);
+
+    const exportJPG = useCallback(() => {
+        openExportImageDialog({
+            format: 'jpeg',
+        });
+    }, [openExportImageDialog]);
 
     const openChartDBIO = useCallback(() => {
         window.location.href = 'https://chartdb.io';
@@ -292,48 +305,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             i18n.changeLanguage(language);
         },
         [i18n]
-    );
-
-    const handleHighResExport = useCallback(
-        (format: 'png' | 'jpg') => {
-            showAlert({
-                title: t('export_high_res.title'),
-                content: (
-                    <div className="flex flex-col gap-4">
-                        <p>{t('export_high_res.description')}</p>
-                        <Select
-                            onValueChange={(value) =>
-                                exportImage(format, Number(value))
-                            }
-                        >
-                            <SelectTrigger>
-                                <SelectValue
-                                    placeholder={t(
-                                        'export_high_res.select_scale'
-                                    )}
-                                />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="1">
-                                    {t('export_high_res.scale_1x')}
-                                </SelectItem>
-                                <SelectItem value="2">
-                                    {t('export_high_res.scale_2x')}
-                                </SelectItem>
-                                <SelectItem value="3">
-                                    {t('export_high_res.scale_3x')}
-                                </SelectItem>
-                                <SelectItem value="4">
-                                    {t('export_high_res.scale_4x')}
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                ),
-                closeLabel: 'Cancel',
-            });
-        },
-        [exportImage, showAlert, t]
     );
 
     return (
@@ -536,18 +507,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         {t('menu.file.export_as')}
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                handleHighResExport('png')
-                                            }
-                                        >
+                                        <MenubarItem onClick={exportPNG}>
                                             PNG
                                         </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                handleHighResExport('jpg')
-                                            }
-                                        >
+                                        <MenubarItem onClick={exportJPG}>
                                             JPG
                                         </MenubarItem>
                                         <MenubarItem onClick={exportSVG}>
