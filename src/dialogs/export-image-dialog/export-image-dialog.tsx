@@ -21,7 +21,7 @@ export interface ExportImageDialogProps extends BaseDialogProps {
     format: ImageType;
 }
 
-const DEFAULT_SCALE = '1';
+const DEFAULT_SCALE = '2';
 export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
     dialog,
     format,
