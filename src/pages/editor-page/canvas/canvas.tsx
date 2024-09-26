@@ -342,6 +342,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             tables: tables.filter((table) =>
                 shouldShowTablesBySchemaFilter(table, filteredSchemas)
             ),
+            mode: 'all', // Use 'all' mode for manual reordering
         });
 
         updateTablesState((currentTables) =>

@@ -53,7 +53,11 @@ export const loadFromDatabaseMetadata = ({
     });
 
     // Second pass: Adjust table positions based on relationships
-    const adjustedTables = adjustTablePositions({ tables, relationships });
+    const adjustedTables = adjustTablePositions({
+        tables,
+        relationships,
+        mode: 'perSchema',
+    });
 
     const sortedTables = adjustedTables.sort((a, b) => {
         if (a.isView === b.isView) {
