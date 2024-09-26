@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const fr = {
+export const fr: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -126,6 +126,7 @@ export const fr = {
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
                         delete_table: 'Supprimer la Table',
+                        change_schema: 'Changer le Schéma',
                     },
                 },
                 empty_state: {
@@ -224,6 +225,54 @@ export const fr = {
                 description:
                     "N'hésitez pas à utiliser votre OPENAI_TOKEN, voir le manuel <0>ici</0>.",
             },
+        },
+
+        // TODO: Translate
+        export_image_dialog: {
+            title: 'Export Image',
+            description: 'Choose the scale factor for export:',
+            scale_1x: '1x Regular',
+            scale_2x: '2x (Recommended)',
+            scale_3x: '3x',
+            scale_4x: '4x',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+
+        // TODO: Translate
+        multiple_schemas_alert: {
+            title: 'Multiple Schemas',
+            description:
+                '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
+            dont_show_again: "Don't show again",
+            change_schema: 'Change',
+            none: 'none',
+        },
+
+        // TODO: Translate
+        new_table_schema_dialog: {
+            title: 'Select Schema',
+            description:
+                'Multiple schemas are currently displayed. Select one for the new table.',
+            cancel: 'Cancel',
+            confirm: 'Confirm',
+        },
+
+        // TODO: Translate
+        star_us_dialog: {
+            title: 'Help us improve!',
+            description:
+                "Would you like to star us on GitHub? It's just a click away!",
+            close: 'Not now',
+            confirm: 'Of course!',
+        },
+
+        // TODO: Translate
+        update_table_schema_dialog: {
+            title: 'Change Schema',
+            description: 'Update table "{{tableName}}" schema',
+            cancel: 'Cancel',
+            confirm: 'Change',
         },
 
         create_relationship_dialog: {
