@@ -661,17 +661,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     <MenubarSubContent>
                                         <MenubarCheckboxItem
                                             onClick={() =>
-                                                changeLanguage(deMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                deMetadata.code
-                                            }
-                                        >
-                                            {deMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
                                                 changeLanguage(enMetadata.code)
                                             }
                                             checked={
@@ -702,6 +691,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             }
                                         >
                                             {frMetadata.name}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            onClick={() =>
+                                                changeLanguage(deMetadata.code)
+                                            }
+                                            checked={
+                                                i18n.language ===
+                                                deMetadata.code
+                                            }
+                                        >
+                                            {deMetadata.name}
                                         </MenubarCheckboxItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
