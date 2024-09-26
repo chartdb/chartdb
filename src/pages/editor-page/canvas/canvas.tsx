@@ -51,6 +51,7 @@ import {
 import { useDialog } from '@/hooks/use-dialog';
 import { MarkerDefinitions } from './marker-definitions';
 import { CanvasContextMenu } from './canvas-context-menu';
+import { areFieldTypesCompatible } from '@/lib/data/data-types';
 
 type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
 
@@ -90,6 +91,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         updateTablesState,
         removeRelationships,
         getField,
+        databaseType,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -222,12 +224,18 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 return;
             }
 
-            if (sourceField.type.id !== targetField.type.id) {
+            if (
+                !areFieldTypesCompatible(
+                    sourceField.type,
+                    targetField.type,
+                    databaseType
+                )
+            ) {
                 toast({
-                    title: 'Field types do not match',
+                    title: 'Field types are not compatible',
                     variant: 'destructive',
                     description:
-                        'Relationships can only be created between fields of the same type',
+                        'Relationships can only be created between compatible field types',
                 });
                 return;
             }
@@ -245,7 +253,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             //     )
             // );
         },
-        [createRelationship, getField, toast]
+        [createRelationship, getField, toast, databaseType]
     );
 
     const onEdgesChangeHandler: OnEdgesChange<TableEdgeType> = useCallback(
@@ -342,6 +350,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             tables: tables.filter((table) =>
                 shouldShowTablesBySchemaFilter(table, filteredSchemas)
             ),
+            mode: 'all', // Use 'all' mode for manual reordering
         });
 
         updateTablesState((currentTables) =>

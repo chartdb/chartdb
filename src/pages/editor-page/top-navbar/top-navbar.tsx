@@ -66,6 +66,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openExportSQLDialog,
         openImportDatabaseDialog,
         showAlert,
+        openExportImageDialog,
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -116,17 +117,21 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setEditMode(true);
     };
 
-    const exportPNG = useCallback(() => {
-        exportImage('png');
+    const exportSVG = useCallback(() => {
+        exportImage('svg', 1);
     }, [exportImage]);
 
-    const exportSVG = useCallback(() => {
-        exportImage('svg');
-    }, [exportImage]);
+    const exportPNG = useCallback(() => {
+        openExportImageDialog({
+            format: 'png',
+        });
+    }, [openExportImageDialog]);
 
     const exportJPG = useCallback(() => {
-        exportImage('jpeg');
-    }, [exportImage]);
+        openExportImageDialog({
+            format: 'jpeg',
+        });
+    }, [openExportImageDialog]);
 
     const openChartDBIO = useCallback(() => {
         window.location.href = 'https://chartdb.io';

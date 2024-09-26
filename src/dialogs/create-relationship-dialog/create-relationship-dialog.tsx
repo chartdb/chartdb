@@ -17,6 +17,7 @@ import { SelectBox } from '@/components/select-box/select-box';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { areFieldTypesCompatible } from '@/lib/data/data-types';
 
 const ErrorMessageRelationshipFieldsNotSameType =
     'Relationships can only be created between fields of the same type';
@@ -41,6 +42,7 @@ export const CreateRelationshipDialog: React.FC<
     const { openRelationshipFromSidebar } = useLayout();
     const [canCreateRelationship, setCanCreateRelationship] = useState(false);
     const { fitView, setEdges } = useReactFlow();
+    const { databaseType } = useChartDB();
 
     const tableOptions = useMemo(() => {
         return tables.map(
@@ -108,7 +110,13 @@ export const CreateRelationshipDialog: React.FC<
             return;
         }
 
-        if (primaryField.type.id !== referencedField.type.id) {
+        if (
+            !areFieldTypesCompatible(
+                primaryField.type,
+                referencedField.type,
+                databaseType
+            )
+        ) {
             setErrorMessage(ErrorMessageRelationshipFieldsNotSameType);
             return;
         }
@@ -121,6 +129,7 @@ export const CreateRelationshipDialog: React.FC<
         referencedFieldId,
         setErrorMessage,
         getField,
+        databaseType,
     ]);
 
     const handleCreateRelationship = useCallback(async () => {

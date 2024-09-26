@@ -1,4 +1,4 @@
-import type { LanguageTranslation } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const es: LanguageTranslation = {
     translation: {
@@ -197,6 +197,7 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            // TODO: Translate
             title: 'Abrir Diagrama',
             description:
                 'Selecciona un diagrama para abrir de la lista a continuación.',
@@ -262,6 +263,18 @@ export const es: LanguageTranslation = {
             },
         },
 
+        // TODO: Translate
+        export_image_dialog: {
+            title: 'Export Image',
+            description: 'Choose the scale factor for export:',
+            scale_1x: '1x Regular',
+            scale_2x: '2x (Recommended)',
+            scale_3x: '3x',
+            scale_4x: '4x',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+
         new_table_schema_dialog: {
             title: 'Seleccionar Esquema',
             description:
@@ -313,7 +326,7 @@ export const es: LanguageTranslation = {
     },
 };
 
-export const esMetadata = {
+export const esMetadata: LanguageMetadata = {
     name: 'Español',
     code: 'es',
 };

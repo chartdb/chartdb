@@ -2,31 +2,22 @@ import React, { useCallback, useMemo } from 'react';
 import type { ExportImageContext, ImageType } from './export-image-context';
 import { exportImageContext } from './export-image-context';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
-import {
-    getNodesBounds,
-    getViewportForBounds,
-    useReactFlow,
-} from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
-
-const imageWidth = 1024;
-const imageHeight = 768;
 
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { getNodes, setNodes } = useReactFlow();
+    const { setNodes, getViewport } = useReactFlow();
     const { diagramName } = useChartDB();
 
     const downloadImage = useCallback(
         (dataUrl: string, type: ImageType) => {
             const a = document.createElement('a');
-
             a.setAttribute('download', `${diagramName}.${type}`);
             a.setAttribute('href', dataUrl);
-
             a.click();
         },
         [diagramName]
@@ -45,7 +36,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (type) => {
+        async (type, scale = 1) => {
             showLoader({
                 animated: false,
             });
@@ -54,15 +45,16 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 nodes.map((node) => ({ ...node, selected: false }))
             );
 
-            const nodesBounds = getNodesBounds(getNodes());
-            const viewport = getViewportForBounds(
-                nodesBounds,
-                imageWidth,
-                imageHeight,
-                0.01,
-                2,
-                0.02
-            );
+            const viewport = getViewport();
+            const reactFlowBounds = document
+                .querySelector('.react-flow')
+                ?.getBoundingClientRect();
+
+            if (!reactFlowBounds) {
+                console.error('Could not find React Flow container');
+                hideLoader();
+                return;
+            }
 
             const imageCreateFn = imageCreatorMap[type];
 
@@ -75,14 +67,15 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         ...(type === 'jpeg' || type === 'png'
                             ? { backgroundColor: '#ffffff' }
                             : {}),
-                        width: imageWidth,
-                        height: imageHeight,
+                        width: reactFlowBounds.width,
+                        height: reactFlowBounds.height,
                         style: {
-                            width: `${imageWidth}px`,
-                            height: `${imageHeight}px`,
+                            width: `${reactFlowBounds.width}px`,
+                            height: `${reactFlowBounds.height}px`,
                             transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
                         },
                         quality: 1,
+                        pixelRatio: scale,
                     }
                 );
 
@@ -92,11 +85,11 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         },
         [
             downloadImage,
-            getNodes,
+            getViewport,
+            hideLoader,
             imageCreatorMap,
             setNodes,
             showLoader,
-            hideLoader,
         ]
     );
 

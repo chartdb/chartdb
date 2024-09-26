@@ -32,13 +32,13 @@ const routes: RouteObject[] = [
                                         <HistoryProvider>
                                             <ThemeProvider>
                                                 <ReactFlowProvider>
-                                                    <DialogProvider>
-                                                        <ExportImageProvider>
+                                                    <ExportImageProvider>
+                                                        <DialogProvider>
                                                             <KeyboardShortcutsProvider>
                                                                 <EditorPage />
                                                             </KeyboardShortcutsProvider>
-                                                        </ExportImageProvider>
-                                                    </DialogProvider>
+                                                        </DialogProvider>
+                                                    </ExportImageProvider>
                                                 </ReactFlowProvider>
                                             </ThemeProvider>
                                         </HistoryProvider>
