@@ -7,8 +7,8 @@ export const de: LanguageTranslation = {
                 file: 'Datei',
                 new: 'Neu',
                 open: 'Öffnen',
-                save: 'Save',
-                import_database: 'Import Datenbank',
+                save: 'Speichern',
+                import_database: 'Datenbank importieren',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
                 delete_diagram: 'Diagramm löschen',
@@ -32,9 +32,9 @@ export const de: LanguageTranslation = {
             },
             help: {
                 help: 'Hilfe',
-                visit_website: 'ChartDB Website',
-                join_discord: 'ChartDB Discord',
-                schedule_a_call: 'ChartDB kontaktieren',
+                visit_website: 'ChartDB Webseite',
+                join_discord: 'Auf Discord beitreten',
+                schedule_a_call: 'Gespräch vereinbaren',
             },
         },
 
@@ -51,23 +51,23 @@ export const de: LanguageTranslation = {
             description:
                 'Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten im Diagramm werden dauerhaft gelöscht.',
             cancel: 'Abbrechen',
-            clear: 'Löschen',
+            clear: 'Leeren',
         },
 
         reorder_diagram_alert: {
             title: 'Diagramm neu anordnen',
             description:
-                'Diese Aktion wird alle Tabellen im Diagramm neu anordnen. Wollen Sie fortfahren?',
+                'Diese Aktion wird alle Tabellen im Diagramm neu anordnen. Möchten Sie fortfahren?',
             reorder: 'Neu anordnen',
             cancel: 'Abbrechen',
         },
 
         multiple_schemas_alert: {
-            title: 'Multiple Schemas',
+            title: 'Mehrere Schemas',
             description:
                 '{{schemasCount}} Schemas in diesem Diagramm. Derzeit angezeigt: {{formattedSchemas}}.',
-            dont_show_again: 'Nicht wieder anzeigen',
-            change_schema: 'Ändern',
+            dont_show_again: 'Nicht erneut anzeigen',
+            change_schema: 'Schema ändern',
             none: 'Keine',
         },
 
@@ -78,16 +78,16 @@ export const de: LanguageTranslation = {
         },
 
         zoom: {
-            on: 'An',
+            on: 'Ein',
             off: 'Aus',
         },
 
         last_saved: 'Zuletzt gespeichert',
         saved: 'Gespeichert',
         diagrams: 'Diagramme',
-        loading_diagram: 'Diagramm laden...',
-        deselect_all: 'Alle auswählen',
-        select_all: 'Alle auswählen',
+        loading_diagram: 'Diagramm wird geladen...',
+        deselect_all: 'Alles abwählen',
+        select_all: 'Alles auswählen',
         clear: 'Leeren',
         show_more: 'Mehr anzeigen',
         show_less: 'Weniger anzeigen',
@@ -131,7 +131,7 @@ export const de: LanguageTranslation = {
                         delete_index: 'Index löschen',
                     },
                     table_actions: {
-                        title: 'Tabellenattribute',
+                        title: 'Tabellenaktionen',
                         change_schema: 'Schema ändern',
                         add_field: 'Feld hinzufügen',
                         add_index: 'Index hinzufügen',
@@ -149,10 +149,10 @@ export const de: LanguageTranslation = {
                 add_relationship: 'Beziehung hinzufügen',
                 collapse: 'Alle einklappen',
                 relationship: {
-                    primary: 'Primary Table',
-                    foreign: 'Referenced Table',
+                    primary: 'Primäre Tabelle',
+                    foreign: 'Referenzierte Tabelle',
                     cardinality: 'Kardinalität',
-                    delete_relationship: 'Löschen',
+                    delete_relationship: 'Beziehung löschen',
                     relationship_actions: {
                         title: 'Aktionen',
                         delete_relationship: 'Beziehung löschen',
@@ -167,8 +167,8 @@ export const de: LanguageTranslation = {
         },
 
         toolbar: {
-            zoom_in: 'Zoom In',
-            zoom_out: 'Zoom Out',
+            zoom_in: 'Vergrößern',
+            zoom_out: 'Verkleinern',
             save: 'Speichern',
             show_all: 'Alle anzeigen',
             undo: 'Rückgängig',
@@ -178,8 +178,9 @@ export const de: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Datenbank auswählen',
-                description: 'Jede Datenbank wird unterschiedlich importiert.',
+                title: 'Welche Datenbank verwenden Sie?',
+                description:
+                    'Jede Datenbank hat ihre eigenen Funktionen und Möglichkeiten.',
                 check_examples_long: 'Beispiele ansehen',
                 check_examples_short: 'Beispiele',
             },
@@ -189,18 +190,18 @@ export const de: LanguageTranslation = {
                 database_edition: 'Datenbank Edition:',
                 step_1: 'Führen Sie dieses Skript in Ihrer Datenbank aus:',
                 step_2: 'Fügen Sie das Skriptergebnis hier ein:',
-                script_results_placeholder: 'Skript hier...',
+                script_results_placeholder: 'Skriptergebnisse hier...',
                 ssms_instructions: {
                     button_text: 'SSMS Anweisungen',
                     title: 'Anweisungen',
                     step_1: 'Gehen Sie zu Tools > Optionen > Abfrageergebnisse > SQL Server.',
-                    step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die Maximale Anzahl von Zeichen für Nicht-XML-Daten (auf 9999999 setzen).',
+                    step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die maximale Zeichenanzahl für Nicht-XML-Daten (auf 9999999 setzen).',
                 },
             },
 
             cancel: 'Abbrechen',
             back: 'Zurück',
-            empty_diagram: 'Diagramm leeren',
+            empty_diagram: 'Leeres Diagramm',
             continue: 'Weiter',
             import: 'Importieren',
         },
@@ -224,14 +225,14 @@ export const de: LanguageTranslation = {
                 'Exportieren Sie das Schema Ihres Diagramms in ein {{databaseType}} Skript',
             close: 'Schließen',
             loading: {
-                text: 'KI erstellt SQL für {{databaseType}}...',
-                description: 'Dies sollte unter 30 Sekunden dauern.',
+                text: 'Die KI generiert SQL für {{databaseType}}...',
+                description: 'Dies sollte bis zu 30 Sekunden dauern.',
             },
             error: {
                 message:
                     'Fehler beim Generieren des SQL-Skripts. Bitte versuchen Sie es später erneut oder <0>kontaktieren Sie uns</0>.',
                 description:
-                    'Sie können Ihren OPENAI_TOKEN verwenden, siehe <0>hier</0>.',
+                    'Verwenden Sie Ihren OPENAI_TOKEN, siehe Anleitung <0>hier</0>.',
             },
         },
 
@@ -252,18 +253,18 @@ export const de: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'Datenbank importieren',
+            title: 'In aktuelles Diagramm importieren',
             override_alert: {
                 title: 'Datenbank importieren',
                 content: {
-                    alert: 'Importieren Sie dieses Diagramm wird vorhandene Tabellen und Beziehungen beeinflussen.',
+                    alert: 'Das Importieren dieses Diagramms wird vorhandene Tabellen und Beziehungen beeinflussen.',
                     new_tables:
                         '<bold>{{newTablesNumber}}</bold> neue Tabellen werden hinzugefügt.',
                     new_relationships:
                         '<bold>{{newRelationshipsNumber}}</bold> neue Beziehungen werden erstellt.',
                     tables_override:
                         '<bold>{{tablesOverrideNumber}}</bold> Tabellen werden überschrieben.',
-                    proceed: 'Wollen Sie fortfahren?',
+                    proceed: 'Möchten Sie fortfahren?',
                 },
                 import: 'Importieren',
                 cancel: 'Abbrechen',
