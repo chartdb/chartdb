@@ -1,4 +1,4 @@
-import { LanguageMetadata } from '../types';
+import type { LanguageMetadata } from '../types';
 
 export const fr = {
     translation: {
@@ -32,7 +32,7 @@ export const fr = {
             },
             help: {
                 help: 'Aide',
-                visit_website: 'Visiter ChartDB',
+                visit_website: 'Visitez ChartDB',
                 join_discord: 'Rejoignez-nous sur Discord',
                 schedule_a_call: 'Parlez avec nous !',
             },
@@ -116,10 +116,10 @@ export const fr = {
                         delete_field: 'Supprimer le Champ',
                     },
                     index_actions: {
-                        title: 'Attributs de l\'Index',
+                        title: "Attributs de l'Index",
                         name: 'Nom',
                         unique: 'Unique',
-                        delete_index: 'Supprimer l\'Index',
+                        delete_index: "Supprimer l'Index",
                     },
                     table_actions: {
                         title: 'Actions de la Table',
@@ -176,9 +176,9 @@ export const fr = {
 
             import_database: {
                 title: 'Importer votre Base de Données',
-                database_edition: 'Édition de la Base de Données:',
-                step_1: 'Exécutez ce script dans votre base de données:',
-                step_2: 'Collez le résultat du script ici:',
+                database_edition: 'Édition de la Base de Données :',
+                step_1: 'Exécutez ce script dans votre base de données :',
+                step_2: 'Collez le résultat du script ici :',
                 script_results_placeholder: 'Résultats du script ici...',
                 ssms_instructions: {
                     button_text: 'Instructions SSMS',
@@ -197,7 +197,8 @@ export const fr = {
 
         open_diagram_dialog: {
             title: 'Ouvrir Diagramme',
-            description: 'Sélectionnez un diagramme à ouvrir dans la liste ci-dessous.',
+            description:
+                'Sélectionnez un diagramme à ouvrir dans la liste ci-dessous.',
             table_columns: {
                 name: 'Nom',
                 created_at: 'Créé le',
@@ -214,14 +215,14 @@ export const fr = {
                 'Exportez le schéma de votre diagramme en script {{databaseType}}',
             close: 'Fermer',
             loading: {
-                text: 'L\'IA génère un SQL pour {{databaseType}}...',
-                description: 'Cela devrait prendre jusqu\'à 30 secondes.',
+                text: "L'IA génère un SQL pour {{databaseType}}...",
+                description: "Cela devrait prendre jusqu'à 30 secondes.",
             },
             error: {
                 message:
                     'Erreur lors de la génération du script SQL. Veuillez réessayer plus tard ou <0>contactez-nous</0>.',
                 description:
-                    'N\'hésitez pas à utiliser votre OPENAI_TOKEN, voir le manuel <0>ici</0>.',
+                    "N'hésitez pas à utiliser votre OPENAI_TOKEN, voir le manuel <0>ici</0>.",
             },
         },
 
@@ -246,7 +247,7 @@ export const fr = {
             override_alert: {
                 title: 'Importer Base de Données',
                 content: {
-                    alert: 'L\'importation de ce diagramme affectera les tables et relations existantes.',
+                    alert: "L'importation de ce diagramme affectera les tables et relations existantes.",
                     new_tables:
                         '<bold>{{newTablesNumber}}</bold> nouvelles tables seront ajoutées.',
                     new_relationships:
@@ -283,6 +284,3 @@ export const frMetadata: LanguageMetadata = {
     name: 'Français',
     code: 'fr',
 };
-
-
-          
