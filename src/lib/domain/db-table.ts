@@ -12,6 +12,7 @@ import {
     schemaNameToDomainSchemaName,
     schemaNameToSchemaId,
 } from './db-schema';
+import { MIN_TABLE_SIZE } from '@/pages/editor-page/canvas/table-node/table-node';
 
 export interface DBTable {
     id: string;
@@ -174,6 +175,16 @@ export const createTablesFromMetadata = ({
             comments: tableInfo.comment ? tableInfo.comment : undefined,
         };
     });
+};
+
+const getTableDimensions = (
+    table: DBTable
+): { width: number; height: number } => {
+    const fieldHeight = 32; // h-8 per field
+    const fieldCount = table.fields.length;
+    const height = fieldCount * fieldHeight + 48;
+    const width = table.width || MIN_TABLE_SIZE;
+    return { width, height };
 };
 
 export const adjustTablePositions = ({
@@ -350,8 +361,8 @@ export const adjustTablePositions = ({
 };
 
 export const shouldReorderTables = (tables: DBTable[]): boolean => {
-    const tableWidth = 200;
-    const tableHeight = 200;
+    // const tableWidth = 200;
+    // const tableHeight = 200;
     const gapThreshold = 500;
 
     // Sort tables by x and y coordinates
@@ -363,13 +374,41 @@ export const shouldReorderTables = (tables: DBTable[]): boolean => {
             const table1 = tables[i];
             const table2 = tables[j];
 
+            const currentTables = [table1, table2];
+
+            const tablesDimentions = [
+                getTableDimensions(table1),
+                getTableDimensions(table2),
+            ];
+
+            const higherTableIndex = table1.y < table2.y ? 0 : 1;
+            const lowerTableIndex = table1.y < table2.y ? 1 : 0;
+
+            const leftTableIndex = table1.x < table2.x ? 0 : 1;
+            const rightTableIndex = table1.x < table2.x ? 1 : 0;
+
             // Check for overlap
             if (
-                Math.abs(table1.x - table2.x) < tableWidth &&
-                Math.abs(table1.y - table2.y) < tableHeight
+                Math.abs(
+                    currentTables[leftTableIndex].x -
+                        currentTables[rightTableIndex].x
+                ) < tablesDimentions[leftTableIndex].width &&
+                Math.abs(
+                    currentTables[higherTableIndex].y -
+                        currentTables[lowerTableIndex].y
+                ) < tablesDimentions[higherTableIndex].height
             ) {
                 return true;
             }
+
+            const tableWidth = Math.max(
+                tablesDimentions[0].width,
+                tablesDimentions[1].width
+            );
+            const tableHeight = Math.max(
+                tablesDimentions[0].height,
+                tablesDimentions[0].height
+            );
 
             // Check for large gaps in X direction
             const gapX = table2.x - (table1.x + tableWidth);
