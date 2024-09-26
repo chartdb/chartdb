@@ -1,4 +1,4 @@
-import type { LanguageTranslation } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const es: LanguageTranslation = {
     translation: {
@@ -263,16 +263,14 @@ export const es: LanguageTranslation = {
             },
         },
 
+        // TODO: Translate
         export_image_dialog: {
             title: 'Export Image',
             description: 'Choose the scale factor for export:',
-            select_scale: 'Select scale',
             scale_1x: '1x Regular',
             scale_2x: '2x (Recommended)',
             scale_3x: '3x',
             scale_4x: '4x',
-            export_png: 'Export High-Res PNG',
-            export_jpg: 'Export High-Res JPG',
             cancel: 'Cancel',
             export: 'Export',
         },
@@ -328,7 +326,7 @@ export const es: LanguageTranslation = {
     },
 };
 
-export const esMetadata = {
+export const esMetadata: LanguageMetadata = {
     name: 'Español',
     code: 'es',
 };

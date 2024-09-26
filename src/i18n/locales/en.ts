@@ -273,13 +273,10 @@ export const en = {
         export_image_dialog: {
             title: 'Export Image',
             description: 'Choose the scale factor for export:',
-            select_scale: 'Select scale',
             scale_1x: '1x Regular',
             scale_2x: '2x (Recommended)',
             scale_3x: '3x',
             scale_4x: '4x',
-            export_png: 'Export High-Res PNG',
-            export_jpg: 'Export High-Res JPG',
             cancel: 'Cancel',
             export: 'Export',
         },
