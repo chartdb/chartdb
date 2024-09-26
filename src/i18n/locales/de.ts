@@ -322,14 +322,6 @@ export const de: LanguageTranslation = {
             edit_table: 'Tabelle bearbeiten',
             delete_table: 'Tabelle löschen',
         },
-
-        field_type_change: {
-            relationship_title: 'Zugehörige Felder ändern',
-            relationship_description:
-                'Dieses Feld ist Teil einer oder mehrerer Beziehungen. Eine Änderung des Typs wirkt sich auf verwandte Felder in anderen Tabellen aus. Möchten Sie fortfahren?',
-            change_all: 'Alles ändern',
-            cancel: 'Abbrechen',
-        },
     },
 };
 

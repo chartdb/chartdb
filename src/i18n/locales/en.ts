@@ -320,14 +320,6 @@ export const en = {
             edit_table: 'Edit Table',
             delete_table: 'Delete Table',
         },
-
-        field_type_change: {
-            relationship_title: 'Change Related Fields',
-            relationship_description:
-                'This field is part of one or more relationships. Changing its type will affect related fields in other tables. Do you want to proceed?',
-            change_all: 'Change All',
-            cancel: 'Cancel',
-        },
     },
 };
 

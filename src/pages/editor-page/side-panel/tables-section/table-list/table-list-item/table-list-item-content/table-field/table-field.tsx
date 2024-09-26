@@ -25,7 +25,6 @@ import { TableFieldToggle } from './table-field-toggle';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
-import { useDialog } from '@/hooks/use-dialog';
 
 export interface TableFieldProps {
     field: DBField;
@@ -51,55 +50,6 @@ export const TableField: React.FC<TableFieldProps> = ({
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-    };
-
-    const { showAlert } = useDialog();
-    const { relationships, updateField: updateFieldGlobal } = useChartDB();
-
-    const handleTypeChange = async (newTypeId: string) => {
-        const newType = dataTypeMap[databaseType].find(
-            (v) => v.id === newTypeId
-        );
-        if (!newType) return;
-
-        const relatedRelationships = relationships.filter(
-            (rel) =>
-                rel.sourceFieldId === field.id || rel.targetFieldId === field.id
-        );
-
-        if (relatedRelationships.length > 0) {
-            const confirmed = await new Promise<boolean>((resolve) => {
-                showAlert({
-                    title: t('field_type_change.relationship_title'),
-                    description: t(
-                        'field_type_change.relationship_description'
-                    ),
-                    actionLabel: t('field_type_change.change_all'),
-                    closeLabel: t('field_type_change.cancel'),
-                    onAction: () => resolve(true),
-                    onClose: () => resolve(false),
-                });
-            });
-
-            if (!confirmed) return;
-
-            // Update all related fields
-            relatedRelationships.forEach((rel) => {
-                const otherFieldId =
-                    rel.sourceFieldId === field.id
-                        ? rel.targetFieldId
-                        : rel.sourceFieldId;
-                const otherFieldTableId =
-                    rel.sourceFieldId === field.id
-                        ? rel.targetTableId
-                        : rel.sourceTableId;
-                updateFieldGlobal(otherFieldTableId, otherFieldId, {
-                    type: newType,
-                });
-            });
-        }
-
-        updateField({ type: newType });
     };
 
     return (
@@ -147,7 +97,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.type.id}
                                 onChange={(value) =>
-                                    handleTypeChange(value as string)
+                                    updateField({
+                                        type: dataTypeMap[databaseType].find(
+                                            (v) => v.id === value
+                                        ),
+                                    })
                                 }
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'
