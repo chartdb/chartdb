@@ -1,39 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
-import type { DataType } from './data/data-types';
-import { DatabaseType } from './domain/database-type';
-
-export function areFieldTypesCompatible(
-    type1: DataType,
-    type2: DataType,
-    databaseType: DatabaseType
-): boolean {
-    // Check for exact match first
-    if (type1.id === type2.id) {
-        return true;
-    }
-
-    // Define compatible types for each database type
-    const compatibleTypes: { [key: string]: { [key: string]: string[] } } = {
-        [DatabaseType.POSTGRESQL]: {
-            serial: ['integer'],
-            smallserial: ['smallint'],
-            bigserial: ['bigint'],
-        },
-        [DatabaseType.MYSQL]: {
-            int: ['integer'],
-            tinyint: ['boolean'],
-        },
-        // Add more database-specific compatibilities as needed
-    };
-
-    // Check if the types are compatible based on the database type
-    const dbCompatibleTypes = compatibleTypes[databaseType] || {};
-    return (
-        dbCompatibleTypes[type1.id]?.includes(type2.id) ||
-        dbCompatibleTypes[type2.id]?.includes(type1.id)
-    );
-}
 
 const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 
