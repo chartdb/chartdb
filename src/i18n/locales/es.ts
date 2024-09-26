@@ -197,6 +197,7 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
+            // TODO: Translate
             title: 'Abrir Diagrama',
             description:
                 'Selecciona un diagrama para abrir de la lista a continuación.',
@@ -260,6 +261,20 @@ export const es: LanguageTranslation = {
                 import: 'Importar',
                 cancel: 'Cancelar',
             },
+        },
+
+        export_image_dialog: {
+            title: 'Export Image',
+            description: 'Choose the scale factor for export:',
+            select_scale: 'Select scale',
+            scale_1x: '1x Regular',
+            scale_2x: '2x (Recommended)',
+            scale_3x: '3x',
+            scale_4x: '4x',
+            export_png: 'Export High-Res PNG',
+            export_jpg: 'Export High-Res JPG',
+            cancel: 'Cancel',
+            export: 'Export',
         },
 
         new_table_schema_dialog: {

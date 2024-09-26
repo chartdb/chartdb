@@ -270,6 +270,20 @@ export const en = {
             },
         },
 
+        export_image_dialog: {
+            title: 'Export Image',
+            description: 'Choose the scale factor for export:',
+            select_scale: 'Select scale',
+            scale_1x: '1x Regular',
+            scale_2x: '2x (Recommended)',
+            scale_3x: '3x',
+            scale_4x: '4x',
+            export_png: 'Export High-Res PNG',
+            export_jpg: 'Export High-Res JPG',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+
         new_table_schema_dialog: {
             title: 'Select Schema',
             description:
@@ -308,18 +322,6 @@ export const en = {
         table_node_context_menu: {
             edit_table: 'Edit Table',
             delete_table: 'Delete Table',
-        },
-
-        export_high_res: {
-            title: 'Export High Resolution Image',
-            description: 'Choose the scale factor for export:',
-            select_scale: 'Select scale',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
-            scale_3x: '3x',
-            scale_4x: '4x',
-            export_png: 'Export High-Res PNG',
-            export_jpg: 'Export High-Res JPG',
         },
     },
 };
