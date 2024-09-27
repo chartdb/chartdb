@@ -182,7 +182,7 @@ const getTableDimensions = (
 ): { width: number; height: number } => {
     const fieldHeight = 32; // h-8 per field
     const fieldCount = table.fields.length;
-    const height = fieldCount * fieldHeight + 48;
+    const height = Math.min(fieldCount, 11) * fieldHeight + 48;
     const width = table.width || MIN_TABLE_SIZE;
     return { width, height };
 };
@@ -360,79 +360,29 @@ export const adjustTablePositions = ({
     return tables;
 };
 
-export const shouldReorderTables = (tables: DBTable[]): boolean => {
-    // const tableWidth = 200;
-    // const tableHeight = 200;
-    const gapThreshold = 500;
+export const hasOverlappingTables = (tables: DBTable[]): string[] => {
+    const overlappingTables = new Set<string>();
+    const tableRects = tables.map((table) => ({
+        id: table.id,
+        left: table.x,
+        right: table.x + getTableDimensions(table).width,
+        top: table.y,
+        bottom: table.y + getTableDimensions(table).height,
+    }));
 
-    // Sort tables by x and y coordinates
-    const sortedTablesX = [...tables].sort((a, b) => a.x - b.x);
-    const sortedTablesY = [...tables].sort((a, b) => a.y - b.y);
-
-    for (let i = 0; i < tables.length; i++) {
-        for (let j = i + 1; j < tables.length; j++) {
-            const table1 = tables[i];
-            const table2 = tables[j];
-
-            const currentTables = [table1, table2];
-
-            const tablesDimentions = [
-                getTableDimensions(table1),
-                getTableDimensions(table2),
-            ];
-
-            const higherTableIndex = table1.y < table2.y ? 0 : 1;
-            const lowerTableIndex = table1.y < table2.y ? 1 : 0;
-
-            const leftTableIndex = table1.x < table2.x ? 0 : 1;
-            const rightTableIndex = table1.x < table2.x ? 1 : 0;
-
-            // Check for overlap
+    for (let i = 0; i < tableRects.length; i++) {
+        for (let j = i + 1; j < tableRects.length; j++) {
             if (
-                Math.abs(
-                    currentTables[leftTableIndex].x -
-                        currentTables[rightTableIndex].x
-                ) < tablesDimentions[leftTableIndex].width &&
-                Math.abs(
-                    currentTables[higherTableIndex].y -
-                        currentTables[lowerTableIndex].y
-                ) < tablesDimentions[higherTableIndex].height
+                tableRects[i].left < tableRects[j].right &&
+                tableRects[i].right > tableRects[j].left &&
+                tableRects[i].top < tableRects[j].bottom &&
+                tableRects[i].bottom > tableRects[j].top
             ) {
-                return true;
-            }
-
-            const tableWidth = Math.max(
-                tablesDimentions[0].width,
-                tablesDimentions[1].width
-            );
-            const tableHeight = Math.max(
-                tablesDimentions[0].height,
-                tablesDimentions[0].height
-            );
-
-            // Check for large gaps in X direction
-            const gapX = table2.x - (table1.x + tableWidth);
-            if (gapX > gapThreshold) {
-                const tablesInBetweenX = sortedTablesX.filter(
-                    (t) => t.x > table1.x + tableWidth && t.x < table2.x
-                );
-                if (tablesInBetweenX.length === 0) {
-                    return true;
-                }
-            }
-
-            // Check for large gaps in Y direction
-            const gapY = table2.y - (table1.y + tableHeight);
-            if (gapY > gapThreshold) {
-                const tablesInBetweenY = sortedTablesY.filter(
-                    (t) => t.y > table1.y + tableHeight && t.y < table2.y
-                );
-                if (tablesInBetweenY.length === 0) {
-                    return true;
-                }
+                overlappingTables.add(tableRects[i].id);
+                overlappingTables.add(tableRects[j].id);
             }
         }
     }
 
-    return false;
+    return Array.from(overlappingTables);
 };

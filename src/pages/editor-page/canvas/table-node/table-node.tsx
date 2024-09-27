@@ -19,6 +19,7 @@ import type { TableEdgeType } from '../table-edge';
 import type { DBField } from '@/lib/domain/db-field';
 import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
+import { cn } from '@/lib/utils';
 
 export type TableNodeType = Node<
     {
@@ -36,7 +37,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     selected,
     dragging,
     id,
-    data: { table },
+    data: { table, isOverlapping, highlightOverlap },
 }) => {
     const { updateTable, relationships } = useChartDB();
     const edges = useStore((store) => store.edges) as TableEdgeType[];
@@ -121,7 +122,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = ({
     return (
         <TableNodeContextMenu table={table}>
             <div
-                className={`flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 ${selected ? 'border-pink-600' : 'border-slate-500 dark:border-slate-700'} rounded-lg shadow-sm`}
+                className={cn(
+                    'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
+                    selected
+                        ? 'border-pink-600'
+                        : 'border-slate-500 dark:border-slate-700',
+                    isOverlapping && highlightOverlap
+                        ? 'ring-2 ring-blue-500 ring-offset-2 animate-pulse-border animate-scale'
+                        : ''
+                )}
                 onClick={(e) => {
                     if (e.detail === 2) {
                         openTableInEditor();

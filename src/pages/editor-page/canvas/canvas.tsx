@@ -30,7 +30,7 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid } from 'lucide-react';
+import { Pencil, LayoutGrid, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -41,7 +41,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import {
     adjustTablePositions,
     shouldShowTablesBySchemaFilter,
-    shouldReorderTables,
+    hasOverlappingTables,
 } from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import {
@@ -102,7 +102,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
-    const [shouldReorder, setShouldReorder] = useState(false);
+    const [hasOverlap, setHasOverlap] = useState(false);
+    const [highlightOverlappingTables, setHighlightOverlappingTables] =
+        useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
@@ -208,17 +210,44 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [selectedRelationshipIds, selectedTableIds, setEdges, getEdges]);
 
     useEffect(() => {
-        setNodes(
-            tables.map((table) => tableToTableNode(table, filteredSchemas))
+        const visibleTables = tables.filter((table) =>
+            shouldShowTablesBySchemaFilter(table, filteredSchemas)
         );
-    }, [tables, setNodes, filteredSchemas]);
+        const overlappingTables = hasOverlappingTables(visibleTables);
+        const tablesOverlap = overlappingTables.length > 0;
+
+        setNodes(
+            tables.map((table) => ({
+                ...tableToTableNode(table, filteredSchemas),
+                data: {
+                    ...tableToTableNode(table, filteredSchemas).data,
+                    isOverlapping: overlappingTables.includes(table.id),
+                    highlightOverlap: highlightOverlappingTables,
+                },
+            }))
+        );
+
+        if (tablesOverlap !== hasOverlap) {
+            setHasOverlap(tablesOverlap);
+        }
+    }, [
+        tables,
+        setNodes,
+        filteredSchemas,
+        highlightOverlappingTables,
+        hasOverlap,
+    ]);
 
     useEffect(() => {
         const visibleTables = tables.filter((table) =>
             shouldShowTablesBySchemaFilter(table, filteredSchemas)
         );
-        setShouldReorder(shouldReorderTables(visibleTables));
-    }, [tables, filteredSchemas]);
+        const tablesOverlap = hasOverlappingTables(visibleTables).length > 0;
+
+        if (tablesOverlap !== hasOverlap) {
+            setHasOverlap(tablesOverlap);
+        }
+    }, [tables, filteredSchemas, hasOverlap]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -354,11 +383,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
 
     const reorderTables = useCallback(() => {
+        const visibleTables = tables.filter((table) =>
+            shouldShowTablesBySchemaFilter(table, filteredSchemas)
+        );
         const newTables = adjustTablePositions({
             relationships,
-            tables: tables.filter((table) =>
-                shouldShowTablesBySchemaFilter(table, filteredSchemas)
-            ),
+            tables: visibleTables,
             mode: 'all', // Use 'all' mode for manual reordering
         });
 
@@ -416,29 +446,60 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <span>
-                                    <Button
-                                        variant="secondary"
-                                        className={`size-8 p-1 shadow-none ${
-                                            shouldReorder
-                                                ? 'bg-pink-600 hover:bg-pink-500'
-                                                : ''
-                                        }`}
-                                        onClick={showReorderConfirmation}
-                                    >
-                                        <LayoutGrid
-                                            className={`size-4 ${shouldReorder ? 'text-white' : ''}`}
-                                        />
-                                    </Button>
-                                </span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {t('toolbar.reorder_diagram')}
-                            </TooltipContent>
-                        </Tooltip>
+                        <div className="flex items-center gap-2">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        <Button
+                                            variant="secondary"
+                                            className="size-8 p-1 shadow-none"
+                                            onClick={showReorderConfirmation}
+                                        >
+                                            <LayoutGrid className="size-4" />
+                                        </Button>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('toolbar.reorder_diagram')}
+                                </TooltipContent>
+                            </Tooltip>
+                            <div
+                                className={`transition-all duration-300 ease-in-out ${
+                                    hasOverlap
+                                        ? 'max-w-[32px] opacity-100'
+                                        : 'max-w-0 overflow-hidden opacity-0'
+                                }`}
+                            >
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <Button
+                                                variant="secondary"
+                                                className={`size-8 p-1 shadow-none ${
+                                                    highlightOverlappingTables
+                                                        ? 'bg-pink-700'
+                                                        : 'bg-pink-600'
+                                                } hover:bg-pink-500`}
+                                                onClick={() =>
+                                                    setHighlightOverlappingTables(
+                                                        !highlightOverlappingTables
+                                                    )
+                                                }
+                                            >
+                                                <AlertTriangle className="size-4 text-white" />
+                                            </Button>
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {highlightOverlappingTables
+                                            ? t('toolbar.hide_overlapping')
+                                            : t('toolbar.show_overlapping')}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
+                        </div>
                     </Controls>
+
                     {isLoadingDOM ? (
                         <Controls
                             position="top-center"
