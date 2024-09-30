@@ -335,6 +335,7 @@ const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.SQL_SERVER]: {},
     [DatabaseType.MARIADB]: {},
     [DatabaseType.SQLITE]: {},
+    // [DatabaseType.CLICKHOUSE]: {},
     [DatabaseType.GENERIC]: {},
 };
 

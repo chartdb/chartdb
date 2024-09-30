@@ -19,6 +19,7 @@ import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
+import type { DBDependency } from '@/lib/domain/db-dependency';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -42,6 +43,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     >();
     const [tables, setTables] = useState<DBTable[]>([]);
     const [relationships, setRelationships] = useState<DBRelationship[]>([]);
+    const [dependencies, setDependencies] = useState<DBDependency[]>([]);
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -118,6 +120,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             databaseEdition,
             tables,
             relationships,
+            dependencies,
         }),
         [
             diagramId,
@@ -126,6 +129,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             databaseEdition,
             tables,
             relationships,
+            dependencies,
             diagramCreatedAt,
             diagramUpdatedAt,
         ]
@@ -136,6 +140,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             const updatedAt = new Date();
             setTables([]);
             setRelationships([]);
+            setDependencies([]);
             setDiagramUpdatedAt(updatedAt);
 
             resetRedoStack();
@@ -145,6 +150,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
                 db.deleteDiagramTables(diagramId),
                 db.deleteDiagramRelationships(diagramId),
+                db.deleteDiagramDependencies(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -156,6 +162,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setDatabaseEdition(undefined);
             setTables([]);
             setRelationships([]);
+            setDependencies([]);
             resetRedoStack();
             resetUndoStack();
 
@@ -164,6 +171,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 db.deleteDiagramTables(diagramId),
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagram(diagramId),
+                db.deleteDiagramDependencies(diagramId),
             ]);
 
             if (config?.defaultDiagramId === diagramId) {
@@ -343,11 +351,26 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     ids.includes(relationship.targetTableId)
             );
 
+            const dependenciesToRemove = dependencies.filter(
+                (dependency) =>
+                    ids.includes(dependency.tableId) ||
+                    ids.includes(dependency.dependentTableId)
+            );
+
             setRelationships((relationships) =>
                 relationships.filter(
                     (relationship) =>
                         !relationshipsToRemove.some(
                             (r) => r.id === relationship.id
+                        )
+                )
+            );
+
+            setDependencies((dependencies) =>
+                dependencies.filter(
+                    (dependency) =>
+                        !dependenciesToRemove.some(
+                            (d) => d.id === dependency.id
                         )
                 )
             );
@@ -365,6 +388,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 ...relationshipsToRemove.map((relationship) =>
                     db.deleteRelationship({ diagramId, id: relationship.id })
                 ),
+                ...dependenciesToRemove.map((dependency) =>
+                    db.deleteDependency({ diagramId, id: dependency.id })
+                ),
                 ...ids.map((id) => db.deleteTable({ diagramId, id })),
             ]);
 
@@ -374,7 +400,11 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     redoData: {
                         tableIds: ids,
                     },
-                    undoData: { tables, relationships: relationshipsToRemove },
+                    undoData: {
+                        tables,
+                        relationships: relationshipsToRemove,
+                        dependencies: dependenciesToRemove,
+                    },
                 });
                 resetRedoStack();
             }
@@ -388,6 +418,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             getTable,
             relationships,
             events,
+            dependencies,
         ]
     );
 
@@ -481,11 +512,28 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 )
             );
 
+            const dependenciesToRemove = dependencies.filter((dependency) =>
+                tablesToDelete.some(
+                    (table) =>
+                        table.id === dependency.tableId ||
+                        table.id === dependency.dependentTableId
+                )
+            );
+
             setRelationships((relationships) =>
                 relationships.filter(
                     (relationship) =>
                         !relationshipsToRemove.some(
                             (r) => r.id === relationship.id
+                        )
+                )
+            );
+
+            setDependencies((dependencies) =>
+                dependencies.filter(
+                    (dependency) =>
+                        !dependenciesToRemove.some(
+                            (d) => d.id === dependency.id
                         )
                 )
             );
@@ -517,6 +565,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 );
             }
 
+            for (const dependency of dependenciesToRemove) {
+                promises.push(
+                    db.deleteDependency({ diagramId, id: dependency.id })
+                );
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
             promises.push(
@@ -532,6 +586,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                     undoData: {
                         tables: prevTables,
                         relationships: relationshipsToRemove,
+                        dependencies: dependenciesToRemove,
                     },
                 });
                 resetRedoStack();
@@ -546,6 +601,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             resetRedoStack,
             relationships,
             events,
+            dependencies,
         ]
     );
 
@@ -949,35 +1005,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         [db, diagramId, setTables, addUndoAction, resetRedoStack, getIndex]
     );
 
-    const addRelationship: ChartDBContext['addRelationship'] = useCallback(
-        async (
-            relationship: DBRelationship,
-            options = { updateHistory: true }
-        ) => {
-            setRelationships((relationships) => [
-                ...relationships,
-                relationship,
-            ]);
-
-            const updatedAt = new Date();
-            setDiagramUpdatedAt(updatedAt);
-            await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-                db.addRelationship({ diagramId, relationship }),
-            ]);
-
-            if (options.updateHistory) {
-                addUndoAction({
-                    action: 'addRelationship',
-                    redoData: { relationship },
-                    undoData: { relationshipId: relationship.id },
-                });
-                resetRedoStack();
-            }
-        },
-        [db, diagramId, setRelationships, addUndoAction, resetRedoStack]
-    );
-
     const addRelationships: ChartDBContext['addRelationships'] = useCallback(
         async (
             relationships: DBRelationship[],
@@ -1012,6 +1039,16 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         [db, diagramId, setRelationships, addUndoAction, resetRedoStack]
     );
 
+    const addRelationship: ChartDBContext['addRelationship'] = useCallback(
+        async (
+            relationship: DBRelationship,
+            options = { updateHistory: true }
+        ) => {
+            return addRelationships([relationship], options);
+        },
+        [addRelationships]
+    );
+
     const createRelationship: ChartDBContext['createRelationship'] =
         useCallback(
             async ({
@@ -1032,7 +1069,9 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 const relationship: DBRelationship = {
                     id: generateId(),
                     name: `${sourceTableName}_${sourceFieldName}_fk`,
+                    sourceSchema: sourceTable?.schema,
                     sourceTableId,
+                    targetSchema: sourceTable?.schema,
                     targetTableId,
                     sourceFieldId,
                     targetFieldId,
@@ -1054,45 +1093,6 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             null,
         [relationships]
     );
-
-    const removeRelationship: ChartDBContext['removeRelationship'] =
-        useCallback(
-            async (id: string, options = { updateHistory: true }) => {
-                const relationship = getRelationship(id);
-                setRelationships((relationships) =>
-                    relationships.filter(
-                        (relationship) => relationship.id !== id
-                    )
-                );
-
-                const updatedAt = new Date();
-                setDiagramUpdatedAt(updatedAt);
-                await Promise.all([
-                    db.updateDiagram({
-                        id: diagramId,
-                        attributes: { updatedAt },
-                    }),
-                    db.deleteRelationship({ diagramId, id }),
-                ]);
-
-                if (!!relationship && options.updateHistory) {
-                    addUndoAction({
-                        action: 'removeRelationship',
-                        redoData: { relationshipId: id },
-                        undoData: { relationship },
-                    });
-                    resetRedoStack();
-                }
-            },
-            [
-                db,
-                diagramId,
-                setRelationships,
-                addUndoAction,
-                resetRedoStack,
-                getRelationship,
-            ]
-        );
 
     const removeRelationships: ChartDBContext['removeRelationships'] =
         useCallback(
@@ -1138,6 +1138,14 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 addUndoAction,
                 resetRedoStack,
             ]
+        );
+
+    const removeRelationship: ChartDBContext['removeRelationship'] =
+        useCallback(
+            async (id: string, options = { updateHistory: true }) => {
+                return removeRelationships([id], options);
+            },
+            [removeRelationships]
         );
 
     const updateRelationship: ChartDBContext['updateRelationship'] =
@@ -1186,11 +1194,170 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             ]
         );
 
+    const addDependencies: ChartDBContext['addDependencies'] = useCallback(
+        async (
+            dependencies: DBDependency[],
+            options = { updateHistory: true }
+        ) => {
+            setDependencies((currentDependencies) => [
+                ...currentDependencies,
+                ...dependencies,
+            ]);
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+
+            await Promise.all([
+                ...dependencies.map((dependency) =>
+                    db.addDependency({ diagramId, dependency })
+                ),
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'addDependencies',
+                    redoData: { dependencies },
+                    undoData: {
+                        dependenciesIds: dependencies.map((r) => r.id),
+                    },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setDependencies, addUndoAction, resetRedoStack]
+    );
+
+    const addDependency: ChartDBContext['addDependency'] = useCallback(
+        async (dependency: DBDependency, options = { updateHistory: true }) => {
+            return addDependencies([dependency], options);
+        },
+        [addDependencies]
+    );
+
+    const createDependency: ChartDBContext['createDependency'] = useCallback(
+        async ({ tableId, dependentTableId }) => {
+            const table = getTable(tableId);
+            const dependentTable = getTable(dependentTableId);
+
+            const dependency: DBDependency = {
+                id: generateId(),
+                tableId,
+                dependentTableId,
+                dependentSchema: dependentTable?.schema,
+                schema: table?.schema,
+                createdAt: Date.now(),
+            };
+
+            await addDependency(dependency);
+
+            return dependency;
+        },
+        [addDependency, getTable]
+    );
+
+    const getDependency: ChartDBContext['getDependency'] = useCallback(
+        (id: string) =>
+            dependencies.find((dependency) => dependency.id === id) ?? null,
+        [dependencies]
+    );
+
+    const removeDependencies: ChartDBContext['removeDependencies'] =
+        useCallback(
+            async (ids: string[], options = { updateHistory: true }) => {
+                const prevDependencies = [
+                    ...dependencies.filter((dependency) =>
+                        ids.includes(dependency.id)
+                    ),
+                ];
+
+                setDependencies((dependencies) =>
+                    dependencies.filter(
+                        (dependency) => !ids.includes(dependency.id)
+                    )
+                );
+
+                const updatedAt = new Date();
+                setDiagramUpdatedAt(updatedAt);
+                await Promise.all([
+                    ...ids.map((id) => db.deleteDependency({ diagramId, id })),
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    }),
+                ]);
+
+                if (prevDependencies.length > 0 && options.updateHistory) {
+                    addUndoAction({
+                        action: 'removeDependencies',
+                        redoData: { dependenciesIds: ids },
+                        undoData: { dependencies: prevDependencies },
+                    });
+                    resetRedoStack();
+                }
+            },
+            [
+                db,
+                diagramId,
+                setDependencies,
+                addUndoAction,
+                resetRedoStack,
+                dependencies,
+            ]
+        );
+
+    const removeDependency: ChartDBContext['removeDependency'] = useCallback(
+        async (id: string, options = { updateHistory: true }) => {
+            return removeDependencies([id], options);
+        },
+        [removeDependencies]
+    );
+
+    const updateDependency: ChartDBContext['updateDependency'] = useCallback(
+        async (
+            id: string,
+            dependency: Partial<DBDependency>,
+            options = { updateHistory: true }
+        ) => {
+            const prevDependency = getDependency(id);
+            setDependencies((dependencies) =>
+                dependencies.map((d) =>
+                    d.id === id ? { ...d, ...dependency } : d
+                )
+            );
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateDependency({ id, attributes: dependency }),
+            ]);
+
+            if (!!prevDependency && options.updateHistory) {
+                addUndoAction({
+                    action: 'updateDependency',
+                    redoData: { dependencyId: id, dependency },
+                    undoData: { dependencyId: id, dependency: prevDependency },
+                });
+                resetRedoStack();
+            }
+        },
+        [
+            db,
+            diagramId,
+            setDependencies,
+            addUndoAction,
+            resetRedoStack,
+            getDependency,
+        ]
+    );
+
     const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
         async (diagramId: string) => {
             const diagram = await db.getDiagram(diagramId, {
                 includeRelationships: true,
                 includeTables: true,
+                includeDependencies: true,
             });
 
             if (diagram) {
@@ -1200,6 +1367,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setDatabaseEdition(diagram.databaseEdition);
                 setTables(diagram?.tables ?? []);
                 setRelationships(diagram?.relationships ?? []);
+                setDependencies(diagram?.dependencies ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
 
@@ -1216,6 +1384,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setDatabaseEdition,
             setTables,
             setRelationships,
+            setDependencies,
             setDiagramCreatedAt,
             setDiagramUpdatedAt,
             events,
@@ -1230,6 +1399,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 databaseType,
                 tables,
                 relationships,
+                dependencies,
                 currentDiagram,
                 schemas,
                 filteredSchemas,
@@ -1268,6 +1438,13 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 removeRelationship,
                 removeRelationships,
                 updateRelationship,
+                addDependency,
+                addDependencies,
+                createDependency,
+                getDependency,
+                removeDependency,
+                removeDependencies,
+                updateDependency,
             }}
         >
             {children}
