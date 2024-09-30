@@ -78,6 +78,7 @@ export const examples: Example[] = [
                     ],
                     color: '#b067e9',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -150,6 +151,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -222,6 +224,7 @@ export const examples: Example[] = [
                     ],
                     color: '#ff6363',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -302,6 +305,7 @@ export const examples: Example[] = [
                     ],
                     color: '#4dee8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -377,6 +381,7 @@ export const examples: Example[] = [
                     ],
                     color: '#ff6b8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -450,6 +455,7 @@ export const examples: Example[] = [
                     ],
                     color: '#b067e9',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -500,6 +506,7 @@ export const examples: Example[] = [
                     indexes: [],
                     color: '#b0b0b0',
                     isView: true,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -539,6 +546,7 @@ export const examples: Example[] = [
                     indexes: [],
                     color: '#b0b0b0',
                     isView: true,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
             ],
@@ -671,6 +679,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -712,6 +721,7 @@ export const examples: Example[] = [
                     ],
                     color: '#4dee8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -837,6 +847,7 @@ export const examples: Example[] = [
                     ],
                     color: '#7175fa',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -923,6 +934,7 @@ export const examples: Example[] = [
                     ],
                     color: '#9ef07a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1015,6 +1027,7 @@ export const examples: Example[] = [
                     ],
                     color: '#4dee8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1094,6 +1107,7 @@ export const examples: Example[] = [
                     ],
                     color: '#4dee8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1198,6 +1212,7 @@ export const examples: Example[] = [
                     ],
                     color: '#7175fa',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1252,6 +1267,7 @@ export const examples: Example[] = [
                     ],
                     color: '#c05dcf',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1365,6 +1381,7 @@ export const examples: Example[] = [
                     ],
                     color: '#ff9f74',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
             ],
@@ -1580,6 +1597,7 @@ export const examples: Example[] = [
                     ],
                     color: '#4dee8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1705,6 +1723,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1762,6 +1781,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8eb7ff',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1834,6 +1854,7 @@ export const examples: Example[] = [
                     ],
                     color: '#42e0c0',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -1891,6 +1912,7 @@ export const examples: Example[] = [
                     ],
                     color: '#c05dcf',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2042,6 +2064,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2217,6 +2240,7 @@ export const examples: Example[] = [
                     ],
                     color: '#7175fa',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2282,6 +2306,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2340,6 +2365,7 @@ export const examples: Example[] = [
                     ],
                     color: '#42e0c0',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2416,6 +2442,7 @@ export const examples: Example[] = [
                     ],
                     color: '#b067e9',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2470,6 +2497,7 @@ export const examples: Example[] = [
                     ],
                     color: '#7175fa',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2572,6 +2600,7 @@ export const examples: Example[] = [
                     ],
                     color: '#9ef07a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2695,6 +2724,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8a61f5',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2840,6 +2870,7 @@ export const examples: Example[] = [
                     ],
                     color: '#ff6b8a',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
                 {
@@ -2908,6 +2939,7 @@ export const examples: Example[] = [
                     ],
                     color: '#8eb7ff',
                     isView: false,
+                    isMaterializedView: false,
                     createdAt: Date.now(),
                 },
             ],

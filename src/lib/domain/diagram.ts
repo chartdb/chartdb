@@ -1,6 +1,8 @@
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import type { DatabaseEdition } from './database-edition';
 import { DatabaseType } from './database-type';
+import type { DBDependency } from './db-dependency';
+import { createDependenciesFromMetadata } from './db-dependency';
 import type { DBRelationship } from './db-relationship';
 import { createRelationshipsFromMetadata } from './db-relationship';
 import type { DBTable } from './db-table';
@@ -13,6 +15,7 @@ export interface Diagram {
     databaseEdition?: DatabaseEdition;
     tables?: DBTable[];
     relationships?: DBRelationship[];
+    dependencies?: DBDependency[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -52,6 +55,14 @@ export const loadFromDatabaseMetadata = ({
         tables,
     });
 
+    // First pass: Create dependencies
+    const dependencies = createDependenciesFromMetadata({
+        views,
+        tables,
+    });
+
+    console.log('dependencies: ', dependencies);
+
     // Second pass: Adjust table positions based on relationships
     const adjustedTables = adjustTablePositions({
         tables,
@@ -79,6 +90,7 @@ export const loadFromDatabaseMetadata = ({
         databaseEdition,
         tables: sortedTables,
         relationships,
+        dependencies,
         createdAt: new Date(),
         updatedAt: new Date(),
     };
