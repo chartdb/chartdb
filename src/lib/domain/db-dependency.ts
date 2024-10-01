@@ -1,5 +1,6 @@
 /* eslint-disable */
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
+import { DatabaseType } from './database-type';
 import { schemaNameToSchemaId } from './db-schema';
 import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
@@ -26,90 +27,97 @@ export const shouldShowDependencyBySchemaFilter = (
             schemaNameToSchemaId(dependency.dependentSchema)
         ));
 
+const astDatabaseTypes: Record<DatabaseType, string> = {
+    [DatabaseType.POSTGRESQL]: 'postgresql',
+    [DatabaseType.MYSQL]: 'mysql',
+    [DatabaseType.MARIADB]: 'mariadb',
+    [DatabaseType.GENERIC]: 'postgresql',
+    [DatabaseType.SQLITE]: 'sqlite',
+    [DatabaseType.SQL_SERVER]: 'postgresql',
+};
+
 export const createDependenciesFromMetadata = ({
     views,
     tables,
+    databaseType,
 }: {
     views: ViewInfo[];
     tables: DBTable[];
+    databaseType: DatabaseType;
 }): DBDependency[] => {
     const parser = new Parser();
-    const dependencies: DBDependency[] = [];
 
-    views.forEach((view) => {
-        const sourceTable = tables.find(
-            (table) =>
-                table.name === view.view_name && table.schema === view.schema
-        );
-
-        if (!sourceTable) {
-            console.warn(
-                `Source table for view ${view.schema}.${view.view_name} not found`
+    const dependencies = views
+        .flatMap((view) => {
+            const sourceTable = tables.find(
+                (table) =>
+                    table.name === view.view_name &&
+                    table.schema === view.schema
             );
-            return; // Skip this view and proceed to the next
-        }
 
-        if (view.view_definition) {
-            try {
-                console.log('view_definition: ', view.view_definition);
-
-                // Pre-process the view_definition
-                const modifiedViewDefinition = preprocessViewDefinition(
-                    view.view_definition
+            if (!sourceTable) {
+                console.warn(
+                    `Source table for view ${view.schema}.${view.view_name} not found`
                 );
+                return []; // Skip this view and proceed to the next
+            }
 
-                console.log('modifiedViewDefinition: ', modifiedViewDefinition);
-
-                // Parse using PostgreSQL dialect
-                const ast = parser.astify(modifiedViewDefinition, {
-                    database: 'postgresql',
-                });
-
-                // Log the AST to inspect its structure (optional)
-                // console.log('AST: ', JSON.stringify(ast, null, 2));
-
-                const dependentTables = extractTablesFromAST(ast);
-
-                console.log('dependentTables: ', dependentTables);
-
-                dependentTables.forEach((depTable) => {
-                    const depSchema = depTable.schema || view.schema; // Use view's schema if depSchema is undefined
-                    const depTableName = depTable.tableName;
-
-                    const targetTable = tables.find(
-                        (table) =>
-                            table.name === depTableName &&
-                            table.schema === depSchema
+            if (view.view_definition) {
+                try {
+                    // Pre-process the view_definition
+                    const modifiedViewDefinition = preprocessViewDefinition(
+                        view.view_definition
                     );
 
-                    if (targetTable) {
-                        const dependency: DBDependency = {
-                            id: generateId(),
-                            schema: view.schema,
-                            tableId: sourceTable.id,
-                            dependentSchema: targetTable.schema,
-                            dependentTableId: targetTable.id,
-                            createdAt: Date.now(),
-                        };
-                        dependencies.push(dependency);
-                    } else {
-                        console.warn(
-                            `Dependent table ${depSchema}.${depTableName} not found for view ${view.schema}.${view.view_name}`
+                    // Parse using PostgreSQL dialect
+                    const ast = parser.astify(modifiedViewDefinition, {
+                        database: astDatabaseTypes[databaseType],
+                    });
+
+                    const dependentTables = extractTablesFromAST(ast);
+
+                    return dependentTables.map((depTable) => {
+                        const depSchema = depTable.schema ?? view.schema; // Use view's schema if depSchema is undefined
+                        const depTableName = depTable.tableName;
+
+                        const targetTable = tables.find(
+                            (table) =>
+                                table.name === depTableName &&
+                                table.schema === depSchema
                         );
-                    }
-                });
-            } catch (error) {
-                console.error(
-                    `Error parsing view ${view.schema}.${view.view_name}:`,
-                    error
+
+                        if (targetTable) {
+                            const dependency: DBDependency = {
+                                id: generateId(),
+                                schema: view.schema,
+                                tableId: sourceTable.id,
+                                dependentSchema: targetTable.schema,
+                                dependentTableId: targetTable.id,
+                                createdAt: Date.now(),
+                            };
+                            return dependency;
+                        } else {
+                            console.warn(
+                                `Dependent table ${depSchema}.${depTableName} not found for view ${view.schema}.${view.view_name}`
+                            );
+                            return null;
+                        }
+                    });
+                } catch (error) {
+                    console.error(
+                        `Error parsing view ${view.schema}.${view.view_name}:`,
+                        error
+                    );
+                    return [];
+                }
+            } else {
+                console.warn(
+                    `View definition missing for ${view.schema}.${view.view_name}`
                 );
+                return [];
             }
-        } else {
-            console.warn(
-                `View definition missing for ${view.schema}.${view.view_name}`
-            );
-        }
-    });
+        })
+        .filter((dependency) => dependency !== null);
 
     return dependencies;
 };

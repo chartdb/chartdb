@@ -59,6 +59,7 @@ export const loadFromDatabaseMetadata = ({
     const dependencies = createDependenciesFromMetadata({
         views,
         tables,
+        databaseType,
     });
 
     console.log('dependencies: ', dependencies);
