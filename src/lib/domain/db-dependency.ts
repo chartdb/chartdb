@@ -1,5 +1,6 @@
 /* eslint-disable */
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
+import { schemaNameToSchemaId } from './db-schema';
 import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 import { Parser } from 'node-sql-parser';
@@ -12,6 +13,18 @@ export interface DBDependency {
     dependentTableId: string;
     createdAt: number;
 }
+
+export const shouldShowDependencyBySchemaFilter = (
+    dependency: DBDependency,
+    filteredSchemas?: string[]
+): boolean =>
+    !filteredSchemas ||
+    !dependency.schema ||
+    !dependency.dependentSchema ||
+    (filteredSchemas.includes(schemaNameToSchemaId(dependency.schema)) &&
+        filteredSchemas.includes(
+            schemaNameToSchemaId(dependency.dependentSchema)
+        ));
 
 export const createDependenciesFromMetadata = ({
     views,

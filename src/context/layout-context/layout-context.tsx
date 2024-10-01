@@ -1,7 +1,7 @@
 import { emptyFn } from '@/lib/utils';
 import { createContext } from 'react';
 
-export type SidebarSection = 'tables' | 'relationships';
+export type SidebarSection = 'tables' | 'relationships' | 'dependencies';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
@@ -11,6 +11,10 @@ export interface LayoutContext {
     openedRelationshipInSidebar: string | undefined;
     openRelationshipFromSidebar: (relationshipId: string) => void;
     closeAllRelationshipsInSidebar: () => void;
+
+    openedDependencyInSidebar: string | undefined;
+    openDependencyFromSidebar: (dependencyId: string) => void;
+    closeAllDependenciesInSidebar: () => void;
 
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
@@ -31,6 +35,10 @@ export const layoutContext = createContext<LayoutContext>({
     openedRelationshipInSidebar: undefined,
     openRelationshipFromSidebar: emptyFn,
     closeAllRelationshipsInSidebar: emptyFn,
+
+    openedDependencyInSidebar: undefined,
+    openDependencyFromSidebar: emptyFn,
+    closeAllDependenciesInSidebar: emptyFn,
 
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,

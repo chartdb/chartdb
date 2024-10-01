@@ -154,6 +154,25 @@ export const es: LanguageTranslation = {
                     description: 'Crea una relación para conectar tablas',
                 },
             },
+            // TODO: Translate
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
+                },
+            },
         },
 
         toolbar: {
