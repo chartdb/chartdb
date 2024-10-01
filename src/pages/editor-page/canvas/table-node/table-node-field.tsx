@@ -31,7 +31,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const connection = useConnection();
         const isTarget = useMemo(
             () =>
-                connection.inProgress && connection.fromNode.id !== tableNodeId,
+                connection.inProgress &&
+                connection.fromNode.id !== tableNodeId &&
+                (connection.fromHandle.id?.startsWith(RIGHT_HANDLE_ID_PREFIX) ||
+                    connection.fromHandle.id?.startsWith(
+                        LEFT_HANDLE_ID_PREFIX
+                    )),
             [connection, tableNodeId]
         );
         const numberOfEdgesToField = useMemo(

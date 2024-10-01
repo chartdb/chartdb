@@ -27,8 +27,8 @@ import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
 import type { TableNodeType } from './table-node/table-node';
 import { MIN_TABLE_SIZE, TableNode } from './table-node/table-node';
-import type { TableEdgeType } from './table-edge';
-import { TableEdge } from './table-edge';
+import type { RelationshipEdgeType } from './relationship-edge';
+import { RelationshipEdge } from './relationship-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import {
     LEFT_HANDLE_ID_PREFIX,
@@ -67,10 +67,24 @@ import type { Graph } from '@/lib/graph';
 import { createGraph, removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { debounce } from '@/lib/utils';
+import type { DependencyEdgeType } from './dependency-edge';
+import { DependencyEdge } from './dependency-edge';
+import {
+    BOTTOM_SOURCE_HANDLE_ID_PREFIX,
+    TARGET_DEP_PREFIX,
+    TOP_SOURCE_HANDLE_ID_PREFIX,
+} from './table-node/table-node-dependency-indicator';
 
-type AddEdgeParams = Parameters<typeof addEdge<TableEdgeType>>[0];
+export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
-const initialEdges: TableEdgeType[] = [];
+type AddEdgeParams = Parameters<typeof addEdge<EdgeType>>[0];
+
+const edgeTypes = {
+    'relationship-edge': RelationshipEdge,
+    'dependency-edge': DependencyEdge,
+};
+
+const initialEdges: EdgeType[] = [];
 
 const tableToTableNode = (
     table: DBTable,
@@ -104,12 +118,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         tables,
         relationships,
         createRelationship,
+        createDependency,
         updateTablesState,
         removeRelationships,
+        removeDependencies,
         getField,
         databaseType,
         filteredSchemas,
         events,
+        dependencies,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -117,7 +134,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showAlert } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
-    const edgeTypes = useMemo(() => ({ 'table-edge': TableEdge }), []);
+
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
@@ -126,7 +143,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
     );
     const [edges, setEdges, onEdgesChange] =
-        useEdgesState<TableEdgeType>(initialEdges);
+        useEdgesState<EdgeType>(initialEdges);
 
     useEffect(() => {
         setIsInitialLoadingNodes(true);
@@ -157,18 +174,40 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             },
             {} as Record<string, number>
         );
-        setEdges(
-            relationships.map((relationship) => ({
-                id: relationship.id,
-                source: relationship.sourceTableId,
-                target: relationship.targetTableId,
-                sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                type: 'table-edge',
-                data: { relationship },
-            }))
+
+        const targetDepIndexes: Record<string, number> = dependencies.reduce(
+            (acc, dep) => {
+                acc[dep.tableId] = 0;
+                return acc;
+            },
+            {} as Record<string, number>
         );
-    }, [relationships, setEdges]);
+
+        setEdges([
+            ...relationships.map(
+                (relationship): RelationshipEdgeType => ({
+                    id: relationship.id,
+                    source: relationship.sourceTableId,
+                    target: relationship.targetTableId,
+                    sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                    targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                    type: 'relationship-edge',
+                    data: { relationship },
+                })
+            ),
+            ...dependencies.map(
+                (dep): DependencyEdgeType => ({
+                    id: dep.id,
+                    source: dep.dependentTableId,
+                    target: dep.tableId,
+                    sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
+                    targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
+                    type: 'dependency-edge',
+                    data: { dependency: dep },
+                })
+            ),
+        ]);
+    }, [relationships, dependencies, setEdges]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
@@ -209,18 +248,32 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         ];
 
         setEdges((edges) =>
-            edges.map((edge) => {
+            edges.map((edge): EdgeType => {
                 const selected = allSelectedEdges.includes(edge.id);
 
-                return {
-                    ...edge,
-                    data: {
-                        ...edge.data!,
-                        highlighted: selected,
-                    },
-                    animated: selected,
-                    zIndex: selected ? 1 : 0,
-                };
+                if (edge.type === 'dependency-edge') {
+                    const dependencyEdge = edge as DependencyEdgeType;
+                    return {
+                        ...dependencyEdge,
+                        data: {
+                            ...dependencyEdge.data!,
+                            highlighted: selected,
+                        },
+                        animated: selected,
+                        zIndex: selected ? 1 : 0,
+                    };
+                } else {
+                    const relationshipEdge = edge as RelationshipEdgeType;
+                    return {
+                        ...relationshipEdge,
+                        data: {
+                            ...relationshipEdge.data!,
+                            highlighted: selected,
+                        },
+                        animated: selected,
+                        zIndex: selected ? 1 : 0,
+                    };
+                }
             })
         );
     }, [selectedRelationshipIds, selectedTableIds, setEdges, getEdges]);
@@ -271,6 +324,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
+            if (
+                params.sourceHandle?.startsWith?.(
+                    TOP_SOURCE_HANDLE_ID_PREFIX
+                ) ||
+                params.sourceHandle?.startsWith?.(
+                    BOTTOM_SOURCE_HANDLE_ID_PREFIX
+                )
+            ) {
+                // this is a dependency edge
+                console.log('this is a dependency edge');
+
+                createDependency({
+                    tableId: params.target,
+                    dependentTableId: params.source,
+                });
+
+                return;
+            }
+
             const sourceTableId = params.source;
             const targetTableId = params.target;
             const sourceFieldId = params.sourceHandle?.split('_')?.pop() ?? '';
@@ -304,37 +376,43 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 sourceFieldId,
                 targetFieldId,
             });
-            // return setEdges((edges) =>
-            //     addEdge<TableEdgeType>(
-            //         { ...params, data: { relationship }, id: relationship.id },
-            //         edges
-            //     )
-            // );
         },
-        [createRelationship, getField, toast, databaseType]
+        [createRelationship, createDependency, getField, toast, databaseType]
     );
 
-    const onEdgesChangeHandler: OnEdgesChange<TableEdgeType> = useCallback(
+    const onEdgesChangeHandler: OnEdgesChange<EdgeType> = useCallback(
         (changes) => {
             const removeChanges: NodeRemoveChange[] = changes.filter(
                 (change) => change.type === 'remove'
             ) as NodeRemoveChange[];
 
-            const relationshipsToRemove: string[] = removeChanges
-                .map(
-                    (change) =>
-                        (getEdge(change.id) as TableEdgeType)?.data
-                            ?.relationship?.id
-                )
-                .filter((id) => !!id) as string[];
+            const edgesToRemove = removeChanges
+                .map((change) => getEdge(change.id) as EdgeType | undefined)
+                .filter((edge) => !!edge);
+
+            const relationshipsToRemove: string[] = (
+                edgesToRemove.filter(
+                    (edge) => edge?.type === 'relationship-edge'
+                ) as RelationshipEdgeType[]
+            ).map((edge) => edge?.data?.relationship?.id as string);
+
+            const dependenciesToRemove: string[] = (
+                edgesToRemove.filter(
+                    (edge) => edge?.type === 'dependency-edge'
+                ) as DependencyEdgeType[]
+            ).map((edge) => edge?.data?.dependency?.id as string);
 
             if (relationshipsToRemove.length > 0) {
                 removeRelationships(relationshipsToRemove);
             }
 
+            if (dependenciesToRemove.length > 0) {
+                removeDependencies(dependenciesToRemove);
+            }
+
             return onEdgesChange(changes);
         },
-        [getEdge, onEdgesChange, removeRelationships]
+        [getEdge, onEdgesChange, removeRelationships, removeDependencies]
     );
 
     const updateOverlappingGraphOnChanges = useCallback(
@@ -589,7 +667,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     edgeTypes={edgeTypes}
                     defaultEdgeOptions={{
                         animated: false,
-                        type: 'table-edge',
+                        type: 'relationship-edge',
                     }}
                     panOnScroll={scrollAction === 'pan'}
                 >
