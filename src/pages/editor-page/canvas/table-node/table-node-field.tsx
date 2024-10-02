@@ -11,9 +11,9 @@ import { KeyRound, Trash2 } from 'lucide-react';
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 
-export const LEFT_HANDLE_ID_PREFIX = 'left_';
-export const RIGHT_HANDLE_ID_PREFIX = 'right_';
-export const TARGET_ID_PREFIX = 'target_';
+export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
+export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
+export const TARGET_ID_PREFIX = 'target_rel_';
 
 export interface TableNodeFieldProps {
     tableNodeId: string;
