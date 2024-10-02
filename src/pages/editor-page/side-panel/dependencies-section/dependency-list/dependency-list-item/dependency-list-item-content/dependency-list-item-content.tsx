@@ -48,12 +48,10 @@ export const DependencyListItemContent: React.FC<
                         <Tooltip>
                             <TooltipTrigger>
                                 <div className="truncate text-left text-sm">
-                                    {dependentTable?.name}
+                                    {table?.name}
                                 </div>
                             </TooltipTrigger>
-                            <TooltipContent>
-                                {dependentTable?.name}
-                            </TooltipContent>
+                            <TooltipContent>{table?.name}</TooltipContent>
                         </Tooltip>
                     </div>
                     <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
@@ -68,10 +66,12 @@ export const DependencyListItemContent: React.FC<
                         <Tooltip>
                             <TooltipTrigger>
                                 <div className="truncate text-left text-sm	">
-                                    {table?.name}
+                                    {dependentTable?.name}
                                 </div>
                             </TooltipTrigger>
-                            <TooltipContent>{table?.name}</TooltipContent>
+                            <TooltipContent>
+                                {dependentTable?.name}
+                            </TooltipContent>
                         </Tooltip>
                     </div>
                 </div>
