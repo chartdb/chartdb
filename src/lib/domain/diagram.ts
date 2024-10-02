@@ -62,8 +62,6 @@ export const loadFromDatabaseMetadata = ({
         databaseType,
     });
 
-    console.log('dependencies: ', dependencies);
-
     // Second pass: Adjust table positions based on relationships
     const adjustedTables = adjustTablePositions({
         tables,

@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import { useLayout } from '@/hooks/use-layout';
 
 export type DependencyEdgeType = Edge<
     {
@@ -27,8 +28,12 @@ export const DependencyEdge: React.FC<EdgeProps<DependencyEdgeType>> = ({
     // data,
 }) => {
     const { dependencies } = useChartDB();
+    const { openDependencyFromSidebar, selectSidebarSection } = useLayout();
 
-    // const dependency = data?.dependency;
+    const openDependencyInEditor = useCallback(() => {
+        selectSidebarSection('dependencies');
+        openDependencyFromSidebar(id);
+    }, [id, openDependencyFromSidebar, selectSidebarSection]);
 
     const edgeNumber = useMemo(
         () =>
@@ -77,6 +82,11 @@ export const DependencyEdge: React.FC<EdgeProps<DependencyEdgeType>> = ({
                     'react-flow__edge-path',
                     `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-blue-300'}`,
                 ])}
+                onClick={(e) => {
+                    if (e.detail === 2) {
+                        openDependencyInEditor();
+                    }
+                }}
             />
             <path
                 d={edgePath}
@@ -85,6 +95,11 @@ export const DependencyEdge: React.FC<EdgeProps<DependencyEdgeType>> = ({
                 strokeWidth={20}
                 // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="react-flow__edge-interaction"
+                onClick={(e) => {
+                    if (e.detail === 2) {
+                        openDependencyInEditor();
+                    }
+                }}
             />
         </>
         // <BaseEdge

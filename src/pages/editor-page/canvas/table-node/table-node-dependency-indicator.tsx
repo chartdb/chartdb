@@ -1,7 +1,12 @@
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { DBTable } from '@/lib/domain/db-table';
-import { Handle, Position, useConnection } from '@xyflow/react';
-import React, { useMemo } from 'react';
+import {
+    Handle,
+    Position,
+    useConnection,
+    useUpdateNodeInternals,
+} from '@xyflow/react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 export const TOP_SOURCE_HANDLE_ID_PREFIX = 'top_dep_';
 export const BOTTOM_SOURCE_HANDLE_ID_PREFIX = 'bottom_dep_';
@@ -15,6 +20,7 @@ export interface TableNodeDependencyIndicatorProps {
 export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicatorProps> =
     React.memo(({ table, focused }) => {
         const { getTable, dependencies } = useChartDB();
+        const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
         const isTarget = useMemo(() => {
             if (!connection.inProgress) {
@@ -58,6 +64,17 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
                 ).length,
             [dependencies, table.id]
         );
+
+        const previousNumberOfEdgesToTableRef = useRef(numberOfEdgesToTable);
+
+        useEffect(() => {
+            if (
+                previousNumberOfEdgesToTableRef.current !== numberOfEdgesToTable
+            ) {
+                updateNodeInternals(table.id);
+                previousNumberOfEdgesToTableRef.current = numberOfEdgesToTable;
+            }
+        }, [table.id, updateNodeInternals, numberOfEdgesToTable]);
 
         return (
             <>

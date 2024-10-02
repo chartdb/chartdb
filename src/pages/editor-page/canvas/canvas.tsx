@@ -332,9 +332,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     BOTTOM_SOURCE_HANDLE_ID_PREFIX
                 )
             ) {
-                // this is a dependency edge
-                console.log('this is a dependency edge');
-
                 createDependency({
                     tableId: params.target,
                     dependentTableId: params.source,
