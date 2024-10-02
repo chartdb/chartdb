@@ -80,7 +80,7 @@ export const DependencyEdge: React.FC<EdgeProps<DependencyEdgeType>> = ({
                 fill="none"
                 className={cn([
                     'react-flow__edge-path',
-                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-blue-300'}`,
+                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-blue-400'}`,
                 ])}
                 onClick={(e) => {
                     if (e.detail === 2) {
