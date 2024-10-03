@@ -4,12 +4,14 @@ import { en, enMetadata } from './locales/en';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
 import { de } from './locales/de';
+import { ja } from './locales/ja';
 
 const resources = {
     en,
     es,
     fr,
     de,
+    ja,
 };
 
 i18n.use(initReactI18next).init({
