@@ -176,6 +176,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             )
         );
 
+        const dependencies = diagram.dependencies ?? [];
+        promises.push(
+            ...dependencies.map((dependency) =>
+                addDependency({ diagramId: diagram.id, dependency })
+            )
+        );
+
         await Promise.all(promises);
     };
 

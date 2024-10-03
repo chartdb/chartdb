@@ -64,6 +64,7 @@ export const createDependenciesFromMetadata = ({
 
             if (view.view_definition) {
                 try {
+
                     // Pre-process the view_definition
                     const modifiedViewDefinition = preprocessViewDefinition(
                         view.view_definition
@@ -74,7 +75,7 @@ export const createDependenciesFromMetadata = ({
                         database: astDatabaseTypes[databaseType],
                     });
 
-                    const dependentTables = extractTablesFromAST(ast);
+                    const dependentTables = extractTablesFromAST(ast, view.schema);
 
                     return dependentTables.map((depTable) => {
                         const depSchema = depTable.schema ?? view.schema; // Use view's schema if depSchema is undefined
@@ -128,60 +129,70 @@ function preprocessViewDefinition(viewDefinition: string): string {
         return '';
     }
 
-    // Regular expression to match 'CREATE VIEW [schema.]view_name [ (column definitions) ] AS'
-    const regex =
-        /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))(?:\s*\([^\)]*\))?\s+AS\s+/i;
-
+    // Remove schema and column definitions as before
+    const regex = /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))(?:\s*\([^\)]*\))?\s+AS\s+/i;
     const match = viewDefinition.match(regex);
+    let modifiedDefinition: string;
     if (match) {
         const viewName = match[1] || match[2] || match[3];
-        const restOfDefinition = viewDefinition.substring(
-            match.index! + match[0].length
-        );
-        const modifiedDefinition = `CREATE VIEW ${viewName} AS ${restOfDefinition}`;
+        const restOfDefinition = viewDefinition.substring(match.index! + match[0].length);
 
-        return modifiedDefinition;
+        // Replace double-quoted function names with unquoted names
+        let modifiedSQL = restOfDefinition.replace(/"(\w+)"/g, '$1');
+
+        // Replace '::' type casts with 'CAST' expressions
+        modifiedSQL = modifiedSQL.replace(/\(([^()]+)\)::(\w+)/g, 'CAST($1 AS $2)');
+
+        modifiedDefinition = `CREATE VIEW ${viewName} AS ${modifiedSQL}`;
     } else {
         console.warn('Could not preprocess view definition:', viewDefinition);
-        return viewDefinition;
+        modifiedDefinition = viewDefinition;
     }
+
+    return modifiedDefinition;
 }
 
-// Updated helper function to extract table names from the AST
 function extractTablesFromAST(
-    ast: any
+    ast: any,
+    defaultSchema: string
 ): { schema?: string; tableName: string }[] {
-    const tablesMap = new Map<string, { schema?: string; tableName: string }>();
+    const tablesMap = new Map<string, { schema: string; tableName: string }>();
+    const visitedNodes = new Set();
 
-    function traverseFromClause(node: any) {
-        if (!node) return;
+    function traverse(node: any) {
+        if (!node || visitedNodes.has(node)) return;
+        visitedNodes.add(node);
 
         if (Array.isArray(node)) {
-            node.forEach(traverseFromClause);
+            node.forEach(traverse);
         } else if (typeof node === 'object') {
-            // Check if node represents a table in 'FROM' clause or a join
+            // Check if node represents a table
             if (
                 node.hasOwnProperty('table') &&
                 typeof node.table === 'string'
             ) {
-                const schema = node.db || node.schema;
+                let schema = node.db || node.schema;
                 const tableName = node.table;
                 if (tableName) {
-                    const key = `${schema || ''}.${tableName}`;
+                    // Assign default schema if undefined
+                    schema = schema || defaultSchema;
+                    const key = `${schema}.${tableName}`;
                     if (!tablesMap.has(key)) {
                         tablesMap.set(key, { schema, tableName });
                     }
                 }
             }
-            // Traverse 'left' and 'right' in joins
-            if (node.left) traverseFromClause(node.left);
-            if (node.right) traverseFromClause(node.right);
+
+            // Recursively traverse all properties
+            for (const key in node) {
+                if (node.hasOwnProperty(key)) {
+                    traverse(node[key]);
+                }
+            }
         }
     }
 
-    if (ast && ast.select && ast.select.from) {
-        traverseFromClause(ast.select.from);
-    }
+    traverse(ast);
 
     return Array.from(tablesMap.values());
 }
