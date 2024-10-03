@@ -86,15 +86,17 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                     </Button>
                 </div>
             </div>
-            <img
-                src={
-                    effectiveTheme === 'dark'
-                        ? example.imageDark
-                        : example.image
-                }
-                alt={example.name}
-                className="w-fit border-b"
-            />
+            <div className="grow overflow-hidden">
+                <img
+                    src={
+                        effectiveTheme === 'dark'
+                            ? example.imageDark
+                            : example.image
+                    }
+                    alt={example.name}
+                    className="w-fit object-cover"
+                />
+            </div>
             <div className="flex p-2 text-base">{example.description}</div>
         </div>
     );
