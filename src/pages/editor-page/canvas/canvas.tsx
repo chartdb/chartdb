@@ -128,7 +128,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filteredSchemas,
         events,
         dependencies,
-        filteredSchemas,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
