@@ -55,3 +55,7 @@ export const debounce = <T extends (...args: Parameters<T>) => ReturnType<T>>(
         timeout = setTimeout(() => func(...args), waitFor);
     };
 };
+
+export const removeDups = <T>(array: T[]): T[] => {
+    return [...new Set(array)];
+};

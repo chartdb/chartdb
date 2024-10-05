@@ -38,6 +38,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@uidotdev/usehooks": "^2.4.1",
     "@xyflow/react": "^12.0.4",
+    "ahooks": "^3.8.1",
     "ai": "^3.3.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

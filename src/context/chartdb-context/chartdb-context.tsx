@@ -8,6 +8,51 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
+import { EventEmitter } from 'ahooks/lib/useEventEmitter';
+
+export type ChartDBEventType =
+    | 'add_tables'
+    | 'update_table'
+    | 'remove_tables'
+    | 'add_field'
+    | 'remove_field';
+
+export type ChartDBEventBase<T extends ChartDBEventType, D> = {
+    action: T;
+    data: D;
+};
+
+export type CreateTableEvent = ChartDBEventBase<
+    'add_tables',
+    { tables: DBTable[] }
+>;
+
+export type UpdateTableEvent = ChartDBEventBase<
+    'update_table',
+    { id: string; table: Partial<DBTable> }
+>;
+
+export type RemoveTableEvent = ChartDBEventBase<
+    'remove_tables',
+    { tableIds: string[] }
+>;
+
+export type AddFieldEvent = ChartDBEventBase<
+    'add_field',
+    { tableId: string; field: DBField; fields: DBField[] }
+>;
+
+export type RemoveFieldEvent = ChartDBEventBase<
+    'remove_field',
+    { tableId: string; fieldId: string; fields: DBField[] }
+>;
+
+export type ChartDBEvent =
+    | CreateTableEvent
+    | UpdateTableEvent
+    | RemoveTableEvent
+    | AddFieldEvent
+    | RemoveFieldEvent;
 
 export interface ChartDBContext {
     diagramId: string;
@@ -17,6 +62,7 @@ export interface ChartDBContext {
     schemas: DBSchema[];
     relationships: DBRelationship[];
     currentDiagram: Diagram;
+    events: EventEmitter<ChartDBEvent>;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
@@ -154,6 +200,7 @@ export const chartDBContext = createContext<ChartDBContext>({
         createdAt: new Date(),
         updatedAt: new Date(),
     },
+    events: new EventEmitter(),
 
     // General operations
     updateDiagramId: emptyFn,
