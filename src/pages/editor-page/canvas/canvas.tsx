@@ -565,6 +565,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             mode: 'all', // Use 'all' mode for manual reordering
         });
 
+        const updatedOverlapGraph = findOverlappingTables({
+            tables: newTables,
+        });
+
         updateTablesState((currentTables) =>
             currentTables.map((table) => {
                 const newTable = newTables.find((t) => t.id === table.id);
@@ -575,6 +579,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 };
             })
         );
+
+        setOverlapGraph(updatedOverlapGraph);
     }, [filteredSchemas, relationships, tables, updateTablesState]);
 
     const showReorderConfirmation = useCallback(() => {
