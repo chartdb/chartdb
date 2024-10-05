@@ -15,7 +15,8 @@ export type ChartDBEventType =
     | 'update_table'
     | 'remove_tables'
     | 'add_field'
-    | 'remove_field';
+    | 'remove_field'
+    | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
     action: T;
@@ -47,12 +48,18 @@ export type RemoveFieldEvent = ChartDBEventBase<
     { tableId: string; fieldId: string; fields: DBField[] }
 >;
 
+export type LoadDiagramEvent = ChartDBEventBase<
+    'load_diagram',
+    { diagram: Diagram }
+>;
+
 export type ChartDBEvent =
     | CreateTableEvent
     | UpdateTableEvent
     | RemoveTableEvent
     | AddFieldEvent
-    | RemoveFieldEvent;
+    | RemoveFieldEvent
+    | LoadDiagramEvent;
 
 export interface ChartDBContext {
     diagramId: string;

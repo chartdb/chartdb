@@ -1202,6 +1202,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setRelationships(diagram?.relationships ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
+
+                events.emit({ action: 'load_diagram', data: { diagram } });
             }
 
             return diagram;
@@ -1216,6 +1218,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setRelationships,
             setDiagramCreatedAt,
             setDiagramUpdatedAt,
+            events,
         ]
     );
 

@@ -98,7 +98,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
         string[]
     >([]);
-    const { filteredSchemas, events } = useChartDB();
     const { toast } = useToast();
     const { t } = useTranslation();
     const {
@@ -109,7 +108,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         removeRelationships,
         getField,
         databaseType,
-        diagramId,
+        filteredSchemas,
+        events,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -447,38 +447,38 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         ]
     );
 
-    const lastDiagramId = useRef<string>('');
+    // const lastDiagramId = useRef<string>('');
 
-    useEffect(() => {
-        if (
-            lastDiagramId.current === diagramId ||
-            nodes.length !== tables.length ||
-            nodes.length === 0
-        ) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (
+    //         lastDiagramId.current === diagramId ||
+    //         nodes.length !== tables.length ||
+    //         nodes.length === 0
+    //     ) {
+    //         return;
+    //     }
 
-        const nodesWithDimensions = nodes
-            .map((node) => ({
-                ...node,
-                measured: {
-                    width:
-                        node.measured?.width ??
-                        node.data.table.width ??
-                        MIN_TABLE_SIZE,
-                    height:
-                        node.measured?.height ??
-                        calcTableHeight(node.data.table.fields.length),
-                },
-            }))
-            .filter((node) => node.hidden === false);
+    //     const nodesWithDimensions = nodes
+    //         .map((node) => ({
+    //             ...node,
+    //             measured: {
+    //                 width:
+    //                     node.measured?.width ??
+    //                     node.data.table.width ??
+    //                     MIN_TABLE_SIZE,
+    //                 height:
+    //                     node.measured?.height ??
+    //                     calcTableHeight(node.data.table.fields.length),
+    //             },
+    //         }))
+    //         .filter((node) => node.hidden === false);
 
-        lastDiagramId.current = diagramId;
-        const overlappingTablesInDiagram = findOverlappingTables({
-            nodes: nodesWithDimensions,
-        });
-        setOverlapGraph(overlappingTablesInDiagram);
-    }, [diagramId, nodes, tables.length, setOverlapGraph]);
+    //     lastDiagramId.current = diagramId;
+    //     const overlappingTablesInDiagram = findOverlappingTables({
+    //         nodes: nodesWithDimensions,
+    //     });
+    //     setOverlapGraph(overlappingTablesInDiagram);
+    // }, [diagramId, nodes, tables.length, setOverlapGraph]);
 
     const eventConsumer = useCallback(
         (event: ChartDBEvent) => {
@@ -546,9 +546,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     overlapGraph
                 );
                 setOverlapGraph(newOverlappingGraph);
+            } else if (event.action === 'load_diagram') {
+                const diagramTables = event.data.diagram.tables ?? [];
+                const overlappingTablesInDiagram = findOverlappingTables({
+                    tables: diagramTables.filter((table) =>
+                        shouldShowTablesBySchemaFilter(table, filteredSchemas)
+                    ),
+                });
+                setOverlapGraph(overlappingTablesInDiagram);
             }
         },
-        [overlapGraph, setOverlapGraph, getNode, nodes]
+        [overlapGraph, setOverlapGraph, getNode, nodes, filteredSchemas]
     );
 
     events.useSubscription(eventConsumer);
