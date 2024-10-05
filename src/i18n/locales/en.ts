@@ -29,6 +29,8 @@ export const en = {
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 change_language: 'Language',
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Help',
@@ -161,6 +163,24 @@ export const en = {
                 empty_state: {
                     title: 'No relationships',
                     description: 'Create a relationship to connect tables',
+                },
+            },
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
                 },
             },
         },

@@ -29,6 +29,9 @@ export const de: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
                 change_language: 'Sprache',
+                // TODO: Translate
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Hilfe',
@@ -162,6 +165,25 @@ export const de: LanguageTranslation = {
                     title: 'Keine Beziehungen',
                     description:
                         'Erstellen Sie eine Beziehung, um Tabellen zu verbinden',
+                },
+            },
+            // TODO: Translate
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
                 },
             },
         },

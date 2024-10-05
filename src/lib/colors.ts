@@ -17,3 +17,4 @@ export const randomColor = () => {
 };
 
 export const greyColor = '#b0b0b0'; // A Cloudy Grey.
+export const blackColor = '#000'; // A Blacky black.

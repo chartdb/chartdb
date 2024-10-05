@@ -8,6 +8,7 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
+import type { DBDependency } from '@/lib/domain/db-dependency';
 import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 
 export type ChartDBEventType =
@@ -68,6 +69,7 @@ export interface ChartDBContext {
     tables: DBTable[];
     schemas: DBSchema[];
     relationships: DBRelationship[];
+    dependencies: DBDependency[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
 
@@ -189,6 +191,34 @@ export interface ChartDBContext {
         relationship: Partial<DBRelationship>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+
+    // Dependency operations
+    createDependency: (params: {
+        tableId: string;
+        dependentTableId: string;
+    }) => Promise<DBDependency>;
+    addDependency: (
+        dependency: DBDependency,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addDependencies: (
+        dependencies: DBDependency[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    getDependency: (id: string) => DBDependency | null;
+    removeDependency: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeDependencies: (
+        ids: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateDependency: (
+        id: string,
+        dependency: Partial<DBDependency>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -197,6 +227,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     diagramId: '',
     tables: [],
     relationships: [],
+    dependencies: [],
     schemas: [],
     filteredSchemas: [],
     filterSchemas: emptyFn,
@@ -253,4 +284,13 @@ export const chartDBContext = createContext<ChartDBContext>({
     updateRelationship: emptyFn,
     removeRelationships: emptyFn,
     addRelationships: emptyFn,
+
+    // Dependency operations
+    createDependency: emptyFn,
+    addDependency: emptyFn,
+    getDependency: emptyFn,
+    removeDependency: emptyFn,
+    removeDependencies: emptyFn,
+    addDependencies: emptyFn,
+    updateDependency: emptyFn,
 });

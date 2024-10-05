@@ -8,15 +8,15 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from './canvas-utils';
 
-export type TableEdgeType = Edge<
+export type RelationshipEdgeType = Edge<
     {
         relationship: DBRelationship;
         highlighted?: boolean;
     },
-    'table-edge'
+    'relationship-edge'
 >;
 
-export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
+export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
     id,
     sourceX,
     sourceY,
@@ -44,8 +44,10 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
             relationships
                 .filter(
                     (relationship) =>
-                        relationship.targetTableId === target &&
-                        relationship.sourceTableId === source
+                        (relationship.targetTableId === target &&
+                            relationship.sourceTableId === source) ||
+                        (relationship.targetTableId === source &&
+                            relationship.sourceTableId === target)
                 )
                 .findIndex((relationship) => relationship.id === id),
         [relationships, id, source, target]
@@ -157,7 +159,7 @@ export const TableEdge: React.FC<EdgeProps<TableEdgeType>> = ({
                 fill="none"
                 className={cn([
                     'react-flow__edge-path',
-                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-300'}`,
+                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
                 ])}
                 onClick={(e) => {
                     if (e.detail === 2) {

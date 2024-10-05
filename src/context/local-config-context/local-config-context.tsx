@@ -29,6 +29,9 @@ export interface LocalConfigContext {
 
     starUsDialogLastOpen: number;
     setStarUsDialogLastOpen: (lastOpen: number) => void;
+
+    showDependenciesOnCanvas: boolean;
+    setShowDependenciesOnCanvas: (showDependenciesOnCanvas: boolean) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -52,4 +55,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     starUsDialogLastOpen: 0,
     setStarUsDialogLastOpen: emptyFn,
+
+    showDependenciesOnCanvas: false,
+    setShowDependenciesOnCanvas: emptyFn,
 });
