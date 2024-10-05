@@ -129,19 +129,30 @@ function preprocessViewDefinition(viewDefinition: string): string {
         return '';
     }
 
-    // Remove schema and column definitions as before
-    const regex = /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))(?:\s*\([^\)]*\))?\s+AS\s+/i;
+    // Replace 'CREATE MATERIALIZED VIEW' with 'CREATE VIEW'
+    viewDefinition = viewDefinition.replace(/CREATE\s+MATERIALIZED\s+VIEW/i, 'CREATE VIEW');
+
+    // Regular expression to match 'CREATE VIEW [schema.]view_name [ (column definitions) ] AS'
+    // This regex captures the view name and skips any content between the view name and 'AS'
+    const regex = /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))[\s\S]*?\bAS\b\s+/i;
+
     const match = viewDefinition.match(regex);
     let modifiedDefinition: string;
+
     if (match) {
         const viewName = match[1] || match[2] || match[3];
+        // Extract the SQL after the 'AS' keyword
         const restOfDefinition = viewDefinition.substring(match.index! + match[0].length);
 
-        // Replace double-quoted function names with unquoted names
+        // Replace double-quoted identifiers with unquoted ones
         let modifiedSQL = restOfDefinition.replace(/"(\w+)"/g, '$1');
 
         // Replace '::' type casts with 'CAST' expressions
         modifiedSQL = modifiedSQL.replace(/\(([^()]+)\)::(\w+)/g, 'CAST($1 AS $2)');
+
+        // Remove ClickHouse-specific syntax that may still be present
+        // For example, remove SETTINGS clauses inside the SELECT statement
+        modifiedSQL = modifiedSQL.replace(/\bSETTINGS\b[\s\S]*$/i, '');
 
         modifiedDefinition = `CREATE VIEW ${viewName} AS ${modifiedSQL}`;
     } else {
