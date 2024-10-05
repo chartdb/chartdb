@@ -351,7 +351,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 for (const change of positionChanges) {
                     newOverlappingGraph = findTableOverlapping(
                         { node: getNode(change.id) as TableNodeType },
-                        { nodes },
+                        { nodes: nodes.filter((node) => !node.hidden) },
                         newOverlappingGraph
                     );
                 }
@@ -359,7 +359,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 for (const change of sizeChanges) {
                     newOverlappingGraph = findTableOverlapping(
                         { node: getNode(change.id) as TableNodeType },
-                        { nodes },
+                        { nodes: nodes.filter((node) => !node.hidden) },
                         newOverlappingGraph
                     );
                 }
@@ -447,39 +447,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         ]
     );
 
-    // const lastDiagramId = useRef<string>('');
-
-    // useEffect(() => {
-    //     if (
-    //         lastDiagramId.current === diagramId ||
-    //         nodes.length !== tables.length ||
-    //         nodes.length === 0
-    //     ) {
-    //         return;
-    //     }
-
-    //     const nodesWithDimensions = nodes
-    //         .map((node) => ({
-    //             ...node,
-    //             measured: {
-    //                 width:
-    //                     node.measured?.width ??
-    //                     node.data.table.width ??
-    //                     MIN_TABLE_SIZE,
-    //                 height:
-    //                     node.measured?.height ??
-    //                     calcTableHeight(node.data.table.fields.length),
-    //             },
-    //         }))
-    //         .filter((node) => node.hidden === false);
-
-    //     lastDiagramId.current = diagramId;
-    //     const overlappingTablesInDiagram = findOverlappingTables({
-    //         nodes: nodesWithDimensions,
-    //     });
-    //     setOverlapGraph(overlappingTablesInDiagram);
-    // }, [diagramId, nodes, tables.length, setOverlapGraph]);
-
     const eventConsumer = useCallback(
         (event: ChartDBEvent) => {
             let newOverlappingGraph: Graph<string> = overlapGraph;
@@ -487,7 +454,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 for (const table of event.data.tables) {
                     newOverlappingGraph = findTableOverlapping(
                         { node: getNode(table.id) as TableNodeType },
-                        { nodes },
+                        { nodes: nodes.filter((node) => !node.hidden) },
                         overlapGraph
                     );
                 }
@@ -520,7 +487,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             measured,
                         },
                     },
-                    { nodes },
+                    { nodes: nodes.filter((node) => !node.hidden) },
                     overlapGraph
                 );
                 setOverlapGraph(newOverlappingGraph);
@@ -542,7 +509,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             measured,
                         },
                     },
-                    { nodes },
+                    { nodes: nodes.filter((node) => !node.hidden) },
                     overlapGraph
                 );
                 setOverlapGraph(newOverlappingGraph);
