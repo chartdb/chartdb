@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
-import type { ChartDBContext } from './chartdb-context';
+import type { ChartDBContext, ChartDBEvent } from './chartdb-context';
 import { chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBField } from '@/lib/domain/db-field';
@@ -18,11 +18,13 @@ import type { DBSchema } from '@/lib/domain/db-schema';
 import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useEventEmitter } from 'ahooks';
 
 export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const db = useStorage();
+    const events = useEventEmitter<ChartDBEvent>();
     const navigate = useNavigate();
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
@@ -272,6 +274,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 ...tables.map((table) => db.addTable({ diagramId, table })),
             ]);
 
+            events.emit({ action: 'add_tables', data: { tables } });
+
             if (options.updateHistory) {
                 addUndoAction({
                     action: 'addTables',
@@ -281,7 +285,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 resetRedoStack();
             }
         },
-        [db, diagramId, setTables, addUndoAction, resetRedoStack]
+        [db, diagramId, setTables, addUndoAction, resetRedoStack, events]
     );
 
     const addTable: ChartDBContext['addTable'] = useCallback(
@@ -352,6 +356,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 tables.filter((table) => !ids.includes(table.id))
             );
 
+            events.emit({ action: 'remove_tables', data: { tableIds: ids } });
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
             await Promise.all([
@@ -381,6 +387,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             resetRedoStack,
             getTable,
             relationships,
+            events,
         ]
     );
 
@@ -401,6 +408,12 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setTables((tables) =>
                 tables.map((t) => (t.id === id ? { ...t, ...table } : t))
             );
+
+            events.emit({
+                action: 'update_table',
+                data: { id, table },
+            });
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
             await Promise.all([
@@ -417,7 +430,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 resetRedoStack();
             }
         },
-        [db, setTables, addUndoAction, resetRedoStack, getTable, diagramId]
+        [
+            db,
+            setTables,
+            addUndoAction,
+            resetRedoStack,
+            getTable,
+            diagramId,
+            events,
+        ]
     );
 
     const updateTablesState: ChartDBContext['updateTablesState'] = useCallback(
@@ -471,6 +492,11 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
             setTables(updateTables);
 
+            events.emit({
+                action: 'remove_tables',
+                data: { tableIds: tablesToDelete.map((t) => t.id) },
+            });
+
             const promises = [];
             for (const updatedTable of updatedTables) {
                 promises.push(
@@ -519,6 +545,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             addUndoAction,
             resetRedoStack,
             relationships,
+            events,
         ]
     );
 
@@ -593,6 +620,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             fieldId: string,
             options = { updateHistory: true }
         ) => {
+            const fields = getTable(tableId)?.fields ?? [];
             const prevField = getField(tableId, fieldId);
             setTables((tables) =>
                 tables.map((table) =>
@@ -606,6 +634,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                         : table
                 )
             );
+
+            events.emit({
+                action: 'remove_field',
+                data: {
+                    tableId: tableId,
+                    fieldId,
+                    fields: fields.filter((f) => f.id !== fieldId),
+                },
+            });
 
             const table = await db.getTable({ diagramId, id: tableId });
             if (!table) {
@@ -634,7 +671,16 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 resetRedoStack();
             }
         },
-        [db, diagramId, setTables, addUndoAction, resetRedoStack, getField]
+        [
+            db,
+            diagramId,
+            setTables,
+            addUndoAction,
+            resetRedoStack,
+            getField,
+            getTable,
+            events,
+        ]
     );
 
     const addField: ChartDBContext['addField'] = useCallback(
@@ -643,6 +689,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             field: DBField,
             options = { updateHistory: true }
         ) => {
+            const fields = getTable(tableId)?.fields ?? [];
             setTables((tables) =>
                 tables.map((table) =>
                     table.id === tableId
@@ -650,6 +697,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                         : table
                 )
             );
+
+            events.emit({
+                action: 'add_field',
+                data: {
+                    tableId: tableId,
+                    field,
+                    fields: [...fields, field],
+                },
+            });
 
             const table = await db.getTable({ diagramId, id: tableId });
 
@@ -679,7 +735,15 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 resetRedoStack();
             }
         },
-        [db, diagramId, setTables, addUndoAction, resetRedoStack]
+        [
+            db,
+            diagramId,
+            setTables,
+            addUndoAction,
+            resetRedoStack,
+            events,
+            getTable,
+        ]
     );
 
     const createField: ChartDBContext['createField'] = useCallback(
@@ -1138,6 +1202,8 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 setRelationships(diagram?.relationships ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
+
+                events.emit({ action: 'load_diagram', data: { diagram } });
             }
 
             return diagram;
@@ -1152,6 +1218,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             setRelationships,
             setDiagramCreatedAt,
             setDiagramUpdatedAt,
+            events,
         ]
     );
 
@@ -1166,6 +1233,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 currentDiagram,
                 schemas,
                 filteredSchemas,
+                events,
                 filterSchemas,
                 updateDiagramId,
                 updateDiagramName,
