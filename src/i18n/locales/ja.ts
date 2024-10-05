@@ -29,6 +29,9 @@ export const ja: LanguageTranslation = {
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
                 change_language: '言語',
+                // TODO: Translate
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'ヘルプ',
@@ -162,6 +165,25 @@ export const ja: LanguageTranslation = {
                     title: 'リレーションシップがありません',
                     description:
                         'テーブルを接続するためにリレーションシップを作成してください',
+                },
+            },
+            // TODO: Translate
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
                 },
             },
         },

@@ -10,6 +10,7 @@ const showCardinalityKey = 'show_cardinality';
 const hideMultiSchemaNotificationKey = 'hide_multi_schema_notification';
 const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
+const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -47,6 +48,12 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
             parseInt(localStorage.getItem(starUsDialogLastOpenKey) || '0')
         );
 
+    const [showDependenciesOnCanvas, setShowDependenciesOnCanvas] =
+        React.useState<boolean>(
+            (localStorage.getItem(showDependenciesOnCanvasKey) || 'false') ===
+                'true'
+        );
+
     useEffect(() => {
         localStorage.setItem(
             starUsDialogLastOpenKey,
@@ -81,6 +88,13 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         localStorage.setItem(showCardinalityKey, showCardinality.toString());
     }, [showCardinality]);
 
+    useEffect(() => {
+        localStorage.setItem(
+            showDependenciesOnCanvasKey,
+            showDependenciesOnCanvas.toString()
+        );
+    }, [showDependenciesOnCanvas]);
+
     return (
         <LocalConfigContext.Provider
             value={{
@@ -98,6 +112,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 githubRepoOpened,
                 starUsDialogLastOpen,
                 setStarUsDialogLastOpen,
+                showDependenciesOnCanvas,
+                setShowDependenciesOnCanvas,
             }}
         >
             {children}

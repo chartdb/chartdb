@@ -29,6 +29,9 @@ export const de: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
                 change_language: 'Sprache',
+                // TODO: Translate
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Hilfe',

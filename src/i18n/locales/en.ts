@@ -29,6 +29,8 @@ export const en = {
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 change_language: 'Language',
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Help',
@@ -163,7 +165,6 @@ export const en = {
                     description: 'Create a relationship to connect tables',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
                 dependencies: 'Dependencies',
                 filter: 'Filter',

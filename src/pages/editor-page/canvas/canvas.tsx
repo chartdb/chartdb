@@ -128,10 +128,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filteredSchemas,
         events,
         dependencies,
+        filteredSchemas,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction } = useLocalConfig();
+    const { scrollAction, showDependenciesOnCanvas } = useLocalConfig();
     const { showAlert } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
@@ -205,10 +206,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
                     type: 'dependency-edge',
                     data: { dependency: dep },
+                    hidden: !showDependenciesOnCanvas,
                 })
             ),
         ]);
-    }, [relationships, dependencies, setEdges]);
+    }, [relationships, dependencies, setEdges, showDependenciesOnCanvas]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
