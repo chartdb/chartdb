@@ -139,6 +139,7 @@ tbls AS (
         ) + N']' AS all_tables_json
     FROM
         (
+            -- Select from tables
             SELECT
                 COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
                 COALESCE(REPLACE(t.name, '"', ''), '') AS table_name,
@@ -155,6 +156,22 @@ tbls AS (
                 s.name LIKE '%'
             GROUP BY
                 s.name, t.name, t.type_desc, t.create_date
+
+            UNION ALL
+
+            -- Select from views
+            SELECT
+                COALESCE(REPLACE(s.name, '"', ''), '') AS table_name,
+                COALESCE(REPLACE(v.name, '"', ''), '') AS object_name,
+                0 AS row_count,  -- Views don't have row counts
+                'VIEW' AS table_type,
+                v.create_date AS creation_date
+            FROM
+                sys.views v
+            JOIN
+                sys.schemas s ON v.schema_id = s.schema_id
+            WHERE
+                s.name LIKE '%'
         ) AS aggregated
 ),
 views AS (
@@ -162,13 +179,17 @@ views AS (
         '[' + STRING_AGG(
             CONVERT(nvarchar(max),
             JSON_QUERY(
-                N'{"schema": "' + COALESCE(REPLACE(s.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                '", "view_name": "' + COALESCE(REPLACE(v.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                '", "view_definition": "' + CAST(
-                    (
-                        SELECT CAST(v.definition AS VARBINARY(MAX)) FOR XML PATH('')
-                    ) AS NVARCHAR(MAX)
-                ) + '"}'
+                N'{"schema": "' + STRING_ESCAPE(COALESCE(s.name, ''), 'json') +
+                '", "view_name": "' + STRING_ESCAPE(COALESCE(v.name, ''), 'json') +
+                '", "view_definition": "' +
+                STRING_ESCAPE(
+                    CAST(
+                        '' AS XML
+                    ).value(
+                        'xs:base64Binary(sql:column("DefinitionBinary"))',
+                        'VARCHAR(MAX)'
+                    ), 'json') +
+                '"}'
             )
             ), ','
         ) + N']' AS all_views_json
@@ -176,6 +197,10 @@ views AS (
         sys.views v
     JOIN
         sys.schemas s ON v.schema_id = s.schema_id
+    JOIN
+        sys.sql_modules m ON v.object_id = m.object_id
+    CROSS APPLY
+        (SELECT CONVERT(VARBINARY(MAX), m.definition) AS DefinitionBinary) AS bin
     WHERE
         s.name LIKE '%'
 )
