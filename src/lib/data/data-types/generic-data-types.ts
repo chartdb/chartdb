@@ -1,4 +1,4 @@
-import { DataType } from './data-types';
+import type { DataType } from './data-types';
 
 export const genericDataTypes: readonly DataType[] = [
     { name: 'bigint', id: 'bigint' },

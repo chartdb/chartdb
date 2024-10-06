@@ -1,4 +1,4 @@
-import { DataType } from './data-types';
+import type { DataType } from './data-types';
 
 export const mysqlDataTypes: readonly DataType[] = [
     // Numeric Types
