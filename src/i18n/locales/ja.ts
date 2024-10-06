@@ -196,6 +196,8 @@ export const ja: LanguageTranslation = {
             undo: '元に戻す',
             redo: 'やり直し',
             reorder_diagram: 'ダイアグラムを並べ替え',
+            // TODO: Translate
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

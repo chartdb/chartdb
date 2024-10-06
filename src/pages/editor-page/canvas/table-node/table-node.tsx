@@ -27,6 +27,7 @@ export type TableNodeType = Node<
     {
         table: DBTable;
         isOverlapping: boolean;
+        highlightOverlappingTables?: boolean;
     },
     'table'
 >;
@@ -37,7 +38,12 @@ export const MIN_TABLE_SIZE = 224;
 export const TABLE_MINIMIZED_FIELDS = 10;
 
 export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
-    ({ selected, dragging, id, data: { table, isOverlapping } }) => {
+    ({
+        selected,
+        dragging,
+        id,
+        data: { table, isOverlapping, highlightOverlappingTables },
+    }) => {
         const { updateTable, relationships } = useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
@@ -128,7 +134,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             ? 'border-pink-600'
                             : 'border-slate-500 dark:border-slate-700',
                         isOverlapping
-                            ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2 animate-pulse-border animate-scale'
+                            ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
+                            : '',
+                        !highlightOverlappingTables && isOverlapping
+                            ? 'animate-scale'
+                            : '',
+                        highlightOverlappingTables && isOverlapping
+                            ? 'animate-scale-2'
                             : ''
                     )}
                     onClick={(e) => {
