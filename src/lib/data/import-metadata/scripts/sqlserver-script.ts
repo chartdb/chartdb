@@ -163,7 +163,12 @@ views AS (
             CONVERT(nvarchar(max),
             JSON_QUERY(
                 N'{"schema": "' + COALESCE(REPLACE(s.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                '", "view_name": "' + COALESCE(REPLACE(v.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS + '"}'
+                '", "view_name": "' + COALESCE(REPLACE(v.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                '", "view_definition": "' + CAST(
+                    (
+                        SELECT CAST(v.definition AS VARBINARY(MAX)) FOR XML PATH('')
+                    ) AS NVARCHAR(MAX)
+                ) + '"}'
             )
             ), ','
         ) + N']' AS all_views_json
@@ -329,68 +334,91 @@ indexes AS (
 ),
 tbls AS (
     SELECT
-        '[' + ISNULL(
-            STUFF((
-                SELECT ',' +
-                    CONVERT(nvarchar(max),
-                    JSON_QUERY(
-                        N'{"schema": "' + COALESCE(REPLACE(aggregated.schema_name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                        '", "table": "' + COALESCE(REPLACE(aggregated.table_name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                        '", "row_count": "' + CAST(aggregated.row_count AS NVARCHAR(MAX)) +
-                        '", "table_type": "' + aggregated.table_type COLLATE SQL_Latin1_General_CP1_CI_AS +
-                        '", "creation_date": "' + CONVERT(NVARCHAR(MAX), aggregated.creation_date, 120) + '"}'
-                    )
+    '[' + ISNULL(
+        STUFF((
+            SELECT ',' +
+                CONVERT(nvarchar(max),
+                JSON_QUERY(
+                    N'{"schema": "' + COALESCE(REPLACE(aggregated.schema_name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                    '", "table": "' + COALESCE(REPLACE(aggregated.object_name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                    '", "row_count": "' + CAST(aggregated.row_count AS NVARCHAR(MAX)) +
+                    '", "object_type": "' + aggregated.object_type COLLATE SQL_Latin1_General_CP1_CI_AS +
+                    '", "creation_date": "' + CONVERT(NVARCHAR(MAX), aggregated.creation_date, 120) + '"}'
                 )
-                FROM
-                    (
-                        SELECT
-                            COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
-                            COALESCE(REPLACE(t.name, '"', ''), '') AS table_name,
-                            SUM(p.rows) AS row_count,
-                            t.type_desc AS table_type,
-                            t.create_date AS creation_date
-                        FROM
-                            sys.tables t
-                        JOIN
-                            sys.schemas s ON t.schema_id = s.schema_id
-                        JOIN
-                            sys.partitions p ON t.object_id = p.object_id AND p.index_id IN (0, 1)
-                        WHERE
-                            s.name LIKE '%'
-                        GROUP BY
-                            s.name, t.name, t.type_desc, t.create_date
-                    ) AS aggregated
-                FOR XML PATH('')
-            ), 1, 1, ''), '')
-        + N']' AS all_tables_json
+            )
+            FROM
+                (
+                    -- Select from tables
+                    SELECT
+                        COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
+                        COALESCE(REPLACE(t.name, '"', ''), '') AS object_name,
+                        SUM(p.rows) AS row_count,
+                        t.type_desc AS object_type,
+                        t.create_date AS creation_date
+                    FROM
+                        sys.tables t
+                    JOIN
+                        sys.schemas s ON t.schema_id = s.schema_id
+                    JOIN
+                        sys.partitions p ON t.object_id = p.object_id AND p.index_id IN (0, 1)
+                    WHERE
+                        s.name LIKE '%'
+                    GROUP BY
+                        s.name, t.name, t.type_desc, t.create_date
+
+                    UNION ALL
+
+                    -- Select from views
+                    SELECT
+                        COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
+                        COALESCE(REPLACE(v.name, '"', ''), '') AS object_name,
+                        0 AS row_count,  -- Views don't have row counts
+                        'VIEW' AS object_type,
+                        v.create_date AS creation_date
+                    FROM
+                        sys.views v
+                    JOIN
+                        sys.schemas s ON v.schema_id = s.schema_id
+                    WHERE
+                        s.name LIKE '%'
+                ) AS aggregated
+            FOR XML PATH('')
+        ), 1, 1, ''), '')
+    + N']' AS all_objects_json
 ),
 views AS (
     SELECT
-        '[' + ISNULL(
-            STUFF((
-                SELECT ',' +
-                    CONVERT(nvarchar(max),
-                    JSON_QUERY(
-                        N'{"schema": "' + COALESCE(REPLACE(s.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                        '", "view_name": "' + COALESCE(REPLACE(v.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS + '"}'
+        '[' +
+        (
+            SELECT
+                STUFF((
+                    SELECT ',' + CONVERT(nvarchar(max),
+                        JSON_QUERY(
+                            N'{"schema": "' + COALESCE(REPLACE(s.name, '"', ''), '') +
+                            '", "view_name": "' + COALESCE(REPLACE(v.name, '"', ''), '') +
+                            '", "view_definition": "' +
+                            CAST(
+                                (
+                                    SELECT CAST(OBJECT_DEFINITION(v.object_id) AS VARBINARY(MAX)) FOR XML PATH('')
+                                ) AS NVARCHAR(MAX)
+                            ) + '"}'
+                        )
                     )
-                )
-                FROM
-                    sys.views v
-                JOIN
-                    sys.schemas s ON v.schema_id = s.schema_id
-                WHERE
-                    s.name LIKE '%'
-                FOR XML PATH('')
-            ), 1, 1, ''), '')
-        + N']' AS all_views_json
+                    FROM
+                        sys.views v
+                    JOIN
+                        sys.schemas s ON v.schema_id = s.schema_id
+                    WHERE
+                        s.name LIKE '%'
+                    FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, '')
+        ) + ']' AS all_views_json
 )
 SELECT JSON_QUERY(
         N'{"fk_info": ' + ISNULL((SELECT cast(all_fks_json as nvarchar(max)) FROM fk_info), N'[]') +
         ', "pk_info": ' + ISNULL((SELECT cast(all_pks_json as nvarchar(max)) FROM pk_info), N'[]') +
         ', "columns": ' + ISNULL((SELECT cast(all_columns_json as nvarchar(max)) FROM cols), N'[]') +
         ', "indexes": ' + ISNULL((SELECT cast(all_indexes_json as nvarchar(max)) FROM indexes), N'[]') +
-        ', "tables": ' + ISNULL((SELECT cast(all_tables_json as nvarchar(max)) FROM tbls), N'[]') +
+        ', "tables": ' + ISNULL((SELECT cast(all_objects_json as nvarchar(max)) FROM tbls), N'[]') +
         ', "views": ' + ISNULL((SELECT cast(all_views_json as nvarchar(max)) FROM views), N'[]') +
         ', "database_name": "' + DB_NAME() + '"' +
         ', "version": ""}'
