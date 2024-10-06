@@ -3,7 +3,7 @@ import type { DBField } from './db-field';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import type { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
-import { greyColor, randomColor } from '@/lib/colors';
+import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
 import type { DBRelationship } from './db-relationship';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
@@ -23,6 +23,7 @@ export interface DBTable {
     indexes: DBIndex[];
     color: string;
     isView: boolean;
+    isMaterializedView?: boolean;
     createdAt: number;
     width?: number;
     comments?: string;
@@ -159,6 +160,12 @@ export const createTablesFromMetadata = ({
                 view.view_name === tableInfo.table
         );
 
+        const isMaterializedView = views.some(
+            (view) =>
+                view.view_definition?.includes('MATERIALIZED') &&
+                view.view_name === tableInfo.table
+        );
+
         // Initial random positions; these will be adjusted later
         return {
             id: generateId(),
@@ -168,8 +175,13 @@ export const createTablesFromMetadata = ({
             y: Math.random() * 800, // Placeholder Y
             fields,
             indexes: dbIndexes,
-            color: isView ? greyColor : randomColor(),
+            color: isMaterializedView
+                ? materializedViewColor
+                : isView
+                  ? viewColor
+                  : randomColor(),
             isView: isView,
+            isMaterializedView: isMaterializedView,
             createdAt: Date.now(),
             comments: tableInfo.comment ? tableInfo.comment : undefined,
         };

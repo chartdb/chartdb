@@ -37,7 +37,6 @@ export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
     const { closeExportImageDialog } = useDialog();
 
     const handleExport = useCallback(() => {
-        console.log({ format, scale });
         exportImage(format, Number(scale));
     }, [exportImage, format, scale]);
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     Select,
     SelectContent,
@@ -15,15 +15,13 @@ import { useTranslation } from 'react-i18next';
 import type { SelectBoxOption } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useReactFlow } from '@xyflow/react';
-import { debounce } from '@/lib/utils';
+import { DependenciesSection } from './dependencies-section/dependencies-section';
 
 export interface SidePanelProps {}
 
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const { t } = useTranslation();
     const { schemas, filterSchemas, filteredSchemas } = useChartDB();
-    const { fitView } = useReactFlow();
     const {
         selectSidebarSection,
         selectedSidebarSection,
@@ -31,18 +29,6 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
         openSelectSchema,
         closeSelectSchema,
     } = useLayout();
-
-    useEffect(() => {
-        if (filteredSchemas !== undefined) {
-            debounce(() => {
-                fitView({
-                    duration: 500,
-                    padding: 0.1,
-                    maxZoom: 0.8,
-                });
-            }, 500)();
-        }
-    }, [filteredSchemas, fitView]);
 
     const schemasOptions: SelectBoxOption[] = useMemo(
         () =>
@@ -119,14 +105,21 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                     'side_panel.relationships_section.relationships'
                                 )}
                             </SelectItem>
+                            <SelectItem value="dependencies">
+                                {t(
+                                    'side_panel.dependencies_section.dependencies'
+                                )}
+                            </SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
             </div>
             {selectedSidebarSection === 'tables' ? (
                 <TablesSection />
-            ) : (
+            ) : selectedSidebarSection === 'relationships' ? (
                 <RelationshipsSection />
+            ) : (
+                <DependenciesSection />
             )}
         </aside>
     );

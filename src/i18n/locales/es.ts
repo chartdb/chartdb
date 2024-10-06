@@ -29,6 +29,9 @@ export const es: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom al Desplazarse',
                 theme: 'Tema',
                 change_language: 'Idioma',
+                // TODO: Translate
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Ayuda',
@@ -154,6 +157,25 @@ export const es: LanguageTranslation = {
                     description: 'Crea una relación para conectar tablas',
                 },
             },
+            // TODO: Translate
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
+                },
+            },
         },
 
         toolbar: {
@@ -164,6 +186,8 @@ export const es: LanguageTranslation = {
             undo: 'Deshacer',
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
+            // TODO: Translate
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

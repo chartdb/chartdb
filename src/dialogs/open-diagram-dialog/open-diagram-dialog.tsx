@@ -85,7 +85,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 </DialogHeader>
                 <div className="flex flex-1 items-center justify-center">
                     <ScrollArea className="h-80 w-full">
-                        <Table>
+                        <Table className="h-fit">
                             <TableHeader className="sticky top-0 bg-background">
                                 <TableRow>
                                     <TableHead />
@@ -134,11 +134,15 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             }
                                         }}
                                     >
-                                        <TableCell className="flex justify-center">
-                                            <DiagramIcon diagram={diagram} />
+                                        <TableCell className="table-cell">
+                                            <div className="flex justify-center">
+                                                <DiagramIcon
+                                                    diagram={diagram}
+                                                />
+                                            </div>
                                         </TableCell>
                                         <TableCell>{diagram.name}</TableCell>
-                                        <TableCell className="hidden items-center sm:inline-flex">
+                                        <TableCell className="hidden items-center sm:table-cell">
                                             {diagram.createdAt.toLocaleString()}
                                         </TableCell>
                                         <TableCell>

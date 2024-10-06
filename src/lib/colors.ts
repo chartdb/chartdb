@@ -12,8 +12,10 @@ export const colorOptions = [
     '#ffe374', // A warm yellow.
     '#ff9f74', // A peachy orange.
 ];
+
 export const randomColor = () => {
     return colorOptions[Math.floor(Math.random() * colorOptions.length)];
 };
 
-export const greyColor = '#b0b0b0'; // A Cloudy Grey.
+export const viewColor = '#b0b0b0';
+export const materializedViewColor = '#7d7d7d';

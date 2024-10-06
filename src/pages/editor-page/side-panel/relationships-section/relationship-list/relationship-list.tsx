@@ -4,11 +4,11 @@ import { RelationshipListItem } from './relationship-list-item/relationship-list
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useLayout } from '@/hooks/use-layout';
 
-export interface TableListProps {
+export interface RelationshipListProps {
     relationships: DBRelationship[];
 }
 
-export const RelationshipList: React.FC<TableListProps> = ({
+export const RelationshipList: React.FC<RelationshipListProps> = ({
     relationships,
 }) => {
     const { openRelationshipFromSidebar, openedRelationshipInSidebar } =

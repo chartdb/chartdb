@@ -77,6 +77,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         setScrollAction,
         setShowCardinality,
         showCardinality,
+        setShowDependenciesOnCanvas,
+        showDependenciesOnCanvas,
     } = useLocalConfig();
     const { effectiveTheme } = useTheme();
     const { t, i18n } = useTranslation();
@@ -299,6 +301,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const showOrHideCardinality = useCallback(() => {
         setShowCardinality(!showCardinality);
     }, [showCardinality, setShowCardinality]);
+
+    const showOrHideDependencies = useCallback(() => {
+        setShowDependenciesOnCanvas(!showDependenciesOnCanvas);
+    }, [showDependenciesOnCanvas, setShowDependenciesOnCanvas]);
 
     const emojiAI = '✨';
 
@@ -605,10 +611,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ? t('menu.view.hide_sidebar')
                                         : t('menu.view.show_sidebar')}
                                 </MenubarItem>
+                                <MenubarSeparator />
                                 <MenubarItem onClick={showOrHideCardinality}>
                                     {showCardinality
                                         ? t('menu.view.hide_cardinality')
                                         : t('menu.view.show_cardinality')}
+                                </MenubarItem>
+                                <MenubarItem onClick={showOrHideDependencies}>
+                                    {showDependenciesOnCanvas
+                                        ? t('menu.view.hide_dependencies')
+                                        : t('menu.view.show_dependencies')}
                                 </MenubarItem>
                                 <MenubarSeparator />
                                 <MenubarSub>

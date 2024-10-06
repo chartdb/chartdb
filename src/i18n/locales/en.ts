@@ -29,6 +29,8 @@ export const en = {
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 change_language: 'Language',
+                show_dependencies: 'Show Dependencies',
+                hide_dependencies: 'Hide Dependencies',
             },
             help: {
                 help: 'Help',
@@ -163,6 +165,24 @@ export const en = {
                     description: 'Create a relationship to connect tables',
                 },
             },
+            dependencies_section: {
+                dependencies: 'Dependencies',
+                filter: 'Filter',
+                collapse: 'Collapse All',
+                dependency: {
+                    table: 'Table',
+                    dependent_table: 'Dependent View',
+                    delete_dependency: 'Delete',
+                    dependency_actions: {
+                        title: 'Actions',
+                        delete_dependency: 'Delete',
+                    },
+                },
+                empty_state: {
+                    title: 'No dependencies',
+                    description: 'Create a view to get started',
+                },
+            },
         },
 
         toolbar: {
@@ -173,6 +193,7 @@ export const en = {
             undo: 'Undo',
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

@@ -8,6 +8,59 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
+import type { DBDependency } from '@/lib/domain/db-dependency';
+import { EventEmitter } from 'ahooks/lib/useEventEmitter';
+
+export type ChartDBEventType =
+    | 'add_tables'
+    | 'update_table'
+    | 'remove_tables'
+    | 'add_field'
+    | 'remove_field'
+    | 'load_diagram';
+
+export type ChartDBEventBase<T extends ChartDBEventType, D> = {
+    action: T;
+    data: D;
+};
+
+export type CreateTableEvent = ChartDBEventBase<
+    'add_tables',
+    { tables: DBTable[] }
+>;
+
+export type UpdateTableEvent = ChartDBEventBase<
+    'update_table',
+    { id: string; table: Partial<DBTable> }
+>;
+
+export type RemoveTableEvent = ChartDBEventBase<
+    'remove_tables',
+    { tableIds: string[] }
+>;
+
+export type AddFieldEvent = ChartDBEventBase<
+    'add_field',
+    { tableId: string; field: DBField; fields: DBField[] }
+>;
+
+export type RemoveFieldEvent = ChartDBEventBase<
+    'remove_field',
+    { tableId: string; fieldId: string; fields: DBField[] }
+>;
+
+export type LoadDiagramEvent = ChartDBEventBase<
+    'load_diagram',
+    { diagram: Diagram }
+>;
+
+export type ChartDBEvent =
+    | CreateTableEvent
+    | UpdateTableEvent
+    | RemoveTableEvent
+    | AddFieldEvent
+    | RemoveFieldEvent
+    | LoadDiagramEvent;
 
 export interface ChartDBContext {
     diagramId: string;
@@ -16,7 +69,9 @@ export interface ChartDBContext {
     tables: DBTable[];
     schemas: DBSchema[];
     relationships: DBRelationship[];
+    dependencies: DBDependency[];
     currentDiagram: Diagram;
+    events: EventEmitter<ChartDBEvent>;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
@@ -136,6 +191,34 @@ export interface ChartDBContext {
         relationship: Partial<DBRelationship>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+
+    // Dependency operations
+    createDependency: (params: {
+        tableId: string;
+        dependentTableId: string;
+    }) => Promise<DBDependency>;
+    addDependency: (
+        dependency: DBDependency,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addDependencies: (
+        dependencies: DBDependency[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    getDependency: (id: string) => DBDependency | null;
+    removeDependency: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeDependencies: (
+        ids: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateDependency: (
+        id: string,
+        dependency: Partial<DBDependency>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -144,6 +227,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     diagramId: '',
     tables: [],
     relationships: [],
+    dependencies: [],
     schemas: [],
     filteredSchemas: [],
     filterSchemas: emptyFn,
@@ -154,6 +238,7 @@ export const chartDBContext = createContext<ChartDBContext>({
         createdAt: new Date(),
         updatedAt: new Date(),
     },
+    events: new EventEmitter(),
 
     // General operations
     updateDiagramId: emptyFn,
@@ -199,4 +284,13 @@ export const chartDBContext = createContext<ChartDBContext>({
     updateRelationship: emptyFn,
     removeRelationships: emptyFn,
     addRelationships: emptyFn,
+
+    // Dependency operations
+    createDependency: emptyFn,
+    addDependency: emptyFn,
+    getDependency: emptyFn,
+    removeDependency: emptyFn,
+    removeDependencies: emptyFn,
+    addDependencies: emptyFn,
+    updateDependency: emptyFn,
 });
