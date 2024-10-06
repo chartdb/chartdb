@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ChartDBLogo from '@/assets/logo.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { examples } from './examples-data/examples-data';
@@ -7,6 +7,10 @@ import { useTheme } from '@/hooks/use-theme';
 
 export const ExamplesPage: React.FC = () => {
     const { effectiveTheme } = useTheme();
+    useEffect(() => {
+        document.title = 'ChartDB - Examples';
+    }, []);
+
     return (
         <section className="flex w-screen flex-col bg-background">
             <nav className="flex h-12 flex-row items-center justify-between border-b px-4">
