@@ -90,7 +90,8 @@ Or like this if you want to have AI capabilities:
 
 ```
 npm install
-VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
+VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY>
+npm run build
 ```
 
 ### Running the Docker Container
