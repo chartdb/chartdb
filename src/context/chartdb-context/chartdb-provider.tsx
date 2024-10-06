@@ -51,7 +51,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
         if (diagramName) {
             document.title = `ChartDB - ${diagramName}`;
         } else {
-            document.title = 'ChartDB';
+            document.title = 'ChartDB - Create Diagram';
         }
     }, [diagramName]);
 

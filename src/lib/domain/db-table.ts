@@ -116,7 +116,10 @@ export const createTablesFromMetadata = ({
             (col: ColumnInfo): DBField => ({
                 id: generateId(),
                 name: col.name,
-                type: { id: col.type.split(' ').join('_'), name: col.type },
+                type: {
+                    id: col.type.split(' ').join('_').toLowerCase(),
+                    name: col.type.toLowerCase(),
+                },
                 primaryKey: tablePrimaryKeys.includes(col.name),
                 unique: Object.values(aggregatedIndexes).some(
                     (idx) =>
