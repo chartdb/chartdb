@@ -193,6 +193,7 @@ export const en = {
             undo: 'Undo',
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

@@ -196,6 +196,8 @@ export const de: LanguageTranslation = {
             undo: 'Rückgängig',
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
+            // TODO: Translate
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

@@ -67,11 +67,12 @@ module.exports = {
                     from: { height: 'var(--radix-accordion-content-height)' },
                     to: { height: '0' },
                 },
-                'pulse-border': {
-                    '0%, 100%': { borderColor: 'rgba(59, 130, 246, 0.5)' },
-                    '50%': { borderColor: 'rgba(59, 130, 246, 1)' },
-                },
                 scale: {
+                    '0%': { transform: 'scale(1)' },
+                    '50%': { transform: 'scale(1.05)' },
+                    '100%': { transform: 'scale(1)' },
+                },
+                'scale-2': {
                     '0%': { transform: 'scale(1)' },
                     '50%': { transform: 'scale(1.05)' },
                     '100%': { transform: 'scale(1)' },
@@ -80,6 +81,8 @@ module.exports = {
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
+                scale: 'scale 1s ease-in-out 1',
+                'scale-2': 'scale-2 1s ease-in-out 1',
             },
         },
     },

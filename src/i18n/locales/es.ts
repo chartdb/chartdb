@@ -186,6 +186,8 @@ export const es: LanguageTranslation = {
             undo: 'Deshacer',
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
+            // TODO: Translate
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
         },
 
         new_diagram_dialog: {

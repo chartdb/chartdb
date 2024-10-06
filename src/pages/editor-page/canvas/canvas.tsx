@@ -36,7 +36,7 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid } from 'lucide-react';
+import { Pencil, LayoutGrid, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -135,6 +135,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showAlert } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
+    const [highlightOverlappingTables, setHighlightOverlappingTables] =
+        useState(false);
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
     const [overlapGraph, setOverlapGraph] =
@@ -292,6 +294,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     data: {
                         ...node.data,
                         isOverlapping,
+                        highlightOverlappingTables,
                     },
                 };
             })
@@ -302,6 +305,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filteredSchemas,
         overlapGraph.lastUpdated,
         overlapGraph.graph,
+        highlightOverlappingTables,
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
@@ -670,6 +674,19 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         });
     }, [t, showAlert, reorderTables]);
 
+    const hasOverlappingTables = useMemo(
+        () =>
+            Array.from(overlapGraph.graph).some(
+                ([, value]) => value.length > 0
+            ),
+        [overlapGraph]
+    );
+
+    const pulseOverlappingTables = useCallback(() => {
+        setHighlightOverlappingTables(true);
+        setTimeout(() => setHighlightOverlappingTables(false), 500);
+    }, []);
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full">
@@ -702,22 +719,51 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <span>
-                                    <Button
-                                        variant="secondary"
-                                        className="size-8 p-1 shadow-none"
-                                        onClick={showReorderConfirmation}
-                                    >
-                                        <LayoutGrid className="size-4" />
-                                    </Button>
-                                </span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {t('toolbar.reorder_diagram')}
-                            </TooltipContent>
-                        </Tooltip>
+                        <div className="mt-16 flex flex-col items-center gap-2 md:mt-0 md:flex-row">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        <Button
+                                            variant="secondary"
+                                            className="size-8 p-1 shadow-none"
+                                            onClick={showReorderConfirmation}
+                                        >
+                                            <LayoutGrid className="size-4" />
+                                        </Button>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('toolbar.reorder_diagram')}
+                                </TooltipContent>
+                            </Tooltip>
+
+                            <div
+                                className={`transition-opacity duration-300 ease-in-out ${
+                                    hasOverlappingTables
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                }`}
+                            >
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <Button
+                                                variant="default"
+                                                className="size-8 p-1 shadow-none"
+                                                onClick={pulseOverlappingTables}
+                                            >
+                                                <AlertTriangle className="size-4 text-white" />
+                                            </Button>
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {t(
+                                            'toolbar.highlight_overlapping_tables'
+                                        )}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
+                        </div>
                     </Controls>
                     {isLoadingDOM ? (
                         <Controls
