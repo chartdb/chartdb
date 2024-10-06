@@ -3,7 +3,7 @@ import type { DBField } from './db-field';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import type { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
-import { blackColor, greyColor, randomColor } from '@/lib/colors';
+import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
 import type { DBRelationship } from './db-relationship';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
@@ -176,9 +176,9 @@ export const createTablesFromMetadata = ({
             fields,
             indexes: dbIndexes,
             color: isMaterializedView
-                ? blackColor
+                ? materializedViewColor
                 : isView
-                  ? greyColor
+                  ? viewColor
                   : randomColor(),
             isView: isView,
             isMaterializedView: isMaterializedView,

@@ -684,7 +684,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const pulseOverlappingTables = useCallback(() => {
         setHighlightOverlappingTables(true);
-        setTimeout(() => setHighlightOverlappingTables(false), 500);
+        setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
     return (
@@ -719,7 +719,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <div className="mt-16 flex flex-col items-center gap-2 md:mt-0 md:flex-row">
+                        <div className="flex flex-col items-center gap-2 md:flex-row">
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
