@@ -17,7 +17,7 @@ import { SelectBox } from '@/components/select-box/select-box';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import { areFieldTypesCompatible } from '@/lib/data/data-types';
+import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
 
 const ErrorMessageRelationshipFieldsNotSameType =
     'Relationships can only be created between fields of the same type';

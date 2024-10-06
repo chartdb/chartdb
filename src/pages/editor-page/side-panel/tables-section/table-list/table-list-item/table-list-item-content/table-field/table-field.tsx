@@ -6,7 +6,7 @@ import { Separator } from '@/components/separator/separator';
 
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { dataTypeMap } from '@/lib/data/data-types';
+import { dataTypeMap } from '@/lib/data/data-types/data-types';
 import {
     Tooltip,
     TooltipContent,

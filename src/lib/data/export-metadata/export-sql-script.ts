@@ -4,7 +4,7 @@ import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
-import type { DataType } from '../data-types';
+import type { DataType } from '../data-types/data-types';
 
 const openai = createOpenAI({
     apiKey: OPENAI_API_KEY,

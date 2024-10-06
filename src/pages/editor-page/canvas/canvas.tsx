@@ -57,7 +57,7 @@ import {
 import { useDialog } from '@/hooks/use-dialog';
 import { MarkerDefinitions } from './marker-definitions';
 import { CanvasContextMenu } from './canvas-context-menu';
-import { areFieldTypesCompatible } from '@/lib/data/data-types';
+import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
 import {
     calcTableHeight,
     findOverlappingTables,

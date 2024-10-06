@@ -1,4 +1,4 @@
-import type { DataType } from '../data/data-types';
+import type { DataType } from '../data/data-types/data-types';
 
 export interface DBField {
     id: string;
