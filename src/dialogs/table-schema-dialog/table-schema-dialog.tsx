@@ -32,19 +32,14 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const [selectedSchema, setSelectedSchema] = React.useState<string>(
-        table?.schema
-            ? schemaNameToSchemaId(table.schema)
-            : (schemas?.[0]?.id ?? '')
+        table?.schema ? schemaNameToSchemaId(table.schema) : (schemas?.[0]?.id ?? '')
     );
 
     useEffect(() => {
         if (!dialog.open) return;
-        setSelectedSchema(
-            table?.schema
-                ? schemaNameToSchemaId(table.schema)
-                : (schemas?.[0]?.id ?? '')
-        );
+        setSelectedSchema(table?.schema ? schemaNameToSchemaId(table.schema) : (schemas?.[0]?.id ?? ''));
     }, [dialog.open, schemas, table?.schema]);
+
     const { closeTableSchemaDialog } = useDialog();
 
     const handleConfirm = useCallback(() => {
@@ -52,13 +47,14 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
     }, [onConfirm, selectedSchema]);
 
     const schemaOptions: SelectBoxOption[] = useMemo(
-        () =>
-            schemas.map((schema) => ({
-                value: schema.id,
-                label: schema.name,
-            })),
+        () => schemas.map((schema) => ({
+            value: schema.id,
+            label: schema.name,
+        })),
         [schemas]
     );
+
+    const isConfirmDisabled = !selectedSchema; // Disable confirm if no schema is selected
 
     return (
         <Dialog
@@ -72,16 +68,10 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
             <DialogContent className="flex flex-col" showClose>
                 <DialogHeader>
                     <DialogTitle>
-                        {table
-                            ? t('update_table_schema_dialog.title')
-                            : t('new_table_schema_dialog.title')}
+                        {table ? t('update_table_schema_dialog.title') : t('new_table_schema_dialog.title')}
                     </DialogTitle>
                     <DialogDescription>
-                        {table
-                            ? t('update_table_schema_dialog.description', {
-                                  tableName: table.name,
-                              })
-                            : t('new_table_schema_dialog.description')}
+                        {table ? t('update_table_schema_dialog.description', { tableName: table.name }) : t('new_table_schema_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-1">
@@ -90,25 +80,19 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
                             options={schemaOptions}
                             multiple={false}
                             value={selectedSchema}
-                            onChange={(value) =>
-                                setSelectedSchema(value as string)
-                            }
+                            onChange={(value) => setSelectedSchema(value as string)}
                         />
                     </div>
                 </div>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>
                         <Button variant="secondary">
-                            {table
-                                ? t('update_table_schema_dialog.cancel')
-                                : t('new_table_schema_dialog.cancel')}
+                            {table ? t('update_table_schema_dialog.cancel') : t('new_table_schema_dialog.cancel')}
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button onClick={handleConfirm}>
-                            {table
-                                ? t('update_table_schema_dialog.confirm')
-                                : t('new_table_schema_dialog.confirm')}
+                        <Button onClick={handleConfirm} disabled={isConfirmDisabled}>
+                            {table ? t('update_table_schema_dialog.confirm') : t('new_table_schema_dialog.confirm')}
                         </Button>
                     </DialogClose>
                 </DialogFooter>
