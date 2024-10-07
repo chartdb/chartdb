@@ -1,3 +1,5 @@
+import { DatabaseType } from './database-type';
+
 export interface DBSchema {
     id: string;
     name: string;
@@ -15,3 +17,8 @@ export const schemaNameToDomainSchemaName = (
         : (schema ?? '').trim() === ''
           ? undefined
           : schema;
+
+export const databasesWithSchemas: DatabaseType[] = [
+    DatabaseType.POSTGRESQL,
+    DatabaseType.SQL_SERVER,
+];
