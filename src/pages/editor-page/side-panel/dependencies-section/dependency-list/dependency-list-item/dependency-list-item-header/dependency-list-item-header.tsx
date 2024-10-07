@@ -39,7 +39,7 @@ export const DependencyListItemHeader: React.FC<
             return '';
         }
 
-        return `${table.name} -> ${dependentTable.name}`;
+        return `${dependentTable.name} -> ${table.name}`;
     }, [dependency.tableId, dependency.dependentTableId, getTable]);
 
     const focusOnDependency = useCallback(

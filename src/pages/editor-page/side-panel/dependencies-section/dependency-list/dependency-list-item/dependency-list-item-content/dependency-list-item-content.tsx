@@ -38,24 +38,6 @@ export const DependencyListItemContent: React.FC<
                 <div className="flex items-center justify-between gap-1 text-xs">
                     <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
                         <div className="flex flex-row items-center gap-1">
-                            <FileOutput className="size-4 text-subtitle" />
-                            <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.dependencies_section.dependency.table'
-                                )}
-                            </div>
-                        </div>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="truncate text-left text-sm">
-                                    {table?.name}
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>{table?.name}</TooltipContent>
-                        </Tooltip>
-                    </div>
-                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
-                        <div className="flex flex-row items-center gap-1">
                             <FileMinus2 className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
@@ -72,6 +54,24 @@ export const DependencyListItemContent: React.FC<
                             <TooltipContent>
                                 {dependentTable?.name}
                             </TooltipContent>
+                        </Tooltip>
+                    </div>
+                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
+                        <div className="flex flex-row items-center gap-1">
+                            <FileOutput className="size-4 text-subtitle" />
+                            <div className="font-bold text-subtitle">
+                                {t(
+                                    'side_panel.dependencies_section.dependency.table'
+                                )}
+                            </div>
+                        </div>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className="truncate text-left text-sm">
+                                    {table?.name}
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>{table?.name}</TooltipContent>
                         </Tooltip>
                     </div>
                 </div>
