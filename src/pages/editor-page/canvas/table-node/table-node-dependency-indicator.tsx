@@ -19,43 +19,22 @@ export interface TableNodeDependencyIndicatorProps {
 
 export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicatorProps> =
     React.memo(({ table, focused }) => {
-        const { getTable, dependencies } = useChartDB();
+        const { dependencies } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
-        const isTarget = useMemo(() => {
-            if (!connection.inProgress) {
-                return false;
-            }
 
-            const sourceTable = connection.fromNode?.id
-                ? getTable(connection.fromNode.id)
-                : null;
-
-            if (!sourceTable) {
-                return false;
-            }
-
-            const isSourceTableView =
-                sourceTable.isView || sourceTable.isMaterializedView;
-            const isTableView = table.isView || table.isMaterializedView;
-            return (
-                ((isSourceTableView && !isTableView) ||
-                    (!isSourceTableView && isTableView)) &&
+        const isTarget = useMemo(
+            () =>
+                connection.inProgress &&
                 connection.fromNode.id !== table.id &&
                 (connection.fromHandle.id?.startsWith(
                     TOP_SOURCE_HANDLE_ID_PREFIX
                 ) ||
                     connection.fromHandle.id?.startsWith(
                         BOTTOM_SOURCE_HANDLE_ID_PREFIX
-                    ))
-            );
-        }, [
-            connection,
-            table.id,
-            getTable,
-            table.isMaterializedView,
-            table.isView,
-        ]);
+                    )),
+            [connection, table.id]
+        );
 
         const numberOfEdgesToTable = useMemo(
             () =>
@@ -78,12 +57,14 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
 
         return (
             <>
-                <Handle
-                    id={`${TOP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
-                    className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
-                    position={Position.Top}
-                    type="source"
-                />
+                {table.isView || table.isMaterializedView ? (
+                    <Handle
+                        id={`${TOP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
+                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
+                        position={Position.Top}
+                        type="source"
+                    />
+                ) : null}
                 {Array.from(
                     { length: numberOfEdgesToTable },
                     (_, index) => index
