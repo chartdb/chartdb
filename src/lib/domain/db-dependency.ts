@@ -1,10 +1,14 @@
-/* eslint-disable */
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 import { DatabaseType } from './database-type';
-import { schemaNameToSchemaId } from './db-schema';
+import {
+    schemaNameToDomainSchemaName,
+    schemaNameToSchemaId,
+} from './db-schema';
 import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
+import type { AST } from 'node-sql-parser';
 import { Parser } from 'node-sql-parser';
+import { Buffer } from 'buffer';
 
 export interface DBDependency {
     id: string;
@@ -29,10 +33,10 @@ export const shouldShowDependencyBySchemaFilter = (
 
 const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.POSTGRESQL]: 'postgresql',
-    [DatabaseType.MYSQL]: 'mysql',
-    [DatabaseType.MARIADB]: 'mariadb',
+    [DatabaseType.MYSQL]: 'postgresql',
+    [DatabaseType.MARIADB]: 'postgresql',
     [DatabaseType.GENERIC]: 'postgresql',
-    [DatabaseType.SQLITE]: 'sqlite',
+    [DatabaseType.SQLITE]: 'postgresql',
     [DatabaseType.SQL_SERVER]: 'postgresql',
 };
 
@@ -49,33 +53,65 @@ export const createDependenciesFromMetadata = ({
 
     const dependencies = views
         .flatMap((view) => {
+            const viewSchema = schemaNameToDomainSchemaName(view.schema);
             const sourceTable = tables.find(
                 (table) =>
-                    table.name === view.view_name &&
-                    table.schema === view.schema
+                    table.name === view.view_name && viewSchema === table.schema
             );
 
             if (!sourceTable) {
                 console.warn(
-                    `Source table for view ${view.schema}.${view.view_name} not found`
+                    `Source table for view ${view.view_name} not found (schema: ${viewSchema})`
                 );
                 return []; // Skip this view and proceed to the next
             }
 
             if (view.view_definition) {
                 try {
+                    let decodedViewDefinition: string;
 
-                    // Pre-process the view_definition
-                    const modifiedViewDefinition = preprocessViewDefinition(
-                        view.view_definition
-                    );
+                    // For other database types, decode the base64-encoded view definition
+                    if (databaseType === DatabaseType.SQL_SERVER) {
+                        decodedViewDefinition = Buffer.from(
+                            view.view_definition,
+                            'base64'
+                        ).toString('utf16le');
+                    } else {
+                        decodedViewDefinition = Buffer.from(
+                            view.view_definition,
+                            'base64'
+                        ).toString('utf-8');
+                    }
 
-                    // Parse using PostgreSQL dialect
+                    let modifiedViewDefinition = '';
+                    if (
+                        databaseType === DatabaseType.MYSQL ||
+                        databaseType === DatabaseType.MARIADB
+                    ) {
+                        modifiedViewDefinition = preprocessViewDefinitionMySQL(
+                            decodedViewDefinition
+                        );
+                    } else if (databaseType === DatabaseType.SQL_SERVER) {
+                        modifiedViewDefinition =
+                            preprocessViewDefinitionSQLServer(
+                                decodedViewDefinition
+                            );
+                    } else {
+                        modifiedViewDefinition = preprocessViewDefinition(
+                            decodedViewDefinition
+                        );
+                    }
+
+                    // Parse using the appropriate dialect
                     const ast = parser.astify(modifiedViewDefinition, {
                         database: astDatabaseTypes[databaseType],
+                        type: 'select', // Parsing a SELECT statement
                     });
 
-                    const dependentTables = extractTablesFromAST(ast, view.schema);
+                    const dependentTables = extractTablesFromAST(
+                        ast,
+                        viewSchema
+                    );
 
                     return dependentTables.map((depTable) => {
                         const depSchema = depTable.schema ?? view.schema; // Use view's schema if depSchema is undefined
@@ -84,7 +120,7 @@ export const createDependenciesFromMetadata = ({
                         const targetTable = tables.find(
                             (table) =>
                                 table.name === depTableName &&
-                                table.schema === depSchema
+                                (table.schema || '') === depSchema
                         );
 
                         if (targetTable) {
@@ -129,12 +165,22 @@ function preprocessViewDefinition(viewDefinition: string): string {
         return '';
     }
 
+    // Remove leading and trailing whitespace
+    viewDefinition = viewDefinition.replace(/\s+/g, ' ').trim();
+
+    // Replace escaped double quotes with regular ones
+    viewDefinition = viewDefinition.replace(/\\"/g, '"');
+
     // Replace 'CREATE MATERIALIZED VIEW' with 'CREATE VIEW'
-    viewDefinition = viewDefinition.replace(/CREATE\s+MATERIALIZED\s+VIEW/i, 'CREATE VIEW');
+    viewDefinition = viewDefinition.replace(
+        /CREATE\s+MATERIALIZED\s+VIEW/i,
+        'CREATE VIEW'
+    );
 
     // Regular expression to match 'CREATE VIEW [schema.]view_name [ (column definitions) ] AS'
     // This regex captures the view name and skips any content between the view name and 'AS'
-    const regex = /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))[\s\S]*?\bAS\b\s+/i;
+    const regex =
+        /CREATE\s+VIEW\s+(?:(?:`[^`]+`|"[^"]+"|\w+)\.)?(?:`([^`]+)`|"([^"]+)"|(\w+))[\s\S]*?\bAS\b\s+/i;
 
     const match = viewDefinition.match(regex);
     let modifiedDefinition: string;
@@ -142,13 +188,18 @@ function preprocessViewDefinition(viewDefinition: string): string {
     if (match) {
         const viewName = match[1] || match[2] || match[3];
         // Extract the SQL after the 'AS' keyword
-        const restOfDefinition = viewDefinition.substring(match.index! + match[0].length);
+        const restOfDefinition = viewDefinition.substring(
+            match.index! + match[0].length
+        );
 
         // Replace double-quoted identifiers with unquoted ones
         let modifiedSQL = restOfDefinition.replace(/"(\w+)"/g, '$1');
 
         // Replace '::' type casts with 'CAST' expressions
-        modifiedSQL = modifiedSQL.replace(/\(([^()]+)\)::(\w+)/g, 'CAST($1 AS $2)');
+        modifiedSQL = modifiedSQL.replace(
+            /\(([^()]+)\)::(\w+)/g,
+            'CAST($1 AS $2)'
+        );
 
         // Remove ClickHouse-specific syntax that may still be present
         // For example, remove SETTINGS clauses inside the SELECT statement
@@ -163,13 +214,114 @@ function preprocessViewDefinition(viewDefinition: string): string {
     return modifiedDefinition;
 }
 
+// Preprocess the view_definition for SQL Server
+function preprocessViewDefinitionSQLServer(viewDefinition: string): string {
+    if (!viewDefinition) {
+        return '';
+    }
+
+    // Remove BOM if present
+    viewDefinition = viewDefinition.replace(/^\uFEFF/, '');
+
+    // Normalize whitespace
+    viewDefinition = viewDefinition.replace(/\s+/g, ' ').trim();
+
+    // Remove square brackets and replace with double quotes
+    viewDefinition = viewDefinition.replace(/\[([^\]]+)\]/g, '"$1"');
+
+    // Remove database names from fully qualified identifiers
+    viewDefinition = viewDefinition.replace(
+        /"([a-zA-Z0-9_]+)"\."([a-zA-Z0-9_]+)"\."([a-zA-Z0-9_]+)"/g,
+        '"$2"."$3"'
+    );
+
+    // Replace SQL Server functions with PostgreSQL equivalents
+    viewDefinition = viewDefinition.replace(/\bGETDATE\(\)/gi, 'NOW()');
+    viewDefinition = viewDefinition.replace(/\bISNULL\(/gi, 'COALESCE(');
+
+    // Replace 'TOP N' with 'LIMIT N' at the end of the query
+    const topMatch = viewDefinition.match(/SELECT\s+TOP\s+(\d+)/i);
+    if (topMatch) {
+        const topN = topMatch[1];
+        viewDefinition = viewDefinition.replace(
+            /SELECT\s+TOP\s+\d+/i,
+            'SELECT'
+        );
+        viewDefinition = viewDefinition.replace(/;+\s*$/, ''); // Remove semicolons at the end
+        viewDefinition += ` LIMIT ${topN}`;
+    }
+
+    viewDefinition = viewDefinition.replace(/\n/g, ''); // Remove newlines
+
+    // Adjust CREATE VIEW syntax
+    const regex =
+        /CREATE\s+VIEW\s+(?:"?([^".\s]+)"?\.)?"?([^".\s]+)"?\s+AS\s+/i;
+    const match = viewDefinition.match(regex);
+    let modifiedDefinition: string;
+
+    if (match) {
+        const viewName = match[2];
+        const modifiedSQL = viewDefinition.substring(
+            match.index! + match[0].length
+        );
+
+        // Remove semicolons at the end
+        const finalSQL = modifiedSQL.replace(/;+\s*$/, '');
+
+        modifiedDefinition = `CREATE VIEW "${viewName}" AS ${finalSQL}`;
+    } else {
+        console.warn('Could not preprocess view definition:', viewDefinition);
+        modifiedDefinition = viewDefinition;
+    }
+
+    return modifiedDefinition;
+}
+
+// Preprocess the view_definition to remove schema from CREATE VIEW
+function preprocessViewDefinitionMySQL(viewDefinition: string): string {
+    if (!viewDefinition) {
+        return '';
+    }
+
+    // Remove any trailing semicolons
+    viewDefinition = viewDefinition.replace(/;\s*$/, '');
+
+    // Remove backticks from identifiers
+    viewDefinition = viewDefinition.replace(/`/g, '');
+
+    // Remove unnecessary parentheses around joins and ON clauses
+    viewDefinition = removeRedundantParentheses(viewDefinition);
+
+    return viewDefinition;
+}
+
+function removeRedundantParentheses(sql: string): string {
+    // Regular expressions to match unnecessary parentheses
+    const patterns = [
+        /\(\s*(JOIN\s+[^()]+?)\s*\)/gi,
+        /\(\s*(ON\s+[^()]+?)\s*\)/gi,
+        // Additional patterns if necessary
+    ];
+
+    let prevSql;
+    do {
+        prevSql = sql;
+        patterns.forEach((pattern) => {
+            sql = sql.replace(pattern, '$1');
+        });
+    } while (sql !== prevSql);
+
+    return sql;
+}
+
 function extractTablesFromAST(
-    ast: any,
-    defaultSchema: string
+    ast: AST | AST[],
+    defaultSchema?: string
 ): { schema?: string; tableName: string }[] {
     const tablesMap = new Map<string, { schema: string; tableName: string }>();
     const visitedNodes = new Set();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function traverse(node: any) {
         if (!node || visitedNodes.has(node)) return;
         visitedNodes.add(node);
@@ -179,14 +331,17 @@ function extractTablesFromAST(
         } else if (typeof node === 'object') {
             // Check if node represents a table
             if (
-                node.hasOwnProperty('table') &&
+                Object.hasOwnProperty.call(node, 'table') &&
                 typeof node.table === 'string'
             ) {
                 let schema = node.db || node.schema;
                 const tableName = node.table;
                 if (tableName) {
                     // Assign default schema if undefined
-                    schema = schema || defaultSchema;
+                    schema =
+                        schemaNameToDomainSchemaName(schema) ||
+                        defaultSchema ||
+                        '';
                     const key = `${schema}.${tableName}`;
                     if (!tablesMap.has(key)) {
                         tablesMap.set(key, { schema, tableName });
@@ -196,7 +351,7 @@ function extractTablesFromAST(
 
             // Recursively traverse all properties
             for (const key in node) {
-                if (node.hasOwnProperty(key)) {
+                if (Object.hasOwnProperty.call(node, key)) {
                     traverse(node[key]);
                 }
             }
