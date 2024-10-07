@@ -33,8 +33,8 @@ export const shouldShowDependencyBySchemaFilter = (
 
 const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.POSTGRESQL]: 'postgresql',
-    [DatabaseType.MYSQL]: 'mysql',
-    [DatabaseType.MARIADB]: 'mariadb',
+    [DatabaseType.MYSQL]: 'postgresql',
+    [DatabaseType.MARIADB]: 'postgresql',
     [DatabaseType.GENERIC]: 'postgresql',
     [DatabaseType.SQLITE]: 'postgresql',
     [DatabaseType.SQL_SERVER]: 'postgresql',
@@ -89,8 +89,7 @@ export const createDependenciesFromMetadata = ({
                         databaseType === DatabaseType.MARIADB
                     ) {
                         modifiedViewDefinition = preprocessViewDefinitionMySQL(
-                            decodedViewDefinition,
-                            view.view_name
+                            decodedViewDefinition
                         );
                     } else if (databaseType === DatabaseType.SQL_SERVER) {
                         modifiedViewDefinition =
@@ -106,6 +105,7 @@ export const createDependenciesFromMetadata = ({
                     // Parse using the appropriate dialect
                     const ast = parser.astify(modifiedViewDefinition, {
                         database: astDatabaseTypes[databaseType],
+                        type: 'select', // Parsing a SELECT statement
                     });
 
                     const dependentTables = extractTablesFromAST(
@@ -278,69 +278,40 @@ function preprocessViewDefinitionSQLServer(viewDefinition: string): string {
 }
 
 // Preprocess the view_definition to remove schema from CREATE VIEW
-function preprocessViewDefinitionMySQL(
-    viewDefinition: string,
-    viewName: string
-): string {
+function preprocessViewDefinitionMySQL(viewDefinition: string): string {
     if (!viewDefinition) {
         return '';
     }
 
-    // Check if viewDefinition starts with 'CREATE VIEW', case-insensitive
-    if (!/^\s*CREATE\s+VIEW/i.test(viewDefinition)) {
-        // Prepend 'CREATE VIEW view_name AS ' if missing
-        viewDefinition = `CREATE VIEW ${viewName} AS ${viewDefinition}`;
-    }
+    // Remove any trailing semicolons
+    viewDefinition = viewDefinition.replace(/;\s*$/, '');
 
-    // Regular expression to match 'CREATE VIEW [schema.]view_name ... AS'
-    const regex = /CREATE\s+VIEW\s+(?:`?(\w+)`?\.)?`?(\w+)`?[\s\S]*?\bAS\b\s+/i;
-    const match = viewDefinition.match(regex);
-    let modifiedDefinition: string;
+    // Remove backticks from identifiers
+    viewDefinition = viewDefinition.replace(/`/g, '');
 
-    if (match) {
-        const extractedViewName = match[2];
-        // Extract the SQL after the 'AS' keyword
-        let modifiedSQL = viewDefinition.substring(
-            match.index! + match[0].length
-        );
+    // Remove unnecessary parentheses around joins and ON clauses
+    viewDefinition = removeRedundantParentheses(viewDefinition);
 
-        // Remove database names from fully qualified identifiers
-        modifiedSQL = modifiedSQL.replace(
-            /`(\w+)`\.`(\w+)`\.`(\w+)`/g,
-            '`$2`.`$3`'
-        );
-        modifiedSQL = modifiedSQL.replace(/`(\w+)`\.`(\w+)`/g, '`$2`');
+    return viewDefinition;
+}
 
-        // Remove outermost parentheses around the FROM clause
-        modifiedSQL = modifiedSQL.replace(
-            /FROM\s*\(\s*([\s\S]+?)\s*\)/i,
-            'FROM $1'
-        );
+function removeRedundantParentheses(sql: string): string {
+    // Regular expressions to match unnecessary parentheses
+    const patterns = [
+        /\(\s*(JOIN\s+[^()]+?)\s*\)/gi,
+        /\(\s*(ON\s+[^()]+?)\s*\)/gi,
+        // Additional patterns if necessary
+    ];
 
-        // Remove extra parentheses around JOIN expressions
-        modifiedSQL = modifiedSQL.replace(
-            /\(\s*(`?\w+`?\s+(?:JOIN|INNER JOIN|LEFT JOIN|RIGHT JOIN)[\s\S]+?)\s*\)/gi,
-            '$1'
-        );
+    let prevSql;
+    do {
+        prevSql = sql;
+        patterns.forEach((pattern) => {
+            sql = sql.replace(pattern, '$1');
+        });
+    } while (sql !== prevSql);
 
-        // Simplify nested parentheses in ON conditions (carefully)
-        modifiedSQL = modifiedSQL.replace(
-            /ON\s*\(\s*\(([\s\S]+?)\)\s*\)/gi,
-            'ON ($1)'
-        );
-        modifiedSQL = modifiedSQL.replace(
-            /ON\s*\(\s*([\s\S]+?)\s*\)/gi,
-            'ON $1'
-        );
-
-        // Preserve backticks (MySQL uses backticks for identifiers)
-        modifiedDefinition = `CREATE VIEW \`${extractedViewName}\` AS ${modifiedSQL}`;
-    } else {
-        console.warn('Could not preprocess view definition:', viewDefinition);
-        modifiedDefinition = viewDefinition;
-    }
-
-    return modifiedDefinition;
+    return sql;
 }
 
 function extractTablesFromAST(

@@ -282,11 +282,11 @@ export const getMySQLQuery = (
     IFNULL((SELECT GROUP_CONCAT(
         CONCAT('{"schema":"', cast(vws.TABLE_SCHEMA as CHAR),
                '","view_name":"', vws.view_name,
-               '","view_definition":"', definition, '"}')
+               '","view_definition":"', view_definition, '"}')
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\` AS view_name,
-               '' AS definition
+               REPLACE(REPLACE(TO_BASE64(\`VIEW_DEFINITION\`), ' ', ''), '\n', '') AS view_definition
         FROM information_schema.views vws
         WHERE vws.table_schema = DATABASE()
     ) AS vws), ''),
