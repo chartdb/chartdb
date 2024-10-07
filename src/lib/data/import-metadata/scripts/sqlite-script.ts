@@ -118,7 +118,7 @@ export const sqliteQuery = `WITH fk_info AS (
   JOIN
       pragma_table_info(m.name) p
   ON
-      m.type = 'table'
+      m.type in ('table', 'view')
 ), tbls AS (
   SELECT
       json_group_array(
@@ -134,7 +134,7 @@ export const sqliteQuery = `WITH fk_info AS (
   FROM
       sqlite_master m
   WHERE
-      m.type = 'table'
+      m.type in ('table', 'view')
 ), views AS (
   SELECT
       json_group_array(
