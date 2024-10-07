@@ -1,71 +1,41 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
-import { NotFoundPage } from './pages/not-found-page/not-found-page';
-import { EditorPage } from './pages/editor-page/editor-page';
-import { ChartDBProvider } from './context/chartdb-context/chartdb-provider';
-import { ReactFlowProvider } from '@xyflow/react';
-import { StorageProvider } from './context/storage-context/storage-provider';
-import { ConfigProvider } from './context/config-context/config-provider';
-import { HistoryProvider } from './context/history-context/history-provider';
-import { RedoUndoStackProvider } from './context/history-context/redo-undo-stack-provider';
-import { LayoutProvider } from './context/layout-context/layout-provider';
-import { DialogProvider } from './context/dialog-context/dialog-provider';
-import { ExportImageProvider } from './context/export-image-context/export-image-provider';
-import { FullScreenLoaderProvider } from './context/full-screen-spinner-context/full-screen-spinner-provider';
-import { ExamplesPage } from './pages/examples-page/examples-page';
-import { KeyboardShortcutsProvider } from './context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
-import { ThemeProvider } from './context/theme-context/theme-provider';
-import { LocalConfigProvider } from './context/local-config-context/local-config-provider';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
         path,
-        element: (
-            <FullScreenLoaderProvider>
-                <LayoutProvider>
-                    <LocalConfigProvider>
-                        <StorageProvider>
-                            <ConfigProvider>
-                                <RedoUndoStackProvider>
-                                    <ChartDBProvider>
-                                        <HistoryProvider>
-                                            <ThemeProvider>
-                                                <ReactFlowProvider>
-                                                    <ExportImageProvider>
-                                                        <DialogProvider>
-                                                            <KeyboardShortcutsProvider>
-                                                                <EditorPage />
-                                                            </KeyboardShortcutsProvider>
-                                                        </DialogProvider>
-                                                    </ExportImageProvider>
-                                                </ReactFlowProvider>
-                                            </ThemeProvider>
-                                        </HistoryProvider>
-                                    </ChartDBProvider>
-                                </RedoUndoStackProvider>
-                            </ConfigProvider>
-                        </StorageProvider>
-                    </LocalConfigProvider>
-                </LayoutProvider>
-            </FullScreenLoaderProvider>
-        ),
+        async lazy() {
+            const { EditorPage } = await import(
+                './pages/editor-page/editor-page'
+            );
+
+            return {
+                element: <EditorPage />,
+            };
+        },
     })),
     {
         path: 'examples',
-        element: (
-            <LocalConfigProvider>
-                <StorageProvider>
-                    <ThemeProvider>
-                        <ExamplesPage />
-                    </ThemeProvider>
-                </StorageProvider>
-            </LocalConfigProvider>
-        ),
+        async lazy() {
+            const { ExamplesPage } = await import(
+                './pages/examples-page/examples-page'
+            );
+            return {
+                element: <ExamplesPage />,
+            };
+        },
     },
     {
         path: '*',
-        element: <NotFoundPage />,
+        async lazy() {
+            const { NotFoundPage } = await import(
+                './pages/not-found-page/not-found-page'
+            );
+            return {
+                element: <NotFoundPage />,
+            };
+        },
     },
 ];
 

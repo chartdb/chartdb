@@ -1,14 +1,8 @@
-import { generateText } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
-
-const openai = createOpenAI({
-    apiKey: OPENAI_API_KEY,
-});
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -131,6 +125,11 @@ export const exportSQL = async (
     diagram: Diagram,
     databaseType: DatabaseType
 ): Promise<string> => {
+    const { generateText } = await import('ai');
+    const { createOpenAI } = await import('@ai-sdk/openai');
+    const openai = createOpenAI({
+        apiKey: OPENAI_API_KEY,
+    });
     const sqlScript = exportBaseSQL(diagram);
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 

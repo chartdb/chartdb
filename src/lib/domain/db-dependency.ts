@@ -7,8 +7,6 @@ import {
 import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 import type { AST } from 'node-sql-parser';
-import { Parser } from 'node-sql-parser';
-import { Buffer } from 'buffer';
 
 export interface DBDependency {
     id: string;
@@ -40,7 +38,7 @@ const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.SQL_SERVER]: 'postgresql',
 };
 
-export const createDependenciesFromMetadata = ({
+export const createDependenciesFromMetadata = async ({
     views,
     tables,
     databaseType,
@@ -48,7 +46,9 @@ export const createDependenciesFromMetadata = ({
     views: ViewInfo[];
     tables: DBTable[];
     databaseType: DatabaseType;
-}): DBDependency[] => {
+}): Promise<DBDependency[]> => {
+    const { Parser } = await import('node-sql-parser');
+    const { Buffer } = await import('buffer/');
     const parser = new Parser();
 
     const dependencies = views

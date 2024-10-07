@@ -62,7 +62,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         const databaseMetadata: DatabaseMetadata =
             loadDatabaseMetadata(scriptResult);
 
-        const diagram = loadFromDatabaseMetadata({
+        const diagram = await loadFromDatabaseMetadata({
             databaseType,
             databaseMetadata,
             diagramNumber,

@@ -29,11 +29,24 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useTranslation } from 'react-i18next';
+import { FullScreenLoaderProvider } from '@/context/full-screen-spinner-context/full-screen-spinner-provider';
+import { LayoutProvider } from '@/context/layout-context/layout-provider';
+import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
+import { StorageProvider } from '@/context/storage-context/storage-provider';
+import { ConfigProvider } from '@/context/config-context/config-provider';
+import { RedoUndoStackProvider } from '@/context/history-context/redo-undo-stack-provider';
+import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
+import { HistoryProvider } from '@/context/history-context/history-provider';
+import { ThemeProvider } from '@/context/theme-context/theme-provider';
+import { ReactFlowProvider } from '@xyflow/react';
+import { ExportImageProvider } from '@/context/export-image-context/export-image-provider';
+import { DialogProvider } from '@/context/dialog-context/dialog-provider';
+import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
 
-export const EditorPage: React.FC = () => {
+const EditorPageComponent: React.FC = () => {
     const { loadDiagram, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
     const {
@@ -253,3 +266,33 @@ export const EditorPage: React.FC = () => {
         </>
     );
 };
+
+export const EditorPage: React.FC = () => (
+    <FullScreenLoaderProvider>
+        <LayoutProvider>
+            <LocalConfigProvider>
+                <StorageProvider>
+                    <ConfigProvider>
+                        <RedoUndoStackProvider>
+                            <ChartDBProvider>
+                                <HistoryProvider>
+                                    <ThemeProvider>
+                                        <ReactFlowProvider>
+                                            <ExportImageProvider>
+                                                <DialogProvider>
+                                                    <KeyboardShortcutsProvider>
+                                                        <EditorPageComponent />
+                                                    </KeyboardShortcutsProvider>
+                                                </DialogProvider>
+                                            </ExportImageProvider>
+                                        </ReactFlowProvider>
+                                    </ThemeProvider>
+                                </HistoryProvider>
+                            </ChartDBProvider>
+                        </RedoUndoStackProvider>
+                    </ConfigProvider>
+                </StorageProvider>
+            </LocalConfigProvider>
+        </LayoutProvider>
+    </FullScreenLoaderProvider>
+);

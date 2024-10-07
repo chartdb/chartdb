@@ -4,8 +4,11 @@ import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { examples } from './examples-data/examples-data';
 import { ExampleCard } from './example-card';
 import { useTheme } from '@/hooks/use-theme';
+import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
+import { StorageProvider } from '@/context/storage-context/storage-provider';
+import { ThemeProvider } from '@/context/theme-context/theme-provider';
 
-export const ExamplesPage: React.FC = () => {
+const ExamplesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
     useEffect(() => {
         document.title = 'ChartDB - Example Database Diagrams & Schemas';
@@ -51,3 +54,13 @@ export const ExamplesPage: React.FC = () => {
         </section>
     );
 };
+
+export const ExamplesPage: React.FC = () => (
+    <LocalConfigProvider>
+        <StorageProvider>
+            <ThemeProvider>
+                <ExamplesPageComponent />
+            </ThemeProvider>
+        </StorageProvider>
+    </LocalConfigProvider>
+);
