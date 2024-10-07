@@ -40,11 +40,11 @@ const ExamplesPageComponent: React.FC = () => {
                 <div className="hidden flex-1 justify-end sm:flex"></div>
             </nav>
             <div className="flex flex-col px-3 pt-3 text-center md:px-28 md:text-left">
-                <div className="font-primary text-2xl font-bold">Examples</div>
-                <div className="mt-1 font-primary text-base text-muted-foreground">
+                <h1 className="font-primary text-2xl font-bold">Examples</h1>
+                <h2 className="mt-1 font-primary text-base text-muted-foreground">
                     A collection of examples to help you get started with
                     ChartDB.
-                </div>
+                </h2>
                 <div className="mt-6 grid grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {examples.map((example) => (
                         <ExampleCard key={example.id} example={example} />

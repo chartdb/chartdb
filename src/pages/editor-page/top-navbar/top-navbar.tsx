@@ -49,6 +49,8 @@ import { deMetadata } from '@/i18n/locales/de';
 import { jaMetadata } from '@/i18n/locales/ja';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { frMetadata } from '@/i18n/locales/fr';
+import { cn } from '@/lib/utils';
+import { labelVariants } from '@/components/label/label-variants';
 
 export interface TopNavbarProps {}
 
@@ -266,7 +268,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         </>
                     ) : (
                         <>
-                            <Label>{diagramName}</Label>
+                            <h1 className={cn(labelVariants())}>
+                                {diagramName}
+                            </h1>
                             <Button
                                 variant="ghost"
                                 className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
