@@ -54,12 +54,12 @@ export const createDependenciesFromMetadata = ({
     const dependencies = views
         .flatMap((view) => {
             const viewSchema = schemaNameToDomainSchemaName(view.schema);
-            const sourceTable = tables.find(
+            const viewTable = tables.find(
                 (table) =>
                     table.name === view.view_name && viewSchema === table.schema
             );
 
-            if (!sourceTable) {
+            if (!viewTable) {
                 console.warn(
                     `Source table for view ${view.view_name} not found (schema: ${viewSchema})`
                 );
@@ -108,34 +108,35 @@ export const createDependenciesFromMetadata = ({
                         type: 'select', // Parsing a SELECT statement
                     });
 
-                    const dependentTables = extractTablesFromAST(
-                        ast,
-                        viewSchema
-                    );
+                    let relatedTables = extractTablesFromAST(ast);
 
-                    return dependentTables.map((depTable) => {
-                        const depSchema = depTable.schema ?? view.schema; // Use view's schema if depSchema is undefined
-                        const depTableName = depTable.tableName;
+                    // Filter out duplicate tables without schema
+                    relatedTables = filterDuplicateTables(relatedTables);
 
-                        const targetTable = tables.find(
+                    return relatedTables.map((relTable) => {
+                        const relSchema = relTable.schema || view.schema; // Use view's schema if relSchema is undefined
+                        const relTableName = relTable.tableName;
+
+                        const table = tables.find(
                             (table) =>
-                                table.name === depTableName &&
-                                (table.schema || '') === depSchema
+                                table.name === relTableName &&
+                                (table.schema || '') === relSchema
                         );
 
-                        if (targetTable) {
+                        if (table) {
                             const dependency: DBDependency = {
                                 id: generateId(),
                                 schema: view.schema,
-                                tableId: sourceTable.id,
-                                dependentSchema: targetTable.schema,
-                                dependentTableId: targetTable.id,
+                                tableId: table.id, // related table
+                                dependentSchema: table.schema,
+                                dependentTableId: viewTable.id, // dependent view
                                 createdAt: Date.now(),
                             };
+
                             return dependency;
                         } else {
                             console.warn(
-                                `Dependent table ${depSchema}.${depTableName} not found for view ${view.schema}.${view.view_name}`
+                                `Dependent table ${relSchema}.${relTableName} not found for view ${view.schema}.${view.view_name}`
                             );
                             return null;
                         }
@@ -158,6 +159,24 @@ export const createDependenciesFromMetadata = ({
 
     return dependencies;
 };
+
+// Add this new function to filter out duplicate tables
+function filterDuplicateTables(
+    tables: { schema?: string; tableName: string }[]
+): { schema?: string; tableName: string }[] {
+    const tableMap = new Map<string, { schema?: string; tableName: string }>();
+
+    for (const table of tables) {
+        const key = table.tableName;
+        const existingTable = tableMap.get(key);
+
+        if (!existingTable || (table.schema && !existingTable.schema)) {
+            tableMap.set(key, table);
+        }
+    }
+
+    return Array.from(tableMap.values());
+}
 
 // Preprocess the view_definition to remove schema from CREATE VIEW
 function preprocessViewDefinition(viewDefinition: string): string {
@@ -315,8 +334,7 @@ function removeRedundantParentheses(sql: string): string {
 }
 
 function extractTablesFromAST(
-    ast: AST | AST[],
-    defaultSchema?: string
+    ast: AST | AST[]
 ): { schema?: string; tableName: string }[] {
     const tablesMap = new Map<string, { schema: string; tableName: string }>();
     const visitedNodes = new Set();
@@ -338,10 +356,7 @@ function extractTablesFromAST(
                 const tableName = node.table;
                 if (tableName) {
                     // Assign default schema if undefined
-                    schema =
-                        schemaNameToDomainSchemaName(schema) ||
-                        defaultSchema ||
-                        '';
+                    schema = schemaNameToDomainSchemaName(schema) || '';
                     const key = `${schema}.${tableName}`;
                     if (!tablesMap.has(key)) {
                         tablesMap.set(key, { schema, tableName });
