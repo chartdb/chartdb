@@ -48,7 +48,18 @@ export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
             dependency
         ) => shouldShowDependencyBySchemaFilter(dependency, filteredSchemas);
 
-        return dependencies.filter(filterSchema).filter(filterName);
+        return dependencies
+            .filter(filterSchema)
+            .filter(filterName)
+            .sort((a, b) => {
+                const dependentTableA = getTable(a.dependentTableId);
+                const tableA = getTable(a.tableId);
+                const dependentTableB = getTable(b.dependentTableId);
+                const tableB = getTable(b.tableId);
+                return `${dependentTableA?.name}${tableA?.name}`.localeCompare(
+                    `${dependentTableB?.name}${tableB?.name}`
+                );
+            });
     }, [dependencies, filterText, filteredSchemas, getTable]);
 
     return (
