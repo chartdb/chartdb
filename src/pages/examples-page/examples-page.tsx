@@ -8,7 +8,7 @@ import { useTheme } from '@/hooks/use-theme';
 export const ExamplesPage: React.FC = () => {
     const { effectiveTheme } = useTheme();
     useEffect(() => {
-        document.title = 'ChartDB - Examples';
+        document.title = 'ChartDB - Example Database Diagrams & Schemas';
     }, []);
 
     return (
