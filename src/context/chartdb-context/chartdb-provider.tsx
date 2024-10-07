@@ -52,9 +52,10 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
     useEffect(() => {
         if (diagramName) {
-            document.title = `ChartDB - ${diagramName}`;
+            document.title = `ChartDB - ${diagramName} Diagram | Visualize Database Schemas`;
         } else {
-            document.title = 'ChartDB - Create Diagram';
+            document.title =
+                'ChartDB - Create & Visualize Database Schema Diagrams';
         }
     }, [diagramName]);
 
