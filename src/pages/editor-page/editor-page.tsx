@@ -33,9 +33,7 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { ExportImageProvider } from '@/context/export-image-context/export-image-provider';
 import { DialogProvider } from '@/context/dialog-context/dialog-provider';
 import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
-// import { EditorMobileLayout } from './editor-mobile-layout';
 import { Spinner } from '@/components/spinner/spinner';
-// import { EditorDesktopLayout } from './editor-desktop-layout';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
