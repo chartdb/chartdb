@@ -14,8 +14,8 @@
 </p>
 
 <h3 align="center">
-  <a href="https://discord.gg/QeFwyWSKwC">Community</a>  &bull;
-  <a href="https://www.chartdb.io">Website</a>  &bull;
+  <a href="https://discord.gg/QeFwyWSKwC">Community</a> | 
+  <a href="https://www.chartdb.io">Website</a> | 
   <a href="https://app.chartdb.io/examples">Demo</a>
 </h3>
 
@@ -32,6 +32,22 @@
   <a href="https://x.com/chartdb_io">
     <img src="https://img.shields.io/twitter/follow/ChartDB?style=social"/>
   </a>
+  <a href="https://github.com/chartdb/chartdb/stargazers">
+    <img src="https://img.shields.io/github/stars/chartdb/chartdb" alt="Number of GitHub stars"/>
+</a>
+
+<a href="https://github.com/chartdb/chartdb/issues">
+    <img src="https://img.shields.io/github/issues/chartdb/chartdb" alt="Number of GitHub issues that are open"/>
+</a>
+
+<a href="https://github.com/chartdb/chartdb/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/chartdb/chartdb" alt="Number of GitHub contributors"/>
+</a>
+
+<a href="https://github.com/chartdb/chartdb/pulls">
+    <img src="https://img.shields.io/github/issues-pr-raw/chartdb/chartdb" alt="Number of GitHub pull requests that are open"/>
+</a>
+
 
 </h4>
 
