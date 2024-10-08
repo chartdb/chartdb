@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import TimeAgo from 'timeago-react';
+import React, { useCallback } from 'react';
 import {
     Menubar,
     MenubarCheckboxItem,
@@ -13,28 +12,16 @@ import {
     MenubarSubTrigger,
     MenubarTrigger,
 } from '@/components/menubar/menubar';
-import { Label } from '@/components/label/label';
-import { Button } from '@/components/button/button';
-import { Check, Pencil } from 'lucide-react';
-import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useClickAway, useKeyPressEvent } from 'react-use';
-import ChartDBLogo from '@/assets/logo.png';
+import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useDialog } from '@/hooks/use-dialog';
-import { Badge } from '@/components/badge/badge';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/tooltip/tooltip';
 import { useExportImage } from '@/hooks/use-export-image';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useConfig } from '@/hooks/use-config';
 import { IS_CHARTDB_IO } from '@/lib/env';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
-import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import {
     KeyboardShortcutAction,
     keyboardShortcutsForOS,
@@ -49,20 +36,14 @@ import { deMetadata } from '@/i18n/locales/de';
 import { jaMetadata } from '@/i18n/locales/ja';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { frMetadata } from '@/i18n/locales/fr';
-import { cn } from '@/lib/utils';
-import { labelVariants } from '@/components/label/label-variants';
+import { DiagramName } from './diagram-name';
+import { LastSaved } from './last-saved';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
-    const {
-        diagramName,
-        updateDiagramName,
-        currentDiagram,
-        clearDiagramData,
-        deleteDiagram,
-        updateDiagramUpdatedAt,
-    } = useChartDB();
+    const { clearDiagramData, deleteDiagram, updateDiagramUpdatedAt } =
+        useChartDB();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -86,26 +67,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
-    const [editMode, setEditMode] = useState(false);
     const { exportImage } = useExportImage();
-    const [editedDiagramName, setEditedDiagramName] =
-        React.useState(diagramName);
-    const inputRef = React.useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        setEditedDiagramName(diagramName);
-    }, [diagramName]);
-
-    const editDiagramName = useCallback(() => {
-        if (!editMode) return;
-        if (editedDiagramName.trim()) {
-            updateDiagramName(editedDiagramName.trim());
-        }
-        setEditMode(false);
-    }, [editedDiagramName, updateDiagramName, editMode]);
-
-    useClickAway(inputRef, editDiagramName);
-    useKeyPressEvent('Enter', editDiagramName);
 
     const createNewDiagram = () => {
         openCreateDiagramDialog();
@@ -113,13 +75,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     const openDiagram = () => {
         openOpenDiagramDialog();
-    };
-
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
-        setEditMode(true);
     };
 
     const exportSVG = useCallback(() => {
@@ -219,79 +174,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             ></iframe>
         );
     }, [isDesktop]);
-
-    const renderLastSaved = useCallback(() => {
-        return (
-            <Tooltip>
-                <TooltipTrigger>
-                    <Badge variant="secondary" className="flex gap-1">
-                        {isDesktop ? t('last_saved') : t('saved')}
-                        <TimeAgo datetime={currentDiagram.updatedAt} />
-                    </Badge>
-                </TooltipTrigger>
-                <TooltipContent>
-                    {currentDiagram.updatedAt.toLocaleString()}
-                </TooltipContent>
-            </Tooltip>
-        );
-    }, [currentDiagram.updatedAt, isDesktop, t]);
-
-    const renderDiagramName = useCallback(() => {
-        return (
-            <>
-                <DiagramIcon diagram={currentDiagram} />
-                <div className="flex">
-                    {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
-                </div>
-                <div className="flex flex-row items-center gap-1">
-                    {editMode ? (
-                        <>
-                            <Input
-                                ref={inputRef}
-                                autoFocus
-                                type="text"
-                                placeholder={diagramName}
-                                value={editedDiagramName}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                    setEditedDiagramName(e.target.value)
-                                }
-                                className="ml-1 h-7 focus-visible:ring-0"
-                            />
-                            <Button
-                                variant="ghost"
-                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
-                                onClick={editDiagramName}
-                            >
-                                <Check />
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <h1 className={cn(labelVariants())}>
-                                {diagramName}
-                            </h1>
-                            <Button
-                                variant="ghost"
-                                className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
-                                onClick={enterEditMode}
-                            >
-                                <Pencil />
-                            </Button>
-                        </>
-                    )}
-                </div>
-            </>
-        );
-    }, [
-        currentDiagram,
-        diagramName,
-        editDiagramName,
-        editMode,
-        editedDiagramName,
-        isDesktop,
-        t,
-    ]);
 
     const showOrHideSidePanel = useCallback(() => {
         if (isSidePanelShowed) {
@@ -762,19 +644,21 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             {isDesktop ? (
                 <>
                     <div className="group flex flex-1 flex-row items-center justify-center">
-                        {renderDiagramName()}
+                        <DiagramName />
                     </div>
                     <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
-                        {renderLastSaved()}
+                        <LastSaved />
                         {renderStars()}
                     </div>
                 </>
             ) : (
                 <div className="flex flex-1 flex-row justify-between gap-2">
                     <div className="group flex flex-1 flex-row items-center">
-                        {renderDiagramName()}
+                        <DiagramName />
                     </div>
-                    <div className="flex items-center">{renderLastSaved()}</div>
+                    <div className="flex items-center">
+                        <LastSaved />
+                    </div>
                     <div className="flex items-center">{renderStars()}</div>
                 </div>
             )}

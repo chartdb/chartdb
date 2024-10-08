@@ -12,7 +12,6 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { databaseSecondaryLogoMap } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
-import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import {
     databaseEditionToImageMap,
@@ -33,6 +32,7 @@ import {
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';
 import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
+import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -70,6 +70,23 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         DatabaseClient | undefined
     >();
     const { t } = useTranslation();
+    const [importMetadataScripts, setImportMetadataScripts] =
+        useState<ImportMetadataScripts>(
+            Object.values(DatabaseType).reduce((acc, val) => {
+                acc[val] = () => '';
+                return acc;
+            }, {} as ImportMetadataScripts)
+        );
+
+    useEffect(() => {
+        const loadScripts = async () => {
+            const { importMetadataScripts } = await import(
+                '@/lib/data/import-metadata/scripts/scripts'
+            );
+            setImportMetadataScripts(importMetadataScripts);
+        };
+        loadScripts();
+    }, []);
 
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
@@ -280,6 +297,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setDatabaseEdition,
         databaseClients,
         databaseClient,
+        importMetadataScripts,
         t,
     ]);
 
