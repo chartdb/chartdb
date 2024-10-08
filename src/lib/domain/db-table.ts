@@ -7,11 +7,17 @@ import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
 import type { DBRelationship } from './db-relationship';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
-import { deepCopy, generateId } from '../utils';
+import {
+    decodeBase64ToUtf16LE,
+    decodeBase64ToUtf8,
+    deepCopy,
+    generateId,
+} from '../utils';
 import {
     schemaNameToDomainSchemaName,
     schemaNameToSchemaId,
 } from './db-schema';
+import { DatabaseType } from './database-type';
 
 export interface DBTable {
     id: string;
@@ -38,18 +44,38 @@ export const shouldShowTablesBySchemaFilter = (
     !table.schema ||
     filteredSchemas.includes(schemaNameToSchemaId(table.schema));
 
+export const decodeViewDefinition = (
+    databaseType: DatabaseType,
+    viewDefinition?: string
+): string => {
+    if (!viewDefinition) {
+        return '';
+    }
+
+    let decodedViewDefinition: string;
+    if (databaseType === DatabaseType.SQL_SERVER) {
+        decodedViewDefinition = decodeBase64ToUtf16LE(viewDefinition);
+    } else {
+        decodedViewDefinition = decodeBase64ToUtf8(viewDefinition);
+    }
+
+    return decodedViewDefinition;
+};
+
 export const createTablesFromMetadata = ({
     tableInfos,
     columns,
     indexes,
     primaryKeys,
     views,
+    databaseType,
 }: {
     tableInfos: TableInfo[];
     columns: ColumnInfo[];
     indexes: IndexInfo[];
     primaryKeys: PrimaryKeyInfo[];
     views: ViewInfo[];
+    databaseType: DatabaseType;
 }): DBTable[] => {
     return tableInfos.map((tableInfo: TableInfo) => {
         const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
@@ -165,8 +191,10 @@ export const createTablesFromMetadata = ({
 
         const isMaterializedView = views.some(
             (view) =>
-                view.view_definition?.includes('MATERIALIZED') &&
-                view.view_name === tableInfo.table
+                view.view_name === tableInfo.table &&
+                decodeViewDefinition(databaseType, view.view_definition)
+                    .toLowerCase()
+                    .includes('materialized')
         );
 
         // Initial random positions; these will be adjusted later

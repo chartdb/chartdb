@@ -4,7 +4,7 @@ import {
     schemaNameToDomainSchemaName,
     schemaNameToSchemaId,
 } from './db-schema';
-import type { DBTable } from './db-table';
+import { decodeViewDefinition, type DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 import type { AST } from 'node-sql-parser';
 
@@ -48,7 +48,6 @@ export const createDependenciesFromMetadata = async ({
     databaseType: DatabaseType;
 }): Promise<DBDependency[]> => {
     const { Parser } = await import('node-sql-parser');
-    const { Buffer } = await import('buffer/');
     const parser = new Parser();
 
     const dependencies = views
@@ -68,20 +67,10 @@ export const createDependenciesFromMetadata = async ({
 
             if (view.view_definition) {
                 try {
-                    let decodedViewDefinition: string;
-
-                    // For other database types, decode the base64-encoded view definition
-                    if (databaseType === DatabaseType.SQL_SERVER) {
-                        decodedViewDefinition = Buffer.from(
-                            view.view_definition,
-                            'base64'
-                        ).toString('utf16le');
-                    } else {
-                        decodedViewDefinition = Buffer.from(
-                            view.view_definition,
-                            'base64'
-                        ).toString('utf-8');
-                    }
+                    const decodedViewDefinition = decodeViewDefinition(
+                        databaseType,
+                        view.view_definition
+                    );
 
                     let modifiedViewDefinition = '';
                     if (
