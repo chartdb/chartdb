@@ -141,7 +141,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         </p>
                         <ToggleGroup
                             type="single"
-                            className="ml-1 gap-2"
+                            className="ml-1 flex-wrap gap-2"
                             value={
                                 !databaseEdition ? 'regular' : databaseEdition
                             }
