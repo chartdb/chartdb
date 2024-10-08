@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from '@/components/resizable/resizable';
-import { SidePanel } from './side-panel/side-panel';
-import { Canvas } from './canvas/canvas';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -17,14 +16,6 @@ import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useLayout } from '@/hooks/use-layout';
 import { useToast } from '@/components/toast/use-toast';
-import {
-    Drawer,
-    DrawerContent,
-    DrawerDescription,
-    DrawerHeader,
-    DrawerTitle,
-} from '@/components/drawer/drawer';
-import { Separator } from '@/components/separator/separator';
 import type { Diagram } from '@/lib/domain/diagram';
 import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
@@ -42,27 +33,31 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { ExportImageProvider } from '@/context/export-image-context/export-image-provider';
 import { DialogProvider } from '@/context/dialog-context/dialog-provider';
 import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
+// import { EditorMobileLayout } from './editor-mobile-layout';
+import { Spinner } from '@/components/spinner/spinner';
+// import { EditorDesktopLayout } from './editor-desktop-layout';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
 
+export const EditorDesktopLayoutLazy = React.lazy(
+    () => import('./editor-desktop-layout')
+);
+
+export const EditorMobileLayoutLazy = React.lazy(
+    () => import('./editor-mobile-layout')
+);
+
 const EditorPageComponent: React.FC = () => {
     const { loadDiagram, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
-    const {
-        isSidePanelShowed,
-        hideSidePanel,
-        openSelectSchema,
-        showSidePanel,
-    } = useLayout();
+    const { openSelectSchema, showSidePanel } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog, openStarUsDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config, updateConfig } = useConfig();
     const navigate = useNavigate();
-    const { isLg } = useBreakpoint('lg');
-    const { isXl } = useBreakpoint('xl');
     const { isMd: isDesktop } = useBreakpoint('md');
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const {
@@ -221,46 +216,23 @@ const EditorPageComponent: React.FC = () => {
                 className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
             >
                 <TopNavbar />
-                {isDesktop ? (
-                    <ResizablePanelGroup direction="horizontal">
-                        <ResizablePanel
-                            defaultSize={isXl ? 25 : isLg ? 35 : 50}
-                            minSize={isXl ? 25 : isLg ? 35 : 50}
-                            maxSize={isSidePanelShowed ? 99 : 0}
-                            // eslint-disable-next-line
-                            className="transition-[flex-grow] duration-200"
-                        >
-                            <SidePanel />
-                        </ResizablePanel>
-                        <ResizableHandle />
-                        <ResizablePanel
-                            defaultSize={isXl ? 75 : isLg ? 65 : 50}
-                        >
-                            <Canvas
-                                initialTables={initialDiagram?.tables ?? []}
-                            />
-                        </ResizablePanel>
-                    </ResizablePanelGroup>
-                ) : (
-                    <>
-                        <Drawer
-                            open={isSidePanelShowed}
-                            onClose={() => hideSidePanel()}
-                        >
-                            <DrawerContent className="h-full" fullScreen>
-                                <DrawerHeader>
-                                    <DrawerTitle>Manage Diagram</DrawerTitle>
-                                    <DrawerDescription>
-                                        Manage your diagram objects
-                                    </DrawerDescription>
-                                </DrawerHeader>
-                                <Separator orientation="horizontal" />
-                                <SidePanel data-vaul-no-drag />
-                            </DrawerContent>
-                        </Drawer>
-                        <Canvas initialTables={initialDiagram?.tables ?? []} />
-                    </>
-                )}
+                <Suspense
+                    fallback={
+                        <div className="flex flex-1 items-center justify-center">
+                            <Spinner size={isDesktop ? 'large' : 'medium'} />
+                        </div>
+                    }
+                >
+                    {isDesktop ? (
+                        <EditorDesktopLayoutLazy
+                            initialDiagram={initialDiagram}
+                        />
+                    ) : (
+                        <EditorMobileLayoutLazy
+                            initialDiagram={initialDiagram}
+                        />
+                    )}
+                </Suspense>
             </section>
             <Toaster />
         </>
@@ -268,15 +240,15 @@ const EditorPageComponent: React.FC = () => {
 };
 
 export const EditorPage: React.FC = () => (
-    <FullScreenLoaderProvider>
-        <LayoutProvider>
-            <LocalConfigProvider>
-                <StorageProvider>
-                    <ConfigProvider>
-                        <RedoUndoStackProvider>
-                            <ChartDBProvider>
-                                <HistoryProvider>
-                                    <ThemeProvider>
+    <LocalConfigProvider>
+        <ThemeProvider>
+            <FullScreenLoaderProvider>
+                <LayoutProvider>
+                    <StorageProvider>
+                        <ConfigProvider>
+                            <RedoUndoStackProvider>
+                                <ChartDBProvider>
+                                    <HistoryProvider>
                                         <ReactFlowProvider>
                                             <ExportImageProvider>
                                                 <DialogProvider>
@@ -286,13 +258,13 @@ export const EditorPage: React.FC = () => (
                                                 </DialogProvider>
                                             </ExportImageProvider>
                                         </ReactFlowProvider>
-                                    </ThemeProvider>
-                                </HistoryProvider>
-                            </ChartDBProvider>
-                        </RedoUndoStackProvider>
-                    </ConfigProvider>
-                </StorageProvider>
-            </LocalConfigProvider>
-        </LayoutProvider>
-    </FullScreenLoaderProvider>
+                                    </HistoryProvider>
+                                </ChartDBProvider>
+                            </RedoUndoStackProvider>
+                        </ConfigProvider>
+                    </StorageProvider>
+                </LayoutProvider>
+            </FullScreenLoaderProvider>
+        </ThemeProvider>
+    </LocalConfigProvider>
 );

@@ -7,13 +7,15 @@ import { mariaDBQuery } from './maria-script';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
 
-export const importMetadataScripts: Record<
+export type ImportMetadataScripts = Record<
     DatabaseType,
     (options?: {
         databaseEdition?: DatabaseEdition;
         databaseClient?: DatabaseClient;
     }) => string
-> = {
+>;
+
+export const importMetadataScripts: ImportMetadataScripts = {
     [DatabaseType.GENERIC]: () => '',
     [DatabaseType.POSTGRESQL]: getPostgresQuery,
     [DatabaseType.MYSQL]: getMySQLQuery,

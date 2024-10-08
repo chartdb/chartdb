@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ChartDBLogo from '@/assets/logo.png';
+import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { examples } from './examples-data/examples-data';
 import { ExampleCard } from './example-card';
