@@ -8,6 +8,7 @@ export interface CodeSnippetProps {
     codeProps?: CopyBlockProps;
     code: string;
     language?: 'sql' | 'bash';
+    loading?: boolean;
 }
 
 const CopyBlock = React.lazy(() =>
@@ -19,21 +20,25 @@ const CopyBlock = React.lazy(() =>
 );
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
-    ({ className, codeProps, code, language = 'sql' }) => (
+    ({ className, codeProps, code, loading, language = 'sql' }) => (
         <div className={cn('flex flex-1 justify-center', className)}>
-            <Suspense fallback={<Spinner />}>
-                <CopyBlock
-                    language={language}
-                    text={code}
-                    customStyle={{
-                        display: 'flex',
-                        flex: '1',
-                        fontSize: '14px',
-                        width: '100%',
-                    }}
-                    {...codeProps}
-                />
-            </Suspense>
+            {loading ? (
+                <Spinner />
+            ) : (
+                <Suspense fallback={<Spinner />}>
+                    <CopyBlock
+                        language={language}
+                        text={code}
+                        customStyle={{
+                            display: 'flex',
+                            flex: '1',
+                            fontSize: '14px',
+                            width: '100%',
+                        }}
+                        {...codeProps}
+                    />
+                </Suspense>
+            )}
         </div>
     )
 );
