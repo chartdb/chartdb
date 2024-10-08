@@ -71,12 +71,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     >();
     const { t } = useTranslation();
     const [importMetadataScripts, setImportMetadataScripts] =
-        useState<ImportMetadataScripts>(
-            Object.values(DatabaseType).reduce((acc, val) => {
-                acc[val] = () => '';
-                return acc;
-            }, {} as ImportMetadataScripts)
-        );
+        useState<ImportMetadataScripts | null>(null);
 
     useEffect(() => {
         const loadScripts = async () => {
@@ -252,19 +247,25 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             </div>
                             <CodeSnippet
                                 className="max-h-40 w-full"
-                                code={importMetadataScripts[databaseType]({
-                                    databaseEdition,
-                                    databaseClient,
-                                })}
+                                loading={!importMetadataScripts}
+                                code={
+                                    importMetadataScripts?.[databaseType]?.({
+                                        databaseEdition,
+                                        databaseClient,
+                                    }) ?? ''
+                                }
                                 language={databaseClient ? 'bash' : 'sql'}
                             />
                         </Tabs>
                     ) : (
                         <CodeSnippet
                             className="max-h-40 w-full"
-                            code={importMetadataScripts[databaseType]({
-                                databaseEdition,
-                            })}
+                            loading={!importMetadataScripts}
+                            code={
+                                importMetadataScripts?.[databaseType]?.({
+                                    databaseEdition,
+                                }) ?? ''
+                            }
                         />
                     )}
                 </div>
