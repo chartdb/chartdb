@@ -33,6 +33,8 @@ import {
 } from '@/lib/domain/database-clients';
 import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
+import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -72,6 +74,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { t } = useTranslation();
     const [importMetadataScripts, setImportMetadataScripts] =
         useState<ImportMetadataScripts | null>(null);
+
+    const { isSm: isDesktop } = useBreakpoint('sm');
 
     useEffect(() => {
         const loadScripts = async () => {
@@ -315,6 +319,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             {t('new_diagram_dialog.back')}
                         </Button>
                     )}
+                    {isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                     {onCreateEmptyDiagram && (
@@ -356,11 +369,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             </Button>
                         </DialogClose>
                     )}
+
+                    {!isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
             </DialogFooter>
         );
     }, [
         handleImport,
+        isDesktop,
         keepDialogAfterImport,
         onCreateEmptyDiagram,
         errorMessage.length,
