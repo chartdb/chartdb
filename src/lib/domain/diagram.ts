@@ -47,6 +47,7 @@ export const loadFromDatabaseMetadata = async ({
         indexes,
         primaryKeys,
         views,
+        databaseType,
     });
 
     // First pass: Create relationships
