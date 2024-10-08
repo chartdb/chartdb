@@ -211,6 +211,8 @@ export const es: LanguageTranslation = {
                     step_1: 'Ve a Herramientas > Opciones > Resultados de Consulta > SQL Server.',
                     step_2: 'Si estás usando "Resultados en Cuadrícula", cambia el Máximo de Caracteres Recuperados para Datos No XML (configúralo en 9999999).',
                 },
+                // TODO: Translate
+                instructions_link: 'Need help? Watch how',
             },
 
             cancel: 'Cancelar',

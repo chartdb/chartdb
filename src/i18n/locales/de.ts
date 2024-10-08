@@ -221,6 +221,8 @@ export const de: LanguageTranslation = {
                     step_1: 'Gehen Sie zu Tools > Optionen > Abfrageergebnisse > SQL Server.',
                     step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die maximale Zeichenanzahl für Nicht-XML-Daten (auf 9999999 setzen).',
                 },
+                // TODO: Translate
+                instructions_link: 'Need help? Watch how',
             },
 
             cancel: 'Abbrechen',

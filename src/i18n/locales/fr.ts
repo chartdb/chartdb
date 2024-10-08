@@ -211,6 +211,8 @@ export const fr: LanguageTranslation = {
                     step_1: 'Allez dans Outils > Options > Résultats des Requêtes > SQL Server.',
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
+                // TODO: Translate
+                instructions_link: 'Need help? Watch how',
             },
 
             cancel: 'Annuler',

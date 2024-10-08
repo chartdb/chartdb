@@ -220,6 +220,8 @@ export const ja: LanguageTranslation = {
                     step_1: 'ツール > オプション > クエリ結果 > SQL Serverに移動します。',
                     step_2: '「グリッドへの結果」を使用している場合、XML以外のデータの最大取得文字数を変更してください（9999999に設定）。',
                 },
+                // TODO: Translate
+                instructions_link: 'Need help? Watch how',
             },
 
             cancel: 'キャンセル',
