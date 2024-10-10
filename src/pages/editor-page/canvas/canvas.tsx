@@ -57,7 +57,7 @@ import {
 import { useDialog } from '@/hooks/use-dialog';
 import { MarkerDefinitions } from './marker-definitions';
 import { CanvasContextMenu } from './canvas-context-menu';
-import { areFieldTypesCompatible } from '@/lib/data/data-types';
+import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
 import {
     calcTableHeight,
     findOverlappingTables,
@@ -123,7 +123,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         removeRelationships,
         removeDependencies,
         getField,
-        getTable,
         databaseType,
         filteredSchemas,
         events,
@@ -338,23 +337,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     BOTTOM_SOURCE_HANDLE_ID_PREFIX
                 )
             ) {
-                const tableOne = getTable(params.source);
-                const tableTwo = getTable(params.target);
-
-                if (!tableOne || !tableTwo) {
-                    return;
-                }
-
-                let tableId;
-                let dependentTableId;
-
-                if (tableOne.isMaterializedView || tableOne.isView) {
-                    tableId = tableTwo.id;
-                    dependentTableId = tableOne.id;
-                } else {
-                    tableId = tableOne.id;
-                    dependentTableId = tableTwo.id;
-                }
+                const tableId = params.target;
+                const dependentTableId = params.source;
 
                 createDependency({
                     tableId,
@@ -398,14 +382,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 targetFieldId,
             });
         },
-        [
-            createRelationship,
-            createDependency,
-            getField,
-            getTable,
-            toast,
-            databaseType,
-        ]
+        [createRelationship, createDependency, getField, toast, databaseType]
     );
 
     const onEdgesChangeHandler: OnEdgesChange<EdgeType> = useCallback(

@@ -15,7 +15,10 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
-import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
+import {
+    databasesWithSchemas,
+    schemaNameToSchemaId,
+} from '@/lib/domain/db-schema';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
@@ -49,16 +52,16 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
 
     useEffect(() => {
         if (diagramName) {
-            document.title = `ChartDB - ${diagramName}`;
+            document.title = `ChartDB - ${diagramName} Diagram | Visualize Database Schemas`;
         } else {
-            document.title = 'ChartDB';
+            document.title =
+                'ChartDB - Create & Visualize Database Schema Diagrams';
         }
     }, [diagramName]);
 
     const schemas = useMemo(
         () =>
-            databaseType === DatabaseType.POSTGRESQL ||
-            databaseType === DatabaseType.SQL_SERVER
+            databasesWithSchemas.includes(databaseType)
                 ? [
                       ...new Set(
                           tables

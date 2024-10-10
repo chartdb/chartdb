@@ -12,7 +12,6 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { databaseSecondaryLogoMap } from '@/lib/databases';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Textarea } from '@/components/textarea/textarea';
-import { importMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import {
     databaseEditionToImageMap,
@@ -33,6 +32,9 @@ import {
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';
 import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
+import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
+import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -70,6 +72,20 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         DatabaseClient | undefined
     >();
     const { t } = useTranslation();
+    const [importMetadataScripts, setImportMetadataScripts] =
+        useState<ImportMetadataScripts | null>(null);
+
+    const { isSm: isDesktop } = useBreakpoint('sm');
+
+    useEffect(() => {
+        const loadScripts = async () => {
+            const { importMetadataScripts } = await import(
+                '@/lib/data/import-metadata/scripts/scripts'
+            );
+            setImportMetadataScripts(importMetadataScripts);
+        };
+        loadScripts();
+    }, []);
 
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
@@ -125,7 +141,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         </p>
                         <ToggleGroup
                             type="single"
-                            className="ml-1 gap-2"
+                            className="ml-1 flex-wrap gap-2"
                             value={
                                 !databaseEdition ? 'regular' : databaseEdition
                             }
@@ -235,19 +251,25 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             </div>
                             <CodeSnippet
                                 className="max-h-40 w-full"
-                                code={importMetadataScripts[databaseType]({
-                                    databaseEdition,
-                                    databaseClient,
-                                })}
+                                loading={!importMetadataScripts}
+                                code={
+                                    importMetadataScripts?.[databaseType]?.({
+                                        databaseEdition,
+                                        databaseClient,
+                                    }) ?? ''
+                                }
                                 language={databaseClient ? 'bash' : 'sql'}
                             />
                         </Tabs>
                     ) : (
                         <CodeSnippet
                             className="max-h-40 w-full"
-                            code={importMetadataScripts[databaseType]({
-                                databaseEdition,
-                            })}
+                            loading={!importMetadataScripts}
+                            code={
+                                importMetadataScripts?.[databaseType]?.({
+                                    databaseEdition,
+                                }) ?? ''
+                            }
                         />
                     )}
                 </div>
@@ -280,6 +302,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setDatabaseEdition,
         databaseClients,
         databaseClient,
+        importMetadataScripts,
         t,
     ]);
 
@@ -296,6 +319,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             {t('new_diagram_dialog.back')}
                         </Button>
                     )}
+                    {isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                     {onCreateEmptyDiagram && (
@@ -337,11 +369,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             </Button>
                         </DialogClose>
                     )}
+
+                    {!isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
             </DialogFooter>
         );
     }, [
         handleImport,
+        isDesktop,
         keepDialogAfterImport,
         onCreateEmptyDiagram,
         errorMessage.length,

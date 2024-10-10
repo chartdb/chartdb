@@ -20,7 +20,7 @@ export interface Diagram {
     updatedAt: Date;
 }
 
-export const loadFromDatabaseMetadata = ({
+export const loadFromDatabaseMetadata = async ({
     databaseType,
     databaseMetadata,
     diagramNumber,
@@ -30,7 +30,7 @@ export const loadFromDatabaseMetadata = ({
     databaseMetadata: DatabaseMetadata;
     diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
-}): Diagram => {
+}): Promise<Diagram> => {
     const {
         tables: tableInfos,
         pk_info: primaryKeys,
@@ -47,6 +47,7 @@ export const loadFromDatabaseMetadata = ({
         indexes,
         primaryKeys,
         views,
+        databaseType,
     });
 
     // First pass: Create relationships
@@ -56,7 +57,7 @@ export const loadFromDatabaseMetadata = ({
     });
 
     // First pass: Create dependencies
-    const dependencies = createDependenciesFromMetadata({
+    const dependencies = await createDependenciesFromMetadata({
         views,
         tables,
         databaseType,

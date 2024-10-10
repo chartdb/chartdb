@@ -217,6 +217,7 @@ export const en = {
                     step_1: 'Go to Tools > Options > Query Results > SQL Server.',
                     step_2: 'If you\'re using "Results to Grid," change the Maximum Characters Retrieved for Non-XML data (set to 9999999).',
                 },
+                instructions_link: 'Need help? Watch how',
             },
 
             cancel: 'Cancel',

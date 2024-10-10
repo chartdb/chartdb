@@ -49,7 +49,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         const databaseMetadata: DatabaseMetadata =
             loadDatabaseMetadata(scriptResult);
 
-        const diagram = loadFromDatabaseMetadata({
+        const diagram = await loadFromDatabaseMetadata({
             databaseType,
             databaseMetadata,
             databaseEdition:
