@@ -29,6 +29,8 @@ export const hi: LanguageTranslation = {
                 zoom_on_scroll: 'स्क्रॉल पर ज़ूम',
                 theme: 'थीम',
                 change_language: 'भाषा बदलें',
+                show_dependencies: 'निर्भरता दिखाएँ',
+                hide_dependencies: 'निर्भरता छिपाएँ',
             },
             help: {
                 help: 'मदद',
@@ -164,6 +166,24 @@ export const hi: LanguageTranslation = {
                         'तालिकाओं को कनेक्ट करने के लिए एक संबंध बनाएँ',
                 },
             },
+            dependencies_section: {
+                dependencies: 'निर्भरताएँ',
+                filter: 'फ़िल्टर',
+                collapse: 'सिकोड़ें',
+                dependency: {
+                    table: 'तालिका',
+                    dependent_table: 'आश्रित तालिका',
+                    delete_dependency: 'निर्भरता हटाएँ',
+                    dependency_actions: {
+                        title: 'कार्रवाइयाँ',
+                        delete_dependency: 'निर्भरता हटाएँ',
+                    },
+                },
+                empty_state: {
+                    title: 'कोई निर्भरता नहीं',
+                    description: 'इस अनुभाग में कोई निर्भरता उपलब्ध नहीं है।',
+                },
+            },
         },
 
         toolbar: {
@@ -174,6 +194,7 @@ export const hi: LanguageTranslation = {
             undo: 'पूर्ववत करें',
             redo: 'पुनः करें',
             reorder_diagram: 'आरेख पुनः व्यवस्थित करें',
+            highlight_overlapping_tables: 'ओवरलैपिंग तालिकाओं को हाइलाइट करें',
         },
 
         new_diagram_dialog: {
@@ -197,6 +218,7 @@ export const hi: LanguageTranslation = {
                     step_1: 'टूल्स > ऑप्शंस > क्वेरी परिणाम > SQL सर्वर पर जाएँ।',
                     step_2: 'यदि आप "ग्रिड में परिणाम" का उपयोग कर रहे हैं, तो Non-XML डेटा के लिए अधिकतम वर्ण प्राप्ति (9999999 पर सेट करें)।',
                 },
+                instructions_link: 'मदद चाहिए? देखें कैसे',
             },
 
             cancel: 'रद्द करें',
