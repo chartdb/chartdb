@@ -4,6 +4,7 @@ import { en, enMetadata } from './locales/en';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
 import { de } from './locales/de';
+import { hi } from './locales/hi';
 import { ja } from './locales/ja';
 
 const resources = {
@@ -11,6 +12,7 @@ const resources = {
     es,
     fr,
     de,
+    hi,
     ja,
 };
 
