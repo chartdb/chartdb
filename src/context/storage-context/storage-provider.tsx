@@ -190,7 +190,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         options: {
             includeTables?: boolean;
             includeRelationships?: boolean;
-        } = { includeRelationships: false, includeTables: false }
+            includeDependencies?: boolean;
+        } = {
+            includeRelationships: false,
+            includeTables: false,
+            includeDependencies: false,
+        }
     ): Promise<Diagram[]> => {
         let diagrams = await db.diagrams.toArray();
 
@@ -207,6 +212,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             diagrams = await Promise.all(
                 diagrams.map(async (diagram) => {
                     diagram.relationships = await listRelationships(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
+        if (options.includeDependencies) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.dependencies = await listDependencies(diagram.id);
                     return diagram;
                 })
             );
