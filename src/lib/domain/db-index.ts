@@ -1,3 +1,7 @@
+import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
+import { generateId } from '../utils';
+import type { DBField } from './db-field';
+
 export interface DBIndex {
     id: string;
     name: string;
@@ -5,3 +9,23 @@ export interface DBIndex {
     fieldIds: string[];
     createdAt: number;
 }
+
+export const createIndexesFromMetadata = ({
+    aggregatedIndexes,
+    fields,
+}: {
+    aggregatedIndexes: AggregatedIndexInfo[];
+    fields: DBField[];
+}): DBIndex[] =>
+    aggregatedIndexes.map(
+        (idx): DBIndex => ({
+            id: generateId(),
+            name: idx.name,
+            unique: idx.unique,
+            fieldIds: idx.columns
+                .sort((a, b) => a.position - b.position)
+                .map((c) => fields.find((f) => f.name === c.name)?.id)
+                .filter((id): id is string => id !== undefined),
+            createdAt: Date.now(),
+        })
+    );
