@@ -5,32 +5,29 @@ const sqlServerQuery = `WITH fk_info AS (
         JSON_QUERY(
             '[' + STRING_AGG(
                 CONVERT(nvarchar(max),
-                JSON_QUERY(N'{"schema": "' + COALESCE(REPLACE(kcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "table": "' + COALESCE(REPLACE(kcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "column": "' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "foreign_key_name": "' + COALESCE(REPLACE(kcu.CONSTRAINT_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "reference_schema": "' + COALESCE(REPLACE(rcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "reference_table": "' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "reference_column": "' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            ') REFERENCES ' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            '(' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            ') ON DELETE ' + rc.DELETE_RULE COLLATE SQL_Latin1_General_CP1_CI_AS +
-                            ' ON UPDATE ' + rc.UPDATE_RULE COLLATE SQL_Latin1_General_CP1_CI_AS + '"}')
+                JSON_QUERY(N'{"schema": "' + COALESCE(REPLACE(tp_schema.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "table": "' + COALESCE(REPLACE(tp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "column": "' + COALESCE(REPLACE(cp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "foreign_key_name": "' + COALESCE(REPLACE(fk.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "reference_schema": "' + COALESCE(REPLACE(tr_schema.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "reference_table": "' + COALESCE(REPLACE(tr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "reference_column": "' + COALESCE(REPLACE(cr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(cp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            ') REFERENCES ' + COALESCE(REPLACE(tr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            '(' + COALESCE(REPLACE(cr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            ') ON DELETE ' + fk.delete_referential_action_desc COLLATE SQL_Latin1_General_CP1_CI_AS +
+                            ' ON UPDATE ' + fk.update_referential_action_desc COLLATE SQL_Latin1_General_CP1_CI_AS + '"}')
                 ), ','
             ) + N']'
         ) AS all_fks_json
-    FROM
-        INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
-    JOIN
-        INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
-        ON kcu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
-        AND kcu.CONSTRAINT_SCHEMA = rc.CONSTRAINT_SCHEMA
-    JOIN
-        INFORMATION_SCHEMA.KEY_COLUMN_USAGE rcu
-        ON rcu.CONSTRAINT_NAME = rc.UNIQUE_CONSTRAINT_NAME
-        AND rcu.CONSTRAINT_SCHEMA = rc.UNIQUE_CONSTRAINT_SCHEMA
-        AND rcu.ORDINAL_POSITION = kcu.ORDINAL_POSITION
+    FROM sys.foreign_keys AS fk
+    JOIN sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
+    JOIN sys.tables AS tp ON fkc.parent_object_id = tp.object_id
+    JOIN sys.schemas AS tp_schema ON tp.schema_id = tp_schema.schema_id
+    JOIN sys.columns AS cp ON fkc.parent_object_id = cp.object_id AND fkc.parent_column_id = cp.column_id
+    JOIN sys.tables AS tr ON fkc.referenced_object_id = tr.object_id
+    JOIN sys.schemas AS tr_schema ON tr.schema_id = tr_schema.schema_id
+    JOIN sys.columns AS cr ON fkc.referenced_object_id = cr.object_id AND fkc.referenced_column_id = cr.column_id
 ), pk_info AS (
     SELECT
         JSON_QUERY(
@@ -223,30 +220,35 @@ const sqlServer2016AndBelowQuery = `WITH fk_info AS (
                 STUFF((
                     SELECT ',' +
                         CONVERT(nvarchar(max),
-                        JSON_QUERY(N'{"schema": "' + COALESCE(REPLACE(kcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "table": "' + COALESCE(REPLACE(kcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "column": "' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "foreign_key_name": "' + COALESCE(REPLACE(kcu.CONSTRAINT_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "reference_schema": "' + COALESCE(REPLACE(rcu.CONSTRAINT_SCHEMA, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "reference_table": "' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "reference_column": "' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(kcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    ') REFERENCES ' + COALESCE(REPLACE(rcu.TABLE_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    '(' + COALESCE(REPLACE(rcu.COLUMN_NAME, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    ') ON DELETE ' + rc.DELETE_RULE COLLATE SQL_Latin1_General_CP1_CI_AS +
-                                    ' ON UPDATE ' + rc.UPDATE_RULE COLLATE SQL_Latin1_General_CP1_CI_AS + '"}')
+                        JSON_QUERY(N'{"schema": "' + COALESCE(REPLACE(tp_schema.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "table": "' + COALESCE(REPLACE(tp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "column": "' + COALESCE(REPLACE(cp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "foreign_key_name": "' + COALESCE(REPLACE(fk.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "reference_schema": "' + COALESCE(REPLACE(tr_schema.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "reference_table": "' + COALESCE(REPLACE(tr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "reference_column": "' + COALESCE(REPLACE(cr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '", "fk_def": "FOREIGN KEY (' + COALESCE(REPLACE(cp.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    ') REFERENCES ' + COALESCE(REPLACE(tr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    '(' + COALESCE(REPLACE(cr.name, '"', ''), '') COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    ') ON DELETE ' + fk.delete_referential_action_desc COLLATE SQL_Latin1_General_CP1_CI_AS +
+                                    ' ON UPDATE ' + fk.update_referential_action_desc COLLATE SQL_Latin1_General_CP1_CI_AS + '"}')
                         )
                     FROM
-                        INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+                        sys.foreign_keys AS fk
                     JOIN
-                        INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
-                        ON kcu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
-                        AND kcu.CONSTRAINT_SCHEMA = rc.CONSTRAINT_SCHEMA
+                        sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
                     JOIN
-                        INFORMATION_SCHEMA.KEY_COLUMN_USAGE rcu
-                        ON rcu.CONSTRAINT_NAME = rc.UNIQUE_CONSTRAINT_NAME
-                        AND rcu.CONSTRAINT_SCHEMA = rc.UNIQUE_CONSTRAINT_SCHEMA
-                        AND rcu.ORDINAL_POSITION = kcu.ORDINAL_POSITION
+                        sys.tables AS tp ON fkc.parent_object_id = tp.object_id
+                    JOIN
+                        sys.schemas AS tp_schema ON tp.schema_id = tp_schema.schema_id
+                    JOIN
+                        sys.columns AS cp ON fkc.parent_object_id = cp.object_id AND fkc.parent_column_id = cp.column_id
+                    JOIN
+                        sys.tables AS tr ON fkc.referenced_object_id = tr.object_id
+                    JOIN
+                        sys.schemas AS tr_schema ON tr.schema_id = tr_schema.schema_id
+                    JOIN
+                        sys.columns AS cr ON fkc.referenced_object_id = cr.object_id AND fkc.referenced_column_id = cr.column_id
                     FOR XML PATH('')
                 ), 1, 1, ''), '')
             + N']'
