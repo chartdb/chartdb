@@ -1,12 +1,9 @@
-import type { DBIndex } from './db-index';
-import type { DBField } from './db-field';
+import { createIndexesFromMetadata, type DBIndex } from './db-index';
+import { createFieldsFromMetadata, type DBField } from './db-field';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
-import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
-import type { IndexInfo } from '../data/import-metadata/metadata-types/index-info';
+import { createAggregatedIndexes } from '../data/import-metadata/metadata-types/index-info';
 import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
 import type { DBRelationship } from './db-relationship';
-import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
-import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 import {
     decodeBase64ToUtf16LE,
     decodeBase64ToUtf8,
@@ -18,6 +15,7 @@ import {
     schemaNameToSchemaId,
 } from './db-schema';
 import { DatabaseType } from './database-type';
+import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 
 export interface DBTable {
     id: string;
@@ -63,124 +61,42 @@ export const decodeViewDefinition = (
 };
 
 export const createTablesFromMetadata = ({
-    tableInfos,
-    columns,
-    indexes,
-    primaryKeys,
-    views,
+    databaseMetadata,
     databaseType,
 }: {
-    tableInfos: TableInfo[];
-    columns: ColumnInfo[];
-    indexes: IndexInfo[];
-    primaryKeys: PrimaryKeyInfo[];
-    views: ViewInfo[];
+    databaseMetadata: DatabaseMetadata;
     databaseType: DatabaseType;
 }): DBTable[] => {
+    const {
+        tables: tableInfos,
+        pk_info: primaryKeys,
+        columns,
+        indexes,
+        views: views,
+    } = databaseMetadata;
+
     return tableInfos.map((tableInfo: TableInfo) => {
         const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
-        // Filter, make unique, and sort columns based on ordinal_position
-        const uniqueColumns = new Map<string, ColumnInfo>();
-        columns
-            .filter(
-                (col) =>
-                    schemaNameToDomainSchemaName(col.schema) === tableSchema &&
-                    col.table === tableInfo.table
-            )
-            .forEach((col) => {
-                if (!uniqueColumns.has(col.name)) {
-                    uniqueColumns.set(col.name, col);
-                }
-            });
-
-        const sortedColumns = Array.from(uniqueColumns.values()).sort(
-            (a, b) => a.ordinal_position - b.ordinal_position
-        );
-
-        const tablePrimaryKeys = primaryKeys
-            .filter(
-                (pk) =>
-                    pk.table === tableInfo.table &&
-                    schemaNameToDomainSchemaName(pk.schema) === tableSchema
-            )
-            .map((pk) => pk.column.trim());
-
-        const tableIndexes = indexes.filter((idx) => {
-            const indexSchema = schemaNameToDomainSchemaName(idx.schema);
-
-            return idx.table === tableInfo.table && indexSchema === tableSchema;
-        });
 
         // Aggregate indexes with multiple columns
-        const aggregatedIndexes = tableIndexes.reduce(
-            (acc, idx) => {
-                const key = `${idx.schema}_${idx.name}`;
-                if (!acc[key]) {
-                    acc[key] = {
-                        ...idx,
-                        columns: [
-                            { name: idx.column, position: idx.column_position },
-                        ],
-                    };
-                } else {
-                    acc[key].columns.push({
-                        name: idx.column,
-                        position: idx.column_position,
-                    });
-                }
-                return acc;
-            },
-            {} as Record<
-                string,
-                Omit<IndexInfo, 'column'> & {
-                    columns: { name: string; position: number }[];
-                }
-            >
-        );
+        const aggregatedIndexes = createAggregatedIndexes({
+            tableInfo,
+            tableSchema,
+            indexes,
+        });
 
-        const fields: DBField[] = sortedColumns.map(
-            (col: ColumnInfo): DBField => ({
-                id: generateId(),
-                name: col.name,
-                type: {
-                    id: col.type.split(' ').join('_').toLowerCase(),
-                    name: col.type.toLowerCase(),
-                },
-                primaryKey: tablePrimaryKeys.includes(col.name),
-                unique: Object.values(aggregatedIndexes).some(
-                    (idx) =>
-                        idx.unique &&
-                        idx.columns.length === 1 &&
-                        idx.columns[0].name === col.name
-                ),
-                nullable: col.nullable,
-                ...(col.character_maximum_length &&
-                col.character_maximum_length !== 'null'
-                    ? { character_maximum_length: col.character_maximum_length }
-                    : {}),
-                ...(col.precision?.precision
-                    ? { precision: col.precision.precision }
-                    : {}),
-                ...(col.precision?.scale ? { scale: col.precision.scale } : {}),
-                ...(col.default ? { default: col.default } : {}),
-                ...(col.collation ? { collation: col.collation } : {}),
-                createdAt: Date.now(),
-                comments: col.comment ? col.comment : undefined,
-            })
-        );
+        const fields = createFieldsFromMetadata({
+            aggregatedIndexes,
+            columns,
+            primaryKeys,
+            tableInfo,
+            tableSchema,
+        });
 
-        const dbIndexes: DBIndex[] = Object.values(aggregatedIndexes).map(
-            (idx): DBIndex => ({
-                id: generateId(),
-                name: idx.name,
-                unique: idx.unique,
-                fieldIds: idx.columns
-                    .sort((a, b) => a.position - b.position)
-                    .map((c) => fields.find((f) => f.name === c.name)?.id)
-                    .filter((id): id is string => id !== undefined),
-                createdAt: Date.now(),
-            })
-        );
+        const dbIndexes = createIndexesFromMetadata({
+            aggregatedIndexes,
+            fields,
+        });
 
         // Determine if the current table is a view by checking against viewInfo
         const isView = views.some(
@@ -191,6 +107,7 @@ export const createTablesFromMetadata = ({
 
         const isMaterializedView = views.some(
             (view) =>
+                schemaNameToDomainSchemaName(view.schema) === tableSchema &&
                 view.view_name === tableInfo.table &&
                 decodeViewDefinition(databaseType, view.view_definition)
                     .toLowerCase()

@@ -31,39 +31,24 @@ export const loadFromDatabaseMetadata = async ({
     diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
 }): Promise<Diagram> => {
-    const {
-        tables: tableInfos,
-        pk_info: primaryKeys,
-        columns,
-        indexes,
-        fk_info: foreignKeys,
-        views: views,
-    } = databaseMetadata;
+    const { fk_info: foreignKeys, views: views } = databaseMetadata;
 
-    // First pass: Create tables without final positions
     const tables = createTablesFromMetadata({
-        tableInfos,
-        columns,
-        indexes,
-        primaryKeys,
-        views,
+        databaseMetadata,
         databaseType,
     });
 
-    // First pass: Create relationships
     const relationships = createRelationshipsFromMetadata({
         foreignKeys,
         tables,
     });
 
-    // First pass: Create dependencies
     const dependencies = await createDependenciesFromMetadata({
         views,
         tables,
         databaseType,
     });
 
-    // Second pass: Adjust table positions based on relationships
     const adjustedTables = adjustTablePositions({
         tables,
         relationships,

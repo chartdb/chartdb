@@ -27,11 +27,11 @@ export const isDatabaseMetadata = (obj: any): boolean => {
     );
 };
 
-export function loadDatabaseMetadata(jsonString: string): DatabaseMetadata {
+export const loadDatabaseMetadata = (jsonString: string): DatabaseMetadata => {
     try {
         const parsedData: DatabaseMetadata = JSON.parse(jsonString);
         return parsedData;
     } catch (parseError) {
         throw new Error(`Error parsing JSON data: ${parseError}`);
     }
-}
+};
