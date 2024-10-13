@@ -235,7 +235,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             includeTables?: boolean;
             includeRelationships?: boolean;
             includeDependencies?: boolean;
-        } = { includeRelationships: false, includeTables: false }
+        } = {
+            includeRelationships: false,
+            includeTables: false,
+            includeDependencies: false,
+        }
     ): Promise<Diagram | undefined> => {
         const diagram = await db.diagrams.get(id);
 
