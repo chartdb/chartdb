@@ -93,6 +93,8 @@ export const en = {
         clear: 'Clear',
         show_more: 'Show More',
         show_less: 'Show Less',
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'Schema:',

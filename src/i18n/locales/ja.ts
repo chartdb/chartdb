@@ -94,6 +94,9 @@ export const ja: LanguageTranslation = {
         clear: 'クリア',
         show_more: 'さらに表示',
         show_less: '表示を減らす',
+        // TODO: Translate
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'スキーマ:',

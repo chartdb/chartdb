@@ -93,6 +93,9 @@ export const hi: LanguageTranslation = {
         clear: 'साफ़ करें',
         show_more: 'अधिक दिखाएँ',
         show_less: 'कम दिखाएँ',
+        // TODO: Translate
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'स्कीमा:',

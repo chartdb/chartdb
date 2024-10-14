@@ -85,6 +85,9 @@ export const es: LanguageTranslation = {
         clear: 'Clear', // TODO: Translate
         show_more: 'Show More', // TODO: Translate
         show_less: 'Show Less', // TODO: Translate
+        // TODO: Translate
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'Schema:', // TODO: Translate

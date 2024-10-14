@@ -250,7 +250,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 </TabsList>
                             </div>
                             <CodeSnippet
-                                className="max-h-40 w-full"
+                                className="h-40 w-full"
                                 loading={!importMetadataScripts}
                                 code={
                                     importMetadataScripts?.[databaseType]?.({
@@ -258,18 +258,19 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                         databaseClient,
                                     }) ?? ''
                                 }
-                                language={databaseClient ? 'bash' : 'sql'}
+                                language={databaseClient ? 'shell' : 'sql'}
                             />
                         </Tabs>
                     ) : (
                         <CodeSnippet
-                            className="max-h-40 w-full"
+                            className="h-40 w-full flex-auto"
                             loading={!importMetadataScripts}
                             code={
                                 importMetadataScripts?.[databaseType]?.({
                                     databaseEdition,
                                 }) ?? ''
                             }
+                            language="sql"
                         />
                     )}
                 </div>

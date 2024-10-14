@@ -1,9 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
-
+import { twMerge } from 'tailwind-merge';
 const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 
-import { twMerge } from 'tailwind-merge';
 const UUID_KEY = 'uuid';
 
 export function cn(...inputs: ClassValue[]) {

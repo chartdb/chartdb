@@ -132,7 +132,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-[80vh] min-w-[500px] flex-col overflow-y-auto xl:min-w-[75vw]"
+                className="flex max-h-[80vh] flex-col overflow-y-auto xl:min-w-[75vw]"
                 showClose
             >
                 <DialogHeader>
@@ -156,10 +156,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                     ) : script.length === 0 ? (
                         renderError()
                     ) : (
-                        <CodeSnippet
-                            className="max-h-96 w-full"
-                            code={script!}
-                        />
+                        <CodeSnippet className="h-96 w-full" code={script!} />
                     )}
                 </div>
 
