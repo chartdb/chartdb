@@ -1,46 +1,127 @@
 import { cn } from '@/lib/utils';
-import React, { Suspense } from 'react';
-import type { CopyBlockProps } from 'react-code-blocks/dist/components/CopyBlock';
+import React, { lazy, Suspense, useCallback, useEffect } from 'react';
 import { Spinner } from '../spinner/spinner';
+import { useTheme } from '@/hooks/use-theme';
+import { useMonaco } from '@monaco-editor/react';
+import { Button } from '../button/button';
+import { Copy, CopyCheck } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
+import { useTranslation } from 'react-i18next';
+import { DarkTheme } from './themes/dark';
+import { LightTheme } from './themes/light';
 
 export interface CodeSnippetProps {
     className?: string;
-    codeProps?: CopyBlockProps;
     code: string;
-    language?: 'sql' | 'bash';
+    language?: 'sql' | 'shell';
     loading?: boolean;
 }
 
-const CopyBlock = React.lazy(() =>
-    import('react-code-blocks').then((module) => ({
-        default: (props: CopyBlockProps) => (
-            <module.CopyBlock {...props} theme={module.atomOneDark} />
-        ),
+export const Editor = lazy(() =>
+    import('./code-editor').then((module) => ({
+        default: module.Editor,
     }))
 );
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
-    ({ className, codeProps, code, loading, language = 'sql' }) => (
-        <div className={cn('flex flex-1 justify-center', className)}>
-            {loading ? (
-                <Spinner />
-            ) : (
-                <Suspense fallback={<Spinner />}>
-                    <CopyBlock
-                        language={language}
-                        text={code}
-                        customStyle={{
-                            display: 'flex',
-                            flex: '1',
-                            fontSize: '14px',
-                            width: '100%',
-                        }}
-                        {...codeProps}
-                    />
-                </Suspense>
-            )}
-        </div>
-    )
+    ({ className, code, loading, language = 'sql' }) => {
+        const { t } = useTranslation();
+        const monaco = useMonaco();
+        const { effectiveTheme } = useTheme();
+        const [isCopied, setIsCopied] = React.useState(false);
+        const [tooltipOpen, setTooltipOpen] = React.useState(false);
+
+        useEffect(() => {
+            monaco?.editor?.defineTheme?.(
+                effectiveTheme,
+                effectiveTheme === 'dark' ? DarkTheme : LightTheme
+            );
+            monaco?.editor?.setTheme?.(effectiveTheme);
+        }, [monaco, effectiveTheme]);
+
+        useEffect(() => {
+            if (!isCopied) return;
+            setTimeout(() => {
+                setIsCopied(false);
+            }, 1500);
+        }, [isCopied]);
+
+        const copyToClipboard = useCallback(() => {
+            navigator.clipboard.writeText(code);
+            setIsCopied(true);
+        }, [code]);
+
+        return (
+            <div
+                className={cn(
+                    'flex relative flex-1 justify-center border rounded-md overflow-hidden',
+                    className
+                )}
+            >
+                {loading ? (
+                    <Spinner />
+                ) : (
+                    <Suspense fallback={<Spinner />}>
+                        <Tooltip
+                            onOpenChange={setTooltipOpen}
+                            open={isCopied || tooltipOpen}
+                        >
+                            <TooltipTrigger
+                                asChild
+                                className="absolute right-1 top-1 z-10"
+                            >
+                                <span>
+                                    <Button
+                                        className=" h-fit p-1.5"
+                                        variant="outline"
+                                        onClick={copyToClipboard}
+                                    >
+                                        {isCopied ? (
+                                            <CopyCheck size={16} />
+                                        ) : (
+                                            <Copy size={16} />
+                                        )}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {t(isCopied ? 'copied' : 'copy_to_clipboard')}
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Editor
+                            value={code}
+                            language={language}
+                            loading={<Spinner />}
+                            theme={effectiveTheme}
+                            options={{
+                                minimap: {
+                                    enabled: false,
+                                },
+                                readOnly: true,
+                                automaticLayout: true,
+                                scrollbar: {
+                                    vertical: 'hidden',
+                                    horizontal: 'hidden',
+                                    alwaysConsumeMouseWheel: false,
+                                },
+                                scrollBeyondLastLine: false,
+                                renderValidationDecorations: 'off',
+                                lineDecorationsWidth: 0,
+                                overviewRulerBorder: false,
+                                overviewRulerLanes: 0,
+                                hideCursorInOverviewRuler: true,
+                                guides: {
+                                    indentation: false,
+                                },
+                                contextmenu: false,
+                            }}
+                        />
+                    </Suspense>
+                )}
+            </div>
+        );
+    }
 );
 
 CodeSnippet.displayName = 'CodeSnippet';

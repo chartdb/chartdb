@@ -411,7 +411,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         diagramId: string
     ): Promise<DBRelationship[]> => {
         // Sort relationships alphabetically
-        return await (
+        return (
             await db.db_relationships
                 .where('diagramId')
                 .equals(diagramId)

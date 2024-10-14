@@ -94,6 +94,9 @@ export const de: LanguageTranslation = {
         clear: 'Leeren',
         show_more: 'Mehr anzeigen',
         show_less: 'Weniger anzeigen',
+        // TODO: Translate
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'Schema:',
