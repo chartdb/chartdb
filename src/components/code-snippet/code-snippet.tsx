@@ -7,6 +7,8 @@ import { Button } from '../button/button';
 import { Copy, CopyCheck } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
+import { DarkTheme } from './themes/dark';
+import { LightTheme } from './themes/light';
 
 export interface CodeSnippetProps {
     className?: string;
@@ -30,9 +32,11 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
         useEffect(() => {
-            monaco?.editor?.setTheme?.(
-                effectiveTheme === 'dark' ? 'vs-dark' : 'vs'
+            monaco?.editor?.defineTheme?.(
+                effectiveTheme,
+                effectiveTheme === 'dark' ? DarkTheme : LightTheme
             );
+            monaco?.editor?.setTheme?.(effectiveTheme);
         }, [monaco, effectiveTheme]);
 
         useEffect(() => {
@@ -89,7 +93,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             value={code}
                             language={language}
                             loading={<Spinner />}
-                            theme={effectiveTheme === 'dark' ? 'vs-dark' : 'vs'}
+                            theme={effectiveTheme}
                             options={{
                                 minimap: {
                                     enabled: false,
