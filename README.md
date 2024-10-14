@@ -52,7 +52,7 @@ Instantly visualize your database schema with a single **"Smart Query."** Custom
     Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
 
 -   **AI-Powered Export for Easy Migration**
-    Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
+    Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL, or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
 -   **Interactive Editing**
     Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
 
@@ -114,9 +114,9 @@ Open your browser and navigate to `http://localhost:8080`.
 
 ## 💚 Community & Support
 
--   [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team)
--   [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
--   [Twitter](https://x.com/chartdb_io) (Get news fast)
+-   [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team).
+-   [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB).
+-   [Twitter](https://x.com/chartdb_io) (Get news fast).
 
 ## Contributing
 
