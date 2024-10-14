@@ -29,9 +29,8 @@ export const fr: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
                 change_language: 'Langue',
-                // TODO: Translate
-                show_dependencies: 'Show Dependencies',
-                hide_dependencies: 'Hide Dependencies',
+                show_dependencies: 'Afficher les Dépendances',
+                hide_dependencies: 'Masquer les Dépendances',
             },
             help: {
                 help: 'Aide',
@@ -160,23 +159,22 @@ export const fr: LanguageTranslation = {
                     description: 'Créez une relation pour connecter les tables',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
+                dependencies: 'Dépendances',
+                filter: 'Filtrer',
+                collapse: 'Réduire Tout',
                 dependency: {
                     table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    dependent_table: 'Vue Dépendante',
+                    delete_dependency: 'Supprimer',
                     dependency_actions: {
                         title: 'Actions',
-                        delete_dependency: 'Delete',
+                        delete_dependency: 'Supprimer',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'Aucune dépendance',
+                    description: 'Créez une vue pour commencer',
                 },
             },
         },
@@ -189,8 +187,7 @@ export const fr: LanguageTranslation = {
             undo: 'Annuler',
             redo: 'Rétablir',
             reorder_diagram: 'Réorganiser le Diagramme',
-            // TODO: Translate
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'Surligner les tables chevauchées',
         },
 
         new_diagram_dialog: {
@@ -214,8 +211,7 @@ export const fr: LanguageTranslation = {
                     step_1: 'Allez dans Outils > Options > Résultats des Requêtes > SQL Server.',
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
-                // TODO: Translate
-                instructions_link: 'Need help? Watch how',
+                instructions_link: "Besoin d'aide ? Regardez comment",
             },
 
             cancel: 'Annuler',
@@ -256,52 +252,48 @@ export const fr: LanguageTranslation = {
             },
         },
 
-        // TODO: Translate
         export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
+            title: "Exporter l'image",
+            description:
+                "Choisissez le facteur d'échelle pour l'image exportée.",
+            scale_1x: '1x Normal',
+            scale_2x: '2x (Recommandé)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Annuler',
+            export: 'Exporter',
         },
 
-        // TODO: Translate
         multiple_schemas_alert: {
-            title: 'Multiple Schemas',
+            title: 'Schémas Multiples',
             description:
-                '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: "Don't show again",
-            change_schema: 'Change',
-            none: 'none',
+                '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
+            dont_show_again: 'Ne plus afficher',
+            change_schema: 'Changer',
+            none: 'Aucun',
         },
 
-        // TODO: Translate
         new_table_schema_dialog: {
-            title: 'Select Schema',
+            title: 'Sélectionner un Schéma',
             description:
-                'Multiple schemas are currently displayed. Select one for the new table.',
-            cancel: 'Cancel',
-            confirm: 'Confirm',
+                'Plusieurs schémas sont actuellement affichés. Sélectionnez-en un pour la nouvelle table.',
+            cancel: 'Annuler',
+            confirm: 'Confirmer',
         },
 
-        // TODO: Translate
         star_us_dialog: {
-            title: 'Help us improve!',
+            title: 'Aidez-nous à nous améliorer',
             description:
-                "Would you like to star us on GitHub? It's just a click away!",
-            close: 'Not now',
-            confirm: 'Of course!',
+                "Souhaitez-vous nous donner une étoile sur GitHub ? Il ne suffit que d'un clic !",
+            close: 'Pas maintenant',
+            confirm: 'Bien sûr !',
         },
 
-        // TODO: Translate
         update_table_schema_dialog: {
-            title: 'Change Schema',
-            description: 'Update table "{{tableName}}" schema',
-            cancel: 'Cancel',
-            confirm: 'Change',
+            title: 'Modifier le Schéma',
+            description: 'Mettre à jour le schéma de la table "{{tableName}}"',
+            cancel: 'Annuler',
+            confirm: 'Modifier',
         },
 
         create_relationship_dialog: {
