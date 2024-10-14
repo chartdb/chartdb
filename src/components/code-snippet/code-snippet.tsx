@@ -4,7 +4,7 @@ import { Spinner } from '../spinner/spinner';
 import { useTheme } from '@/hooks/use-theme';
 import { useMonaco } from '@monaco-editor/react';
 import { Button } from '../button/button';
-import { ClipboardCopy, CopyCheck } from 'lucide-react';
+import { Copy, CopyCheck } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 
@@ -41,7 +41,10 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
 
         return (
             <div
-                className={cn('flex relative flex-1 justify-center', className)}
+                className={cn(
+                    'flex relative flex-1 justify-center border rounded-md overflow-hidden',
+                    className
+                )}
             >
                 {loading ? (
                     <Spinner />
@@ -61,7 +64,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                         {isCopied ? (
                                             <CopyCheck size={16} />
                                         ) : (
-                                            <ClipboardCopy size={16} />
+                                            <Copy size={16} />
                                         )}
                                     </Button>
                                 </span>
@@ -72,8 +75,6 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                         </Tooltip>
 
                         <Editor
-                            // height="100%"
-                            // defaultValue={code}
                             value={code}
                             language={language}
                             loading={<Spinner />}
@@ -83,11 +84,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                     enabled: false,
                                 },
                                 readOnly: true,
-                                readOnlyMessage: {
-                                    value: 'Code snippet is read-only',
-                                },
                                 automaticLayout: true,
-                                lineNumbers: 'off',
                                 scrollbar: {
                                     vertical: 'hidden',
                                     horizontal: 'hidden',
@@ -99,6 +96,9 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                 overviewRulerBorder: false,
                                 overviewRulerLanes: 0,
                                 hideCursorInOverviewRuler: true,
+                                guides: {
+                                    indentation: false,
+                                },
                             }}
                         />
                     </Suspense>
