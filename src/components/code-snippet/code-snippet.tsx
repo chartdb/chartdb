@@ -27,12 +27,20 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const monaco = useMonaco();
         const { effectiveTheme } = useTheme();
         const [isCopied, setIsCopied] = React.useState(false);
+        const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
         useEffect(() => {
             monaco?.editor?.setTheme?.(
                 effectiveTheme === 'dark' ? 'vs-dark' : 'vs'
             );
         }, [monaco, effectiveTheme]);
+
+        useEffect(() => {
+            if (!isCopied) return;
+            setTimeout(() => {
+                setIsCopied(false);
+            }, 1500);
+        }, [isCopied]);
 
         const copyToClipboard = useCallback(() => {
             navigator.clipboard.writeText(code);
@@ -50,7 +58,10 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                     <Spinner />
                 ) : (
                     <Suspense fallback={<Spinner />}>
-                        <Tooltip>
+                        <Tooltip
+                            onOpenChange={setTooltipOpen}
+                            open={isCopied || tooltipOpen}
+                        >
                             <TooltipTrigger
                                 asChild
                                 className="absolute right-1 top-1 z-10"
@@ -99,6 +110,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                 guides: {
                                     indentation: false,
                                 },
+                                contextmenu: false,
                             }}
                         />
                     </Suspense>
