@@ -161,7 +161,8 @@ cols AS (
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
                                             ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
-                                            '","comment":"', COALESCE(dsc.description, ''), '"}')), ',') AS cols_metadata
+                                            '","comment":"', COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), ''),
+                                            '"}')), ',') AS cols_metadata
     FROM information_schema.columns cols
     LEFT JOIN pg_catalog.pg_class c
         ON c.relname = cols.table_name
@@ -204,7 +205,8 @@ cols AS (
                                                 FROM pg_stat_user_tables s
                                                 WHERE tbls.TABLE_SCHEMA = s.schemaname AND tbls.TABLE_NAME = s.relname),
                                                 0), ', "type":"', tbls.TABLE_TYPE, '",', '"engine":"",', '"collation":"",',
-                        '"comment":"', COALESCE(dsc.description, ''), '"}'
+                        '"comment":"', COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), ''),
+                        '"}'
                 )),
                 ',') AS tbls_metadata
         FROM information_schema.tables tbls
