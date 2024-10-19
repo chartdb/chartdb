@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -24,10 +25,19 @@ export default defineConfig({
                 },
             ],
         }),
+        sentryVitePlugin({
+            org: 'buckle',
+            project: 'chartdb-app',
+        }),
     ],
+
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
         },
+    },
+
+    build: {
+        sourcemap: true,
     },
 });
