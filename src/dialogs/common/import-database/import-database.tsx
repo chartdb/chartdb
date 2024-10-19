@@ -35,6 +35,7 @@ import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/da
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { Spinner } from '@/components/spinner/spinner';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -77,6 +78,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const { isSm: isDesktop } = useBreakpoint('sm');
 
+    const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
+    const [isCheckingJson, setIsCheckingJson] = useState(false);
+
     useEffect(() => {
         const loadScripts = async () => {
             const { importMetadataScripts } = await import(
@@ -90,6 +94,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
             setErrorMessage('');
+            setShowCheckJsonButton(false);
             return;
         }
 
@@ -98,11 +103,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
             if (isDatabaseMetadata(parsedResult)) {
                 setErrorMessage('');
+                setShowCheckJsonButton(false);
             } else {
                 setErrorMessage(errorScriptOutputMessage);
+                setShowCheckJsonButton(false);
             }
         } catch (error) {
-            setErrorMessage(errorScriptOutputMessage);
+            if (
+                scriptResult &&
+                (!scriptResult.includes('{') || !scriptResult.includes('}'))
+            ) {
+                setErrorMessage(errorScriptOutputMessage);
+                setShowCheckJsonButton(false);
+            } else {
+                setShowCheckJsonButton(true);
+                setErrorMessage('');
+            }
         }
     }, [scriptResult]);
 
@@ -119,6 +135,40 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         },
         [setScriptResult]
     );
+
+    const handleCheckJson = useCallback(() => {
+        setIsCheckingJson(true);
+
+        setTimeout(() => {
+            try {
+                // remove spaces at the beginning and end of the string
+                // remove all double quotes at the beginning and end of the string
+                // remove all double quotes in the middle of the string
+                // remove newlines
+                const fixedJson = scriptResult
+                    .trim()
+                    .replace(/^\s+|\s+$/g, '')
+                    .replace(/^"|"$/g, '')
+                    .replace(/""/g, '"')
+                    .replace(/\n/g, '');
+
+                setScriptResult(fixedJson);
+                const parsedResult = JSON.parse(fixedJson);
+
+                if (isDatabaseMetadata(parsedResult)) {
+                    setErrorMessage('');
+                    setShowCheckJsonButton(false);
+                } else {
+                    throw new Error('Invalid JSON structure');
+                }
+            } catch (error) {
+                setErrorMessage(errorScriptOutputMessage);
+                setShowCheckJsonButton(false);
+            } finally {
+                setIsCheckingJson(false);
+            }
+        }, 1000);
+    }, [scriptResult, setScriptResult]);
 
     const renderHeader = useCallback(() => {
         return (
@@ -286,10 +336,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         value={scriptResult}
                         onChange={handleInputChange}
                     />
+                    {showCheckJsonButton && (
+                        <div className="mt-2 flex items-center gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleCheckJson}
+                                disabled={isCheckingJson}
+                            >
+                                {isCheckingJson ? (
+                                    <Spinner size="small" />
+                                ) : (
+                                    t(
+                                        'new_diagram_dialog.import_database.check_json'
+                                    )
+                                )}
+                            </Button>
+                        </div>
+                    )}
                     {errorMessage && (
-                        <p className="mt-2 text-sm text-red-700">
-                            {errorMessage}
-                        </p>
+                        <div className="mt-2 flex items-center gap-2">
+                            <p className="text-sm text-red-700">
+                                {errorMessage}
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>
@@ -305,6 +376,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         databaseClient,
         importMetadataScripts,
         t,
+        showCheckJsonButton,
+        isCheckingJson,
+        handleCheckJson,
     ]);
 
     const renderFooter = useCallback(() => {
@@ -361,6 +435,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 type="button"
                                 variant="default"
                                 disabled={
+                                    showCheckJsonButton ||
                                     scriptResult.trim().length === 0 ||
                                     errorMessage.length > 0
                                 }
@@ -390,6 +465,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         onCreateEmptyDiagram,
         errorMessage.length,
         scriptResult,
+        showCheckJsonButton,
         goBack,
         t,
     ]);

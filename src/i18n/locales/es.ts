@@ -216,6 +216,7 @@ export const es: LanguageTranslation = {
                 },
                 // TODO: Translate
                 instructions_link: 'Need help? Watch how',
+                check_json: 'Check JSON',
             },
 
             cancel: 'Cancelar',
