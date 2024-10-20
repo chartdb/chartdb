@@ -105,8 +105,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             setErrorMessage('');
             setShowCheckJsonButton(false);
         } else if (
-            scriptResult.trim().startsWith('{') &&
-            scriptResult.trim().endsWith('}')
+            scriptResult.trim().includes('{') &&
+            scriptResult.trim().includes('}')
         ) {
             setShowCheckJsonButton(true);
             setErrorMessage('');
