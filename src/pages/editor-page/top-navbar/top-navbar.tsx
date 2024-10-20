@@ -34,6 +34,7 @@ import { enMetadata } from '@/i18n/locales/en';
 import { esMetadata } from '@/i18n/locales/es';
 import { deMetadata } from '@/i18n/locales/de';
 import { jaMetadata } from '@/i18n/locales/ja';
+import { chMetadata } from '@/i18n/locales/ch';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { frMetadata } from '@/i18n/locales/fr';
 import { hiMetadata } from '@/i18n/locales/hi';
@@ -629,6 +630,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             }
                                         >
                                             {jaMetadata.name}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            onClick={() =>
+                                                changeLanguage(chMetadata.code)
+                                            }
+                                            checked={
+                                                i18n.language ===
+                                                chMetadata.code
+                                            }
+                                        >
+                                            {chMetadata.name}
                                         </MenubarCheckboxItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
