@@ -222,6 +222,8 @@ export const hi: LanguageTranslation = {
                     step_2: 'यदि आप "ग्रिड में परिणाम" का उपयोग कर रहे हैं, तो Non-XML डेटा के लिए अधिकतम वर्ण प्राप्ति (9999999 पर सेट करें)।',
                 },
                 instructions_link: 'मदद चाहिए? देखें कैसे',
+                // TODO: Translate
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'रद्द करें',

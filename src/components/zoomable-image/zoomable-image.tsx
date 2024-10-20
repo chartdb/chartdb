@@ -1,5 +1,5 @@
 import React from 'react';
-import { DialogTrigger } from '../command/dialog';
+import { DialogTrigger } from '@/components/command/dialog';
 import {
     Dialog,
     DialogContent,

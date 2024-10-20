@@ -7,7 +7,7 @@ export interface DBSchema {
 }
 
 export const schemaNameToSchemaId = (schema: string): string =>
-    schema.toLowerCase().split(' ').join('_');
+    schema.trim().toLowerCase().split(' ').join('_');
 
 export const schemaNameToDomainSchemaName = (
     schema: string | null | undefined
@@ -16,7 +16,7 @@ export const schemaNameToDomainSchemaName = (
         ? undefined
         : (schema ?? '').trim() === ''
           ? undefined
-          : schema;
+          : schema?.trim();
 
 export const databasesWithSchemas: DatabaseType[] = [
     DatabaseType.POSTGRESQL,

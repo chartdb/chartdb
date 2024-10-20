@@ -31,10 +31,14 @@ import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';
-import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { Spinner } from '@/components/spinner/spinner';
+import {
+    fixMetadataJson,
+    isStringMetadataJson,
+} from '@/lib/data/import-metadata/utils';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -77,6 +81,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const { isSm: isDesktop } = useBreakpoint('sm');
 
+    const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
+    const [isCheckingJson, setIsCheckingJson] = useState(false);
+
     useEffect(() => {
         const loadScripts = async () => {
             const { importMetadataScripts } = await import(
@@ -90,19 +97,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
             setErrorMessage('');
+            setShowCheckJsonButton(false);
             return;
         }
 
-        try {
-            const parsedResult = JSON.parse(scriptResult);
-
-            if (isDatabaseMetadata(parsedResult)) {
-                setErrorMessage('');
-            } else {
-                setErrorMessage(errorScriptOutputMessage);
-            }
-        } catch (error) {
+        if (isStringMetadataJson(scriptResult)) {
+            setErrorMessage('');
+            setShowCheckJsonButton(false);
+        } else if (
+            scriptResult.trim().includes('{') &&
+            scriptResult.trim().includes('}')
+        ) {
+            setShowCheckJsonButton(true);
+            setErrorMessage('');
+        } else {
             setErrorMessage(errorScriptOutputMessage);
+            setShowCheckJsonButton(false);
         }
     }, [scriptResult]);
 
@@ -119,6 +129,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         },
         [setScriptResult]
     );
+
+    const handleCheckJson = useCallback(async () => {
+        setIsCheckingJson(true);
+
+        const fixedJson = await fixMetadataJson(scriptResult);
+
+        if (isStringMetadataJson(fixedJson)) {
+            setScriptResult(fixedJson);
+            setErrorMessage('');
+        } else {
+            setErrorMessage(errorScriptOutputMessage);
+        }
+
+        setShowCheckJsonButton(false);
+        setIsCheckingJson(false);
+    }, [scriptResult, setScriptResult]);
 
     const renderHeader = useCallback(() => {
         return (
@@ -286,11 +312,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         value={scriptResult}
                         onChange={handleInputChange}
                     />
-                    {errorMessage && (
-                        <p className="mt-2 text-sm text-red-700">
-                            {errorMessage}
-                        </p>
-                    )}
+                    {showCheckJsonButton || errorMessage ? (
+                        <div className="mt-2 flex items-center gap-2">
+                            {showCheckJsonButton ? (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleCheckJson}
+                                    disabled={isCheckingJson}
+                                >
+                                    {isCheckingJson ? (
+                                        <Spinner size="small" />
+                                    ) : (
+                                        t(
+                                            'new_diagram_dialog.import_database.check_script_result'
+                                        )
+                                    )}
+                                </Button>
+                            ) : (
+                                <p className="text-sm text-red-700">
+                                    {errorMessage}
+                                </p>
+                            )}
+                        </div>
+                    ) : null}
                 </div>
             </div>
         );
@@ -305,6 +351,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         databaseClient,
         importMetadataScripts,
         t,
+        showCheckJsonButton,
+        isCheckingJson,
+        handleCheckJson,
     ]);
 
     const renderFooter = useCallback(() => {
@@ -361,6 +410,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 type="button"
                                 variant="default"
                                 disabled={
+                                    showCheckJsonButton ||
                                     scriptResult.trim().length === 0 ||
                                     errorMessage.length > 0
                                 }
@@ -390,6 +440,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         onCreateEmptyDiagram,
         errorMessage.length,
         scriptResult,
+        showCheckJsonButton,
         goBack,
         t,
     ]);

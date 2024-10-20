@@ -212,6 +212,8 @@ export const fr: LanguageTranslation = {
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
                 instructions_link: "Besoin d'aide ? Regardez comment",
+                // TODO: Translate
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'Annuler',
