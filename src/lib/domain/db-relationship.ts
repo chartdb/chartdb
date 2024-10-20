@@ -42,6 +42,15 @@ export const shouldShowRelationshipBySchemaFilter = (
             schemaNameToSchemaId(relationship.targetSchema)
         ));
 
+const determineCardinality = (
+    field: DBField,
+    isTablePKComplex: boolean
+): Cardinality => {
+    return field.unique || (field.primaryKey && !isTablePKComplex)
+        ? 'one'
+        : 'many';
+};
+
 export const createRelationshipsFromMetadata = ({
     foreignKeys,
     tables,
@@ -50,7 +59,7 @@ export const createRelationshipsFromMetadata = ({
     tables: DBTable[];
 }): DBRelationship[] => {
     return foreignKeys
-        .map((fk: ForeignKeyInfo) => {
+        .map((fk: ForeignKeyInfo): DBRelationship | null => {
             const schema = schemaNameToDomainSchemaName(fk.schema);
             const sourceTable = tables.find(
                 (table) => table.name === fk.table && table.schema === schema
@@ -88,10 +97,6 @@ export const createRelationshipsFromMetadata = ({
                     targetField,
                     isTargetTablePKComplex
                 );
-                const type = determineRelationshipType({
-                    sourceCardinality,
-                    targetCardinality,
-                });
 
                 return {
                     id: generateId(),
@@ -102,25 +107,15 @@ export const createRelationshipsFromMetadata = ({
                     targetTableId: targetTable.id,
                     sourceFieldId: sourceField.id,
                     targetFieldId: targetField.id,
-                    type,
                     sourceCardinality,
                     targetCardinality,
                     createdAt: Date.now(),
-                } as DBRelationship;
+                };
             }
 
             return null;
         })
         .filter((rel) => rel !== null) as DBRelationship[];
-};
-
-const determineCardinality = (
-    field: DBField,
-    isTablePKComplex: boolean
-): Cardinality => {
-    return field.unique || (field.primaryKey && !isTablePKComplex)
-        ? 'one'
-        : 'many';
 };
 
 export const determineRelationshipType = ({

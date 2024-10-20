@@ -225,7 +225,7 @@ export const ja: LanguageTranslation = {
                 },
                 // TODO: Translate
                 instructions_link: 'Need help? Watch how',
-                check_json: 'Check JSON',
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'キャンセル',

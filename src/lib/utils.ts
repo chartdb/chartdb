@@ -84,3 +84,7 @@ export const decodeBase64ToUtf8 = (base64: string) => {
     const decoder = new TextDecoder('utf-8');
     return decoder.decode(bytes);
 };
+
+export const waitFor = async (ms: number): Promise<void> => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};

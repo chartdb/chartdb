@@ -213,7 +213,7 @@ export const fr: LanguageTranslation = {
                 },
                 instructions_link: "Besoin d'aide ? Regardez comment",
                 // TODO: Translate
-                check_json: 'Check JSON',
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'Annuler',

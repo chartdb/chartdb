@@ -223,7 +223,7 @@ export const hi: LanguageTranslation = {
                 },
                 instructions_link: 'मदद चाहिए? देखें कैसे',
                 // TODO: Translate
-                check_json: 'Check JSON',
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'रद्द करें',
