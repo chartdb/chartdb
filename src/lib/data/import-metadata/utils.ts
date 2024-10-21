@@ -7,9 +7,14 @@ export const fixMetadataJson = async (
     await waitFor(1000);
     return metadataJson
         .trim()
+        .replace(/^[^{]*/, '') // Remove everything before the first '{'
+        .replace(/}[^}]*$/, '}') // Remove everything after the last '}'
         .replace(/^\s+|\s+$/g, '')
         .replace(/^"|"$/g, '')
-        .replace(/""/g, '"')
+        .replace(/^'|'$/g, '')
+        .replace(/(?<=:\s*)""(?=\s*[,}])/g, '___EMPTY___') // Temporarily replace empty strings
+        .replace(/""/g, '"') // Replace remaining double quotes
+        .replace(/___EMPTY___/g, '""') // Restore empty strings
         .replace(/\n/g, '');
 };
 
