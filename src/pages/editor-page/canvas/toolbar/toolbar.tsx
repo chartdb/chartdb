@@ -16,9 +16,11 @@ import { Button } from '@/components/button/button';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
-export interface ToolbarProps {}
+export interface ToolbarProps {
+    readonly?: boolean;
+}
 
-export const Toolbar: React.FC<ToolbarProps> = () => {
+export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { updateDiagramUpdatedAt } = useChartDB();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -59,17 +61,25 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
         <div className="px-1">
             <Card className="h-[44px] bg-secondary p-0 shadow-none">
                 <CardContent className="flex h-full flex-row items-center p-1">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span>
-                                <ToolbarButton onClick={updateDiagramUpdatedAt}>
-                                    <Save />
-                                </ToolbarButton>
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent>{t('toolbar.save')}</TooltipContent>
-                    </Tooltip>
-                    <Separator orientation="vertical" />
+                    {!readonly ? (
+                        <>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        <ToolbarButton
+                                            onClick={updateDiagramUpdatedAt}
+                                        >
+                                            <Save />
+                                        </ToolbarButton>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('toolbar.save')}
+                                </TooltipContent>
+                            </Tooltip>
+                            <Separator orientation="vertical" />
+                        </>
+                    ) : null}
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

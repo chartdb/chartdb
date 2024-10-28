@@ -72,6 +72,7 @@ export interface ChartDBContext {
     dependencies: DBDependency[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
+    readonly?: boolean;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
