@@ -10,6 +10,7 @@ import { KeyRound, Trash2 } from 'lucide-react';
 
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { cn } from '@/lib/utils';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -26,7 +27,7 @@ export interface TableNodeFieldProps {
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
-        const { removeField, relationships } = useChartDB();
+        const { removeField, relationships, readonly } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
         const isTarget = useMemo(
@@ -70,22 +71,22 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         : 'z-0 max-h-0 overflow-hidden opacity-0'
                 }`}
             >
-                {isConnectable && (
+                {isConnectable ? (
                     <>
                         <Handle
                             id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
-                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly ? '!invisible' : ''}`}
                             position={Position.Right}
                             type="source"
                         />
                         <Handle
                             id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
-                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly ? '!invisible' : ''}`}
                             position={Position.Left}
                             type="source"
                         />
                     </>
-                )}
+                ) : null}
                 {(!connection.inProgress || isTarget) && isConnectable && (
                     <>
                         {Array.from(
@@ -115,26 +116,38 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 <div className="block truncate text-left">{field.name}</div>
                 <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
                     {field.primaryKey ? (
-                        <div className="text-muted-foreground group-hover:hidden">
+                        <div
+                            className={cn(
+                                'text-muted-foreground',
+                                !readonly ? 'group-hover:hidden' : ''
+                            )}
+                        >
                             <KeyRound size={14} />
                         </div>
                     ) : null}
 
-                    <div className="content-center truncate text-right text-xs text-muted-foreground group-hover:hidden">
+                    <div
+                        className={cn(
+                            'content-center truncate text-right text-xs text-muted-foreground',
+                            !readonly ? 'group-hover:hidden' : ''
+                        )}
+                    >
                         {field.type.name}
                     </div>
-                    <div className="hidden flex-row group-hover:flex">
-                        <Button
-                            variant="ghost"
-                            className="size-6 p-0 hover:bg-primary-foreground"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                removeField(tableNodeId, field.id);
-                            }}
-                        >
-                            <Trash2 className="size-3.5 text-red-700" />
-                        </Button>
-                    </div>
+                    {readonly ? null : (
+                        <div className="hidden flex-row group-hover:flex">
+                            <Button
+                                variant="ghost"
+                                className="size-6 p-0 hover:bg-primary-foreground"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeField(tableNodeId, field.id);
+                                }}
+                            >
+                                <Trash2 className="size-3.5 text-red-700" />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         );
