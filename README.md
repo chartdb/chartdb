@@ -10,7 +10,7 @@
 
 <p align="center">
   <b>Open-source database diagrams editor</b> <br />
-  <b>No installations • No Database password required.</b> <br />
+  <b>No installations • No database password required.</b> <br />
 </p>
 
 <h3 align="center">
@@ -48,8 +48,8 @@ Instantly visualize your database schema with a single **"Smart Query."** Custom
 
 **What it does**:
 
--   **Instant Schema Import**
-    Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
+-   **Instant Schema Import:**
+    Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema for documentation, team discussions, or simply to better understand your data.
 
 -   **AI-Powered Export for Easy Migration**
     Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
@@ -110,7 +110,7 @@ Open your browser and navigate to `http://localhost:8080`.
 3. Choose the database that you are using.
 4. Take the magic query and run it in your database.
 5. Copy and paste the resulting JSON set into ChartDB.
-6. Enjoy Viewing & Editing!
+6. Enjoy viewing & editing!
 
 ## 💚 Community & Support
 
@@ -121,7 +121,7 @@ Open your browser and navigate to `http://localhost:8080`.
 ## Contributing
 
 We welcome community contributions, big or small, and are here to guide you along
-the way. Message us in the [ChartDB Community Discord](https://discord.gg/QeFwyWSKwC).
+the way. You can message us on the [ChartDB Community Discord](https://discord.gg/QeFwyWSKwC).
 
 For more information on how to contribute, please see our
 [Contributing Guide](/CONTRIBUTING.md).
