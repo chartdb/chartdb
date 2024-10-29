@@ -23,11 +23,17 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import { storageInitialValue } from '../storage-context/storage-context';
 
-export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
-    const db = useStorage();
+export interface ChartDBProviderProps {
+    diagram?: Diagram;
+    readonly?: boolean;
+    skipTitleUpdate?: boolean;
+}
+export const ChartDBProvider: React.FC<
+    React.PropsWithChildren<ChartDBProviderProps>
+> = ({ children, diagram, readonly, skipTitleUpdate }) => {
+    let db = useStorage();
     const events = useEventEmitter<ChartDBEvent>();
     const navigate = useNavigate();
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
@@ -44,20 +50,32 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [databaseEdition, setDatabaseEdition] = useState<
         DatabaseEdition | undefined
     >();
-    const [tables, setTables] = useState<DBTable[]>([]);
-    const [relationships, setRelationships] = useState<DBRelationship[]>([]);
-    const [dependencies, setDependencies] = useState<DBDependency[]>([]);
+    const [tables, setTables] = useState<DBTable[]>(diagram?.tables ?? []);
+    const [relationships, setRelationships] = useState<DBRelationship[]>(
+        diagram?.relationships ?? []
+    );
+    const [dependencies, setDependencies] = useState<DBDependency[]>(
+        diagram?.dependencies ?? []
+    );
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
+    if (readonly) {
+        db = storageInitialValue;
+    }
+
     useEffect(() => {
+        if (skipTitleUpdate) {
+            return;
+        }
+
         if (diagramName) {
             document.title = `ChartDB - ${diagramName} Diagram | Visualize Database Schemas`;
         } else {
             document.title =
                 'ChartDB - Create & Visualize Database Schema Diagrams';
         }
-    }, [diagramName]);
+    }, [diagramName, skipTitleUpdate]);
 
     const schemas = useMemo(
         () =>
@@ -1407,6 +1425,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 schemas,
                 filteredSchemas,
                 events,
+                readonly,
                 filterSchemas,
                 updateDiagramId,
                 updateDiagramName,

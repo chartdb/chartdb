@@ -44,7 +44,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         id,
         data: { table, isOverlapping, highlightOverlappingTables },
     }) => {
-        const { updateTable, relationships } = useChartDB();
+        const { updateTable, relationships, readonly } = useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
         const [expanded, setExpanded] = useState(false);
@@ -173,13 +173,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             </Label>
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                onClick={openTableInEditor}
-                            >
-                                <Pencil className="size-4" />
-                            </Button>
+                            {readonly ? null : (
+                                <Button
+                                    variant="ghost"
+                                    className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                    onClick={openTableInEditor}
+                                >
+                                    <Pencil className="size-4" />
+                                </Button>
+                            )}
                             <Button
                                 variant="ghost"
                                 className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"

@@ -27,6 +27,53 @@ const routes: RouteObject[] = [
         },
     },
     {
+        id: 'templates',
+        path: 'templates',
+        async lazy() {
+            const { TemplatesPage } = await import(
+                './pages/templates-page/templates-page'
+            );
+            return {
+                element: <TemplatesPage />,
+            };
+        },
+    },
+    {
+        id: 'templates_featured',
+        path: 'templates/featured',
+        async lazy() {
+            const { TemplatesPage } = await import(
+                './pages/templates-page/templates-page'
+            );
+            return {
+                element: <TemplatesPage />,
+            };
+        },
+    },
+    {
+        id: 'templates_tags',
+        path: 'templates/tags/:tag',
+        async lazy() {
+            const { TemplatesPage } = await import(
+                './pages/templates-page/templates-page'
+            );
+            return {
+                element: <TemplatesPage />,
+            };
+        },
+    },
+    {
+        path: 'templates/:templateSlug',
+        async lazy() {
+            const { TemplatePage } = await import(
+                './pages/template-page/template-page'
+            );
+            return {
+                element: <TemplatePage />,
+            };
+        },
+    },
+    {
         path: '*',
         async lazy() {
             const { NotFoundPage } = await import(
