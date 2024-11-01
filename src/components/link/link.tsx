@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 export const Link = React.forwardRef<
@@ -6,7 +7,7 @@ export const Link = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
     <a
         ref={ref}
-        className={`text-pink-600 hover:underline ${className}`}
+        className={cn('text-pink-600 hover:underline', className)}
         {...props}
     >
         {children}

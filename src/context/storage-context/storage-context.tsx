@@ -88,7 +88,7 @@ export interface StorageContext {
     deleteDiagramDependencies: (diagramId: string) => Promise<void>;
 }
 
-export const storageContext = createContext<StorageContext>({
+export const storageInitialValue: StorageContext = {
     getConfig: emptyFn,
     updateConfig: emptyFn,
 
@@ -119,4 +119,7 @@ export const storageContext = createContext<StorageContext>({
     deleteDependency: emptyFn,
     listDependencies: emptyFn,
     deleteDiagramDependencies: emptyFn,
-});
+};
+
+export const storageContext =
+    createContext<StorageContext>(storageInitialValue);
