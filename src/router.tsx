@@ -1,6 +1,7 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
+import type { TemplatePageLoaderData } from './pages/template-page/template-page';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -63,6 +64,7 @@ const routes: RouteObject[] = [
         },
     },
     {
+        id: 'templates_templateSlug',
         path: 'templates/:templateSlug',
         async lazy() {
             const { TemplatePage } = await import(
@@ -70,6 +72,16 @@ const routes: RouteObject[] = [
             );
             return {
                 element: <TemplatePage />,
+            };
+        },
+        loader: async ({ params }): Promise<TemplatePageLoaderData> => {
+            const { templates } = await import(
+                './templates-data/templates-data'
+            );
+            return {
+                template: templates.find(
+                    (template) => template.slug === params.templateSlug
+                ),
             };
         },
     },

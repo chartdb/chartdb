@@ -54,6 +54,7 @@
     "node-sql-parser": "^5.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
     "react-hotkeys-hook": "^4.5.0",
     "react-i18next": "^15.0.1",
     "react-resizable-panels": "^2.0.22",
