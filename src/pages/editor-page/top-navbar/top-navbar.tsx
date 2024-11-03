@@ -39,6 +39,7 @@ import { frMetadata } from '@/i18n/locales/fr';
 import { hiMetadata } from '@/i18n/locales/hi';
 import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
+import { pt_BRMetadata } from '@/i18n/locales/pt_BR';
 
 export interface TopNavbarProps {}
 
@@ -629,6 +630,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             }
                                         >
                                             {jaMetadata.name}
+                                        </MenubarCheckboxItem>
+                                        <MenubarCheckboxItem
+                                            onClick={() =>
+                                                changeLanguage(
+                                                    pt_BRMetadata.code
+                                                )
+                                            }
+                                            checked={
+                                                i18n.language ===
+                                                pt_BRMetadata.code
+                                            }
+                                        >
+                                            {pt_BRMetadata.name}
                                         </MenubarCheckboxItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
