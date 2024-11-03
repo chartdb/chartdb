@@ -3,7 +3,6 @@ import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
-import { StorageProvider } from '@/context/storage-context/storage-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { Button } from '@/components/button/button';
 import { CloudDownload } from 'lucide-react';
@@ -31,17 +30,14 @@ import { Badge } from '@/components/badge/badge';
 import { Canvas } from '../editor-page/canvas/canvas';
 import { ReactFlowProvider } from '@xyflow/react';
 import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
-import { convertTemplateToNewDiagram } from '@/templates-data/template-utils';
-import { useStorage } from '@/hooks/use-storage';
-import type { Diagram } from '@/lib/domain/diagram';
 import { Helmet } from 'react-helmet-async';
+import { APP_URL } from '@/lib/env';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
 }
 
 const TemplatePageComponent: React.FC = () => {
-    const { addDiagram } = useStorage();
     const { templateSlug } = useParams<{ templateSlug: string }>();
     const navigate = useNavigate();
     const data = useLoaderData() as TemplatePageLoaderData;
@@ -57,22 +53,12 @@ const TemplatePageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
 
     const cloneTemplate = useCallback(async () => {
-        if (!template) {
-            return;
+        if (APP_URL) {
+            window.location.href = `${APP_URL}/templates/clone/${templateSlug}`;
+        } else {
+            navigate(`/templates/clone/${templateSlug}`);
         }
-
-        const diagram = convertTemplateToNewDiagram(template);
-
-        const now = new Date();
-        const diagramToAdd: Diagram = {
-            ...diagram,
-            createdAt: now,
-            updatedAt: now,
-        };
-
-        await addDiagram({ diagram: diagramToAdd });
-        navigate(`/diagrams/${diagramToAdd.id}`);
-    }, [addDiagram, navigate, template]);
+    }, [navigate, templateSlug]);
 
     return (
         <>
@@ -242,12 +228,10 @@ const TemplatePageComponent: React.FC = () => {
 
 export const TemplatePage: React.FC = () => (
     <LocalConfigProvider>
-        <StorageProvider>
-            <ThemeProvider>
-                <ReactFlowProvider>
-                    <TemplatePageComponent />
-                </ReactFlowProvider>
-            </ThemeProvider>
-        </StorageProvider>
+        <ThemeProvider>
+            <ReactFlowProvider>
+                <TemplatePageComponent />
+            </ReactFlowProvider>
+        </ThemeProvider>
     </LocalConfigProvider>
 );

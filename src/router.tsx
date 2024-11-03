@@ -86,6 +86,28 @@ const routes: RouteObject[] = [
         },
     },
     {
+        id: 'templates_load',
+        path: 'templates/clone/:templateSlug',
+        async lazy() {
+            const { CloneTemplatePage } = await import(
+                './pages/clone-template-page/clone-template-page'
+            );
+            return {
+                element: <CloneTemplatePage />,
+            };
+        },
+        loader: async ({ params }) => {
+            const { templates } = await import(
+                './templates-data/templates-data'
+            );
+            return {
+                template: templates.find(
+                    (template) => template.slug === params.templateSlug
+                ),
+            };
+        },
+    },
+    {
         path: '*',
         async lazy() {
             const { NotFoundPage } = await import(
