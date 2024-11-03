@@ -34,7 +34,7 @@ import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
 import { convertTemplateToNewDiagram } from '@/templates-data/template-utils';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/helmet/helmet-wrapper';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
