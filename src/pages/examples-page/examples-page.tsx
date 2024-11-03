@@ -7,7 +7,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { StorageProvider } from '@/context/storage-context/storage-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
-import { Helmet } from '@/helmet/helmet-wrapper';
+import { Helmet } from 'react-helmet-async';
 
 const ExamplesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();

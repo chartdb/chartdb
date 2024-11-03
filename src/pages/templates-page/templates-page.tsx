@@ -11,7 +11,7 @@ import { useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
 import { removeDups } from '@/lib/utils';
-import { Helmet } from '@/helmet/helmet-wrapper';
+import { Helmet } from 'react-helmet-async';
 
 const TemplatesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
