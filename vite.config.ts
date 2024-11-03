@@ -30,4 +30,21 @@ export default defineConfig({
             '@': path.resolve(__dirname, './src'),
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    if (
+                        assetInfo.names &&
+                        assetInfo.originalFileNames.some((name) =>
+                            name.startsWith('src/assets/templates/')
+                        )
+                    ) {
+                        return 'assets/[name][extname]';
+                    }
+                    return 'assets/[name]-[hash][extname]';
+                },
+            },
+        },
+    },
 });
