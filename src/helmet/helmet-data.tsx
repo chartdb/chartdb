@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from './helmet-wrapper';
 
 export const HelmetData: React.FC = () => (
     <Helmet>
