@@ -133,7 +133,7 @@ const TemplatesPageComponent: React.FC = () => {
                             <div className="grid flex-1 grid-flow-row grid-cols-1 gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
                                 {templates.map((template) => (
                                     <TemplateCard
-                                        key={`${template.id}`}
+                                        key={`${template.slug}`}
                                         template={template}
                                     />
                                 ))}
