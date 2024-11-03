@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, filteredSchemas, schemas } = useChartDB();
+    const { createTable, filteredSchemas, schemas, readonly } = useChartDB();
     const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
 
-    if (!isDesktop) {
+    if (!isDesktop || readonly) {
         return <>{children}</>;
     }
 
