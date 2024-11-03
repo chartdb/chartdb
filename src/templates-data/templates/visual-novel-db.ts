@@ -1,36 +1,37 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Template } from '../templates-data';
-import image from '@/assets/templates/employeedb.png';
-import imageDark from '@/assets/templates/employeedb-dark.png';
+import image from '@/assets/templates/visual-novel-db.png';
+import imageDark from '@/assets/templates/visual-novel-db-dark.png';
 
-export const employeeDb: Template = {
-    slug: 'employees-db',
-    name: 'Employees schema',
-    shortDescription: 'Employees, departments, and salaries',
-    description:
-        'A schema for database of employees, departments, and salaries.',
+export const visualNovelDb: Template = {
+    slug: 'visual-novel-db',
+    name: 'The Visual Novel Database | vndb',
+    shortDescription: 'The Visual Novel Database | vndb',
+    description: 'A comprehensive database for information about visual novels',
     image,
     imageDark,
-    tags: ['mysql'],
+    tags: ['postgres'],
     keywords: [
-        'Employees database schema',
-        'Employees database template',
+        'VNDB',
+        'visual novel database schema',
+        'visual novel database template',
         'database schema visualization',
-        'Employees database design',
+        'visual novel database design',
         'ChartDB',
-        'Employees schema diagram',
+        'VNDB schema diagram',
         'relational database structure',
-        'Employees development',
-        'Employees tables',
-        'database template for Employees',
+        'VNDB development',
+        'VNDB tables',
+        'database template for VNDB',
     ],
     featured: true,
+    url: 'https://vndb.org',
     diagram: {
-        id: 'diagramexample01',
-        name: 'employees-db',
+        id: 'visual_novel_db',
+        name: 'visual-novel-db',
         createdAt: new Date(),
         updatedAt: new Date(),
-        databaseType: DatabaseType.MYSQL,
+        databaseType: DatabaseType.POSTGRESQL,
         tables: [
             {
                 id: '6e70s6dhdfnve9xljbih6bo7x',

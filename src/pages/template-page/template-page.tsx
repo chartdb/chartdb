@@ -195,7 +195,7 @@ const TemplatePageComponent: React.FC = () => {
                                         {template.tags.map((tag) => (
                                             <Badge
                                                 variant="outline"
-                                                key={`${template.id}_${tag}`}
+                                                key={`${template.slug}_${tag}`}
                                             >
                                                 {tag}
                                             </Badge>

@@ -71,7 +71,10 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
                 </div>
                 <div className="flex flex-wrap gap-1 p-2">
                     {template.tags.map((tag) => (
-                        <Badge variant="outline" key={`${template.id}_${tag}`}>
+                        <Badge
+                            variant="outline"
+                            key={`${template.slug}_${tag}`}
+                        >
                             {tag}
                         </Badge>
                     ))}
