@@ -31,7 +31,7 @@ import { Canvas } from '../editor-page/canvas/canvas';
 import { ReactFlowProvider } from '@xyflow/react';
 import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
 import { Helmet } from 'react-helmet-async';
-import { APP_URL } from '@/lib/env';
+import { APP_URL, HOST_URL } from '@/lib/env';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
@@ -63,11 +63,58 @@ const TemplatePageComponent: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>
-                    {template
-                        ? `ChartDB - ${template.name} - ${template.shortDescription}`
-                        : 'ChartDB - Database Schema Template'}
-                </title>
+                {template ? (
+                    <>
+                        <title>
+                            Database schema diagram for {template.name} |
+                            ChartDB
+                        </title>
+                        <meta
+                            name="title"
+                            content={`Database schema for - ${template.name} | ChartDB`}
+                        />
+                        <meta
+                            name="description"
+                            content={`${template.shortDescription}: ${template.description}`}
+                        />
+                        <meta
+                            name="keywords"
+                            content={`${template.keywords.join(', ')}`}
+                        />
+                        <meta
+                            property="og:title"
+                            content={`Database schema for - ${template.name} | ChartDB`}
+                        />
+                        <meta
+                            property="og:description"
+                            content={`${template.shortDescription}: ${template.description}`}
+                        />
+                        <meta
+                            property="og:image"
+                            content={`${HOST_URL}${template.image}`}
+                        />
+                        <meta property="og:type" content="website" />
+
+                        <meta
+                            name="twitter:title"
+                            content={`Database schema for - ${template.name} | ChartDB`}
+                        />
+                        <meta
+                            name="twitter:description"
+                            content={`${template.shortDescription}: ${template.description}`}
+                        />
+                        <meta
+                            name="twitter:image"
+                            content={`${HOST_URL}${template.image}`}
+                        />
+                        <meta
+                            name="twitter:card"
+                            content="summary_large_image"
+                        />
+                    </>
+                ) : (
+                    <title>Database Schema Diagram | ChartDB</title>
+                )}
             </Helmet>
 
             <section className="flex h-screen w-screen flex-col bg-background">
