@@ -86,6 +86,10 @@ const TemplatePageComponent: React.FC = () => {
                             content={`Database schema for - ${template.name} | ChartDB`}
                         />
                         <meta
+                            property="og:url"
+                            content={`${HOST_URL}/templates/${templateSlug}`}
+                        />
+                        <meta
                             property="og:description"
                             content={`${template.shortDescription}: ${template.description}`}
                         />
