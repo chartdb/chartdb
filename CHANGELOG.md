@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/guyb1/chartdb/compare/v1.0.0...v1.1.0) (2024-11-04)
+
+
+### Features
+
+* test ([a0a95db](https://github.com/guyb1/chartdb/commit/a0a95db3dbe47604ca5e87428e96c3fc541a3ac6))
+* test21 ([3df97e4](https://github.com/guyb1/chartdb/commit/3df97e46b6e750e15690826651ac153a7cdab0ff))
+
 ## 1.0.0 (2024-11-04)
 
 
