@@ -1,7 +1,7 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Template } from '../templates-data';
-import image from '@/assets/templates/mysql/wordpress-db.png';
-import imageDark from '@/assets/templates/mysql/wordpress-db-dark.png';
+import image from '@/assets/templates/wordpress-db.png';
+import imageDark from '@/assets/templates/wordpress-db-dark.png';
 
 export const wordpressDb: Template = {
     slug: 'wordpress-db',
