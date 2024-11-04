@@ -25,7 +25,7 @@ export const airbnbDb: Template = {
     ],
     featured: true,
     diagram: {
-        id: 'diagramexample05',
+        id: 'airbnb_db',
         name: 'airbnb-db',
         createdAt: new Date(),
         updatedAt: new Date(),

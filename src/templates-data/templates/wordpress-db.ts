@@ -27,7 +27,7 @@ export const wordpressDb: Template = {
     featured: true,
     url: 'https://wordpress.org',
     diagram: {
-        id: 'diagramexample13',
+        id: 'wordpress_db',
         name: 'wordpress-db',
         createdAt: new Date(),
         updatedAt: new Date(),
