@@ -7,6 +7,7 @@ import { de } from './locales/de';
 import { hi } from './locales/hi';
 import { ja } from './locales/ja';
 import { pt_BR } from './locales/pt_BR';
+import { tr } from './locales/tr';
 
 const resources = {
     en,
@@ -16,6 +17,7 @@ const resources = {
     hi,
     ja,
     pt_BR,
+    tr,
 };
 
 i18n.use(initReactI18next).init({
