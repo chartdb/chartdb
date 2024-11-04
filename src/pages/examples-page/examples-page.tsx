@@ -49,6 +49,9 @@ const ExamplesPageComponent: React.FC = () => {
                         A collection of examples to help you get started with
                         ChartDB.
                     </h2>
+                    <h2 className="mt-1 text-base font-semibold">
+                        Click on one 😀
+                    </h2>
                     <div className="mt-6 grid grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {examples.map((example) => (
                             <ExampleCard key={example.id} example={example} />
