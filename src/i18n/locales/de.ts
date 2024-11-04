@@ -29,9 +29,8 @@ export const de: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
                 change_language: 'Sprache',
-                // TODO: Translate
-                show_dependencies: 'Show Dependencies',
-                hide_dependencies: 'Hide Dependencies',
+                show_dependencies: 'Abhängigkeiten anzeigen',
+                hide_dependencies: 'Abhängigkeiten ausblenden',
             },
             help: {
                 help: 'Hilfe',
@@ -94,9 +93,8 @@ export const de: LanguageTranslation = {
         clear: 'Leeren',
         show_more: 'Mehr anzeigen',
         show_less: 'Weniger anzeigen',
-        // TODO: Translate
-        copy_to_clipboard: 'Copy to Clipboard',
-        copied: 'Copied!',
+        copy_to_clipboard: 'In die Zwischenablage kopieren',
+        copied: 'Kopiert!',
 
         side_panel: {
             schema: 'Schema:',
@@ -170,23 +168,22 @@ export const de: LanguageTranslation = {
                         'Erstellen Sie eine Beziehung, um Tabellen zu verbinden',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
-                dependencies: 'Dependencies',
+                dependencies: 'Abhängigkeiten',
                 filter: 'Filter',
-                collapse: 'Collapse All',
+                collapse: 'Alle einklappen',
                 dependency: {
-                    table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    table: 'Tabelle',
+                    dependent_table: 'Abhängige Ansicht',
+                    delete_dependency: 'Löschen',
                     dependency_actions: {
-                        title: 'Actions',
-                        delete_dependency: 'Delete',
+                        title: 'Aktionen',
+                        delete_dependency: 'Löschen',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'Keine Abhängigkeiten',
+                    description: 'Erstellen Sie eine Ansicht, um zu beginnen',
                 },
             },
         },
@@ -199,8 +196,7 @@ export const de: LanguageTranslation = {
             undo: 'Rückgängig',
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
-            // TODO: Translate
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
         },
 
         new_diagram_dialog: {
@@ -224,9 +220,8 @@ export const de: LanguageTranslation = {
                     step_1: 'Gehen Sie zu Tools > Optionen > Abfrageergebnisse > SQL Server.',
                     step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die maximale Zeichenanzahl für Nicht-XML-Daten (auf 9999999 setzen).',
                 },
-                // TODO: Translate
-                instructions_link: 'Need help? Watch how',
-                check_script_result: 'Check Script Result',
+                instructions_link: 'Brauchen Sie Hilfe? So geht’s',
+                check_script_result: 'Skriptergebnis überprüfen',
             },
 
             cancel: 'Abbrechen',
@@ -301,16 +296,15 @@ export const de: LanguageTranslation = {
             },
         },
 
-        // TODO: Translate
         export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
+            title: 'Bild exportieren',
+            description: 'Wählen Sie den Skalierungsfaktor für den Export:',
+            scale_1x: '1x Normal',
+            scale_2x: '2x (Empfohlen)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Abbrechen',
+            export: 'Exportieren',
         },
 
         new_table_schema_dialog: {
