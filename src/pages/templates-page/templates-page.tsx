@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
@@ -7,49 +7,27 @@ import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { Component, Star } from 'lucide-react';
 import { ListMenu } from '@/components/list-menu/list-menu';
 import { TemplateCard } from './template-card/template-card';
-import { useMatches, useParams } from 'react-router-dom';
+import { useLoaderData, useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
-import { removeDups } from '@/lib/utils';
 import { Helmet } from 'react-helmet-async';
+
+export interface TemplatesPageLoaderData {
+    templates: Template[] | undefined;
+    allTags: string[] | undefined;
+}
 
 const TemplatesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
+    const data = useLoaderData() as TemplatesPageLoaderData;
+
+    const { templates, allTags } = data ?? {};
     const { tag } = useParams<{ tag: string }>();
     const matches = useMatches();
-    const [templates, setTemplates] = React.useState<Template[]>();
-    const [tags, setTags] = React.useState<string[]>();
-
     const isFeatured = matches.some(
         (match) => match.id === 'templates_featured'
     );
     const isAllTemplates = matches.some((match) => match.id === 'templates');
-    const isTags = matches.some((match) => match.id === 'templates_tags');
-
-    useEffect(() => {
-        const loadTemplates = async () => {
-            const { templates: loadedTemplates } = await import(
-                '@/templates-data/templates-data'
-            );
-
-            let templatesToLoad = loadedTemplates;
-
-            if (isFeatured) {
-                templatesToLoad = loadedTemplates.filter((t) => t.featured);
-            }
-
-            if (isTags && tag) {
-                templatesToLoad = loadedTemplates.filter((t) =>
-                    t.tags.includes(tag)
-                );
-            }
-
-            setTemplates(templatesToLoad);
-            setTags(removeDups(loadedTemplates?.flatMap((t) => t.tags) ?? []));
-        };
-
-        loadTemplates();
-    }, [isFeatured, isTags, tag]);
 
     return (
         <>
@@ -125,10 +103,10 @@ const TemplatesPageComponent: React.FC = () => {
                                 <h4 className="mt-4 text-left text-sm font-semibold">
                                     Tags
                                 </h4>
-                                {tags ? (
+                                {allTags ? (
                                     <ListMenu
                                         className="mt-1 w-44 shrink-0"
-                                        items={tags.map((currentTag) => ({
+                                        items={allTags.map((currentTag) => ({
                                             title: currentTag,
                                             href: `/templates/tags/${currentTag}`,
                                             selected: tag === currentTag,
