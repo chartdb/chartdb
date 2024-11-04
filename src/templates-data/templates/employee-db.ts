@@ -5,7 +5,7 @@ import imageDark from '@/assets/templates/employeedb-dark.png';
 
 export const employeeDb: Template = {
     slug: 'employees-db',
-    name: 'Employees schema',
+    name: 'Employees',
     shortDescription: 'Employees, departments, and salaries',
     description:
         'A schema for database of employees, departments, and salaries.',
@@ -15,14 +15,7 @@ export const employeeDb: Template = {
     keywords: [
         'Employees database schema',
         'Employees database template',
-        'database schema visualization',
-        'Employees database design',
-        'ChartDB',
-        'Employees schema diagram',
-        'relational database structure',
-        'Employees development',
-        'Employees tables',
-        'database template for Employees',
+        'Employees sample database schema visualization',
     ],
     featured: true,
     diagram: {
