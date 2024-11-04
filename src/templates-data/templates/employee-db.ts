@@ -26,7 +26,7 @@ export const employeeDb: Template = {
     ],
     featured: true,
     diagram: {
-        id: 'diagramexample01',
+        id: 'employees_db',
         name: 'employees-db',
         createdAt: new Date(),
         updatedAt: new Date(),

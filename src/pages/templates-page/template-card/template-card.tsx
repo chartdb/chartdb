@@ -26,7 +26,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
                     className="h-2 rounded-t-[6px]"
                     style={{ backgroundColor: randomColor() }}
                 ></div>
-                <div className="grow overflow-hidden p-1">
+                <div className="overflow-hidden p-1">
                     <img
                         src={
                             effectiveTheme === 'dark'
