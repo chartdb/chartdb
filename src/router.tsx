@@ -2,6 +2,8 @@ import React from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
 import type { TemplatePageLoaderData } from './pages/template-page/template-page';
+import type { TemplatesPageLoaderData } from './pages/templates-page/templates-page';
+import { getTemplatesAndAllTags } from './templates-data/template-utils';
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -38,6 +40,15 @@ const routes: RouteObject[] = [
                 element: <TemplatesPage />,
             };
         },
+
+        loader: async (): Promise<TemplatesPageLoaderData> => {
+            const { tags, templates } = await getTemplatesAndAllTags();
+
+            return {
+                allTags: tags,
+                templates,
+            };
+        },
     },
     {
         id: 'templates_featured',
@@ -50,6 +61,16 @@ const routes: RouteObject[] = [
                 element: <TemplatesPage />,
             };
         },
+        loader: async (): Promise<TemplatesPageLoaderData> => {
+            const { tags, templates } = await getTemplatesAndAllTags({
+                featured: true,
+            });
+
+            return {
+                allTags: tags,
+                templates,
+            };
+        },
     },
     {
         id: 'templates_tags',
@@ -60,6 +81,16 @@ const routes: RouteObject[] = [
             );
             return {
                 element: <TemplatesPage />,
+            };
+        },
+        loader: async ({ params }): Promise<TemplatesPageLoaderData> => {
+            const { tags, templates } = await getTemplatesAndAllTags({
+                tag: params.tag,
+            });
+
+            return {
+                allTags: tags,
+                templates,
             };
         },
     },

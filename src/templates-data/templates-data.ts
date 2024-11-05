@@ -1,6 +1,8 @@
 import type { Diagram } from '@/lib/domain/diagram';
 import { employeeDb } from './templates/employee-db';
 import { visualNovelDb } from './templates/visual-novel-db';
+import { airbnbDb } from './templates/airbnb-db';
+import { wordpressDb } from './templates/wordpress-db';
 
 export interface Template {
     slug: string;
@@ -16,4 +18,9 @@ export interface Template {
     url?: string;
 }
 
-export const templates: Template[] = [employeeDb, visualNovelDb];
+export const templates: Template[] = [
+    employeeDb,
+    visualNovelDb,
+    airbnbDb,
+    wordpressDb,
+];

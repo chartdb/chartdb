@@ -1,6 +1,6 @@
 import type { Diagram } from '@/lib/domain/diagram';
 import type { Template } from './templates-data';
-import { generateId } from '@/lib/utils';
+import { generateId, removeDups } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
@@ -86,4 +86,31 @@ export const convertTemplateToNewDiagram = (template: Template): Diagram => {
         relationships,
         tables,
     };
+};
+
+export const getTemplatesAndAllTags = async ({
+    featured,
+    tag,
+}: {
+    featured?: boolean;
+    tag?: string;
+} = {}): Promise<{ templates: Template[]; tags: string[] }> => {
+    const { templates } = await import('@/templates-data/templates-data');
+    const allTags = removeDups(templates?.flatMap((t) => t.tags) ?? []);
+
+    if (featured) {
+        return {
+            templates: templates.filter((t) => t.featured),
+            tags: allTags,
+        };
+    }
+
+    if (tag) {
+        return {
+            templates: templates.filter((t) => t.tags.includes(tag)),
+            tags: allTags,
+        };
+    }
+
+    return { templates, tags: allTags };
 };
