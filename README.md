@@ -15,8 +15,8 @@
 
 <h3 align="center">
   <a href="https://discord.gg/QeFwyWSKwC">Community</a>  &bull;
-  <a href="https://www.chartdb.io">Website</a>  &bull;
-  <a href="https://app.chartdb.io/examples">Demo</a>
+  <a href="https://www.chartdb.io?ref=github_readme">Website</a>  &bull;
+  <a href="https://app.chartdb.io?ref=github_readme">Demo</a>
 </h3>
 
 <h4 align="center">
@@ -71,7 +71,7 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 
 ## Getting Started
 
-Use the [cloud version](https://app.chartdb.io/) or deploy locally:
+Use the [cloud version](https://app.chartdb.io?ref=github_readme_2) or deploy locally:
 
 ### How To Use
 
@@ -105,7 +105,7 @@ Open your browser and navigate to `http://localhost:8080`.
 
 ## Try it on our website
 
-1. Go to [ChartDB.io](https://chartdb.io)
+1. Go to [ChartDB.io](https://chartdb.io?ref=github_readme_2)
 2. Click "Go to app"
 3. Choose the database that you are using.
 4. Take the magic query and run it in your database.
