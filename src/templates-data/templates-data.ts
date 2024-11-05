@@ -3,6 +3,7 @@ import { employeeDb } from './templates/employee-db';
 import { visualNovelDb } from './templates/visual-novel-db';
 import { airbnbDb } from './templates/airbnb-db';
 import { wordpressDb } from './templates/wordpress-db';
+import { pokemonDb } from './templates/pokemon-db';
 
 export interface Template {
     slug: string;
@@ -22,4 +23,5 @@ export const templates: Template[] = [
     visualNovelDb,
     airbnbDb,
     wordpressDb,
+    pokemonDb,
 ];
