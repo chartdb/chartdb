@@ -38,7 +38,7 @@
 ---
 
 <p align="center">
-  <img width='700px' src="./public/ChartDB.png">
+  <img width='700px' src="./public/chartdb.png">
 </p>
 
 ### 🎉 ChartDB

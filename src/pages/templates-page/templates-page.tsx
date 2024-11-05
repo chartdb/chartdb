@@ -50,7 +50,7 @@ const TemplatesPageComponent: React.FC = () => {
                     property="og:description"
                     content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
                 />
-                <meta property="og:image" content={`${HOST_URL}/ChartDB.png`} />
+                <meta property="og:image" content={`${HOST_URL}/chartdb.png`} />
                 <meta property="og:type" content="website" />
                 <meta property="og:site_name" content="ChartDB" />
                 <meta
@@ -63,7 +63,7 @@ const TemplatesPageComponent: React.FC = () => {
                 />
                 <meta
                     name="twitter:image"
-                    content={`${HOST_URL}/ChartDB.png`}
+                    content={`${HOST_URL}/chartdb.png`}
                 />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:site" content="@ChartDB_io" />
