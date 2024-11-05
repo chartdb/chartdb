@@ -5,25 +5,13 @@ import imageDark from '@/assets/templates/visual-novel-db-dark.png';
 
 export const visualNovelDb: Template = {
     slug: 'visual-novel-db',
-    name: 'The Visual Novel Database | vndb',
-    shortDescription: 'The Visual Novel Database | vndb',
-    description: 'A comprehensive database for information about visual novels',
+    name: 'The Visual Novel Database',
+    shortDescription: 'The Visual Novel Database',
+    description:
+        'A comprehensive database for information about visual novels.',
     image,
     imageDark,
     tags: ['postgres'],
-    keywords: [
-        'VNDB',
-        'visual novel database schema',
-        'visual novel database template',
-        'database schema visualization',
-        'visual novel database design',
-        'ChartDB',
-        'VNDB schema diagram',
-        'relational database structure',
-        'VNDB development',
-        'VNDB tables',
-        'database template for VNDB',
-    ],
     featured: true,
     url: 'https://vndb.org',
     diagram: {

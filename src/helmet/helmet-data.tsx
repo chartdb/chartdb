@@ -18,7 +18,7 @@ export const HelmetData: React.FC = () => (
         />
         <meta
             property="og:image"
-            content="https://app.chartdb.io/ChartDB.png"
+            content="https://app.chartdb.io/chartdb.png"
         />
         <meta property="og:url" content="https://app.chartdb.io" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -32,7 +32,7 @@ export const HelmetData: React.FC = () => (
         />
         <meta
             name="twitter:image"
-            content="https://github.com/chartdb/chartdb/raw/main/public/ChartDB.png"
+            content="https://github.com/chartdb/chartdb/raw/main/public/chartdb.png"
         />
         <title>ChartDB - Database schema diagrams visualizer</title>
     </Helmet>

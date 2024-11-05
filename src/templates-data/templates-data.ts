@@ -13,7 +13,6 @@ export interface Template {
     imageDark: string;
     diagram: Diagram;
     tags: string[];
-    keywords: string[];
     featured: boolean;
     url?: string;
 }
