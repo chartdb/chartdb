@@ -158,7 +158,16 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
 
         return (
             <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger
+                    asChild
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (!isOpen && e.key === ' ') {
+                            e.preventDefault();
+                            onOpenChange(!isOpen);
+                        }
+                    }}
+                >
                     <div
                         className={cn(
                             `flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring ${disabled ? 'bg-muted pointer-events-none' : ''}`,
