@@ -35,6 +35,7 @@ import { DialogProvider } from '@/context/dialog-context/dialog-provider';
 import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
+import { useStorage } from '@/hooks/use-storage';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -58,10 +59,12 @@ const EditorPageComponent: React.FC = () => {
     const { openSelectSchema, showSidePanel } = useLayout();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
-    const { openCreateDiagramDialog, openStarUsDialog } = useDialog();
+    const { openCreateDiagramDialog, openOpenDiagramDialog, openStarUsDialog } =
+        useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config, updateConfig } = useConfig();
     const navigate = useNavigate();
+    const { listDiagrams } = useStorage();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const {
@@ -106,16 +109,23 @@ const EditorPageComponent: React.FC = () => {
                     navigate(`/diagrams/${config.defaultDiagramId}`);
                 }
             } else {
-                openCreateDiagramDialog();
+                const existingDiagrams = await listDiagrams();
+                if (existingDiagrams.length > 0) {
+                    openOpenDiagramDialog();
+                } else {
+                    openCreateDiagramDialog();
+                }
             }
         };
         loadDefaultDiagram();
     }, [
         diagramId,
+        openOpenDiagramDialog,
         openCreateDiagramDialog,
         config,
         navigate,
         loadDiagram,
+        listDiagrams,
         resetRedoStack,
         resetUndoStack,
         hideLoader,
