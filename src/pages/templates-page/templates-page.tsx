@@ -11,6 +11,7 @@ import { useLoaderData, useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
+import { HOST_URL } from '@/lib/env';
 
 export interface TemplatesPageLoaderData {
     templates: Template[] | undefined;
@@ -33,6 +34,9 @@ const TemplatesPageComponent: React.FC = () => {
         <>
             <Helmet>
                 <title>ChartDB - Database Schema Templates</title>
+                {HOST_URL !== 'https://chartdb.io' ? (
+                    <link rel="canonical" href="https://chartdb.io/templates" />
+                ) : null}
             </Helmet>
 
             <section className="flex w-screen flex-col bg-background">
