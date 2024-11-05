@@ -348,6 +348,6 @@ export const id_ID: LanguageTranslation = {
 };
 
 export const id_IDMetadata: LanguageMetadata = {
-    name: 'Indonesia',
+    name: 'Bahasa Indonesia',
     code: 'id_ID',
 };
