@@ -65,31 +65,22 @@ const TemplatePageComponent: React.FC = () => {
             <Helmet>
                 {template ? (
                     <>
-                        <title>
-                            Database schema diagram for {template.name} |
-                            ChartDB
-                        </title>
                         {HOST_URL !== 'https://chartdb.io' ? (
                             <link
                                 rel="canonical"
                                 href={`https://chartdb.io/templates/${templateSlug}`}
                             />
                         ) : null}
-                        <meta
-                            name="title"
-                            content={`Database schema for - ${template.name} | ChartDB`}
-                        />
+                        <title>
+                            {`Database schema diagram for - ${template.name} | ChartDB`}
+                        </title>
                         <meta
                             name="description"
                             content={`${template.shortDescription}: ${template.description}`}
                         />
                         <meta
-                            name="keywords"
-                            content={`${template.keywords.join(', ')}`}
-                        />
-                        <meta
                             property="og:title"
-                            content={`Database schema for - ${template.name} | ChartDB`}
+                            content={`Database schema diagram for - ${template.name} | ChartDB`}
                         />
                         <meta
                             property="og:url"
@@ -104,7 +95,7 @@ const TemplatePageComponent: React.FC = () => {
                             content={`${HOST_URL}${template.image}`}
                         />
                         <meta property="og:type" content="website" />
-
+                        <meta property="og:site_name" content="ChartDB" />
                         <meta
                             name="twitter:title"
                             content={`Database schema for - ${template.name} | ChartDB`}
@@ -121,6 +112,8 @@ const TemplatePageComponent: React.FC = () => {
                             name="twitter:card"
                             content="summary_large_image"
                         />
+                        <meta name="twitter:site" content="@ChartDB_io" />
+                        <meta name="twitter:creator" content="@ChartDB_io" />
                     </>
                 ) : (
                     <title>Database Schema Diagram | ChartDB</title>
