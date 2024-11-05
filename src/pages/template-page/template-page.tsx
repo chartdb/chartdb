@@ -69,6 +69,12 @@ const TemplatePageComponent: React.FC = () => {
                             Database schema diagram for {template.name} |
                             ChartDB
                         </title>
+                        {HOST_URL !== 'https://chartdb.io' ? (
+                            <link
+                                rel="canonical"
+                                href={`https://chartdb.io/templates/${templateSlug}`}
+                            />
+                        ) : null}
                         <meta
                             name="title"
                             content={`Database schema for - ${template.name} | ChartDB`}
