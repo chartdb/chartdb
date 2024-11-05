@@ -110,7 +110,7 @@ export const uk = {
 
                 table: {
                     fields: 'поля',
-                    nullable: 'Nullable?',
+                    nullable: 'Зведений нанівець?',
                     primary_key: 'Первинний ключ',
                     indexes: 'Індекси',
                     comments: 'Коментарі',
@@ -337,8 +337,8 @@ export const uk = {
         },
 
         canvas_context_menu: {
-            new_table: 'New Table',
-            new_relationship: 'New Relationship',
+            new_table: 'Нова таблиця',
+            new_relationship: 'Нові стосунки',
         },
 
         table_node_context_menu: {
