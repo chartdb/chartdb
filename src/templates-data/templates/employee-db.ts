@@ -12,11 +12,6 @@ export const employeeDb: Template = {
     image,
     imageDark,
     tags: ['mysql'],
-    keywords: [
-        'Employees database schema',
-        'Employees database template',
-        'Employees sample database schema visualization',
-    ],
     featured: true,
     diagram: {
         id: 'employees_db',

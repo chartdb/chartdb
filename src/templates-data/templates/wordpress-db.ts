@@ -12,13 +12,6 @@ export const wordpressDb: Template = {
     image,
     imageDark,
     tags: ['mysql', 'open source', 'WordPress', 'php'],
-    keywords: [
-        'WordPress database schema',
-        'WordPress database ChartDB template',
-        'Schema visualization for WordPress database',
-        'WordPress database design with ChartDB',
-        'WordPress schema diagram',
-    ],
     featured: true,
     url: 'https://wordpress.org',
     diagram: {

@@ -7,17 +7,11 @@ export const visualNovelDb: Template = {
     slug: 'visual-novel-db',
     name: 'The Visual Novel Database',
     shortDescription: 'The Visual Novel Database',
-    description: 'A comprehensive database for information about visual novels',
+    description:
+        'A comprehensive database for information about visual novels.',
     image,
     imageDark,
     tags: ['postgres'],
-    keywords: [
-        'The Visual Novel Database Schema',
-        'The visual novel database template',
-        'Database schema visualization',
-        'Visual novel database design',
-        'Relational database structure',
-    ],
     featured: true,
     url: 'https://vndb.org',
     diagram: {

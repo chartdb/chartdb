@@ -11,13 +11,6 @@ export const airbnbDb: Template = {
     image,
     imageDark,
     tags: ['postgres', 'example apps'],
-    keywords: [
-        'Airbnb database schema',
-        'Airbnb database ChartDB template',
-        'Database schema visualization for Airbnb',
-        'Airbnb sample database design',
-        'Airbnb example schema diagram',
-    ],
     featured: true,
     diagram: {
         id: 'airbnb_db',
