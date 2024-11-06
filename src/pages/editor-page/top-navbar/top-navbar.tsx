@@ -30,16 +30,10 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
-import { enMetadata } from '@/i18n/locales/en';
-import { esMetadata } from '@/i18n/locales/es';
-import { deMetadata } from '@/i18n/locales/de';
-import { jaMetadata } from '@/i18n/locales/ja';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { frMetadata } from '@/i18n/locales/fr';
-import { hiMetadata } from '@/i18n/locales/hi';
 import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
-import { pt_BRMetadata } from '@/i18n/locales/pt_BR';
+import { languages } from '@/i18n/i18n';
 
 export interface TopNavbarProps {}
 
@@ -565,85 +559,22 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         {t('menu.view.change_language')}
                                     </MenubarSubTrigger>
                                     <MenubarSubContent>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(enMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                enMetadata.code
-                                            }
-                                        >
-                                            {enMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(esMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                esMetadata.code
-                                            }
-                                        >
-                                            {esMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(frMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                frMetadata.code
-                                            }
-                                        >
-                                            {frMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(deMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                deMetadata.code
-                                            }
-                                        >
-                                            {deMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(hiMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                hiMetadata.code
-                                            }
-                                        >
-                                            {hiMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(jaMetadata.code)
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                jaMetadata.code
-                                            }
-                                        >
-                                            {jaMetadata.name}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            onClick={() =>
-                                                changeLanguage(
-                                                    pt_BRMetadata.code
-                                                )
-                                            }
-                                            checked={
-                                                i18n.language ===
-                                                pt_BRMetadata.code
-                                            }
-                                        >
-                                            {pt_BRMetadata.name}
-                                        </MenubarCheckboxItem>
+                                        {languages.map((language) => (
+                                            <MenubarCheckboxItem
+                                                key={language.code}
+                                                onClick={() =>
+                                                    changeLanguage(
+                                                        language.code
+                                                    )
+                                                }
+                                                checked={
+                                                    i18n.language ===
+                                                    language.code
+                                                }
+                                            >
+                                                {language.name}
+                                            </MenubarCheckboxItem>
+                                        ))}
                                     </MenubarSubContent>
                                 </MenubarSub>
                             </MenubarContent>
