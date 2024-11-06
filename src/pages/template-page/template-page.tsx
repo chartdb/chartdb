@@ -173,8 +173,11 @@ const TemplatePageComponent: React.FC = () => {
                         </Breadcrumb>
                         <div className="flex flex-col items-center gap-4 md:flex-row md:items-start md:justify-between md:gap-0">
                             <div className="flex flex-col pr-0 md:pr-20">
-                                <h1 className="font-primary text-2xl font-bold">
+                                <h1 className="flex flex-col font-primary text-2xl font-bold">
                                     {template?.name}
+                                    <span className="text-sm font-normal text-muted-foreground">
+                                        Database schema diagram
+                                    </span>
                                 </h1>
                                 <h2 className="mt-3">
                                     <span className="font-semibold">
