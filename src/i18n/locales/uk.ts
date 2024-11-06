@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const uk = {
+export const uk: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -68,7 +68,7 @@ export const uk = {
             title: 'Кілька схем',
             description:
                 '{{schemasCount}} схеми на цій діаграмі. Зараз відображається: {{formattedSchemas}}.',
-            dont_show_again: "Більше не показувати",
+            dont_show_again: 'Більше не показувати',
             change_schema: 'Зміна',
             none: 'немає',
         },
@@ -119,7 +119,7 @@ export const uk = {
                     add_index: 'Додати індекс',
                     index_select_fields: 'Виберіть поля',
                     no_types_found: 'Типи не знайдено',
-                    field_name: 'Ім'я',
+                    field_name: "Ім'я",
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибути полів',
@@ -130,7 +130,7 @@ export const uk = {
                     },
                     index_actions: {
                         title: 'Атрибути індексу',
-                        name: 'Ім'я',
+                        name: "Ім'я",
                         unique: 'Унікальний',
                         delete_index: 'Видалити індекс',
                     },
@@ -150,7 +150,7 @@ export const uk = {
             relationships_section: {
                 relationships: 'стосунки',
                 filter: 'фільтр',
-                add_relationship: 'Додати зв'язок',
+                add_relationship: "Додати зв'язок",
                 collapse: 'Згорнути все',
                 relationship: {
                     primary: 'Первинна таблиця',
@@ -232,9 +232,10 @@ export const uk = {
 
         open_diagram_dialog: {
             title: 'Відкрита діаграма',
-            description: 'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
+            description:
+                'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
             table_columns: {
-                name: 'Ім'я',
+                name: "Ім'я",
                 created_at: 'Створено в',
                 last_modified: 'Востаннє змінено',
                 tables_count: 'Таблиці',
@@ -254,7 +255,7 @@ export const uk = {
             },
             error: {
                 message:
-                    'Помилка створення сценарію SQL. Спробуйте пізніше або <0>зв'яжіться з нами</0>.',
+                    "Помилка створення сценарію SQL. Спробуйте пізніше або <0>зв'яжіться з нами</0>.",
                 description:
                     'Не соромтеся використовувати свій OPENAI_TOKEN, дивіться посібник <0>тут</0>.',
             },
@@ -323,8 +324,7 @@ export const uk = {
 
         star_us_dialog: {
             title: 'Допоможіть нам покращитися!',
-            description:
-                "Хочете позначити нас на Ґітхаб? Це лише один клік!",
+            description: 'Хочете позначити нас на Ґітхаб? Це лише один клік!',
             close: 'Не зараз',
             confirm: 'звичайно!',
         },
@@ -348,7 +348,7 @@ export const uk = {
     },
 };
 
-export const enMetadata: LanguageMetadata = {
+export const ukMetadata: LanguageMetadata = {
     name: 'Українська',
     code: 'uk',
 };
