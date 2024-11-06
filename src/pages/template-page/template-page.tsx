@@ -249,21 +249,23 @@ const TemplatePageComponent: React.FC = () => {
                                 </div>
                                 <Separator />
                                 {template.url ? (
-                                    <div>
-                                        <h4 className="mb-1 text-base font-semibold md:text-left">
-                                            Url
-                                        </h4>
+                                    <>
+                                        <div>
+                                            <h4 className="mb-1 text-base font-semibold md:text-left">
+                                                Url
+                                            </h4>
 
-                                        <Link
-                                            className="break-all text-sm text-muted-foreground"
-                                            href={`${template.url}?ref=chartdb`}
-                                            target="_blank"
-                                        >
-                                            {template.url}
-                                        </Link>
-                                    </div>
+                                            <Link
+                                                className="break-all text-sm text-muted-foreground"
+                                                href={`${template.url}?ref=chartdb`}
+                                                target="_blank"
+                                            >
+                                                {template.url}
+                                            </Link>
+                                        </div>
+                                        <Separator />
+                                    </>
                                 ) : null}
-                                <Separator />
                                 <div>
                                     <h4 className="mb-1 text-base font-semibold md:text-left">
                                         Tags
