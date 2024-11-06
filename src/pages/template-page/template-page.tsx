@@ -32,6 +32,7 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
 import { Helmet } from 'react-helmet-async';
 import { APP_URL, HOST_URL } from '@/lib/env';
+import { Link } from '@/components/link/link';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
@@ -246,6 +247,25 @@ const TemplatePageComponent: React.FC = () => {
                                         </span>
                                     </div>
                                 </div>
+                                <Separator />
+                                {template.url ? (
+                                    <>
+                                        <div>
+                                            <h4 className="mb-1 text-base font-semibold md:text-left">
+                                                Url
+                                            </h4>
+
+                                            <Link
+                                                className="break-all text-sm text-muted-foreground"
+                                                href={`${template.url}?ref=chartdb`}
+                                                target="_blank"
+                                            >
+                                                {template.url}
+                                            </Link>
+                                        </div>
+                                        <Separator />
+                                    </>
+                                ) : null}
                                 <div>
                                     <h4 className="mb-1 text-base font-semibold md:text-left">
                                         Tags
