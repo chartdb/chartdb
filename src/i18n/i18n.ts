@@ -1,13 +1,25 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import type { LanguageMetadata } from './types';
 import { en, enMetadata } from './locales/en';
-import { es } from './locales/es';
-import { fr } from './locales/fr';
-import { de } from './locales/de';
-import { hi } from './locales/hi';
-import { ja } from './locales/ja';
-import { pt_BR } from './locales/pt_BR';
-import { uk } from './locales/uk';
+import { es, esMetadata } from './locales/es';
+import { fr, frMetadata } from './locales/fr';
+import { de, deMetadata } from './locales/de';
+import { hi, hiMetadata } from './locales/hi';
+import { ja, jaMetadata } from './locales/ja';
+import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
+import { uk, ukMetadata } from './locales/uk';
+
+export const languages: LanguageMetadata[] = [
+    enMetadata,
+    esMetadata,
+    frMetadata,
+    deMetadata,
+    hiMetadata,
+    jaMetadata,
+    pt_BRMetadata,
+    ukMetadata,
+];
 
 const resources = {
     en,
