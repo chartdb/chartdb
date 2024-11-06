@@ -68,7 +68,7 @@ export const te = {
             title: 'బహుళ స్కీమాలు',
             description:
                 '{{schemasCount}} స్కీమాలు ఈ చిత్రంలో ఉన్నాయి. ప్రస్తుత స్కీమాలు: {{formattedSchemas}}.',
-            dont_show_again: "మరలా చూపించవద్దు",
+            dont_show_again: 'మరలా చూపించవద్దు',
             change_schema: 'మార్చు',
             none: 'ఎదరికాదు',
         },
@@ -324,7 +324,7 @@ export const te = {
         star_us_dialog: {
             title: 'మా సహాయంతో మెరుగుపరచండి!',
             description:
-                "మీకు GitHub‌లో మాకు స్టార్ ఇవ్వాలనుకుంటున్నారా? కేవలం ఒక క్లిక్ మాత్రమే!",
+                'మీకు GitHub‌లో మాకు స్టార్ ఇవ్వాలనుకుంటున్నారా? కేవలం ఒక క్లిక్ మాత్రమే!',
             close: 'ఇప్పుడు కాదు',
             confirm: 'ఖచ్చితంగా!',
         },
@@ -335,7 +335,7 @@ export const te = {
             many_to_one: 'చాలా_కీ_ఒకటి',
             many_to_many: 'చాలా_కీ_చాలా',
         },
-        
+
         canvas_context_menu: {
             new_table: 'కొత్త పట్టిక',
             new_relationship: 'కొత్త సంబంధం',

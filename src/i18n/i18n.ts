@@ -9,7 +9,7 @@ import { hi, hiMetadata } from './locales/hi';
 import { ja, jaMetadata } from './locales/ja';
 import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
 import { uk, ukMetadata } from './locales/uk';
-import {te, teMetadata } from './locales/te'
+import { te, teMetadata } from './locales/te';
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
