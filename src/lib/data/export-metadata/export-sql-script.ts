@@ -3,6 +3,7 @@ import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
+import type { LanguageModelV1 } from 'ai';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -193,15 +194,22 @@ export const exportSQL = async (
     databaseType: DatabaseType
 ): Promise<string> => {
     const { generateText } = await import('ai');
-    const { createOpenAI } = await import('@ai-sdk/openai');
-    const openai = createOpenAI({
-        apiKey: OPENAI_API_KEY,
-    });
+    let model;
+    if (OPENAI_API_KEY) {
+        const { createOpenAI } = await import('@ai-sdk/openai');
+        const openai = createOpenAI({
+            apiKey: OPENAI_API_KEY,
+        });
+        model = openai('gpt-4o-mini-2024-07-18');
+    } else {
+        const { ollama } = await import('ollama-ai-provider');
+        model = ollama('llama3.1');
+    }
     const sqlScript = exportBaseSQL(diagram);
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
     const { text } = await generateText({
-        model: openai('gpt-4o-mini-2024-07-18'),
+        model: model as LanguageModelV1,
         prompt: prompt,
     });
 

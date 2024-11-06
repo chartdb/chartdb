@@ -52,6 +52,7 @@
     "monaco-editor": "^0.52.0",
     "nanoid": "^5.0.7",
     "node-sql-parser": "^5.3.2",
+    "ollama-ai-provider": "^0.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
