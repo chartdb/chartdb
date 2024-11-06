@@ -34,6 +34,7 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { languages } from '@/i18n/i18n';
+import { useNavigate } from 'react-router-dom';
 
 export interface TopNavbarProps {}
 
@@ -64,6 +65,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
     const { exportImage } = useExportImage();
+    const navigate = useNavigate();
+
+    const handleDeleteDiagramAction = useCallback(() => {
+        deleteDiagram();
+        navigate('/');
+    }, [deleteDiagram, navigate]);
 
     const createNewDiagram = () => {
         openCreateDiagramDialog();
@@ -423,7 +430,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             closeLabel: t(
                                                 'delete_diagram_alert.cancel'
                                             ),
-                                            onAction: deleteDiagram,
+                                            onAction: handleDeleteDiagramAction,
                                         })
                                     }
                                 >
