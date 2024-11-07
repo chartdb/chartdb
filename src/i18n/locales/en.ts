@@ -346,6 +346,11 @@ export const en = {
             description: 'Paste the diagram JSON below:',
             cancel: 'Cancel',
             import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again.',
+            },
         },
         relationship_type: {
             one_to_one: 'One to One',

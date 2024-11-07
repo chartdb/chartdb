@@ -16,6 +16,8 @@ import { FileUploader } from '@/components/file-uploader/file-uploader';
 import { useStorage } from '@/hooks/use-storage';
 import { useNavigate } from 'react-router-dom';
 import { diagramFromJSONInput } from '@/lib/export-import-utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
+import { AlertCircle } from 'lucide-react';
 
 export interface ImportDiagramDialogProps extends BaseDialogProps {}
 
@@ -26,6 +28,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     const [file, setFile] = useState<File | null>(null);
     const { addDiagram } = useStorage();
     const navigate = useNavigate();
+    const [error, setError] = useState(false);
 
     const onFileChange = useCallback((files: File[]) => {
         if (files.length === 0) {
@@ -38,6 +41,8 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
 
     useEffect(() => {
         if (!dialog.open) return;
+        setError(false);
+        setFile(null);
     }, [dialog.open]);
     const { closeImportDiagramDialog } = useDialog();
 
@@ -49,14 +54,22 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
             const json = e.target?.result;
             if (typeof json !== 'string') return;
 
-            const diagram = diagramFromJSONInput(json);
+            try {
+                const diagram = diagramFromJSONInput(json);
 
-            await addDiagram({ diagram });
+                await addDiagram({ diagram });
 
-            navigate(`/diagrams/${diagram.id}`);
+                closeImportDiagramDialog();
+
+                navigate(`/diagrams/${diagram.id}`);
+            } catch (e) {
+                setError(true);
+
+                throw e;
+            }
         };
         reader.readAsText(file);
-    }, [file, addDiagram, navigate]);
+    }, [file, addDiagram, navigate, closeImportDiagramDialog]);
 
     return (
         <Dialog
@@ -76,11 +89,22 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                         {t('import_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex p-1">
+                <div className="flex flex-col p-1">
                     <FileUploader
                         supportedExtensions={['.json']}
                         onFilesChange={onFileChange}
                     />
+                    {error ? (
+                        <Alert variant="destructive" className="mt-2">
+                            <AlertCircle className="size-4" />
+                            <AlertTitle>
+                                {t('import_diagram_dialog.error.title')}
+                            </AlertTitle>
+                            <AlertDescription>
+                                {t('import_diagram_dialog.error.description')}
+                            </AlertDescription>
+                        </Alert>
+                    ) : null}
                 </div>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>
@@ -88,11 +112,9 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                             {t('import_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
-                    <DialogClose asChild>
-                        <Button onClick={handleImport} disabled={file === null}>
-                            {t('import_diagram_dialog.import')}
-                        </Button>
-                    </DialogClose>
+                    <Button onClick={handleImport} disabled={file === null}>
+                        {t('import_diagram_dialog.import')}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
