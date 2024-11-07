@@ -39,54 +39,66 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     useKeyPressEvent('Enter', editDiagramName);
 
     const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+        event: React.MouseEvent<HTMLHeadingElement, MouseEvent>
     ) => {
         event.stopPropagation();
         setEditMode(true);
     };
 
     return (
-        <>
-            <DiagramIcon diagram={currentDiagram} />
-            <div className="flex">
-                {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
-            </div>
-            <div className="flex flex-row items-center gap-1">
-                {editMode ? (
-                    <>
-                        <Input
-                            ref={inputRef}
-                            autoFocus
-                            type="text"
-                            placeholder={diagramName}
-                            value={editedDiagramName}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) =>
-                                setEditedDiagramName(e.target.value)
-                            }
-                            className="ml-1 h-7 focus-visible:ring-0"
-                        />
-                        <Button
-                            variant="ghost"
-                            className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
-                            onClick={editDiagramName}
-                        >
-                            <Check />
-                        </Button>
-                    </>
-                ) : (
-                    <>
-                        <h1 className={cn(labelVariants())}>{diagramName}</h1>
-                        <Button
-                            variant="ghost"
-                            className="hidden size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 group-hover:flex dark:text-slate-400 dark:hover:text-slate-300"
-                            onClick={enterEditMode}
-                        >
-                            <Pencil />
-                        </Button>
-                    </>
+        <div className="group">
+            <div
+                className={cn(
+                    'flex flex-1 flex-row items-center justify-center px-2 py-1',
+                    {
+                        'text-editable': !editMode,
+                    }
                 )}
+            >
+                <DiagramIcon diagram={currentDiagram} />
+                <div className="flex">
+                    {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                    {editMode ? (
+                        <>
+                            <Input
+                                ref={inputRef}
+                                autoFocus
+                                type="text"
+                                placeholder={diagramName}
+                                value={editedDiagramName}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                    setEditedDiagramName(e.target.value)
+                                }
+                                className="ml-1 h-7 focus-visible:ring-0"
+                            />
+                            <Button
+                                variant="ghost"
+                                className="size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 flex dark:text-slate-400 dark:hover:text-slate-300"
+                                onClick={editDiagramName}
+                            >
+                                <Check />
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <h1
+                                className={cn(
+                                    labelVariants(),
+                                    'group-hover:underline'
+                                )}
+                                onClick={(e) => {
+                                    enterEditMode(e);
+                                }}
+                            >
+                                {diagramName}
+                            </h1>
+                        </>
+                    )}
+                </div>
             </div>
-        </>
+        </div>
     );
 };

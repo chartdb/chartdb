@@ -65,10 +65,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
+    const handleNameClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setEditMode(true);
     };
 
@@ -219,7 +217,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1">
+            <div className="flex min-w-0 flex-1 px-2">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -232,11 +230,16 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    <div className="truncate">
-                        {table.name}
-                        <span className="text-xs text-muted-foreground">
-                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
-                        </span>
+                    <div className="flex items-center">
+                        <div
+                            onClick={handleNameClick}
+                            className="truncate px-2 py-1 text-editable"
+                        >
+                            {table.name}
+                            <span className="text-xs text-muted-foreground">
+                                {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
+                            </span>
+                        </div>
                     </div>
                 )}
             </div>
@@ -245,7 +248,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     <>
                         <div>{renderDropDownMenu()}</div>
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
-                            <ListItemHeaderButton onClick={enterEditMode}>
+                            <ListItemHeaderButton
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditMode(true);
+                                }}
+                            >
                                 <Pencil />
                             </ListItemHeaderButton>
                             <ListItemHeaderButton onClick={focusOnTable}>
