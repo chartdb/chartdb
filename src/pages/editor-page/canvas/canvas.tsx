@@ -723,7 +723,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     }}
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={isShiftKeyPressed}
-                    snapGrid={[10, 10]}
+                    snapGrid={[20, 20]}
                     onNodeDrag={handleNodeDrag}
                     onNodeDragStop={handleNodeDragStop}
                 >
