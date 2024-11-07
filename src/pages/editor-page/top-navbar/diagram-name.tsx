@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Label } from '@/components/label/label';
 import { Button } from '@/components/button/button';
-import { Check, Pencil } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
@@ -76,7 +76,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                             />
                             <Button
                                 variant="ghost"
-                                className="size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 flex dark:text-slate-400 dark:hover:text-slate-300"
+                                className="flex size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
                                 onClick={editDiagramName}
                             >
                                 <Check />

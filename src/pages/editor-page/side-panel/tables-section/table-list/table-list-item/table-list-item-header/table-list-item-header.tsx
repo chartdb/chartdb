@@ -233,7 +233,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     <div className="flex items-center">
                         <div
                             onClick={handleNameClick}
-                            className="truncate px-2 py-1 text-editable"
+                            className="text-editable truncate px-2 py-1"
                         >
                             {table.name}
                             <span className="text-xs text-muted-foreground">
