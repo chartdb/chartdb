@@ -5,6 +5,8 @@ import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table
 import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
+import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
+import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -48,6 +50,18 @@ export interface DialogContext {
         params: Omit<ExportImageDialogProps, 'dialog'>
     ) => void;
     closeExportImageDialog: () => void;
+
+    // Export diagram dialog
+    openExportDiagramDialog: (
+        params: Omit<ExportDiagramDialogProps, 'dialog'>
+    ) => void;
+    closeExportDiagramDialog: () => void;
+
+    // Import diagram dialog
+    openImportDiagramDialog: (
+        params: Omit<ImportDiagramDialogProps, 'dialog'>
+    ) => void;
+    closeImportDiagramDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -69,4 +83,8 @@ export const dialogContext = createContext<DialogContext>({
     closeStarUsDialog: emptyFn,
     openExportImageDialog: emptyFn,
     closeExportImageDialog: emptyFn,
+    openExportDiagramDialog: emptyFn,
+    closeExportDiagramDialog: emptyFn,
+    openImportDiagramDialog: emptyFn,
+    closeImportDiagramDialog: emptyFn,
 });

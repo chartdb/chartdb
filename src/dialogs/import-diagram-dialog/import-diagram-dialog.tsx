@@ -1,0 +1,100 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDialog } from '@/hooks/use-dialog';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/dialog/dialog';
+import { Button } from '@/components/button/button';
+import type { BaseDialogProps } from '../common/base-dialog-props';
+import { useTranslation } from 'react-i18next';
+import { FileUploader } from '@/components/file-uploader/file-uploader';
+import { useStorage } from '@/hooks/use-storage';
+import { useNavigate } from 'react-router-dom';
+import { diagramFromJSONInput } from '@/lib/export-import-utils';
+
+export interface ImportDiagramDialogProps extends BaseDialogProps {}
+
+export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
+    dialog,
+}) => {
+    const { t } = useTranslation();
+    const [file, setFile] = useState<File | null>(null);
+    const { addDiagram } = useStorage();
+    const navigate = useNavigate();
+
+    const onFileChange = useCallback((files: File[]) => {
+        if (files.length === 0) {
+            setFile(null);
+            return;
+        }
+
+        setFile(files[0]);
+    }, []);
+
+    useEffect(() => {
+        if (!dialog.open) return;
+    }, [dialog.open]);
+    const { closeImportDiagramDialog } = useDialog();
+
+    const handleImport = useCallback(() => {
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const json = e.target?.result;
+            if (typeof json !== 'string') return;
+
+            const diagram = diagramFromJSONInput(json);
+
+            await addDiagram({ diagram });
+
+            navigate(`/diagrams/${diagram.id}`);
+        };
+        reader.readAsText(file);
+    }, [file, addDiagram, navigate]);
+
+    return (
+        <Dialog
+            {...dialog}
+            onOpenChange={(open) => {
+                if (!open) {
+                    closeImportDiagramDialog();
+                }
+            }}
+        >
+            <DialogContent className="flex flex-col" showClose>
+                <DialogHeader>
+                    <DialogTitle>
+                        {t('import_diagram_dialog.title')}
+                    </DialogTitle>
+                    <DialogDescription>
+                        {t('import_diagram_dialog.description')}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex p-1">
+                    <FileUploader
+                        supportedExtensions={['.json']}
+                        onFilesChange={onFileChange}
+                    />
+                </div>
+                <DialogFooter className="flex gap-1 md:justify-between">
+                    <DialogClose asChild>
+                        <Button variant="secondary">
+                            {t('import_diagram_dialog.cancel')}
+                        </Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                        <Button onClick={handleImport} disabled={file === null}>
+                            {t('import_diagram_dialog.import')}
+                        </Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};

@@ -32,6 +32,12 @@ export const hi: LanguageTranslation = {
                 show_dependencies: 'निर्भरता दिखाएँ',
                 hide_dependencies: 'निर्भरता छिपाएँ',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'मदद',
                 visit_website: 'ChartDB वेबसाइट पर जाएँ',
@@ -331,7 +337,21 @@ export const hi: LanguageTranslation = {
             close: 'अभी नहीं',
             confirm: 'बिलकुल!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+        },
         relationship_type: {
             one_to_one: 'एक से एक',
             one_to_many: 'एक से कई',

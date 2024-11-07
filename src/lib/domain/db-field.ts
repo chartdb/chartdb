@@ -1,4 +1,5 @@
-import type { DataType } from '../data/data-types/data-types';
+import { z } from 'zod';
+import { dataTypeSchema, type DataType } from '../data/data-types/data-types';
 import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
@@ -21,6 +22,22 @@ export interface DBField {
     collation?: string;
     comments?: string;
 }
+
+export const dbFieldSchema: z.ZodType<DBField> = z.object({
+    id: z.string(),
+    name: z.string(),
+    type: dataTypeSchema,
+    primaryKey: z.boolean(),
+    unique: z.boolean(),
+    nullable: z.boolean(),
+    createdAt: z.number(),
+    characterMaximumLength: z.string().optional(),
+    precision: z.number().optional(),
+    scale: z.number().optional(),
+    default: z.string().optional(),
+    collation: z.string().optional(),
+    comments: z.string().optional(),
+});
 
 export const createFieldsFromMetadata = ({
     columns,

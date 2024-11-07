@@ -32,6 +32,12 @@ export const uk: LanguageTranslation = {
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'Допомога',
                 visit_website: 'Відвідайте ChartDB',
@@ -328,7 +334,21 @@ export const uk: LanguageTranslation = {
             close: 'Не зараз',
             confirm: 'звичайно!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+        },
         relationship_type: {
             one_to_one: 'Один до одного',
             one_to_many: 'Один до багатьох',

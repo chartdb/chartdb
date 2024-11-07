@@ -32,6 +32,12 @@ export const pt_BR: LanguageTranslation = {
                 show_dependencies: 'Mostrar Dependências',
                 hide_dependencies: 'Ocultar Dependências',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'Ajuda',
                 visit_website: 'Visitar ChartDB',
@@ -328,7 +334,21 @@ export const pt_BR: LanguageTranslation = {
             close: 'Agora não',
             confirm: 'Claro!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+        },
         relationship_type: {
             one_to_one: 'Um para Um',
             one_to_many: 'Um para Muitos',

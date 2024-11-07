@@ -33,6 +33,12 @@ export const ja: LanguageTranslation = {
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'ヘルプ',
                 visit_website: 'ChartDBにアクセス',
@@ -333,7 +339,21 @@ export const ja: LanguageTranslation = {
             close: '今はしない',
             confirm: 'もちろん！',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+        },
         relationship_type: {
             one_to_one: '1対1',
             one_to_many: '1対多',
