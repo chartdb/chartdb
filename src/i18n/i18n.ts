@@ -7,6 +7,7 @@ import { fr, frMetadata } from './locales/fr';
 import { de, deMetadata } from './locales/de';
 import { hi, hiMetadata } from './locales/hi';
 import { ja, jaMetadata } from './locales/ja';
+import { ko_KR, ko_KRMetadata } from './locales/ko_KR.ts';
 import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
 import { uk, ukMetadata } from './locales/uk';
 
@@ -17,6 +18,7 @@ export const languages: LanguageMetadata[] = [
     deMetadata,
     hiMetadata,
     jaMetadata,
+    ko_KRMetadata,
     pt_BRMetadata,
     ukMetadata,
 ];
@@ -28,6 +30,7 @@ const resources = {
     de,
     hi,
     ja,
+    ko_KR,
     pt_BR,
     uk,
 };
