@@ -10,7 +10,7 @@ export const airbnbDb: Template = {
     description: 'Example database schema diagram for Airbnb',
     image,
     imageDark,
-    tags: ['postgres', 'example apps'],
+    tags: ['Postgres', 'Example Apps'],
     featured: true,
     diagram: {
         id: 'airbnb_db',

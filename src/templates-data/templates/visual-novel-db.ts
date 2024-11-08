@@ -11,7 +11,7 @@ export const visualNovelDb: Template = {
         'A comprehensive database for information about visual novels.',
     image,
     imageDark,
-    tags: ['postgres'],
+    tags: ['Postgres', 'The Visual Novel Database'],
     featured: true,
     url: 'https://vndb.org',
     diagram: {

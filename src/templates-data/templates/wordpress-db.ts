@@ -11,7 +11,7 @@ export const wordpressDb: Template = {
         '(CMS) ideal for building websites, blogs, or apps. Flexible, customizable, and designed for developers to expand',
     image,
     imageDark,
-    tags: ['mysql', 'open source', 'WordPress', 'php'],
+    tags: ['MySQL', 'Open Source', 'WordPress', 'PHP'],
     featured: true,
     url: 'https://wordpress.org',
     diagram: {
