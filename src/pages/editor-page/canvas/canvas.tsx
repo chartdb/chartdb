@@ -148,6 +148,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
 
+    const [isShiftKeyPressed, setIsShiftKeyPressed] = useState<boolean>(false);
+
     useEffect(() => {
         setIsInitialLoadingNodes(true);
     }, [initialTables]);
@@ -688,6 +690,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
+    const handleNodeDrag = useCallback((event: React.MouseEvent) => {
+        setIsShiftKeyPressed(event.shiftKey);
+    }, []);
+
+    const handleNodeDragStop = useCallback(() => {
+        setIsShiftKeyPressed(false);
+    }, []);
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full">
@@ -712,6 +722,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         type: 'relationship-edge',
                     }}
                     panOnScroll={scrollAction === 'pan'}
+                    snapToGrid={isShiftKeyPressed}
+                    snapGrid={[20, 20]}
+                    onNodeDrag={handleNodeDrag}
+                    onNodeDragStop={handleNodeDragStop}
                 >
                     <Controls
                         position="top-left"
