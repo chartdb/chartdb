@@ -232,6 +232,8 @@ export const de: LanguageTranslation = {
 
             cancel: 'Abbrechen',
             back: 'Zurück',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Leeres Diagramm',
             continue: 'Weiter',
             import: 'Importieren',
@@ -352,7 +354,7 @@ export const de: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
         relationship_type: {

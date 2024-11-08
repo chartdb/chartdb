@@ -234,6 +234,8 @@ export const hi: LanguageTranslation = {
 
             cancel: 'रद्द करें',
             back: 'वापस',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'खाली आरेख',
             continue: 'जारी रखें',
             import: 'आयात करें',
@@ -354,7 +356,7 @@ export const hi: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
         relationship_type: {

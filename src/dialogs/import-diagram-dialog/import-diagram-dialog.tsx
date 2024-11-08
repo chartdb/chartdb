@@ -44,7 +44,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
         setError(false);
         setFile(null);
     }, [dialog.open]);
-    const { closeImportDiagramDialog } = useDialog();
+    const { closeImportDiagramDialog, closeCreateDiagramDialog } = useDialog();
 
     const handleImport = useCallback(() => {
         if (!file) return;
@@ -60,6 +60,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                 await addDiagram({ diagram });
 
                 closeImportDiagramDialog();
+                closeCreateDiagramDialog();
 
                 navigate(`/diagrams/${diagram.id}`);
             } catch (e) {
@@ -69,7 +70,13 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
             }
         };
         reader.readAsText(file);
-    }, [file, addDiagram, navigate, closeImportDiagramDialog]);
+    }, [
+        file,
+        addDiagram,
+        navigate,
+        closeImportDiagramDialog,
+        closeCreateDiagramDialog,
+    ]);
 
     return (
         <Dialog

@@ -231,6 +231,8 @@ export const ko_KR: LanguageTranslation = {
 
             cancel: '취소',
             back: '뒤로가기',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: '빈 다이어그램으로 시작',
             continue: '계속',
             import: '가져오기',
@@ -350,7 +352,7 @@ export const ko_KR: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
         relationship_type: {

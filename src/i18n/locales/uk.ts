@@ -231,6 +231,8 @@ export const uk: LanguageTranslation = {
 
             cancel: 'Скасувати',
             back: 'Назад',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Порожня діаграма',
             continue: 'Продовжити',
             import: 'Імпорт',
@@ -351,7 +353,7 @@ export const uk: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
         relationship_type: {

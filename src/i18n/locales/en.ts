@@ -229,6 +229,7 @@ export const en = {
             },
 
             cancel: 'Cancel',
+            import_from_file: 'Import from File',
             back: 'Back',
             empty_diagram: 'Empty diagram',
             continue: 'Continue',
@@ -349,7 +350,7 @@ export const en = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
         relationship_type: {
