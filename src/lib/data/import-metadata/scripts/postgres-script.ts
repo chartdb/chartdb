@@ -68,29 +68,46 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
                                             ',"fk_def":"', replace(fk_def, '"', ''),
                                             '"}')), ',') as fk_metadata
     FROM (
-        SELECT  connamespace::regnamespace::text AS schema_name,
-                conname AS foreign_key_name,
-                CASE
-                    WHEN strpos(conrelid::regclass::text, '.') > 0
-                    THEN split_part(conrelid::regclass::text, '.', 2)
-                    ELSE conrelid::regclass::text
-                END AS table_name,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[1] AS fk_column,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[2] AS reference_schema,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[3] AS reference_table,
-                (regexp_matches(pg_get_constraintdef(oid), '(?i)FOREIGN KEY \\("?(\\w+)"?\\) REFERENCES (?:"?(\\w+)"?\\.)?"?(\\w+)"?\\("?(\\w+)"?\\)', 'g'))[4] AS reference_column,
-                pg_get_constraintdef(oid) as fk_def
-        FROM
-            pg_constraint
-        WHERE
-            contype = 'f'
-            AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
-                databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-                    ? timescaleFilters
-                    : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-                      ? supabaseFilters
-                      : ''
-            }
+            SELECT c.conname AS foreign_key_name,
+                    n.nspname AS schema_name,
+                    CASE
+                        WHEN position('.' in conrelid::regclass::text) > 0
+                        THEN split_part(conrelid::regclass::text, '.', 2)
+                        ELSE conrelid::regclass::text
+                    END AS table_name,
+                    a.attname AS fk_column,
+                    nr.nspname AS reference_schema,
+                    CASE
+                        WHEN position('.' in confrelid::regclass::text) > 0
+                        THEN split_part(confrelid::regclass::text, '.', 2)
+                        ELSE confrelid::regclass::text
+                    END AS reference_table,
+                    af.attname AS reference_column,
+                    pg_get_constraintdef(c.oid) as fk_def
+                FROM
+                    pg_constraint AS c
+                JOIN
+                    pg_attribute AS a ON a.attnum = ANY(c.conkey) AND a.attrelid = c.conrelid
+                JOIN
+                    pg_class AS cl ON cl.oid = c.conrelid
+                JOIN
+                    pg_namespace AS n ON n.oid = cl.relnamespace
+                JOIN
+                    pg_attribute AS af ON af.attnum = ANY(c.confkey) AND af.attrelid = c.confrelid
+                JOIN
+                    pg_class AS clf ON clf.oid = c.confrelid
+                JOIN
+                    pg_namespace AS nr ON nr.oid = clf.relnamespace
+                WHERE
+                    c.contype = 'f'
+                    AND connamespace::regnamespace::text NOT IN ('information_schema', 'pg_catalog')${
+                        databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
+                            ? timescaleFilters
+                            : databaseEdition ===
+                                DatabaseEdition.POSTGRESQL_SUPABASE
+                              ? supabaseFilters
+                              : ''
+                    }
     ) AS x
 ), pk_info AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', replace(schema_name, '"', ''), '"',
