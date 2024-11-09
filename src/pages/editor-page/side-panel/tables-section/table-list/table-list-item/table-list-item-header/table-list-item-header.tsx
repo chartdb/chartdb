@@ -70,7 +70,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
 
-    const handleNameClick = (e: React.MouseEvent) => {
+    const enterEditMode = (e: React.MouseEvent) => {
         e.stopPropagation();
         setEditMode(true);
     };
@@ -222,7 +222,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1 px-2">
+            <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -235,26 +235,24 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    <div className="flex items-center">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div
-                                    onDoubleClick={handleNameClick}
-                                    className="text-editable truncate px-2 py-[0.1rem]"
-                                >
-                                    {table.name}
-                                    <span className="text-xs text-muted-foreground">
-                                        {schemaToDisplay
-                                            ? ` (${schemaToDisplay})`
-                                            : ''}
-                                    </span>
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {t('tool_tips.double_click_to_edit')}
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div
+                                onDoubleClick={enterEditMode}
+                                className="text-editable truncate px-2 py-0.5"
+                            >
+                                {table.name}
+                                <span className="text-xs text-muted-foreground">
+                                    {schemaToDisplay
+                                        ? ` (${schemaToDisplay})`
+                                        : ''}
+                                </span>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('tool_tips.double_click_to_edit')}
+                        </TooltipContent>
+                    </Tooltip>
                 )}
             </div>
             <div className="flex flex-row-reverse">
@@ -262,12 +260,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     <>
                         <div>{renderDropDownMenu()}</div>
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
-                            <ListItemHeaderButton
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setEditMode(true);
-                                }}
-                            >
+                            <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
                             </ListItemHeaderButton>
                             <ListItemHeaderButton onClick={focusOnTable}>
