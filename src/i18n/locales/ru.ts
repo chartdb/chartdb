@@ -7,7 +7,7 @@ export const ru: LanguageTranslation = {
                 file: 'Файл',
                 new: 'Создать',
                 open: 'Открыть',
-                save: 'Сохранять',
+                save: 'Сохранить',
                 import_database: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
@@ -15,27 +15,27 @@ export const ru: LanguageTranslation = {
                 exit: 'Выход',
             },
             edit: {
-                edit: 'Редактировать',
+                edit: 'Изменение',
                 undo: 'Отменить',
-                redo: 'Переделать',
+                redo: 'Повторить',
                 clear: 'Прозрачный',
             },
             view: {
                 view: 'Вид',
                 show_sidebar: 'Показать боковую панель',
                 hide_sidebar: 'Скрыть боковую панель',
-                hide_cardinality: 'Скрыть мощность',
-                show_cardinality: 'Показать мощность',
+                hide_cardinality: 'Скрыть множественность связи',
+                show_cardinality: 'Показать множественность связи',
                 zoom_on_scroll: 'Увеличить при прокрутке',
                 theme: 'Тема',
-                change_language: 'Язык',
+                change_language: 'Сменить язык',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
             },
             help: {
                 help: 'Помощь',
-                visit_website: 'Посещать ChartDB',
-                join_discord: 'Присоединяйтесь к нам в Discord',
+                visit_website: 'Перейти на сайт ChartDB',
+                join_discord: 'Присоединиться к сообществу в Discord',
                 schedule_a_call: 'Поговорите с нами!',
             },
         },
@@ -44,7 +44,7 @@ export const ru: LanguageTranslation = {
             title: 'Удалить диаграмму',
             description:
                 'Это действие нельзя отменить. Это навсегда удалит диаграмму.',
-            cancel: 'Отмена',
+            cancel: 'Отменить',
             delete: 'Удалить',
         },
 
@@ -52,8 +52,8 @@ export const ru: LanguageTranslation = {
             title: 'Очистить диаграмму',
             description:
                 'Это действие нельзя отменить. Это навсегда удалит все данные в диаграмме.',
-            cancel: 'Отмена',
-            clear: 'Прозрачный',
+            cancel: 'Отменить',
+            clear: 'Очистить',
         },
 
         reorder_diagram_alert: {
@@ -61,7 +61,7 @@ export const ru: LanguageTranslation = {
             description:
                 'Это действие переставит все таблицы на диаграмме. Хотите продолжить?',
             reorder: 'Изменить порядок',
-            cancel: 'Отмена',
+            cancel: 'Отменить',
         },
 
         multiple_schemas_alert: {
@@ -69,19 +69,19 @@ export const ru: LanguageTranslation = {
             description:
                 '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
             dont_show_again: "Больше не показывать",
-            change_schema: 'Изменять',
+            change_schema: 'Изменить',
             none: 'никто',
         },
 
         theme: {
             system: 'Система',
-            light: 'Свет',
-            dark: 'Темный',
+            light: 'Светлая',
+            dark: 'Темная',
         },
 
         zoom: {
-            on: 'На',
-            off: 'Выключенный',
+            on: 'Включён',
+            off: 'Выключен',
         },
 
         last_saved: 'Последнее сохранение',
@@ -90,7 +90,7 @@ export const ru: LanguageTranslation = {
         loading_diagram: 'Загрузка диаграммы...',
         deselect_all: 'Отменить выбор всех',
         select_all: 'Выбрать все',
-        clear: 'Прозрачный',
+        clear: 'Очистить',
         show_more: 'Показать больше',
         show_less: 'Показать меньше',
 
@@ -207,7 +207,7 @@ export const ru: LanguageTranslation = {
 
             import_database: {
                 title: 'Импортируйте свою базу данных',
-                database_edition: 'Редакция базы данных:',
+                database_edition: 'Версия базы данных:',
                 step_1: 'Запустите этот скрипт в своей базе данных:',
                 step_2: 'Вставьте результат скрипта сюда:',
                 script_results_placeholder: 'Результаты скрипта здесь...',
@@ -223,7 +223,7 @@ export const ru: LanguageTranslation = {
             cancel: 'Отмена',
             back: 'Назад',
             empty_diagram: 'Пустая диаграмма',
-            continue: 'Продолжать',
+            continue: 'Продолжить',
             import: 'Импорт',
         },
 
@@ -258,19 +258,19 @@ export const ru: LanguageTranslation = {
         },
 
         create_relationship_dialog: {
-            title: 'Создать отношения',
+            title: 'Создать отношениe',
             primary_table: 'Основная таблица',
             primary_field: 'Основное поле',
-            referenced_table: 'Справочная таблица',
-            referenced_field: 'Ссылочное поле',
-            primary_table_placeholder: 'Выбрать таблицу',
+            referenced_table: 'Ссылается на таблицу',
+            referenced_field: 'Ссылается на поле',
+            primary_table_placeholder: 'Выберите таблицу',
             primary_field_placeholder: 'Выберите поле',
-            referenced_table_placeholder: 'Выбрать таблицу',
+            referenced_table_placeholder: 'Выберите таблицу',
             referenced_field_placeholder: 'Выберите поле',
             no_tables_found: 'Таблицы не найдены',
             no_fields_found: 'Поля не найдены',
-            create: 'Создавать',
-            cancel: 'Отмена',
+            create: 'Создать',
+            cancel: 'Отменить',
         },
 
         import_database_dialog: {
@@ -294,28 +294,28 @@ export const ru: LanguageTranslation = {
 
         export_image_dialog: {
             title: 'Экспортировать изображение',
-            description: 'Выберите масштабный коэффициент для экспорта:',
+            description: 'Выберите детализацию изображения при экспорте:',
             scale_1x: '1x Обычный',
             scale_2x: '2x (Рекомендовано)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Отмена',
-            export: 'Экспорт',
+            cancel: 'Отменить',
+            export: 'Экспортировать',
         },
 
         new_table_schema_dialog: {
             title: 'Выбрать схему',
             description:
                 'В настоящее время отображается несколько схем. Выберите одну для новой таблицы.',
-            cancel: 'Отмена',
-            confirm: 'Подтверждать',
+            cancel: 'Отменить',
+            confirm: 'Подтвердить',
         },
 
         update_table_schema_dialog: {
             title: 'Изменить схему',
             description: 'Обновить таблицу "{{tableName}}" схема',
-            cancel: 'Отмена',
-            confirm: 'Изменять',
+            cancel: 'Отменить',
+            confirm: 'Изменить',
         },
 
         star_us_dialog: {
@@ -327,19 +327,19 @@ export const ru: LanguageTranslation = {
         },
 
         relationship_type: {
-            one_to_one: 'Один на один',
+            one_to_one: 'Один к одному',
             one_to_many: 'Один ко многим',
             many_to_one: 'Многие к одному',
             many_to_many: 'Многие ко многим',
         },
 
         canvas_context_menu: {
-            new_table: 'Новая таблица',
-            new_relationship: 'Новые отношения',
+            new_table: 'Создать таблицу',
+            new_relationship: 'Создать отношение',
         },
 
         table_node_context_menu: {
-            edit_table: 'Редактировать таблицу',
+            edit_table: 'Изменить таблицу',
             delete_table: 'Удалить таблицу',
         },
     },
