@@ -348,7 +348,7 @@ export const ru: LanguageTranslation = {
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
         tool_tips: {
-            double_click_to_edit: 'Кликните дважды, чтобы скопировать',
+            double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
     },
 };
