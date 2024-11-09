@@ -122,6 +122,8 @@ export interface ChartDBContext {
         updateFn: (tables: DBTable[]) => PartialExcept<DBTable, 'id'>[],
         options?: { updateHistory: boolean; forceOverride?: boolean }
     ) => Promise<void>;
+    duplicateTable: (tableId: string) => Promise<DBTable>;
+    duplicateTables: (tableIds: string[]) => Promise<DBTable[]>;
 
     // Field operations
     getField: (tableId: string, fieldId: string) => DBField | null;
@@ -262,6 +264,8 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeTables: emptyFn,
     updateTable: emptyFn,
     updateTablesState: emptyFn,
+    duplicateTable: emptyFn,
+    duplicateTables: emptyFn,
 
     // Field operations
     updateField: emptyFn,

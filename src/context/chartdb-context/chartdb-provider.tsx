@@ -324,6 +324,107 @@ export const ChartDBProvider: React.FC<
         [tables]
     );
 
+    const duplicateTables: ChartDBContext['duplicateTables'] = useCallback(
+        async (idsOfTableToBeCopied) => {
+            // Disabled because often used here to drop some fields out of objects
+            /* eslint-disable @typescript-eslint/no-unused-vars */
+            const newTables = idsOfTableToBeCopied.map(
+                (idOfTableToBeCopied) => {
+                    const tableToBeCopied = getTable(idOfTableToBeCopied);
+
+                    // this case is unlikely. The check is here for typescript inference:
+                    if (!tableToBeCopied) {
+                        throw new Error(
+                            "Can't find table to duplicate given it's id"
+                        );
+                    }
+
+                    const {
+                        x,
+                        y,
+                        id: __tableIdToExclude,
+                        createdAt: __tableCreatedAtToExclude,
+                        fields: fieldsToBeCopied,
+                        indexes: indexesToBeCopied,
+                        name: tableName,
+                        ...restOfTheTableToBeCopied
+                        // TODO: add ts check to ensure restOfTheTable has only primitive values
+                    } = tableToBeCopied;
+
+                    const newFields = fieldsToBeCopied.map(
+                        ({
+                            createdAt: __fieldCreatedAtToExclude,
+                            id: originalFieldId,
+                            // TODO: add ts check to ensure restOfTheField has only primitive values
+                            ...restOfTheField
+                        }) => ({
+                            ...restOfTheField,
+                            originalFieldId,
+                            id: generateId(),
+                            createdAt: Date.now(),
+                        })
+                    );
+
+                    return {
+                        ...restOfTheTableToBeCopied,
+                        id: generateId(),
+                        name: `${tableName}_copy`,
+                        x: x + 50,
+                        y: y + 50,
+                        fields: newFields.map(
+                            ({
+                                originalFieldId: __originalFieldIdToExclude,
+                                ...restOfTheField
+                            }) => restOfTheField
+                        ),
+                        indexes: indexesToBeCopied.map(
+                            ({
+                                createdAt: __indexCreatedAtToExclude,
+                                id: __indexIdToExclude,
+                                fieldIds: manyFieldIdsReferencedByOriginalIndex,
+                                // TODO: add ts check to ensure restOfTheIndex has only primitive values
+                                ...restOfTheIndex
+                            }) => ({
+                                ...restOfTheIndex,
+                                id: generateId(),
+                                fieldIds:
+                                    manyFieldIdsReferencedByOriginalIndex.map(
+                                        (fieldIdReferencedByOriginalIndex) =>
+                                            newFields.find(
+                                                ({ originalFieldId }) =>
+                                                    fieldIdReferencedByOriginalIndex ===
+                                                    originalFieldId
+                                            )!.id
+                                    ),
+                                createdAt: Date.now(),
+                            })
+                        ),
+                        createdAt: Date.now(),
+                    };
+                }
+                /* eslint-enable @typescript-eslint/no-unused-vars */
+            );
+
+            await addTables(newTables);
+
+            return newTables;
+        },
+        [addTables, getTable]
+    );
+
+    const duplicateTable: ChartDBContext['duplicateTable'] = useCallback(
+        async (tableId: string) => {
+            const [newTable] = await duplicateTables([tableId]);
+
+            // this case is unlikely. The check is here for typescript inference:
+            if (!newTable)
+                throw new Error("duplicateTables didn't return new table");
+
+            return newTable;
+        },
+        [duplicateTables]
+    );
+
     const removeTables: ChartDBContext['removeTables'] = useCallback(
         async (ids, options) => {
             const tables = ids.map((id) => getTable(id)).filter((t) => !!t);
@@ -1404,6 +1505,8 @@ export const ChartDBProvider: React.FC<
                 removeTables,
                 updateTable,
                 updateTablesState,
+                duplicateTable,
+                duplicateTables,
                 updateField,
                 removeField,
                 createField,
