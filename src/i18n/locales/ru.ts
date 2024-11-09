@@ -5,7 +5,7 @@ export const ru: LanguageTranslation = {
         menu: {
             file: {
                 file: 'Файл',
-                new: 'Новый',
+                new: 'Создать',
                 open: 'Открыть',
                 save: 'Сохранять',
                 import_database: 'Импортировать базу данных',
