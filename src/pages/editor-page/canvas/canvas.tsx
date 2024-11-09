@@ -22,6 +22,7 @@ import {
     MiniMap,
     Controls,
     useReactFlow,
+    useKeyPress,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -66,7 +67,7 @@ import {
 import type { Graph } from '@/lib/graph';
 import { createGraph, removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
-import { debounce } from '@/lib/utils';
+import { cn, debounce, getOperatingSystem } from '@/lib/utils';
 import type { DependencyEdgeType } from './dependency-edge';
 import { DependencyEdge } from './dependency-edge';
 import {
@@ -148,9 +149,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
 
-    const [isShiftKeyPressed, setIsShiftKeyPressed] = useState<boolean>(false);
-    const [isSnapToGridEnabled, setIsSnapToGridEnabled] =
-        useState<boolean>(false);
+    const [snapToGridEnabled, setSnapToGridEnabled] = useState(false);
 
     useEffect(() => {
         setIsInitialLoadingNodes(true);
@@ -692,27 +691,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Shift') {
-                setIsShiftKeyPressed(true);
-            }
-        };
-
-        const handleKeyUp = (event: KeyboardEvent) => {
-            if (event.key === 'Shift') {
-                setIsShiftKeyPressed(false);
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('keyup', handleKeyUp);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
-        };
-    }, []);
+    const shiftPressed = useKeyPress('Shift');
+    const operatingSystem = getOperatingSystem();
 
     return (
         <CanvasContextMenu>
@@ -738,7 +718,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         type: 'relationship-edge',
                     }}
                     panOnScroll={scrollAction === 'pan'}
-                    snapToGrid={isShiftKeyPressed || isSnapToGridEnabled}
+                    snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
                 >
                     <Controls
@@ -769,36 +749,35 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                                             {t('toolbar.reorder_diagram')}
                                         </TooltipContent>
                                     </Tooltip>
-
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <span>
                                                 <Button
                                                     variant="secondary"
-                                                    className={`size-8 p-1 shadow-none hover:bg-pink-600 ${
-                                                        isSnapToGridEnabled ||
-                                                        isShiftKeyPressed
-                                                            ? 'bg-pink-600'
+                                                    className={cn(
+                                                        'size-8 p-1 shadow-none',
+                                                        snapToGridEnabled ||
+                                                            shiftPressed
+                                                            ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
                                                             : ''
-                                                    }`}
+                                                    )}
                                                     onClick={() =>
-                                                        setIsSnapToGridEnabled(
-                                                            !isSnapToGridEnabled
+                                                        setSnapToGridEnabled(
+                                                            (prev) => !prev
                                                         )
                                                     }
                                                 >
-                                                    <Magnet
-                                                        className={`size-4 ${
-                                                            isShiftKeyPressed
-                                                                ? 'bg-pink-600'
-                                                                : ''
-                                                        }`}
-                                                    />
+                                                    <Magnet className="size-4" />
                                                 </Button>
                                             </span>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            {t('Snap to Grid (Shift)')}
+                                            {t('snap_to_grid_tooltip', {
+                                                key:
+                                                    operatingSystem === 'mac'
+                                                        ? '⇧'
+                                                        : 'Shift',
+                                            })}
                                         </TooltipContent>
                                     </Tooltip>
                                 </>

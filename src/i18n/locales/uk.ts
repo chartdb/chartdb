@@ -345,6 +345,9 @@ export const uk: LanguageTranslation = {
             edit_table: 'Редагувати таблицю',
             delete_table: 'Видалити таблицю',
         },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
     },
 };
 

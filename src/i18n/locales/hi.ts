@@ -348,6 +348,9 @@ export const hi: LanguageTranslation = {
             edit_table: 'तालिका संपादित करें',
             delete_table: 'तालिका हटाएँ',
         },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
     },
 };
 

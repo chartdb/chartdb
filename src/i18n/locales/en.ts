@@ -345,6 +345,8 @@ export const en = {
             edit_table: 'Edit Table',
             delete_table: 'Delete Table',
         },
+
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
     },
 };
 
