@@ -126,6 +126,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         }, [expanded, table.fields, isMustDisplayedField]);
 
         return (
+            // TODO?: replace the whole table reference with just tableId, because it's the only thing that's used inside
             <TableNodeContextMenu table={table}>
                 <div
                     className={cn(
