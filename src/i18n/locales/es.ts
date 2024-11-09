@@ -29,9 +29,8 @@ export const es: LanguageTranslation = {
                 zoom_on_scroll: 'Zoom al Desplazarse',
                 theme: 'Tema',
                 change_language: 'Idioma',
-                // TODO: Translate
-                show_dependencies: 'Show Dependencies',
-                hide_dependencies: 'Hide Dependencies',
+                show_dependencies: 'Mostrar dependencias',
+                hide_dependencies: 'Ocultar dependencias',
             },
             help: {
                 help: 'Ayuda',
@@ -80,20 +79,19 @@ export const es: LanguageTranslation = {
         saved: 'Guardado',
         diagrams: 'Diagramas',
         loading_diagram: 'Cargando diagrama...',
-        deselect_all: 'Deselect All', // TODO: Translate
-        select_all: 'Select All', // TODO: Translate
-        clear: 'Clear', // TODO: Translate
-        show_more: 'Show More', // TODO: Translate
-        show_less: 'Show Less', // TODO: Translate
-        // TODO: Translate
+        deselect_all: 'Deseleccionar todo',
+        select_all: 'Seleccionar todo',
+        clear: 'Limpiar',
+        show_more: 'Mostrar más',
+        show_less: 'Mostrar menos',
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
         side_panel: {
-            schema: 'Schema:', // TODO: Translate
-            filter_by_schema: 'Filter by schema', // TODO: Translate
-            search_schema: 'Search schema...', // TODO: Translate
-            no_schemas_found: 'No schemas found.', // TODO: Translate
+            schema: 'Esquema:',
+            filter_by_schema: 'Filtrar por esquema',
+            search_schema: 'Buscar esquema...',
+            no_schemas_found: 'No se encontraron esquemas.',
             view_all_options: 'Ver todas las opciones...',
             tables_section: {
                 tables: 'Tablas',
@@ -113,7 +111,7 @@ export const es: LanguageTranslation = {
                     index_select_fields: 'Seleccionar campos',
                     field_name: 'Nombre',
                     field_type: 'Tipo',
-                    no_types_found: 'No types found', // TODO: Translate
+                    no_types_found: 'No se encontraron tipos',
                     field_actions: {
                         title: 'Atributos del Campo',
                         unique: 'Único',
@@ -160,23 +158,22 @@ export const es: LanguageTranslation = {
                     description: 'Crea una relación para conectar tablas',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
+                dependencies: 'Dependencias',
+                filter: 'Filtro',
+                collapse: 'Colapsar todo',
                 dependency: {
-                    table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    table: 'Tabla',
+                    dependent_table: 'Vista dependiente',
+                    delete_dependency: 'Eliminar',
                     dependency_actions: {
-                        title: 'Actions',
-                        delete_dependency: 'Delete',
+                        title: 'Acciones',
+                        delete_dependency: 'Eliminar',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'Sin dependencias',
+                    description: 'Crea una vista para comenzar',
                 },
             },
         },
@@ -189,8 +186,7 @@ export const es: LanguageTranslation = {
             undo: 'Deshacer',
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
-            // TODO: Translate
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'Resaltar tablas superpuestas',
         },
 
         new_diagram_dialog: {
@@ -214,9 +210,8 @@ export const es: LanguageTranslation = {
                     step_1: 'Ve a Herramientas > Opciones > Resultados de Consulta > SQL Server.',
                     step_2: 'Si estás usando "Resultados en Cuadrícula", cambia el Máximo de Caracteres Recuperados para Datos No XML (configúralo en 9999999).',
                 },
-                // TODO: Translate
-                instructions_link: 'Need help? Watch how',
-                check_script_result: 'Check Script Result',
+                instructions_link: '¿Necesitas ayuda? mira cómo',
+                check_script_result: 'Revisa el resultado del script',
             },
 
             cancel: 'Cancelar',
@@ -227,7 +222,6 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            // TODO: Translate
             title: 'Abrir Diagrama',
             description:
                 'Selecciona un diagrama para abrir de la lista a continuación.',
@@ -293,16 +287,15 @@ export const es: LanguageTranslation = {
             },
         },
 
-        // TODO: Translate
         export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
+            title: 'Exportar imagen',
+            description: 'Escoge el factor de escalamiento para exportar:',
+            scale_1x: '1x regular',
+            scale_2x: '2x (recomendado)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Cancelar',
+            export: 'Exportar',
         },
 
         new_table_schema_dialog: {
