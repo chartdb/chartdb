@@ -4,7 +4,7 @@ import image from '@/assets/templates/adonis-acl.png';
 import imageDark from '@/assets/templates/adonis-acl-dark.png';
 
 export const adonisAclDb: Template = {
-    slug: 'adonis-acl-db',
+    slug: 'adonis-acl-database',
     name: 'Adonis Acl Database',
     shortDescription: 'Role based permissions',
     description:
@@ -16,7 +16,7 @@ export const adonisAclDb: Template = {
     url: 'https://github.com/enniel/adonis-acl',
     diagram: {
         id: 'adonis_acl_db',
-        name: 'adonis-acl-db',
+        name: 'adonis-acl-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,

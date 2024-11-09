@@ -4,7 +4,7 @@ import image from '@/assets/templates/django-db.png';
 import imageDark from '@/assets/templates/django-db-dark.png';
 
 export const djangoDb: Template = {
-    slug: 'django-db',
+    slug: 'django-database',
     name: 'Django',
     shortDescription: 'High-level Python web framework',
     description:
@@ -16,7 +16,7 @@ export const djangoDb: Template = {
     url: 'https://github.com/django/django',
     diagram: {
         id: 'django_db',
-        name: 'django-db',
+        name: 'django-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,

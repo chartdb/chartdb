@@ -4,7 +4,7 @@ import image from '@/assets/templates/twitter-db.png';
 import imageDark from '@/assets/templates/twitter-db-dark.png';
 
 export const twitterDb: Template = {
-    slug: 'twitter-db',
+    slug: 'twitter-database',
     name: 'Twitter Database',
     shortDescription: 'Social media platform clone application',
     description:
@@ -16,7 +16,7 @@ export const twitterDb: Template = {
     featured: true,
     diagram: {
         id: 'twitter_db',
-        name: 'twitter-db',
+        name: 'twitter-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,
