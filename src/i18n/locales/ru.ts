@@ -17,8 +17,8 @@ export const ru: LanguageTranslation = {
             edit: {
                 edit: 'Изменение',
                 undo: 'Отменить',
-                redo: 'Повторить',
-                clear: 'Прозрачный',
+                redo: 'Вернуть',
+                clear: 'Очистить',
             },
             view: {
                 view: 'Вид',
@@ -26,7 +26,7 @@ export const ru: LanguageTranslation = {
                 hide_sidebar: 'Скрыть боковую панель',
                 hide_cardinality: 'Скрыть множественность связи',
                 show_cardinality: 'Показать множественность связи',
-                zoom_on_scroll: 'Увеличить при прокрутке',
+                zoom_on_scroll: 'Увеличение при прокрутке',
                 theme: 'Тема',
                 change_language: 'Сменить язык',
                 show_dependencies: 'Показать зависимости',
@@ -68,20 +68,20 @@ export const ru: LanguageTranslation = {
             title: 'Множественные схемы',
             description:
                 '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
-            dont_show_again: "Больше не показывать",
+            dont_show_again: 'Больше не показывать',
             change_schema: 'Изменить',
             none: 'никто',
         },
 
         theme: {
-            system: 'Система',
+            system: 'Системная',
             light: 'Светлая',
             dark: 'Темная',
         },
 
         zoom: {
-            on: 'Включён',
-            off: 'Выключен',
+            on: 'Включено',
+            off: 'Выключено',
         },
 
         last_saved: 'Последнее сохранение',
@@ -108,11 +108,11 @@ export const ru: LanguageTranslation = {
 
                 table: {
                     fields: 'Поля',
-                    nullable: 'Обнуляемый?',
-                    primary_key: 'Первичный ключ',
+                    nullable: 'Может содержать NULL?',
+                    primary_key: 'Первичный ключ,',
                     indexes: 'Индексы',
                     comments: 'Комментарии',
-                    no_comments: 'Без комментариев',
+                    no_comments: 'Нет комментария',
                     add_field: 'Добавить поле',
                     add_index: 'Добавить индекс',
                     index_select_fields: 'Выберите поля',
@@ -123,7 +123,7 @@ export const ru: LanguageTranslation = {
                         title: 'Атрибуты поля',
                         unique: 'Уникальный',
                         comments: 'Комментарии',
-                        no_comments: 'Без комментариев',
+                        no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
                     },
                     index_actions: {
@@ -133,7 +133,7 @@ export const ru: LanguageTranslation = {
                         delete_index: 'Удалить индекс',
                     },
                     table_actions: {
-                        title: 'Действия таблицы',
+                        title: 'Действия',
                         change_schema: 'Изменить схему',
                         add_field: 'Добавить поле',
                         add_index: 'Добавить индекс',
@@ -153,7 +153,7 @@ export const ru: LanguageTranslation = {
                 relationship: {
                     primary: 'Основная таблица',
                     foreign: 'Справочная таблица',
-                    cardinality: 'Мощность',
+                    cardinality: 'Тип множественности связи',
                     delete_relationship: 'Удалить',
                     relationship_actions: {
                         title: 'Действия',
@@ -188,10 +188,10 @@ export const ru: LanguageTranslation = {
         toolbar: {
             zoom_in: 'Увеличить масштаб',
             zoom_out: 'Уменьшить масштаб',
-            save: 'Сохранять',
+            save: 'Сохранить',
             show_all: 'Показать все',
             undo: 'Отменить',
-            redo: 'Переделать',
+            redo: 'Вернуть',
             reorder_diagram: 'Переупорядочить диаграмму',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
         },
@@ -201,7 +201,7 @@ export const ru: LanguageTranslation = {
                 title: 'Какова ваша база данных?',
                 description:
                     'Каждая база данных имеет свои уникальные функции и возможности.',
-                check_examples_long: 'Проверьте примеры',
+                check_examples_long: 'Открыть примеры',
                 check_examples_short: 'Примеры',
             },
 
@@ -209,18 +209,19 @@ export const ru: LanguageTranslation = {
                 title: 'Импортируйте свою базу данных',
                 database_edition: 'Версия базы данных:',
                 step_1: 'Запустите этот скрипт в своей базе данных:',
-                step_2: 'Вставьте результат скрипта сюда:',
-                script_results_placeholder: 'Результаты скрипта здесь...',
+                step_2: 'Вставьте вывод скрипта сюда:',
+                script_results_placeholder: 'Вывод скрипта здесь...',
                 ssms_instructions: {
                     button_text: 'SSMS Инструкции',
                     title: 'Инструкции',
-                    step_1: 'Перейти к инструментам > Параметры > Результаты запроса > SQL Сервер.',
+                    step_1: 'Откройте в меню пункты Инструменты > Параметры > Результаты запроса > SQL Сервер.',
                     step_2: 'Если вы используете "Результат в сетке," измените Максимальное количество извлекаемых символов для данных, отличных от XML (установите на 9999999).',
                 },
                 instructions_link: 'Нужна помощь? Посмотрите, как',
+                check_script_result: 'Проверить результат выполнения скрипта',
             },
 
-            cancel: 'Отмена',
+            cancel: 'Отменить',
             back: 'Назад',
             empty_diagram: 'Пустая диаграмма',
             continue: 'Продолжить',
@@ -229,7 +230,8 @@ export const ru: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Открыть диаграмму',
-            description: 'Выберите диаграмму, которую нужно открыть, из списка ниже.',
+            description:
+                'Выберите диаграмму, которую нужно открыть, из списка ниже.',
             table_columns: {
                 name: 'Имя',
                 created_at: 'Создано в',
@@ -321,7 +323,7 @@ export const ru: LanguageTranslation = {
         star_us_dialog: {
             title: 'Помогите нам стать лучше!',
             description:
-                "Хотите отметить нас на GitHub? Это всего лишь один клик!",
+                'Хотите отметить нас на GitHub? Это всего лишь один клик!',
             close: 'Не сейчас',
             confirm: 'Конечно!',
         },
@@ -341,6 +343,12 @@ export const ru: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Изменить таблицу',
             delete_table: 'Удалить таблицу',
+        },
+
+        copy_to_clipboard: 'Скопировать в буфер обмена',
+        copied: 'Скопировано!',
+        tool_tips: {
+            double_click_to_edit: 'Кликните дважды, чтобы скопировать',
         },
     },
 };
