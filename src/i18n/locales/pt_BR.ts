@@ -345,6 +345,10 @@ export const pt_BR: LanguageTranslation = {
             edit_table: 'Editar Tabela',
             delete_table: 'Excluir Tabela',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'Duplo clique para editar',
+        },
     },
 };
 

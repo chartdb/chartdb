@@ -607,9 +607,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </div>
             {isDesktop ? (
                 <>
-                    <div className="group flex flex-1 flex-row items-center justify-center">
-                        <DiagramName />
-                    </div>
+                    <DiagramName />
                     <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                         <LastSaved />
                         {renderStars()}
