@@ -347,6 +347,9 @@ export const de: LanguageTranslation = {
             delete_table: 'Tabelle löschen',
         },
 
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
         tool_tips: {
             double_click_to_edit: 'Doppelklicken zum Bearbeiten',
         },

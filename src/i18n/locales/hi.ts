@@ -349,6 +349,9 @@ export const hi: LanguageTranslation = {
             delete_table: 'तालिका हटाएँ',
         },
 
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
         tool_tips: {
             double_click_to_edit: 'संपादित करने के लिए डबल-क्लिक करें',
         },
