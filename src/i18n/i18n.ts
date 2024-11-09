@@ -1,49 +1,30 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import type { LanguageMetadata } from './types';
-import { en, enMetadata } from './locales/en';
-import { es, esMetadata } from './locales/es';
-import { fr, frMetadata } from './locales/fr';
-import { de, deMetadata } from './locales/de';
-import { hi, hiMetadata } from './locales/hi';
-import { ja, jaMetadata } from './locales/ja';
-import { ko_KR, ko_KRMetadata } from './locales/ko_KR.ts';
-import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
-import { uk, ukMetadata } from './locales/uk';
-import { ru, ruMetadata } from './locales/ru';
-import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
-import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
 
-export const languages: LanguageMetadata[] = [
-    enMetadata,
-    esMetadata,
-    frMetadata,
-    deMetadata,
-    hiMetadata,
-    jaMetadata,
-    ko_KRMetadata,
-    pt_BRMetadata,
-    ukMetadata,
-    ruMetadata,
-    zh_CNMetadata,
-    zh_TWMetadata,
-];
+import * as locales from './locales';
+import { enMetadata } from './locales/en';
 
-const resources = {
-    en,
-    es,
-    fr,
-    de,
-    hi,
-    ja,
-    ko_KR,
-    pt_BR,
-    uk,
-    ru,
-    zh_CN,
-    zh_TW,
-};
+type LocalesKeys = keyof typeof locales;
+type MetadataKeys = Extract<LocalesKeys, `${string}Metadata`>;
+type OtherLocalesKeys = Exclude<LocalesKeys, `${string}Metadata`>;
+
+export const languages = Object.entries(locales)
+    .filter(([exportedPropertyName]) =>
+        exportedPropertyName.endsWith('Metadata')
+    )
+    .map(
+        // gives values of consts, whose name ends with `Metadata`
+        (exports) => exports[1] as (typeof locales)[MetadataKeys]
+    );
+
+const resources = Object.fromEntries(
+    Object.entries(locales).filter(
+        ([exportedPropertyName]) =>
+            // Notice _!_ to get everything else (non-metadata)
+            !exportedPropertyName.endsWith('Metadata')
+    )
+) as Pick<typeof locales, OtherLocalesKeys>;
 
 i18n.use(LanguageDetector)
     .use(initReactI18next)
