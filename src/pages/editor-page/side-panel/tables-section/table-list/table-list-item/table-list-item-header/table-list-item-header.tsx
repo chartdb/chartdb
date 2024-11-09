@@ -8,6 +8,7 @@ import {
     FileKey2,
     Check,
     Group,
+    Copy,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -33,6 +34,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useTableActionsDropdownClickHandlers } from './useTableActionsDropdownClickHandlers';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -41,14 +43,9 @@ export interface TableListItemHeaderProps {
 export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
 }) => {
-    const {
-        updateTable,
-        removeTable,
-        createIndex,
-        createField,
-        schemas,
-        filteredSchemas,
-    } = useChartDB();
+    const { updateTable, schemas, filteredSchemas } = useChartDB();
+    const { createField, createIndex, duplicateTable, removeTable } =
+        useTableActionsDropdownClickHandlers(table.id);
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
@@ -58,14 +55,18 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { isMd: isDesktop } = useBreakpoint('md');
     const inputRef = React.useRef<HTMLInputElement>(null);
 
+    // tableId is consciously extracted, to prevent relying on table object
+    // reference inside callbacks to prevent leaks. We actually watch only tableId in them
+    const tableId = table.id;
+
     const editTableName = useCallback(() => {
         if (!editMode) return;
         if (tableName.trim()) {
-            updateTable(table.id, { name: tableName.trim() });
+            updateTable(tableId, { name: tableName.trim() });
         }
 
         setEditMode(false);
-    }, [tableName, table.id, updateTable, editMode]);
+    }, [tableName, tableId, updateTable, editMode]);
 
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
@@ -79,45 +80,30 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             event.stopPropagation();
             setNodes((nodes) =>
-                nodes.map((node) =>
-                    node.id == table.id
-                        ? {
-                              ...node,
-                              selected: true,
-                          }
-                        : {
-                              ...node,
-                              selected: false,
-                          }
-                )
+                nodes.map((node) => ({
+                    ...node,
+                    selected: node.id == tableId,
+                }))
             );
             fitView({
                 duration: 500,
                 maxZoom: 1,
                 minZoom: 1,
-                nodes: [
-                    {
-                        id: table.id,
-                    },
-                ],
+                nodes: [{ id: tableId }],
             });
 
             if (!isDesktop) {
                 hideSidePanel();
             }
         },
-        [fitView, table.id, setNodes, hideSidePanel, isDesktop]
+        [fitView, tableId, setNodes, hideSidePanel, isDesktop]
     );
-
-    const deleteTableHandler = useCallback(() => {
-        removeTable(table.id);
-    }, [table.id, removeTable]);
 
     const updateTableSchema = useCallback(
         (schema: string) => {
-            updateTable(table.id, { schema });
+            updateTable(tableId, { schema });
         },
-        [table.id, updateTable]
+        [tableId, updateTable]
     );
 
     const changeSchema = useCallback(() => {
@@ -128,90 +114,85 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         });
     }, [openTableSchemaDialog, table, schemas, updateTableSchema]);
 
-    const renderDropDownMenu = useCallback(
-        () => (
-            <DropdownMenu>
-                <DropdownMenuTrigger>
-                    <ListItemHeaderButton>
-                        <EllipsisVertical />
-                    </ListItemHeaderButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-fit">
-                    <DropdownMenuLabel>
+    // There's no need in useCallback, because the function itself isn't passed
+    // for example as a prop, but immediately invoked right in this component,
+    // and only needed to manage code nesting
+    const renderDropDownMenu = () => (
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <ListItemHeaderButton>
+                    <EllipsisVertical />
+                </ListItemHeaderButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-fit">
+                <DropdownMenuLabel>
+                    {t('side_panel.tables_section.table.table_actions.title')}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {schemas.length > 0 ? (
+                    <>
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                className="flex justify-between gap-4"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    changeSchema();
+                                }}
+                            >
+                                {t(
+                                    'side_panel.tables_section.table.table_actions.change_schema'
+                                )}
+                                <Group className="size-3.5" />
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                    </>
+                ) : null}
+                <DropdownMenuGroup>
+                    {[
+                        {
+                            eventHandler: createField,
+                            i18nName:
+                                'side_panel.tables_section.table.table_actions.add_field',
+                            IconComponent: FileType2,
+                        },
+                        {
+                            eventHandler: createIndex,
+                            i18nName:
+                                'side_panel.tables_section.table.table_actions.add_index',
+                            IconComponent: FileKey2,
+                        },
+                        {
+                            eventHandler: duplicateTable,
+                            i18nName:
+                                'side_panel.tables_section.table.table_actions.duplicate_table',
+                            IconComponent: Copy,
+                        },
+                    ].map(({ IconComponent, i18nName, eventHandler }) => (
+                        <DropdownMenuItem
+                            className="flex justify-between gap-4"
+                            key={i18nName}
+                            onClick={eventHandler}
+                        >
+                            {t(i18nName)}
+                            <IconComponent className="size-3.5" />
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                    <DropdownMenuItem
+                        onClick={removeTable}
+                        className="flex justify-between !text-red-700"
+                    >
                         {t(
-                            'side_panel.tables_section.table.table_actions.title'
+                            'side_panel.tables_section.table.table_actions.delete_table'
                         )}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {schemas.length > 0 ? (
-                        <>
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem
-                                    className="flex justify-between gap-4"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        changeSchema();
-                                    }}
-                                >
-                                    {t(
-                                        'side_panel.tables_section.table.table_actions.change_schema'
-                                    )}
-                                    <Group className="size-3.5" />
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
-                        </>
-                    ) : null}
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            className="flex justify-between gap-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                createField(table.id);
-                            }}
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.add_field'
-                            )}
-                            <FileType2 className="size-3.5" />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            className="flex justify-between gap-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                createIndex(table.id);
-                            }}
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.add_index'
-                            )}
-                            <FileKey2 className="size-3.5" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onClick={deleteTableHandler}
-                            className="flex justify-between !text-red-700"
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.delete_table'
-                            )}
-                            <Trash2 className="size-3.5 text-red-700" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        ),
-        [
-            table.id,
-            createField,
-            createIndex,
-            deleteTableHandler,
-            t,
-            changeSchema,
-            schemas.length,
-        ]
+                        <Trash2 className="size-3.5 text-red-700" />
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 
     let schemaToDisplay;
