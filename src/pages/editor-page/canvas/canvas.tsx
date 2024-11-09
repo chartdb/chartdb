@@ -36,7 +36,7 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid, AlertTriangle } from 'lucide-react';
+import { Pencil, LayoutGrid, AlertTriangle, Magnet } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -147,6 +147,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
+
+    const [isShiftKeyPressed, setIsShiftKeyPressed] = useState<boolean>(false);
+    const [isSnapToGridEnabled, setIsSnapToGridEnabled] =
+        useState<boolean>(false);
 
     useEffect(() => {
         setIsInitialLoadingNodes(true);
@@ -688,6 +692,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Shift') {
+                setIsShiftKeyPressed(true);
+            }
+        };
+
+        const handleKeyUp = (event: KeyboardEvent) => {
+            if (event.key === 'Shift') {
+                setIsShiftKeyPressed(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, []);
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full">
@@ -712,6 +738,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         type: 'relationship-edge',
                     }}
                     panOnScroll={scrollAction === 'pan'}
+                    snapToGrid={isShiftKeyPressed || isSnapToGridEnabled}
+                    snapGrid={[20, 20]}
                 >
                     <Controls
                         position="top-left"
@@ -722,24 +750,58 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     >
                         <div className="flex flex-col items-center gap-2 md:flex-row">
                             {!readonly ? (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span>
-                                            <Button
-                                                variant="secondary"
-                                                className="size-8 p-1 shadow-none"
-                                                onClick={
-                                                    showReorderConfirmation
-                                                }
-                                            >
-                                                <LayoutGrid className="size-4" />
-                                            </Button>
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t('toolbar.reorder_diagram')}
-                                    </TooltipContent>
-                                </Tooltip>
+                                <>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="secondary"
+                                                    className="size-8 p-1 shadow-none"
+                                                    onClick={
+                                                        showReorderConfirmation
+                                                    }
+                                                >
+                                                    <LayoutGrid className="size-4" />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t('toolbar.reorder_diagram')}
+                                        </TooltipContent>
+                                    </Tooltip>
+
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="secondary"
+                                                    className={`size-8 p-1 shadow-none hover:bg-pink-600 ${
+                                                        isSnapToGridEnabled ||
+                                                        isShiftKeyPressed
+                                                            ? 'bg-pink-600'
+                                                            : ''
+                                                    }`}
+                                                    onClick={() =>
+                                                        setIsSnapToGridEnabled(
+                                                            !isSnapToGridEnabled
+                                                        )
+                                                    }
+                                                >
+                                                    <Magnet
+                                                        className={`size-4 ${
+                                                            isShiftKeyPressed
+                                                                ? 'bg-pink-600'
+                                                                : ''
+                                                        }`}
+                                                    />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t('Snap to Grid (Shift)')}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </>
                             ) : null}
 
                             <div
