@@ -10,7 +10,7 @@ export const pokemonDb: Template = {
     description: 'Mysql Relational of 722 pokemons. 14 Tables 5 views.',
     image,
     imageDark,
-    tags: ['mysql', 'pokemon', 'example apps'],
+    tags: ['MySQL', 'Pokemon', 'Example Apps'],
     featured: true,
     url: 'https://github.com/brianr852/Pokemon-Database',
     diagram: {

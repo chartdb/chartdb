@@ -11,7 +11,7 @@ export const employeeDb: Template = {
         'A schema for database of employees, departments, and salaries.',
     image,
     imageDark,
-    tags: ['mysql'],
+    tags: ['MySQL'],
     featured: true,
     diagram: {
         id: 'employees_db',
