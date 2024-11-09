@@ -4,7 +4,7 @@ import image from '@/assets/templates/wordpress-db.png';
 import imageDark from '@/assets/templates/wordpress-db-dark.png';
 
 export const wordpressDb: Template = {
-    slug: 'wordpress-db',
+    slug: 'wordpress-database',
     name: 'WordPress',
     shortDescription: 'An open-source PHP Content Management System',
     description:
@@ -16,7 +16,7 @@ export const wordpressDb: Template = {
     url: 'https://wordpress.org',
     diagram: {
         id: 'wordpress_db',
-        name: 'wordpress-db',
+        name: 'wordpress-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.MYSQL,

@@ -4,7 +4,7 @@ import image from '@/assets/templates/employeedb.png';
 import imageDark from '@/assets/templates/employeedb-dark.png';
 
 export const employeeDb: Template = {
-    slug: 'employees-db',
+    slug: 'employees-database',
     name: 'Employees',
     shortDescription: 'Employees, departments, and salaries',
     description:
@@ -15,7 +15,7 @@ export const employeeDb: Template = {
     featured: true,
     diagram: {
         id: 'employees_db',
-        name: 'employees-db',
+        name: 'employees-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.MYSQL,

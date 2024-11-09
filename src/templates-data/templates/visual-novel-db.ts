@@ -4,7 +4,7 @@ import image from '@/assets/templates/visual-novel-db.png';
 import imageDark from '@/assets/templates/visual-novel-db-dark.png';
 
 export const visualNovelDb: Template = {
-    slug: 'visual-novel-db',
+    slug: 'visual-novel-database',
     name: 'The Visual Novel Database',
     shortDescription: 'The Visual Novel Database',
     description:
@@ -16,7 +16,7 @@ export const visualNovelDb: Template = {
     url: 'https://vndb.org',
     diagram: {
         id: 'visual_novel_db',
-        name: 'visual-novel-db',
+        name: 'visual-novel-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,
