@@ -145,6 +145,7 @@ export const de: LanguageTranslation = {
                         change_schema: 'Schema ändern',
                         add_field: 'Feld hinzufügen',
                         add_index: 'Index hinzufügen',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Tabelle löschen',
                     },
                 },
@@ -371,6 +372,7 @@ export const de: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Tabelle bearbeiten',
+            duplicate_table: 'Duplicate table', // TODO: Translate
             delete_table: 'Tabelle löschen',
         },
 

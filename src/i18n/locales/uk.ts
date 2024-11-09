@@ -145,6 +145,7 @@ export const uk: LanguageTranslation = {
                         change_schema: 'Змінити схему',
                         add_field: 'Додати поле',
                         add_index: 'Додати індекс',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Видалити таблицю',
                     },
                 },
@@ -370,6 +371,7 @@ export const uk: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Редагувати таблицю',
+            duplicate_table: 'Duplicate table', // TODO: Translate
             delete_table: 'Видалити таблицю',
         },
 

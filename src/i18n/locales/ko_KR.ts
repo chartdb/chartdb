@@ -145,6 +145,7 @@ export const ko_KR: LanguageTranslation = {
                         change_schema: '스키마 변경',
                         add_field: '필드 추가',
                         add_index: '인덱스 추가',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: '테이블 삭제',
                     },
                 },
@@ -369,6 +370,7 @@ export const ko_KR: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: '테이블 수정',
+            duplicate_table: 'Duplicate table', // TODO: Translate
             delete_table: '테이블 삭제',
         },
 

@@ -136,6 +136,7 @@ export const es: LanguageTranslation = {
                         change_schema: 'Cambiar Esquema',
                         add_field: 'Agregar Campo',
                         add_index: 'Agregar Índice',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Eliminar Tabla',
                     },
                 },
@@ -371,6 +372,7 @@ export const es: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Editar Tabla',
+            duplicate_table: 'Duplicate table', // TODO: Translate
             delete_table: 'Eliminar Tabla',
         },
 
