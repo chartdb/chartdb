@@ -4,7 +4,7 @@ import image from '@/assets/templates/laravel-db.png';
 import imageDark from '@/assets/templates/laravel-db-dark.png';
 
 export const laravelDb: Template = {
-    slug: 'laravel-db',
+    slug: 'laravel-database',
     name: 'Laravel',
     shortDescription: 'PHP web framework',
     description:
@@ -16,7 +16,7 @@ export const laravelDb: Template = {
     url: 'https://github.com/laravel/laravel',
     diagram: {
         id: 'laravel_db',
-        name: 'laravel-db',
+        name: 'laravel-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,

@@ -139,7 +139,7 @@ const TemplatesPageComponent: React.FC = () => {
                                 </h4>
                                 {allTags ? (
                                     <ListMenu
-                                        className="mt-1 w-44 shrink-0"
+                                        className="mt-1 shrink-0"
                                         items={allTags.map((currentTag) => ({
                                             title: currentTag,
                                             href: `/templates/tags/${currentTag}`,

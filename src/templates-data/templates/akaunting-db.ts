@@ -4,7 +4,7 @@ import image from '@/assets/templates/akaunting.png';
 import imageDark from '@/assets/templates/akaunting-dark.png';
 
 export const akauntingDb: Template = {
-    slug: 'akaunting-db',
+    slug: 'akaunting-database',
     name: 'Akaunting',
     shortDescription: 'Online Accounting Software',
     description: `For small businesses and freelancers, built with Laravel and VueJS`,
@@ -15,7 +15,7 @@ export const akauntingDb: Template = {
     url: 'https://github.com/akaunting/akaunting',
     diagram: {
         id: 'akaunting_db',
-        name: 'akaunting-db',
+        name: 'akaunting-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,

@@ -347,6 +347,10 @@ export const ko_KR: LanguageTranslation = {
 
         // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: '더블클릭하여 편집',
+        },
     },
 };
 

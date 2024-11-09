@@ -4,7 +4,7 @@ import image from '@/assets/templates/airbnb.png';
 import imageDark from '@/assets/templates/airbnb-dark.png';
 
 export const airbnbDb: Template = {
-    slug: 'airbnb-db',
+    slug: 'airbnb-database',
     name: 'Airbnb',
     shortDescription: 'Short-term Vacation Rentals',
     description: 'Example database schema diagram for Airbnb',
@@ -14,7 +14,7 @@ export const airbnbDb: Template = {
     featured: true,
     diagram: {
         id: 'airbnb_db',
-        name: 'airbnb-db',
+        name: 'airbnb-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,

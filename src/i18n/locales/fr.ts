@@ -352,6 +352,10 @@ export const fr: LanguageTranslation = {
 
         // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'Double-cliquez pour modifier',
+        },
     },
 };
 

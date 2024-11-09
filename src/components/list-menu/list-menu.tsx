@@ -34,7 +34,7 @@ export const ListMenu = React.forwardRef<HTMLDivElement, ListMenuProps>(
                                 strokeWidth={item.selected ? 2.4 : 2}
                             />
                         ) : null}
-                        {item.title}
+                        <span className="min-w-0 truncate">{item.title}</span>
                     </Link>
                 ))}
             </div>

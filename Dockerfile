@@ -1,5 +1,7 @@
 FROM node:22-alpine AS builder
 
+ARG VITE_OPENAI_API_KEY
+
 WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
