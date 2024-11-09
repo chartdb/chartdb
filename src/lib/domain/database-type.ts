@@ -5,4 +5,5 @@ export enum DatabaseType {
     SQL_SERVER = 'sql_server',
     MARIADB = 'mariadb',
     SQLITE = 'sqlite',
+    FIREBIRD = 'firebird',
 }

@@ -68,6 +68,7 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 -   ✅ MariaDB
 -   ✅ SQLite
 -   ✅ ClickHouse
+-   ✅ Firebird
 
 ## Getting Started
 

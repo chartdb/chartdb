@@ -35,6 +35,7 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                 <DatabaseOption type={DatabaseType.MARIADB} />
                 <DatabaseOption type={DatabaseType.SQLITE} />
                 <DatabaseOption type={DatabaseType.SQL_SERVER} />
+                <DatabaseOption type={DatabaseType.FIREBIRD} />
                 <ExampleOption />
             </ToggleGroup>
         </div>
