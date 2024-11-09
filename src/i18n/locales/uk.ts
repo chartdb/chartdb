@@ -345,6 +345,10 @@ export const uk: LanguageTranslation = {
             edit_table: 'Редагувати таблицю',
             delete_table: 'Видалити таблицю',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'Двойной клик для редактирования',
+        },
     },
 };
 

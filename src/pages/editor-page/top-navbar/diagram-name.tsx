@@ -10,6 +10,11 @@ import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { labelVariants } from '@/components/label/label-variants';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface DiagramNameProps {}
 
@@ -84,17 +89,24 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                         </>
                     ) : (
                         <>
-                            <h1
-                                className={cn(
-                                    labelVariants(),
-                                    'group-hover:underline'
-                                )}
-                                onClick={(e) => {
-                                    enterEditMode(e);
-                                }}
-                            >
-                                {diagramName}
-                            </h1>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h1
+                                        className={cn(
+                                            labelVariants(),
+                                            'group-hover:underline'
+                                        )}
+                                        onDoubleClick={(e) => {
+                                            enterEditMode(e);
+                                        }}
+                                    >
+                                        {diagramName}
+                                    </h1>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('tool_tips.double_click_to_edit')}
+                                </TooltipContent>
+                            </Tooltip>
                         </>
                     )}
                 </div>

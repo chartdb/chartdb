@@ -28,6 +28,11 @@ import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -231,15 +236,24 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     />
                 ) : (
                     <div className="flex items-center">
-                        <div
-                            onClick={handleNameClick}
-                            className="text-editable truncate px-2 py-1"
-                        >
-                            {table.name}
-                            <span className="text-xs text-muted-foreground">
-                                {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
-                            </span>
-                        </div>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div
+                                    onDoubleClick={handleNameClick}
+                                    className="text-editable truncate px-2 py-[0.1rem]"
+                                >
+                                    {table.name}
+                                    <span className="text-xs text-muted-foreground">
+                                        {schemaToDisplay
+                                            ? ` (${schemaToDisplay})`
+                                            : ''}
+                                    </span>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {t('tool_tips.double_click_to_edit')}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 )}
             </div>

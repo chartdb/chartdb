@@ -350,6 +350,10 @@ export const ja: LanguageTranslation = {
             edit_table: 'テーブルを編集',
             delete_table: 'テーブルを削除',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'ダブルクリックして編集',
+        },
     },
 };
 

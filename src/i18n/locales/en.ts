@@ -345,6 +345,10 @@ export const en = {
             edit_table: 'Edit Table',
             delete_table: 'Delete Table',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'Double-click to edit',
+        },
     },
 };
 
