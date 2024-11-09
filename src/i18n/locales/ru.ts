@@ -347,6 +347,8 @@ export const ru: LanguageTranslation = {
 
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
