@@ -353,6 +353,10 @@ export const es: LanguageTranslation = {
             edit_table: 'Editar Tabla',
             delete_table: 'Eliminar Tabla',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'Doble clic para editar',
+        },
     },
 };
 

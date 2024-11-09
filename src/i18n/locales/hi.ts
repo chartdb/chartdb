@@ -348,6 +348,10 @@ export const hi: LanguageTranslation = {
             edit_table: 'तालिका संपादित करें',
             delete_table: 'तालिका हटाएँ',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'संपादित करने के लिए डबल-क्लिक करें',
+        },
     },
 };
 

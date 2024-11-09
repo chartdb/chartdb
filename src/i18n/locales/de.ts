@@ -346,6 +346,10 @@ export const de: LanguageTranslation = {
             edit_table: 'Tabelle bearbeiten',
             delete_table: 'Tabelle löschen',
         },
+
+        tool_tips: {
+            double_click_to_edit: 'Doppelklicken zum Bearbeiten',
+        },
     },
 };
 

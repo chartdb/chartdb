@@ -344,6 +344,10 @@ export const ko_KR: LanguageTranslation = {
             edit_table: '테이블 수정',
             delete_table: '테이블 삭제',
         },
+
+        tool_tips: {
+            double_click_to_edit: '더블클릭하여 편집',
+        },
     },
 };
 

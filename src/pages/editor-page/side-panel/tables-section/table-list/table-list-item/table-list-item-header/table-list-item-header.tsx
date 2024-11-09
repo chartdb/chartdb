@@ -28,6 +28,11 @@ import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -65,10 +70,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
+    const enterEditMode = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setEditMode(true);
     };
 
@@ -219,7 +222,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1">
+            <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -232,12 +235,24 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    <div className="truncate">
-                        {table.name}
-                        <span className="text-xs text-muted-foreground">
-                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
-                        </span>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div
+                                onDoubleClick={enterEditMode}
+                                className="text-editable truncate px-2 py-0.5"
+                            >
+                                {table.name}
+                                <span className="text-xs text-muted-foreground">
+                                    {schemaToDisplay
+                                        ? ` (${schemaToDisplay})`
+                                        : ''}
+                                </span>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('tool_tips.double_click_to_edit')}
+                        </TooltipContent>
+                    </Tooltip>
                 )}
             </div>
             <div className="flex flex-row-reverse">
