@@ -351,6 +351,9 @@ export const ja: LanguageTranslation = {
             delete_table: 'テーブルを削除',
         },
 
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
         tool_tips: {
             double_click_to_edit: 'ダブルクリックして編集',
         },
