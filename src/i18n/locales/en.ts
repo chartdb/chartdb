@@ -32,6 +32,11 @@ export const en = {
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
             },
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'Help',
                 visit_website: 'Visit ChartDB',
@@ -224,6 +229,7 @@ export const en = {
             },
 
             cancel: 'Cancel',
+            import_from_file: 'Import from File',
             back: 'Back',
             empty_diagram: 'Empty diagram',
             continue: 'Continue',
@@ -328,7 +334,25 @@ export const en = {
             close: 'Not now',
             confirm: 'Of course!',
         },
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
 
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',
