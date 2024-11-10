@@ -13,6 +13,9 @@ import PostgresqlLogo2 from '@/assets/postgresql_logo_2.png';
 import MariaDBLogo2 from '@/assets/mariadb_logo_2.png';
 import SqliteLogo2 from '@/assets/sqlite_logo_2.png';
 import SqlServerLogo2 from '@/assets/sql_server_logo_2.png';
+import FirebirdLogo from '@/assets/firebird_logo.png';
+import FirebirdLogo2 from '@/assets/firebird_logo_2.png';
+import FirebirdLogoDark from '@/assets/firebird_logo_dark.png';
 import GeneralDBLogo2 from '@/assets/general_db_logo_2.png';
 import { DatabaseType } from './domain/database-type';
 import type { EffectiveTheme } from '@/context/theme-context/theme-context';
@@ -24,6 +27,7 @@ export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.SQL_SERVER]: 'SQL Server',
     [DatabaseType.MARIADB]: 'MariaDB',
     [DatabaseType.SQLITE]: 'SQLite',
+    [DatabaseType.FIREBIRD]: 'Firebird',
 };
 
 export const databaseLogoMap: Record<DatabaseType, string> = {
@@ -32,6 +36,7 @@ export const databaseLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MARIADB]: MariaDBLogo,
     [DatabaseType.SQLITE]: SqliteLogo,
     [DatabaseType.SQL_SERVER]: SqlServerLogo,
+    [DatabaseType.FIREBIRD]: FirebirdLogo,
     [DatabaseType.GENERIC]: '',
 };
 
@@ -41,6 +46,7 @@ export const databaseDarkLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MARIADB]: MariaDBLogoDark,
     [DatabaseType.SQLITE]: SqliteLogoDark,
     [DatabaseType.SQL_SERVER]: SqlServerLogoDark,
+    [DatabaseType.FIREBIRD]: FirebirdLogoDark,
     [DatabaseType.GENERIC]: '',
 };
 
@@ -58,5 +64,6 @@ export const databaseSecondaryLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MARIADB]: MariaDBLogo2,
     [DatabaseType.SQLITE]: SqliteLogo2,
     [DatabaseType.SQL_SERVER]: SqlServerLogo2,
+    [DatabaseType.FIREBIRD]: FirebirdLogo2,
     [DatabaseType.GENERIC]: GeneralDBLogo2,
 };

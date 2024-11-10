@@ -319,6 +319,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         >
                                             {databaseTypeToLabelMap['sqlite']}
                                         </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                openImportDatabaseDialog({
+                                                    databaseType:
+                                                        DatabaseType.FIREBIRD,
+                                                })
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['firebird']}
+                                        </MenubarItem>
                                     </MenubarSubContent>
                                 </MenubarSub>
                                 <MenubarSeparator />
@@ -392,6 +402,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             }
                                         >
                                             {databaseTypeToLabelMap['sqlite']}
+                                            <MenubarShortcut className="text-base">
+                                                {emojiAI}
+                                            </MenubarShortcut>
+                                        </MenubarItem>
+                                        <MenubarItem
+                                            onClick={() =>
+                                                exportSQL(DatabaseType.FIREBIRD)
+                                            }
+                                        >
+                                            {databaseTypeToLabelMap['firebird']}
                                             <MenubarShortcut className="text-base">
                                                 {emojiAI}
                                             </MenubarShortcut>

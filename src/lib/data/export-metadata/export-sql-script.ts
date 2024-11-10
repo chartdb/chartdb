@@ -338,6 +338,12 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **General SQLite Constraints**: Remember, \`ALTER TABLE\` in SQLite is limited and cannot add constraints after the table is created.
         - **Conditional Logic**: Ensure the script uses SQLite-compatible syntax and does not include unsupported features.
     `,
+        firebird: `
+        - **Table Creation**: Use \`CREATE TABLE\` for creating tables. While creating the table structure, ensure that all foreign key columns use the correct data types as determined in the foreign key review.
+        - **Index Creation**: Place all \`CREATE INDEX\` statements separately after the \`CREATE TABLE\` statement. Avoid using \`IF NOT EXISTS\` in \`CREATE INDEX\` statements.
+        - **Date Column Defaults**: Avoid using \`CURRENT_DATE\` as a default for \`DATE\` columns. Instead, consider using \`DEFAULT NULL\` or handle default values programmatically.
+        - **Timestamp Default Value**: Use \`DEFAULT CURRENT_TIMESTAMP\` for \`TIMESTAMP\` columns.
+    `,
     };
 
     const dialectInstruction = dialectInstructionMap[databaseType] ?? '';
