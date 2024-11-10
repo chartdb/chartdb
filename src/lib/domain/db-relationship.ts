@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
 import type { DBField } from './db-field';
 import {
@@ -20,6 +21,20 @@ export interface DBRelationship {
     targetCardinality: Cardinality;
     createdAt: number;
 }
+
+export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
+    id: z.string(),
+    name: z.string(),
+    sourceSchema: z.string().optional(),
+    sourceTableId: z.string(),
+    targetSchema: z.string().optional(),
+    targetTableId: z.string(),
+    sourceFieldId: z.string(),
+    targetFieldId: z.string(),
+    sourceCardinality: z.union([z.literal('one'), z.literal('many')]),
+    targetCardinality: z.union([z.literal('one'), z.literal('many')]),
+    createdAt: z.number(),
+});
 
 export type RelationshipType =
     | 'one_to_one'

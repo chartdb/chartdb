@@ -32,6 +32,12 @@ export const fr: LanguageTranslation = {
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'Aide',
                 visit_website: 'Visitez ChartDB',
@@ -218,6 +224,8 @@ export const fr: LanguageTranslation = {
 
             cancel: 'Annuler',
             back: 'Retour',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Diagramme vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -332,7 +340,26 @@ export const fr: LanguageTranslation = {
                 cancel: 'Annuler',
             },
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Un à Un',
             one_to_many: 'Un à Plusieurs',

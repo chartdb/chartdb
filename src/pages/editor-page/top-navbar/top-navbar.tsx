@@ -48,6 +48,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openImportDatabaseDialog,
         showAlert,
         openExportImageDialog,
+        openExportDiagramDialog,
+        openImportDiagramDialog,
     } = useDialog();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -204,9 +206,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     );
 
     return (
-        <nav className="flex h-20 flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
-            <div className="flex flex-1 justify-between gap-x-3 md:justify-normal">
-                <div className="flex py-[10px] font-primary md:items-center md:py-0">
+        <nav className="flex flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
+            <div className="flex flex-1 flex-col justify-between gap-x-3 md:flex-row md:justify-normal">
+                <div className="flex items-center justify-between pt-[8px] font-primary md:py-[10px]">
                     <a
                         href="https://chartdb.io"
                         className="cursor-pointer"
@@ -222,388 +224,362 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                             className="h-4 max-w-fit"
                         />
                     </a>
+                    {!isDesktop ? (
+                        <div className="flex items-center">{renderStars()}</div>
+                    ) : null}
                 </div>
-                <div>
-                    <Menubar className="border-none shadow-none">
-                        <MenubarMenu>
-                            <MenubarTrigger>
-                                {t('menu.file.file')}
-                            </MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={createNewDiagram}>
-                                    {t('menu.file.new')}
-                                </MenubarItem>
-                                <MenubarItem onClick={openDiagram}>
-                                    {t('menu.file.open')}
-                                    <MenubarShortcut>
-                                        {
-                                            keyboardShortcutsForOS[
-                                                KeyboardShortcutAction
-                                                    .OPEN_DIAGRAM
-                                            ].keyCombinationLabel
-                                        }
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem onClick={updateDiagramUpdatedAt}>
-                                    {t('menu.file.save')}
-                                    <MenubarShortcut>
-                                        {
-                                            keyboardShortcutsForOS[
-                                                KeyboardShortcutAction
-                                                    .SAVE_DIAGRAM
-                                            ].keyCombinationLabel
-                                        }
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.file.import_database')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openImportDatabaseDialog({
-                                                    databaseType:
-                                                        DatabaseType.POSTGRESQL,
-                                                })
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'postgresql'
-                                                ]
-                                            }
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openImportDatabaseDialog({
-                                                    databaseType:
-                                                        DatabaseType.MYSQL,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mysql']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openImportDatabaseDialog({
-                                                    databaseType:
-                                                        DatabaseType.SQL_SERVER,
-                                                })
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'sql_server'
-                                                ]
-                                            }
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openImportDatabaseDialog({
-                                                    databaseType:
-                                                        DatabaseType.MARIADB,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mariadb']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                openImportDatabaseDialog({
-                                                    databaseType:
-                                                        DatabaseType.SQLITE,
-                                                })
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['sqlite']}
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.file.export_sql')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(DatabaseType.GENERIC)
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['generic']}
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(
-                                                    DatabaseType.POSTGRESQL
-                                                )
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'postgresql'
-                                                ]
-                                            }
-                                            <MenubarShortcut className="text-base">
-                                                {emojiAI}
-                                            </MenubarShortcut>
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(DatabaseType.MYSQL)
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mysql']}
-                                            <MenubarShortcut className="text-base">
-                                                {emojiAI}
-                                            </MenubarShortcut>
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(
-                                                    DatabaseType.SQL_SERVER
-                                                )
-                                            }
-                                        >
-                                            {
-                                                databaseTypeToLabelMap[
-                                                    'sql_server'
-                                                ]
-                                            }
-                                            <MenubarShortcut className="text-base">
-                                                {emojiAI}
-                                            </MenubarShortcut>
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(DatabaseType.MARIADB)
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['mariadb']}
-                                            <MenubarShortcut className="text-base">
-                                                {emojiAI}
-                                            </MenubarShortcut>
-                                        </MenubarItem>
-                                        <MenubarItem
-                                            onClick={() =>
-                                                exportSQL(DatabaseType.SQLITE)
-                                            }
-                                        >
-                                            {databaseTypeToLabelMap['sqlite']}
-                                            <MenubarShortcut className="text-base">
-                                                {emojiAI}
-                                            </MenubarShortcut>
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.file.export_as')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarItem onClick={exportPNG}>
-                                            PNG
-                                        </MenubarItem>
-                                        <MenubarItem onClick={exportJPG}>
-                                            JPG
-                                        </MenubarItem>
-                                        <MenubarItem onClick={exportSVG}>
-                                            SVG
-                                        </MenubarItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSeparator />
-                                <MenubarItem
-                                    onClick={() =>
-                                        showAlert({
-                                            title: t(
-                                                'delete_diagram_alert.title'
-                                            ),
-                                            description: t(
-                                                'delete_diagram_alert.description'
-                                            ),
-                                            actionLabel: t(
-                                                'delete_diagram_alert.delete'
-                                            ),
-                                            closeLabel: t(
-                                                'delete_diagram_alert.cancel'
-                                            ),
-                                            onAction: handleDeleteDiagramAction,
-                                        })
+
+                <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
+                    <MenubarMenu>
+                        <MenubarTrigger>{t('menu.file.file')}</MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={createNewDiagram}>
+                                {t('menu.file.new')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openDiagram}>
+                                {t('menu.file.open')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction.OPEN_DIAGRAM
+                                        ].keyCombinationLabel
                                     }
-                                >
-                                    {t('menu.file.delete_diagram')}
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem>{t('menu.file.exit')}</MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
-                            <MenubarTrigger>
-                                {t('menu.edit.edit')}
-                            </MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={undo} disabled={!hasUndo}>
-                                    {t('menu.edit.undo')}
-                                    <MenubarShortcut>
-                                        {
-                                            keyboardShortcutsForOS[
-                                                KeyboardShortcutAction.UNDO
-                                            ].keyCombinationLabel
-                                        }
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarItem onClick={redo} disabled={!hasRedo}>
-                                    {t('menu.edit.redo')}
-                                    <MenubarShortcut>
-                                        {
-                                            keyboardShortcutsForOS[
-                                                KeyboardShortcutAction.REDO
-                                            ].keyCombinationLabel
-                                        }
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem
-                                    onClick={() =>
-                                        showAlert({
-                                            title: t(
-                                                'clear_diagram_alert.title'
-                                            ),
-                                            description: t(
-                                                'clear_diagram_alert.description'
-                                            ),
-                                            actionLabel: t(
-                                                'clear_diagram_alert.clear'
-                                            ),
-                                            closeLabel: t(
-                                                'clear_diagram_alert.cancel'
-                                            ),
-                                            onAction: clearDiagramData,
-                                        })
+                                </MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarItem onClick={updateDiagramUpdatedAt}>
+                                {t('menu.file.save')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction.SAVE_DIAGRAM
+                                        ].keyCombinationLabel
                                     }
-                                >
-                                    {t('menu.edit.clear')}
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
-                            <MenubarTrigger>
-                                {t('menu.view.view')}
-                            </MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={showOrHideSidePanel}>
-                                    {isSidePanelShowed
-                                        ? t('menu.view.hide_sidebar')
-                                        : t('menu.view.show_sidebar')}
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem onClick={showOrHideCardinality}>
-                                    {showCardinality
-                                        ? t('menu.view.hide_cardinality')
-                                        : t('menu.view.show_cardinality')}
-                                </MenubarItem>
-                                <MenubarItem onClick={showOrHideDependencies}>
-                                    {showDependenciesOnCanvas
-                                        ? t('menu.view.hide_dependencies')
-                                        : t('menu.view.show_dependencies')}
-                                </MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.view.zoom_on_scroll')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
+                                </MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.file.import_database')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.POSTGRESQL,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['postgresql']}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.MYSQL,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['mysql']}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.SQL_SERVER,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['sql_server']}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.MARIADB,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['mariadb']}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            openImportDatabaseDialog({
+                                                databaseType:
+                                                    DatabaseType.SQLITE,
+                                            })
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['sqlite']}
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.file.export_sql')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.GENERIC)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['generic']}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.POSTGRESQL)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['postgresql']}
+                                        <MenubarShortcut className="text-base">
+                                            {emojiAI}
+                                        </MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.MYSQL)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['mysql']}
+                                        <MenubarShortcut className="text-base">
+                                            {emojiAI}
+                                        </MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.SQL_SERVER)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['sql_server']}
+                                        <MenubarShortcut className="text-base">
+                                            {emojiAI}
+                                        </MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.MARIADB)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['mariadb']}
+                                        <MenubarShortcut className="text-base">
+                                            {emojiAI}
+                                        </MenubarShortcut>
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={() =>
+                                            exportSQL(DatabaseType.SQLITE)
+                                        }
+                                    >
+                                        {databaseTypeToLabelMap['sqlite']}
+                                        <MenubarShortcut className="text-base">
+                                            {emojiAI}
+                                        </MenubarShortcut>
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.file.export_as')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarItem onClick={exportPNG}>
+                                        PNG
+                                    </MenubarItem>
+                                    <MenubarItem onClick={exportJPG}>
+                                        JPG
+                                    </MenubarItem>
+                                    <MenubarItem onClick={exportSVG}>
+                                        SVG
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarItem
+                                onClick={() =>
+                                    showAlert({
+                                        title: t('delete_diagram_alert.title'),
+                                        description: t(
+                                            'delete_diagram_alert.description'
+                                        ),
+                                        actionLabel: t(
+                                            'delete_diagram_alert.delete'
+                                        ),
+                                        closeLabel: t(
+                                            'delete_diagram_alert.cancel'
+                                        ),
+                                        onAction: handleDeleteDiagramAction,
+                                    })
+                                }
+                            >
+                                {t('menu.file.delete_diagram')}
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem>{t('menu.file.exit')}</MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+                    <MenubarMenu>
+                        <MenubarTrigger>{t('menu.edit.edit')}</MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={undo} disabled={!hasUndo}>
+                                {t('menu.edit.undo')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction.UNDO
+                                        ].keyCombinationLabel
+                                    }
+                                </MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarItem onClick={redo} disabled={!hasRedo}>
+                                {t('menu.edit.redo')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction.REDO
+                                        ].keyCombinationLabel
+                                    }
+                                </MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem
+                                onClick={() =>
+                                    showAlert({
+                                        title: t('clear_diagram_alert.title'),
+                                        description: t(
+                                            'clear_diagram_alert.description'
+                                        ),
+                                        actionLabel: t(
+                                            'clear_diagram_alert.clear'
+                                        ),
+                                        closeLabel: t(
+                                            'clear_diagram_alert.cancel'
+                                        ),
+                                        onAction: clearDiagramData,
+                                    })
+                                }
+                            >
+                                {t('menu.edit.clear')}
+                            </MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+                    <MenubarMenu>
+                        <MenubarTrigger>{t('menu.view.view')}</MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={showOrHideSidePanel}>
+                                {isSidePanelShowed
+                                    ? t('menu.view.hide_sidebar')
+                                    : t('menu.view.show_sidebar')}
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem onClick={showOrHideCardinality}>
+                                {showCardinality
+                                    ? t('menu.view.hide_cardinality')
+                                    : t('menu.view.show_cardinality')}
+                            </MenubarItem>
+                            <MenubarItem onClick={showOrHideDependencies}>
+                                {showDependenciesOnCanvas
+                                    ? t('menu.view.hide_dependencies')
+                                    : t('menu.view.show_dependencies')}
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.view.zoom_on_scroll')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarCheckboxItem
+                                        checked={scrollAction === 'zoom'}
+                                        onClick={() => setScrollAction('zoom')}
+                                    >
+                                        {t('zoom.on')}
+                                    </MenubarCheckboxItem>
+                                    <MenubarCheckboxItem
+                                        checked={scrollAction === 'pan'}
+                                        onClick={() => setScrollAction('pan')}
+                                    >
+                                        {t('zoom.off')}
+                                    </MenubarCheckboxItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.view.theme')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarCheckboxItem
+                                        checked={theme === 'system'}
+                                        onClick={() => setTheme('system')}
+                                    >
+                                        {t('theme.system')}
+                                    </MenubarCheckboxItem>
+                                    <MenubarCheckboxItem
+                                        checked={theme === 'light'}
+                                        onClick={() => setTheme('light')}
+                                    >
+                                        {t('theme.light')}
+                                    </MenubarCheckboxItem>
+                                    <MenubarCheckboxItem
+                                        checked={theme === 'dark'}
+                                        onClick={() => setTheme('dark')}
+                                    >
+                                        {t('theme.dark')}
+                                    </MenubarCheckboxItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.view.change_language')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    {languages.map((language) => (
                                         <MenubarCheckboxItem
-                                            checked={scrollAction === 'zoom'}
+                                            key={language.code}
                                             onClick={() =>
-                                                setScrollAction('zoom')
+                                                changeLanguage(language.code)
+                                            }
+                                            checked={
+                                                i18n.language === language.code
                                             }
                                         >
-                                            {t('zoom.on')}
+                                            {language.name}
                                         </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            checked={scrollAction === 'pan'}
-                                            onClick={() =>
-                                                setScrollAction('pan')
-                                            }
-                                        >
-                                            {t('zoom.off')}
-                                        </MenubarCheckboxItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.view.theme')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        <MenubarCheckboxItem
-                                            checked={theme === 'system'}
-                                            onClick={() => setTheme('system')}
-                                        >
-                                            {t('theme.system')}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            checked={theme === 'light'}
-                                            onClick={() => setTheme('light')}
-                                        >
-                                            {t('theme.light')}
-                                        </MenubarCheckboxItem>
-                                        <MenubarCheckboxItem
-                                            checked={theme === 'dark'}
-                                            onClick={() => setTheme('dark')}
-                                        >
-                                            {t('theme.dark')}
-                                        </MenubarCheckboxItem>
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                                <MenubarSeparator />
-                                <MenubarSub>
-                                    <MenubarSubTrigger>
-                                        {t('menu.view.change_language')}
-                                    </MenubarSubTrigger>
-                                    <MenubarSubContent>
-                                        {languages.map((language) => (
-                                            <MenubarCheckboxItem
-                                                key={language.code}
-                                                onClick={() =>
-                                                    changeLanguage(
-                                                        language.code
-                                                    )
-                                                }
-                                                checked={
-                                                    i18n.language ===
-                                                    language.code
-                                                }
-                                            >
-                                                {language.name}
-                                            </MenubarCheckboxItem>
-                                        ))}
-                                    </MenubarSubContent>
-                                </MenubarSub>
-                            </MenubarContent>
-                        </MenubarMenu>
-                        <MenubarMenu>
-                            <MenubarTrigger>
-                                {t('menu.help.help')}
-                            </MenubarTrigger>
-                            <MenubarContent>
-                                <MenubarItem onClick={openChartDBIO}>
-                                    {t('menu.help.visit_website')}
-                                </MenubarItem>
-                                <MenubarItem onClick={openJoinDiscord}>
-                                    {t('menu.help.join_discord')}
-                                </MenubarItem>
-                                <MenubarItem onClick={openCalendly}>
-                                    {t('menu.help.schedule_a_call')}
-                                </MenubarItem>
-                            </MenubarContent>
-                        </MenubarMenu>
-                    </Menubar>
-                </div>
+                                    ))}
+                                </MenubarSubContent>
+                            </MenubarSub>
+                        </MenubarContent>
+                    </MenubarMenu>
+
+                    <MenubarMenu>
+                        <MenubarTrigger>{t('menu.share.share')}</MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={openExportDiagramDialog}>
+                                {t('menu.share.export_diagram')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openImportDiagramDialog}>
+                                {t('menu.share.import_diagram')}
+                            </MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+
+                    <MenubarMenu>
+                        <MenubarTrigger>{t('menu.help.help')}</MenubarTrigger>
+                        <MenubarContent>
+                            <MenubarItem onClick={openChartDBIO}>
+                                {t('menu.help.visit_website')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openJoinDiscord}>
+                                {t('menu.help.join_discord')}
+                            </MenubarItem>
+                            <MenubarItem onClick={openCalendly}>
+                                {t('menu.help.schedule_a_call')}
+                            </MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+                </Menubar>
             </div>
             {isDesktop ? (
                 <>
@@ -614,14 +590,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </div>
                 </>
             ) : (
-                <div className="flex flex-1 flex-row justify-between gap-2">
-                    <div className="group flex flex-1 flex-row items-center">
-                        <DiagramName />
-                    </div>
-                    <div className="flex items-center">
-                        <LastSaved />
-                    </div>
-                    <div className="flex items-center">{renderStars()}</div>
+                <div className="flex flex-1 justify-center pb-2 pt-1">
+                    <DiagramName />
                 </div>
             )}
         </nav>

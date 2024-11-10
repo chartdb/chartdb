@@ -1,6 +1,12 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
 import { twMerge } from 'tailwind-merge';
+import type { Diagram } from './domain/diagram';
+import type { DBTable } from './domain/db-table';
+import type { DBField } from './domain/db-field';
+import type { DBIndex } from './domain/db-index';
+import type { DBRelationship } from './domain/db-relationship';
+import type { DBDependency } from './domain/db-dependency';
 const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 
 const UUID_KEY = 'uuid';
@@ -87,4 +93,90 @@ export const decodeBase64ToUtf8 = (base64: string) => {
 
 export const waitFor = async (ms: number): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+export const cloneDiagram = (
+    diagram: Diagram,
+    generateId: () => string
+): Diagram => {
+    const diagramId = generateId();
+
+    const idsMap = new Map<string, string>();
+    diagram.tables?.forEach((table) => {
+        idsMap.set(table.id, generateId());
+
+        table.fields.forEach((field) => {
+            idsMap.set(field.id, generateId());
+        });
+
+        table.indexes.forEach((index) => {
+            idsMap.set(index.id, generateId());
+        });
+    });
+    diagram.relationships?.forEach((relationship) => {
+        idsMap.set(relationship.id, generateId());
+    });
+
+    diagram.dependencies?.forEach((dependency) => {
+        idsMap.set(dependency.id, generateId());
+    });
+
+    const getNewId = (id: string) => {
+        const newId = idsMap.get(id);
+        if (!newId) {
+            throw new Error(`Id not found for ${id}`);
+        }
+        return newId;
+    };
+
+    const tables: DBTable[] =
+        diagram.tables?.map((table) => {
+            const newTable: DBTable = { ...table, id: getNewId(table.id) };
+            newTable.fields = table.fields.map(
+                (field): DBField => ({
+                    ...field,
+                    id: getNewId(field.id),
+                })
+            );
+            newTable.indexes = table.indexes.map(
+                (index): DBIndex => ({
+                    ...index,
+                    id: getNewId(index.id),
+                })
+            );
+
+            return newTable;
+        }) ?? [];
+
+    const relationships: DBRelationship[] =
+        diagram.relationships?.map(
+            (relationship): DBRelationship => ({
+                ...relationship,
+                id: getNewId(relationship.id),
+                sourceTableId: getNewId(relationship.sourceTableId),
+                targetTableId: getNewId(relationship.targetTableId),
+                sourceFieldId: getNewId(relationship.sourceFieldId),
+                targetFieldId: getNewId(relationship.targetFieldId),
+            })
+        ) ?? [];
+
+    const dependencies: DBDependency[] =
+        diagram.dependencies?.map(
+            (dependency): DBDependency => ({
+                ...dependency,
+                id: getNewId(dependency.id),
+                dependentTableId: getNewId(dependency.dependentTableId),
+                tableId: getNewId(dependency.tableId),
+            })
+        ) ?? [];
+
+    return {
+        ...diagram,
+        id: diagramId,
+        dependencies,
+        relationships,
+        tables,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
 };

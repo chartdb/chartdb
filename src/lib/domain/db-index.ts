@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import { generateId } from '../utils';
 import type { DBField } from './db-field';
@@ -9,6 +10,14 @@ export interface DBIndex {
     fieldIds: string[];
     createdAt: number;
 }
+
+export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
+    id: z.string(),
+    name: z.string(),
+    unique: z.boolean(),
+    fieldIds: z.array(z.string()),
+    createdAt: z.number(),
+});
 
 export const createIndexesFromMetadata = ({
     aggregatedIndexes,

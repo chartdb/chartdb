@@ -32,6 +32,12 @@ export const ko_KR: LanguageTranslation = {
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: '도움말',
                 visit_website: 'ChartDB 사이트 방문',
@@ -225,6 +231,8 @@ export const ko_KR: LanguageTranslation = {
 
             cancel: '취소',
             back: '뒤로가기',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: '빈 다이어그램으로 시작',
             continue: '계속',
             import: '가져오기',
@@ -327,7 +335,26 @@ export const ko_KR: LanguageTranslation = {
             close: '아직은 괜찮아요',
             confirm: '당연하죠!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: '일대일 (1:1)',
             one_to_many: '일대다 (1:N)',
