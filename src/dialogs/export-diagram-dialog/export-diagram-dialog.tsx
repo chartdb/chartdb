@@ -37,7 +37,7 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
     const downloadOutput = useCallback(
         (dataUrl: string) => {
             const a = document.createElement('a');
-            a.setAttribute('download', `ChartDB-(${diagramName}).json`);
+            a.setAttribute('download', `ChartDB(${diagramName}).json`);
             a.setAttribute('href', dataUrl);
             a.click();
         },
