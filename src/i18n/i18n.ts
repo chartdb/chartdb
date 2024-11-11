@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+// When new locale files added, their contents should be reexported in ./locales/index.ts
 import * as locales from './locales';
 import { enMetadata } from './locales/en';
 
