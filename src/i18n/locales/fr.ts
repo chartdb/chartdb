@@ -15,7 +15,7 @@ export const fr: LanguageTranslation = {
                 exit: 'Quitter',
             },
             edit: {
-                edit: 'Éditer',
+                edit: 'Édition',
                 undo: 'Annuler',
                 redo: 'Rétablir',
                 clear: 'Effacer',
@@ -32,11 +32,10 @@ export const fr: LanguageTranslation = {
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
             },
-            // TODO: Translate
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: 'Partage',
+                export_diagram: 'Exporter le diagramme',
+                import_diagram: 'Importer un diagramme',
             },
             help: {
                 help: 'Aide',
