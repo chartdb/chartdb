@@ -32,6 +32,11 @@ export const zh_TW: LanguageTranslation = {
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
             },
+            share: {
+                share: '分享',
+                export_diagram: '匯出圖表',
+                import_diagram: '匯入圖表',
+            },
             help: {
                 help: '幫助',
                 visit_website: '訪問 ChartDB 網站',
@@ -220,6 +225,7 @@ export const zh_TW: LanguageTranslation = {
             },
 
             cancel: '取消',
+            import_from_file: '從檔案匯入',
             back: '返回',
             empty_diagram: '空白圖表',
             continue: '繼續',
@@ -318,10 +324,28 @@ export const zh_TW: LanguageTranslation = {
         star_us_dialog: {
             title: '協助我們改善！',
             description: '請在 GitHub 上給我們一顆星，只需點擊一下！',
-            close: '現在不要',
+            close: '先不要',
             confirm: '當然！',
         },
+        export_diagram_dialog: {
+            title: '匯出圖表',
+            description: '選擇匯出格式：',
+            format_json: 'JSON',
+            cancel: '取消',
+            export: '匯出',
+        },
 
+        import_diagram_dialog: {
+            title: '匯入圖表',
+            description: '請在下方貼上圖表的 JSON：',
+            cancel: '取消',
+            import: '匯入',
+            error: {
+                title: '匯入圖表時發生錯誤',
+                description:
+                    '圖表的 JSON 無效。請檢查 JSON 並再試一次。如需幫助，請聯繫 chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: '一對一',
             one_to_many: '一對多',
@@ -337,6 +361,12 @@ export const zh_TW: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: '編輯表格',
             delete_table: '刪除表格',
+        },
+
+        snap_to_grid_tooltip: '對齊網格（按住 {{key}}）',
+
+        tool_tips: {
+            double_click_to_edit: '雙擊以編輯',
         },
     },
 };
