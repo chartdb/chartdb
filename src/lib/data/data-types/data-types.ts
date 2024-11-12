@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { DatabaseType } from '../../domain/database-type';
 import { genericDataTypes } from './generic-data-types';
 import { mariadbDataTypes } from './mariadb-data-types';
@@ -10,6 +11,11 @@ export interface DataType {
     id: string;
     name: string;
 }
+
+export const dataTypeSchema: z.ZodType<DataType> = z.object({
+    id: z.string(),
+    name: z.string(),
+});
 
 export const dataTypeMap: Record<DatabaseType, readonly DataType[]> = {
     [DatabaseType.GENERIC]: genericDataTypes,

@@ -4,18 +4,18 @@ import image from '@/assets/templates/pokemon.png';
 import imageDark from '@/assets/templates/pokemon-dark.png';
 
 export const pokemonDb: Template = {
-    slug: 'pokemon-db',
+    slug: 'pokemon-database',
     name: 'Pokemon',
     shortDescription: 'Pokemon information',
     description: 'Mysql Relational of 722 pokemons. 14 Tables 5 views.',
     image,
     imageDark,
-    tags: ['mysql', 'pokemon', 'example apps'],
+    tags: ['MySQL', 'Pokemon', 'Example Apps'],
     featured: true,
     url: 'https://github.com/brianr852/Pokemon-Database',
     diagram: {
         id: 'pokemon_db',
-        name: 'pokemon-db',
+        name: 'pokemon-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.MYSQL,

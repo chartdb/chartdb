@@ -4,6 +4,11 @@ import { visualNovelDb } from './templates/visual-novel-db';
 import { airbnbDb } from './templates/airbnb-db';
 import { wordpressDb } from './templates/wordpress-db';
 import { pokemonDb } from './templates/pokemon-db';
+import { adonisAclDb } from './templates/adonis-acl-db';
+import { akauntingDb } from './templates/akaunting-db';
+import { djangoDb } from './templates/django-db';
+import { twitterDb } from './templates/twitter-db';
+import { laravelDb } from './templates/laravel-db';
 
 export interface Template {
     slug: string;
@@ -20,8 +25,13 @@ export interface Template {
 
 export const templates: Template[] = [
     employeeDb,
-    visualNovelDb,
+    pokemonDb,
     airbnbDb,
     wordpressDb,
-    pokemonDb,
+    djangoDb,
+    laravelDb,
+    twitterDb,
+    visualNovelDb,
+    adonisAclDb,
+    akauntingDb,
 ];

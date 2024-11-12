@@ -97,7 +97,7 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ### Running the Docker Container
 
 ```bash
-docker build -t chartdb .
+docker build -t chartdb . (If you want AI capabilities, use `docker build --build-arg VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -t chartdb .`)
 docker run -p 8080:80 chartdb
 ```
 

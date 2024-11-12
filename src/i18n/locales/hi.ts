@@ -32,6 +32,12 @@ export const hi: LanguageTranslation = {
                 show_dependencies: 'निर्भरता दिखाएँ',
                 hide_dependencies: 'निर्भरता छिपाएँ',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'मदद',
                 visit_website: 'ChartDB वेबसाइट पर जाएँ',
@@ -228,6 +234,8 @@ export const hi: LanguageTranslation = {
 
             cancel: 'रद्द करें',
             back: 'वापस',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'खाली आरेख',
             continue: 'जारी रखें',
             import: 'आयात करें',
@@ -331,7 +339,26 @@ export const hi: LanguageTranslation = {
             close: 'अभी नहीं',
             confirm: 'बिलकुल!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'एक से एक',
             one_to_many: 'एक से कई',
@@ -347,6 +374,13 @@ export const hi: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'तालिका संपादित करें',
             delete_table: 'तालिका हटाएँ',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'संपादित करने के लिए डबल-क्लिक करें',
         },
     },
 };
