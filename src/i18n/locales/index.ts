@@ -10,3 +10,4 @@ export * from './ko_KR';
 export * from './pt_BR';
 export * from './ru';
 export * from './uk';
+export * from './zh_CN';
