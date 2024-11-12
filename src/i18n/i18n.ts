@@ -11,7 +11,9 @@ import { ko_KR, ko_KRMetadata } from './locales/ko_KR.ts';
 import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
 import { uk, ukMetadata } from './locales/uk';
 import { ru, ruMetadata } from './locales/ru';
+import { tr, trMetadata } from './locales/tr';
 import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
+
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
@@ -24,6 +26,7 @@ export const languages: LanguageMetadata[] = [
     pt_BRMetadata,
     ukMetadata,
     ruMetadata,
+    trMetadata,
     zh_CNMetadata,
 ];
 
@@ -38,6 +41,7 @@ const resources = {
     pt_BR,
     uk,
     ru,
+    tr,
     zh_CN,
 };
 
