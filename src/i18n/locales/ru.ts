@@ -32,11 +32,10 @@ export const ru: LanguageTranslation = {
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
             },
-            // TODO: Translate
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: 'Поделиться',
+                export_diagram: 'Экспорт кода диаграммы',
+                import_diagram: 'Импорт кода диаграммы',
             },
             help: {
                 help: 'Помощь',
@@ -229,8 +228,7 @@ export const ru: LanguageTranslation = {
 
             cancel: 'Отменить',
             back: 'Назад',
-            // TODO: Translate
-            import_from_file: 'Import from File',
+            import_from_file: 'Импортировать из файла',
             empty_diagram: 'Пустая диаграмма',
             continue: 'Продолжить',
             import: 'Импорт',
@@ -254,7 +252,7 @@ export const ru: LanguageTranslation = {
             title: 'Экспорт SQL',
             description:
                 'Экспортируйте схему диаграммы в {{databaseType}} скрипт',
-            close: 'Close',
+            close: 'Закрыть',
             loading: {
                 text: 'ИИ генерирует SQL для {{databaseType}}...',
                 description: 'Это должно занять до 30 секунд.',
@@ -335,24 +333,22 @@ export const ru: LanguageTranslation = {
             close: 'Не сейчас',
             confirm: 'Конечно!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Экспорт кода диаграммы',
+            description: 'Выберите формат экспорта:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Отменить',
+            export: 'Экспортировать',
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            title: 'Импорт кода диаграммы',
+            description: 'Вставьте JSON код диаграммы ниже:',
+            cancel: 'Отменить',
+            import: 'Импортировать',
             error: {
-                title: 'Error importing diagram',
+                title: 'Ошибка при импорте диаграммы',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'Код JSON диаграммы некорректен. Проверьте, пожалуйста, код и попробуйте снова. Проблема не решается? Напишите нам: chartdb.io@gmail.com',
             },
         },
         relationship_type: {
@@ -374,8 +370,7 @@ export const ru: LanguageTranslation = {
 
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
-        // TODO: Add translations
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+        snap_to_grid_tooltip: 'Выравнивание по сетке (Удерживайте {{key}})',
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
