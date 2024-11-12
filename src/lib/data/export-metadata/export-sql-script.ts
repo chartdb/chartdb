@@ -190,15 +190,38 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
 export const exportSQL = async (
     diagram: Diagram,
-    databaseType: DatabaseType
+    databaseType: DatabaseType,
+    options?: {
+        stream: boolean;
+        onResultStream: (text: string) => void;
+        signal?: AbortSignal;
+    }
 ): Promise<string> => {
-    const { generateText } = await import('ai');
-    const { createOpenAI } = await import('@ai-sdk/openai');
+    const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
+        import('ai'),
+        import('@ai-sdk/openai'),
+    ]);
     const openai = createOpenAI({
         apiKey: OPENAI_API_KEY,
     });
     const sqlScript = exportBaseSQL(diagram);
     const prompt = generateSQLPrompt(databaseType, sqlScript);
+
+    if (options?.stream) {
+        const { textStream, text } = await streamText({
+            model: openai('gpt-4o-mini-2024-07-18'),
+            prompt: prompt,
+        });
+
+        for await (const textPart of textStream) {
+            if (options.signal?.aborted) {
+                return '';
+            }
+            options.onResultStream(textPart);
+        }
+
+        return text;
+    }
 
     const { text } = await generateText({
         model: openai('gpt-4o-mini-2024-07-18'),

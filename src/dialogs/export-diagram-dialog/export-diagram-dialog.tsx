@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDialog } from '@/hooks/use-dialog';
 import {
     Dialog,
@@ -16,6 +16,8 @@ import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { diagramToJSONOutput } from '@/lib/export-import-utils';
+import { Spinner } from '@/components/spinner/spinner';
+import { waitFor } from '@/lib/utils';
 
 export interface ExportDiagramDialogProps extends BaseDialogProps {}
 
@@ -24,28 +26,34 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const { diagramName, currentDiagram } = useChartDB();
+    const [isLoading, setIsLoading] = useState(false);
+    const { closeExportDiagramDialog } = useDialog();
 
     useEffect(() => {
         if (!dialog.open) return;
+        setIsLoading(false);
     }, [dialog.open]);
-    const { closeExportDiagramDialog } = useDialog();
 
     const downloadOutput = useCallback(
         (dataUrl: string) => {
             const a = document.createElement('a');
-            a.setAttribute('download', `${diagramName}.json`);
+            a.setAttribute('download', `ChartDB(${diagramName}).json`);
             a.setAttribute('href', dataUrl);
             a.click();
         },
         [diagramName]
     );
 
-    const handleExport = useCallback(() => {
+    const handleExport = useCallback(async () => {
+        setIsLoading(true);
+        await waitFor(1000);
         const json = diagramToJSONOutput(currentDiagram);
         const blob = new Blob([json], { type: 'application/json' });
         const dataUrl = URL.createObjectURL(blob);
         downloadOutput(dataUrl);
-    }, [downloadOutput, currentDiagram]);
+        setIsLoading(false);
+        closeExportDiagramDialog();
+    }, [downloadOutput, currentDiagram, closeExportDiagramDialog]);
 
     const outputTypeOptions: SelectBoxOption[] = useMemo(
         () =>
@@ -89,11 +97,12 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
                             {t('export_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
-                    <DialogClose asChild>
-                        <Button onClick={handleExport}>
-                            {t('export_diagram_dialog.export')}
-                        </Button>
-                    </DialogClose>
+                    <Button onClick={handleExport} disabled={isLoading}>
+                        {isLoading ? (
+                            <Spinner className="mr-1 size-5 text-primary-foreground" />
+                        ) : null}
+                        {t('export_diagram_dialog.export')}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

@@ -1,6 +1,5 @@
-import { generateId } from 'ai';
 import { diagramSchema, type Diagram } from './domain/diagram';
-import { cloneDiagram, generateDiagramId } from './utils';
+import { cloneDiagram, generateDiagramId, generateId } from './utils';
 
 export const runningIdGenerator = (): (() => string) => {
     let id = 0;
