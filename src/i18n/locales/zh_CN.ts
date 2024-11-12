@@ -47,24 +47,21 @@ export const zh_CN: LanguageTranslation = {
 
         delete_diagram_alert: {
             title: '删除关系图',
-            description:
-                '此操作无法撤销。这将永久删除关系图。',
+            description: '此操作无法撤销。这将永久删除关系图。',
             cancel: '取消',
             delete: '删除',
         },
 
         clear_diagram_alert: {
             title: '清除关系图',
-            description:
-                '此操作无法撤销。这将永久删除关系图中的所有数据。',
+            description: '此操作无法撤销。这将永久删除关系图中的所有数据。',
             cancel: '取消',
             clear: '清空',
         },
 
         reorder_diagram_alert: {
             title: '重新排列关系图',
-            description:
-                '此操作将重新排列关系图中的所有表。是否要继续？',
+            description: '此操作将重新排列关系图中的所有表。是否要继续？',
             reorder: '重新排列',
             cancel: '取消',
         },
@@ -73,7 +70,7 @@ export const zh_CN: LanguageTranslation = {
             title: '多个模式',
             description:
                 '此关系图中有 {{schemasCount}} 个模式，当前显示：{{formattedSchemas}}。',
-            dont_show_again: "不再展示",
+            dont_show_again: '不再展示',
             change_schema: '更改',
             none: '无',
         },
@@ -206,8 +203,7 @@ export const zh_CN: LanguageTranslation = {
         new_diagram_dialog: {
             database_selection: {
                 title: '您是哪种数据库？',
-                description:
-                    '每种数据库都有其特性和功能。',
+                description: '每种数据库都有其特性和功能。',
                 check_examples_long: '查看样例',
                 check_examples_short: '样例',
             },
@@ -252,8 +248,7 @@ export const zh_CN: LanguageTranslation = {
 
         export_sql_dialog: {
             title: '导出 SQL 语句',
-            description:
-                '将您的图表模式导出为 {{databaseType}} 脚本。',
+            description: '将您的图表模式导出为 {{databaseType}} 脚本。',
             close: '关闭',
             loading: {
                 text: 'AI 正在为 {{databaseType}} 生成 SQL 语句...',
@@ -315,8 +310,7 @@ export const zh_CN: LanguageTranslation = {
 
         new_table_schema_dialog: {
             title: '选择模式',
-            description:
-                '当前显示多个模式。请选择一个用于新表。',
+            description: '当前显示多个模式。请选择一个用于新表。',
             cancel: '取消',
             confirm: '确认',
         },
@@ -330,8 +324,7 @@ export const zh_CN: LanguageTranslation = {
 
         star_us_dialog: {
             title: '帮助我们改进！',
-            description:
-                "您想在 GitHub 上为我们加注星标吗？只需点击一下即可！",
+            description: '您想在 GitHub 上为我们加注星标吗？只需点击一下即可！',
             close: '以后再说',
             confirm: '当然！',
         },
