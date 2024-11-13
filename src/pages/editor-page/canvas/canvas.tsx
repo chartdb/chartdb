@@ -166,7 +166,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
-            setTimeout(() => fitView({ maxZoom: 1, duration: 0 }), 0);
+            debounce(() => {
+                fitView({
+                    duration: 200,
+                    padding: 0.1,
+                    maxZoom: 0.8,
+                });
+            }, 500)();
         }
     }, [isInitialLoadingNodes, fitView]);
 
