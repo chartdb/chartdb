@@ -9,6 +9,11 @@ import { akauntingDb } from './templates/akaunting-db';
 import { djangoDb } from './templates/django-db';
 import { twitterDb } from './templates/twitter-db';
 import { laravelDb } from './templates/laravel-db';
+import { laravelSparkDb } from './templates/laravel-spark-db';
+import { voyagerDb } from './templates/voyager-db';
+import { koelDb } from './templates/koel-db';
+import { laravelPermissionDb } from './templates/laravel-permission-db';
+import { gravityDb } from './templates/gravity-db';
 
 export interface Template {
     slug: string;
@@ -34,4 +39,9 @@ export const templates: Template[] = [
     visualNovelDb,
     adonisAclDb,
     akauntingDb,
+    laravelSparkDb,
+    voyagerDb,
+    koelDb,
+    laravelPermissionDb,
+    gravityDb,
 ];
