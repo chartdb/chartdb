@@ -3,6 +3,7 @@ import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
+import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -197,18 +198,27 @@ export const exportSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
+    const sqlScript = exportBaseSQL(diagram);
+    const cacheKey = await generateCacheKey(databaseType, sqlScript);
+
+    const cachedResult = getFromCache(cacheKey);
+    if (cachedResult) {
+        return cachedResult;
+    }
+
     const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
         import('ai'),
         import('@ai-sdk/openai'),
     ]);
+
     const openai = createOpenAI({
         apiKey: OPENAI_API_KEY,
     });
-    const sqlScript = exportBaseSQL(diagram);
+
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
     if (options?.stream) {
-        const { textStream, text } = await streamText({
+        const { textStream, text: textPromise } = await streamText({
             model: openai('gpt-4o-mini-2024-07-18'),
             prompt: prompt,
         });
@@ -220,6 +230,9 @@ export const exportSQL = async (
             options.onResultStream(textPart);
         }
 
+        const text = await textPromise;
+
+        setInCache(cacheKey, text);
         return text;
     }
 
@@ -228,6 +241,7 @@ export const exportSQL = async (
         prompt: prompt,
     });
 
+    setInCache(cacheKey, text);
     return text;
 };
 
