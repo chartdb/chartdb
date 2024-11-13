@@ -33,7 +33,9 @@ export const getTemplatesAndAllTags = async ({
 
     if (tag) {
         return {
-            templates: templates.filter((t) => t.tags.includes(tag)),
+            templates: templates.filter((t) =>
+                t.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
+            ),
             tags: allTags,
         };
     }
