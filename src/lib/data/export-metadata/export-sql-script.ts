@@ -3,47 +3,7 @@ import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
-
-// Replace the Map cache with localStorage functions
-const getFromCache = (key: string): string | null => {
-    try {
-        return localStorage.getItem(`sql-export-${key}`);
-    } catch (e) {
-        console.warn('Failed to read from localStorage:', e);
-        return null;
-    }
-};
-
-const setInCache = (key: string, value: string): void => {
-    try {
-        localStorage.setItem(`sql-export-${key}`, value);
-    } catch (e) {
-        console.warn('Failed to write to localStorage:', e);
-    }
-};
-
-async function sha256(message: string): Promise<string> {
-    // Encode message as UTF-8
-    const msgBuffer = new TextEncoder().encode(message);
-
-    // Hash the message
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-
-    // Convert hash to hex string
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('');
-    return hashHex;
-}
-
-const generateCacheKey = async (
-    databaseType: DatabaseType,
-    sqlScript: string
-): Promise<string> => {
-    const rawKey = `${databaseType}:${sqlScript}`;
-    return await sha256(rawKey);
-};
+import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -241,14 +201,10 @@ export const exportSQL = async (
     const sqlScript = exportBaseSQL(diagram);
     const cacheKey = await generateCacheKey(databaseType, sqlScript);
 
-    // Check localStorage cache first
     const cachedResult = getFromCache(cacheKey);
     if (cachedResult) {
-        console.log(`Cache hit for SQL export with key: ${cacheKey}`);
         return cachedResult;
     }
-
-    console.log(`Cache miss for SQL export with key: ${cacheKey}`);
 
     const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
         import('ai'),
@@ -262,23 +218,22 @@ export const exportSQL = async (
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
     if (options?.stream) {
-        const { textStream } = await streamText({
+        const { textStream, text: textPromise } = await streamText({
             model: openai('gpt-4o-mini-2024-07-18'),
             prompt: prompt,
         });
 
-        let fullText = '';
         for await (const textPart of textStream) {
             if (options.signal?.aborted) {
                 return '';
             }
-            fullText += textPart;
             options.onResultStream(textPart);
         }
 
-        // Cache the complete result
-        setInCache(cacheKey, fullText);
-        return fullText;
+        const text = await textPromise;
+
+        setInCache(cacheKey, text);
+        return text;
     }
 
     const { text } = await generateText({
@@ -286,7 +241,6 @@ export const exportSQL = async (
         prompt: prompt,
     });
 
-    // Cache the result in localStorage instead of Map
     setInCache(cacheKey, text);
     return text;
 };
