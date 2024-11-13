@@ -141,6 +141,7 @@ export const cloneDiagram = (
             newTable.indexes = table.indexes.map(
                 (index): DBIndex => ({
                     ...index,
+                    fieldIds: index.fieldIds.map((id) => getNewId(id)),
                     id: getNewId(index.id),
                 })
             );
