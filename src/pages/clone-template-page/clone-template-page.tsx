@@ -1,5 +1,5 @@
 import { Spinner } from '@/components/spinner/spinner';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import type { TemplatePageLoaderData } from '../template-page/template-page';
 import { convertTemplateToNewDiagram } from '@/templates-data/template-utils';
@@ -12,6 +12,7 @@ import { ThemeProvider } from '@/context/theme-context/theme-provider';
 export const CloneTemplateComponent: React.FC = () => {
     const navigate = useNavigate();
     const { addDiagram, deleteDiagram } = useStorage();
+    const clonedBefore = useRef<boolean>(false);
     const data = useLoaderData() as TemplatePageLoaderData;
 
     const template = data.template;
@@ -21,6 +22,11 @@ export const CloneTemplateComponent: React.FC = () => {
             return;
         }
 
+        if (clonedBefore.current) {
+            return;
+        }
+
+        clonedBefore.current = true;
         const diagram = convertTemplateToNewDiagram(template);
 
         await deleteDiagram(diagram.id);
