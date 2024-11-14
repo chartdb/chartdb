@@ -136,7 +136,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             e.stopPropagation();
             const clonedTable = cloneTable(table);
 
-            clonedTable.name = `${clonedTable.name} copy`;
+            clonedTable.name = `${clonedTable.name}_copy`;
             clonedTable.x += 30;
             clonedTable.y += 50;
 
