@@ -16,6 +16,7 @@ RUN npm run build
 FROM nginx:stable-alpine AS production
 
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 # Expose the default port for the Nginx web server
 EXPOSE 80
