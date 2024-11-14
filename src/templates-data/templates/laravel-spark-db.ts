@@ -11,7 +11,7 @@ export const laravelSparkDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/laravel/spark-aurelius',
     diagram: {
         id: 'laravel_spark_db',

@@ -12,7 +12,7 @@ export const voyagerDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://voyager.devdojo.com',
     diagram: {
         id: 'voyager_db',

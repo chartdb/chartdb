@@ -12,7 +12,7 @@ export const buddypressDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'WordPress'],
-    featured: true,
+    featured: false,
     url: 'https://buddypress.org',
     diagram: {
         id: 'buddypress_db',

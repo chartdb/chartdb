@@ -12,7 +12,7 @@ export const laravelPermissionDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/spatie/laravel-permission',
     diagram: {
         id: 'laravel_permission_db',

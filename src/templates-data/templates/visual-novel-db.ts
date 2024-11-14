@@ -12,7 +12,7 @@ export const visualNovelDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Visual Novel Database'],
-    featured: true,
+    featured: false,
     url: 'https://vndb.org',
     diagram: {
         id: 'visual_novel_db',

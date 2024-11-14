@@ -11,7 +11,7 @@ export const koelDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://koel.dev',
     diagram: {
         id: 'koel_db',
