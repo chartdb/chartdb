@@ -1,5 +1,6 @@
+import { cloneDiagram } from './clone';
 import { diagramSchema, type Diagram } from './domain/diagram';
-import { cloneDiagram, generateDiagramId, generateId } from './utils';
+import { generateDiagramId } from './utils';
 
 export const runningIdGenerator = (): (() => string) => {
     let id = 0;
@@ -7,10 +8,10 @@ export const runningIdGenerator = (): (() => string) => {
 };
 
 const cloneDiagramWithRunningIds = (diagram: Diagram) =>
-    cloneDiagram(diagram, runningIdGenerator());
+    cloneDiagram(diagram, { generateId: runningIdGenerator() });
 
 const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
-    ...cloneDiagram(diagram, generateId),
+    ...cloneDiagram(diagram),
     id: generateDiagramId(),
 });
 
