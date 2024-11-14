@@ -135,6 +135,7 @@ export const fr: LanguageTranslation = {
                         title: 'Actions de la Table',
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Supprimer la Table',
                         change_schema: 'Changer le Schéma',
                     },
@@ -373,6 +374,7 @@ export const fr: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Éditer la Table',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Supprimer la Table',
         },
 

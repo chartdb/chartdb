@@ -8,6 +8,7 @@ import {
     FileKey2,
     Check,
     Group,
+    Copy,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -33,6 +34,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { cloneTable } from '@/lib/clone';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -46,6 +48,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         removeTable,
         createIndex,
         createField,
+        createTable,
         schemas,
         filteredSchemas,
     } = useChartDB();
@@ -128,6 +131,20 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         });
     }, [openTableSchemaDialog, table, schemas, updateTableSchema]);
 
+    const duplicateTableHandler = useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            e.stopPropagation();
+            const clonedTable = cloneTable(table);
+
+            clonedTable.name = `${clonedTable.name}_copy`;
+            clonedTable.x += 30;
+            clonedTable.y += 50;
+
+            createTable(clonedTable);
+        },
+        [createTable, table]
+    );
+
     const renderDropDownMenu = useCallback(
         () => (
             <DropdownMenu>
@@ -191,6 +208,18 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
+                            onClick={duplicateTableHandler}
+                            className="flex justify-between"
+                        >
+                            {t(
+                                'side_panel.tables_section.table.table_actions.duplicate_table'
+                            )}
+                            <Copy className="size-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
                             onClick={deleteTableHandler}
                             className="flex justify-between !text-red-700"
                         >
@@ -208,6 +237,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             createField,
             createIndex,
             deleteTableHandler,
+            duplicateTableHandler,
             t,
             changeSchema,
             schemas.length,

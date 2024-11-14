@@ -144,6 +144,7 @@ export const en = {
                         change_schema: 'Change Schema',
                         add_field: 'Add Field',
                         add_index: 'Add Index',
+                        duplicate_table: 'Duplicate Table',
                         delete_table: 'Delete Table',
                     },
                 },
@@ -367,6 +368,7 @@ export const en = {
 
         table_node_context_menu: {
             edit_table: 'Edit Table',
+            duplicate_table: 'Duplicate Table',
             delete_table: 'Delete Table',
         },
 
