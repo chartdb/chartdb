@@ -12,7 +12,7 @@ export const adonisAclDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Node.js'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/enniel/adonis-acl',
     diagram: {
         id: 'adonis_acl_db',

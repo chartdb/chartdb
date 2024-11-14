@@ -11,7 +11,7 @@ export const akauntingDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/akaunting/akaunting',
     diagram: {
         id: 'akaunting_db',

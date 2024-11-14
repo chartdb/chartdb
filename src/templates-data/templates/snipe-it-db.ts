@@ -12,7 +12,7 @@ export const snipeItDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/snipe/snipe-it',
     diagram: {
         id: 'snipe_it_db',

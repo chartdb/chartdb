@@ -12,7 +12,7 @@ export const ticketitDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/spatie/ticketit',
     diagram: {
         id: 'ticketit_db',

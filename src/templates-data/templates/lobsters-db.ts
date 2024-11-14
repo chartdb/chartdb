@@ -12,7 +12,7 @@ export const lobstersDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'Example Apps'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/SukhjinderArora/lobsters-clone',
     diagram: {
         id: 'lobsters_db',

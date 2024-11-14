@@ -142,10 +142,12 @@ const TemplatesPageComponent: React.FC = () => {
                                         className="mt-1 shrink-0"
                                         items={allTags.map((currentTag) => ({
                                             title: currentTag,
-                                            href: `/templates/tags/${currentTag.toLowerCase()}`,
+                                            href: `/templates/tags/${currentTag.toLowerCase().replace(/ /g, '-')}`,
                                             selected:
-                                                tag?.toLowerCase() ===
-                                                currentTag.toLocaleLowerCase(),
+                                                tag
+                                                    ?.toLowerCase()
+                                                    .replace(/-/g, ' ') ===
+                                                currentTag.toLowerCase(),
                                         }))}
                                     />
                                 ) : null}

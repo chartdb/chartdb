@@ -12,7 +12,7 @@ export const gravityDb: Template = {
     image,
     imageDark,
     tags: ['Postgres', 'SaaS', 'Node.js'],
-    featured: true,
+    featured: false,
     url: 'https://usegravity.app',
     diagram: {
         id: 'gravity_db',

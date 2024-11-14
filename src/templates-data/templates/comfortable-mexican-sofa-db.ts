@@ -5,14 +5,14 @@ import imageDark from '@/assets/templates/comfortable-mexican-sofa-db-dark.png';
 
 export const ComfortableMexicanSofaDb: Template = {
     slug: 'comfortable-mexican-sofa-database',
-    name: 'ComfortableMexicanSofa',
+    name: 'Comfortable Mexican Sofa',
     shortDescription: 'Rails CMS - ComfortableMexicanSofa',
     description:
         'A powerful Ruby on Rails 5.2+ CMS (Content Management System) Engine',
     image,
     imageDark,
     tags: ['Postgres', 'Open Source', 'Rails', 'CMS'],
-    featured: true,
+    featured: false,
     url: 'https://github.com/comfy/comfortable-mexican-sofa',
     diagram: {
         id: 'comfortable_mexican_sofa_db',
