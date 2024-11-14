@@ -14,6 +14,12 @@ import { voyagerDb } from './templates/voyager-db';
 import { koelDb } from './templates/koel-db';
 import { laravelPermissionDb } from './templates/laravel-permission-db';
 import { gravityDb } from './templates/gravity-db';
+import { ticketitDb } from './templates/ticketit-db';
+import { lobstersDb } from './templates/lobsters-db';
+import { refinerycmsDb } from './templates/refinerycms-db';
+import { buddypressDb } from './templates/buddypress-db';
+import { snipeItDb } from './templates/snipe-it-db';
+import { ComfortableMexicanSofaDb } from './templates/comfortable-mexican-sofa-db';
 
 export interface Template {
     slug: string;
@@ -44,4 +50,10 @@ export const templates: Template[] = [
     koelDb,
     laravelPermissionDb,
     gravityDb,
+    ticketitDb,
+    lobstersDb,
+    refinerycmsDb,
+    buddypressDb,
+    snipeItDb,
+    ComfortableMexicanSofaDb,
 ];
