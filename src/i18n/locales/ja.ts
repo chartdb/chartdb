@@ -147,6 +147,7 @@ export const ja: LanguageTranslation = {
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'テーブルを削除',
                     },
                 },
@@ -375,6 +376,7 @@ export const ja: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'テーブルを編集',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'テーブルを削除',
         },
 

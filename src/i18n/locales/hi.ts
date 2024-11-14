@@ -146,6 +146,7 @@ export const hi: LanguageTranslation = {
                         change_schema: 'स्कीमा बदलें',
                         add_field: 'फ़ील्ड जोड़ें',
                         add_index: 'सूचकांक जोड़ें',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'तालिका हटाएँ',
                     },
                 },
@@ -373,6 +374,7 @@ export const hi: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'तालिका संपादित करें',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'तालिका हटाएँ',
         },
 

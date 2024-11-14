@@ -141,6 +141,7 @@ export const zh_CN: LanguageTranslation = {
                         change_schema: '更改模式',
                         add_field: '添加字段',
                         add_index: '添加索引',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: '删除表',
                     },
                 },
@@ -361,6 +362,7 @@ export const zh_CN: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: '编辑表',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: '删除表',
         },
 
