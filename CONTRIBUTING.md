@@ -30,7 +30,7 @@ To get started:
 
 ### License
 
-By contributing, you agree that your work will be licensed under ChartDB's [license](https://github.com/chartdb/chartdb/blob/main/LICENSE.md).
+By contributing, you agree that your work will be licensed under ChartDB's [license](https://github.com/chartdb/chartdb/blob/main/LICENSE).
 
 ## Questions?
 
