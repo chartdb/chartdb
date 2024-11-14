@@ -28,7 +28,7 @@ export const TableNodeContextMenu: React.FC<
     const duplicateTableHandler = useCallback(() => {
         const clonedTable = cloneTable(table);
 
-        clonedTable.name = `${clonedTable.name} copy`;
+        clonedTable.name = `${clonedTable.name}_copy`;
         clonedTable.x += 30;
         clonedTable.y += 50;
 
