@@ -32,6 +32,7 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
 import { Helmet } from 'react-helmet-async';
 import { APP_URL, HOST_URL } from '@/lib/env';
+import { Link } from '@/components/link/link';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
@@ -173,8 +174,11 @@ const TemplatePageComponent: React.FC = () => {
                         </Breadcrumb>
                         <div className="flex flex-col items-center gap-4 md:flex-row md:items-start md:justify-between md:gap-0">
                             <div className="flex flex-col pr-0 md:pr-20">
-                                <h1 className="font-primary text-2xl font-bold">
+                                <h1 className="flex flex-col font-primary text-2xl font-bold">
                                     {template?.name}
+                                    <span className="text-sm font-normal text-muted-foreground">
+                                        Database schema diagram
+                                    </span>
                                 </h1>
                                 <h2 className="mt-3">
                                     <span className="font-semibold">
@@ -243,6 +247,25 @@ const TemplatePageComponent: React.FC = () => {
                                         </span>
                                     </div>
                                 </div>
+                                <Separator />
+                                {template.url ? (
+                                    <>
+                                        <div>
+                                            <h4 className="mb-1 text-base font-semibold md:text-left">
+                                                Url
+                                            </h4>
+
+                                            <Link
+                                                className="break-all text-sm text-muted-foreground"
+                                                href={`${template.url}?ref=chartdb`}
+                                                target="_blank"
+                                            >
+                                                {template.url}
+                                            </Link>
+                                        </div>
+                                        <Separator />
+                                    </>
+                                ) : null}
                                 <div>
                                     <h4 className="mb-1 text-base font-semibold md:text-left">
                                         Tags

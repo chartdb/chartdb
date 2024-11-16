@@ -35,6 +35,7 @@ import { DialogProvider } from '@/context/dialog-context/dialog-provider';
 import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
+import { useStorage } from '@/hooks/use-storage';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -73,6 +74,7 @@ const EditorPageComponent: React.FC = () => {
     } = useLocalConfig();
     const { toast } = useToast();
     const { t } = useTranslation();
+    const { listDiagrams } = useStorage();
 
     useEffect(() => {
         if (!config) {
@@ -106,7 +108,15 @@ const EditorPageComponent: React.FC = () => {
                     navigate(`/diagrams/${config.defaultDiagramId}`);
                 }
             } else {
-                openCreateDiagramDialog();
+                const diagrams = await listDiagrams();
+
+                if (diagrams.length > 0) {
+                    const defaultDiagramId = diagrams[0].id;
+                    await updateConfig({ defaultDiagramId });
+                    navigate(`/diagrams/${defaultDiagramId}`);
+                } else {
+                    openCreateDiagramDialog();
+                }
             }
         };
         loadDefaultDiagram();
@@ -115,6 +125,7 @@ const EditorPageComponent: React.FC = () => {
         openCreateDiagramDialog,
         config,
         navigate,
+        listDiagrams,
         loadDiagram,
         resetRedoStack,
         resetUndoStack,

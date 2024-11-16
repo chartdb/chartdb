@@ -15,7 +15,7 @@ export const fr: LanguageTranslation = {
                 exit: 'Quitter',
             },
             edit: {
-                edit: 'Éditer',
+                edit: 'Édition',
                 undo: 'Annuler',
                 redo: 'Rétablir',
                 clear: 'Effacer',
@@ -31,6 +31,11 @@ export const fr: LanguageTranslation = {
                 change_language: 'Langue',
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
+            },
+            share: {
+                share: 'Partage',
+                export_diagram: 'Exporter le diagramme',
+                import_diagram: 'Importer un diagramme',
             },
             help: {
                 help: 'Aide',
@@ -130,6 +135,7 @@ export const fr: LanguageTranslation = {
                         title: 'Actions de la Table',
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Supprimer la Table',
                         change_schema: 'Changer le Schéma',
                     },
@@ -218,6 +224,8 @@ export const fr: LanguageTranslation = {
 
             cancel: 'Annuler',
             back: 'Retour',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Diagramme vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -332,7 +340,26 @@ export const fr: LanguageTranslation = {
                 cancel: 'Annuler',
             },
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Un à Un',
             one_to_many: 'Un à Plusieurs',
@@ -347,7 +374,15 @@ export const fr: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Éditer la Table',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Supprimer la Table',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'Double-cliquez pour modifier',
         },
     },
 };

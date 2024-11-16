@@ -20,7 +20,7 @@ import {
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { Annoyed, Sparkles } from 'lucide-react';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 
@@ -37,28 +37,47 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
+    const [isScriptLoading, setIsScriptLoading] =
+        React.useState<boolean>(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     const exportSQLScript = useCallback(async () => {
         if (targetDatabaseType === DatabaseType.GENERIC) {
             return Promise.resolve(exportBaseSQL(currentDiagram));
         } else {
-            return exportSQL(currentDiagram, targetDatabaseType);
+            return exportSQL(currentDiagram, targetDatabaseType, {
+                stream: true,
+                onResultStream: (text) =>
+                    setScript((prev) => (prev ? prev + text : text)),
+                signal: abortControllerRef.current?.signal,
+            });
         }
     }, [targetDatabaseType, currentDiagram]);
 
     useEffect(() => {
-        if (!dialog.open) return;
+        if (!dialog.open) {
+            abortControllerRef.current?.abort();
+
+            return;
+        }
+        abortControllerRef.current = new AbortController();
         setScript(undefined);
         setError(false);
         const fetchScript = async () => {
             try {
+                setIsScriptLoading(true);
                 const script = await exportSQLScript();
                 setScript(script);
+                setIsScriptLoading(false);
             } catch (e) {
                 setError(true);
             }
         };
         fetchScript();
+
+        return () => {
+            abortControllerRef.current?.abort();
+        };
     }, [dialog.open, setScript, exportSQLScript, setError]);
 
     const renderError = useCallback(
@@ -156,7 +175,12 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                     ) : script.length === 0 ? (
                         renderError()
                     ) : (
-                        <CodeSnippet className="h-96 w-full" code={script!} />
+                        <CodeSnippet
+                            className="h-96 w-full"
+                            code={script!}
+                            autoScroll={true}
+                            isComplete={!isScriptLoading}
+                        />
                     )}
                 </div>
 

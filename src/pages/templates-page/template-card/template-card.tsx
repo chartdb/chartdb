@@ -43,7 +43,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
                             {template.name}
                         </h3>
                     </div>
-                    <div className="flex flex-row">
+                    <div className="flex h-full flex-col justify-start pt-1">
                         <Tooltip>
                             <TooltipTrigger className="mr-1">
                                 <img

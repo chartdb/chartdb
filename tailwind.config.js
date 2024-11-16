@@ -77,12 +77,17 @@ module.exports = {
                     '50%': { transform: 'scale(1.05)' },
                     '100%': { transform: 'scale(1)' },
                 },
+                blink: {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '0' },
+                },
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
                 scale: 'scale 1s ease-in-out 1',
                 'scale-2': 'scale-2 1s ease-in-out 2',
+                blink: 'blink 1s infinite',
             },
         },
     },
