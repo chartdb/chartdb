@@ -28,7 +28,6 @@ export const zh_TW: LanguageTranslation = {
                 show_cardinality: '顯示基數',
                 zoom_on_scroll: '滾動縮放',
                 theme: '主題',
-                change_language: '變更語言',
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
             },
@@ -370,10 +369,15 @@ export const zh_TW: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: '雙擊以編輯',
         },
+
+        language_select: {
+            change_language: '變更語言',
+        },
     },
 };
 
 export const zh_TWMetadata: LanguageMetadata = {
-    name: '繁體中文',
+    nativeName: '繁體中文',
+    name: 'Traditional Chinese',
     code: 'zh_TW',
 };

@@ -28,7 +28,6 @@ export const en = {
                 show_cardinality: 'Show Cardinality',
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
-                change_language: 'Language',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
             },
@@ -377,10 +376,15 @@ export const en = {
         tool_tips: {
             double_click_to_edit: 'Double-click to edit',
         },
+
+        language_select: {
+            change_language: 'Language',
+        },
     },
 };
 
 export const enMetadata: LanguageMetadata = {
     name: 'English',
+    nativeName: 'English',
     code: 'en',
 };

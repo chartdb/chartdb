@@ -28,7 +28,6 @@ export const pt_BR: LanguageTranslation = {
                 show_cardinality: 'Mostrar Cardinalidade',
                 zoom_on_scroll: 'Zoom ao Rolar',
                 theme: 'Tema',
-                change_language: 'Idioma',
                 show_dependencies: 'Mostrar Dependências',
                 hide_dependencies: 'Ocultar Dependências',
             },
@@ -381,10 +380,15 @@ export const pt_BR: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Duplo clique para editar',
         },
+
+        language_select: {
+            change_language: 'Idioma',
+        },
     },
 };
 
 export const pt_BRMetadata: LanguageMetadata = {
     name: 'Portuguese',
+    nativeName: 'Português',
     code: 'pt_BR',
 };

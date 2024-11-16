@@ -28,7 +28,6 @@ export const uk: LanguageTranslation = {
                 show_cardinality: 'Показати кардинальність',
                 zoom_on_scroll: 'Збільшити прокручування',
                 theme: 'Тема',
-                change_language: 'Мова',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
             },
@@ -381,10 +380,15 @@ export const uk: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Двойной клик для редактирования',
         },
+
+        language_select: {
+            change_language: 'Мова',
+        },
     },
 };
 
 export const ukMetadata: LanguageMetadata = {
-    name: 'Українська',
+    name: 'Ukrainian',
+    nativeName: 'Українська',
     code: 'uk',
 };
