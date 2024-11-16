@@ -3,7 +3,7 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/comfortable-mexican-sofa-db.png';
 import imageDark from '@/assets/templates/comfortable-mexican-sofa-db-dark.png';
 
-export const ComfortableMexicanSofaDb: Template = {
+export const comfortableMexicanSofaDb: Template = {
     slug: 'comfortable-mexican-sofa-database',
     name: 'Comfortable Mexican Sofa',
     shortDescription: 'Rails CMS - ComfortableMexicanSofa',
