@@ -28,6 +28,7 @@ export const languages: LanguageMetadata[] = [
     ruMetadata,
     zh_CNMetadata,
     zh_TWMetadata,
+    neMetadata,
 ];
 
 const resources = {
