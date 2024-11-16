@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-import { Button } from '@/components/button/button';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,10 +18,13 @@ import type {
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { languages } from '@/i18n/i18n';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/button/button-variants';
 
 export interface LanguageNavProps {}
 export const LanguageNav: React.FC<LanguageNavProps> = () => {
     const { t, i18n } = useTranslation();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const languagesOptions: SelectBoxOption[] = languages.map((lang) => ({
         label: lang.nativeName,
@@ -33,6 +35,7 @@ export const LanguageNav: React.FC<LanguageNavProps> = () => {
     const handleLanguageChange: SelectBoxProps['onChange'] = useCallback(
         (language: string | string[]) => {
             i18n.changeLanguage(language as string);
+            setDropdownOpen(false);
         },
         [i18n]
     );
@@ -44,18 +47,22 @@ export const LanguageNav: React.FC<LanguageNavProps> = () => {
     }, [i18n, languagesOptions]);
 
     return (
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <Tooltip>
                 <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="size-6 rounded-full md:size-8"
+                        <div
+                            className={cn(
+                                buttonVariants({
+                                    variant: 'outline',
+                                    size: 'icon',
+                                }),
+                                'size-6 rounded-full md:size-8 cursor-pointer'
+                            )}
                         >
                             <Globe className="size-3.5 md:size-4" />
                             <span className="sr-only">Change language</span>
-                        </Button>
+                        </div>
                     </DropdownMenuTrigger>
                 </TooltipTrigger>
                 <TooltipContent>
