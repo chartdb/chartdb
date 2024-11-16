@@ -28,7 +28,6 @@ export const fr: LanguageTranslation = {
                 show_cardinality: 'Afficher la Cardinalité',
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
-                change_language: 'Langue',
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
             },
@@ -384,10 +383,15 @@ export const fr: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Double-cliquez pour modifier',
         },
+
+        language_select: {
+            change_language: 'Langue',
+        },
     },
 };
 
 export const frMetadata: LanguageMetadata = {
-    name: 'Français',
+    name: 'French',
+    nativeName: 'Français',
     code: 'fr',
 };

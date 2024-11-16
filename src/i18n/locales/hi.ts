@@ -28,7 +28,6 @@ export const hi: LanguageTranslation = {
                 show_cardinality: 'कार्डिनैलिटी दिखाएँ',
                 zoom_on_scroll: 'स्क्रॉल पर ज़ूम',
                 theme: 'थीम',
-                change_language: 'भाषा बदलें',
                 show_dependencies: 'निर्भरता दिखाएँ',
                 hide_dependencies: 'निर्भरता छिपाएँ',
             },
@@ -384,10 +383,15 @@ export const hi: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'संपादित करने के लिए डबल-क्लिक करें',
         },
+
+        language_select: {
+            change_language: 'भाषा बदलें',
+        },
     },
 };
 
 export const hiMetadata: LanguageMetadata = {
     name: 'Hindi',
+    nativeName: 'हिन्दी',
     code: 'hi',
 };

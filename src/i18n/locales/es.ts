@@ -28,7 +28,6 @@ export const es: LanguageTranslation = {
                 hide_sidebar: 'Ocultar Barra Lateral',
                 zoom_on_scroll: 'Zoom al Desplazarse',
                 theme: 'Tema',
-                change_language: 'Idioma',
                 show_dependencies: 'Mostrar dependencias',
                 hide_dependencies: 'Ocultar dependencias',
             },
@@ -382,10 +381,15 @@ export const es: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Doble clic para editar',
         },
+
+        language_select: {
+            change_language: 'Idioma',
+        },
     },
 };
 
 export const esMetadata: LanguageMetadata = {
-    name: 'Español',
+    name: 'Spanish',
+    nativeName: 'Español',
     code: 'es',
 };
