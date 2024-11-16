@@ -10,6 +10,7 @@ import {
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useTranslation } from 'react-i18next';
 import { SelectDatabaseContent } from './select-database-content';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface SelectDatabaseProps {
     onContinue: () => void;
@@ -27,6 +28,7 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
     createNewDiagram,
 }) => {
     const { t } = useTranslation();
+    const { openImportDiagramDialog } = useDialog();
 
     return (
         <>
@@ -51,7 +53,13 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                         </Button>
                     </DialogClose>
                 ) : (
-                    <div></div>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={openImportDiagramDialog}
+                    >
+                        {t('new_diagram_dialog.import_from_file')}
+                    </Button>
                 )}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                     <Button

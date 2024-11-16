@@ -1,6 +1,8 @@
 # Stage 1: Build the application
 FROM node:22-alpine AS builder
 
+ARG VITE_OPENAI_API_KEY
+
 WORKDIR /usr/src/app
 
 # Copy and install only production dependencies
@@ -19,6 +21,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 
 # Copy the build output from the builder stage
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 # Expose the default port for the Nginx web server
 EXPOSE 80

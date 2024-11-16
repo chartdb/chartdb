@@ -1,5 +1,13 @@
-import { createIndexesFromMetadata, type DBIndex } from './db-index';
-import { createFieldsFromMetadata, type DBField } from './db-field';
+import {
+    createIndexesFromMetadata,
+    dbIndexSchema,
+    type DBIndex,
+} from './db-index';
+import {
+    createFieldsFromMetadata,
+    dbFieldSchema,
+    type DBField,
+} from './db-field';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { createAggregatedIndexes } from '../data/import-metadata/metadata-types/index-info';
 import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
@@ -16,6 +24,7 @@ import {
 } from './db-schema';
 import { DatabaseType } from './database-type';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
+import { z } from 'zod';
 
 export interface DBTable {
     id: string;
@@ -33,6 +42,23 @@ export interface DBTable {
     comments?: string;
     hidden?: boolean;
 }
+
+export const dbTableSchema: z.ZodType<DBTable> = z.object({
+    id: z.string(),
+    name: z.string(),
+    schema: z.string().optional(),
+    x: z.number(),
+    y: z.number(),
+    fields: z.array(dbFieldSchema),
+    indexes: z.array(dbIndexSchema),
+    color: z.string(),
+    isView: z.boolean(),
+    isMaterializedView: z.boolean().optional(),
+    createdAt: z.number(),
+    width: z.number().optional(),
+    comments: z.string().optional(),
+    hidden: z.boolean().optional(),
+});
 
 export const shouldShowTablesBySchemaFilter = (
     table: DBTable,

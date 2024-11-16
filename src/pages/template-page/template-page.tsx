@@ -32,6 +32,7 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { ChartDBProvider } from '@/context/chartdb-context/chartdb-provider';
 import { Helmet } from 'react-helmet-async';
 import { APP_URL, HOST_URL } from '@/lib/env';
+import { Link } from '@/components/link/link';
 
 export interface TemplatePageLoaderData {
     template: Template | undefined;
@@ -65,25 +66,22 @@ const TemplatePageComponent: React.FC = () => {
             <Helmet>
                 {template ? (
                     <>
+                        {HOST_URL !== 'https://chartdb.io' ? (
+                            <link
+                                rel="canonical"
+                                href={`https://chartdb.io/templates/${templateSlug}`}
+                            />
+                        ) : null}
                         <title>
-                            Database schema diagram for {template.name} |
-                            ChartDB
+                            {`Database schema diagram for - ${template.name} | ChartDB`}
                         </title>
-                        <meta
-                            name="title"
-                            content={`Database schema for - ${template.name} | ChartDB`}
-                        />
                         <meta
                             name="description"
                             content={`${template.shortDescription}: ${template.description}`}
                         />
                         <meta
-                            name="keywords"
-                            content={`${template.keywords.join(', ')}`}
-                        />
-                        <meta
                             property="og:title"
-                            content={`Database schema for - ${template.name} | ChartDB`}
+                            content={`Database schema diagram for - ${template.name} | ChartDB`}
                         />
                         <meta
                             property="og:url"
@@ -98,7 +96,7 @@ const TemplatePageComponent: React.FC = () => {
                             content={`${HOST_URL}${template.image}`}
                         />
                         <meta property="og:type" content="website" />
-
+                        <meta property="og:site_name" content="ChartDB" />
                         <meta
                             name="twitter:title"
                             content={`Database schema for - ${template.name} | ChartDB`}
@@ -115,6 +113,8 @@ const TemplatePageComponent: React.FC = () => {
                             name="twitter:card"
                             content="summary_large_image"
                         />
+                        <meta name="twitter:site" content="@ChartDB_io" />
+                        <meta name="twitter:creator" content="@ChartDB_io" />
                     </>
                 ) : (
                     <title>Database Schema Diagram | ChartDB</title>
@@ -174,8 +174,11 @@ const TemplatePageComponent: React.FC = () => {
                         </Breadcrumb>
                         <div className="flex flex-col items-center gap-4 md:flex-row md:items-start md:justify-between md:gap-0">
                             <div className="flex flex-col pr-0 md:pr-20">
-                                <h1 className="font-primary text-2xl font-bold">
+                                <h1 className="flex flex-col font-primary text-2xl font-bold">
                                     {template?.name}
+                                    <span className="text-sm font-normal text-muted-foreground">
+                                        Database schema diagram
+                                    </span>
                                 </h1>
                                 <h2 className="mt-3">
                                     <span className="font-semibold">
@@ -244,6 +247,25 @@ const TemplatePageComponent: React.FC = () => {
                                         </span>
                                     </div>
                                 </div>
+                                <Separator />
+                                {template.url ? (
+                                    <>
+                                        <div>
+                                            <h4 className="mb-1 text-base font-semibold md:text-left">
+                                                Url
+                                            </h4>
+
+                                            <Link
+                                                className="break-all text-sm text-muted-foreground"
+                                                href={`${template.url}?ref=chartdb`}
+                                                target="_blank"
+                                            >
+                                                {template.url}
+                                            </Link>
+                                        </div>
+                                        <Separator />
+                                    </>
+                                ) : null}
                                 <div>
                                     <h4 className="mb-1 text-base font-semibold md:text-left">
                                         Tags

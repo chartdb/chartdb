@@ -4,31 +4,19 @@ import image from '@/assets/templates/wordpress-db.png';
 import imageDark from '@/assets/templates/wordpress-db-dark.png';
 
 export const wordpressDb: Template = {
-    slug: 'wordpress-db',
-    name: 'WordPress Database',
+    slug: 'wordpress-database',
+    name: 'WordPress',
     shortDescription: 'An open-source PHP Content Management System',
     description:
         '(CMS) ideal for building websites, blogs, or apps. Flexible, customizable, and designed for developers to expand',
     image,
     imageDark,
-    tags: ['mysql', 'open source', 'WordPress', 'php'],
-    keywords: [
-        'WordPress database schema',
-        'WordPress database template',
-        'database schema visualization',
-        'WordPress database design',
-        'ChartDB',
-        'WordPress schema diagram',
-        'relational database structure',
-        'WordPress development',
-        'WordPress tables',
-        'database template for WordPress',
-    ],
+    tags: ['MySQL', 'Open Source', 'WordPress', 'PHP'],
     featured: true,
     url: 'https://wordpress.org',
     diagram: {
         id: 'wordpress_db',
-        name: 'wordpress-db',
+        name: 'wordpress-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.MYSQL,

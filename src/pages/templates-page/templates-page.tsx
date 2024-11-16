@@ -11,6 +11,7 @@ import { useLoaderData, useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
+import { HOST_URL } from '@/lib/env';
 
 export interface TemplatesPageLoaderData {
     templates: Template[] | undefined;
@@ -32,7 +33,41 @@ const TemplatesPageComponent: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>ChartDB - Database Schema Templates</title>
+                {HOST_URL !== 'https://chartdb.io' ? (
+                    <link rel="canonical" href="https://chartdb.io/templates" />
+                ) : null}
+                <title>Database Schema Diagram Templates | ChartDB</title>
+                <meta
+                    name="description"
+                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
+                />
+                <meta
+                    property="og:title"
+                    content="Database Schema Diagram Templates | ChartDB"
+                />
+                <meta property="og:url" content={`${HOST_URL}/templates`} />
+                <meta
+                    property="og:description"
+                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
+                />
+                <meta property="og:image" content={`${HOST_URL}/chartdb.png`} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="ChartDB" />
+                <meta
+                    name="twitter:title"
+                    content="Database Schema Diagram Templates | ChartDB"
+                />
+                <meta
+                    name="twitter:description"
+                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
+                />
+                <meta
+                    name="twitter:image"
+                    content={`${HOST_URL}/chartdb.png`}
+                />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:site" content="@ChartDB_io" />
+                <meta name="twitter:creator" content="@ChartDB_io" />
             </Helmet>
 
             <section className="flex w-screen flex-col bg-background">
@@ -70,10 +105,9 @@ const TemplatesPageComponent: React.FC = () => {
                         Database Schema Templates
                     </h1>
                     <h2 className="mt-1 font-primary text-base text-muted-foreground">
-                        Explore a collection of real-world database schemas
-                        drawn from real-world live applications and open-source
-                        projects. Use these as a foundation or source of
-                        inspiration when designing your app’s architecture.
+                        Discover a collection of real-world database schema
+                        diagrams, featuring example applications and popular
+                        open-source projects.
                     </h2>
                     {!templates ? (
                         <Spinner
@@ -105,11 +139,15 @@ const TemplatesPageComponent: React.FC = () => {
                                 </h4>
                                 {allTags ? (
                                     <ListMenu
-                                        className="mt-1 w-44 shrink-0"
+                                        className="mt-1 shrink-0"
                                         items={allTags.map((currentTag) => ({
                                             title: currentTag,
-                                            href: `/templates/tags/${currentTag}`,
-                                            selected: tag === currentTag,
+                                            href: `/templates/tags/${currentTag.toLowerCase().replace(/ /g, '-')}`,
+                                            selected:
+                                                tag
+                                                    ?.toLowerCase()
+                                                    .replace(/-/g, ' ') ===
+                                                currentTag.toLowerCase(),
                                         }))}
                                     />
                                 ) : null}
