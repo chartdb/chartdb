@@ -12,3 +12,5 @@ export * from './ru';
 export * from './uk';
 export * from './zh_CN';
 export * from './zh_TW';
+export * from './ne';
+export * from './mr';
