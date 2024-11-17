@@ -16,8 +16,8 @@
 <h3 align="center">
   <a href="https://discord.gg/QeFwyWSKwC">Community</a>  &bull;
   <a href="https://www.chartdb.io?ref=github_readme">Website</a>  &bull;
-  <a href="https://app.chartdb.io?ref=github_readme">Demo</a>  &bull;
-  <a href="https://chartdb.io/templates?ref=github_readme">Examples</a>
+  <a href="https://chartdb.io/templates?ref=github_readme">Examples</a>  &bull;
+  <a href="https://app.chartdb.io?ref=github_readme">Demo</a>
 </h3>
 
 <h4 align="center">
