@@ -1,6 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const zh_TW: LanguageTranslation = {
+const zh_TW: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -380,4 +380,5 @@ export const zh_TWMetadata: LanguageMetadata = {
     nativeName: '繁體中文',
     name: 'Traditional Chinese',
     code: 'zh_TW',
+    translation: zh_TW,
 };

@@ -6,4 +6,5 @@ export type LanguageMetadata = {
     name: string;
     nativeName: string;
     code: string;
+    translation: LanguageTranslation;
 };

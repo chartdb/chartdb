@@ -387,4 +387,5 @@ export const enMetadata: LanguageMetadata = {
     name: 'English',
     nativeName: 'English',
     code: 'en',
+    translation: en,
 };

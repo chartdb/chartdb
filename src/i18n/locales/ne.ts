@@ -1,6 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const ne: LanguageTranslation = {
+const ne: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -391,4 +391,5 @@ export const neMetadata: LanguageMetadata = {
     name: 'Nepali',
     nativeName: 'नेपाली',
     code: 'ne',
+    translation: ne,
 };

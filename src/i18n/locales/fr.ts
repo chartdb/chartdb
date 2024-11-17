@@ -1,6 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const fr: LanguageTranslation = {
+const fr: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -394,4 +394,5 @@ export const frMetadata: LanguageMetadata = {
     name: 'French',
     nativeName: 'Français',
     code: 'fr',
+    translation: fr,
 };
