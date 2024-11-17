@@ -13,6 +13,7 @@ import { uk, ukMetadata } from './locales/uk';
 import { ru, ruMetadata } from './locales/ru';
 import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
 import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
+import { id_ID, id_IDMetadata } from './locales/id_ID.ts';
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
@@ -27,6 +28,7 @@ export const languages: LanguageMetadata[] = [
     ruMetadata,
     zh_CNMetadata,
     zh_TWMetadata,
+    id_IDMetadata,
 ];
 
 const resources = {
@@ -42,6 +44,7 @@ const resources = {
     ru,
     zh_CN,
     zh_TW,
+    id_ID,
 };
 
 i18n.use(initReactI18next).init({

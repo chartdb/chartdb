@@ -35,7 +35,6 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { languages } from '@/i18n/i18n';
 import { useNavigate } from 'react-router-dom';
-import { id_IDMetadata } from '@/i18n/locales/id_ID';
 
 export interface TopNavbarProps {}
 
@@ -549,16 +548,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                             {language.name}
                                         </MenubarCheckboxItem>
                                     ))}
-                                    <MenubarCheckboxItem
-                                        onClick={() =>
-                                            changeLanguage(id_IDMetadata.code)
-                                        }
-                                        checked={
-                                            i18n.language === id_IDMetadata.code
-                                        }
-                                    >
-                                        {id_IDMetadata.name}
-                                    </MenubarCheckboxItem>
                                 </MenubarSubContent>
                             </MenubarSub>
                         </MenubarContent>

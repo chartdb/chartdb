@@ -139,6 +139,7 @@ export const id_ID: LanguageTranslation = {
                         change_schema: 'Ubah Skema',
                         add_field: 'Tambah Kolom',
                         add_index: 'Tambah Indeks',
+                        duplicate_table: 'Duplikat Tabel',
                         delete_table: 'Hapus Tabel',
                     },
                 },
@@ -224,6 +225,7 @@ export const id_ID: LanguageTranslation = {
             },
 
             cancel: 'Batal',
+            import_from_file: 'Impor dari file',
             back: 'Kembali',
             empty_diagram: 'Diagram Kosong',
             continue: 'Lanjutkan',
