@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const ne = {
+export const ne: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -28,7 +28,6 @@ export const ne = {
                 show_cardinality: 'कार्डिन्यालिटी देखाउनुहोस्',
                 zoom_on_scroll: 'स्क्रोलमा जुम गर्नुहोस्',
                 theme: 'थिम',
-                change_language: 'भाषा परिवर्तन गर्नुहोस्',
                 show_dependencies: 'डिपेन्डेन्सीहरू देखाउनुहोस्',
                 hide_dependencies: 'डिपेन्डेन्सीहरू लुकाउनुहोस्',
             },
@@ -381,10 +380,15 @@ export const ne = {
         tool_tips: {
             double_click_to_edit: 'सम्पादन गर्नका लागि डबल क्लिक गर्नुहोस्',
         },
+
+        language_select: {
+            change_language: 'भाषा परिवर्तन गर्नुहोस्',
+        },
     },
 };
 
 export const neMetadata: LanguageMetadata = {
     name: 'Nepali',
+    nativeName: 'नेपाली',
     code: 'ne',
 };
