@@ -8,12 +8,13 @@ import { fr, frMetadata } from './locales/fr';
 import { de, deMetadata } from './locales/de';
 import { hi, hiMetadata } from './locales/hi';
 import { ja, jaMetadata } from './locales/ja';
-import { ko_KR, ko_KRMetadata } from './locales/ko_KR.ts';
+import { ko_KR, ko_KRMetadata } from './locales/ko_KR';
 import { pt_BR, pt_BRMetadata } from './locales/pt_BR';
 import { uk, ukMetadata } from './locales/uk';
 import { ru, ruMetadata } from './locales/ru';
 import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
 import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
+import { mr, mrMetadata } from './locales/mr';
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
@@ -28,6 +29,7 @@ export const languages: LanguageMetadata[] = [
     ruMetadata,
     zh_CNMetadata,
     zh_TWMetadata,
+    mrMetadata,
 ];
 
 const resources = {
@@ -43,6 +45,7 @@ const resources = {
     ru,
     zh_CN,
     zh_TW,
+    mr,
 };
 
 i18n.use(LanguageDetector)
