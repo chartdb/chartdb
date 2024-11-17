@@ -22,6 +22,7 @@ import {
     MiniMap,
     Controls,
     useReactFlow,
+    useKeyPress,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -36,7 +37,7 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid, AlertTriangle } from 'lucide-react';
+import { Pencil, LayoutGrid, AlertTriangle, Magnet } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -66,7 +67,7 @@ import {
 import type { Graph } from '@/lib/graph';
 import { createGraph, removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
-import { debounce } from '@/lib/utils';
+import { cn, debounce, getOperatingSystem } from '@/lib/utils';
 import type { DependencyEdgeType } from './dependency-edge';
 import { DependencyEdge } from './dependency-edge';
 import {
@@ -103,9 +104,10 @@ const tableToTableNode = (
 
 export interface CanvasProps {
     initialTables: DBTable[];
+    readonly?: boolean;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
+export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const { getEdge, getInternalNode, fitView, getEdges, getNode } =
         useReactFlow();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
@@ -147,6 +149,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
 
+    const [snapToGridEnabled, setSnapToGridEnabled] = useState(false);
+
     useEffect(() => {
         setIsInitialLoadingNodes(true);
     }, [initialTables]);
@@ -162,7 +166,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
-            setTimeout(() => fitView({ maxZoom: 1, duration: 0 }), 0);
+            debounce(() => {
+                fitView({
+                    duration: 200,
+                    padding: 0.1,
+                    maxZoom: 0.8,
+                });
+            }, 500)();
         }
     }, [isInitialLoadingNodes, fitView]);
 
@@ -387,7 +397,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onEdgesChangeHandler: OnEdgesChange<EdgeType> = useCallback(
         (changes) => {
-            const removeChanges: NodeRemoveChange[] = changes.filter(
+            let changesToApply = changes;
+
+            if (readonly) {
+                changesToApply = changesToApply.filter(
+                    (change) => change.type !== 'remove'
+                );
+            }
+
+            const removeChanges: NodeRemoveChange[] = changesToApply.filter(
                 (change) => change.type === 'remove'
             ) as NodeRemoveChange[];
 
@@ -415,9 +433,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 removeDependencies(dependenciesToRemove);
             }
 
-            return onEdgesChange(changes);
+            return onEdgesChange(changesToApply);
         },
-        [getEdge, onEdgesChange, removeRelationships, removeDependencies]
+        [
+            getEdge,
+            onEdgesChange,
+            removeRelationships,
+            removeDependencies,
+            readonly,
+        ]
     );
 
     const updateOverlappingGraphOnChanges = useCallback(
@@ -460,15 +484,23 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onNodesChangeHandler: OnNodesChange<TableNodeType> = useCallback(
         (changes) => {
-            const positionChanges: NodePositionChange[] = changes.filter(
+            let changesToApply = changes;
+
+            if (readonly) {
+                changesToApply = changesToApply.filter(
+                    (change) => change.type !== 'remove'
+                );
+            }
+
+            const positionChanges: NodePositionChange[] = changesToApply.filter(
                 (change) => change.type === 'position' && !change.dragging
             ) as NodePositionChange[];
 
-            const removeChanges: NodeRemoveChange[] = changes.filter(
+            const removeChanges: NodeRemoveChange[] = changesToApply.filter(
                 (change) => change.type === 'remove'
             ) as NodeRemoveChange[];
 
-            const sizeChanges: NodeDimensionChange[] = changes.filter(
+            const sizeChanges: NodeDimensionChange[] = changesToApply.filter(
                 (change) => change.type === 'dimensions' && change.resizing
             ) as NodeDimensionChange[];
 
@@ -521,12 +553,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 sizeChanges,
             });
 
-            return onNodesChange(changes);
+            return onNodesChange(changesToApply);
         },
         [
             onNodesChange,
             updateTablesState,
             updateOverlappingGraphOnChangesDebounced,
+            readonly,
         ]
     );
 
@@ -664,6 +697,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
+    const shiftPressed = useKeyPress('Shift');
+    const operatingSystem = getOperatingSystem();
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full">
@@ -688,6 +724,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         type: 'relationship-edge',
                     }}
                     panOnScroll={scrollAction === 'pan'}
+                    snapToGrid={shiftPressed || snapToGridEnabled}
+                    snapGrid={[20, 20]}
                 >
                     <Controls
                         position="top-left"
@@ -697,22 +735,59 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         className="!shadow-none"
                     >
                         <div className="flex flex-col items-center gap-2 md:flex-row">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <span>
-                                        <Button
-                                            variant="secondary"
-                                            className="size-8 p-1 shadow-none"
-                                            onClick={showReorderConfirmation}
-                                        >
-                                            <LayoutGrid className="size-4" />
-                                        </Button>
-                                    </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {t('toolbar.reorder_diagram')}
-                                </TooltipContent>
-                            </Tooltip>
+                            {!readonly ? (
+                                <>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="secondary"
+                                                    className="size-8 p-1 shadow-none"
+                                                    onClick={
+                                                        showReorderConfirmation
+                                                    }
+                                                >
+                                                    <LayoutGrid className="size-4" />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t('toolbar.reorder_diagram')}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="secondary"
+                                                    className={cn(
+                                                        'size-8 p-1 shadow-none',
+                                                        snapToGridEnabled ||
+                                                            shiftPressed
+                                                            ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
+                                                            : ''
+                                                    )}
+                                                    onClick={() =>
+                                                        setSnapToGridEnabled(
+                                                            (prev) => !prev
+                                                        )
+                                                    }
+                                                >
+                                                    <Magnet className="size-4" />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t('snap_to_grid_tooltip', {
+                                                key:
+                                                    operatingSystem === 'mac'
+                                                        ? '⇧'
+                                                        : 'Shift',
+                                            })}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </>
+                            ) : null}
 
                             <div
                                 className={`transition-opacity duration-300 ease-in-out ${
@@ -760,7 +835,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         </Controls>
                     ) : null}
 
-                    {!isDesktop ? (
+                    {!isDesktop && !readonly ? (
                         <Controls
                             position="bottom-left"
                             orientation="horizontal"
@@ -785,7 +860,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Toolbar />
+                        <Toolbar readonly={readonly} />
                     </Controls>
                     <MiniMap
                         style={{

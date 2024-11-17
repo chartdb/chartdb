@@ -190,7 +190,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         options: {
             includeTables?: boolean;
             includeRelationships?: boolean;
-        } = { includeRelationships: false, includeTables: false }
+            includeDependencies?: boolean;
+        } = {
+            includeRelationships: false,
+            includeTables: false,
+            includeDependencies: false,
+        }
     ): Promise<Diagram[]> => {
         let diagrams = await db.diagrams.toArray();
 
@@ -212,6 +217,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             );
         }
 
+        if (options.includeDependencies) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.dependencies = await listDependencies(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
         return diagrams;
     };
 
@@ -221,7 +235,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             includeTables?: boolean;
             includeRelationships?: boolean;
             includeDependencies?: boolean;
-        } = { includeRelationships: false, includeTables: false }
+        } = {
+            includeRelationships: false,
+            includeTables: false,
+            includeDependencies: false,
+        }
     ): Promise<Diagram | undefined> => {
         const diagram = await db.diagrams.get(id);
 
@@ -261,6 +279,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             db.diagrams.delete(id),
             db.db_tables.where('diagramId').equals(id).delete(),
             db.db_relationships.where('diagramId').equals(id).delete(),
+            db.db_dependencies.where('diagramId').equals(id).delete(),
         ]);
     };
 
@@ -392,7 +411,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         diagramId: string
     ): Promise<DBRelationship[]> => {
         // Sort relationships alphabetically
-        return await (
+        return (
             await db.db_relationships
                 .where('diagramId')
                 .equals(diagramId)

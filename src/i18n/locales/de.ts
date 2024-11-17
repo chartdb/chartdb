@@ -28,10 +28,14 @@ export const de: LanguageTranslation = {
                 show_cardinality: 'Kardinalität anzeigen',
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
-                change_language: 'Sprache',
-                // TODO: Translate
-                show_dependencies: 'Show Dependencies',
-                hide_dependencies: 'Hide Dependencies',
+                show_dependencies: 'Abhängigkeiten anzeigen',
+                hide_dependencies: 'Abhängigkeiten ausblenden',
+            },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'Hilfe',
@@ -94,6 +98,8 @@ export const de: LanguageTranslation = {
         clear: 'Leeren',
         show_more: 'Mehr anzeigen',
         show_less: 'Weniger anzeigen',
+        copy_to_clipboard: 'In die Zwischenablage kopieren',
+        copied: 'Kopiert!',
 
         side_panel: {
             schema: 'Schema:',
@@ -138,6 +144,7 @@ export const de: LanguageTranslation = {
                         change_schema: 'Schema ändern',
                         add_field: 'Feld hinzufügen',
                         add_index: 'Index hinzufügen',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Tabelle löschen',
                     },
                 },
@@ -167,23 +174,22 @@ export const de: LanguageTranslation = {
                         'Erstellen Sie eine Beziehung, um Tabellen zu verbinden',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
-                dependencies: 'Dependencies',
+                dependencies: 'Abhängigkeiten',
                 filter: 'Filter',
-                collapse: 'Collapse All',
+                collapse: 'Alle einklappen',
                 dependency: {
-                    table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    table: 'Tabelle',
+                    dependent_table: 'Abhängige Ansicht',
+                    delete_dependency: 'Löschen',
                     dependency_actions: {
-                        title: 'Actions',
-                        delete_dependency: 'Delete',
+                        title: 'Aktionen',
+                        delete_dependency: 'Löschen',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'Keine Abhängigkeiten',
+                    description: 'Erstellen Sie eine Ansicht, um zu beginnen',
                 },
             },
         },
@@ -196,8 +202,7 @@ export const de: LanguageTranslation = {
             undo: 'Rückgängig',
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
-            // TODO: Translate
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
         },
 
         new_diagram_dialog: {
@@ -221,10 +226,14 @@ export const de: LanguageTranslation = {
                     step_1: 'Gehen Sie zu Tools > Optionen > Abfrageergebnisse > SQL Server.',
                     step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die maximale Zeichenanzahl für Nicht-XML-Daten (auf 9999999 setzen).',
                 },
+                instructions_link: 'Brauchen Sie Hilfe? So geht’s',
+                check_script_result: 'Skriptergebnis überprüfen',
             },
 
             cancel: 'Abbrechen',
             back: 'Zurück',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Leeres Diagramm',
             continue: 'Weiter',
             import: 'Importieren',
@@ -295,16 +304,15 @@ export const de: LanguageTranslation = {
             },
         },
 
-        // TODO: Translate
         export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
+            title: 'Bild exportieren',
+            description: 'Wählen Sie den Skalierungsfaktor für den Export:',
+            scale_1x: '1x Normal',
+            scale_2x: '2x (Empfohlen)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Abbrechen',
+            export: 'Exportieren',
         },
 
         new_table_schema_dialog: {
@@ -329,7 +337,26 @@ export const de: LanguageTranslation = {
             close: 'Nicht jetzt',
             confirm: 'Natürlich!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Ein zu Eins (1:1)',
             one_to_many: 'Ein zu Viele (1:n)',
@@ -344,12 +371,25 @@ export const de: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Tabelle bearbeiten',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Tabelle löschen',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'Doppelklicken zum Bearbeiten',
+        },
+
+        language_select: {
+            change_language: 'Sprache',
         },
     },
 };
 
 export const deMetadata: LanguageMetadata = {
-    name: 'Deutsch',
+    name: 'German',
+    nativeName: 'Deutsch',
     code: 'de',
 };

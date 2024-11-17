@@ -26,7 +26,7 @@ export interface SelectBoxOption {
     description?: string;
 }
 
-interface SelectBoxProps {
+export interface SelectBoxProps {
     options: SelectBoxOption[];
     value?: string[] | string;
     onChange?: (values: string[] | string) => void;
@@ -156,9 +156,19 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             [options, value, multiple]
         );
 
+        const handleKeyDown = React.useCallback(
+            (e: React.KeyboardEvent) => {
+                if (!isOpen && e.code.toLowerCase() === 'space') {
+                    e.preventDefault();
+                    onOpenChange(true);
+                }
+            },
+            [isOpen, onOpenChange]
+        );
+
         return (
             <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild tabIndex={0} onKeyDown={handleKeyDown}>
                     <div
                         className={cn(
                             `flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring ${disabled ? 'bg-muted pointer-events-none' : ''}`,

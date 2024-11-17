@@ -74,7 +74,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-[90vh] w-[90vw] flex-col overflow-y-auto md:w-screen xl:min-w-[55vw]"
+                className="flex w-[90vw] flex-col overflow-y-auto md:w-screen xl:min-w-[55vw]"
                 showClose
             >
                 <DialogHeader>

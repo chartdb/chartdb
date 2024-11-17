@@ -12,7 +12,14 @@
         @apply duration-100;
     }
 
+    .monaco-editor .monaco-editor-overlaymessage {
+        @apply hidden !important;
+    }
+
     .scrollable-flex > div {
         @apply !flex;
+    }
+
+    .marker-definitions {
     }
 }

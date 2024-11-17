@@ -1,15 +1,11 @@
 import React from 'react';
-import { DialogTrigger } from '../command/dialog';
+import { DialogTrigger } from '@/components/command/dialog';
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogTitle,
 } from '../dialog/dialog';
-
-// import Image from 'next/image'
-// import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
-// import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
 
 export const ZoomableImage = React.forwardRef<
     React.ElementRef<typeof DialogTrigger>,
@@ -22,7 +18,7 @@ export const ZoomableImage = React.forwardRef<
     return (
         <Dialog>
             <DialogTrigger asChild ref={ref}>
-                <img {...props} />
+                {props.children ? props.children : <img {...props} />}
             </DialogTrigger>
             <DialogContent className="max-w-4xl border-0 bg-transparent p-0">
                 <DialogTitle className="hidden" />

@@ -15,7 +15,7 @@ export const fr: LanguageTranslation = {
                 exit: 'Quitter',
             },
             edit: {
-                edit: 'Éditer',
+                edit: 'Édition',
                 undo: 'Annuler',
                 redo: 'Rétablir',
                 clear: 'Effacer',
@@ -28,10 +28,13 @@ export const fr: LanguageTranslation = {
                 show_cardinality: 'Afficher la Cardinalité',
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
-                change_language: 'Langue',
-                // TODO: Translate
-                show_dependencies: 'Show Dependencies',
-                hide_dependencies: 'Hide Dependencies',
+                show_dependencies: 'Afficher les Dépendances',
+                hide_dependencies: 'Masquer les Dépendances',
+            },
+            share: {
+                share: 'Partage',
+                export_diagram: 'Exporter le diagramme',
+                import_diagram: 'Importer un diagramme',
             },
             help: {
                 help: 'Aide',
@@ -85,6 +88,9 @@ export const fr: LanguageTranslation = {
         clear: 'Effacer',
         show_more: 'Afficher Plus',
         show_less: 'Afficher Moins',
+        // TODO: Translate
+        copy_to_clipboard: 'Copy to Clipboard',
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'Schéma:',
@@ -128,6 +134,7 @@ export const fr: LanguageTranslation = {
                         title: 'Actions de la Table',
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Supprimer la Table',
                         change_schema: 'Changer le Schéma',
                     },
@@ -157,23 +164,22 @@ export const fr: LanguageTranslation = {
                     description: 'Créez une relation pour connecter les tables',
                 },
             },
-            // TODO: Translate
             dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
+                dependencies: 'Dépendances',
+                filter: 'Filtrer',
+                collapse: 'Réduire Tout',
                 dependency: {
                     table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    dependent_table: 'Vue Dépendante',
+                    delete_dependency: 'Supprimer',
                     dependency_actions: {
                         title: 'Actions',
-                        delete_dependency: 'Delete',
+                        delete_dependency: 'Supprimer',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'Aucune dépendance',
+                    description: 'Créez une vue pour commencer',
                 },
             },
         },
@@ -186,8 +192,7 @@ export const fr: LanguageTranslation = {
             undo: 'Annuler',
             redo: 'Rétablir',
             reorder_diagram: 'Réorganiser le Diagramme',
-            // TODO: Translate
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'Surligner les tables chevauchées',
         },
 
         new_diagram_dialog: {
@@ -211,10 +216,15 @@ export const fr: LanguageTranslation = {
                     step_1: 'Allez dans Outils > Options > Résultats des Requêtes > SQL Server.',
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
+                instructions_link: "Besoin d'aide ? Regardez comment",
+                // TODO: Translate
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'Annuler',
             back: 'Retour',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Diagramme vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -251,52 +261,48 @@ export const fr: LanguageTranslation = {
             },
         },
 
-        // TODO: Translate
         export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x Regular',
-            scale_2x: '2x (Recommended)',
+            title: "Exporter l'image",
+            description:
+                "Choisissez le facteur d'échelle pour l'image exportée.",
+            scale_1x: '1x Normal',
+            scale_2x: '2x (Recommandé)',
             scale_3x: '3x',
             scale_4x: '4x',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Annuler',
+            export: 'Exporter',
         },
 
-        // TODO: Translate
         multiple_schemas_alert: {
-            title: 'Multiple Schemas',
+            title: 'Schémas Multiples',
             description:
-                '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: "Don't show again",
-            change_schema: 'Change',
-            none: 'none',
+                '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
+            dont_show_again: 'Ne plus afficher',
+            change_schema: 'Changer',
+            none: 'Aucun',
         },
 
-        // TODO: Translate
         new_table_schema_dialog: {
-            title: 'Select Schema',
+            title: 'Sélectionner un Schéma',
             description:
-                'Multiple schemas are currently displayed. Select one for the new table.',
-            cancel: 'Cancel',
-            confirm: 'Confirm',
+                'Plusieurs schémas sont actuellement affichés. Sélectionnez-en un pour la nouvelle table.',
+            cancel: 'Annuler',
+            confirm: 'Confirmer',
         },
 
-        // TODO: Translate
         star_us_dialog: {
-            title: 'Help us improve!',
+            title: 'Aidez-nous à nous améliorer',
             description:
-                "Would you like to star us on GitHub? It's just a click away!",
-            close: 'Not now',
-            confirm: 'Of course!',
+                "Souhaitez-vous nous donner une étoile sur GitHub ? Il ne suffit que d'un clic !",
+            close: 'Pas maintenant',
+            confirm: 'Bien sûr !',
         },
 
-        // TODO: Translate
         update_table_schema_dialog: {
-            title: 'Change Schema',
-            description: 'Update table "{{tableName}}" schema',
-            cancel: 'Cancel',
-            confirm: 'Change',
+            title: 'Modifier le Schéma',
+            description: 'Mettre à jour le schéma de la table "{{tableName}}"',
+            cancel: 'Annuler',
+            confirm: 'Modifier',
         },
 
         create_relationship_dialog: {
@@ -333,7 +339,26 @@ export const fr: LanguageTranslation = {
                 cancel: 'Annuler',
             },
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Un à Un',
             one_to_many: 'Un à Plusieurs',
@@ -348,12 +373,25 @@ export const fr: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Éditer la Table',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Supprimer la Table',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'Double-cliquez pour modifier',
+        },
+
+        language_select: {
+            change_language: 'Langue',
         },
     },
 };
 
 export const frMetadata: LanguageMetadata = {
-    name: 'Français',
+    name: 'French',
+    nativeName: 'Français',
     code: 'fr',
 };

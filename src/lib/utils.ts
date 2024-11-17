@@ -1,9 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
-
+import { twMerge } from 'tailwind-merge';
 const randomId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 25);
 
-import { twMerge } from 'tailwind-merge';
 const UUID_KEY = 'uuid';
 
 export function cn(...inputs: ClassValue[]) {
@@ -84,4 +83,21 @@ export const decodeBase64ToUtf8 = (base64: string) => {
 
     const decoder = new TextDecoder('utf-8');
     return decoder.decode(bytes);
+};
+
+export const waitFor = async (ms: number): Promise<void> => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+export const sha256 = async (message: string): Promise<string> => {
+    const msgBuffer = new TextEncoder().encode(message);
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+
+    return hashHex;
 };

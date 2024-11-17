@@ -31,8 +31,14 @@ import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
 } from '@/lib/domain/database-clients';
-import { isDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
+import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { Spinner } from '@/components/spinner/spinner';
+import {
+    fixMetadataJson,
+    isStringMetadataJson,
+} from '@/lib/data/import-metadata/utils';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -73,6 +79,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const [importMetadataScripts, setImportMetadataScripts] =
         useState<ImportMetadataScripts | null>(null);
 
+    const { isSm: isDesktop } = useBreakpoint('sm');
+
+    const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
+    const [isCheckingJson, setIsCheckingJson] = useState(false);
+
     useEffect(() => {
         const loadScripts = async () => {
             const { importMetadataScripts } = await import(
@@ -86,19 +97,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
             setErrorMessage('');
+            setShowCheckJsonButton(false);
             return;
         }
 
-        try {
-            const parsedResult = JSON.parse(scriptResult);
-
-            if (isDatabaseMetadata(parsedResult)) {
-                setErrorMessage('');
-            } else {
-                setErrorMessage(errorScriptOutputMessage);
-            }
-        } catch (error) {
+        if (isStringMetadataJson(scriptResult)) {
+            setErrorMessage('');
+            setShowCheckJsonButton(false);
+        } else if (
+            scriptResult.trim().includes('{') &&
+            scriptResult.trim().includes('}')
+        ) {
+            setShowCheckJsonButton(true);
+            setErrorMessage('');
+        } else {
             setErrorMessage(errorScriptOutputMessage);
+            setShowCheckJsonButton(false);
         }
     }, [scriptResult]);
 
@@ -115,6 +129,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         },
         [setScriptResult]
     );
+
+    const handleCheckJson = useCallback(async () => {
+        setIsCheckingJson(true);
+
+        const fixedJson = await fixMetadataJson(scriptResult);
+
+        if (isStringMetadataJson(fixedJson)) {
+            setScriptResult(fixedJson);
+            setErrorMessage('');
+        } else {
+            setErrorMessage(errorScriptOutputMessage);
+        }
+
+        setShowCheckJsonButton(false);
+        setIsCheckingJson(false);
+    }, [scriptResult, setScriptResult]);
 
     const renderHeader = useCallback(() => {
         return (
@@ -137,7 +167,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         </p>
                         <ToggleGroup
                             type="single"
-                            className="ml-1 gap-2"
+                            className="ml-1 flex-wrap gap-2"
                             value={
                                 !databaseEdition ? 'regular' : databaseEdition
                             }
@@ -246,7 +276,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 </TabsList>
                             </div>
                             <CodeSnippet
-                                className="max-h-40 w-full"
+                                className="h-40 w-full"
                                 loading={!importMetadataScripts}
                                 code={
                                     importMetadataScripts?.[databaseType]?.({
@@ -254,18 +284,19 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                         databaseClient,
                                     }) ?? ''
                                 }
-                                language={databaseClient ? 'bash' : 'sql'}
+                                language={databaseClient ? 'shell' : 'sql'}
                             />
                         </Tabs>
                     ) : (
                         <CodeSnippet
-                            className="max-h-40 w-full"
+                            className="h-40 w-full flex-auto"
                             loading={!importMetadataScripts}
                             code={
                                 importMetadataScripts?.[databaseType]?.({
                                     databaseEdition,
                                 }) ?? ''
                             }
+                            language="sql"
                         />
                     )}
                 </div>
@@ -281,11 +312,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         value={scriptResult}
                         onChange={handleInputChange}
                     />
-                    {errorMessage && (
-                        <p className="mt-2 text-sm text-red-700">
-                            {errorMessage}
-                        </p>
-                    )}
+                    {showCheckJsonButton || errorMessage ? (
+                        <div className="mt-2 flex items-center gap-2">
+                            {showCheckJsonButton ? (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleCheckJson}
+                                    disabled={isCheckingJson}
+                                >
+                                    {isCheckingJson ? (
+                                        <Spinner size="small" />
+                                    ) : (
+                                        t(
+                                            'new_diagram_dialog.import_database.check_script_result'
+                                        )
+                                    )}
+                                </Button>
+                            ) : (
+                                <p className="text-sm text-red-700">
+                                    {errorMessage}
+                                </p>
+                            )}
+                        </div>
+                    ) : null}
                 </div>
             </div>
         );
@@ -300,6 +351,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         databaseClient,
         importMetadataScripts,
         t,
+        showCheckJsonButton,
+        isCheckingJson,
+        handleCheckJson,
     ]);
 
     const renderFooter = useCallback(() => {
@@ -315,6 +369,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             {t('new_diagram_dialog.back')}
                         </Button>
                     )}
+                    {isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
                     {onCreateEmptyDiagram && (
@@ -347,6 +410,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 type="button"
                                 variant="default"
                                 disabled={
+                                    showCheckJsonButton ||
                                     scriptResult.trim().length === 0 ||
                                     errorMessage.length > 0
                                 }
@@ -356,15 +420,27 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             </Button>
                         </DialogClose>
                     )}
+
+                    {!isDesktop ? (
+                        <ZoomableImage src="/load-new-db-instructions.gif">
+                            <Button type="button" variant="link">
+                                {t(
+                                    'new_diagram_dialog.import_database.instructions_link'
+                                )}
+                            </Button>
+                        </ZoomableImage>
+                    ) : null}
                 </div>
             </DialogFooter>
         );
     }, [
         handleImport,
+        isDesktop,
         keepDialogAfterImport,
         onCreateEmptyDiagram,
         errorMessage.length,
         scriptResult,
+        showCheckJsonButton,
         goBack,
         t,
     ]);

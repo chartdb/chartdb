@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 import { DatabaseType } from './database-type';
 import {
@@ -16,6 +17,15 @@ export interface DBDependency {
     dependentTableId: string;
     createdAt: number;
 }
+
+export const dbDependencySchema: z.ZodType<DBDependency> = z.object({
+    id: z.string(),
+    schema: z.string().optional(),
+    tableId: z.string(),
+    dependentSchema: z.string().optional(),
+    dependentTableId: z.string(),
+    createdAt: z.number(),
+});
 
 export const shouldShowDependencyBySchemaFilter = (
     dependency: DBDependency,

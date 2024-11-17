@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
 import type { DBField } from './db-field';
 import {
@@ -21,6 +22,20 @@ export interface DBRelationship {
     createdAt: number;
 }
 
+export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
+    id: z.string(),
+    name: z.string(),
+    sourceSchema: z.string().optional(),
+    sourceTableId: z.string(),
+    targetSchema: z.string().optional(),
+    targetTableId: z.string(),
+    sourceFieldId: z.string(),
+    targetFieldId: z.string(),
+    sourceCardinality: z.union([z.literal('one'), z.literal('many')]),
+    targetCardinality: z.union([z.literal('one'), z.literal('many')]),
+    createdAt: z.number(),
+});
+
 export type RelationshipType =
     | 'one_to_one'
     | 'one_to_many'
@@ -42,6 +57,15 @@ export const shouldShowRelationshipBySchemaFilter = (
             schemaNameToSchemaId(relationship.targetSchema)
         ));
 
+const determineCardinality = (
+    field: DBField,
+    isTablePKComplex: boolean
+): Cardinality => {
+    return field.unique || (field.primaryKey && !isTablePKComplex)
+        ? 'one'
+        : 'many';
+};
+
 export const createRelationshipsFromMetadata = ({
     foreignKeys,
     tables,
@@ -50,7 +74,7 @@ export const createRelationshipsFromMetadata = ({
     tables: DBTable[];
 }): DBRelationship[] => {
     return foreignKeys
-        .map((fk: ForeignKeyInfo) => {
+        .map((fk: ForeignKeyInfo): DBRelationship | null => {
             const schema = schemaNameToDomainSchemaName(fk.schema);
             const sourceTable = tables.find(
                 (table) => table.name === fk.table && table.schema === schema
@@ -88,10 +112,6 @@ export const createRelationshipsFromMetadata = ({
                     targetField,
                     isTargetTablePKComplex
                 );
-                const type = determineRelationshipType({
-                    sourceCardinality,
-                    targetCardinality,
-                });
 
                 return {
                     id: generateId(),
@@ -102,25 +122,15 @@ export const createRelationshipsFromMetadata = ({
                     targetTableId: targetTable.id,
                     sourceFieldId: sourceField.id,
                     targetFieldId: targetField.id,
-                    type,
                     sourceCardinality,
                     targetCardinality,
                     createdAt: Date.now(),
-                } as DBRelationship;
+                };
             }
 
             return null;
         })
         .filter((rel) => rel !== null) as DBRelationship[];
-};
-
-const determineCardinality = (
-    field: DBField,
-    isTablePKComplex: boolean
-): Cardinality => {
-    return field.unique || (field.primaryKey && !isTablePKComplex)
-        ? 'one'
-        : 'many';
 };
 
 export const determineRelationshipType = ({

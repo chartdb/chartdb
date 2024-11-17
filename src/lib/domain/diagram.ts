@@ -1,12 +1,23 @@
+import { z } from 'zod';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
-import type { DatabaseEdition } from './database-edition';
+import { DatabaseEdition } from './database-edition';
 import { DatabaseType } from './database-type';
 import type { DBDependency } from './db-dependency';
-import { createDependenciesFromMetadata } from './db-dependency';
+import {
+    createDependenciesFromMetadata,
+    dbDependencySchema,
+} from './db-dependency';
 import type { DBRelationship } from './db-relationship';
-import { createRelationshipsFromMetadata } from './db-relationship';
+import {
+    createRelationshipsFromMetadata,
+    dbRelationshipSchema,
+} from './db-relationship';
 import type { DBTable } from './db-table';
-import { adjustTablePositions, createTablesFromMetadata } from './db-table';
+import {
+    adjustTablePositions,
+    createTablesFromMetadata,
+    dbTableSchema,
+} from './db-table';
 import { generateDiagramId } from '@/lib/utils';
 export interface Diagram {
     id: string;
@@ -20,6 +31,18 @@ export interface Diagram {
     updatedAt: Date;
 }
 
+export const diagramSchema: z.ZodType<Diagram> = z.object({
+    id: z.string(),
+    name: z.string(),
+    databaseType: z.nativeEnum(DatabaseType),
+    databaseEdition: z.nativeEnum(DatabaseEdition).optional(),
+    tables: z.array(dbTableSchema).optional(),
+    relationships: z.array(dbRelationshipSchema).optional(),
+    dependencies: z.array(dbDependencySchema).optional(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+});
+
 export const loadFromDatabaseMetadata = async ({
     databaseType,
     databaseMetadata,
@@ -31,39 +54,24 @@ export const loadFromDatabaseMetadata = async ({
     diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
 }): Promise<Diagram> => {
-    const {
-        tables: tableInfos,
-        pk_info: primaryKeys,
-        columns,
-        indexes,
-        fk_info: foreignKeys,
-        views: views,
-    } = databaseMetadata;
+    const { fk_info: foreignKeys, views: views } = databaseMetadata;
 
-    // First pass: Create tables without final positions
     const tables = createTablesFromMetadata({
-        tableInfos,
-        columns,
-        indexes,
-        primaryKeys,
-        views,
+        databaseMetadata,
         databaseType,
     });
 
-    // First pass: Create relationships
     const relationships = createRelationshipsFromMetadata({
         foreignKeys,
         tables,
     });
 
-    // First pass: Create dependencies
     const dependencies = await createDependenciesFromMetadata({
         views,
         tables,
         databaseType,
     });
 
-    // Second pass: Adjust table positions based on relationships
     const adjustedTables = adjustTablePositions({
         tables,
         relationships,

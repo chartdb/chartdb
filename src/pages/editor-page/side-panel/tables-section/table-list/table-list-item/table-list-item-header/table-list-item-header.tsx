@@ -8,6 +8,7 @@ import {
     FileKey2,
     Check,
     Group,
+    Copy,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -28,6 +29,12 @@ import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+import { cloneTable } from '@/lib/clone';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -41,6 +48,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         removeTable,
         createIndex,
         createField,
+        createTable,
         schemas,
         filteredSchemas,
     } = useChartDB();
@@ -65,10 +73,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
+    const enterEditMode = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setEditMode(true);
     };
 
@@ -124,6 +130,20 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             onConfirm: updateTableSchema,
         });
     }, [openTableSchemaDialog, table, schemas, updateTableSchema]);
+
+    const duplicateTableHandler = useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            e.stopPropagation();
+            const clonedTable = cloneTable(table);
+
+            clonedTable.name = `${clonedTable.name}_copy`;
+            clonedTable.x += 30;
+            clonedTable.y += 50;
+
+            createTable(clonedTable);
+        },
+        [createTable, table]
+    );
 
     const renderDropDownMenu = useCallback(
         () => (
@@ -188,6 +208,18 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
+                            onClick={duplicateTableHandler}
+                            className="flex justify-between"
+                        >
+                            {t(
+                                'side_panel.tables_section.table.table_actions.duplicate_table'
+                            )}
+                            <Copy className="size-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
                             onClick={deleteTableHandler}
                             className="flex justify-between !text-red-700"
                         >
@@ -205,6 +237,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             createField,
             createIndex,
             deleteTableHandler,
+            duplicateTableHandler,
             t,
             changeSchema,
             schemas.length,
@@ -219,7 +252,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1">
+            <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input
                         ref={inputRef}
@@ -232,12 +265,24 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (
-                    <div className="truncate">
-                        {table.name}
-                        <span className="text-xs text-muted-foreground">
-                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
-                        </span>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div
+                                onDoubleClick={enterEditMode}
+                                className="text-editable truncate px-2 py-0.5"
+                            >
+                                {table.name}
+                                <span className="text-xs text-muted-foreground">
+                                    {schemaToDisplay
+                                        ? ` (${schemaToDisplay})`
+                                        : ''}
+                                </span>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('tool_tips.double_click_to_edit')}
+                        </TooltipContent>
+                    </Tooltip>
                 )}
             </div>
             <div className="flex flex-row-reverse">

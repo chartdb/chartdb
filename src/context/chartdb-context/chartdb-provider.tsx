@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
@@ -11,8 +11,6 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import type { Diagram } from '@/lib/domain/diagram';
-import { useNavigate } from 'react-router-dom';
-import { useConfig } from '@/hooks/use-config';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DBSchema } from '@/lib/domain/db-schema';
 import {
@@ -23,19 +21,22 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import { storageInitialValue } from '../storage-context/storage-context';
 
-export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
-    const db = useStorage();
+export interface ChartDBProviderProps {
+    diagram?: Diagram;
+    readonly?: boolean;
+}
+export const ChartDBProvider: React.FC<
+    React.PropsWithChildren<ChartDBProviderProps>
+> = ({ children, diagram, readonly }) => {
+    let db = useStorage();
     const events = useEventEmitter<ChartDBEvent>();
-    const navigate = useNavigate();
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
-    const { updateConfig } = useConfig();
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
     const [diagramUpdatedAt, setDiagramUpdatedAt] = useState<Date>(new Date());
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
@@ -44,20 +45,19 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
     const [databaseEdition, setDatabaseEdition] = useState<
         DatabaseEdition | undefined
     >();
-    const [tables, setTables] = useState<DBTable[]>([]);
-    const [relationships, setRelationships] = useState<DBRelationship[]>([]);
-    const [dependencies, setDependencies] = useState<DBDependency[]>([]);
+    const [tables, setTables] = useState<DBTable[]>(diagram?.tables ?? []);
+    const [relationships, setRelationships] = useState<DBRelationship[]>(
+        diagram?.relationships ?? []
+    );
+    const [dependencies, setDependencies] = useState<DBDependency[]>(
+        diagram?.dependencies ?? []
+    );
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
-    useEffect(() => {
-        if (diagramName) {
-            document.title = `ChartDB - ${diagramName} Diagram | Visualize Database Schemas`;
-        } else {
-            document.title =
-                'ChartDB - Create & Visualize Database Schema Diagrams';
-        }
-    }, [diagramName]);
+    if (readonly) {
+        db = storageInitialValue;
+    }
 
     const schemas = useMemo(
         () =>
@@ -169,34 +169,13 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
             resetRedoStack();
             resetUndoStack();
 
-            const [config] = await Promise.all([
-                db.getConfig(),
+            await Promise.all([
                 db.deleteDiagramTables(diagramId),
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagram(diagramId),
                 db.deleteDiagramDependencies(diagramId),
             ]);
-
-            if (config?.defaultDiagramId === diagramId) {
-                const diagrams = await db.listDiagrams();
-
-                if (diagrams.length > 0) {
-                    const defaultDiagramId = diagrams[0].id;
-                    await updateConfig({ defaultDiagramId });
-                    navigate(`/diagrams/${defaultDiagramId}`);
-                } else {
-                    await updateConfig({ defaultDiagramId: '' });
-                    navigate('/');
-                }
-            }
-        }, [
-            db,
-            diagramId,
-            navigate,
-            resetRedoStack,
-            resetUndoStack,
-            updateConfig,
-        ]);
+        }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
     const updateDiagramUpdatedAt: ChartDBContext['updateDiagramUpdatedAt'] =
         useCallback(async () => {
@@ -1407,6 +1386,7 @@ export const ChartDBProvider: React.FC<React.PropsWithChildren> = ({
                 schemas,
                 filteredSchemas,
                 events,
+                readonly,
                 filterSchemas,
                 updateDiagramId,
                 updateDiagramName,

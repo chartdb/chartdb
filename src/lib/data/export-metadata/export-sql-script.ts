@@ -3,6 +3,7 @@ import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
+import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -20,12 +21,63 @@ export const exportBaseSQL = (diagram: Diagram): string => {
     // Initialize the SQL script string
     let sqlScript = '';
 
+    // First create the CREATE SCHEMA statements for all the found schemas based on tables
+    const schemas = new Set<string>();
+    tables.forEach((table) => {
+        if (table.schema) {
+            schemas.add(table.schema);
+        }
+    });
+
+    // Add CREATE SCHEMA statements if any schemas exist
+    schemas.forEach((schema) => {
+        sqlScript += `CREATE SCHEMA IF NOT EXISTS ${schema};\n`;
+    });
+    sqlScript += '\n';
+
+    // Add CREATE SEQUENCE statements
+    const sequences = new Set<string>();
+
+    tables.forEach((table) => {
+        table.fields.forEach((field) => {
+            if (field.default) {
+                // Match nextval('schema.sequence_name') or nextval('sequence_name')
+                const match = field.default.match(
+                    /nextval\('([^']+)'(?:::[^)]+)?\)/
+                );
+                if (match) {
+                    sequences.add(match[1]);
+                }
+            }
+        });
+    });
+
+    sequences.forEach((sequence) => {
+        sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
+    });
+    sqlScript += '\n';
+
     // Loop through each non-view table to generate the SQL statements
     nonViewTables.forEach((table) => {
-        sqlScript += `CREATE TABLE ${table.name} (\n`;
+        const tableName = table.schema
+            ? `${table.schema}.${table.name}`
+            : table.name;
+        sqlScript += `CREATE TABLE ${tableName} (\n`;
 
         table.fields.forEach((field, index) => {
-            sqlScript += `  ${field.name} ${field.type.name}`;
+            let typeName = field.type.name;
+
+            // Temp fix for 'array' to be text[]
+            if (typeName.toLowerCase() === 'array') {
+                typeName = 'text[]';
+            }
+
+            // Temp fix for 'user-defined' to be text
+            if (typeName.toLowerCase() === 'user-defined') {
+                typeName = 'text';
+            }
+
+            sqlScript += `  ${field.name} ${typeName}`;
 
             // Add size for character types
             if (field.characterMaximumLength) {
@@ -46,7 +98,14 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
             // Handle DEFAULT value
             if (field.default) {
-                sqlScript += ` DEFAULT ${field.default}`;
+                // Temp remove default user-define value when it have it
+                let fieldDefault = field.default;
+
+                // Remove the type cast part after :: if it exists
+                if (fieldDefault.includes('::')) {
+                    fieldDefault = fieldDefault.split('::')[0];
+                }
+                sqlScript += ` DEFAULT ${fieldDefault}`;
             }
 
             // Handle PRIMARY KEY constraint
@@ -64,13 +123,13 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
         // Add table comment
         if (table.comments) {
-            sqlScript += `COMMENT ON TABLE ${table.name} IS '${table.comments}';\n`;
+            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments}';\n`;
         }
 
         table.fields.forEach((field) => {
             // Add column comment
             if (field.comments) {
-                sqlScript += `COMMENT ON COLUMN ${table.name}.${field.name} IS '${field.comments}';\n`;
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments}';\n`;
             }
         });
 
@@ -85,7 +144,10 @@ export const exportBaseSQL = (diagram: Diagram): string => {
                 .join(', ');
 
             if (fieldNames) {
-                sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${index.name} ON ${table.name} (${fieldNames});\n`;
+                const indexName = table.schema
+                    ? `${table.schema}_${index.name}`
+                    : index.name;
+                sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });
 
@@ -114,7 +176,13 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             sourceTableField &&
             targetTableField
         ) {
-            sqlScript += `ALTER TABLE ${sourceTable.name} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${sourceTableField.name}) REFERENCES ${targetTable.name} (${targetTableField.name});\n`;
+            const sourceTableName = sourceTable.schema
+                ? `${sourceTable.schema}.${sourceTable.name}`
+                : sourceTable.name;
+            const targetTableName = targetTable.schema
+                ? `${targetTable.schema}.${targetTable.name}`
+                : targetTable.name;
+            sqlScript += `ALTER TABLE ${sourceTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${sourceTableField.name}) REFERENCES ${targetTableName} (${targetTableField.name});\n`;
         }
     });
 
@@ -123,21 +191,57 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
 export const exportSQL = async (
     diagram: Diagram,
-    databaseType: DatabaseType
+    databaseType: DatabaseType,
+    options?: {
+        stream: boolean;
+        onResultStream: (text: string) => void;
+        signal?: AbortSignal;
+    }
 ): Promise<string> => {
-    const { generateText } = await import('ai');
-    const { createOpenAI } = await import('@ai-sdk/openai');
+    const sqlScript = exportBaseSQL(diagram);
+    const cacheKey = await generateCacheKey(databaseType, sqlScript);
+
+    const cachedResult = getFromCache(cacheKey);
+    if (cachedResult) {
+        return cachedResult;
+    }
+
+    const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
+        import('ai'),
+        import('@ai-sdk/openai'),
+    ]);
+
     const openai = createOpenAI({
         apiKey: OPENAI_API_KEY,
     });
-    const sqlScript = exportBaseSQL(diagram);
+
     const prompt = generateSQLPrompt(databaseType, sqlScript);
+
+    if (options?.stream) {
+        const { textStream, text: textPromise } = await streamText({
+            model: openai('gpt-4o-mini-2024-07-18'),
+            prompt: prompt,
+        });
+
+        for await (const textPart of textStream) {
+            if (options.signal?.aborted) {
+                return '';
+            }
+            options.onResultStream(textPart);
+        }
+
+        const text = await textPromise;
+
+        setInCache(cacheKey, text);
+        return text;
+    }
 
     const { text } = await generateText({
         model: openai('gpt-4o-mini-2024-07-18'),
         prompt: prompt,
     });
 
+    setInCache(cacheKey, text);
     return text;
 };
 
