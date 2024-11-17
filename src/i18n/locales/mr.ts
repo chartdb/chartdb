@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const mr = {
+export const mr: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -28,9 +28,14 @@ export const mr = {
                 show_cardinality: 'कार्डिनॅलिटी दाखवा',
                 zoom_on_scroll: 'स्क्रोलवर झूम करा',
                 theme: 'थीम',
-                change_language: 'भाषा बदला',
                 show_dependencies: 'डिपेंडेन्सि दाखवा',
                 hide_dependencies: 'डिपेंडेन्सि लपवा',
+            },
+            share: {
+                // TODO: Add translations
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'मदत',
@@ -68,7 +73,7 @@ export const mr = {
             title: 'एकाधिक स्कीमा',
             description:
                 '{{schemasCount}} स्कीमा या आरेखात आहेत. सध्या दाखवत आहोत: {{formattedSchemas}}.',
-            dont_show_again: "पुन्हा दाखवू नका",
+            dont_show_again: 'पुन्हा दाखवू नका',
             change_schema: 'बदला',
             none: 'काहीही नाही',
         },
@@ -93,6 +98,10 @@ export const mr = {
         clear: 'साफ करा',
         show_more: 'अधिक दाखवा',
         show_less: 'कमी दाखवा',
+        // TODO: Add translations
+        copy_to_clipboard: 'Copy to Clipboard',
+        // TODO: Add translations
+        copied: 'Copied!',
 
         side_panel: {
             schema: 'स्कीमा:',
@@ -138,6 +147,8 @@ export const mr = {
                         add_field: 'फील्ड जोडा',
                         add_index: 'इंडेक्स जोडा',
                         delete_table: 'टेबल हटवा',
+                        // TODO: Add translations
+                        duplicate_table: 'Duplicate Table',
                     },
                 },
                 empty_state: {
@@ -162,7 +173,8 @@ export const mr = {
                 },
                 empty_state: {
                     title: 'कोणतेही रिलेशनशिप नाहीत',
-                    description: 'टेबल्स कनेक्ट करण्यासाठी एक रिलेशनशिप तयार करा',
+                    description:
+                        'टेबल्स कनेक्ट करण्यासाठी एक रिलेशनशिप तयार करा',
                 },
             },
             dependencies_section: {
@@ -217,9 +229,14 @@ export const mr = {
                     step_1: 'टूल्स > पर्याय > क्वेरी परिणाम > SQL सर्व्हर वर जा.',
                     step_2: 'जर तुम्ही "ग्रिडला परिणाम" वापरत असाल, तर नॉन-XML डेटासाठी जास्तीत जास्त वर्ण पुनर्प्राप्ती बदला (9999999 वर सेट करा).',
                 },
+                // TODO: Add translations
+                instructions_link: 'Need help? Watch how',
+                check_script_result: 'Check Script Result',
             },
 
             cancel: 'रद्द करा',
+            // TODO: Add translations
+            import_from_file: 'Import from File',
             back: 'मागे',
             empty_diagram: 'रिक्त आरेख',
             continue: 'सुरू ठेवा',
@@ -320,9 +337,31 @@ export const mr = {
         star_us_dialog: {
             title: 'आम्हाला सुधारण्यास मदत करा!',
             description:
-                "तुम्हाला GitHub वर आम्हाला स्टार करायचे आहे का? हे फक्त एक क्लिक दूर आहे!",
+                'तुम्हाला GitHub वर आम्हाला स्टार करायचे आहे का? हे फक्त एक क्लिक दूर आहे!',
             close: 'आता नाही',
             confirm: 'नक्कीच!',
+        },
+
+        // TODO: Add translations
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+        },
+
+        // TO
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
         },
 
         relationship_type: {
@@ -340,11 +379,26 @@ export const mr = {
         table_node_context_menu: {
             edit_table: 'टेबल संपादित करा',
             delete_table: 'टेबल हटवा',
+            // TODO: Add translations
+            duplicate_table: 'Duplicate Table',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        // TODO: Add translations
+        tool_tips: {
+            double_click_to_edit: 'Double-click to edit',
+        },
+
+        language_select: {
+            change_language: 'भाषा बदला',
         },
     },
 };
 
-export const enMetadata: LanguageMetadata = {
-    name: 'मराठी',
+export const mrMetadata: LanguageMetadata = {
+    name: 'Marathi',
+    nativeName: 'मराठी',
     code: 'mr',
 };
