@@ -28,7 +28,6 @@ export const zh_CN: LanguageTranslation = {
                 show_cardinality: '展示基数',
                 zoom_on_scroll: '滚动缩放',
                 theme: '主题',
-                change_language: '语言',
                 show_dependencies: '展示依赖',
                 hide_dependencies: '隐藏依赖',
             },
@@ -371,10 +370,15 @@ export const zh_CN: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: '双击编辑',
         },
+
+        language_select: {
+            change_language: '语言',
+        },
     },
 };
 
 export const zh_CNMetadata: LanguageMetadata = {
-    name: '简体中文',
+    name: 'Chinese',
+    nativeName: '简体中文',
     code: 'zh_CN',
 };

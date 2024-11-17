@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import type { LanguageMetadata } from './types';
 import { en, enMetadata } from './locales/en';
 import { es, esMetadata } from './locales/es';
@@ -47,14 +48,15 @@ const resources = {
     id_ID,
 };
 
-i18n.use(initReactI18next).init({
-    resources,
-    lng: enMetadata.code,
-    interpolation: {
-        escapeValue: false,
-    },
-    fallbackLng: enMetadata.code,
-    debug: false,
-});
+i18n.use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources,
+        interpolation: {
+            escapeValue: false,
+        },
+        fallbackLng: enMetadata.code,
+        debug: false,
+    });
 
 export { i18n };

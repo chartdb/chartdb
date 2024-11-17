@@ -28,7 +28,6 @@ export const ru: LanguageTranslation = {
                 show_cardinality: 'Показать множественность связи',
                 zoom_on_scroll: 'Увеличение при прокрутке',
                 theme: 'Тема',
-                change_language: 'Сменить язык',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
             },
@@ -376,10 +375,15 @@ export const ru: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
+
+        language_select: {
+            change_language: 'Сменить язык',
+        },
     },
 };
 
 export const ruMetadata: LanguageMetadata = {
     name: 'Russian',
+    nativeName: 'Русский',
     code: 'ru',
 };

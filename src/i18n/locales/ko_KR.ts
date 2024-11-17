@@ -28,7 +28,6 @@ export const ko_KR: LanguageTranslation = {
                 show_cardinality: '카디널리티 보이기',
                 zoom_on_scroll: '스크롤 시 확대',
                 theme: '테마',
-                change_language: '언어/Language',
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
             },
@@ -380,10 +379,15 @@ export const ko_KR: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: '더블클릭하여 편집',
         },
+
+        language_select: {
+            change_language: '언어',
+        },
     },
 };
 
 export const ko_KRMetadata: LanguageMetadata = {
-    name: '한국어',
+    name: 'Korean',
+    nativeName: '한국어',
     code: 'ko_KR',
 };
