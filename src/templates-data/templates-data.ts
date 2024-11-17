@@ -19,8 +19,12 @@ import { lobstersDb } from './templates/lobsters-db';
 import { refinerycmsDb } from './templates/refinerycms-db';
 import { buddypressDb } from './templates/buddypress-db';
 import { snipeItDb } from './templates/snipe-it-db';
-import { ComfortableMexicanSofaDb } from './templates/comfortable-mexican-sofa-db';
-
+import { comfortableMexicanSofaDb } from './templates/comfortable-mexican-sofa-db';
+import { syliusDb } from './templates/sylius-db';
+import { monicaDb } from './templates/monica-db';
+import { attendizeDb } from './templates/attendize-db';
+import { saasPegasusDb } from './templates/saas-pegasus-db';
+import { bookstackDb } from './templates/bookstack-db';
 export interface Template {
     slug: string;
     name: string;
@@ -55,5 +59,10 @@ export const templates: Template[] = [
     refinerycmsDb,
     buddypressDb,
     snipeItDb,
-    ComfortableMexicanSofaDb,
+    comfortableMexicanSofaDb,
+    syliusDb,
+    monicaDb,
+    attendizeDb,
+    saasPegasusDb,
+    bookstackDb,
 ];

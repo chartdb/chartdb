@@ -28,7 +28,6 @@ export const ja: LanguageTranslation = {
                 show_cardinality: 'カーディナリティを表示',
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
-                change_language: '言語',
                 // TODO: Translate
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
@@ -386,10 +385,15 @@ export const ja: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'ダブルクリックして編集',
         },
+
+        language_select: {
+            change_language: '言語',
+        },
     },
 };
 
 export const jaMetadata: LanguageMetadata = {
     name: 'Japanese',
+    nativeName: '日本語',
     code: 'ja',
 };

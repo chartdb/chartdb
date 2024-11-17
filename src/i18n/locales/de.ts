@@ -28,7 +28,6 @@ export const de: LanguageTranslation = {
                 show_cardinality: 'Kardinalität anzeigen',
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
-                change_language: 'Sprache',
                 show_dependencies: 'Abhängigkeiten anzeigen',
                 hide_dependencies: 'Abhängigkeiten ausblenden',
             },
@@ -382,10 +381,15 @@ export const de: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Doppelklicken zum Bearbeiten',
         },
+
+        language_select: {
+            change_language: 'Sprache',
+        },
     },
 };
 
 export const deMetadata: LanguageMetadata = {
-    name: 'Deutsch',
+    name: 'German',
+    nativeName: 'Deutsch',
     code: 'de',
 };

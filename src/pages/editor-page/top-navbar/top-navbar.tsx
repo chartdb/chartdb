@@ -33,8 +33,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
-import { languages } from '@/i18n/i18n';
 import { useNavigate } from 'react-router-dom';
+import { LanguageNav } from './language-nav/language-nav';
 
 export interface TopNavbarProps {}
 
@@ -62,7 +62,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         showDependenciesOnCanvas,
     } = useLocalConfig();
     const { effectiveTheme } = useTheme();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { config, updateConfig } = useConfig();
@@ -198,13 +198,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
 
     const emojiAI = '✨';
 
-    const changeLanguage = useCallback(
-        (language: string) => {
-            i18n.changeLanguage(language);
-        },
-        [i18n]
-    );
-
     return (
         <nav className="flex flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
             <div className="flex flex-1 flex-col justify-between gap-x-3 md:flex-row md:justify-normal">
@@ -225,7 +218,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         />
                     </a>
                     {!isDesktop ? (
-                        <div className="flex items-center">{renderStars()}</div>
+                        <div className="flex items-center gap-2">
+                            {renderStars()}
+                            <LanguageNav />
+                        </div>
                     ) : null}
                 </div>
 
@@ -529,27 +525,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     </MenubarCheckboxItem>
                                 </MenubarSubContent>
                             </MenubarSub>
-                            <MenubarSeparator />
-                            <MenubarSub>
-                                <MenubarSubTrigger>
-                                    {t('menu.view.change_language')}
-                                </MenubarSubTrigger>
-                                <MenubarSubContent>
-                                    {languages.map((language) => (
-                                        <MenubarCheckboxItem
-                                            key={language.code}
-                                            onClick={() =>
-                                                changeLanguage(language.code)
-                                            }
-                                            checked={
-                                                i18n.language === language.code
-                                            }
-                                        >
-                                            {language.name}
-                                        </MenubarCheckboxItem>
-                                    ))}
-                                </MenubarSubContent>
-                            </MenubarSub>
                         </MenubarContent>
                     </MenubarMenu>
 
@@ -587,6 +562,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                         <LastSaved />
                         {renderStars()}
+                        <LanguageNav />
                     </div>
                 </>
             ) : (
