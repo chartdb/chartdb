@@ -14,6 +14,7 @@ import { uk, ukMetadata } from './locales/uk';
 import { ru, ruMetadata } from './locales/ru';
 import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
 import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
+import { ne, neMetadata } from './locales/ne';
 import { mr, mrMetadata } from './locales/mr';
 
 export const languages: LanguageMetadata[] = [
@@ -29,6 +30,7 @@ export const languages: LanguageMetadata[] = [
     ruMetadata,
     zh_CNMetadata,
     zh_TWMetadata,
+    neMetadata,
     mrMetadata,
 ];
 
@@ -45,6 +47,7 @@ const resources = {
     ru,
     zh_CN,
     zh_TW,
+    ne,
     mr,
 };
 
