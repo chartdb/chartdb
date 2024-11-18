@@ -23,7 +23,7 @@ export const TemplatesPageHelmet: React.FC<TemplatesPageHelmetProps> = ({
     const canonicalUrl = useMemo(() => {
         let suffix = '/templates';
         if (formattedUrlTag) {
-            suffix += `/${formattedUrlTag}`;
+            suffix += `/tags/${formattedUrlTag}`;
         } else if (isFeatured) {
             suffix += '/featured';
         }
