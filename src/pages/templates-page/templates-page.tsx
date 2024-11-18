@@ -70,8 +70,10 @@ const TemplatesPageComponent: React.FC = () => {
                 <div className="flex flex-col p-3 text-center md:px-28 md:text-left">
                     <h1 className="font-primary text-2xl font-bold">
                         {isFeatured
-                            ? 'Featured database Schema Templates'
-                            : 'Database Schema Templates'}
+                            ? 'Featured database schema templates'
+                            : tag
+                              ? `Database schema templates for ${tag}`
+                              : 'Database schema templates'}
                     </h1>
                     <h2 className="mt-1 font-primary text-base text-muted-foreground">
                         Discover a collection of real-world database schema
