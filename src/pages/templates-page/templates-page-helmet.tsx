@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { HOST_URL } from '@/lib/env';
@@ -8,16 +8,36 @@ export interface TemplatesPageHelmetProps {
     isFeatured: boolean;
 }
 
+const CHARTDB_HOST_URL = 'https://chartdb.io';
 export const TemplatesPageHelmet: React.FC<TemplatesPageHelmetProps> = ({
     tag,
     isFeatured,
 }) => {
     const { tag: tagParam } = useParams<{ tag: string }>();
 
+    const formattedUrlTag = useMemo(
+        () => tag?.toLowerCase().replace(/ /g, '-'),
+        [tag]
+    );
+
+    const canonicalUrl = useMemo(() => {
+        let suffix = '/templates';
+        if (formattedUrlTag) {
+            suffix += `/${formattedUrlTag}`;
+        } else if (isFeatured) {
+            suffix += '/featured';
+        }
+
+        return `${CHARTDB_HOST_URL}${suffix}`;
+    }, [isFeatured, formattedUrlTag]);
+
+    const needCanonical =
+        HOST_URL !== CHARTDB_HOST_URL || (tag && formattedUrlTag !== tagParam);
+
     return (
         <Helmet>
-            {HOST_URL !== 'https://chartdb.io' ? (
-                <link rel="canonical" href="https://chartdb.io/templates" />
+            {needCanonical ? (
+                <link rel="canonical" href={canonicalUrl} />
             ) : null}
 
             {tag ? (
