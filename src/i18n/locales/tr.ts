@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const tr = {
+export const tr: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -28,14 +28,19 @@ export const tr = {
                 show_cardinality: 'Kardinaliteyi Göster',
                 zoom_on_scroll: 'Kaydırarak Yakınlaştır',
                 theme: 'Tema',
-                change_language: 'Dil',
                 show_dependencies: 'Bağımlılıkları Göster',
                 hide_dependencies: 'Bağımlılıkları Gizle',
             },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
+            },
             help: {
                 help: 'Yardım',
-                visit_website: 'ChartDB\'yi Ziyaret Et',
-                join_discord: 'Discord\'a Katıl',
+                visit_website: "ChartDB'yi Ziyaret Et",
+                join_discord: "Discord'a Katıl",
                 schedule_a_call: 'Bize Ulaş!',
             },
         },
@@ -68,7 +73,7 @@ export const tr = {
             title: 'Birden Fazla Şema',
             description:
                 'Bu diyagramda {{schemasCount}} şema var. Şu anda görüntülenen: {{formattedSchemas}}.',
-            dont_show_again: "Tekrar gösterme",
+            dont_show_again: 'Tekrar gösterme',
             change_schema: 'Değiştir',
             none: 'yok',
         },
@@ -138,6 +143,8 @@ export const tr = {
                         change_schema: 'Şemayı Değiştir',
                         add_field: 'Alan Ekle',
                         add_index: 'İndeks Ekle',
+                        // TODO: Translate
+                        duplicate_table: 'Duplicate Table',
                         delete_table: 'Tabloyu Sil',
                     },
                 },
@@ -212,12 +219,15 @@ export const tr = {
                 ssms_instructions: {
                     button_text: 'SSMS Talimatları',
                     title: 'Talimatlar',
-                    step_1: 'Araçlar > Seçenekler > Sorgu Sonuçları > SQL Server\'a gidin.',
+                    step_1: "Araçlar > Seçenekler > Sorgu Sonuçları > SQL Server'a gidin.",
                     step_2: 'Eğer "Sonuçlar Izgaraya" kullanıyorsanız, Maksimum Karakterlerin Alınması için XML olmayan veriler (9999999 olarak ayarlanmış) değiştirin.',
                 },
-                instructions_link: 'Yardıma mı ihtiyacınız var? İzlemek için tıklayın',
+                instructions_link:
+                    'Yardıma mı ihtiyacınız var? İzlemek için tıklayın',
                 check_script_result: 'Komut Dosyası Sonucunu Kontrol Et',
             },
+            // TODO: Translate
+            import_from_file: 'Import from File',
             cancel: 'İptal',
             back: 'Geri',
             empty_diagram: 'Boş diyagram',
@@ -250,7 +260,7 @@ export const tr = {
                 message:
                     'SQL betiği oluşturulurken hata oluştu. Lütfen daha sonra tekrar deneyin veya <0>bize ulaşın</0>.',
                 description:
-                    'OPENAI_TOKEN\'ınızı kullanabilirsiniz, kılavuzu <0>buradan</0> görebilirsiniz.',
+                    "OPENAI_TOKEN'ınızı kullanabilirsiniz, kılavuzu <0>buradan</0> görebilirsiniz.",
             },
         },
         create_relationship_dialog: {
@@ -316,6 +326,31 @@ export const tr = {
             close: 'Şimdi Değil',
             confirm: 'Tabii ki!',
         },
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Bir Bir',
             one_to_many: 'Bir Çok',
@@ -329,11 +364,26 @@ export const tr = {
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',
             delete_table: 'Tabloyu Sil',
+            // TODO: Translate
+            duplicate_table: 'Duplicate Table',
+        },
+
+        // TODO: Translate
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        // TODO: Translate
+        tool_tips: {
+            double_click_to_edit: 'Double-click to edit',
+        },
+
+        language_select: {
+            change_language: 'Dil',
         },
     },
 };
 
 export const trMetadata: LanguageMetadata = {
-    name: 'Türkçe',
+    nativeName: 'Türkçe',
+    name: 'Turkish',
     code: 'tr',
 };
