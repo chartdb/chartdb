@@ -21,13 +21,13 @@ export const TemplatesPageHelmet: React.FC<TemplatesPageHelmetProps> = ({
             ) : null}
 
             {tag ? (
-                <title>{`${tag} database Schema Diagram Templates | ChartDB`}</title>
+                <title>{`${tag} database schema diagram templates | ChartDB`}</title>
             ) : isFeatured ? (
                 <title>
-                    Featured database Schema Diagram Templates | ChartDB
+                    Featured database schema diagram templates | ChartDB
                 </title>
             ) : (
-                <title>Database Schema Diagram Templates | ChartDB</title>
+                <title>Database schema diagram templates | ChartDB</title>
             )}
 
             {tag ? (
@@ -45,17 +45,17 @@ export const TemplatesPageHelmet: React.FC<TemplatesPageHelmetProps> = ({
             {tag ? (
                 <meta
                     property="og:title"
-                    content={`${tag} database Schema Diagram Templates | ChartDB`}
+                    content={`${tag} database schema diagram templates | ChartDB`}
                 />
             ) : isFeatured ? (
                 <meta
                     property="og:title"
-                    content="Featured database Schema Diagram Templates | ChartDB"
+                    content="Featured database schema diagram templates | ChartDB"
                 />
             ) : (
                 <meta
                     property="og:title"
-                    content="Database Schema Diagram Templates | ChartDB"
+                    content="Database schema diagram templates | ChartDB"
                 />
             )}
 
@@ -91,12 +91,12 @@ export const TemplatesPageHelmet: React.FC<TemplatesPageHelmetProps> = ({
             {tag ? (
                 <meta
                     name="twitter:title"
-                    content={`${tag} database Schema Diagram Templates | ChartDB`}
+                    content={`${tag} database schema diagram templates | ChartDB`}
                 />
             ) : (
                 <meta
                     name="twitter:title"
-                    content="Database Schema Diagram Templates | ChartDB"
+                    content="Database schema diagram templates | ChartDB"
                 />
             )}
 
