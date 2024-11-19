@@ -41,6 +41,7 @@ export interface DBTable {
     width?: number;
     comments?: string;
     hidden?: boolean;
+    order?: number;
 }
 
 export const dbTableSchema: z.ZodType<DBTable> = z.object({
@@ -58,6 +59,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     width: z.number().optional(),
     comments: z.string().optional(),
     hidden: z.boolean().optional(),
+    order: z.number().optional(),
 });
 
 export const shouldShowTablesBySchemaFilter = (
