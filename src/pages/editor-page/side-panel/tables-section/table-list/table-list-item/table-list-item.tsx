@@ -8,11 +8,22 @@ import { TableListItemHeader } from './table-list-item-header/table-list-item-he
 import { TableListItemContent } from './table-list-item-content/table-list-item-content';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import type { Transform } from '@dnd-kit/utilities';
 
 export interface TableListItemProps {
     table: DBTable;
 }
+
+const collectTransform = (transform: Transform | null): string => {
+    if (transform == null) {
+        return '';
+    }
+
+    const defaultScaleX: string = 'scaleX(1)';
+    const defaultScaleY: string = 'scaleY(1)';
+
+    return `translate3d(${transform.x}px, ${transform.y}px, 0px) ${defaultScaleX} ${defaultScaleY}`;
+};
 
 export const TableListItem = React.forwardRef<
     React.ElementRef<typeof AccordionItem>,
@@ -22,7 +33,7 @@ export const TableListItem = React.forwardRef<
         id: table.id,
     });
     const style = {
-        transform: CSS.Transform.toString(transform),
+        transform: collectTransform(transform),
         transition,
     };
 
