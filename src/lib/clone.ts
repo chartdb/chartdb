@@ -63,28 +63,51 @@ export const cloneTable = (
         ...options.idsMap,
     ]);
 
-    const getNewId = (id: string) => {
+    const getNewId = (id: string): string | null => {
         const newId = idsMap.get(id);
         if (!newId) {
-            throw new Error(`Id not found for ${id}`);
+            return null;
         }
         return newId;
     };
 
-    const newTable: DBTable = { ...table, id: getNewId(table.id) };
-    newTable.fields = table.fields.map(
-        (field): DBField => ({
-            ...field,
-            id: getNewId(field.id),
+    const tableId = getNewId(table.id);
+    if (!tableId) {
+        throw new Error('Table id not found');
+    }
+
+    const newTable: DBTable = { ...table, id: tableId };
+    newTable.fields = table.fields
+        .map((field): DBField | null => {
+            const id = getNewId(field.id);
+
+            if (!id) {
+                return null;
+            }
+
+            return {
+                ...field,
+                id,
+            };
         })
-    );
-    newTable.indexes = table.indexes.map(
-        (index): DBIndex => ({
-            ...index,
-            fieldIds: index.fieldIds.map((id) => getNewId(id)),
-            id: getNewId(index.id),
+        .filter((field): field is DBField => field !== null);
+    newTable.indexes = table.indexes
+        .map((index): DBIndex | null => {
+            const id = getNewId(index.id);
+
+            if (!id) {
+                return null;
+            }
+
+            return {
+                ...index,
+                fieldIds: index.fieldIds
+                    .map((id) => getNewId(id))
+                    .filter((fieldId): fieldId is string => fieldId !== null),
+                id,
+            };
         })
-    );
+        .filter((index): index is DBIndex => index !== null);
 
     return newTable;
 };
@@ -102,10 +125,10 @@ export const cloneDiagram = (
 
     const idsMap = generateIdsMapFromDiagram(diagram, generateId);
 
-    const getNewId = (id: string) => {
+    const getNewId = (id: string): string | null => {
         const newId = idsMap.get(id);
         if (!newId) {
-            throw new Error(`Id not found for ${id}`);
+            return null;
         }
         return newId;
     };
@@ -116,26 +139,59 @@ export const cloneDiagram = (
         ) ?? [];
 
     const relationships: DBRelationship[] =
-        diagram.relationships?.map(
-            (relationship): DBRelationship => ({
-                ...relationship,
-                id: getNewId(relationship.id),
-                sourceTableId: getNewId(relationship.sourceTableId),
-                targetTableId: getNewId(relationship.targetTableId),
-                sourceFieldId: getNewId(relationship.sourceFieldId),
-                targetFieldId: getNewId(relationship.targetFieldId),
+        diagram.relationships
+            ?.map((relationship): DBRelationship | null => {
+                const id = getNewId(relationship.id);
+                const sourceTableId = getNewId(relationship.sourceTableId);
+                const targetTableId = getNewId(relationship.targetTableId);
+                const sourceFieldId = getNewId(relationship.sourceFieldId);
+                const targetFieldId = getNewId(relationship.targetFieldId);
+
+                if (
+                    !id ||
+                    !sourceTableId ||
+                    !targetTableId ||
+                    !sourceFieldId ||
+                    !targetFieldId
+                ) {
+                    return null;
+                }
+
+                return {
+                    ...relationship,
+                    id,
+                    sourceTableId,
+                    targetTableId,
+                    sourceFieldId,
+                    targetFieldId,
+                };
             })
-        ) ?? [];
+            .filter(
+                (relationship): relationship is DBRelationship =>
+                    relationship !== null
+            ) ?? [];
 
     const dependencies: DBDependency[] =
-        diagram.dependencies?.map(
-            (dependency): DBDependency => ({
-                ...dependency,
-                id: getNewId(dependency.id),
-                dependentTableId: getNewId(dependency.dependentTableId),
-                tableId: getNewId(dependency.tableId),
+        diagram.dependencies
+            ?.map((dependency): DBDependency | null => {
+                const id = getNewId(dependency.id);
+                const dependentTableId = getNewId(dependency.dependentTableId);
+                const tableId = getNewId(dependency.tableId);
+
+                if (!id || !dependentTableId || !tableId) {
+                    return null;
+                }
+
+                return {
+                    ...dependency,
+                    id,
+                    dependentTableId,
+                    tableId,
+                };
             })
-        ) ?? [];
+            .filter(
+                (dependency): dependency is DBDependency => dependency !== null
+            ) ?? [];
 
     return {
         ...diagram,

@@ -16,6 +16,7 @@ import { zh_CN, zh_CNMetadata } from './locales/zh_CN';
 import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
 import { ne, neMetadata } from './locales/ne';
 import { mr, mrMetadata } from './locales/mr';
+import { tr, trMetadata } from './locales/tr';
 import { id_ID, id_IDMetadata } from './locales/id_ID.ts';
 
 export const languages: LanguageMetadata[] = [
@@ -33,6 +34,7 @@ export const languages: LanguageMetadata[] = [
     zh_TWMetadata,
     neMetadata,
     mrMetadata,
+    trMetadata,
     id_IDMetadata,
 ];
 
@@ -51,6 +53,7 @@ const resources = {
     zh_TW,
     ne,
     mr,
+    tr,
     id_ID,
 };
 
