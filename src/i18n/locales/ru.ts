@@ -339,11 +339,10 @@ export const ru: LanguageTranslation = {
             format_json: 'JSON',
             cancel: 'Отменить',
             export: 'Экспортировать',
-            // TODO: Translate
             error: {
-                title: 'Error exporting diagram',
+                title: 'Ошибка экспортирования диаграммы',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Что-то пошло не так. Если вам нужна помощь, напишите нам: chartdb.io@gmail.com',
             },
         },
         import_diagram_dialog: {
