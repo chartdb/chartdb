@@ -28,9 +28,14 @@ export const id_ID: LanguageTranslation = {
                 show_cardinality: 'Tampilkan Kardinalitas',
                 zoom_on_scroll: 'Perbesar saat Scroll',
                 theme: 'Tema',
-                change_language: 'Bahasa',
                 show_dependencies: 'Tampilkan Dependensi',
                 hide_dependencies: 'Sembunyikan Dependensi',
+            },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'Bantuan',
@@ -330,6 +335,33 @@ export const id_ID: LanguageTranslation = {
             confirm: 'Tentu saja!',
         },
 
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
+        },
+
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+
         relationship_type: {
             one_to_one: 'Satu ke Satu',
             one_to_many: 'Satu ke Banyak',
@@ -345,11 +377,26 @@ export const id_ID: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Ubah Tabel',
             delete_table: 'Hapus Tabel',
+            // TODO: Translate
+            duplicate_table: 'Duplicate Table',
+        },
+
+        // TODO: Translate
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        // TODO: Translate
+        tool_tips: {
+            double_click_to_edit: 'Double-click to edit',
+        },
+
+        language_select: {
+            change_language: 'Bahasa',
         },
     },
 };
 
 export const id_IDMetadata: LanguageMetadata = {
-    name: 'Bahasa Indonesia',
+    name: 'Indonesian',
+    nativeName: 'Indonesia',
     code: 'id_ID',
 };
