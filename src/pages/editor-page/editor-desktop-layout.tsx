@@ -23,11 +23,11 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
     return (
         <ResizablePanelGroup direction="horizontal">
             <ResizablePanel
-                defaultSize={isXl ? 25 : isLg ? 35 : 50}
-                minSize={isXl ? 25 : isLg ? 35 : 50}
+                defaultSize={25}
+                minSize={25}
                 maxSize={isSidePanelShowed ? 99 : 0}
                 // eslint-disable-next-line
-                className="transition-[flex-grow] duration-200"
+                className="transition-[flex-grow] duration-200 min-w-[350px]"
             >
                 <SidePanel />
             </ResizablePanel>
