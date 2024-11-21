@@ -338,6 +338,11 @@ export const en = {
             format_json: 'JSON',
             cancel: 'Cancel',
             export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {

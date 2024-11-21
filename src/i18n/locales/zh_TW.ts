@@ -331,6 +331,12 @@ const zh_TW = {
             format_json: 'JSON',
             cancel: '取消',
             export: '匯出',
+            // TODO: Translate
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {

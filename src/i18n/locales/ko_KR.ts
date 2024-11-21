@@ -30,11 +30,10 @@ const ko_KR = {
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
             },
-            // TODO: Translate
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: '공유',
+                export_diagram: '다이어그램 내보내기',
+                import_diagram: '다이어그램 가져오기',
             },
             help: {
                 help: '도움말',
@@ -143,7 +142,7 @@ const ko_KR = {
                         change_schema: '스키마 변경',
                         add_field: '필드 추가',
                         add_index: '인덱스 추가',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: '테이블 복제',
                         delete_table: '테이블 삭제',
                     },
                 },
@@ -229,8 +228,7 @@ const ko_KR = {
 
             cancel: '취소',
             back: '뒤로가기',
-            // TODO: Translate
-            import_from_file: 'Import from File',
+            import_from_file: '파일에서 가져오기',
             empty_diagram: '빈 다이어그램으로 시작',
             continue: '계속',
             import: '가져오기',
@@ -332,24 +330,27 @@ const ko_KR = {
             close: '아직은 괜찮아요',
             confirm: '당연하죠!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: '다이어그램 내보내기',
+            description: '내보낼 형식을 선택해주세요:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
-        },
-        // TODO: Translate
-        import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            cancel: '취소',
+            export: '내보내기',
             error: {
-                title: 'Error importing diagram',
+                title: '다이어그램 내보내기 오류',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    '무언가 문제가 발생하였습니다. 도움이 필요하신 경우 chartdb.io@gmail.com으로 연락해주세요.',
+            },
+        },
+        import_diagram_dialog: {
+            title: '다이어그램 가져오기',
+            description: '아래에 다이어그램 JSON을 첨부해주세요:',
+            cancel: '취소',
+            import: '가져오기',
+            error: {
+                title: '다이어그램 가져오기 오류',
+                description:
+                    '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 chartdb.io@gmail.com으로 연락해주세요.',
             },
         },
         relationship_type: {
@@ -366,12 +367,11 @@ const ko_KR = {
 
         table_node_context_menu: {
             edit_table: '테이블 수정',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: '테이블 복제',
             delete_table: '테이블 삭제',
         },
 
-        // TODO: Add translations
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+        snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',
 
         tool_tips: {
             double_click_to_edit: '더블클릭하여 편집',

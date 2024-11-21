@@ -336,6 +336,11 @@ const ru = {
             format_json: 'JSON',
             cancel: 'Отменить',
             export: 'Экспортировать',
+            error: {
+                title: 'Ошибка экспортирования диаграммы',
+                description:
+                    'Что-то пошло не так. Если вам нужна помощь, напишите нам: chartdb.io@gmail.com',
+            },
         },
         import_diagram_dialog: {
             title: 'Импорт кода диаграммы',

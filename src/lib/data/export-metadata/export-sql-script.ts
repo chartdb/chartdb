@@ -82,6 +82,8 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Add size for character types
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
+            } else if (field.type.name.toLowerCase().includes('varchar')) {
+                sqlScript += `(500)`;
             }
 
             // Add precision and scale for numeric types
@@ -94,6 +96,11 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Handle NOT NULL constraint
             if (!field.nullable) {
                 sqlScript += ' NOT NULL';
+            }
+
+            // Handle UNIQUE value
+            if (!field.primaryKey && field.unique) {
+                sqlScript += ` UNIQUE`;
             }
 
             // Handle DEFAULT value

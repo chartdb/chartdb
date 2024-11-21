@@ -18,6 +18,8 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { diagramToJSONOutput } from '@/lib/export-import-utils';
 import { Spinner } from '@/components/spinner/spinner';
 import { waitFor } from '@/lib/utils';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
 
 export interface ExportDiagramDialogProps extends BaseDialogProps {}
 
@@ -28,10 +30,12 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
     const { diagramName, currentDiagram } = useChartDB();
     const [isLoading, setIsLoading] = useState(false);
     const { closeExportDiagramDialog } = useDialog();
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!dialog.open) return;
         setIsLoading(false);
+        setError(false);
     }, [dialog.open]);
 
     const downloadOutput = useCallback(
@@ -47,12 +51,19 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
     const handleExport = useCallback(async () => {
         setIsLoading(true);
         await waitFor(1000);
-        const json = diagramToJSONOutput(currentDiagram);
-        const blob = new Blob([json], { type: 'application/json' });
-        const dataUrl = URL.createObjectURL(blob);
-        downloadOutput(dataUrl);
-        setIsLoading(false);
-        closeExportDiagramDialog();
+        try {
+            const json = diagramToJSONOutput(currentDiagram);
+            const blob = new Blob([json], { type: 'application/json' });
+            const dataUrl = URL.createObjectURL(blob);
+            downloadOutput(dataUrl);
+            setIsLoading(false);
+            closeExportDiagramDialog();
+        } catch (e) {
+            setError(true);
+            setIsLoading(false);
+
+            throw e;
+        }
     }, [downloadOutput, currentDiagram, closeExportDiagramDialog]);
 
     const outputTypeOptions: SelectBoxOption[] = useMemo(
@@ -90,6 +101,17 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
                             value="json"
                         />
                     </div>
+                    {error ? (
+                        <Alert variant="destructive">
+                            <AlertCircle className="size-4" />
+                            <AlertTitle>
+                                {t('export_diagram_dialog.error.title')}
+                            </AlertTitle>
+                            <AlertDescription>
+                                {t('export_diagram_dialog.error.description')}
+                            </AlertDescription>
+                        </Alert>
+                    ) : null}
                 </div>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>

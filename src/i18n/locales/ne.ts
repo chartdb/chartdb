@@ -338,6 +338,11 @@ const ne = {
             format_json: 'JSON',
             cancel: 'रद्द गर्नुहोस्',
             export: 'निर्यात गर्नुहोस्',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {
