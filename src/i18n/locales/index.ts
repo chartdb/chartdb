@@ -10,6 +10,7 @@ export * from './mr';
 export * from './ne';
 export * from './pt_BR';
 export * from './ru';
+export * from './te';
 export * from './tr';
 export * from './uk';
 export * from './zh_CN';
