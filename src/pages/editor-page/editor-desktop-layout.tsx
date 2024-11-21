@@ -6,7 +6,6 @@ import {
 } from '@/components/resizable/resizable';
 import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
-import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useLayout } from '@/hooks/use-layout';
 import type { Diagram } from '@/lib/domain/diagram';
 
@@ -17,8 +16,6 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
     initialDiagram,
 }) => {
     const { isSidePanelShowed } = useLayout();
-    const { isLg } = useBreakpoint('lg');
-    const { isXl } = useBreakpoint('xl');
 
     return (
         <ResizablePanelGroup direction="horizontal">
@@ -32,7 +29,7 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
                 <SidePanel />
             </ResizablePanel>
             <ResizableHandle />
-            <ResizablePanel defaultSize={isXl ? 75 : isLg ? 65 : 50}>
+            <ResizablePanel defaultSize={75}>
                 <Canvas initialTables={initialDiagram?.tables ?? []} />
             </ResizablePanel>
         </ResizablePanelGroup>
