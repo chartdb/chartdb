@@ -28,6 +28,15 @@ To get started:
 2. Create a branch from `main`.
 3. If you’re new to GitHub pull requests, check out [this video series](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github).
 
+### Translations
+
+New translations should be added to `src/i18n/locales/`.
+If you don't know the code for your language, you can take a look at [Wikipedia's list of ISO-639 language codes](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes).
+
+File with your new Translation should have only 1 exported constant, whose name ends with `Metadata`. You can look at any other translation file as an example.
+
+After you finished, make sure to add your translation to `src/i18n/locales/index.ts`.
+
 ### License
 
 By contributing, you agree that your work will be licensed under ChartDB's [license](https://github.com/chartdb/chartdb/blob/main/LICENSE).
