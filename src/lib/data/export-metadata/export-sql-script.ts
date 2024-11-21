@@ -3,6 +3,7 @@ import { OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
+import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -81,6 +82,8 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Add size for character types
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
+            } else if (field.type.name.toLowerCase().includes('varchar')) {
+                sqlScript += `(500)`;
             }
 
             // Add precision and scale for numeric types
@@ -93,6 +96,11 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Handle NOT NULL constraint
             if (!field.nullable) {
                 sqlScript += ' NOT NULL';
+            }
+
+            // Handle UNIQUE value
+            if (!field.primaryKey && field.unique) {
+                sqlScript += ` UNIQUE`;
             }
 
             // Handle DEFAULT value
@@ -190,21 +198,57 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
 export const exportSQL = async (
     diagram: Diagram,
-    databaseType: DatabaseType
+    databaseType: DatabaseType,
+    options?: {
+        stream: boolean;
+        onResultStream: (text: string) => void;
+        signal?: AbortSignal;
+    }
 ): Promise<string> => {
-    const { generateText } = await import('ai');
-    const { createOpenAI } = await import('@ai-sdk/openai');
+    const sqlScript = exportBaseSQL(diagram);
+    const cacheKey = await generateCacheKey(databaseType, sqlScript);
+
+    const cachedResult = getFromCache(cacheKey);
+    if (cachedResult) {
+        return cachedResult;
+    }
+
+    const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
+        import('ai'),
+        import('@ai-sdk/openai'),
+    ]);
+
     const openai = createOpenAI({
         apiKey: OPENAI_API_KEY,
     });
-    const sqlScript = exportBaseSQL(diagram);
+
     const prompt = generateSQLPrompt(databaseType, sqlScript);
+
+    if (options?.stream) {
+        const { textStream, text: textPromise } = await streamText({
+            model: openai('gpt-4o-mini-2024-07-18'),
+            prompt: prompt,
+        });
+
+        for await (const textPart of textStream) {
+            if (options.signal?.aborted) {
+                return '';
+            }
+            options.onResultStream(textPart);
+        }
+
+        const text = await textPromise;
+
+        setInCache(cacheKey, text);
+        return text;
+    }
 
     const { text } = await generateText({
         model: openai('gpt-4o-mini-2024-07-18'),
         prompt: prompt,
     });
 
+    setInCache(cacheKey, text);
     return text;
 };
 

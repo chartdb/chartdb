@@ -10,8 +10,7 @@ import { TemplateCard } from './template-card/template-card';
 import { useLoaderData, useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
-import { Helmet } from 'react-helmet-async';
-import { HOST_URL } from '@/lib/env';
+import { TemplatesPageHelmet } from './templates-page-helmet';
 
 export interface TemplatesPageLoaderData {
     templates: Template[] | undefined;
@@ -23,53 +22,21 @@ const TemplatesPageComponent: React.FC = () => {
     const data = useLoaderData() as TemplatesPageLoaderData;
 
     const { templates, allTags } = data ?? {};
-    const { tag } = useParams<{ tag: string }>();
+    const { tag: tagParam } = useParams<{ tag: string }>();
     const matches = useMatches();
     const isFeatured = matches.some(
         (match) => match.id === 'templates_featured'
     );
     const isAllTemplates = matches.some((match) => match.id === 'templates');
+    const tag = allTags?.find(
+        (currentTag) =>
+            tagParam?.toLowerCase().replace(/-/g, ' ') ===
+            currentTag.toLowerCase()
+    );
 
     return (
         <>
-            <Helmet>
-                {HOST_URL !== 'https://chartdb.io' ? (
-                    <link rel="canonical" href="https://chartdb.io/templates" />
-                ) : null}
-                <title>Database Schema Diagram Templates | ChartDB</title>
-                <meta
-                    name="description"
-                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
-                />
-                <meta
-                    property="og:title"
-                    content="Database Schema Diagram Templates | ChartDB"
-                />
-                <meta property="og:url" content={`${HOST_URL}/templates`} />
-                <meta
-                    property="og:description"
-                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
-                />
-                <meta property="og:image" content={`${HOST_URL}/chartdb.png`} />
-                <meta property="og:type" content="website" />
-                <meta property="og:site_name" content="ChartDB" />
-                <meta
-                    name="twitter:title"
-                    content="Database Schema Diagram Templates | ChartDB"
-                />
-                <meta
-                    name="twitter:description"
-                    content="Discover a collection of real-world database schema diagrams, featuring example applications and popular open-source projects."
-                />
-                <meta
-                    name="twitter:image"
-                    content={`${HOST_URL}/chartdb.png`}
-                />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:site" content="@ChartDB_io" />
-                <meta name="twitter:creator" content="@ChartDB_io" />
-            </Helmet>
-
+            <TemplatesPageHelmet tag={tag} isFeatured={isFeatured} />
             <section className="flex w-screen flex-col bg-background">
                 <nav className="flex h-12 shrink-0 flex-row items-center justify-between border-b px-4">
                     <div className="flex flex-1 justify-start gap-x-3">
@@ -102,12 +69,25 @@ const TemplatesPageComponent: React.FC = () => {
                 </nav>
                 <div className="flex flex-col p-3 text-center md:px-28 md:text-left">
                     <h1 className="font-primary text-2xl font-bold">
-                        Database Schema Templates
+                        {isFeatured
+                            ? 'Featured database schema templates'
+                            : tag
+                              ? `Database schema templates for ${tag}`
+                              : 'Database schema templates'}
                     </h1>
                     <h2 className="mt-1 font-primary text-base text-muted-foreground">
                         Discover a collection of real-world database schema
-                        diagrams, featuring example applications and popular
-                        open-source projects.
+                        diagrams
+                        {tag ? (
+                            <>
+                                {' for '}
+                                <span className="font-semibold">{tag}</span>
+                            </>
+                        ) : (
+                            ''
+                        )}
+                        , featuring example applications and popular open-source
+                        projects.
                     </h2>
                     {!templates ? (
                         <Spinner
@@ -139,10 +119,10 @@ const TemplatesPageComponent: React.FC = () => {
                                 </h4>
                                 {allTags ? (
                                     <ListMenu
-                                        className="mt-1 w-44 shrink-0"
+                                        className="mt-1 shrink-0"
                                         items={allTags.map((currentTag) => ({
                                             title: currentTag,
-                                            href: `/templates/tags/${currentTag}`,
+                                            href: `/templates/tags/${currentTag.toLowerCase().replace(/ /g, '-')}`,
                                             selected: tag === currentTag,
                                         }))}
                                     />

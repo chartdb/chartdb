@@ -19,7 +19,7 @@ export const MarkerDefinitions: React.FC = () => {
     }
 
     return (
-        <svg className="absolute left-0 top-0 z-0 size-0">
+        <svg className="marker-definitions absolute left-0 top-0 z-0 size-0">
             <defs>
                 {Object.entries(cardinalityOptions).map(([cardinality, text]) =>
                     sideOptions.map((side) =>

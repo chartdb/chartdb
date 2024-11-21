@@ -17,6 +17,8 @@ import { emptyFn } from '@/lib/utils';
 import { StarUsDialog } from '@/dialogs/star-us-dialog/star-us-dialog';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
+import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
+import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -86,6 +88,14 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             [setOpenTableSchemaDialog]
         );
 
+    // Export image dialog
+    const [openExportDiagramDialog, setOpenExportDiagramDialog] =
+        useState(false);
+
+    // Import diagram dialog
+    const [openImportDiagramDialog, setOpenImportDiagramDialog] =
+        useState(false);
+
     // Alert dialog
     const [showAlert, setShowAlert] = useState(false);
     const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
@@ -126,6 +136,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
+                openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
+                closeExportDiagramDialog: () =>
+                    setOpenExportDiagramDialog(false),
+                openImportDiagramDialog: () => setOpenImportDiagramDialog(true),
+                closeImportDiagramDialog: () =>
+                    setOpenImportDiagramDialog(false),
             }}
         >
             {children}
@@ -152,6 +168,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
             />
+            <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
+            <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
         </dialogContext.Provider>
     );
 };

@@ -85,7 +85,7 @@ const routes: RouteObject[] = [
         },
         loader: async ({ params }): Promise<TemplatesPageLoaderData> => {
             const { tags, templates } = await getTemplatesAndAllTags({
-                tag: params.tag,
+                tag: params.tag?.replace(/-/g, ' '),
             });
 
             return {

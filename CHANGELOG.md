@@ -1,5 +1,71 @@
 # Changelog
 
+## [1.2.0](https://github.com/chartdb/chartdb/compare/v1.1.0...v1.2.0) (2024-11-17)
+
+
+### Features
+
+* **duplicate table:** duplicate table from the canvas and sidebar ([#404](https://github.com/chartdb/chartdb/issues/404)) ([44cf5ca](https://github.com/chartdb/chartdb/commit/44cf5ca264f52851f2dffb51a752a52b6fa7ec8d))
+
+
+### Bug Fixes
+
+* **AI exports:** add cahching layer to SQL exports ([#390](https://github.com/chartdb/chartdb/issues/390)) ([e5dbbf2](https://github.com/chartdb/chartdb/commit/e5dbbf2eaab6d80a531d451211b6f5a415bc7ce3))
+* **canvas:** fix auto zoom on diagram load ([#395](https://github.com/chartdb/chartdb/issues/395)) ([492c932](https://github.com/chartdb/chartdb/commit/492c9324d27b561470c4967ce2e99f82eec467d8))
+* **dockerfile:** support SPA refresh to resolve nginx return 404 ([#384](https://github.com/chartdb/chartdb/issues/384)) ([eaf75ce](https://github.com/chartdb/chartdb/commit/eaf75cedb0e024236c7684bb533856d7f80074da))
+* **docs:** update license reference ([#403](https://github.com/chartdb/chartdb/issues/403)) ([44d10c2](https://github.com/chartdb/chartdb/commit/44d10c23907165288951a9d2ec3165ad23f81c61))
+* **export image:** Add support for displaying cardinality relationships + background ([#407](https://github.com/chartdb/chartdb/issues/407)) ([68474e7](https://github.com/chartdb/chartdb/commit/68474e75d56ed4b4b445cc9b7f59cca96a4ca5db))
+* **i18n:** add Nepali translations ([#406](https://github.com/chartdb/chartdb/issues/406)) ([e1e55c4](https://github.com/chartdb/chartdb/commit/e1e55c4b2ac7755b0810dc1f21da44903fe68a54))
+* **i18n:** change language keeps selected language also after refreshing the page ([#409](https://github.com/chartdb/chartdb/issues/409)) ([f35f62f](https://github.com/chartdb/chartdb/commit/f35f62fdf38ca84065f171a31b80aa8123b1d8b9))
+* **i18n:** Create Translations in Marathi language ([#266](https://github.com/chartdb/chartdb/issues/266)) ([c6f7ff7](https://github.com/chartdb/chartdb/commit/c6f7ff70f841efb9cf1766338f409fe0ea7bb998))
+* **i18n:** fix language nav: close when lang selected, hide tooltip when lang selected ([#411](https://github.com/chartdb/chartdb/issues/411)) ([02aaabd](https://github.com/chartdb/chartdb/commit/02aaabdc4e9b1570d81ff03fe1e6da0307f22999))
+* **templates:** add five more templates (Sylius, Monica, Attendize, SaaS Pegasus & BookStack) ([#408](https://github.com/chartdb/chartdb/issues/408)) ([0f67394](https://github.com/chartdb/chartdb/commit/0f673947af469e86f70737427ac8fb3c2420d1a2))
+* **templates:** add six more templates (ticketit, snipe-it, refinerycms, comfortable-mexican-sofa, buddypress, lobsters) ([#402](https://github.com/chartdb/chartdb/issues/402)) ([07d3745](https://github.com/chartdb/chartdb/commit/07d374574775d132e1cba0908c47dcbbd6cd2c3f))
+* **templates:** fix cloned indexes from a template ([#398](https://github.com/chartdb/chartdb/issues/398)) ([9f8500f](https://github.com/chartdb/chartdb/commit/9f8500fc7e36e6a819ecb9029f263d80eac88279))
+* **templates:** fix tags urls ([#405](https://github.com/chartdb/chartdb/issues/405)) ([fe8b9f9](https://github.com/chartdb/chartdb/commit/fe8b9f9e91481d8a3272113b6f4be4da8d61ad04))
+* **templates:** tag urls lowercase to support browsers ([#397](https://github.com/chartdb/chartdb/issues/397)) ([959e540](https://github.com/chartdb/chartdb/commit/959e5402b8c112fae6243ce9283947057506c128))
+
+## [1.1.0](https://github.com/chartdb/chartdb/compare/v1.0.1...v1.1.0) (2024-11-13)
+
+
+### Features
+
+* **add templates:** add five more templates (laravel, django, twitter… ([#371](https://github.com/chartdb/chartdb/issues/371)) ([20b3396](https://github.com/chartdb/chartdb/commit/20b3396ec2afff09ca8bcdd91f5c6284c93cd959))
+* **canvas:** Added Snap to grid functionality. Toggle/hold shift to enable snap to grid. ([#373](https://github.com/chartdb/chartdb/issues/373)) ([6c7eb46](https://github.com/chartdb/chartdb/commit/6c7eb4609d8466278de30317665929ec529c1f94))
+* **share:** add sharing capabilities to import and export diagrams ([#365](https://github.com/chartdb/chartdb/issues/365)) ([94a5d84](https://github.com/chartdb/chartdb/commit/94a5d84fae819b0de6c1e471d1aad16dc8f39dd6))
+
+
+### Bug Fixes
+
+* **bundle:** fix bundle size ([#382](https://github.com/chartdb/chartdb/issues/382)) ([4ca1832](https://github.com/chartdb/chartdb/commit/4ca18327324106950f0d1af851b9b74379b67b7b))
+* **dockerfile:** support openai key in docker build ([#366](https://github.com/chartdb/chartdb/issues/366)) ([545e857](https://github.com/chartdb/chartdb/commit/545e8578c9e8aa71696f6aa8bec81cacaa602c2d))
+* **i18n:** add korean ([#362](https://github.com/chartdb/chartdb/issues/362)) ([b305be8](https://github.com/chartdb/chartdb/commit/b305be82aee00994ef576ca6fd62d72dd491f771))
+* **i18n:** Add simplified chinese ([#385](https://github.com/chartdb/chartdb/issues/385)) ([9f28933](https://github.com/chartdb/chartdb/commit/9f2893319a1a2aed9a7c03d15e25a17ab37c2465))
+* **i18n:** Added Russian language ([#376](https://github.com/chartdb/chartdb/issues/376)) ([2c69b08](https://github.com/chartdb/chartdb/commit/2c69b08eaea6b86ce0c1ddb18a23e22629198bf5))
+* **i18n:** added traditional Chinese language translation ([#356](https://github.com/chartdb/chartdb/issues/356)) ([123f40f](https://github.com/chartdb/chartdb/commit/123f40f39e703ad612635964af530ac72c387d3c))
+* **i18n:** Fixed part of RU lang introduced in [#365](https://github.com/chartdb/chartdb/issues/365) feat(share) ([#380](https://github.com/chartdb/chartdb/issues/380)) ([5508c1e](https://github.com/chartdb/chartdb/commit/5508c1e084e0ee24d1a54f721f760b9fc14df107))
+* **i18n:** french translation update - share menu ([#391](https://github.com/chartdb/chartdb/issues/391)) ([e3129ce](https://github.com/chartdb/chartdb/commit/e3129cec744d18f09953544d9e74cd5adc4e8afb))
+* **import json:** for Check Script Result, default with quotes ([#358](https://github.com/chartdb/chartdb/issues/358)) ([1430d2c](https://github.com/chartdb/chartdb/commit/1430d2c2365b7b74e36b8ff9d32a163d7437448a))
+* improve title name edit interaction ([#367](https://github.com/chartdb/chartdb/issues/367)) ([84e7591](https://github.com/chartdb/chartdb/commit/84e7591d0586b9a457f31737c6e363ef41574142))
+* **share:** add loader to the export ([#381](https://github.com/chartdb/chartdb/issues/381)) ([3609bfe](https://github.com/chartdb/chartdb/commit/3609bfea4d4c78b03711ff8d721b4e67bf82185a))
+* **sql export:** make loading for export interactive ([#388](https://github.com/chartdb/chartdb/issues/388)) ([125a39f](https://github.com/chartdb/chartdb/commit/125a39fb5be803f0e6db0b68fb5bc8e290fa8dae))
+* **templates:** change the template url to be database instead of db ([#374](https://github.com/chartdb/chartdb/issues/374)) ([f1d073d](https://github.com/chartdb/chartdb/commit/f1d073d05383955da6f60a9a66ed2be879b103e4))
+* **templates:** fix issue with double-clone on localhost ([#394](https://github.com/chartdb/chartdb/issues/394)) ([78c427f](https://github.com/chartdb/chartdb/commit/78c427f38e5c64fc340d13ceb2153c2b85db437e))
+
+## [1.0.1](https://github.com/chartdb/chartdb/compare/v1.0.0...v1.0.1) (2024-11-06)
+
+
+### Bug Fixes
+
+* **offline:** add support when running on isolated network ([#359](https://github.com/chartdb/chartdb/issues/359)) ([aa884b4](https://github.com/chartdb/chartdb/commit/aa884b49ce16d70f67881bdc940993c1fe901796))
+* open default diagram after deleting current diagram ([#350](https://github.com/chartdb/chartdb/issues/350)) ([87a40cf](https://github.com/chartdb/chartdb/commit/87a40cff615b04b678642ba2d6e097c38b26d239))
+* **select-box:** allow using tab & space to show choices ([#336](https://github.com/chartdb/chartdb/issues/336)) ([93f623a](https://github.com/chartdb/chartdb/commit/93f623a13a61e9143638fbe7e8346f07e37a26b2))
+* **smart query:** import postgres FKs ([#357](https://github.com/chartdb/chartdb/issues/357)) ([acb736e](https://github.com/chartdb/chartdb/commit/acb736e44fd50d29a85b4eff42e20780aef710ed))
+* **templates:** add two more templates (Airbnb, Wordpress) ([#317](https://github.com/chartdb/chartdb/issues/317)) ([ebce882](https://github.com/chartdb/chartdb/commit/ebce8827eab049eefa0eebcb0ec2540698bc0e15))
+* **templates:** align database icon ([#351](https://github.com/chartdb/chartdb/issues/351)) ([efaddee](https://github.com/chartdb/chartdb/commit/efaddeebb4f24235d82f4e2bf7423fbf48b97187))
+* **template:** separator in case of empty url ([#355](https://github.com/chartdb/chartdb/issues/355)) ([180886c](https://github.com/chartdb/chartdb/commit/180886c5882f2329c797fc284b255012d21f5b5c))
+* **templates:** fetch templates data from router ([#321](https://github.com/chartdb/chartdb/issues/321)) ([d8a20eb](https://github.com/chartdb/chartdb/commit/d8a20ebbd9118989690a40fcd3aa59fb156b446f))
+
 ## 1.0.0 (2024-11-04)
 
 

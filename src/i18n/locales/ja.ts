@@ -28,10 +28,15 @@ export const ja: LanguageTranslation = {
                 show_cardinality: 'カーディナリティを表示',
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
-                change_language: '言語',
                 // TODO: Translate
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
+            },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'ヘルプ',
@@ -141,6 +146,7 @@ export const ja: LanguageTranslation = {
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'テーブルを削除',
                     },
                 },
@@ -230,6 +236,8 @@ export const ja: LanguageTranslation = {
 
             cancel: 'キャンセル',
             back: '戻る',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: '空のダイアグラム',
             continue: '続行',
             import: 'インポート',
@@ -333,7 +341,31 @@ export const ja: LanguageTranslation = {
             close: '今はしない',
             confirm: 'もちろん！',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: '1対1',
             one_to_many: '1対多',
@@ -348,12 +380,25 @@ export const ja: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'テーブルを編集',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'テーブルを削除',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'ダブルクリックして編集',
+        },
+
+        language_select: {
+            change_language: '言語',
         },
     },
 };
 
 export const jaMetadata: LanguageMetadata = {
     name: 'Japanese',
+    nativeName: '日本語',
     code: 'ja',
 };

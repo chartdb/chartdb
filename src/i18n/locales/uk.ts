@@ -28,9 +28,14 @@ export const uk: LanguageTranslation = {
                 show_cardinality: 'Показати кардинальність',
                 zoom_on_scroll: 'Збільшити прокручування',
                 theme: 'Тема',
-                change_language: 'Мова',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
+            },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'Допомога',
@@ -139,6 +144,7 @@ export const uk: LanguageTranslation = {
                         change_schema: 'Змінити схему',
                         add_field: 'Додати поле',
                         add_index: 'Додати індекс',
+                        duplicate_table: 'Duplicate Table', // TODO: Translate
                         delete_table: 'Видалити таблицю',
                     },
                 },
@@ -225,6 +231,8 @@ export const uk: LanguageTranslation = {
 
             cancel: 'Скасувати',
             back: 'Назад',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             empty_diagram: 'Порожня діаграма',
             continue: 'Продовжити',
             import: 'Імпорт',
@@ -328,7 +336,31 @@ export const uk: LanguageTranslation = {
             close: 'Не зараз',
             confirm: 'звичайно!',
         },
-
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
         relationship_type: {
             one_to_one: 'Один до одного',
             one_to_many: 'Один до багатьох',
@@ -343,12 +375,25 @@ export const uk: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Редагувати таблицю',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Видалити таблицю',
+        },
+
+        // TODO: Add translations
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        tool_tips: {
+            double_click_to_edit: 'Двойной клик для редактирования',
+        },
+
+        language_select: {
+            change_language: 'Мова',
         },
     },
 };
 
 export const ukMetadata: LanguageMetadata = {
-    name: 'Українська',
+    name: 'Ukrainian',
+    nativeName: 'Українська',
     code: 'uk',
 };
