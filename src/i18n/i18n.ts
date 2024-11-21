@@ -19,6 +19,8 @@ import { mr, mrMetadata } from './locales/mr';
 import { tr, trMetadata } from './locales/tr';
 import { id_ID, id_IDMetadata } from './locales/id_ID';
 import { te, teMetadata } from './locales/te';
+import { bn, bnMetadata } from './locales/bn';
+
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
@@ -38,6 +40,7 @@ export const languages: LanguageMetadata[] = [
     trMetadata,
     id_IDMetadata,
     teMetadata,
+    bnMetadata
 ];
 
 const resources = {
@@ -58,6 +61,7 @@ const resources = {
     tr,
     id_ID,
     te,
+    bn
 };
 
 i18n.use(LanguageDetector)
