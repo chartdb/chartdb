@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const fr: LanguageTranslation = {
-    translation: {
+const fr = {
         menu: {
             file: {
                 file: 'Fichier',
@@ -263,8 +262,7 @@ const fr: LanguageTranslation = {
 
         export_image_dialog: {
             title: "Exporter l'image",
-            description:
-                "Choisissez le facteur d'échelle pour l'image exportée.",
+            description: "Choisissez le facteur d'échelle pour l'image exportée.",
             scale_1x: '1x Normal',
             scale_2x: '2x (Recommandé)',
             scale_3x: '3x',
@@ -387,12 +385,11 @@ const fr: LanguageTranslation = {
         language_select: {
             change_language: 'Langue',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const frMetadata: LanguageMetadata = {
+export const frMetadata = {
     name: 'French',
     nativeName: 'Français',
     code: 'fr',
     translation: fr,
-};
+} as const satisfies LanguageMetadata;

@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const ru: LanguageTranslation = {
-    translation: {
+const ru = {
         menu: {
             file: {
                 file: 'Файл',
@@ -250,8 +249,7 @@ const ru: LanguageTranslation = {
 
         export_sql_dialog: {
             title: 'Экспорт SQL',
-            description:
-                'Экспортируйте схему диаграммы в {{databaseType}} скрипт',
+            description: 'Экспортируйте схему диаграммы в {{databaseType}} скрипт',
             close: 'Закрыть',
             loading: {
                 text: 'ИИ генерирует SQL для {{databaseType}}...',
@@ -328,8 +326,7 @@ const ru: LanguageTranslation = {
 
         star_us_dialog: {
             title: 'Помогите нам стать лучше!',
-            description:
-                'Хотите отметить нас на GitHub? Это всего лишь один клик!',
+            description: 'Хотите отметить нас на GitHub? Это всего лишь один клик!',
             close: 'Не сейчас',
             confirm: 'Конечно!',
         },
@@ -379,12 +376,11 @@ const ru: LanguageTranslation = {
         language_select: {
             change_language: 'Сменить язык',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const ruMetadata: LanguageMetadata = {
+export const ruMetadata = {
     name: 'Russian',
     nativeName: 'Русский',
     code: 'ru',
     translation: ru,
-};
+} as const satisfies LanguageMetadata;

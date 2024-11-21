@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const pt_BR: LanguageTranslation = {
-    translation: {
+const pt_BR = {
         menu: {
             file: {
                 file: 'Arquivo',
@@ -384,12 +383,11 @@ const pt_BR: LanguageTranslation = {
         language_select: {
             change_language: 'Idioma',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const pt_BRMetadata: LanguageMetadata = {
+export const pt_BRMetadata = {
     name: 'Portuguese',
     nativeName: 'Português',
     code: 'pt_BR',
     translation: pt_BR,
-};
+} as const satisfies LanguageMetadata;

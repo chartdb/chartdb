@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const zh_TW: LanguageTranslation = {
-    translation: {
+const zh_TW = {
         menu: {
             file: {
                 file: '檔案',
@@ -254,8 +253,7 @@ const zh_TW: LanguageTranslation = {
                 description: '最多需要 30 秒。',
             },
             error: {
-                message:
-                    '生成 SQL 腳本時發生錯誤。稍後再試，或<0>聯繫我們</0>。',
+                message: '生成 SQL 腳本時發生錯誤。稍後再試，或<0>聯繫我們</0>。',
                 description:
                     '可以自由使用 OPENAI_TOKEN，詳細說明可參考<0>此處</0>。',
             },
@@ -373,12 +371,11 @@ const zh_TW: LanguageTranslation = {
         language_select: {
             change_language: '變更語言',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const zh_TWMetadata: LanguageMetadata = {
+export const zh_TWMetadata = {
     nativeName: '繁體中文',
     name: 'Traditional Chinese',
     code: 'zh_TW',
     translation: zh_TW,
-};
+} as const satisfies LanguageMetadata;

@@ -1,7 +1,6 @@
 import type { LanguageMetadata } from '../types';
 
 export const en = {
-    translation: {
         menu: {
             file: {
                 file: 'File',
@@ -251,8 +250,7 @@ export const en = {
 
         export_sql_dialog: {
             title: 'Export SQL',
-            description:
-                'Export your diagram schema to {{databaseType}} script',
+            description: 'Export your diagram schema to {{databaseType}} script',
             close: 'Close',
             loading: {
                 text: 'AI is generating SQL for {{databaseType}}...',
@@ -380,12 +378,11 @@ export const en = {
         language_select: {
             change_language: 'Language',
         },
-    },
-};
+} as const;
 
-export const enMetadata: LanguageMetadata = {
+export const enMetadata = {
     name: 'English',
     nativeName: 'English',
     code: 'en',
     translation: en,
-};
+} as const satisfies LanguageMetadata;

@@ -17,7 +17,7 @@ import type {
     SelectBoxProps,
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
-import { languages } from '@/i18n/locales';
+import { languageMetadatas } from '@/i18n/i18n';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/button/button-variants';
 
@@ -26,11 +26,13 @@ export const LanguageNav: React.FC<LanguageNavProps> = () => {
     const { t, i18n } = useTranslation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const languagesOptions: SelectBoxOption[] = languages.map((lang) => ({
-        label: lang.nativeName,
-        value: lang.code,
-        description: `(${lang.name})`,
-    }));
+    const languagesOptions: SelectBoxOption[] = languageMetadatas.map(
+        (lang) => ({
+            label: lang.nativeName,
+            value: lang.code,
+            description: `(${lang.name})`,
+        })
+    );
 
     const handleLanguageChange: SelectBoxProps['onChange'] = useCallback(
         (language: string | string[]) => {

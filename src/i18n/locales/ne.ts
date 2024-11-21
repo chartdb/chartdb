@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const ne: LanguageTranslation = {
-    translation: {
+const ne = {
         menu: {
             file: {
                 file: 'फाइल',
@@ -187,8 +186,7 @@ const ne: LanguageTranslation = {
                 },
                 empty_state: {
                     title: 'कुनै डिपेन्डेन्सीहरू छैनन्',
-                    description:
-                        'डिपेन्डेन्सीहरू देखाउनका लागि एक व्यू बनाउनुहोस्',
+                    description: 'डिपेन्डेन्सीहरू देखाउनका लागि एक व्यू बनाउनुहोस्',
                 },
             },
         },
@@ -201,15 +199,13 @@ const ne: LanguageTranslation = {
             undo: 'पूर्ववत',
             redo: 'पुनः गर्नुहोस्',
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
-            highlight_overlapping_tables:
-                'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
+            highlight_overlapping_tables: 'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
         },
 
         new_diagram_dialog: {
             database_selection: {
                 title: 'तपाईंको डाटाबेस के हो?',
-                description:
-                    'प्रत्येक डाटाबेसलाई आफ्नो विशेषता र क्षमताहरू छन्।',
+                description: 'प्रत्येक डाटाबेसलाई आफ्नो विशेषता र क्षमताहरू छन्।',
                 check_examples_long: 'उदाहरणहरू हेर्नुहोस्',
                 check_examples_short: 'उदाहरणहरू',
             },
@@ -240,8 +236,7 @@ const ne: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'डायाग्राम खोल्नुहोस्',
-            description:
-                'तलको सूचीबाट खोल्नका लागि एक डायाग्राम चयन गर्नुहोस्।',
+            description: 'तलको सूचीबाट खोल्नका लागि एक डायाग्राम चयन गर्नुहोस्।',
             table_columns: {
                 name: 'नाम',
                 created_at: 'मा सिर्जना',
@@ -384,12 +379,11 @@ const ne: LanguageTranslation = {
         language_select: {
             change_language: 'भाषा परिवर्तन गर्नुहोस्',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const neMetadata: LanguageMetadata = {
+export const neMetadata = {
     name: 'Nepali',
     nativeName: 'नेपाली',
     code: 'ne',
     translation: ne,
-};
+} as const satisfies LanguageMetadata;

@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const mr: LanguageTranslation = {
-    translation: {
+const mr = {
         menu: {
             file: {
                 file: 'फाइल',
@@ -173,8 +172,7 @@ const mr: LanguageTranslation = {
                 },
                 empty_state: {
                     title: 'कोणतेही रिलेशनशिप नाहीत',
-                    description:
-                        'टेबल्स कनेक्ट करण्यासाठी एक रिलेशनशिप तयार करा',
+                    description: 'टेबल्स कनेक्ट करण्यासाठी एक रिलेशनशिप तयार करा',
                 },
             },
             dependencies_section: {
@@ -394,12 +392,11 @@ const mr: LanguageTranslation = {
         language_select: {
             change_language: 'भाषा बदला',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const mrMetadata: LanguageMetadata = {
+export const mrMetadata = {
     name: 'Marathi',
     nativeName: 'मराठी',
     code: 'mr',
     translation: mr,
-};
+} as const satisfies LanguageMetadata;

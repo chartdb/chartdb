@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const ko_KR: LanguageTranslation = {
-    translation: {
+const ko_KR = {
         menu: {
             file: {
                 file: '파일',
@@ -207,8 +206,7 @@ const ko_KR: LanguageTranslation = {
         new_diagram_dialog: {
             database_selection: {
                 title: '당신의 데이터베이스 종류가 무엇인가요?',
-                description:
-                    '각 데이터베이스에는 고유한 기능과 특징이 있습니다.',
+                description: '각 데이터베이스에는 고유한 기능과 특징이 있습니다.',
                 check_examples_long: '예제 확인',
                 check_examples_short: '예제들',
             },
@@ -330,8 +328,7 @@ const ko_KR: LanguageTranslation = {
 
         star_us_dialog: {
             title: '개선할 수 있도록 도와주세요!',
-            description:
-                'GitHub에 별을 찍어주시겠습니까? 클릭 한번이면 됩니다!',
+            description: 'GitHub에 별을 찍어주시겠습니까? 클릭 한번이면 됩니다!',
             close: '아직은 괜찮아요',
             confirm: '당연하죠!',
         },
@@ -383,12 +380,11 @@ const ko_KR: LanguageTranslation = {
         language_select: {
             change_language: '언어',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const ko_KRMetadata: LanguageMetadata = {
+export const ko_KRMetadata = {
     name: 'Korean',
     nativeName: '한국어',
     code: 'ko_KR',
     translation: ko_KR,
-};
+} as const satisfies LanguageMetadata;

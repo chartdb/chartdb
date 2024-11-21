@@ -1,7 +1,6 @@
-import type { LanguageMetadata, LanguageTranslation } from '../types';
+import type { LanguageTranslation, LanguageMetadata } from '../types';
 
-const zh_CN: LanguageTranslation = {
-    translation: {
+const zh_CN = {
         menu: {
             file: {
                 file: '文件',
@@ -255,10 +254,8 @@ const zh_CN: LanguageTranslation = {
                 description: '此操作最多需要 30 秒。',
             },
             error: {
-                message:
-                    '生成 SQL 脚本时出错。请稍后再试，或者 <0>联系我们</0>。',
-                description:
-                    '随时使用您的 OPENAI_TOKEN，在<0>这里</0>查看手册。',
+                message: '生成 SQL 脚本时出错。请稍后再试，或者 <0>联系我们</0>。',
+                description: '随时使用您的 OPENAI_TOKEN，在<0>这里</0>查看手册。',
             },
         },
 
@@ -284,8 +281,7 @@ const zh_CN: LanguageTranslation = {
                 title: '导入数据库',
                 content: {
                     alert: '导入此关系图将影响现有的表和关系。',
-                    new_tables:
-                        '将添加 <bold>{{newTablesNumber}}</bold> 个新表。',
+                    new_tables: '将添加 <bold>{{newTablesNumber}}</bold> 个新表。',
                     new_relationships:
                         '将创建 <bold>{{newRelationshipsNumber}}</bold> 个新关系。',
                     tables_override:
@@ -374,12 +370,11 @@ const zh_CN: LanguageTranslation = {
         language_select: {
             change_language: '语言',
         },
-    },
-};
+} as const satisfies LanguageTranslation;
 
-export const zh_CNMetadata: LanguageMetadata = {
+export const zh_CNMetadata = {
     name: 'Chinese',
     nativeName: '简体中文',
     code: 'zh_CN',
     translation: zh_CN,
-};
+} as const satisfies LanguageMetadata;
