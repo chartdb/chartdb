@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const te = {
+export const te: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -28,9 +28,14 @@ export const te = {
                 show_cardinality: 'కార్డినాలిటీని చూపించండి',
                 zoom_on_scroll: 'స్క్రోల్‌పై జూమ్',
                 theme: 'థీమ్',
-                change_language: 'భాష మార్చు',
                 show_dependencies: 'ఆధారాలు చూపించండి',
                 hide_dependencies: 'ఆధారాలను దాచండి',
+            },
+            // TODO: Translate
+            share: {
+                share: 'Share',
+                export_diagram: 'Export Diagram',
+                import_diagram: 'Import Diagram',
             },
             help: {
                 help: 'సహాయం',
@@ -139,6 +144,8 @@ export const te = {
                         change_schema: 'స్కీమాను మార్చు',
                         add_field: 'ఫీల్డ్ జోడించు',
                         add_index: 'ఇండెక్స్ జోడించు',
+                        // TODO: Translate
+                        duplicate_table: 'Duplicate Table',
                         delete_table: 'పట్టికను తొలగించు',
                     },
                 },
@@ -224,6 +231,8 @@ export const te = {
             },
 
             cancel: 'రద్దు',
+            // TODO: Translate
+            import_from_file: 'Import from File',
             back: 'తిరుగు',
             empty_diagram: 'ఖాళీ చిత్రము',
             continue: 'కొనసాగించు',
@@ -329,6 +338,33 @@ export const te = {
             confirm: 'ఖచ్చితంగా!',
         },
 
+        // TODO: Translate
+        export_diagram_dialog: {
+            title: 'Export Diagram',
+            description: 'Choose the format for export:',
+            format_json: 'JSON',
+            cancel: 'Cancel',
+            export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
+        },
+
+        // TODO: Translate
+        import_diagram_dialog: {
+            title: 'Import Diagram',
+            description: 'Paste the diagram JSON below:',
+            cancel: 'Cancel',
+            import: 'Import',
+            error: {
+                title: 'Error importing diagram',
+                description:
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+
         relationship_type: {
             one_to_one: 'ఒకటి_కీ_ఒకటి',
             one_to_many: 'ఒకటి_కీ_చాలా',
@@ -343,12 +379,27 @@ export const te = {
 
         table_node_context_menu: {
             edit_table: 'పట్టికను సవరించు',
+            // TODO: Translate
+            duplicate_table: 'Duplicate Table',
             delete_table: 'పట్టికను తొలగించు',
+        },
+
+        // TODO: Translate
+        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+
+        // TODO: Translate
+        tool_tips: {
+            double_click_to_edit: 'Double-click to edit',
+        },
+
+        language_select: {
+            change_language: 'భాష మార్చు',
         },
     },
 };
 
 export const teMetadata: LanguageMetadata = {
-    name: 'తెలుగు',
+    name: 'Telugu',
+    nativeName: 'తెలుగు',
     code: 'te',
 };

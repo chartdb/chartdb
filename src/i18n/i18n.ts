@@ -17,7 +17,7 @@ import { zh_TW, zh_TWMetadata } from './locales/zh_TW';
 import { ne, neMetadata } from './locales/ne';
 import { mr, mrMetadata } from './locales/mr';
 import { tr, trMetadata } from './locales/tr';
-import { id_ID, id_IDMetadata } from './locales/id_ID.ts';
+import { id_ID, id_IDMetadata } from './locales/id_ID';
 import { te, teMetadata } from './locales/te';
 
 export const languages: LanguageMetadata[] = [
