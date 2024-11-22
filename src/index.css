@@ -22,4 +22,26 @@
 
     .marker-definitions {
     }
+
+    .react-colorful {
+        width: 100% !important;
+        height: 150px !important;
+
+        .react-colorful__saturation {
+            .react-colorful__pointer {
+                @apply size-4;
+            }
+        }
+
+        .react-colorful__hue {
+            @apply h-3;
+
+            .react-colorful__hue-pointer {
+                @apply size-2;
+                .react-colorful__pointer-fill {
+                    @apply bg-white !important;
+                }
+            }
+        }
+    }
 }

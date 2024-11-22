@@ -6,11 +6,14 @@ export const colorOptions = [
     '#8a61f5', // A bold indigo.
     '#7175fa', // A lighter indigo.
     '#8eb7ff', // A sky blue.
+    '#5271ff', // A royal blue
+    '#004aad', // A cobalt blue.
     '#42e0c0', // A fresh aqua.
     '#4dee8a', // A mint green.
     '#9ef07a', // A lime green.
     '#ffe374', // A warm yellow.
     '#ff9f74', // A peachy orange.
+    '#ff914d', // A bold orange.
 ];
 
 export const randomColor = () => {
