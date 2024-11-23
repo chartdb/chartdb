@@ -1,6 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const hi: LanguageTranslation = {
+export const gu: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -31,7 +31,7 @@ export const hi: LanguageTranslation = {
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',
                 hide_dependencies: 'નિર્ભરતાઓ છુપાવો',
             },
-            
+
             share: {
                 share: 'શેર કરો',
                 export_diagram: 'ડાયાગ્રામ નિકાસ કરો',
@@ -47,7 +47,7 @@ export const hi: LanguageTranslation = {
 
         delete_diagram_alert: {
             title: 'ડાયાગ્રામ કાઢી નાખો',
-            description: 
+            description:
                 'આ ક્રિયા પરત નહીં લઇ શકાય. આ ડાયાગ્રામ કાયમ માટે કાઢી નાખવામાં આવશે.',
             cancel: 'રદ કરો',
             delete: 'કાઢી નાખો',
@@ -55,7 +55,7 @@ export const hi: LanguageTranslation = {
 
         clear_diagram_alert: {
             title: 'ડાયાગ્રામ સાફ કરો',
-            description: 
+            description:
                 'આ ક્રિયા પરત નહીં લઇ શકાય. આ ડાયાગ્રામમાં બધા ડેટા કાયમ માટે કાઢી નાખશે.',
             cancel: 'રદ કરો',
             clear: 'સાફ કરો',
@@ -63,7 +63,7 @@ export const hi: LanguageTranslation = {
 
         reorder_diagram_alert: {
             title: 'ડાયાગ્રામ ફરી વ્યવસ્થિત કરો',
-            description: 
+            description:
                 'આ ક્રિયા ડાયાગ્રામમાં બધી ટેબલ્સને ફરીથી વ્યવસ્થિત કરશે. શું તમે ચાલુ રાખવા માંગો છો?',
             reorder: 'ફરી વ્યવસ્થિત કરો',
             cancel: 'રદ કરો',
@@ -71,7 +71,7 @@ export const hi: LanguageTranslation = {
 
         multiple_schemas_alert: {
             title: 'કઈંક વધારે સ્કીમા',
-            description: 
+            description:
                 '{{schemasCount}} સ્કીમા આ ડાયાગ્રામમાં છે. હાલમાં દર્શાવેલ છે: {{formattedSchemas}}.',
             dont_show_again: 'ફરીથી ન બતાવો',
             change_schema: 'બદલો',
@@ -100,7 +100,6 @@ export const hi: LanguageTranslation = {
         show_less: 'ઓછું બતાવો',
         copy_to_clipboard: 'ક્લિપબોર્ડમાં નકલ કરો',
         copied: 'નકલ થયું!',
-
 
         side_panel: {
             schema: 'સ્કીમા:',
@@ -146,7 +145,7 @@ export const hi: LanguageTranslation = {
                         change_schema: 'સ્કીમા બદલો',
                         add_field: 'ફીલ્ડ ઉમેરો',
                         add_index: 'ઇન્ડેક્સ ઉમેરો',
-                        duplicate_table: 'ટેબલ ડુપ્લિકેટ કરો', 
+                        duplicate_table: 'ટેબલ ડુપ્લિકેટ કરો',
                         delete_table: 'ટેબલ કાઢી નાખો',
                     },
                 },
@@ -209,8 +208,7 @@ export const hi: LanguageTranslation = {
         new_diagram_dialog: {
             database_selection: {
                 title: 'તમારું ડેટાબેસ શું છે?',
-                description:
-                    'દરેક ડેટાબેસની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
+                description: 'દરેક ડેટાબેસની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
                 check_examples_long: 'ઉદાહરણ જુઓ',
                 check_examples_short: 'ઉદાહરણ',
             },
@@ -254,18 +252,18 @@ export const hi: LanguageTranslation = {
 
         export_sql_dialog: {
             title: 'SQL નિકાસ કરો',
-    description:
-        '{{databaseType}} સ્ક્રિપ્ટ માટે તમારું ડાયાગ્રામ સ્કીમા નિકાસ કરો',
-    close: 'બંધ કરો',
-    loading: {
-        text: '{{databaseType}} માટે AI SQL બનાવી રહ્યું છે...',
-        description: 'તેને 30 સેકંડ સુધીનો સમય લાગી શકે છે.',
-    },
-    error: {
-        message:
-            'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો અથવા <0>અમારો સંપર્ક કરો</0>.',
-        description:
-            'તમારા OPENAI_TOKEN નો ઉપયોગ કરવા માટે મફત અનુભવો, મેન્યુઅલ <0>અહીં જુઓ</0>.',
+            description:
+                '{{databaseType}} સ્ક્રિપ્ટ માટે તમારું ડાયાગ્રામ સ્કીમા નિકાસ કરો',
+            close: 'બંધ કરો',
+            loading: {
+                text: '{{databaseType}} માટે AI SQL બનાવી રહ્યું છે...',
+                description: 'તેને 30 સેકંડ સુધીનો સમય લાગી શકે છે.',
+            },
+            error: {
+                message:
+                    'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો અથવા <0>અમારો સંપર્ક કરો</0>.',
+                description:
+                    'તમારા OPENAI_TOKEN નો ઉપયોગ કરવા માટે મફત અનુભવો, મેન્યુઅલ <0>અહીં જુઓ</0>.',
             },
         },
 
@@ -287,20 +285,20 @@ export const hi: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'વર્તમાન ડાયાગ્રામમાં આયાત કરો',
-    override_alert: {
-        title: 'ડેટાબેસ આયાત કરો',
-        content: {
-            alert: 'આ ડાયાગ્રામ આયાત કરવાથી હાલના ટેબલ્સ અને સંબંધો પર અસર થશે.',
-            new_tables:
-                '<bold>{{newTablesNumber}}</bold> નવા ટેબલ ઉમેરવામાં આવશે.',
-            new_relationships:
-                '<bold>{{newRelationshipsNumber}}</bold> નવા સંબંધો બનાવવામાં આવશે.',
-            tables_override:
-                '<bold>{{tablesOverrideNumber}}</bold> ટેબલ ઓવરરાઇટ કરાશે.',
-            proceed: 'શું તમે આગળ વધવા માંગો છો?',
-        },
-        import: 'આયાત કરો',
-        cancel: 'રદ કરો',
+            override_alert: {
+                title: 'ડેટાબેસ આયાત કરો',
+                content: {
+                    alert: 'આ ડાયાગ્રામ આયાત કરવાથી હાલના ટેબલ્સ અને સંબંધો પર અસર થશે.',
+                    new_tables:
+                        '<bold>{{newTablesNumber}}</bold> નવા ટેબલ ઉમેરવામાં આવશે.',
+                    new_relationships:
+                        '<bold>{{newRelationshipsNumber}}</bold> નવા સંબંધો બનાવવામાં આવશે.',
+                    tables_override:
+                        '<bold>{{tablesOverrideNumber}}</bold> ટેબલ ઓવરરાઇટ કરાશે.',
+                    proceed: 'શું તમે આગળ વધવા માંગો છો?',
+                },
+                import: 'આયાત કરો',
+                cancel: 'રદ કરો',
             },
         },
 
@@ -317,10 +315,10 @@ export const hi: LanguageTranslation = {
 
         new_table_schema_dialog: {
             title: 'સ્કીમા પસંદ કરો',
-        description:
-            'વર્તમાનમાં ઘણા સ્કીમા દર્શાવવામાં આવે છે. નવું ટેબલ માટે એક પસંદ કરો.',
-        cancel: 'રદ કરો',
-        confirm: 'ખાતરી કરો',
+            description:
+                'વર્તમાનમાં ઘણા સ્કીમા દર્શાવવામાં આવે છે. નવું ટેબલ માટે એક પસંદ કરો.',
+            cancel: 'રદ કરો',
+            confirm: 'ખાતરી કરો',
         },
 
         update_table_schema_dialog: {
@@ -337,20 +335,20 @@ export const hi: LanguageTranslation = {
             close: 'હાલમાં નહીં',
             confirm: 'ખરેખર!',
         },
-        
+
         export_diagram_dialog: {
             title: 'ડાયાગ્રામ નિકાસ કરો',
             description: 'નિકાસ માટે ફોર્મેટ પસંદ કરો:',
             format_json: 'JSON',
             cancel: 'રદ કરો',
             export: 'નિકાસ કરો',
-    error: {
-            title: 'ડાયાગ્રામ નિકાસમાં ભૂલ',
-            description:
-                'કશુક તો ખોટું થયું. મદદ જોઈએ? chartdb.io@gmail.com પર સંપર્ક કરો.',
+            error: {
+                title: 'ડાયાગ્રામ નિકાસમાં ભૂલ',
+                description:
+                    'કશુક તો ખોટું થયું. મદદ જોઈએ? chartdb.io@gmail.com પર સંપર્ક કરો.',
             },
         },
-       
+
         import_diagram_dialog: {
             title: 'ડાયાગ્રામ આયાત કરો',
             description: 'નીચે ડાયાગ્રામ JSON પેસ્ટ કરો:',
@@ -360,8 +358,8 @@ export const hi: LanguageTranslation = {
                 title: 'ડાયાગ્રામ આયાતમાં ભૂલ',
                 description:
                     'ડાયાગ્રામ JSON અમાન્ય છે. કૃપા કરીને JSON તપાસો અને ફરી પ્રયાસ કરો. મદદ જોઈએ? chartdb.io@gmail.com પર સંપર્ક કરો.',
+            },
         },
-    },
         relationship_type: {
             one_to_one: 'એકથી એક',
             one_to_many: 'એકથી ઘણા',
@@ -376,18 +374,18 @@ export const hi: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'ટેબલ સંપાદિત કરો',
-            duplicate_table: 'ટેબલ નકલ કરો', 
+            duplicate_table: 'ટેબલ નકલ કરો',
             delete_table: 'ટેબલ કાઢી નાખો',
         },
 
-        snap_to_grid_tooltip: 'ગ્રિડ પર સ્નેપ કરો (જમાવટ {{key}})',,
+        snap_to_grid_tooltip: 'ગ્રિડ પર સ્નેપ કરો (જમાવટ {{key}})',
 
         tool_tips: {
             double_click_to_edit: 'સંપાદિત કરવા માટે ડબલ-ક્લિક કરો',
         },
 
         language_select: {
-            change_language:'ભાષા બદલો',
+            change_language: 'ભાષા બદલો',
         },
     },
 };
