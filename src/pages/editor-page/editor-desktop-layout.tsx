@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Collapsible from '@radix-ui/react-collapsible';
 import {
     ResizableHandle,
     ResizablePanel,
@@ -29,11 +28,7 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
                     'min-w-[350px]': isSidePanelShowed,
                 })}
             >
-                <Collapsible.Root open={isSidePanelShowed}>
-                    <Collapsible.Content>
-                        <SidePanel />
-                    </Collapsible.Content>
-                </Collapsible.Root>
+                <SidePanel />
             </ResizablePanel>
             <ResizableHandle disabled={!isSidePanelShowed} />
             <ResizablePanel defaultSize={75}>
