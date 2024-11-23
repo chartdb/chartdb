@@ -5,6 +5,7 @@ export enum KeyboardShortcutAction {
     UNDO = 'undo',
     OPEN_DIAGRAM = 'open_diagram',
     SAVE_DIAGRAM = 'save_diagram',
+    TOGGLE_SIDE_PANEL = 'toggle_side_panel',
 }
 
 export interface KeyboardShortcut {
@@ -46,6 +47,13 @@ export const keyboardShortcuts: Record<
         keyCombinationLabelWin: 'Ctrl+S',
         keyCombinationMac: 'meta+s',
         keyCombinationWin: 'ctrl+s',
+    },
+    [KeyboardShortcutAction.TOGGLE_SIDE_PANEL]: {
+        action: KeyboardShortcutAction.TOGGLE_SIDE_PANEL,
+        keyCombinationLabelMac: '⌘B',
+        keyCombinationLabelWin: 'Ctrl+B',
+        keyCombinationMac: 'meta+b',
+        keyCombinationWin: 'ctrl+b',
     },
 };
 
