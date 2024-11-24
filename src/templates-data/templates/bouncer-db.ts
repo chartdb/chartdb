@@ -50,7 +50,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -63,7 +62,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -199,7 +197,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -295,7 +292,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -308,7 +304,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -333,7 +328,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -447,7 +441,6 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -522,7 +515,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -617,7 +609,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -642,7 +633,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -726,7 +716,6 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -801,7 +790,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -814,7 +802,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -827,7 +814,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -898,7 +884,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -923,7 +908,6 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {

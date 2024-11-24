@@ -346,7 +346,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -518,7 +517,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                 ],
@@ -2164,7 +2162,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2177,7 +2174,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2398,7 +2394,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2411,7 +2406,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2675,7 +2669,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2688,7 +2681,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -2845,7 +2837,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -3096,7 +3087,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                 ],
@@ -3636,7 +3626,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -3724,7 +3713,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -3749,7 +3737,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -3786,7 +3773,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4105,7 +4091,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4118,7 +4103,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4131,7 +4115,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4144,7 +4127,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4217,7 +4199,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4266,7 +4247,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4279,7 +4259,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4316,7 +4295,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -4341,7 +4319,6 @@ export const feedbinDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                 ],
