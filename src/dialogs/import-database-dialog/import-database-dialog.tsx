@@ -323,7 +323,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex w-[90vw] flex-col overflow-y-auto md:overflow-visible xl:min-w-[45vw]"
+                className="flex max-h-screen w-[90vw] flex-col overflow-y-auto md:overflow-visible xl:min-w-[45vw]"
                 showClose
             >
                 <ImportDatabase
