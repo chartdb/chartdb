@@ -25,6 +25,12 @@ import { monicaDb } from './templates/monica-db';
 import { attendizeDb } from './templates/attendize-db';
 import { saasPegasusDb } from './templates/saas-pegasus-db';
 import { bookstackDb } from './templates/bookstack-db';
+import { bouncerDb } from './templates/bouncer-db';
+import { cabotDb } from './templates/cabot-db';
+import { feedbinDb } from './templates/feedbin-db';
+import { freescoutDb } from './templates/freescout-db';
+import { hackerNewsDb } from './templates/hacker-news-db';
+import { flarumDb } from './templates/flarum-db';
 export interface Template {
     slug: string;
     name: string;
@@ -65,4 +71,10 @@ export const templates: Template[] = [
     attendizeDb,
     saasPegasusDb,
     bookstackDb,
+    bouncerDb,
+    cabotDb,
+    feedbinDb,
+    freescoutDb,
+    hackerNewsDb,
+    flarumDb,
 ];
