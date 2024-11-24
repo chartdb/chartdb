@@ -10,7 +10,7 @@ export const monicaDb: Template = {
     description: 'Open Source eCommerce Framework on Symfony',
     image,
     imageDark,
-    tags: ['MySQL', 'Open Source', 'Laravel', 'Monica'],
+    tags: ['MySQL', 'Open Source', 'Laravel'],
     featured: true,
     url: 'https://github.com/monicahq/monica',
     diagram: {

@@ -5,6 +5,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -40,11 +41,13 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                     {t('new_diagram_dialog.database_selection.description')}
                 </DialogDescription>
             </DialogHeader>
-            <SelectDatabaseContent
-                databaseType={databaseType}
-                onContinue={onContinue}
-                setDatabaseType={setDatabaseType}
-            />
+            <DialogInternalContent>
+                <SelectDatabaseContent
+                    databaseType={databaseType}
+                    onContinue={onContinue}
+                    setDatabaseType={setDatabaseType}
+                />
+            </DialogInternalContent>
             <DialogFooter className="mt-4 flex !justify-between gap-2">
                 {hasExistingDiagram ? (
                     <DialogClose asChild>
