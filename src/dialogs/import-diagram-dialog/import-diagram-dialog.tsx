@@ -7,6 +7,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
@@ -87,7 +88,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                 }
             }}
         >
-            <DialogContent className="flex flex-col" showClose>
+            <DialogContent className="flex max-h-screen flex-col" showClose>
                 <DialogHeader>
                     <DialogTitle>
                         {t('import_diagram_dialog.title')}
@@ -96,23 +97,27 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                         {t('import_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-col p-1">
-                    <FileUploader
-                        supportedExtensions={['.json']}
-                        onFilesChange={onFileChange}
-                    />
-                    {error ? (
-                        <Alert variant="destructive" className="mt-2">
-                            <AlertCircle className="size-4" />
-                            <AlertTitle>
-                                {t('import_diagram_dialog.error.title')}
-                            </AlertTitle>
-                            <AlertDescription>
-                                {t('import_diagram_dialog.error.description')}
-                            </AlertDescription>
-                        </Alert>
-                    ) : null}
-                </div>
+                <DialogInternalContent>
+                    <div className="flex flex-col p-1">
+                        <FileUploader
+                            supportedExtensions={['.json']}
+                            onFilesChange={onFileChange}
+                        />
+                        {error ? (
+                            <Alert variant="destructive" className="mt-2">
+                                <AlertCircle className="size-4" />
+                                <AlertTitle>
+                                    {t('import_diagram_dialog.error.title')}
+                                </AlertTitle>
+                                <AlertDescription>
+                                    {t(
+                                        'import_diagram_dialog.error.description'
+                                    )}
+                                </AlertDescription>
+                            </Alert>
+                        ) : null}
+                    </div>
+                </DialogInternalContent>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>
                         <Button variant="secondary">

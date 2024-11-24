@@ -7,9 +7,9 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
-import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import {
     Table,
     TableBody,
@@ -74,7 +74,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex w-[90vw] flex-col overflow-y-auto md:w-screen xl:min-w-[55vw]"
+                className="flex h-[30rem] max-h-screen w-[90vw] flex-col overflow-y-auto md:w-screen xl:min-w-[55vw]"
                 showClose
             >
                 <DialogHeader>
@@ -83,9 +83,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                         {t('open_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-1 items-center justify-center">
-                    <ScrollArea className="h-80 w-full">
-                        <Table className="h-fit">
+                <DialogInternalContent>
+                    <div className="flex flex-1 items-center justify-center">
+                        <Table>
                             <TableHeader className="sticky top-0 bg-background">
                                 <TableRow>
                                     <TableHead />
@@ -155,8 +155,8 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 ))}
                             </TableBody>
                         </Table>
-                    </ScrollArea>
-                </div>
+                    </div>
+                </DialogInternalContent>
 
                 <DialogFooter className="flex !justify-between gap-2">
                     <DialogClose asChild>

@@ -7,6 +7,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Label } from '@/components/label/label';
@@ -151,7 +152,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-[80vh] flex-col overflow-y-auto xl:min-w-[75vw]"
+                className="flex max-h-screen flex-col overflow-y-auto xl:min-w-[75vw]"
                 showClose
             >
                 <DialogHeader>
@@ -167,23 +168,24 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                         })}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-1 items-center justify-center">
-                    {error ? (
-                        renderError()
-                    ) : script === undefined ? (
-                        renderLoader()
-                    ) : script.length === 0 ? (
-                        renderError()
-                    ) : (
-                        <CodeSnippet
-                            className="h-96 w-full"
-                            code={script!}
-                            autoScroll={true}
-                            isComplete={!isScriptLoading}
-                        />
-                    )}
-                </div>
-
+                <DialogInternalContent>
+                    <div className="flex flex-1 items-center justify-center">
+                        {error ? (
+                            renderError()
+                        ) : script === undefined ? (
+                            renderLoader()
+                        ) : script.length === 0 ? (
+                            renderError()
+                        ) : (
+                            <CodeSnippet
+                                className="h-96 w-full"
+                                code={script!}
+                                autoScroll={true}
+                                isComplete={!isScriptLoading}
+                            />
+                        )}
+                    </div>
+                </DialogInternalContent>
                 <DialogFooter className="flex !justify-between gap-2">
                     <div />
                     <DialogClose asChild>
