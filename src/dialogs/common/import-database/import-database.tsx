@@ -140,7 +140,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             setScriptResult(fixedJson);
             setErrorMessage('');
         } else {
-            setScriptResult(fixedJson);
             setErrorMessage(errorScriptOutputMessage);
         }
 
