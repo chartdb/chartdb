@@ -28,6 +28,9 @@ import { bookstackDb } from './templates/bookstack-db';
 import { bouncerDb } from './templates/bouncer-db';
 import { cabotDb } from './templates/cabot-db';
 import { feedbinDb } from './templates/feedbin-db';
+import { freescoutDb } from './templates/freescout-db';
+import { hackerNewsDb } from './templates/hacker-news-db';
+import { flarumDb } from './templates/flarum-db';
 export interface Template {
     slug: string;
     name: string;
@@ -71,4 +74,7 @@ export const templates: Template[] = [
     bouncerDb,
     cabotDb,
     feedbinDb,
+    freescoutDb,
+    hackerNewsDb,
+    flarumDb,
 ];
