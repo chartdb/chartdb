@@ -112,7 +112,7 @@ const DialogDescription = React.forwardRef<
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 const DialogInternalContent = React.forwardRef<
-    React.ElementRef<typeof DialogPrimitive.Title>,
+    React.ElementRef<typeof ScrollArea>,
     React.ComponentPropsWithoutRef<typeof ScrollArea>
 >(({ className, ...props }, ref) => (
     <ScrollArea
