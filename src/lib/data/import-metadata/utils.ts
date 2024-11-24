@@ -15,6 +15,9 @@ export const fixMetadataJson = async (
             .replace(/^\s+|\s+$/g, '')
             .replace(/^"|"$/g, '')
             .replace(/^'|'$/g, '')
+            .replace(/""""/g, '""') // Remove Quadruple quotes from keys
+            .replace(/"""([^",}]+)"""/g, '"$1"') // Remove tripple quotes from keys
+            .replace(/""([^",}]+)""/g, '"$1"') // Remove double quotes from keys
             /* eslint-disable-next-line no-useless-escape */
             .replace(/\"/g, '___ESCAPED_QUOTE___') // Temporarily replace empty strings
             .replace(/(?<=:\s*)""(?=\s*[,}])/g, '___EMPTY___') // Temporarily replace empty strings
