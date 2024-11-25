@@ -1,4 +1,4 @@
-import type { LanguageTranslation, LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 const pt_BR = {
     menu: {
