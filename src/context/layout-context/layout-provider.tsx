@@ -36,6 +36,10 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const showSidePanel: LayoutContext['showSidePanel'] = () =>
         setIsSidePanelShowed(true);
 
+    const toggleSidePanel: LayoutContext['toggleSidePanel'] = () => {
+        setIsSidePanelShowed((prevIsSidePanelShowed) => !prevIsSidePanelShowed);
+    };
+
     const openTableFromSidebar: LayoutContext['openTableFromSidebar'] = (
         tableId
     ) => {
@@ -77,6 +81,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 isSidePanelShowed,
                 hideSidePanel,
                 showSidePanel,
+                toggleSidePanel,
                 isSelectSchemaOpen,
                 openSelectSchema,
                 closeSelectSchema,

@@ -8,6 +8,7 @@ import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
 import { useLayout } from '@/hooks/use-layout';
 import type { Diagram } from '@/lib/domain/diagram';
+import { cn } from '@/lib/utils';
 
 export interface EditorDesktopLayoutProps {
     initialDiagram?: Diagram;
@@ -23,12 +24,13 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
                 defaultSize={25}
                 minSize={25}
                 maxSize={isSidePanelShowed ? 99 : 0}
-                // eslint-disable-next-line
-                className="transition-[flex-grow] duration-200 min-w-[350px]"
+                className={cn('transition-[flex-grow] duration-200', {
+                    'min-w-[350px]': isSidePanelShowed,
+                })}
             >
                 <SidePanel />
             </ResizablePanel>
-            <ResizableHandle />
+            <ResizableHandle disabled={!isSidePanelShowed} />
             <ResizablePanel defaultSize={75}>
                 <Canvas initialTables={initialDiagram?.tables ?? []} />
             </ResizablePanel>

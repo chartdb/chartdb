@@ -467,6 +467,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                 {isSidePanelShowed
                                     ? t('menu.view.hide_sidebar')
                                     : t('menu.view.show_sidebar')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction
+                                                .TOGGLE_SIDE_PANEL
+                                        ].keyCombinationLabel
+                                    }
+                                </MenubarShortcut>
                             </MenubarItem>
                             <MenubarSeparator />
                             <MenubarItem onClick={showOrHideCardinality}>

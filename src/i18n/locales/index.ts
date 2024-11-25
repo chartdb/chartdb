@@ -14,5 +14,6 @@ export * from './ru';
 export * from './te';
 export * from './tr';
 export * from './uk';
+export * from './vi';
 export * from './zh_CN';
 export * from './zh_TW';
