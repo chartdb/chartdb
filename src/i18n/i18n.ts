@@ -22,6 +22,12 @@ export const languageMetadatas = Object.entries(
         (exports) => exports[1]
     ) satisfies LanguageMetadata[];
 
+type EnsureAllExportsHandled<Keys extends never> = Keys;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type Test = EnsureAllExportsHandled<
+    Exclude<keyof Locales, MetadataKeys | DeliberatelyAllowedAdditionalExports>
+>;
+
 export const resources = languageMetadatas.reduce(
     (acc, { code, translation }) => ({ ...acc, [code]: { translation } }),
     {} as {
