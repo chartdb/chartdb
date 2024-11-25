@@ -8,6 +8,7 @@ import {
 import { useHistory } from '@/hooks/use-history';
 import { useDialog } from '@/hooks/use-dialog';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useLayout } from '@/hooks/use-layout';
 
 export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -15,6 +16,8 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     const { redo, undo } = useHistory();
     const { openOpenDiagramDialog } = useDialog();
     const { updateDiagramUpdatedAt } = useChartDB();
+    const { toggleSidePanel } = useLayout();
+
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.REDO].keyCombination,
         redo,
@@ -48,6 +51,15 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
             preventDefault: true,
         },
         [updateDiagramUpdatedAt]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.TOGGLE_SIDE_PANEL]
+            .keyCombination,
+        toggleSidePanel,
+        {
+            preventDefault: true,
+        },
+        [toggleSidePanel]
     );
 
     return (
