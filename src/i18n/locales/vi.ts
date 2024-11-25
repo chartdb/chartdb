@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const vi = {
+export const vi: LanguageTranslation = {
     translation: {
         menu: {
             file: {
