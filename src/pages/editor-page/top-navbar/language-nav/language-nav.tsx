@@ -17,7 +17,7 @@ import type {
     SelectBoxProps,
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
-import { languageMetadatas } from '@/i18n/i18n';
+import { languageMetadatas } from '@/i18n/locales';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/button/button-variants';
 
