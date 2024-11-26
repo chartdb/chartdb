@@ -96,7 +96,11 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
 ### Running the Docker Container
+```bash
+docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
+```
 
+#### Build & run Docker image locally
 ```bash
 docker build -t chartdb . (If you want AI capabilities, use `docker build --build-arg VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -t chartdb .`)
 docker run -p 8080:80 chartdb
