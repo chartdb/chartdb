@@ -106,7 +106,6 @@ docker build -t chartdb . (If you want AI capabilities, use `docker build --buil
 docker run -p 8080:80 chartdb
 ```
 
-
 Open your browser and navigate to `http://localhost:8080`.
 
 ## Try it on our website
