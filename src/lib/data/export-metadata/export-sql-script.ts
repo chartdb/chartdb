@@ -219,7 +219,7 @@ export const exportSQL = async (
     ]);
 
     const openai = createOpenAI({
-        apiKey: OPENAI_API_KEY,
+        apiKey: window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY,
     });
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);

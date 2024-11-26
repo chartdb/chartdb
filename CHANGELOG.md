@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/chartdb/chartdb/compare/v1.3.0...v1.3.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **docker:** make OPENAI_API_KEY optional in docker run ([#448](https://github.com/chartdb/chartdb/issues/448)) ([4bb4766](https://github.com/chartdb/chartdb/commit/4bb4766e1ac8d69e138668eb8a46de5affe62ceb))
+
 ## [1.3.0](https://github.com/chartdb/chartdb/compare/v1.2.0...v1.3.0) (2024-11-25)
 
 
