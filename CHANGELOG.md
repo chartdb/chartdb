@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.3.1](https://github.com/chartdb/chartdb/compare/v1.3.0...v1.3.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **docker:** make OPENAI_API_KEY optional in docker run ([#448](https://github.com/chartdb/chartdb/issues/448)) ([4bb4766](https://github.com/chartdb/chartdb/commit/4bb4766e1ac8d69e138668eb8a46de5affe62ceb))
+
+## [1.3.0](https://github.com/chartdb/chartdb/compare/v1.2.0...v1.3.0) (2024-11-25)
+
+
+### Features
+
+* **side panel:** collapsible side panel on desktop view + keyboard shortcut ([#439](https://github.com/chartdb/chartdb/issues/439)) ([70f545f](https://github.com/chartdb/chartdb/commit/70f545f78bab9c510a6e5936fa5b259b806b6c69))
+
+
+### Bug Fixes
+
+* **dialogs:** fix height of dialogs for small screens ([#440](https://github.com/chartdb/chartdb/issues/440)) ([667685e](https://github.com/chartdb/chartdb/commit/667685ed0f6a8cc61ae86b3ba60e052fbe6a9e1a))
+* **drawer:** set fix min size ([#429](https://github.com/chartdb/chartdb/issues/429)) ([c5e0ea6](https://github.com/chartdb/chartdb/commit/c5e0ea6fa4017666ff3bc1e3071c487df48afd3d))
+* **export-sql:** add unique to export script ([#422](https://github.com/chartdb/chartdb/issues/422)) ([b75c6fe](https://github.com/chartdb/chartdb/commit/b75c6fe4e78f3e2058be680f2fa0442db3b4a6bd))
+* fix layout warnings ([#434](https://github.com/chartdb/chartdb/issues/434)) ([94ec43b](https://github.com/chartdb/chartdb/commit/94ec43b60845bb8c3592ce1b1450ca0171a53f99))
+* **i18n:** add bahasa indonesia translation ([#331](https://github.com/chartdb/chartdb/issues/331)) ([ab07da0](https://github.com/chartdb/chartdb/commit/ab07da0b031f0d4050ff6b44ddcb94cb6c0010b6))
+* **i18n:** add missing type to vi.ts ([#444](https://github.com/chartdb/chartdb/issues/444)) ([e77ee60](https://github.com/chartdb/chartdb/commit/e77ee60a5b47e0854d11b0ee2f16d6956737d0ff))
+* **i18n:** Add Telugu Language ([#352](https://github.com/chartdb/chartdb/issues/352)) ([8749591](https://github.com/chartdb/chartdb/commit/8749591be036e131de4bfeed1e6eece8d62980dd))
+* **i18n:** add Turkish translations ([#315](https://github.com/chartdb/chartdb/issues/315)) ([d9fcbee](https://github.com/chartdb/chartdb/commit/d9fcbeec726b7bde9f7d202bf09dc6b617e3ad80))
+* **i18n:** add Vietnamese translations ([#435](https://github.com/chartdb/chartdb/issues/435)) ([6c65c2e](https://github.com/chartdb/chartdb/commit/6c65c2e9cce600b9778b84ce5b5f1625dc6f1a58))
+* **i18n:** Translating to Gujarati language ([#433](https://github.com/chartdb/chartdb/issues/433)) ([2940431](https://github.com/chartdb/chartdb/commit/2940431efa1a6aa54d80c61d5e05f0ad47cd67ba))
+* **i18n:** Translation of the export error into Russian ([#418](https://github.com/chartdb/chartdb/issues/418)) ([7c3c628](https://github.com/chartdb/chartdb/commit/7c3c62860efc98d3aabf2132a79ac945ffc8315a))
+* **i18n:** update korean for 1.2.0 ([#419](https://github.com/chartdb/chartdb/issues/419)) ([8397bef](https://github.com/chartdb/chartdb/commit/8397bef3924610d94661aae99c55ba4fa376a186))
+* **import script:** remove double quotes ([#442](https://github.com/chartdb/chartdb/issues/442)) ([fb702c8](https://github.com/chartdb/chartdb/commit/fb702c87ce5254bf6e0209c692305f5086956090))
+* **share:** fix export to handle broken indexes & relationships ([#416](https://github.com/chartdb/chartdb/issues/416)) ([4be3592](https://github.com/chartdb/chartdb/commit/4be3592cf4d160be83ddf1db01ffe9afdef119fa))
+* **templates:** add Five more templates (bouncer, cabot, feedbin, Pythonic, flarum, freescout) ([#441](https://github.com/chartdb/chartdb/issues/441)) ([eaa0678](https://github.com/chartdb/chartdb/commit/eaa067814fd96fcc1ee10488ee747a71a8e8ec7a))
+
 ## [1.2.0](https://github.com/chartdb/chartdb/compare/v1.1.0...v1.2.0) (2024-11-17)
 
 

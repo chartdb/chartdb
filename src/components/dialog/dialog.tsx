@@ -3,6 +3,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '../scroll-area/scroll-area';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -110,6 +111,18 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+const DialogInternalContent = React.forwardRef<
+    React.ElementRef<typeof ScrollArea>,
+    React.ComponentPropsWithoutRef<typeof ScrollArea>
+>(({ className, ...props }, ref) => (
+    <ScrollArea
+        ref={ref}
+        className={cn('flex max-h-screen flex-col overflow-y-auto', className)}
+        {...props}
+    />
+));
+DialogInternalContent.displayName = 'DialogInternalContent';
+
 export {
     Dialog,
     DialogPortal,
@@ -121,4 +134,5 @@ export {
     DialogFooter,
     DialogTitle,
     DialogDescription,
+    DialogInternalContent,
 };

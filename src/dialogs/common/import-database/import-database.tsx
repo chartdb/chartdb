@@ -5,6 +5,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
@@ -139,6 +140,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             setScriptResult(fixedJson);
             setErrorMessage('');
         } else {
+            setScriptResult(fixedJson);
             setErrorMessage(errorScriptOutputMessage);
         }
 
@@ -157,188 +159,201 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const renderContent = useCallback(() => {
         return (
-            <div className="flex w-full flex-1 flex-col gap-6">
-                {databaseTypeToEditionMap[databaseType].length > 0 ? (
-                    <div className="flex flex-col gap-1 md:flex-row">
-                        <p className="text-sm leading-6 text-muted-foreground">
-                            {t(
-                                'new_diagram_dialog.import_database.database_edition'
-                            )}
-                        </p>
-                        <ToggleGroup
-                            type="single"
-                            className="ml-1 flex-wrap gap-2"
-                            value={
-                                !databaseEdition ? 'regular' : databaseEdition
-                            }
-                            onValueChange={(value) => {
-                                setDatabaseEdition(
-                                    value === 'regular'
-                                        ? undefined
-                                        : (value as DatabaseEdition)
-                                );
-                            }}
-                        >
-                            <ToggleGroupItem
-                                value="regular"
-                                variant="outline"
-                                className="h-6 gap-1 p-0 px-2 shadow-none"
+            <DialogInternalContent>
+                <div className="flex w-full flex-1 flex-col gap-6">
+                    {databaseTypeToEditionMap[databaseType].length > 0 ? (
+                        <div className="flex flex-col gap-1 md:flex-row">
+                            <p className="text-sm leading-6 text-muted-foreground">
+                                {t(
+                                    'new_diagram_dialog.import_database.database_edition'
+                                )}
+                            </p>
+                            <ToggleGroup
+                                type="single"
+                                className="ml-1 flex-wrap gap-2"
+                                value={
+                                    !databaseEdition
+                                        ? 'regular'
+                                        : databaseEdition
+                                }
+                                onValueChange={(value) => {
+                                    setDatabaseEdition(
+                                        value === 'regular'
+                                            ? undefined
+                                            : (value as DatabaseEdition)
+                                    );
+                                }}
                             >
-                                <Avatar className="size-4 rounded-none">
-                                    <AvatarImage
-                                        src={
-                                            databaseSecondaryLogoMap[
-                                                databaseType
-                                            ]
-                                        }
-                                        alt="Regular"
-                                    />
-                                    <AvatarFallback>Regular</AvatarFallback>
-                                </Avatar>
-                                Regular
-                            </ToggleGroupItem>
-                            {databaseTypeToEditionMap[databaseType].map(
-                                (edition) => (
-                                    <ToggleGroupItem
-                                        value={edition}
-                                        key={edition}
-                                        variant="outline"
-                                        className="h-6 gap-1 p-0 px-2 shadow-none"
-                                    >
-                                        <Avatar className="size-4">
-                                            <AvatarImage
-                                                src={
-                                                    databaseEditionToImageMap[
-                                                        edition
-                                                    ]
-                                                }
-                                                alt={
-                                                    databaseEditionToLabelMap[
-                                                        edition
-                                                    ]
-                                                }
-                                            />
-                                            <AvatarFallback>
-                                                {
-                                                    databaseEditionToLabelMap[
-                                                        edition
-                                                    ]
-                                                }
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        {databaseEditionToLabelMap[edition]}
-                                    </ToggleGroupItem>
-                                )
-                            )}
-                        </ToggleGroup>
-                    </div>
-                ) : null}
-                <div className="flex flex-col gap-1">
-                    <div className="flex flex-col gap-1 text-sm text-muted-foreground md:flex-row md:justify-between">
-                        <div>
-                            1. {t('new_diagram_dialog.import_database.step_1')}
-                        </div>
-                        {databaseType === DatabaseType.SQL_SERVER && (
-                            <SSMSInfo />
-                        )}
-                    </div>
-                    {databaseTypeToClientsMap[databaseType].length > 0 ? (
-                        <Tabs
-                            value={
-                                !databaseClient ? 'dbclient' : databaseClient
-                            }
-                            onValueChange={(value) => {
-                                setDatabaseClient(
-                                    value === 'dbclient'
-                                        ? undefined
-                                        : (value as DatabaseClient)
-                                );
-                            }}
-                        >
-                            <div className="flex flex-1">
-                                <TabsList className="h-8 justify-start rounded-none rounded-t-sm ">
-                                    <TabsTrigger
-                                        value="dbclient"
-                                        className="h-6 w-20"
-                                    >
-                                        DB Client
-                                    </TabsTrigger>
-
-                                    {databaseClients?.map((client) => (
-                                        <TabsTrigger
-                                            key={client}
-                                            value={client}
-                                            className="h-6 !w-20"
+                                <ToggleGroupItem
+                                    value="regular"
+                                    variant="outline"
+                                    className="h-6 gap-1 p-0 px-2 shadow-none"
+                                >
+                                    <Avatar className="size-4 rounded-none">
+                                        <AvatarImage
+                                            src={
+                                                databaseSecondaryLogoMap[
+                                                    databaseType
+                                                ]
+                                            }
+                                            alt="Regular"
+                                        />
+                                        <AvatarFallback>Regular</AvatarFallback>
+                                    </Avatar>
+                                    Regular
+                                </ToggleGroupItem>
+                                {databaseTypeToEditionMap[databaseType].map(
+                                    (edition) => (
+                                        <ToggleGroupItem
+                                            value={edition}
+                                            key={edition}
+                                            variant="outline"
+                                            className="h-6 gap-1 p-0 px-2 shadow-none"
                                         >
-                                            {databaseClientToLabelMap[client]}
-                                        </TabsTrigger>
-                                    )) ?? []}
-                                </TabsList>
+                                            <Avatar className="size-4">
+                                                <AvatarImage
+                                                    src={
+                                                        databaseEditionToImageMap[
+                                                            edition
+                                                        ]
+                                                    }
+                                                    alt={
+                                                        databaseEditionToLabelMap[
+                                                            edition
+                                                        ]
+                                                    }
+                                                />
+                                                <AvatarFallback>
+                                                    {
+                                                        databaseEditionToLabelMap[
+                                                            edition
+                                                        ]
+                                                    }
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            {databaseEditionToLabelMap[edition]}
+                                        </ToggleGroupItem>
+                                    )
+                                )}
+                            </ToggleGroup>
+                        </div>
+                    ) : null}
+                    <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1 text-sm text-muted-foreground md:flex-row md:justify-between">
+                            <div>
+                                1.{' '}
+                                {t('new_diagram_dialog.import_database.step_1')}
                             </div>
+                            {databaseType === DatabaseType.SQL_SERVER && (
+                                <SSMSInfo />
+                            )}
+                        </div>
+                        {databaseTypeToClientsMap[databaseType].length > 0 ? (
+                            <Tabs
+                                value={
+                                    !databaseClient
+                                        ? 'dbclient'
+                                        : databaseClient
+                                }
+                                onValueChange={(value) => {
+                                    setDatabaseClient(
+                                        value === 'dbclient'
+                                            ? undefined
+                                            : (value as DatabaseClient)
+                                    );
+                                }}
+                            >
+                                <div className="flex flex-1">
+                                    <TabsList className="h-8 justify-start rounded-none rounded-t-sm ">
+                                        <TabsTrigger
+                                            value="dbclient"
+                                            className="h-6 w-20"
+                                        >
+                                            DB Client
+                                        </TabsTrigger>
+
+                                        {databaseClients?.map((client) => (
+                                            <TabsTrigger
+                                                key={client}
+                                                value={client}
+                                                className="h-6 !w-20"
+                                            >
+                                                {
+                                                    databaseClientToLabelMap[
+                                                        client
+                                                    ]
+                                                }
+                                            </TabsTrigger>
+                                        )) ?? []}
+                                    </TabsList>
+                                </div>
+                                <CodeSnippet
+                                    className="h-40 w-full"
+                                    loading={!importMetadataScripts}
+                                    code={
+                                        importMetadataScripts?.[databaseType]?.(
+                                            {
+                                                databaseEdition,
+                                                databaseClient,
+                                            }
+                                        ) ?? ''
+                                    }
+                                    language={databaseClient ? 'shell' : 'sql'}
+                                />
+                            </Tabs>
+                        ) : (
                             <CodeSnippet
-                                className="h-40 w-full"
+                                className="h-40 w-full flex-auto"
                                 loading={!importMetadataScripts}
                                 code={
                                     importMetadataScripts?.[databaseType]?.({
                                         databaseEdition,
-                                        databaseClient,
                                     }) ?? ''
                                 }
-                                language={databaseClient ? 'shell' : 'sql'}
+                                language="sql"
                             />
-                        </Tabs>
-                    ) : (
-                        <CodeSnippet
-                            className="h-40 w-full flex-auto"
-                            loading={!importMetadataScripts}
-                            code={
-                                importMetadataScripts?.[databaseType]?.({
-                                    databaseEdition,
-                                }) ?? ''
-                            }
-                            language="sql"
-                        />
-                    )}
-                </div>
-                <div className="flex h-48 flex-col gap-1">
-                    <p className="text-sm text-muted-foreground">
-                        2. {t('new_diagram_dialog.import_database.step_2')}
-                    </p>
-                    <Textarea
-                        className="w-full flex-1 rounded-md bg-muted p-2 text-sm"
-                        placeholder={t(
-                            'new_diagram_dialog.import_database.script_results_placeholder'
                         )}
-                        value={scriptResult}
-                        onChange={handleInputChange}
-                    />
-                    {showCheckJsonButton || errorMessage ? (
-                        <div className="mt-2 flex items-center gap-2">
-                            {showCheckJsonButton ? (
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleCheckJson}
-                                    disabled={isCheckingJson}
-                                >
-                                    {isCheckingJson ? (
-                                        <Spinner size="small" />
-                                    ) : (
-                                        t(
-                                            'new_diagram_dialog.import_database.check_script_result'
-                                        )
-                                    )}
-                                </Button>
-                            ) : (
-                                <p className="text-sm text-red-700">
-                                    {errorMessage}
-                                </p>
+                    </div>
+                    <div className="flex h-48 flex-col gap-1">
+                        <p className="text-sm text-muted-foreground">
+                            2. {t('new_diagram_dialog.import_database.step_2')}
+                        </p>
+                        <Textarea
+                            className="w-full flex-1 rounded-md bg-muted p-2 text-sm"
+                            placeholder={t(
+                                'new_diagram_dialog.import_database.script_results_placeholder'
                             )}
-                        </div>
-                    ) : null}
+                            value={scriptResult}
+                            onChange={handleInputChange}
+                        />
+                        {showCheckJsonButton || errorMessage ? (
+                            <div className="mt-2 flex items-center gap-2">
+                                {showCheckJsonButton ? (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleCheckJson}
+                                        disabled={isCheckingJson}
+                                    >
+                                        {isCheckingJson ? (
+                                            <Spinner size="small" />
+                                        ) : (
+                                            t(
+                                                'new_diagram_dialog.import_database.check_script_result'
+                                            )
+                                        )}
+                                    </Button>
+                                ) : (
+                                    <p className="text-sm text-red-700">
+                                        {errorMessage}
+                                    </p>
+                                )}
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
-            </div>
+            </DialogInternalContent>
         );
     }, [
         databaseEdition,
