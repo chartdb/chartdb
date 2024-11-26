@@ -102,6 +102,11 @@ docker build -t chartdb . (If you want AI capabilities, use `docker build --buil
 docker run -p 8080:80 chartdb
 ```
 
+#### Run locally from GitHub Container Registry
+```bash
+docker run -p 8080:80 --rm -it ghcr.io/chartdb/chartdb:latest
+```
+
 Open your browser and navigate to `http://localhost:8080`.
 
 ## Try it on our website
