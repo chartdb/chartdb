@@ -96,16 +96,16 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
 ### Running the Docker Container
+```bash
+docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
+```
 
+#### Build & run Docker Image locally
 ```bash
 docker build -t chartdb . (If you want AI capabilities, use `docker build --build-arg VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -t chartdb .`)
 docker run -p 8080:80 chartdb
 ```
 
-#### Run locally from GitHub Container Registry
-```bash
-docker run -p 8080:80 --rm -it ghcr.io/chartdb/chartdb:latest
-```
 
 Open your browser and navigate to `http://localhost:8080`.
 
