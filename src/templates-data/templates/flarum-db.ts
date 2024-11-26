@@ -14,8 +14,8 @@ export const flarumDb: Template = {
     featured: false,
     url: 'https://flarum.org',
     diagram: {
-        id: 'diagramexample27',
-        name: 'flarum-db',
+        id: 'flarum_db',
+        name: 'flarum-database',
         createdAt: new Date(),
         updatedAt: new Date(),
         databaseType: DatabaseType.POSTGRESQL,
