@@ -134,7 +134,6 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                     {
@@ -147,7 +146,6 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        character_maximum_length: '255',
                         createdAt: Date.now(),
                     },
                 ],
