@@ -8,6 +8,11 @@ server {
 	    try_files  $uri $uri/ /index.html;
     }
 
+    location /config.js {
+        default_type application/javascript;
+        return 200 "window.env = { OPENAI_API_KEY: \"$OPENAI_API_KEY\" };";
+    }
+
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   /usr/share/nginx/html;
