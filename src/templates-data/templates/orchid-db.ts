@@ -13,7 +13,7 @@ export const orchidDb: Template = {
     imageDark,
     tags: ['Postgres', 'Open Source', 'Laravel', 'PHP'],
     featured: false,
-    url: 'https://drawsql.app/templates/orchid',
+    url: 'https://github.com/orchidsoftware/platform',
     diagram: {
         id: 'orchid_db',
         name: 'orchid-database',
