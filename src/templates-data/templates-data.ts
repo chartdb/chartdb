@@ -31,6 +31,18 @@ import { feedbinDb } from './templates/feedbin-db';
 import { freescoutDb } from './templates/freescout-db';
 import { hackerNewsDb } from './templates/hacker-news-db';
 import { flarumDb } from './templates/flarum-db';
+import { canvasDb } from './templates/canvas-db';
+import { taggitDb } from './templates/taggit-db';
+import { doorkeeperDb } from './templates/doorkeeper-db';
+import { orchidDb } from './templates/orchid-db';
+import { flipperDb } from './templates/flipper-db';
+import { cachetDb } from './templates/cachet-db';
+import { reversionDb } from './templates/reversion-db';
+import { screeenlyDb } from './templates/screeenly-db';
+import { staytusDb } from './templates/staytus-db';
+import { deployerDb } from './templates/deployer-db';
+import { deviseDb } from './templates/devise-db';
+import { talkDb } from './templates/talk-db';
 export interface Template {
     slug: string;
     name: string;
@@ -77,4 +89,16 @@ export const templates: Template[] = [
     freescoutDb,
     hackerNewsDb,
     flarumDb,
+    canvasDb,
+    taggitDb,
+    doorkeeperDb,
+    orchidDb,
+    flipperDb,
+    cachetDb,
+    reversionDb,
+    screeenlyDb,
+    staytusDb,
+    deployerDb,
+    deviseDb,
+    talkDb,
 ];
