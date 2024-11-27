@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TimeAgo from 'timeago-react';
-import { register as registerLocale } from 'timeago.js';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Badge } from '@/components/badge/badge';
 import {
@@ -10,39 +9,83 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
-
-import en from 'timeago.js/lib/lang/en_US';
-import es from 'timeago.js/lib/lang/es';
-import fr from 'timeago.js/lib/lang/fr';
-import de from 'timeago.js/lib/lang/de';
-import hi from 'timeago.js/lib/lang/hi_IN';
-import ja from 'timeago.js/lib/lang/ja';
-import ko from 'timeago.js/lib/lang/ko';
-import pt from 'timeago.js/lib/lang/pt_BR';
-import uk from 'timeago.js/lib/lang/uk';
-import ru from 'timeago.js/lib/lang/ru';
-import zh_CN from 'timeago.js/lib/lang/zh_CN';
-import zh_TW from 'timeago.js/lib/lang/zh_TW';
-
-registerLocale('en', en);
-registerLocale('es', es);
-registerLocale('fr', fr);
-registerLocale('de', de);
-registerLocale('hi', hi);
-registerLocale('ja', ja);
-registerLocale('ko_KR', ko);
-registerLocale('pt_BR', pt);
-registerLocale('uk', uk);
-registerLocale('ru', ru);
-registerLocale('zh_CN', zh_CN);
-registerLocale('zh_TW', zh_TW);
-
+import type { LocaleFunc } from 'timeago.js';
+import { register as registerLocale } from 'timeago.js';
 export interface LastSavedProps {}
+
+const timeAgolocaleFromLanguage = async (
+    language: string
+): Promise<{ locale: LocaleFunc; lang: string }> => {
+    let locale: LocaleFunc;
+    let lang: string;
+    switch (language) {
+        case 'es':
+            locale = (await import('timeago.js/lib/lang/es')).default;
+            lang = 'es';
+            break;
+        case 'fr':
+            locale = (await import('timeago.js/lib/lang/fr')).default;
+            lang = 'fr';
+            break;
+        case 'de':
+            locale = (await import('timeago.js/lib/lang/de')).default;
+            lang = 'de';
+            break;
+        case 'hi':
+            locale = (await import('timeago.js/lib/lang/hi_IN')).default;
+            lang = 'hi_IN';
+            break;
+        case 'ja':
+            locale = (await import('timeago.js/lib/lang/ja')).default;
+            lang = 'ja';
+            break;
+        case 'ko_KR':
+            locale = (await import('timeago.js/lib/lang/ko')).default;
+            lang = 'ko';
+            break;
+        case 'ru':
+            locale = (await import('timeago.js/lib/lang/ru')).default;
+            lang = 'ru';
+            break;
+        case 'zh_CN':
+            locale = (await import('timeago.js/lib/lang/zh_CN')).default;
+            lang = 'zh_CN';
+            break;
+        case 'zh_TW':
+            locale = (await import('timeago.js/lib/lang/zh_TW')).default;
+            lang = 'zh_TW';
+            break;
+        case 'pt_BR':
+            locale = (await import('timeago.js/lib/lang/pt_BR')).default;
+            lang = 'pt_BR';
+            break;
+        default:
+            locale = (await import('timeago.js/lib/lang/en_US')).default;
+            lang = 'en_US';
+            break;
+    }
+    return { locale, lang };
+};
 
 export const LastSaved: React.FC<LastSavedProps> = () => {
     const { currentDiagram } = useChartDB();
     const { t, i18n } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
+    const [language, setLanguage] = useState<string>('en_US');
+
+    useEffect(() => {
+        const updateLocale = async () => {
+            const { locale, lang } = await timeAgolocaleFromLanguage(
+                i18n.language
+            );
+
+            registerLocale(i18n.language, locale);
+            setLanguage(lang);
+        };
+
+        updateLocale();
+    }, [i18n.language]);
+
     return (
         <Tooltip>
             <TooltipTrigger>
@@ -50,7 +93,7 @@ export const LastSaved: React.FC<LastSavedProps> = () => {
                     {isDesktop ? t('last_saved') : t('saved')}
                     <TimeAgo
                         datetime={currentDiagram.updatedAt}
-                        locale={i18n.language}
+                        locale={language}
                     />
                 </Badge>
             </TooltipTrigger>
