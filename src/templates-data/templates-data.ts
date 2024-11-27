@@ -37,6 +37,12 @@ import { doorkeeperDb } from './templates/doorkeeper-db';
 import { orchidDb } from './templates/orchid-db';
 import { flipperDb } from './templates/flipper-db';
 import { cachetDb } from './templates/cachet-db';
+import { reversionDb } from './templates/reversion-db';
+import { screeenlyDb } from './templates/screeenly-db';
+import { staytusDb } from './templates/staytus-db';
+import { deployerDb } from './templates/deployer-db';
+import { deviseDb } from './templates/devise-db';
+import { talkDb } from './templates/talk-db';
 export interface Template {
     slug: string;
     name: string;
@@ -89,4 +95,10 @@ export const templates: Template[] = [
     orchidDb,
     flipperDb,
     cachetDb,
+    reversionDb,
+    screeenlyDb,
+    staytusDb,
+    deployerDb,
+    deviseDb,
+    talkDb,
 ];
