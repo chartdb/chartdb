@@ -1,6 +1,6 @@
-import type { LanguageMetadata } from '../types';
+import type { LanguageMetadata, LanguageTranslation } from '../types';
 
-export const bn = {
+export const bn: LanguageTranslation = {
     translation: {
         menu: {
             file: {
@@ -206,7 +206,8 @@ export const bn = {
         new_diagram_dialog: {
             database_selection: {
                 title: 'আপনার ডাটাবেস কী?',
-                description: 'প্রতিটি ডাটাবেসের নিজস্ব বৈশিষ্ট্য এবং ক্ষমতা রয়েছে।',
+                description:
+                    'প্রতিটি ডাটাবেসের নিজস্ব বৈশিষ্ট্য এবং ক্ষমতা রয়েছে।',
                 check_examples_long: 'উদাহরণ দেখুন',
                 check_examples_short: 'উদাহরণ',
             },
