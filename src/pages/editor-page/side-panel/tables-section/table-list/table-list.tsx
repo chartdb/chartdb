@@ -59,34 +59,20 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
             );
             const newIndex = tables.findIndex((table) => table.id === over.id);
 
-            const orderingTables: DBTable[] = arrayMove<DBTable>(
+            const tablesOrders = arrayMove<DBTable>(
                 tables,
                 oldIndex,
                 newIndex
-            );
+            ).reduce((acc, table, index) => {
+                acc.set(table.id, index);
+                return acc;
+            }, new Map<string, number>());
 
-            updateTablesState((currentTables: DBTable[]) =>
-                currentTables.map((currentTable: DBTable) => {
-                    let currentIndex: number = -1;
-
-                    for (let i = 0; i < orderingTables.length; i++) {
-                        const updatedTable: DBTable | undefined =
-                            orderingTables[i];
-
-                        if (
-                            updatedTable &&
-                            updatedTable.id === currentTable.id
-                        ) {
-                            currentIndex = i;
-                        }
-                    }
-
-                    if (currentIndex != -1) {
-                        currentTable.order = currentIndex;
-                    }
-
-                    return currentTable;
-                })
+            updateTablesState((tables: DBTable[]) =>
+                tables.map((table) => ({
+                    id: table.id,
+                    order: tablesOrders.get(table.id),
+                }))
             );
         }
     };
@@ -121,7 +107,30 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
                 >
                     {tables
                         .sort((table1: DBTable, table2: DBTable) => {
-                            return (table1.order ?? 0) - (table2.order ?? 0);
+                            // if one table has order and the other doesn't, the one with order should come first
+                            if (table1.order && table2.order === undefined) {
+                                return -1;
+                            }
+
+                            if (table1.order === undefined && table2.order) {
+                                return 1;
+                            }
+
+                            // if both tables have order, sort by order
+                            if (
+                                table1.order !== undefined &&
+                                table2.order !== undefined
+                            ) {
+                                return table1.order - table2.order;
+                            }
+
+                            // if both tables don't have order, sort by name
+                            if (table1.isView === table2.isView) {
+                                // Both are either tables or views, so sort alphabetically by name
+                                return table1.name.localeCompare(table2.name);
+                            }
+                            // If one is a view and the other is not, put tables first
+                            return table1.isView ? 1 : -1;
                         })
                         .map((table) => (
                             <TableListItem

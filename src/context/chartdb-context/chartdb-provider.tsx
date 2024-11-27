@@ -311,7 +311,7 @@ export const ChartDBProvider: React.FC<
                 color: randomColor(),
                 createdAt: Date.now(),
                 isView: false,
-                order: 9999,
+                order: tables.length,
                 ...attributes,
             };
             await addTable(table);
