@@ -1,6 +1,6 @@
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { useDialog } from '@/hooks/use-dialog';
-import type { DatabaseType } from '@/lib/domain/database-type';
+import { DatabaseType } from '@/lib/domain/database-type';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ImportDatabase } from '../common/import-database/import-database';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -30,6 +30,8 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         addTables,
         addRelationships,
         diagramName,
+        databaseType: currentDatabaseType,
+        updateDatabaseType,
     } = useChartDB();
     const [scriptResult, setScriptResult] = useState('');
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
@@ -282,6 +284,10 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             }),
         ]);
 
+        if (currentDatabaseType === DatabaseType.GENERIC) {
+            await updateDatabaseType(databaseType);
+        }
+
         setNodes((nodes) =>
             nodes.map((node) => ({
                 ...node,
@@ -297,6 +303,8 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         closeImportDatabaseDialog();
     }, [
         databaseEdition,
+        currentDatabaseType,
+        updateDatabaseType,
         databaseType,
         scriptResult,
         tables,
