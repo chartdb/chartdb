@@ -59,6 +59,10 @@ const timeAgolocaleFromLanguage = async (
             locale = (await import('timeago.js/lib/lang/pt_BR')).default;
             lang = 'pt_BR';
             break;
+        case 'bn':
+            locale = (await import('timeago.js/lib/lang/bn_IN')).default;
+            lang = 'bn';
+            break;
         default:
             locale = (await import('timeago.js/lib/lang/en_US')).default;
             lang = 'en_US';
