@@ -27,6 +27,7 @@ export interface ChartDBProviderProps {
     diagram?: Diagram;
     readonly?: boolean;
 }
+
 export const ChartDBProvider: React.FC<
     React.PropsWithChildren<ChartDBProviderProps>
 > = ({ children, diagram, readonly }) => {
@@ -310,6 +311,7 @@ export const ChartDBProvider: React.FC<
                 color: randomColor(),
                 createdAt: Date.now(),
                 isView: false,
+                order: tables.length,
                 ...attributes,
             };
             await addTable(table);

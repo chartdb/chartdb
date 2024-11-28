@@ -122,6 +122,18 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         config: '++id, defaultDiagramId',
     });
 
+    db.version(8).stores({
+        diagrams:
+            '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+        db_tables:
+            '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
+        db_relationships:
+            '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+        db_dependencies:
+            '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
+        config: '++id, defaultDiagramId',
+    });
+
     db.on('ready', async () => {
         const config = await getConfig();
 
@@ -345,15 +357,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             .equals(diagramId)
             .toArray();
 
-        // Sort tables first alphabetically, then views alphabetically
-        return tables.sort((a, b) => {
-            if (a.isView === b.isView) {
-                // Both are either tables or views, so sort alphabetically by name
-                return a.name.localeCompare(b.name);
-            }
-            // If one is a view and the other is not, put tables first
-            return a.isView ? 1 : -1;
-        });
+        return tables;
     };
 
     const addRelationship: StorageContext['addRelationship'] = async ({
