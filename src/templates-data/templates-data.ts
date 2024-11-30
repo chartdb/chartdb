@@ -43,6 +43,12 @@ import { staytusDb } from './templates/staytus-db';
 import { deployerDb } from './templates/deployer-db';
 import { deviseDb } from './templates/devise-db';
 import { talkDb } from './templates/talk-db';
+import { octoboxDb } from './templates/octobox-db';
+import { payRailsDb } from './templates/pay-rails-db';
+import { laravelActivitylogDb } from './templates/laravel-activitylog-db';
+import { pixelfedDb } from './templates/pixelfed-db';
+import { polrDb } from './templates/polr-db';
+import { djangoAxesDb } from './templates/django-axes-db';
 export interface Template {
     slug: string;
     name: string;
@@ -101,4 +107,10 @@ export const templates: Template[] = [
     deployerDb,
     deviseDb,
     talkDb,
+    octoboxDb,
+    payRailsDb,
+    laravelActivitylogDb,
+    pixelfedDb,
+    polrDb,
+    djangoAxesDb,
 ];
