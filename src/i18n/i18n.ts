@@ -19,6 +19,7 @@ import { mr, mrMetadata } from './locales/mr';
 import { tr, trMetadata } from './locales/tr';
 import { id_ID, id_IDMetadata } from './locales/id_ID';
 import { te, teMetadata } from './locales/te';
+import { bn, bnMetadata } from './locales/bn';
 import { gu, guMetadata } from './locales/gu';
 import { vi, viMetadata } from './locales/vi';
 
@@ -40,6 +41,7 @@ export const languages: LanguageMetadata[] = [
     trMetadata,
     id_IDMetadata,
     teMetadata,
+    bnMetadata,
     guMetadata,
     viMetadata,
 ];
@@ -62,6 +64,7 @@ const resources = {
     tr,
     id_ID,
     te,
+    bn,
     gu,
     vi,
 };
