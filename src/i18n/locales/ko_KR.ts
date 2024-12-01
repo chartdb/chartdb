@@ -77,6 +77,17 @@ export const ko_KR: LanguageTranslation = {
             none: '없음',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: '복사 실패',
+                description: '클립보드가 지원되지 않습니다"',
+            },
+            failed: {
+                title: '복사 실패',
+                description: '문제가 발생했습니다. 다시 시도해주세요.',
+            },
+        },
+
         theme: {
             system: '시스템 설정에 따름',
             light: '밝게',

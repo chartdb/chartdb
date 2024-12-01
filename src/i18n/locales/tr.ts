@@ -78,6 +78,17 @@ export const tr: LanguageTranslation = {
             none: 'yok',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Kopyalama başarısız',
+                description: 'Panoya desteklenmiyor',
+            },
+            failed: {
+                title: 'Kopyalama başarısız',
+                description: 'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
+            },
+        },
+
         theme: {
             system: 'Sistem',
             light: 'Açık',

@@ -78,6 +78,17 @@ export const id_ID: LanguageTranslation = {
             none: 'Tidak ada',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Gagal menyalin',
+                description: 'Clipboard tidak didukung',
+            },
+            failed: {
+                title: 'Gagal menyalin',
+                description: 'Ada yang salah. Silakan coba lagi.',
+            },
+        },
+
         theme: {
             system: 'Sistem',
             light: 'Terang',

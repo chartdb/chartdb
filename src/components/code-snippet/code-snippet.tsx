@@ -3,6 +3,7 @@ import React, { lazy, Suspense, useCallback, useEffect } from 'react';
 import { Spinner } from '../spinner/spinner';
 import { useTheme } from '@/hooks/use-theme';
 import { useMonaco } from '@monaco-editor/react';
+import { useToast } from '@/components/toast/use-toast';
 import { Button } from '../button/button';
 import { Copy, CopyCheck } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
@@ -38,6 +39,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const { t } = useTranslation();
         const monaco = useMonaco();
         const { effectiveTheme } = useTheme();
+        const { toast } = useToast();
         const [isCopied, setIsCopied] = React.useState(false);
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
@@ -66,10 +68,32 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
             }
         }, [code, monaco, autoScroll]);
 
-        const copyToClipboard = useCallback(() => {
-            navigator.clipboard.writeText(code);
-            setIsCopied(true);
-        }, [code]);
+        const copyToClipboard = useCallback(async () => {
+            if (!navigator?.clipboard) {
+                toast({
+                    title: t('copy_to_clipboard_toast.unsupported.title'),
+                    variant: 'destructive',
+                    description: t(
+                        'copy_to_clipboard_toast.unsupported.description'
+                    ),
+                });
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(code);
+                setIsCopied(true);
+            } catch (error) {
+                setIsCopied(false);
+                toast({
+                    title: t('copy_to_clipboard_toast.failed.title'),
+                    variant: 'destructive',
+                    description: t(
+                        'copy_to_clipboard_toast.failed.description'
+                    ),
+                });
+            }
+        }, [code, t, toast]);
 
         return (
             <div

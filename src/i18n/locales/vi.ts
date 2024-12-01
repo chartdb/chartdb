@@ -77,6 +77,17 @@ export const vi: LanguageTranslation = {
             none: 'không có',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Sao chép thất bại',
+                description: 'Không hỗ trợ bảng tạm',
+            },
+            failed: {
+                title: 'Sao chép thất bại',
+                description: 'Đã xảy ra lỗi. Vui lòng thử lại.',
+            },
+        },
+
         theme: {
             system: 'Hệ thống',
             light: 'Sáng',
@@ -97,7 +108,7 @@ export const vi: LanguageTranslation = {
         clear: 'Xóa',
         show_more: 'Hiển thị thêm',
         show_less: 'Hiển thị ít hơn',
-        copy_to_clipboard: 'Sao chép vào Clipboard',
+        copy_to_clipboard: 'Sao chép vào bảng tạm',
         copied: 'Đã sao chép!',
 
         side_panel: {

@@ -78,6 +78,17 @@ export const gu: LanguageTranslation = {
             none: 'કઈ નહીં',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'નકલ નિષ્ફળ',
+                description: 'ક્લિપબોર્ડ આધારિત નથી',
+            },
+            failed: {
+                title: 'નકલ નિષ્ફળ',
+                description: 'કંઈક ખોટું થયું છે. કૃપા કરીને ફરી પ્રયાસ કરો.',
+            },
+        },
+
         theme: {
             system: 'સિસ્ટમ',
             light: 'હલકો',

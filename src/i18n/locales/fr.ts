@@ -68,6 +68,17 @@ export const fr: LanguageTranslation = {
             cancel: 'Annuler',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Échec de la copie',
+                description: 'Presse-papiers non pris en charge',
+            },
+            failed: {
+                title: 'Échec de la copie',
+                description: 'Quelque chose a mal tourné. Veuillez réessayer.',
+            },
+        },
+
         theme: {
             system: 'Système',
             light: 'Clair',

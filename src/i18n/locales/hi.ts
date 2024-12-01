@@ -78,6 +78,17 @@ export const hi: LanguageTranslation = {
             none: 'कोई नहीं',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'कॉपी असफल',
+                description: 'क्लिपबोर्ड समर्थित नहीं है',
+            },
+            failed: {
+                title: 'कॉपी असफल',
+                description: 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।',
+            },
+        },
+
         theme: {
             system: 'सिस्टम',
             light: 'हल्का',

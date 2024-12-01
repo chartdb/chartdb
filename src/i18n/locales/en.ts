@@ -77,6 +77,17 @@ export const en = {
             none: 'none',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Copy failed',
+                description: 'Clipboard not supported',
+            },
+            failed: {
+                title: 'Copy failed',
+                description: 'Something went wrong. Please try again.',
+            },
+        },
+
         theme: {
             system: 'System',
             light: 'Light',
