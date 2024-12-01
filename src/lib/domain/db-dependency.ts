@@ -46,6 +46,7 @@ const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: 'postgresql',
     [DatabaseType.SQLITE]: 'postgresql',
     [DatabaseType.SQL_SERVER]: 'postgresql',
+    [DatabaseType.CLICKHOUSE]: 'postgresql',
 };
 
 export const createDependenciesFromMetadata = async ({

@@ -8,10 +8,13 @@ export interface ExampleOptionProps {}
 export const ExampleOption: React.FC<ExampleOptionProps> = () => {
     const { t } = useTranslation();
     return (
-        <Link href="/examples" className="text-primary hover:text-primary">
-            <div className="flex size-20 cursor-pointer flex-col items-center rounded-md border py-3 text-center md:size-32">
-                <div className="flex flex-1 items-center">
-                    <LayoutGrid size={34} />
+        <Link
+            href="/examples"
+            className="col-span-3 text-primary hover:text-primary"
+        >
+            <div className="flex h-8 w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border py-3 text-center md:h-12">
+                <div className="flex items-center">
+                    <LayoutGrid className="size-5 md:size-6" />
                 </div>
                 <div className="flex flex-col-reverse">
                     <div className="hidden text-sm text-primary md:flex">

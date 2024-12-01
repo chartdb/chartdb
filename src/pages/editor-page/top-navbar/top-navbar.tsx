@@ -39,8 +39,12 @@ import { LanguageNav } from './language-nav/language-nav';
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
-    const { clearDiagramData, deleteDiagram, updateDiagramUpdatedAt } =
-        useChartDB();
+    const {
+        clearDiagramData,
+        deleteDiagram,
+        updateDiagramUpdatedAt,
+        databaseType,
+    } = useChartDB();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -482,11 +486,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                     ? t('menu.view.hide_cardinality')
                                     : t('menu.view.show_cardinality')}
                             </MenubarItem>
-                            <MenubarItem onClick={showOrHideDependencies}>
-                                {showDependenciesOnCanvas
-                                    ? t('menu.view.hide_dependencies')
-                                    : t('menu.view.show_dependencies')}
-                            </MenubarItem>
+                            {databaseType !== DatabaseType.CLICKHOUSE ? (
+                                <MenubarItem onClick={showOrHideDependencies}>
+                                    {showDependenciesOnCanvas
+                                        ? t('menu.view.hide_dependencies')
+                                        : t('menu.view.show_dependencies')}
+                                </MenubarItem>
+                            ) : null}
                             <MenubarSeparator />
                             <MenubarSub>
                                 <MenubarSubTrigger>

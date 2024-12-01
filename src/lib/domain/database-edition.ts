@@ -51,4 +51,5 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
         [DatabaseType.SQLITE]: [],
         [DatabaseType.GENERIC]: [],
         [DatabaseType.MARIADB]: [],
+        [DatabaseType.CLICKHOUSE]: [],
     };

@@ -18,4 +18,5 @@ export const databaseTypeToClientsMap: Record<DatabaseType, DatabaseClient[]> =
         [DatabaseType.GENERIC]: [],
         [DatabaseType.SQL_SERVER]: [],
         [DatabaseType.MARIADB]: [],
+        [DatabaseType.CLICKHOUSE]: [],
     };
