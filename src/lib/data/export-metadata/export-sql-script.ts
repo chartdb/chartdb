@@ -382,6 +382,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **General SQLite Constraints**: Remember, \`ALTER TABLE\` in SQLite is limited and cannot add constraints after the table is created.
         - **Conditional Logic**: Ensure the script uses SQLite-compatible syntax and does not include unsupported features.
     `,
+        clickhouse: '',
     };
 
     const dialectInstruction = dialectInstructionMap[databaseType] ?? '';

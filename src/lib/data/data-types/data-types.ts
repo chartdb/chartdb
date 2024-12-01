@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DatabaseType } from '../../domain/database-type';
+import { clickhouseDataTypes } from './clickhouse-data-types';
 import { genericDataTypes } from './generic-data-types';
 import { mariadbDataTypes } from './mariadb-data-types';
 import { mysqlDataTypes } from './mysql-data-types';
@@ -24,6 +25,7 @@ export const dataTypeMap: Record<DatabaseType, readonly DataType[]> = {
     [DatabaseType.SQL_SERVER]: sqlServerDataTypes,
     [DatabaseType.MARIADB]: mariadbDataTypes,
     [DatabaseType.SQLITE]: sqliteDataTypes,
+    [DatabaseType.CLICKHOUSE]: clickhouseDataTypes,
 } as const;
 
 const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
@@ -39,6 +41,7 @@ const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.SQL_SERVER]: {},
     [DatabaseType.MARIADB]: {},
     [DatabaseType.SQLITE]: {},
+    [DatabaseType.CLICKHOUSE]: {},
     [DatabaseType.GENERIC]: {},
 };
 

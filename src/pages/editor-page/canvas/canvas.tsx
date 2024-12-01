@@ -75,6 +75,7 @@ import {
     TARGET_DEP_PREFIX,
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
@@ -216,11 +217,19 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
                     type: 'dependency-edge',
                     data: { dependency: dep },
-                    hidden: !showDependenciesOnCanvas,
+                    hidden:
+                        !showDependenciesOnCanvas &&
+                        databaseType !== DatabaseType.CLICKHOUSE,
                 })
             ),
         ]);
-    }, [relationships, dependencies, setEdges, showDependenciesOnCanvas]);
+    }, [
+        relationships,
+        dependencies,
+        setEdges,
+        showDependenciesOnCanvas,
+        databaseType,
+    ]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
