@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useRef } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
 import { NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
@@ -245,3 +245,47 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 );
 
 TableNode.displayName = 'TableNode';
+
+// Optimize field rendering with virtualization
+const VirtualizedFields: React.FC<{
+    fields: DBField[],
+    visibleCount: number,
+    rowHeight: number,
+    onRender: (field: DBField) => React.ReactNode
+}> = React.memo(({ fields, visibleCount, rowHeight, onRender }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [startIndex, setStartIndex] = useState(0);
+    
+    const visibleFields = useMemo(() => {
+        return fields.slice(startIndex, startIndex + visibleCount);
+    }, [fields, startIndex, visibleCount]);
+    
+    const onScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+        const scrollTop = e.currentTarget.scrollTop;
+        const newStartIndex = Math.floor(scrollTop / rowHeight);
+        setStartIndex(newStartIndex);
+    }, [rowHeight]);
+    
+    return (
+        <div 
+            ref={containerRef}
+            style={{ height: Math.min(fields.length, visibleCount) * rowHeight }}
+            onScroll={onScroll}
+        >
+            <div style={{ height: fields.length * rowHeight, position: 'relative' }}>
+                {visibleFields.map((field, index) => (
+                    <div
+                        key={field.id}
+                        style={{
+                            position: 'absolute',
+                            top: (startIndex + index) * rowHeight,
+                            height: rowHeight
+                        }}
+                    >
+                        {onRender(field)}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+});

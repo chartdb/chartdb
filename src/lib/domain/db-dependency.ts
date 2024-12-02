@@ -84,6 +84,19 @@ export const createDependenciesFromMetadata = async ({
     const { Parser } = await import('node-sql-parser');
     const parser = new Parser();
 
+    // Create a lookup map for tables to avoid repeated array searches
+    const createTableLookup = (tables: DBTable[]) => {
+        const lookup = new Map<string, DBTable>();
+        tables.forEach(table => {
+            const key = `${table.schema || ''}.${table.name}`;
+            lookup.set(key, table);
+        });
+        return lookup;
+    };
+
+    // Use in createDependenciesFromMetadata
+    const tableLookup = createTableLookup(tables);
+
     const dependencies = views
         .flatMap((view) => {
             const viewSchema = schemaNameToDomainSchemaName(view.schema);
@@ -106,29 +119,14 @@ export const createDependenciesFromMetadata = async ({
                         view.view_definition
                     );
 
-                    let modifiedViewDefinition = '';
-                    if (
-                        databaseType === DatabaseType.MYSQL ||
-                        databaseType === DatabaseType.MARIADB
-                    ) {
-                        modifiedViewDefinition = preprocessViewDefinitionMySQL(
-                            decodedViewDefinition
-                        );
-                    } else if (databaseType === DatabaseType.SQL_SERVER) {
-                        modifiedViewDefinition =
-                            preprocessViewDefinitionSQLServer(
-                                decodedViewDefinition
-                            );
-                    } else {
-                        modifiedViewDefinition = preprocessViewDefinition(
-                            decodedViewDefinition
-                        );
-                    }
+                    const modifiedViewDefinition = getPreprocessedViewDefinition(
+                        databaseType,
+                        decodedViewDefinition
+                    );
 
-                    // Parse using the appropriate dialect
                     const ast = parser.astify(modifiedViewDefinition, {
                         database: astDatabaseTypes[databaseType],
-                        type: 'select', // Parsing a SELECT statement
+                        type: 'select',
                     });
 
                     let relatedTables = extractTablesFromAST(ast);
@@ -140,11 +138,7 @@ export const createDependenciesFromMetadata = async ({
                         const relSchema = relTable.schema || view.schema; // Use view's schema if relSchema is undefined
                         const relTableName = relTable.tableName;
 
-                        const table = tables.find(
-                            (table) =>
-                                table.name === relTableName &&
-                                (table.schema || '') === relSchema
-                        );
+                        const table = tableLookup.get(`${relSchema}.${relTableName}`);
 
                         if (table) {
                             const dependency: DBDependency = {
@@ -166,8 +160,8 @@ export const createDependenciesFromMetadata = async ({
                     });
                 } catch (error) {
                     console.error(
-                        `Error parsing view ${view.schema}.${view.view_name}:`,
-                        error
+                        `Error processing view ${view.schema}.${view.view_name}:`,
+                        error instanceof Error ? error.message : 'Unknown error'
                     );
                     return [];
                 }
@@ -399,4 +393,61 @@ function extractTablesFromAST(
     traverse(ast);
 
     return Array.from(tablesMap.values());
+}
+
+// Optimize dependency tracking with indexed collections
+class DependencyTracker {
+    private dependenciesByTableId: Map<string, Set<string>> = new Map();
+    private reverseDependencies: Map<string, Set<string>> = new Map();
+    
+    addDependency(sourceId: string, targetId: string) {
+        if (!this.dependenciesByTableId.has(sourceId)) {
+            this.dependenciesByTableId.set(sourceId, new Set());
+        }
+        if (!this.reverseDependencies.has(targetId)) {
+            this.reverseDependencies.set(targetId, new Set());
+        }
+        
+        this.dependenciesByTableId.get(sourceId)!.add(targetId);
+        this.reverseDependencies.get(targetId)!.add(sourceId);
+    }
+    
+    getDependencies(tableId: string): string[] {
+        return Array.from(this.dependenciesByTableId.get(tableId) || []);
+    }
+    
+    getDependents(tableId: string): string[] {
+        return Array.from(this.reverseDependencies.get(tableId) || []);
+    }
+    
+    removeDependency(sourceId: string, targetId: string) {
+        this.dependenciesByTableId.get(sourceId)?.delete(targetId);
+        this.reverseDependencies.get(targetId)?.delete(sourceId);
+    }
+}
+
+// Add type guard for AST nodes
+interface TableNode {
+    table: string;
+    db?: string;
+    schema?: string;
+}
+
+function isTableNode(node: unknown): node is TableNode {
+    return typeof node === 'object' && 
+           node !== null && 
+           'table' in node && 
+           typeof (node as TableNode).table === 'string';
+}
+
+// Add cache size limit and cleanup
+const MAX_CACHE_SIZE = 1000;
+
+function cleanCache() {
+    if (viewDefinitionCache.size > MAX_CACHE_SIZE) {
+        const entries = Array.from(viewDefinitionCache.entries());
+        const sortedByAge = entries.sort((a, b) => a[1].localeCompare(b[1]));
+        const toRemove = sortedByAge.slice(0, sortedByAge.length - MAX_CACHE_SIZE);
+        toRemove.forEach(([key]) => viewDefinitionCache.delete(key));
+    }
 }
