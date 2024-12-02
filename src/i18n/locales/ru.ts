@@ -77,6 +77,18 @@ export const ru: LanguageTranslation = {
             none: 'никто',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Ошибка копирования',
+                description: 'Буфер обмена не поддерживается',
+            },
+            failed: {
+                title: 'Ошибка копирования',
+                description:
+                    'Что-то пошло не так. Пожалуйста, попробуйте еще раз.',
+            },
+        },
+
         theme: {
             system: 'Системная',
             light: 'Светлая',

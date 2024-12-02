@@ -78,6 +78,17 @@ export const bn: LanguageTranslation = {
             none: 'কিছুই না',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'কপি ব্যর্থ হয়েছে',
+                description: 'ক্লিপবোর্ড সমর্থিত নয়',
+            },
+            failed: {
+                title: 'কপি ব্যর্থ হয়েছে',
+                description: 'কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+            },
+        },
+
         theme: {
             system: 'সিস্টেম',
             light: 'হালকা',

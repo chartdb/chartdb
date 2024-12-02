@@ -77,6 +77,17 @@ export const ne: LanguageTranslation = {
             none: 'कुनै पनि छैन',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'प्रतिलिपि असफल',
+                description: 'क्लिपबोर्ड समर्थित छैन',
+            },
+            failed: {
+                title: 'प्रतिलिपि असफल',
+                description: 'केही गडबड भयो। कृपया फेरि प्रयास गर्नुहोस्।',
+            },
+        },
+
         theme: {
             system: 'सिस्टम',
             light: 'लाइट',

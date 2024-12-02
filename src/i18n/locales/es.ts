@@ -69,6 +69,17 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Copia fallida',
+                description: 'Portapapeles no soportado',
+            },
+            failed: {
+                title: 'Copia fallida',
+                description: 'Algo salió mal. Por favor, inténtelo de nuevo.',
+            },
+        },
+
         theme: {
             system: 'Sistema',
             light: 'Claro',

@@ -78,6 +78,17 @@ export const uk: LanguageTranslation = {
             none: 'немає',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Помилка копіювання',
+                description: 'Буфер обміну не підтримується',
+            },
+            failed: {
+                title: 'Помилка копіювання',
+                description: 'Щось пішло не так. Будь ласка, спробуйте ще раз.',
+            },
+        },
+
         theme: {
             system: 'система',
             light: 'світлий',

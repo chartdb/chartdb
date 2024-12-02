@@ -78,6 +78,17 @@ export const mr: LanguageTranslation = {
             none: 'काहीही नाही',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'कॉपी अयशस्वी',
+                description: 'क्लिपबोर्ड समर्थित नाही',
+            },
+            failed: {
+                title: 'कॉपी अयशस्वी',
+                description: 'काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.',
+            },
+        },
+
         theme: {
             system: 'सिस्टम',
             light: 'लाईट',

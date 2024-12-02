@@ -79,6 +79,18 @@ export const ja: LanguageTranslation = {
             none: 'なし',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'コピー失敗',
+                description: 'クリップボードがサポートされていません',
+            },
+            failed: {
+                title: 'コピー失敗',
+                description:
+                    '何かがうまくいきませんでした。もう一度お試しください。',
+            },
+        },
+
         theme: {
             system: 'システム',
             light: 'ライト',

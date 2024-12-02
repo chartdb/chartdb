@@ -78,6 +78,17 @@ export const pt_BR: LanguageTranslation = {
             none: 'nenhum',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Falha na cópia',
+                description: 'Área de transferência não suportada',
+            },
+            failed: {
+                title: 'Falha na cópia',
+                description: 'Algo deu errado. Por favor, tente novamente.',
+            },
+        },
+
         theme: {
             system: 'Sistema',
             light: 'Claro',

@@ -78,6 +78,17 @@ export const te: LanguageTranslation = {
             none: 'ఎదరికాదు',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'కాపీ విఫలమైంది',
+                description: 'క్లిప్‌బోర్డ్ మద్దతు ఇవ్వదు',
+            },
+            failed: {
+                title: 'కాపీ విఫలమైంది',
+                description: 'ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+            },
+        },
+
         theme: {
             system: 'సిస్టమ్',
             light: 'హালకా',

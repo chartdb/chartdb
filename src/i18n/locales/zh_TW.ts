@@ -74,6 +74,17 @@ export const zh_TW: LanguageTranslation = {
             none: '無',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: '複製失敗',
+                description: '不支援剪貼簿',
+            },
+            failed: {
+                title: '複製失敗',
+                description: '出現問題。請再試一次。',
+            },
+        },
+
         theme: {
             system: '系統',
             light: '淺色',

@@ -78,6 +78,18 @@ export const de: LanguageTranslation = {
             none: 'Keine',
         },
 
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Kopieren fehlgeschlagen',
+                description: 'Zwischenablage nicht unterstützt',
+            },
+            failed: {
+                title: 'Kopieren fehlgeschlagen',
+                description:
+                    'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+            },
+        },
+
         theme: {
             system: 'System',
             light: 'Hell',
