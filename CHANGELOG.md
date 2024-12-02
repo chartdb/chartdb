@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.4.0](https://github.com/chartdb/chartdb/compare/v1.3.1...v1.4.0) (2024-12-02)
+
+
+### Features
+
+* **add templates:** add six more templates  ([#452](https://github.com/chartdb/chartdb/issues/452)) ([be1b109](https://github.com/chartdb/chartdb/commit/be1b109f23e62df4cc63fa8914c2754f7809cc08))
+* **add templates:** add six more templates (django-axes, laravel-activitylog, octobox, pay-rails, pixelfed, polr) ([#460](https://github.com/chartdb/chartdb/issues/460)) ([03772f6](https://github.com/chartdb/chartdb/commit/03772f6b4f99f9c4350356aa0f2a4666f4f1794d))
+* **add templates:** add six more templates (reversion, screeenly, staytus, deployer, devise, talk) ([#457](https://github.com/chartdb/chartdb/issues/457)) ([ddeef3b](https://github.com/chartdb/chartdb/commit/ddeef3b134efa893e1c1e15e2f87c27157200e2d))
+* **clickhouse:** add ClickHouse support ([#463](https://github.com/chartdb/chartdb/issues/463)) ([807cd22](https://github.com/chartdb/chartdb/commit/807cd22e0c739f339fa07fe1d2f043c5411ae41f))
+* **i18n:** Added bangla translations ([#432](https://github.com/chartdb/chartdb/issues/432)) ([885eb71](https://github.com/chartdb/chartdb/commit/885eb719de577c2652fbed1ed287f38fcc98c148))
+* **side-panel:** Add functionality of order tables by drag & drop ([#425](https://github.com/chartdb/chartdb/issues/425)) ([a0e966b](https://github.com/chartdb/chartdb/commit/a0e966b64f8070d4595d47b2fb39e8bbf427b794))
+
+
+### Bug Fixes
+
+* **clipboard:** defensive for navigator clipboard ([#462](https://github.com/chartdb/chartdb/issues/462)) ([5fc10a7](https://github.com/chartdb/chartdb/commit/5fc10a7e649fc5877bb297b519b1b6a8b81f1323))
+* **import-database:** update database type after importing into an existing generic diagra ([#456](https://github.com/chartdb/chartdb/issues/456)) ([a8fe491](https://github.com/chartdb/chartdb/commit/a8fe491c1b5a30d9f4144cefa9111dd3dfd5df1a))
+* **Last Saved:** Translate the "last saved" relative date message ([#400](https://github.com/chartdb/chartdb/issues/400)) ([d45677e](https://github.com/chartdb/chartdb/commit/d45677e92d72efc6cea8f865ce46f0be6ec9961f))
+* **mariadb-types:** Add uuid data type ([#459](https://github.com/chartdb/chartdb/issues/459)) ([94656ec](https://github.com/chartdb/chartdb/commit/94656ec7a5435c2da262fb3bc6a6d381d554b0c1))
+* window type ([#454](https://github.com/chartdb/chartdb/issues/454)) ([9c7d03c](https://github.com/chartdb/chartdb/commit/9c7d03c285ff6f818eef3199c9b7a530d03a1fec))
+
 ## [1.3.1](https://github.com/chartdb/chartdb/compare/v1.3.0...v1.3.1) (2024-11-26)
 
 
