@@ -223,36 +223,30 @@ export const adjustTablePositions = ({
             return false;
         };
 
-        const findNonOverlappingPosition = (
-            baseX: number,
-            baseY: number,
-            tableId: string
-        ): { x: number; y: number } => {
+        const findNonOverlappingPosition = (baseX: number, baseY: number, tableId: string): { x: number; y: number } => {
+            const positions = new Set<string>();
             const spiralStep = Math.max(tableWidth, tableHeight) / 2;
             let angle = 0;
             let radius = 0;
-            let iterations = 0;
-            const maxIterations = 1000; // Prevent infinite loop
-
-            while (iterations < maxIterations) {
-                const x = baseX + radius * Math.cos(angle);
-                const y = baseY + radius * Math.sin(angle);
-                if (!isOverlapping(x, y, tableId)) {
+            
+            while (radius < 2000) { // Set reasonable bounds
+                const x = Math.round(baseX + radius * Math.cos(angle));
+                const y = Math.round(baseY + radius * Math.sin(angle));
+                const key = `${x},${y}`;
+                
+                if (!positions.has(key) && !isOverlapping(x, y, tableId)) {
                     return { x, y };
                 }
+                
+                positions.add(key);
                 angle += Math.PI / 4;
                 if (angle >= 2 * Math.PI) {
                     angle = 0;
                     radius += spiralStep;
                 }
-                iterations++;
             }
-
-            // If we can't find a non-overlapping position, return a position far from others
-            return {
-                x: baseX + radius * Math.cos(angle),
-                y: baseY + radius * Math.sin(angle),
-            };
+            
+            return { x: baseX, y: baseY };
         };
 
         const positionTable = (

@@ -96,34 +96,29 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             [relationships]
         );
 
+        const fieldCategories = useMemo(() => {
+            const mustDisplayed = new Set(
+                table.fields.filter(isMustDisplayedField).map(f => f.id)
+            );
+            
+            return {
+                mustDisplayedFields: table.fields.filter(f => mustDisplayed.has(f.id)),
+                otherFields: table.fields.filter(f => !mustDisplayed.has(f.id))
+            };
+        }, [table.fields, isMustDisplayedField]);
+
         const visibleFields = useMemo(() => {
-            if (expanded) {
-                return table.fields;
-            }
-
-            const mustDisplayedFields = table.fields.filter((field: DBField) =>
-                isMustDisplayedField(field)
-            );
-            const nonMustDisplayedFields = table.fields.filter(
-                (field: DBField) => !isMustDisplayedField(field)
-            );
-
-            const visibleMustDisplayedFields = mustDisplayedFields.slice(
-                0,
-                TABLE_MINIMIZED_FIELDS
-            );
-            const remainingSlots =
-                TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
-            const visibleNonMustDisplayedFields = nonMustDisplayedFields.slice(
-                0,
-                remainingSlots
-            );
-
+            if (expanded) return table.fields;
+            
+            const { mustDisplayedFields, otherFields } = fieldCategories;
+            const visibleMustDisplayed = mustDisplayedFields.slice(0, TABLE_MINIMIZED_FIELDS);
+            const remainingSlots = TABLE_MINIMIZED_FIELDS - visibleMustDisplayed.length;
+            
             return [
-                ...visibleMustDisplayedFields,
-                ...visibleNonMustDisplayedFields,
+                ...visibleMustDisplayed,
+                ...otherFields.slice(0, remainingSlots)
             ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
-        }, [expanded, table.fields, isMustDisplayedField]);
+        }, [expanded, table.fields, fieldCategories, TABLE_MINIMIZED_FIELDS]);
 
         return (
             <TableNodeContextMenu table={table}>

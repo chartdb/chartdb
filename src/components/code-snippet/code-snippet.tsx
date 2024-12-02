@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import React, { lazy, Suspense, useCallback, useEffect } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { Spinner } from '../spinner/spinner';
 import { useTheme } from '@/hooks/use-theme';
 import { useMonaco } from '@monaco-editor/react';
@@ -43,13 +43,32 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const [isCopied, setIsCopied] = React.useState(false);
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
+        const monacoConfig = useMemo(() => ({
+            minimap: { enabled: false },
+            readOnly: true,
+            automaticLayout: true,
+            scrollbar: {
+                vertical: 'hidden',
+                horizontal: 'hidden',
+                alwaysConsumeMouseWheel: false,
+            },
+            scrollBeyondLastLine: false,
+            renderValidationDecorations: 'off',
+            lineDecorationsWidth: 0,
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            guides: { indentation: false },
+            contextmenu: false,
+        }), []);
+
         useEffect(() => {
-            monaco?.editor?.defineTheme?.(
-                effectiveTheme,
-                effectiveTheme === 'dark' ? DarkTheme : LightTheme
-            );
-            monaco?.editor?.setTheme?.(effectiveTheme);
-        }, [monaco, effectiveTheme]);
+            if (!monaco?.editor) return;
+            
+            const theme = effectiveTheme === 'dark' ? DarkTheme : LightTheme;
+            monaco.editor.defineTheme(effectiveTheme, theme);
+            monaco.editor.setTheme(effectiveTheme);
+        }, [monaco?.editor, effectiveTheme]);
 
         useEffect(() => {
             if (!isCopied) return;
@@ -144,28 +163,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             language={language}
                             loading={<Spinner />}
                             theme={effectiveTheme}
-                            options={{
-                                minimap: {
-                                    enabled: false,
-                                },
-                                readOnly: true,
-                                automaticLayout: true,
-                                scrollbar: {
-                                    vertical: 'hidden',
-                                    horizontal: 'hidden',
-                                    alwaysConsumeMouseWheel: false,
-                                },
-                                scrollBeyondLastLine: false,
-                                renderValidationDecorations: 'off',
-                                lineDecorationsWidth: 0,
-                                overviewRulerBorder: false,
-                                overviewRulerLanes: 0,
-                                hideCursorInOverviewRuler: true,
-                                guides: {
-                                    indentation: false,
-                                },
-                                contextmenu: false,
-                            }}
+                            options={monacoConfig}
                         />
                         {!isComplete ? (
                             <div className="absolute bottom-2 right-2 size-2 animate-blink rounded-full bg-pink-600" />

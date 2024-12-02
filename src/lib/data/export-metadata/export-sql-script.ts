@@ -5,6 +5,34 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 
+// Cache SQL templates
+const sqlTemplateCache = new Map<string, string>();
+
+const getSQLTemplate = (databaseType: DatabaseType, key: string): string => {
+    const cacheKey = `${databaseType}:${key}`;
+    
+    if (!sqlTemplateCache.has(cacheKey)) {
+        const template = generateSQLTemplate(databaseType, key);
+        sqlTemplateCache.set(cacheKey, template);
+    }
+    
+    return sqlTemplateCache.get(cacheKey)!;
+};
+
+// Optimize SQL generation with StringBuilder pattern
+class SQLBuilder {
+    private parts: string[] = [];
+    
+    append(sql: string): this {
+        this.parts.push(sql);
+        return this;
+    }
+    
+    toString(): string {
+        return this.parts.join('');
+    }
+}
+
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
 

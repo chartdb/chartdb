@@ -49,6 +49,29 @@ const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.CLICKHOUSE]: 'postgresql',
 };
 
+// Cache preprocessed view definitions
+const viewDefinitionCache = new Map<string, string>();
+
+const getPreprocessedViewDefinition = (databaseType: DatabaseType, viewDefinition: string): string => {
+    const cacheKey = `${databaseType}:${viewDefinition}`;
+    
+    if (viewDefinitionCache.has(cacheKey)) {
+        return viewDefinitionCache.get(cacheKey)!;
+    }
+
+    let processed: string;
+    if (databaseType === DatabaseType.SQL_SERVER) {
+        processed = preprocessViewDefinitionSQLServer(viewDefinition);
+    } else if ([DatabaseType.MYSQL, DatabaseType.MARIADB].includes(databaseType)) {
+        processed = preprocessViewDefinitionMySQL(viewDefinition); 
+    } else {
+        processed = preprocessViewDefinition(viewDefinition);
+    }
+
+    viewDefinitionCache.set(cacheKey, processed);
+    return processed;
+};
+
 export const createDependenciesFromMetadata = async ({
     views,
     tables,
