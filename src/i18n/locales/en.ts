@@ -80,7 +80,7 @@ export const en = {
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Copy failed',
-                description: 'Clipboard not supported',
+                description: 'Clipboard not supported.',
             },
             failed: {
                 title: 'Copy failed',
