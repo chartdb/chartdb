@@ -28,7 +28,6 @@ export const zh_CN: LanguageTranslation = {
                 show_cardinality: '展示基数',
                 zoom_on_scroll: '滚动缩放',
                 theme: '主题',
-                change_language: '语言',
                 show_dependencies: '展示依赖',
                 hide_dependencies: '隐藏依赖',
             },
@@ -73,6 +72,17 @@ export const zh_CN: LanguageTranslation = {
             dont_show_again: '不再展示',
             change_schema: '更改',
             none: '无',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: '复制失败',
+                description: '不支持剪贴板',
+            },
+            failed: {
+                title: '复制失败',
+                description: '出现问题。请再试一次。',
+            },
         },
 
         theme: {
@@ -335,6 +345,12 @@ export const zh_CN: LanguageTranslation = {
             format_json: 'JSON',
             cancel: '取消',
             export: '导出',
+            // TODO: translate
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {
@@ -371,10 +387,15 @@ export const zh_CN: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: '双击编辑',
         },
+
+        language_select: {
+            change_language: '语言',
+        },
     },
 };
 
 export const zh_CNMetadata: LanguageMetadata = {
-    name: '简体中文',
+    name: 'Chinese',
+    nativeName: '简体中文',
     code: 'zh_CN',
 };

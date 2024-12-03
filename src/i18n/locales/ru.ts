@@ -28,7 +28,6 @@ export const ru: LanguageTranslation = {
                 show_cardinality: 'Показать множественность связи',
                 zoom_on_scroll: 'Увеличение при прокрутке',
                 theme: 'Тема',
-                change_language: 'Сменить язык',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
             },
@@ -76,6 +75,18 @@ export const ru: LanguageTranslation = {
             dont_show_again: 'Больше не показывать',
             change_schema: 'Изменить',
             none: 'никто',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Ошибка копирования',
+                description: 'Буфер обмена не поддерживается',
+            },
+            failed: {
+                title: 'Ошибка копирования',
+                description:
+                    'Что-то пошло не так. Пожалуйста, попробуйте еще раз.',
+            },
         },
 
         theme: {
@@ -340,6 +351,11 @@ export const ru: LanguageTranslation = {
             format_json: 'JSON',
             cancel: 'Отменить',
             export: 'Экспортировать',
+            error: {
+                title: 'Ошибка экспортирования диаграммы',
+                description:
+                    'Что-то пошло не так. Если вам нужна помощь, напишите нам: chartdb.io@gmail.com',
+            },
         },
         import_diagram_dialog: {
             title: 'Импорт кода диаграммы',
@@ -376,10 +392,15 @@ export const ru: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
+
+        language_select: {
+            change_language: 'Сменить язык',
+        },
     },
 };
 
 export const ruMetadata: LanguageMetadata = {
     name: 'Russian',
+    nativeName: 'Русский',
     code: 'ru',
 };

@@ -1,5 +1,84 @@
 # Changelog
 
+## [1.4.0](https://github.com/chartdb/chartdb/compare/v1.3.1...v1.4.0) (2024-12-02)
+
+
+### Features
+
+* **add templates:** add six more templates  ([#452](https://github.com/chartdb/chartdb/issues/452)) ([be1b109](https://github.com/chartdb/chartdb/commit/be1b109f23e62df4cc63fa8914c2754f7809cc08))
+* **add templates:** add six more templates (django-axes, laravel-activitylog, octobox, pay-rails, pixelfed, polr) ([#460](https://github.com/chartdb/chartdb/issues/460)) ([03772f6](https://github.com/chartdb/chartdb/commit/03772f6b4f99f9c4350356aa0f2a4666f4f1794d))
+* **add templates:** add six more templates (reversion, screeenly, staytus, deployer, devise, talk) ([#457](https://github.com/chartdb/chartdb/issues/457)) ([ddeef3b](https://github.com/chartdb/chartdb/commit/ddeef3b134efa893e1c1e15e2f87c27157200e2d))
+* **clickhouse:** add ClickHouse support ([#463](https://github.com/chartdb/chartdb/issues/463)) ([807cd22](https://github.com/chartdb/chartdb/commit/807cd22e0c739f339fa07fe1d2f043c5411ae41f))
+* **i18n:** Added bangla translations ([#432](https://github.com/chartdb/chartdb/issues/432)) ([885eb71](https://github.com/chartdb/chartdb/commit/885eb719de577c2652fbed1ed287f38fcc98c148))
+* **side-panel:** Add functionality of order tables by drag & drop ([#425](https://github.com/chartdb/chartdb/issues/425)) ([a0e966b](https://github.com/chartdb/chartdb/commit/a0e966b64f8070d4595d47b2fb39e8bbf427b794))
+
+
+### Bug Fixes
+
+* **clipboard:** defensive for navigator clipboard ([#462](https://github.com/chartdb/chartdb/issues/462)) ([5fc10a7](https://github.com/chartdb/chartdb/commit/5fc10a7e649fc5877bb297b519b1b6a8b81f1323))
+* **import-database:** update database type after importing into an existing generic diagra ([#456](https://github.com/chartdb/chartdb/issues/456)) ([a8fe491](https://github.com/chartdb/chartdb/commit/a8fe491c1b5a30d9f4144cefa9111dd3dfd5df1a))
+* **Last Saved:** Translate the "last saved" relative date message ([#400](https://github.com/chartdb/chartdb/issues/400)) ([d45677e](https://github.com/chartdb/chartdb/commit/d45677e92d72efc6cea8f865ce46f0be6ec9961f))
+* **mariadb-types:** Add uuid data type ([#459](https://github.com/chartdb/chartdb/issues/459)) ([94656ec](https://github.com/chartdb/chartdb/commit/94656ec7a5435c2da262fb3bc6a6d381d554b0c1))
+* window type ([#454](https://github.com/chartdb/chartdb/issues/454)) ([9c7d03c](https://github.com/chartdb/chartdb/commit/9c7d03c285ff6f818eef3199c9b7a530d03a1fec))
+
+## [1.3.1](https://github.com/chartdb/chartdb/compare/v1.3.0...v1.3.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **docker:** make OPENAI_API_KEY optional in docker run ([#448](https://github.com/chartdb/chartdb/issues/448)) ([4bb4766](https://github.com/chartdb/chartdb/commit/4bb4766e1ac8d69e138668eb8a46de5affe62ceb))
+
+## [1.3.0](https://github.com/chartdb/chartdb/compare/v1.2.0...v1.3.0) (2024-11-25)
+
+
+### Features
+
+* **side panel:** collapsible side panel on desktop view + keyboard shortcut ([#439](https://github.com/chartdb/chartdb/issues/439)) ([70f545f](https://github.com/chartdb/chartdb/commit/70f545f78bab9c510a6e5936fa5b259b806b6c69))
+
+
+### Bug Fixes
+
+* **dialogs:** fix height of dialogs for small screens ([#440](https://github.com/chartdb/chartdb/issues/440)) ([667685e](https://github.com/chartdb/chartdb/commit/667685ed0f6a8cc61ae86b3ba60e052fbe6a9e1a))
+* **drawer:** set fix min size ([#429](https://github.com/chartdb/chartdb/issues/429)) ([c5e0ea6](https://github.com/chartdb/chartdb/commit/c5e0ea6fa4017666ff3bc1e3071c487df48afd3d))
+* **export-sql:** add unique to export script ([#422](https://github.com/chartdb/chartdb/issues/422)) ([b75c6fe](https://github.com/chartdb/chartdb/commit/b75c6fe4e78f3e2058be680f2fa0442db3b4a6bd))
+* fix layout warnings ([#434](https://github.com/chartdb/chartdb/issues/434)) ([94ec43b](https://github.com/chartdb/chartdb/commit/94ec43b60845bb8c3592ce1b1450ca0171a53f99))
+* **i18n:** add bahasa indonesia translation ([#331](https://github.com/chartdb/chartdb/issues/331)) ([ab07da0](https://github.com/chartdb/chartdb/commit/ab07da0b031f0d4050ff6b44ddcb94cb6c0010b6))
+* **i18n:** add missing type to vi.ts ([#444](https://github.com/chartdb/chartdb/issues/444)) ([e77ee60](https://github.com/chartdb/chartdb/commit/e77ee60a5b47e0854d11b0ee2f16d6956737d0ff))
+* **i18n:** Add Telugu Language ([#352](https://github.com/chartdb/chartdb/issues/352)) ([8749591](https://github.com/chartdb/chartdb/commit/8749591be036e131de4bfeed1e6eece8d62980dd))
+* **i18n:** add Turkish translations ([#315](https://github.com/chartdb/chartdb/issues/315)) ([d9fcbee](https://github.com/chartdb/chartdb/commit/d9fcbeec726b7bde9f7d202bf09dc6b617e3ad80))
+* **i18n:** add Vietnamese translations ([#435](https://github.com/chartdb/chartdb/issues/435)) ([6c65c2e](https://github.com/chartdb/chartdb/commit/6c65c2e9cce600b9778b84ce5b5f1625dc6f1a58))
+* **i18n:** Translating to Gujarati language ([#433](https://github.com/chartdb/chartdb/issues/433)) ([2940431](https://github.com/chartdb/chartdb/commit/2940431efa1a6aa54d80c61d5e05f0ad47cd67ba))
+* **i18n:** Translation of the export error into Russian ([#418](https://github.com/chartdb/chartdb/issues/418)) ([7c3c628](https://github.com/chartdb/chartdb/commit/7c3c62860efc98d3aabf2132a79ac945ffc8315a))
+* **i18n:** update korean for 1.2.0 ([#419](https://github.com/chartdb/chartdb/issues/419)) ([8397bef](https://github.com/chartdb/chartdb/commit/8397bef3924610d94661aae99c55ba4fa376a186))
+* **import script:** remove double quotes ([#442](https://github.com/chartdb/chartdb/issues/442)) ([fb702c8](https://github.com/chartdb/chartdb/commit/fb702c87ce5254bf6e0209c692305f5086956090))
+* **share:** fix export to handle broken indexes & relationships ([#416](https://github.com/chartdb/chartdb/issues/416)) ([4be3592](https://github.com/chartdb/chartdb/commit/4be3592cf4d160be83ddf1db01ffe9afdef119fa))
+* **templates:** add Five more templates (bouncer, cabot, feedbin, Pythonic, flarum, freescout) ([#441](https://github.com/chartdb/chartdb/issues/441)) ([eaa0678](https://github.com/chartdb/chartdb/commit/eaa067814fd96fcc1ee10488ee747a71a8e8ec7a))
+
+## [1.2.0](https://github.com/chartdb/chartdb/compare/v1.1.0...v1.2.0) (2024-11-17)
+
+
+### Features
+
+* **duplicate table:** duplicate table from the canvas and sidebar ([#404](https://github.com/chartdb/chartdb/issues/404)) ([44cf5ca](https://github.com/chartdb/chartdb/commit/44cf5ca264f52851f2dffb51a752a52b6fa7ec8d))
+
+
+### Bug Fixes
+
+* **AI exports:** add cahching layer to SQL exports ([#390](https://github.com/chartdb/chartdb/issues/390)) ([e5dbbf2](https://github.com/chartdb/chartdb/commit/e5dbbf2eaab6d80a531d451211b6f5a415bc7ce3))
+* **canvas:** fix auto zoom on diagram load ([#395](https://github.com/chartdb/chartdb/issues/395)) ([492c932](https://github.com/chartdb/chartdb/commit/492c9324d27b561470c4967ce2e99f82eec467d8))
+* **dockerfile:** support SPA refresh to resolve nginx return 404 ([#384](https://github.com/chartdb/chartdb/issues/384)) ([eaf75ce](https://github.com/chartdb/chartdb/commit/eaf75cedb0e024236c7684bb533856d7f80074da))
+* **docs:** update license reference ([#403](https://github.com/chartdb/chartdb/issues/403)) ([44d10c2](https://github.com/chartdb/chartdb/commit/44d10c23907165288951a9d2ec3165ad23f81c61))
+* **export image:** Add support for displaying cardinality relationships + background ([#407](https://github.com/chartdb/chartdb/issues/407)) ([68474e7](https://github.com/chartdb/chartdb/commit/68474e75d56ed4b4b445cc9b7f59cca96a4ca5db))
+* **i18n:** add Nepali translations ([#406](https://github.com/chartdb/chartdb/issues/406)) ([e1e55c4](https://github.com/chartdb/chartdb/commit/e1e55c4b2ac7755b0810dc1f21da44903fe68a54))
+* **i18n:** change language keeps selected language also after refreshing the page ([#409](https://github.com/chartdb/chartdb/issues/409)) ([f35f62f](https://github.com/chartdb/chartdb/commit/f35f62fdf38ca84065f171a31b80aa8123b1d8b9))
+* **i18n:** Create Translations in Marathi language ([#266](https://github.com/chartdb/chartdb/issues/266)) ([c6f7ff7](https://github.com/chartdb/chartdb/commit/c6f7ff70f841efb9cf1766338f409fe0ea7bb998))
+* **i18n:** fix language nav: close when lang selected, hide tooltip when lang selected ([#411](https://github.com/chartdb/chartdb/issues/411)) ([02aaabd](https://github.com/chartdb/chartdb/commit/02aaabdc4e9b1570d81ff03fe1e6da0307f22999))
+* **templates:** add five more templates (Sylius, Monica, Attendize, SaaS Pegasus & BookStack) ([#408](https://github.com/chartdb/chartdb/issues/408)) ([0f67394](https://github.com/chartdb/chartdb/commit/0f673947af469e86f70737427ac8fb3c2420d1a2))
+* **templates:** add six more templates (ticketit, snipe-it, refinerycms, comfortable-mexican-sofa, buddypress, lobsters) ([#402](https://github.com/chartdb/chartdb/issues/402)) ([07d3745](https://github.com/chartdb/chartdb/commit/07d374574775d132e1cba0908c47dcbbd6cd2c3f))
+* **templates:** fix cloned indexes from a template ([#398](https://github.com/chartdb/chartdb/issues/398)) ([9f8500f](https://github.com/chartdb/chartdb/commit/9f8500fc7e36e6a819ecb9029f263d80eac88279))
+* **templates:** fix tags urls ([#405](https://github.com/chartdb/chartdb/issues/405)) ([fe8b9f9](https://github.com/chartdb/chartdb/commit/fe8b9f9e91481d8a3272113b6f4be4da8d61ad04))
+* **templates:** tag urls lowercase to support browsers ([#397](https://github.com/chartdb/chartdb/issues/397)) ([959e540](https://github.com/chartdb/chartdb/commit/959e5402b8c112fae6243ce9283947057506c128))
+
 ## [1.1.0](https://github.com/chartdb/chartdb/compare/v1.0.1...v1.1.0) (2024-11-13)
 
 

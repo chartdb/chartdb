@@ -82,6 +82,8 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Add size for character types
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
+            } else if (field.type.name.toLowerCase().includes('varchar')) {
+                sqlScript += `(500)`;
             }
 
             // Add precision and scale for numeric types
@@ -94,6 +96,11 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             // Handle NOT NULL constraint
             if (!field.nullable) {
                 sqlScript += ' NOT NULL';
+            }
+
+            // Handle UNIQUE value
+            if (!field.primaryKey && field.unique) {
+                sqlScript += ` UNIQUE`;
             }
 
             // Handle DEFAULT value
@@ -212,7 +219,7 @@ export const exportSQL = async (
     ]);
 
     const openai = createOpenAI({
-        apiKey: OPENAI_API_KEY,
+        apiKey: window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY,
     });
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);
@@ -375,6 +382,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **General SQLite Constraints**: Remember, \`ALTER TABLE\` in SQLite is limited and cannot add constraints after the table is created.
         - **Conditional Logic**: Ensure the script uses SQLite-compatible syntax and does not include unsupported features.
     `,
+        clickhouse: '',
     };
 
     const dialectInstruction = dialectInstructionMap[databaseType] ?? '';

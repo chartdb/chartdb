@@ -28,7 +28,6 @@ export const uk: LanguageTranslation = {
                 show_cardinality: 'Показати кардинальність',
                 zoom_on_scroll: 'Збільшити прокручування',
                 theme: 'Тема',
-                change_language: 'Мова',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
             },
@@ -77,6 +76,17 @@ export const uk: LanguageTranslation = {
             dont_show_again: 'Більше не показувати',
             change_schema: 'Зміна',
             none: 'немає',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Помилка копіювання',
+                description: 'Буфер обміну не підтримується',
+            },
+            failed: {
+                title: 'Помилка копіювання',
+                description: 'Щось пішло не так. Будь ласка, спробуйте ще раз.',
+            },
         },
 
         theme: {
@@ -344,6 +354,11 @@ export const uk: LanguageTranslation = {
             format_json: 'JSON',
             cancel: 'Cancel',
             export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
         // TODO: Translate
         import_diagram_dialog: {
@@ -381,10 +396,15 @@ export const uk: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Двойной клик для редактирования',
         },
+
+        language_select: {
+            change_language: 'Мова',
+        },
     },
 };
 
 export const ukMetadata: LanguageMetadata = {
-    name: 'Українська',
+    name: 'Ukrainian',
+    nativeName: 'Українська',
     code: 'uk',
 };

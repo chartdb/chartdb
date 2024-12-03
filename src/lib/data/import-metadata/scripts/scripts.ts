@@ -6,6 +6,7 @@ import { getSqlServerQuery } from './sqlserver-script';
 import { mariaDBQuery } from './maria-script';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
+import { clickhouseQuery } from './clickhouse-script';
 
 export type ImportMetadataScripts = Record<
     DatabaseType,
@@ -22,4 +23,5 @@ export const importMetadataScripts: ImportMetadataScripts = {
     [DatabaseType.SQLITE]: () => sqliteQuery,
     [DatabaseType.SQL_SERVER]: getSqlServerQuery,
     [DatabaseType.MARIADB]: () => mariaDBQuery,
+    [DatabaseType.CLICKHOUSE]: () => clickhouseQuery,
 };

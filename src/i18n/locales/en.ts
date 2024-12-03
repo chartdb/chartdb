@@ -28,7 +28,6 @@ export const en = {
                 show_cardinality: 'Show Cardinality',
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
-                change_language: 'Language',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
             },
@@ -76,6 +75,17 @@ export const en = {
             dont_show_again: "Don't show again",
             change_schema: 'Change',
             none: 'none',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Copy failed',
+                description: 'Clipboard not supported.',
+            },
+            failed: {
+                title: 'Copy failed',
+                description: 'Something went wrong. Please try again.',
+            },
         },
 
         theme: {
@@ -341,6 +351,11 @@ export const en = {
             format_json: 'JSON',
             cancel: 'Cancel',
             export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {
@@ -377,10 +392,15 @@ export const en = {
         tool_tips: {
             double_click_to_edit: 'Double-click to edit',
         },
+
+        language_select: {
+            change_language: 'Language',
+        },
     },
 };
 
 export const enMetadata: LanguageMetadata = {
     name: 'English',
+    nativeName: 'English',
     code: 'en',
 };

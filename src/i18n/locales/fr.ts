@@ -28,7 +28,6 @@ export const fr: LanguageTranslation = {
                 show_cardinality: 'Afficher la Cardinalité',
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
-                change_language: 'Langue',
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
             },
@@ -67,6 +66,17 @@ export const fr: LanguageTranslation = {
                 'Cette action réorganisera toutes les tables dans le diagramme. Voulez-vous continuer ?',
             reorder: 'Réorganiser',
             cancel: 'Annuler',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'Échec de la copie',
+                description: 'Presse-papiers non pris en charge',
+            },
+            failed: {
+                title: 'Échec de la copie',
+                description: 'Quelque chose a mal tourné. Veuillez réessayer.',
+            },
         },
 
         theme: {
@@ -347,6 +357,11 @@ export const fr: LanguageTranslation = {
             format_json: 'JSON',
             cancel: 'Cancel',
             export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
         // TODO: Translate
         import_diagram_dialog: {
@@ -384,10 +399,15 @@ export const fr: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'Double-cliquez pour modifier',
         },
+
+        language_select: {
+            change_language: 'Langue',
+        },
     },
 };
 
 export const frMetadata: LanguageMetadata = {
-    name: 'Français',
+    name: 'French',
+    nativeName: 'Français',
     code: 'fr',
 };

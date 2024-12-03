@@ -28,7 +28,6 @@ export const zh_TW: LanguageTranslation = {
                 show_cardinality: '顯示基數',
                 zoom_on_scroll: '滾動縮放',
                 theme: '主題',
-                change_language: '變更語言',
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
             },
@@ -73,6 +72,17 @@ export const zh_TW: LanguageTranslation = {
             dont_show_again: '不再顯示',
             change_schema: '變更',
             none: '無',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: '複製失敗',
+                description: '不支援剪貼簿',
+            },
+            failed: {
+                title: '複製失敗',
+                description: '出現問題。請再試一次。',
+            },
         },
 
         theme: {
@@ -334,6 +344,12 @@ export const zh_TW: LanguageTranslation = {
             format_json: 'JSON',
             cancel: '取消',
             export: '匯出',
+            // TODO: Translate
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
 
         import_diagram_dialog: {
@@ -370,10 +386,15 @@ export const zh_TW: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: '雙擊以編輯',
         },
+
+        language_select: {
+            change_language: '變更語言',
+        },
     },
 };
 
 export const zh_TWMetadata: LanguageMetadata = {
-    name: '繁體中文',
+    nativeName: '繁體中文',
+    name: 'Traditional Chinese',
     code: 'zh_TW',
 };

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import {
     CircleDotDashed,
+    GripVertical,
     Pencil,
     EllipsisVertical,
     Trash2,
@@ -15,6 +16,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
+import { useSortable } from '@dnd-kit/sortable';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -60,6 +62,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const [tableName, setTableName] = React.useState(table.name);
     const { isMd: isDesktop } = useBreakpoint('md');
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const { listeners } = useSortable({ id: table.id });
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -252,6 +255,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
+            <div
+                className="flex cursor-move items-center justify-center"
+                {...listeners}
+            >
+                <GripVertical className="size-4 text-muted-foreground" />
+            </div>
             <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input

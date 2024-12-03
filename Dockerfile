@@ -21,10 +21,12 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 
 # Copy the build output from the builder stage
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
-COPY ./default.conf /etc/nginx/conf.d/default.conf
+COPY ./default.conf.template /etc/nginx/conf.d/default.conf.template
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Expose the default port for the Nginx web server
 EXPOSE 80
 
-# Run Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Use entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]

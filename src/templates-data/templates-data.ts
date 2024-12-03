@@ -19,8 +19,36 @@ import { lobstersDb } from './templates/lobsters-db';
 import { refinerycmsDb } from './templates/refinerycms-db';
 import { buddypressDb } from './templates/buddypress-db';
 import { snipeItDb } from './templates/snipe-it-db';
-import { ComfortableMexicanSofaDb } from './templates/comfortable-mexican-sofa-db';
-
+import { comfortableMexicanSofaDb } from './templates/comfortable-mexican-sofa-db';
+import { syliusDb } from './templates/sylius-db';
+import { monicaDb } from './templates/monica-db';
+import { attendizeDb } from './templates/attendize-db';
+import { saasPegasusDb } from './templates/saas-pegasus-db';
+import { bookstackDb } from './templates/bookstack-db';
+import { bouncerDb } from './templates/bouncer-db';
+import { cabotDb } from './templates/cabot-db';
+import { feedbinDb } from './templates/feedbin-db';
+import { freescoutDb } from './templates/freescout-db';
+import { hackerNewsDb } from './templates/hacker-news-db';
+import { flarumDb } from './templates/flarum-db';
+import { canvasDb } from './templates/canvas-db';
+import { taggitDb } from './templates/taggit-db';
+import { doorkeeperDb } from './templates/doorkeeper-db';
+import { orchidDb } from './templates/orchid-db';
+import { flipperDb } from './templates/flipper-db';
+import { cachetDb } from './templates/cachet-db';
+import { reversionDb } from './templates/reversion-db';
+import { screeenlyDb } from './templates/screeenly-db';
+import { staytusDb } from './templates/staytus-db';
+import { deployerDb } from './templates/deployer-db';
+import { deviseDb } from './templates/devise-db';
+import { talkDb } from './templates/talk-db';
+import { octoboxDb } from './templates/octobox-db';
+import { payRailsDb } from './templates/pay-rails-db';
+import { laravelActivitylogDb } from './templates/laravel-activitylog-db';
+import { pixelfedDb } from './templates/pixelfed-db';
+import { polrDb } from './templates/polr-db';
+import { djangoAxesDb } from './templates/django-axes-db';
 export interface Template {
     slug: string;
     name: string;
@@ -55,5 +83,34 @@ export const templates: Template[] = [
     refinerycmsDb,
     buddypressDb,
     snipeItDb,
-    ComfortableMexicanSofaDb,
+    comfortableMexicanSofaDb,
+    syliusDb,
+    monicaDb,
+    attendizeDb,
+    saasPegasusDb,
+    bookstackDb,
+    bouncerDb,
+    cabotDb,
+    feedbinDb,
+    freescoutDb,
+    hackerNewsDb,
+    flarumDb,
+    canvasDb,
+    taggitDb,
+    doorkeeperDb,
+    orchidDb,
+    flipperDb,
+    cachetDb,
+    reversionDb,
+    screeenlyDb,
+    staytusDb,
+    deployerDb,
+    deviseDb,
+    talkDb,
+    octoboxDb,
+    payRailsDb,
+    laravelActivitylogDb,
+    pixelfedDb,
+    polrDb,
+    djangoAxesDb,
 ];

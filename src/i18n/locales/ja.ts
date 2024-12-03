@@ -28,7 +28,6 @@ export const ja: LanguageTranslation = {
                 show_cardinality: 'カーディナリティを表示',
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
-                change_language: '言語',
                 // TODO: Translate
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
@@ -78,6 +77,18 @@ export const ja: LanguageTranslation = {
             dont_show_again: '再表示しない',
             change_schema: '変更',
             none: 'なし',
+        },
+
+        copy_to_clipboard_toast: {
+            unsupported: {
+                title: 'コピー失敗',
+                description: 'クリップボードがサポートされていません',
+            },
+            failed: {
+                title: 'コピー失敗',
+                description:
+                    '何かがうまくいきませんでした。もう一度お試しください。',
+            },
         },
 
         theme: {
@@ -349,6 +360,11 @@ export const ja: LanguageTranslation = {
             format_json: 'JSON',
             cancel: 'Cancel',
             export: 'Export',
+            error: {
+                title: 'Error exporting diagram',
+                description:
+                    'Something went wrong. Need help? chartdb.io@gmail.com',
+            },
         },
         // TODO: Translate
         import_diagram_dialog: {
@@ -386,10 +402,15 @@ export const ja: LanguageTranslation = {
         tool_tips: {
             double_click_to_edit: 'ダブルクリックして編集',
         },
+
+        language_select: {
+            change_language: '言語',
+        },
     },
 };
 
 export const jaMetadata: LanguageMetadata = {
     name: 'Japanese',
+    nativeName: '日本語',
     code: 'ja',
 };

@@ -26,7 +26,7 @@ export interface SelectBoxOption {
     description?: string;
 }
 
-interface SelectBoxProps {
+export interface SelectBoxProps {
     options: SelectBoxOption[];
     value?: string[] | string;
     onChange?: (values: string[] | string) => void;

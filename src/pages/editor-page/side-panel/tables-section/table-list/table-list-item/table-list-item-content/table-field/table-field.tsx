@@ -48,7 +48,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     }));
 
     const style = {
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Translate.toString(transform),
         transition,
     };
 

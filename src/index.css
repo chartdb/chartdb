@@ -16,7 +16,6 @@
         @apply hidden !important;
     }
 
-    .scrollable-flex > div {
-        @apply !flex;
+    .marker-definitions {
     }
 }

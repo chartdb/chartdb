@@ -50,4 +50,5 @@ export const mariadbDataTypes: readonly DataType[] = [
 
     // JSON Type
     { name: 'json', id: 'json' },
+    { name: 'uuid', id: 'uuid' },
 ] as const;
