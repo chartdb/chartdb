@@ -117,7 +117,10 @@ const DialogInternalContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <ScrollArea
         ref={ref}
-        className={cn('flex max-h-screen flex-col overflow-y-auto', className)}
+        className={cn(
+            'flex flex-1 max-h-screen flex-col overflow-y-auto',
+            className
+        )}
         {...props}
     />
 ));
