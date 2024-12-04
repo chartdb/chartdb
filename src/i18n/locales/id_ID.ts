@@ -31,11 +31,10 @@ export const id_ID: LanguageTranslation = {
                 show_dependencies: 'Tampilkan Dependensi',
                 hide_dependencies: 'Sembunyikan Dependensi',
             },
-            // TODO: Translate
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: 'Bagikan',
+                export_diagram: 'Ekspor Diagram',
+                import_diagram: 'Impor Diagram',
             },
             help: {
                 help: 'Bantuan',
@@ -346,30 +345,28 @@ export const id_ID: LanguageTranslation = {
             confirm: 'Tentu saja!',
         },
 
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Ekspor Diagram',
+            description: 'Pilih format untuk ekspor:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Batal',
+            export: 'Ekspor',
             error: {
-                title: 'Error exporting diagram',
+                title: 'Error ekspor diagram',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Sesuatu yang salah. Butuh bantuan? chartdb.io@gmail.com',
             },
         },
 
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            title: 'Impor Diagram',
+            description: 'Tempel diagram JSON di bawah:',
+            cancel: 'Batal',
+            import: 'Impor',
             error: {
-                title: 'Error importing diagram',
+                title: 'Error impor diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? chartdb.io@gmail.com',
             },
         },
 
@@ -388,16 +385,13 @@ export const id_ID: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Ubah Tabel',
             delete_table: 'Hapus Tabel',
-            // TODO: Translate
-            duplicate_table: 'Duplicate Table',
+            duplicate_table: 'Duplikat Tabel',
         },
 
-        // TODO: Translate
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+        snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',
 
-        // TODO: Translate
         tool_tips: {
-            double_click_to_edit: 'Double-click to edit',
+            double_click_to_edit: 'Klik ganda untuk mengedit',
         },
 
         language_select: {
