@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/chartdb/chartdb/compare/v1.4.0...v1.5.0) (2024-12-04)
+
+
+### Features
+
+* **i18n:** translate share and dialog sections in Indonesian locale files ([#468](https://github.com/chartdb/chartdb/issues/468)) ([3574cec](https://github.com/chartdb/chartdb/commit/3574cecc7c73dcab404b82115d20e1ad0cd26b37))
+
+
+### Bug Fixes
+
+* **dialogs:** fix footer position on dialogs ([#470](https://github.com/chartdb/chartdb/issues/470)) ([2309306](https://github.com/chartdb/chartdb/commit/2309306ef590783b00a2489209092107dd9a3788))
+
 ## [1.4.0](https://github.com/chartdb/chartdb/compare/v1.3.1...v1.4.0) (2024-12-02)
 
 
