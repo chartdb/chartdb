@@ -152,6 +152,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
 
     const [snapToGridEnabled, setSnapToGridEnabled] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handleTogglePage = () => {
+        setCurrentPage((current) => (current === 1 ? 2 : 1));
+    };
+
     useEffect(() => {
         setIsInitialLoadingNodes(true);
     }, [initialTables]);
@@ -869,7 +875,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Toolbar readonly={readonly} />
+                        <Toolbar
+                            readonly={readonly}
+                            currentPage={currentPage}
+                            onTogglePage={handleTogglePage}
+                        />
                     </Controls>
                     <MiniMap
                         style={{
