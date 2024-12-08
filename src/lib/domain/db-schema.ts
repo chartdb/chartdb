@@ -22,4 +22,5 @@ export const databasesWithSchemas: DatabaseType[] = [
     DatabaseType.POSTGRESQL,
     DatabaseType.SQL_SERVER,
     DatabaseType.CLICKHOUSE,
+    DatabaseType.COCKROACHDB,
 ];

@@ -17,6 +17,9 @@ import GeneralDBLogo2 from '@/assets/general_db_logo_2.png';
 import ClickhouseLogo from '@/assets/clickhouse_logo.png';
 import ClickhouseLogoDark from '@/assets/clickhouse_logo_dark.png';
 import ClickhouseLogo2 from '@/assets/clickhouse_logo_2.png';
+import CockroachDBLogo from '@/assets/cockroachdb_logo.png';
+import CockroachDBLogoDark from '@/assets/cockroachdb_logo_dark.png';
+import CockroachDBLogo2 from '@/assets/cockroachdb_logo_2.png';
 import { DatabaseType } from './domain/database-type';
 import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 
@@ -28,6 +31,7 @@ export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.MARIADB]: 'MariaDB',
     [DatabaseType.SQLITE]: 'SQLite',
     [DatabaseType.CLICKHOUSE]: 'ClickHouse',
+    [DatabaseType.COCKROACHDB]: 'CockroachDB',
 };
 
 export const databaseLogoMap: Record<DatabaseType, string> = {
@@ -37,6 +41,7 @@ export const databaseLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.SQLITE]: SqliteLogo,
     [DatabaseType.SQL_SERVER]: SqlServerLogo,
     [DatabaseType.CLICKHOUSE]: ClickhouseLogo,
+    [DatabaseType.COCKROACHDB]: CockroachDBLogo,
     [DatabaseType.GENERIC]: '',
 };
 
@@ -47,6 +52,7 @@ export const databaseDarkLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.SQLITE]: SqliteLogoDark,
     [DatabaseType.SQL_SERVER]: SqlServerLogoDark,
     [DatabaseType.CLICKHOUSE]: ClickhouseLogoDark,
+    [DatabaseType.COCKROACHDB]: CockroachDBLogoDark,
     [DatabaseType.GENERIC]: '',
 };
 
@@ -65,5 +71,6 @@ export const databaseSecondaryLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.SQLITE]: SqliteLogo2,
     [DatabaseType.SQL_SERVER]: SqlServerLogo2,
     [DatabaseType.CLICKHOUSE]: ClickhouseLogo2,
+    [DatabaseType.COCKROACHDB]: CockroachDBLogo2,
     [DatabaseType.GENERIC]: GeneralDBLogo2,
 };
