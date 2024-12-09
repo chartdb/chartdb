@@ -1,15 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
-import {
-    ZoomIn,
-    ZoomOut,
-    Save,
-    Redo,
-    Undo,
-    Scan,
-    ChevronDown,
-    ChevronUp,
-} from 'lucide-react';
+import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
@@ -27,15 +18,9 @@ const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
 export interface ToolbarProps {
     readonly?: boolean;
-    onTogglePage?: () => void;
-    currentPage?: number;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({
-    readonly,
-    onTogglePage,
-    currentPage = 1,
-}) => {
+export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { updateDiagramUpdatedAt } = useChartDB();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -78,25 +63,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 <CardContent className="flex h-full flex-row items-center p-1">
                     {!readonly ? (
                         <>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <span>
-                                        <ToolbarButton onClick={onTogglePage}>
-                                            {currentPage === 1 ? (
-                                                <ChevronDown />
-                                            ) : (
-                                                <ChevronUp />
-                                            )}
-                                        </ToolbarButton>
-                                    </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {currentPage === 1
-                                        ? t('toolbar.next_page')
-                                        : t('toolbar.previous_page')}
-                                </TooltipContent>
-                            </Tooltip>
-                            <Separator orientation="vertical" />
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
