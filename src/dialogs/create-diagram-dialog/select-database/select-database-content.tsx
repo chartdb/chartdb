@@ -72,8 +72,8 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                 {Array.from({ length: TOTAL_SLOTS }).map((_, index) =>
                     currentDatabasesTypes?.[index] ? (
                         <DatabaseOption
-                            key={index}
-                            type={currentDatabasesTypes?.[index]}
+                            key={currentDatabasesTypes[index]}
+                            type={currentDatabasesTypes[index]}
                         />
                     ) : null
                 )}
