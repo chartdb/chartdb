@@ -25,7 +25,7 @@ export const DiagramIcon = React.forwardRef<
 >(({ databaseType, databaseEdition, className, imgClassName }, ref) =>
     databaseEdition ? (
         <Tooltip>
-            <TooltipTrigger className={cn('mr-1', className)} ref={ref}>
+            <TooltipTrigger className={cn('mr-1', className)} ref={ref} asChild>
                 <img
                     src={databaseEditionToImageMap[databaseEdition]}
                     className={cn('h-5 max-w-fit rounded-full', imgClassName)}
@@ -38,7 +38,7 @@ export const DiagramIcon = React.forwardRef<
         </Tooltip>
     ) : (
         <Tooltip>
-            <TooltipTrigger className={cn('mr-2', className)} ref={ref}>
+            <TooltipTrigger className={cn('mr-2', className)} ref={ref} asChild>
                 <img
                     src={databaseSecondaryLogoMap[databaseType]}
                     className={cn('h-5 max-w-fit', imgClassName)}

@@ -282,6 +282,23 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         attributes: Partial<Diagram>;
     }) => {
         await db.diagrams.update(id, attributes);
+
+        if (attributes.id) {
+            await Promise.all([
+                db.db_tables
+                    .where('diagramId')
+                    .equals(id)
+                    .modify({ diagramId: attributes.id }),
+                db.db_relationships
+                    .where('diagramId')
+                    .equals(id)
+                    .modify({ diagramId: attributes.id }),
+                db.db_dependencies
+                    .where('diagramId')
+                    .equals(id)
+                    .modify({ diagramId: attributes.id }),
+            ]);
+        }
     };
 
     const deleteDiagram: StorageContext['deleteDiagram'] = async (
