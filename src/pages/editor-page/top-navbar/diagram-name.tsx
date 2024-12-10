@@ -60,7 +60,10 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                     }
                 )}
             >
-                <DiagramIcon diagram={currentDiagram} />
+                <DiagramIcon
+                    databaseType={currentDiagram.databaseType}
+                    databaseEdition={currentDiagram.databaseEdition}
+                />
                 <div className="flex">
                     {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
                 </div>
