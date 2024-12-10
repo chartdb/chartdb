@@ -255,29 +255,30 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
-    const addTables: ChartDBContext['addTables'] = useCallback(
-        async (tables: DBTable[], options = { updateHistory: true }) => {
-            setTables((currentTables) => [...currentTables, ...tables]);
-            const updatedAt = new Date();
-            setDiagramUpdatedAt(updatedAt);
-            await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-                ...tables.map((table) => db.addTable({ diagramId, table })),
-            ]);
+    const addTables = useCallback(async (tables: DBTable[], options = { updateHistory: true }) => {
+        const updatedAt = new Date();
+        
+        // Batch state updates
+        setTables(currentTables => [...currentTables, ...tables]);
+        setDiagramUpdatedAt(updatedAt);
+        
+        // Batch DB operations
+        await Promise.all([
+            db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ...tables.map(table => db.addTable({ diagramId, table }))
+        ]);
 
-            events.emit({ action: 'add_tables', data: { tables } });
-
-            if (options.updateHistory) {
-                addUndoAction({
-                    action: 'addTables',
-                    redoData: { tables },
-                    undoData: { tableIds: tables.map((t) => t.id) },
-                });
-                resetRedoStack();
-            }
-        },
-        [db, diagramId, setTables, addUndoAction, resetRedoStack, events]
-    );
+        // Batch events and history
+        if (options.updateHistory) {
+            addUndoAction({
+                action: 'addTables',
+                redoData: { tables },
+                undoData: { tableIds: tables.map(t => t.id) }
+            });
+            resetRedoStack();
+        }
+        events.emit({ action: 'add_tables', data: { tables } });
+    }, [db, diagramId, setTables, addUndoAction, resetRedoStack, events]);
 
     const addTable: ChartDBContext['addTable'] = useCallback(
         async (table: DBTable, options = { updateHistory: true }) => {
@@ -1375,6 +1376,108 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    const batchUpdateTables = useCallback(async (
+        updates: Array<{ table: DBTable, type: 'add' | 'update' | 'delete' }>,
+        options = { updateHistory: true }
+    ) => {
+        const updatedAt = new Date();
+        
+        // Group operations by type
+        const grouped = updates.reduce((acc, update) => {
+            acc[update.type].push(update.table);
+            return acc;
+        }, { add: [], update: [], delete: [] } as Record<string, DBTable[]>);
+
+        // Batch state updates
+        setTables(currentTables => {
+            const tablesMap = new Map(currentTables.map(t => [t.id, t]));
+            grouped.delete.forEach(t => tablesMap.delete(t.id));
+            grouped.update.forEach(t => tablesMap.set(t.id, t));
+            grouped.add.forEach(t => tablesMap.set(t.id, t));
+            return Array.from(tablesMap.values());
+        });
+
+        // Batch DB operations
+        await Promise.all([
+            db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ...grouped.add.map(table => db.addTable({ diagramId, table })),
+            ...grouped.update.map(table => db.putTable({ diagramId, table })),
+            ...grouped.delete.map(table => db.deleteTable({ diagramId, id: table.id }))
+        ]);
+
+        if (options.updateHistory) {
+            addUndoAction({
+                action: 'batchUpdateTables',
+                redoData: { updates },
+                undoData: { 
+                    updates: updates.map(u => ({
+                        table: u.type === 'delete' ? u.table : null,
+                        type: u.type === 'add' ? 'delete' : 'add'
+                    }))
+                }
+            });
+            resetRedoStack();
+        }
+    }, [db, diagramId, setTables, addUndoAction, resetRedoStack]);
+
+    const batchStateUpdates = useCallback(async (
+        updates: Array<{
+            type: 'table' | 'relationship' | 'dependency';
+            action: 'add' | 'update' | 'delete';
+            data: any;
+        }>,
+        options = { updateHistory: true }
+    ) => {
+        // Group updates by type
+        const grouped = updates.reduce((acc, update) => {
+            if (!acc[update.type]) {
+                acc[update.type] = { add: [], update: [], delete: [] };
+            }
+            acc[update.type][update.action].push(update.data);
+            return acc;
+        }, {} as Record<string, Record<string, any[]>>);
+
+        // Batch all state updates
+        const stateUpdates = [];
+        if (grouped.table) {
+            stateUpdates.push(
+                setTables(current => {
+                    const tableMap = new Map(current.map(t => [t.id, t]));
+                    grouped.table.delete.forEach(id => tableMap.delete(id));
+                    grouped.table.update.forEach(t => tableMap.set(t.id, {...tableMap.get(t.id)!, ...t}));
+                    grouped.table.add.forEach(t => tableMap.set(t.id, t));
+                    return Array.from(tableMap.values());
+                })
+            );
+        }
+
+        // Similar batching for relationships and dependencies
+        
+        // Execute all state updates in one render cycle
+        await Promise.all(stateUpdates);
+        
+        // Batch DB operations
+        const dbOperations = [];
+        // Add DB operations here
+        
+        await Promise.all(dbOperations);
+        
+        if (options.updateHistory) {
+            addUndoAction({
+                action: 'batchStateUpdate',
+                redoData: { updates },
+                undoData: { 
+                    updates: updates.map(u => ({
+                        type: u.type,
+                        action: u.action === 'add' ? 'delete' : 'add',
+                        data: u.action === 'delete' ? u.data : null
+                    }))
+                }
+            });
+            resetRedoStack();
+        }
+    }, [setTables, addUndoAction, resetRedoStack]);
+
     return (
         <chartDBContext.Provider
             value={{
@@ -1430,6 +1533,8 @@ export const ChartDBProvider: React.FC<
                 removeDependency,
                 removeDependencies,
                 updateDependency,
+                batchUpdateTables,
+                batchStateUpdates,
             }}
         >
             {children}
