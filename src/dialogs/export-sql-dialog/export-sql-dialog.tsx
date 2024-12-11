@@ -70,7 +70,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 const script = await exportSQLScript();
                 setScript(script);
                 setIsScriptLoading(false);
-            } catch (e) {
+            } catch {
                 setError(true);
             }
         };
