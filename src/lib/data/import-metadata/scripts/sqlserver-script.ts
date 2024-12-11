@@ -76,9 +76,9 @@ cols AS (
                         ELSE
                             'null'
                     END +
-                ', "nullable": "' +
+                ', "nullable": ' +
                     CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
-                '", "default": "' +
+                ', "default": "' +
                     COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '\\"'), '') +
                 '", "collation": "' +
                     COALESCE(cols.COLLATION_NAME, '') +
@@ -308,9 +308,9 @@ cols AS (
                                             ELSE
                                                 'null'
                                         END +
-                                    ', "nullable": "' +
+                                    ', "nullable": ' +
                                         CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
-                                    '", "default": "' +
+                                    ', "default": "' +
                                         COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '"'), '') +
                                     '", "collation": "' +
                                         COALESCE(cols.COLLATION_NAME, '') +
