@@ -83,7 +83,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
             try {
                 await navigator.clipboard.writeText(code);
                 setIsCopied(true);
-            } catch (error) {
+            } catch {
                 setIsCopied(false);
                 toast({
                     title: t('copy_to_clipboard_toast.failed.title'),

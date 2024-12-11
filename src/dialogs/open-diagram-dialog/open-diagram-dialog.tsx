@@ -137,7 +137,12 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                         <TableCell className="table-cell">
                                             <div className="flex justify-center">
                                                 <DiagramIcon
-                                                    diagram={diagram}
+                                                    databaseType={
+                                                        diagram.databaseType
+                                                    }
+                                                    databaseEdition={
+                                                        diagram.databaseEdition
+                                                    }
                                                 />
                                             </div>
                                         </TableCell>

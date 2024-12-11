@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.0](https://github.com/chartdb/chartdb/compare/v1.4.0...v1.5.0) (2024-12-11)
+
+
+### Features
+
+* **CockroachDB:** Add CockroachDB support ([#472](https://github.com/chartdb/chartdb/issues/472)) ([5409288](https://github.com/chartdb/chartdb/commit/54092883883b135f6ace51d86754b1df76603d30))
+* **i18n:** translate share and dialog sections in Indonesian locale files ([#468](https://github.com/chartdb/chartdb/issues/468)) ([3574cec](https://github.com/chartdb/chartdb/commit/3574cecc7c73dcab404b82115d20e1ad0cd26b37))
+
+
+### Bug Fixes
+
+* **core:** fix update diagram id ([#477](https://github.com/chartdb/chartdb/issues/477)) ([348f805](https://github.com/chartdb/chartdb/commit/348f80568e0f686ee478147fdc43a5d43b5c1ebb))
+* **dialogs:** fix footer position on dialogs ([#470](https://github.com/chartdb/chartdb/issues/470)) ([2309306](https://github.com/chartdb/chartdb/commit/2309306ef590783b00a2489209092107dd9a3788))
+* **sql-server import:** nullable should be boolean instead of string ([#480](https://github.com/chartdb/chartdb/issues/480)) ([635fb53](https://github.com/chartdb/chartdb/commit/635fb53c9f7ebd1e5ef4d9274af041edc08f04c3))
+
 ## [1.4.0](https://github.com/chartdb/chartdb/compare/v1.3.1...v1.4.0) (2024-12-02)
 
 
