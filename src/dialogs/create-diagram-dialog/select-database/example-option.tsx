@@ -12,9 +12,9 @@ export const ExampleOption: React.FC<ExampleOptionProps> = () => {
             href="/examples"
             className="col-span-3 text-primary hover:text-primary"
         >
-            <div className="flex h-8 w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border py-3 text-center md:h-12">
+            <div className="flex h-8 w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border py-3 text-center">
                 <div className="flex items-center">
-                    <LayoutGrid className="size-5 md:size-6" />
+                    <LayoutGrid className="size-4" />
                 </div>
                 <div className="flex flex-col-reverse">
                     <div className="hidden text-sm text-primary md:flex">

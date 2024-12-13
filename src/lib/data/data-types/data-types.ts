@@ -26,6 +26,7 @@ export const dataTypeMap: Record<DatabaseType, readonly DataType[]> = {
     [DatabaseType.MARIADB]: mariadbDataTypes,
     [DatabaseType.SQLITE]: sqliteDataTypes,
     [DatabaseType.CLICKHOUSE]: clickhouseDataTypes,
+    [DatabaseType.COCKROACHDB]: postgresDataTypes,
 } as const;
 
 const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
@@ -42,6 +43,7 @@ const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.MARIADB]: {},
     [DatabaseType.SQLITE]: {},
     [DatabaseType.CLICKHOUSE]: {},
+    [DatabaseType.COCKROACHDB]: {},
     [DatabaseType.GENERIC]: {},
 };
 

@@ -93,7 +93,14 @@ const EditorPageComponent: React.FC = () => {
                 resetUndoStack();
                 const diagram = await loadDiagram(diagramId);
                 if (!diagram) {
-                    navigate('/');
+                    if (currentDiagram?.id) {
+                        await updateConfig({
+                            defaultDiagramId: currentDiagram.id,
+                        });
+                        navigate(`/diagrams/${currentDiagram.id}`);
+                    } else {
+                        navigate('/');
+                    }
                 }
                 setInitialDiagram(diagram);
                 hideLoader();

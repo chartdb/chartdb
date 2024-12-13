@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Diagram } from '@/lib/domain/diagram';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
+import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import {
     databaseEditionToImageMap,
     databaseEditionToLabelMap,
@@ -9,39 +9,44 @@ import {
     databaseSecondaryLogoMap,
     databaseTypeToLabelMap,
 } from '@/lib/databases';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import { cn } from '@/lib/utils';
 
-export interface DiagramIconProps {
-    diagram: Diagram;
+export interface DiagramIconProps
+    extends React.ComponentPropsWithoutRef<'div'> {
+    databaseType: DatabaseType;
+    databaseEdition?: DatabaseEdition;
+    imgClassName?: string;
 }
 
 export const DiagramIcon = React.forwardRef<
     React.ElementRef<typeof TooltipTrigger>,
     DiagramIconProps
->(({ diagram }, ref) =>
-    diagram.databaseEdition ? (
+>(({ databaseType, databaseEdition, className, imgClassName }, ref) =>
+    databaseEdition ? (
         <Tooltip>
-            <TooltipTrigger className="mr-1" ref={ref}>
+            <TooltipTrigger className={cn('mr-1', className)} ref={ref} asChild>
                 <img
-                    src={databaseEditionToImageMap[diagram.databaseEdition]}
-                    className="h-5 max-w-fit rounded-full"
+                    src={databaseEditionToImageMap[databaseEdition]}
+                    className={cn('h-5 max-w-fit rounded-full', imgClassName)}
                     alt="database"
                 />
             </TooltipTrigger>
             <TooltipContent>
-                {databaseEditionToLabelMap[diagram.databaseEdition]}
+                {databaseEditionToLabelMap[databaseEdition]}
             </TooltipContent>
         </Tooltip>
     ) : (
         <Tooltip>
-            <TooltipTrigger className="mr-2" ref={ref}>
+            <TooltipTrigger className={cn('mr-2', className)} ref={ref} asChild>
                 <img
-                    src={databaseSecondaryLogoMap[diagram.databaseType]}
-                    className="h-5 max-w-fit"
+                    src={databaseSecondaryLogoMap[databaseType]}
+                    className={cn('h-5 max-w-fit', imgClassName)}
                     alt="database"
                 />
             </TooltipTrigger>
             <TooltipContent>
-                {databaseTypeToLabelMap[diagram.databaseType]}
+                {databaseTypeToLabelMap[databaseType]}
             </TooltipContent>
         </Tooltip>
     )

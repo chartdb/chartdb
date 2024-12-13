@@ -52,4 +52,5 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
         [DatabaseType.GENERIC]: [],
         [DatabaseType.MARIADB]: [],
         [DatabaseType.CLICKHOUSE]: [],
+        [DatabaseType.COCKROACHDB]: [],
     };
