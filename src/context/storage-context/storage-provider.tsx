@@ -134,6 +134,20 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         config: '++id, defaultDiagramId',
     });
 
+    db.version(9).upgrade((tx) =>
+        tx
+            .table<DBTable & { diagramId: string }>('db_tables')
+            .toCollection()
+            .modify((table) => {
+                for (const field of table.fields) {
+                    if (typeof field.nullable === 'string') {
+                        field.nullable =
+                            (field.nullable as string).toLowerCase() === 'true';
+                    }
+                }
+            })
+    );
+
     db.on('ready', async () => {
         const config = await getConfig();
 
