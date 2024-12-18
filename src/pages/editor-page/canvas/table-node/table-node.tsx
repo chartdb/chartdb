@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useRef } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
 import { NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
@@ -96,34 +96,29 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             [relationships]
         );
 
+        const fieldCategories = useMemo(() => {
+            const mustDisplayed = new Set(
+                table.fields.filter(isMustDisplayedField).map(f => f.id)
+            );
+            
+            return {
+                mustDisplayedFields: table.fields.filter(f => mustDisplayed.has(f.id)),
+                otherFields: table.fields.filter(f => !mustDisplayed.has(f.id))
+            };
+        }, [table.fields, isMustDisplayedField]);
+
         const visibleFields = useMemo(() => {
-            if (expanded) {
-                return table.fields;
-            }
-
-            const mustDisplayedFields = table.fields.filter((field: DBField) =>
-                isMustDisplayedField(field)
-            );
-            const nonMustDisplayedFields = table.fields.filter(
-                (field: DBField) => !isMustDisplayedField(field)
-            );
-
-            const visibleMustDisplayedFields = mustDisplayedFields.slice(
-                0,
-                TABLE_MINIMIZED_FIELDS
-            );
-            const remainingSlots =
-                TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
-            const visibleNonMustDisplayedFields = nonMustDisplayedFields.slice(
-                0,
-                remainingSlots
-            );
-
+            if (expanded) return table.fields;
+            
+            const { mustDisplayedFields, otherFields } = fieldCategories;
+            const visibleMustDisplayed = mustDisplayedFields.slice(0, TABLE_MINIMIZED_FIELDS);
+            const remainingSlots = TABLE_MINIMIZED_FIELDS - visibleMustDisplayed.length;
+            
             return [
-                ...visibleMustDisplayedFields,
-                ...visibleNonMustDisplayedFields,
+                ...visibleMustDisplayed,
+                ...otherFields.slice(0, remainingSlots)
             ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
-        }, [expanded, table.fields, isMustDisplayedField]);
+        }, [expanded, table.fields, fieldCategories, TABLE_MINIMIZED_FIELDS]);
 
         return (
             <TableNodeContextMenu table={table}>
@@ -250,3 +245,47 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 );
 
 TableNode.displayName = 'TableNode';
+
+// Optimize field rendering with virtualization
+const VirtualizedFields: React.FC<{
+    fields: DBField[],
+    visibleCount: number,
+    rowHeight: number,
+    onRender: (field: DBField) => React.ReactNode
+}> = React.memo(({ fields, visibleCount, rowHeight, onRender }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [startIndex, setStartIndex] = useState(0);
+    
+    const visibleFields = useMemo(() => {
+        return fields.slice(startIndex, startIndex + visibleCount);
+    }, [fields, startIndex, visibleCount]);
+    
+    const onScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+        const scrollTop = e.currentTarget.scrollTop;
+        const newStartIndex = Math.floor(scrollTop / rowHeight);
+        setStartIndex(newStartIndex);
+    }, [rowHeight]);
+    
+    return (
+        <div 
+            ref={containerRef}
+            style={{ height: Math.min(fields.length, visibleCount) * rowHeight }}
+            onScroll={onScroll}
+        >
+            <div style={{ height: fields.length * rowHeight, position: 'relative' }}>
+                {visibleFields.map((field, index) => (
+                    <div
+                        key={field.id}
+                        style={{
+                            position: 'absolute',
+                            top: (startIndex + index) * rowHeight,
+                            height: rowHeight
+                        }}
+                    >
+                        {onRender(field)}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+});

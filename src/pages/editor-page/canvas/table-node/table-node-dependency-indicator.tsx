@@ -36,24 +36,35 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
             [connection, table.id]
         );
 
-        const numberOfEdgesToTable = useMemo(
-            () =>
-                dependencies.filter(
-                    (dependency) => dependency.tableId === table.id
-                ).length,
-            [dependencies, table.id]
-        );
+        const dependencyStats = useMemo(() => {
+            const counts = dependencies.reduce((acc, dep) => {
+                if (dep.tableId === table.id) {
+                    acc.incoming++;
+                }
+                if (dep.dependentTableId === table.id) {
+                    acc.outgoing++;
+                }
+                return acc;
+            }, { incoming: 0, outgoing: 0 });
 
-        const previousNumberOfEdgesToTableRef = useRef(numberOfEdgesToTable);
+            return {
+                total: counts.incoming + counts.outgoing,
+                hasIncoming: counts.incoming > 0,
+                hasOutgoing: counts.outgoing > 0
+            };
+        }, [dependencies, table.id]);
+
+        const previousNumberOfEdgesToTableRef = useRef(dependencyStats.total);
 
         useEffect(() => {
-            if (
-                previousNumberOfEdgesToTableRef.current !== numberOfEdgesToTable
-            ) {
-                updateNodeInternals(table.id);
-                previousNumberOfEdgesToTableRef.current = numberOfEdgesToTable;
+            if (dependencyStats.total !== previousNumberOfEdgesToTableRef.current) {
+                const timeoutId = setTimeout(() => {
+                    updateNodeInternals(table.id);
+                    previousNumberOfEdgesToTableRef.current = dependencyStats.total;
+                }, 0);
+                return () => clearTimeout(timeoutId);
             }
-        }, [table.id, updateNodeInternals, numberOfEdgesToTable]);
+        }, [dependencyStats.total, table.id, updateNodeInternals]);
 
         return (
             <>
@@ -66,7 +77,7 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
                     />
                 ) : null}
                 {Array.from(
-                    { length: numberOfEdgesToTable },
+                    { length: dependencyStats.total },
                     (_, index) => index
                 ).map((index) => (
                     <Handle
@@ -79,7 +90,7 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
                 ))}
                 {isTarget ? (
                     <Handle
-                        id={`${TARGET_DEP_PREFIX}${numberOfEdgesToTable}_${table.id}`}
+                        id={`${TARGET_DEP_PREFIX}${dependencyStats.total}_${table.id}`}
                         className={
                             isTarget
                                 ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
