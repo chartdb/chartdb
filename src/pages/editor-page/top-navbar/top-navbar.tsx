@@ -35,6 +35,7 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { useNavigate } from 'react-router-dom';
 import { LanguageNav } from './language-nav/language-nav';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 export interface TopNavbarProps {}
 
@@ -50,11 +51,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         openOpenDiagramDialog,
         openExportSQLDialog,
         openImportDatabaseDialog,
-        showAlert,
         openExportImageDialog,
         openExportDiagramDialog,
         openImportDiagramDialog,
     } = useDialog();
+    const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
     const {

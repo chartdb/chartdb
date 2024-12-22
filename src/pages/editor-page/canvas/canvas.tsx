@@ -55,7 +55,6 @@ import {
     TooltipTrigger,
     TooltipContent,
 } from '@/components/tooltip/tooltip';
-import { useDialog } from '@/hooks/use-dialog';
 import { MarkerDefinitions } from './marker-definitions';
 import { CanvasContextMenu } from './canvas-context-menu';
 import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
@@ -76,6 +75,7 @@ import {
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
@@ -134,7 +134,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
     const { scrollAction, showDependenciesOnCanvas } = useLocalConfig();
-    const { showAlert } = useDialog();
+    const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const [highlightOverlappingTables, setHighlightOverlappingTables] =

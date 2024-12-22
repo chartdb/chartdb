@@ -6,8 +6,6 @@ import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-di
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { ExportSQLDialog } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
-import type { BaseAlertDialogProps } from '@/dialogs/base-alert-dialog/base-alert-dialog';
-import { BaseAlertDialog } from '@/dialogs/base-alert-dialog/base-alert-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-database-dialog';
@@ -96,22 +94,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
 
-    // Alert dialog
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertParams, setAlertParams] = useState<BaseAlertDialogProps>({
-        title: '',
-    });
-    const showAlertHandler: DialogContext['showAlert'] = useCallback(
-        (params) => {
-            setAlertParams(params);
-            setShowAlert(true);
-        },
-        [setShowAlert, setAlertParams]
-    );
-    const closeAlertHandler = useCallback(() => {
-        setShowAlert(false);
-    }, [setShowAlert]);
-
     return (
         <dialogContext.Provider
             value={{
@@ -121,8 +103,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
-                showAlert: showAlertHandler,
-                closeAlert: closeAlertHandler,
                 openCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(true),
                 closeCreateRelationshipDialog: () =>
@@ -151,7 +131,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 dialog={{ open: openExportSQLDialog }}
                 {...exportSQLDialogParams}
             />
-            <BaseAlertDialog dialog={{ open: showAlert }} {...alertParams} />
             <CreateRelationshipDialog
                 dialog={{ open: openCreateRelationshipDialog }}
             />

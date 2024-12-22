@@ -12,6 +12,7 @@ import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Trans, useTranslation } from 'react-i18next';
 import { useReactFlow } from '@xyflow/react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
@@ -21,7 +22,8 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     dialog,
     databaseType,
 }) => {
-    const { closeImportDatabaseDialog, showAlert } = useDialog();
+    const { closeImportDatabaseDialog } = useDialog();
+    const { showAlert } = useAlert();
     const {
         tables,
         relationships,
