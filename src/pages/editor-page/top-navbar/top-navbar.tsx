@@ -212,7 +212,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 onClick={openBuckleWaitlist}
             >
                 <span className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md bg-background px-2 py-0.5 font-primary text-xs font-semibold text-foreground md:text-sm">
-                    Get Buckle 🎁
+                    ChartDB v2.0 🔥
                 </span>
             </button>
         );
