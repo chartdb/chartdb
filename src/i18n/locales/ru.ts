@@ -102,7 +102,6 @@ export const ru: LanguageTranslation = {
 
         last_saved: 'Последнее сохранение',
         saved: 'Сохранено',
-        diagrams: 'Диаграммы',
         loading_diagram: 'Загрузка диаграммы...',
         deselect_all: 'Отменить выбор всех',
         select_all: 'Выбрать все',

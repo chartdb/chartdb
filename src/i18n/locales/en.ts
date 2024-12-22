@@ -101,7 +101,6 @@ export const en = {
 
         last_saved: 'Last saved',
         saved: 'Saved',
-        diagrams: 'Diagrams',
         loading_diagram: 'Loading diagram...',
         deselect_all: 'Deselect All',
         select_all: 'Select All',

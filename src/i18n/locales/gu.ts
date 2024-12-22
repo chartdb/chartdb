@@ -102,7 +102,6 @@ export const gu: LanguageTranslation = {
 
         last_saved: 'છેલ્લે સાચવ્યું',
         saved: 'સાચવ્યું',
-        diagrams: 'ડાયાગ્રામ',
         loading_diagram: 'ડાયાગ્રામ લોડ થઈ રહ્યું છે...',
         deselect_all: 'બધાને ડીસેલેક્ટ કરો',
         select_all: 'બધા પસંદ કરો',

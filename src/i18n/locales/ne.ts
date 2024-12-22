@@ -101,7 +101,6 @@ export const ne: LanguageTranslation = {
 
         last_saved: 'अन्तिम सुरक्षित',
         saved: 'सुरक्षित',
-        diagrams: 'डायाग्रामहरू',
         loading_diagram: 'डायाग्राम लोड हुँदैछ...',
         deselect_all: 'सबै चयन हटाउनुहोस्',
         select_all: 'सबै चयन गर्नुहोस्',

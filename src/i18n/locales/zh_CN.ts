@@ -98,7 +98,6 @@ export const zh_CN: LanguageTranslation = {
 
         last_saved: '上次保存时间：',
         saved: '已保存',
-        diagrams: '关系图',
         loading_diagram: '加载关系图...',
         deselect_all: '取消全选',
         select_all: '全选',

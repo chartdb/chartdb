@@ -101,7 +101,6 @@ export const id_ID: LanguageTranslation = {
 
         last_saved: 'Terakhir disimpan',
         saved: 'Tersimpan',
-        diagrams: 'Diagram',
         loading_diagram: 'Memuat diagram...',
         deselect_all: 'Batalkan Semua',
         select_all: 'Pilih Semua',

@@ -101,7 +101,6 @@ export const vi: LanguageTranslation = {
 
         last_saved: 'Đã lưu lần cuối',
         saved: 'Đã lưu',
-        diagrams: 'Sơ đồ',
         loading_diagram: 'Đang tải sơ đồ...',
         deselect_all: 'Bỏ chọn tất cả',
         select_all: 'Chọn tất cả',

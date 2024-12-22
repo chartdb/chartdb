@@ -102,7 +102,6 @@ export const te: LanguageTranslation = {
 
         last_saved: 'చివరిగా సేవ్ చేయబడిన',
         saved: 'సేవ్ చేయబడింది',
-        diagrams: 'చిత్రాలు',
         loading_diagram: 'చిత్రం లోడ్ అవుతోంది...',
         deselect_all: 'అన్ని ఎంచుకోకుండా ఉంచు',
         select_all: 'అన్ని ఎంచుకోండి',

@@ -104,7 +104,6 @@ export const ja: LanguageTranslation = {
 
         last_saved: '最後に保存された',
         saved: '保存されました',
-        diagrams: 'ダイアグラム',
         loading_diagram: 'ダイアグラムを読み込み中...',
         deselect_all: 'すべての選択を解除',
         select_all: 'すべてを選択',
