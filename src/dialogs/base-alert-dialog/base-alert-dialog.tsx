@@ -10,7 +10,7 @@ import {
     AlertDialogTitle,
 } from '@/components/alert-dialog/alert-dialog';
 import type { AlertDialogProps } from '@radix-ui/react-alert-dialog';
-import { useDialog } from '@/hooks/use-dialog';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 export interface BaseAlertDialogProps {
     title: string;
@@ -33,7 +33,7 @@ export const BaseAlertDialog: React.FC<BaseAlertDialogProps> = ({
     content,
     onClose,
 }) => {
-    const { closeAlert } = useDialog();
+    const { closeAlert } = useAlert();
 
     const closeAlertHandler = useCallback(() => {
         onClose?.();
