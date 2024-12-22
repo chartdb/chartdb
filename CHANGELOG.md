@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/chartdb/chartdb/compare/v1.5.0...v1.5.1) (2024-12-15)
+
+
+### Bug Fixes
+
+* **export:** fix SQL server field.nullable type to boolean ([#486](https://github.com/chartdb/chartdb/issues/486)) ([a151f56](https://github.com/chartdb/chartdb/commit/a151f56b5d950e0b5cc54363684ada95889024b3))
+* **readme:** Update README.md - add CockroachDB ([#482](https://github.com/chartdb/chartdb/issues/482)) ([2b6b733](https://github.com/chartdb/chartdb/commit/2b6b73326155f18d6d56779c0657a3506e2d2cde))
+
 ## [1.5.0](https://github.com/chartdb/chartdb/compare/v1.4.0...v1.5.0) (2024-12-11)
 
 
