@@ -103,7 +103,6 @@ export const de: LanguageTranslation = {
 
         last_saved: 'Zuletzt gespeichert',
         saved: 'Gespeichert',
-        diagrams: 'Diagramme',
         loading_diagram: 'Diagramm wird geladen...',
         deselect_all: 'Alles abwählen',
         select_all: 'Alles auswählen',

@@ -102,8 +102,6 @@ export const tr: LanguageTranslation = {
 
         last_saved: 'Son kaydedilen',
         saved: 'Kaydedildi',
-        diagrams: 'Diyagramlar',
-
         loading_diagram: 'Diyagram yükleniyor...',
         deselect_all: 'Hepsini Seçme',
         select_all: 'Hepsini Seç',

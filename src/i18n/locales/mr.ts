@@ -102,7 +102,6 @@ export const mr: LanguageTranslation = {
 
         last_saved: 'शेवटचे जतन केले',
         saved: 'जतन केले',
-        diagrams: 'आरेख',
         loading_diagram: 'आरेख लोड करत आहे...',
         deselect_all: 'सर्व निवड रद्द करा',
         select_all: 'सर्व निवडा',

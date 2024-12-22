@@ -98,7 +98,6 @@ export const zh_TW: LanguageTranslation = {
 
         last_saved: '上次儲存於',
         saved: '已儲存',
-        diagrams: '圖表',
         loading_diagram: '正在載入圖表...',
         deselect_all: '取消所有選取',
         select_all: '全選',

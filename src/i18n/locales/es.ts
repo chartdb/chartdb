@@ -93,7 +93,6 @@ export const es: LanguageTranslation = {
 
         last_saved: 'Último guardado',
         saved: 'Guardado',
-        diagrams: 'Diagramas',
         loading_diagram: 'Cargando diagrama...',
         deselect_all: 'Deseleccionar todo',
         select_all: 'Seleccionar todo',

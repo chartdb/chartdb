@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Label } from '@/components/label/label';
 import { Button } from '@/components/button/button';
 import { Check } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
-import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
@@ -22,7 +20,6 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
 
     const { t } = useTranslation();
-    const { isMd: isDesktop } = useBreakpoint('md');
     const [editMode, setEditMode] = useState(false);
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
@@ -54,7 +51,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
         <div className="group">
             <div
                 className={cn(
-                    'flex flex-1 flex-row items-center justify-center px-2 py-1',
+                    'flex flex-1 flex-row items-center justify-center px-2 py-1 whitespace-nowrap',
                     {
                         'text-editable': !editMode,
                     }
@@ -64,9 +61,6 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                     databaseType={currentDiagram.databaseType}
                     databaseEdition={currentDiagram.databaseEdition}
                 />
-                <div className="flex">
-                    {isDesktop ? <Label>{t('diagrams')}/</Label> : null}
-                </div>
                 <div className="flex flex-row items-center gap-1">
                     {editMode ? (
                         <>

@@ -102,7 +102,6 @@ export const pt_BR: LanguageTranslation = {
 
         last_saved: 'Última vez salvo',
         saved: 'Salvo',
-        diagrams: 'Diagramas',
         loading_diagram: 'Carregando diagrama...',
         deselect_all: 'Desmarcar Todos',
         select_all: 'Selecionar Todos',

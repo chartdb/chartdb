@@ -102,7 +102,6 @@ export const hi: LanguageTranslation = {
 
         last_saved: 'अंतिम सहेजा गया',
         saved: 'सहेजा गया',
-        diagrams: 'आरेख',
         loading_diagram: 'आरेख लोड हो रहा है...',
         deselect_all: 'सभी को अचयनित करें',
         select_all: 'सभी को चुनें',

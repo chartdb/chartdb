@@ -102,7 +102,6 @@ export const uk: LanguageTranslation = {
 
         last_saved: 'Востаннє збережено',
         saved: 'Збережено',
-        diagrams: 'Діаграми',
         loading_diagram: 'Діаграма завантаження...',
         deselect_all: 'Зняти вибір із усіх',
         select_all: 'Вибрати усі',

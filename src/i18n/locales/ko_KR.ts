@@ -101,7 +101,6 @@ export const ko_KR: LanguageTranslation = {
 
         last_saved: '최근 저장일시: ',
         saved: '저장됨',
-        diagrams: '다이어그램',
         loading_diagram: '다이어그램 로딩중...',
         deselect_all: '모두 선택 해제',
         select_all: '모두 선택',

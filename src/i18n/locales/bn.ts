@@ -102,7 +102,6 @@ export const bn: LanguageTranslation = {
 
         last_saved: 'সর্বশেষ সংরক্ষণ',
         saved: 'সংরক্ষিত',
-        diagrams: 'ডায়াগ্রাম',
         loading_diagram: 'ডায়াগ্রাম লোড হচ্ছে...',
         deselect_all: 'সব নির্বাচন সরান',
         select_all: 'সব নির্বাচন করুন',
