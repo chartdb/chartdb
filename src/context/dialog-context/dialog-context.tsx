@@ -40,6 +40,10 @@ export interface DialogContext {
     openStarUsDialog: () => void;
     closeStarUsDialog: () => void;
 
+    // Buckle dialog
+    openBuckleDialog: () => void;
+    closeBuckleDialog: () => void;
+
     // Export image dialog
     openExportImageDialog: (
         params: Omit<ExportImageDialogProps, 'dialog'>
@@ -80,4 +84,6 @@ export const dialogContext = createContext<DialogContext>({
     closeExportDiagramDialog: emptyFn,
     openImportDiagramDialog: emptyFn,
     closeImportDiagramDialog: emptyFn,
+    openBuckleDialog: emptyFn,
+    closeBuckleDialog: emptyFn,
 });
