@@ -33,8 +33,8 @@ export const ml: LanguageTranslation = {
             },
             share: {
                   share: 'പങ്കിടുക',
-                  export_diagram: 'ആരാഖം ഇറക്കുമതി ചെയ്യുക',
-                  import_diagram: 'ആരാഖം ഇറക്കുമതി ചെയ്യുക',
+                  export_diagram: 'കയറ്റുമതി ഡയഗ്രം',
+                  import_diagram: 'ഇറക്കുമതി ഡയഗ്രം',
               },
               
             help: {
