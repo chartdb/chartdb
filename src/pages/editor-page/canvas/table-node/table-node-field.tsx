@@ -5,8 +5,12 @@ import {
     useConnection,
     useUpdateNodeInternals,
 } from '@xyflow/react';
-import { Button } from '@/components/button/button';
-import { KeyRound, Trash2 } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+import { KeyRound, MessageCircleMore, Snowflake } from 'lucide-react';
 
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -27,7 +31,7 @@ export interface TableNodeFieldProps {
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
-        const { removeField, relationships, readonly } = useChartDB();
+        const { relationships, readonly } = useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
         const isTarget = useMemo(
@@ -63,7 +67,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
         return (
             <div
-                className={`group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${
+                className={`group relative flex h-8 items-center justify-between gap-1 border-t px-2.5 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${
                     highlighted ? 'bg-pink-100 dark:bg-pink-900' : ''
                 } transition-all duration-200 ease-in-out ${
                     visible
@@ -113,41 +117,48 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         />
                     </>
                 )}
-                <div className="block truncate text-left">{field.name}</div>
-                <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
-                    {field.primaryKey ? (
-                        <div
-                            className={cn(
-                                'text-muted-foreground',
-                                !readonly ? 'group-hover:hidden' : ''
-                            )}
-                        >
+
+                <div
+                    className={`flex items-center gap-1 truncate text-left ${field.primaryKey || field.unique ? 'font-bold' : 'pl-4'}`}
+                >
+                    {field.primaryKey && (
+                        <div className="text-muted-foreground">
                             <KeyRound size={14} />
                         </div>
-                    ) : null}
+                    )}
+
+                    {field.unique && !field.primaryKey && (
+                        <div className="text-muted-foreground">
+                            <Snowflake size={14} />
+                        </div>
+                    )}
+
+                    {field.name}
+                </div>
+                <div className="flex max-w-[50%] justify-end gap-2 truncate hover:shrink-0">
+                    <div className="flex items-center gap-1">
+                        {field.comments && (
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <div className="cursor-pointer text-muted-foreground">
+                                        <MessageCircleMore size={14} />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {field.comments}
+                                </TooltipContent>
+                            </Tooltip>
+                        )}
+                    </div>
 
                     <div
                         className={cn(
-                            'content-center truncate text-right text-xs text-muted-foreground',
-                            !readonly ? 'group-hover:hidden' : ''
+                            'content-center truncate text-right text-xs text-muted-foreground'
                         )}
                     >
                         {field.type.name}
+                        {field.nullable && '?'}
                     </div>
-                    {readonly ? null : (
-                        <div className="hidden flex-row group-hover:flex">
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 hover:bg-primary-foreground"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeField(tableNodeId, field.id);
-                                }}
-                            >
-                                <Trash2 className="size-3.5 text-red-700" />
-                            </Button>
-                        </div>
-                    )}
                 </div>
             </div>
         );
