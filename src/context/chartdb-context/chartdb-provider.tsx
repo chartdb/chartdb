@@ -797,7 +797,7 @@ export const ChartDBProvider: React.FC<
                         ? { id: 'integer', name: 'integer' }
                         : { id: 'bigint', name: 'bigint' },
                 unique: false,
-                nullable: true,
+                nullable: false,
                 primaryKey: false,
                 createdAt: Date.now(),
             };
