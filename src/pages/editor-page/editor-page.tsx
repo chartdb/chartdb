@@ -160,11 +160,9 @@ const EditorPageComponent: React.FC = () => {
             new Date().getTime() - starUsDialogLastOpen >
             1000 * 60 * 60 * 24 * SHOW_STAR_US_AGAIN_AFTER_DAYS
         ) {
-            setTimeout(() => {
-                const lastOpen = new Date().getTime();
-                setStarUsDialogLastOpen(lastOpen);
-                openStarUsDialog();
-            }, OPEN_STAR_US_AFTER_SECONDS * 1000);
+            const lastOpen = new Date().getTime();
+            setStarUsDialogLastOpen(lastOpen);
+            setTimeout(openStarUsDialog, OPEN_STAR_US_AFTER_SECONDS * 1000);
         }
     }, [
         currentDiagram?.id,
@@ -189,11 +187,9 @@ const EditorPageComponent: React.FC = () => {
                     ? SHOW_BUCKLE_AGAIN_OPENED_AFTER_DAYS
                     : SHOW_BUCKLE_AGAIN_AFTER_DAYS)
         ) {
-            setTimeout(() => {
-                const lastOpen = new Date().getTime();
-                setBuckleDialogLastOpen(lastOpen);
-                openBuckleDialog();
-            }, OPEN_BUCKLE_AFTER_SECONDS * 1000);
+            const lastOpen = new Date().getTime();
+            setBuckleDialogLastOpen(lastOpen);
+            setTimeout(openBuckleDialog, OPEN_BUCKLE_AFTER_SECONDS * 1000);
         }
     }, [
         currentDiagram?.id,
