@@ -65,6 +65,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         showCardinality,
         setShowDependenciesOnCanvas,
         showDependenciesOnCanvas,
+        setShowRelationshipsOnCanvas,
+        showRelationshipsOnCanvas,
     } = useLocalConfig();
     const { effectiveTheme } = useTheme();
     const { t } = useTranslation();
@@ -200,6 +202,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const showOrHideDependencies = useCallback(() => {
         setShowDependenciesOnCanvas(!showDependenciesOnCanvas);
     }, [showDependenciesOnCanvas, setShowDependenciesOnCanvas]);
+
+    const showOrHideRelationships = useCallback(() => {
+        setShowRelationshipsOnCanvas(!showRelationshipsOnCanvas);
+    }, [showRelationshipsOnCanvas, setShowRelationshipsOnCanvas]);
 
     const openBuckleWaitlist = useCallback(() => {
         window.open('https://waitlist.buckle.dev', '_blank');
@@ -511,7 +517,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ? t('menu.view.hide_dependencies')
                                         : t('menu.view.show_dependencies')}
                                 </MenubarItem>
+                                
                             ) : null}
+                            {databaseType !== DatabaseType.CLICKHOUSE ?(
+                            <MenubarItem onClick={showOrHideRelationships}>
+                            {showRelationshipsOnCanvas
+                                ? t('menu.view.hide_relationships')
+                                : t('menu.view.show_relationships')}
+                           </MenubarItem>
+                           ) : null}
                             <MenubarSeparator />
                             <MenubarSub>
                                 <MenubarSubTrigger>
