@@ -30,6 +30,8 @@ export const en = {
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             share: {
                 share: 'Share',

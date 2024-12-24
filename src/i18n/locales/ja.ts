@@ -31,6 +31,8 @@ export const ja: LanguageTranslation = {
                 // TODO: Translate
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             // TODO: Translate
             share: {
