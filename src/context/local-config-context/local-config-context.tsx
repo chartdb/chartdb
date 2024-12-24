@@ -22,6 +22,16 @@ export interface LocalConfigContext {
     setGithubRepoOpened: (githubRepoOpened: boolean) => void;
     starUsDialogLastOpen: number;
     setStarUsDialogLastOpen: (lastOpen: number) => void;
+    feature/show-hide-relationships
+
+
+    buckleWaitlistOpened: boolean;
+    setBuckleWaitlistOpened: (githubRepoOpened: boolean) => void;
+
+    buckleDialogLastOpen: number;
+    setBuckleDialogLastOpen: (lastOpen: number) => void;
+
+    main
     showDependenciesOnCanvas: boolean;
     setShowDependenciesOnCanvas: (showDependenciesOnCanvas: boolean) => void;
     // Add these two new properties
@@ -44,6 +54,16 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     setGithubRepoOpened: emptyFn,
     starUsDialogLastOpen: 0,
     setStarUsDialogLastOpen: emptyFn,
+    feature/show-hide-relationships
+
+
+    buckleWaitlistOpened: false,
+    setBuckleWaitlistOpened: emptyFn,
+
+    buckleDialogLastOpen: 0,
+    setBuckleDialogLastOpen: emptyFn,
+
+    main
     showDependenciesOnCanvas: false,
     setShowDependenciesOnCanvas: emptyFn,
     // Add default values for the new properties
