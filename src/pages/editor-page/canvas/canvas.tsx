@@ -133,7 +133,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDependenciesOnCanvas } = useLocalConfig();
+    const { scrollAction, showDependenciesOnCanvas, showMiniMapOnCanvas } =
+        useLocalConfig();
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
@@ -228,6 +229,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         dependencies,
         setEdges,
         showDependenciesOnCanvas,
+        showMiniMapOnCanvas,
         databaseType,
     ]);
 
@@ -871,12 +873,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     >
                         <Toolbar readonly={readonly} />
                     </Controls>
-                    <MiniMap
-                        style={{
-                            width: isDesktop ? 100 : 60,
-                            height: isDesktop ? 100 : 60,
-                        }}
-                    />
+                    {showMiniMapOnCanvas && (
+                        <MiniMap
+                            style={{
+                                width: isDesktop ? 100 : 60,
+                                height: isDesktop ? 100 : 60,
+                            }}
+                        />
+                    )}
                     <Background
                         variant={BackgroundVariant.Dots}
                         gap={16}
