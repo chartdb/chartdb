@@ -10,6 +10,8 @@ const showCardinalityKey = 'show_cardinality';
 const hideMultiSchemaNotificationKey = 'hide_multi_schema_notification';
 const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
+const buckleWaitlistOpenedKey = 'buckle_waitlist_opened';
+const buckleDialogLastOpenKey = 'buckle_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 const showRelationshipsOnCanvasKey = 'show_relationships_on_canvas';
 
@@ -49,6 +51,17 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
             parseInt(localStorage.getItem(starUsDialogLastOpenKey) || '0')
         );
 
+    const [buckleWaitlistOpened, setBuckleWaitlistOpened] =
+        React.useState<boolean>(
+            (localStorage.getItem(buckleWaitlistOpenedKey) || 'false') ===
+                'true'
+        );
+
+    const [buckleDialogLastOpen, setBuckleDialogLastOpen] =
+        React.useState<number>(
+            parseInt(localStorage.getItem(buckleDialogLastOpenKey) || '0')
+        );
+
     const [showDependenciesOnCanvas, setShowDependenciesOnCanvas] =
         React.useState<boolean>(
             (localStorage.getItem(showDependenciesOnCanvasKey) || 'false') ===
@@ -70,6 +83,20 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     useEffect(() => {
         localStorage.setItem(githubRepoOpenedKey, githubRepoOpened.toString());
     }, [githubRepoOpened]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            buckleDialogLastOpenKey,
+            buckleDialogLastOpen.toString()
+        );
+    }, [buckleDialogLastOpen]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            buckleWaitlistOpenedKey,
+            buckleWaitlistOpened.toString()
+        );
+    }, [buckleWaitlistOpened]);
 
     useEffect(() => {
         localStorage.setItem(
@@ -126,8 +153,15 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setStarUsDialogLastOpen,
                 showDependenciesOnCanvas,
                 setShowDependenciesOnCanvas,
+               feature/show-hide-relationships
                 showRelationshipsOnCanvas,
                 setShowRelationshipsOnCanvas,
+
+                setBuckleDialogLastOpen,
+                buckleDialogLastOpen,
+                buckleWaitlistOpened,
+                setBuckleWaitlistOpened,
+                main
             }}
         >
             {children}
