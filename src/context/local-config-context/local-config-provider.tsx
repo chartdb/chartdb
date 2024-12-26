@@ -32,7 +32,7 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const [showCardinality, setShowCardinality] = React.useState<boolean>(
-        (localStorage.getItem(showCardinalityKey) || 'true') === 'false'
+        (localStorage.getItem(showCardinalityKey) || 'false') === 'true'
     );
 
     const [hideMultiSchemaNotification, setHideMultiSchemaNotification] =
