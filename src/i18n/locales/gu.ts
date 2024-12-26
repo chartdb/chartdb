@@ -30,6 +30,9 @@ export const gu: LanguageTranslation = {
                 theme: 'થિમ',
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',
                 hide_dependencies: 'નિર્ભરતાઓ છુપાવો',
+                //TODO: TRANSLATE
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
 
             share: {

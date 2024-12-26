@@ -30,6 +30,8 @@ export const zh_TW: LanguageTranslation = {
                 theme: '主題',
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
+                show_relationships: '顯示關係',
+                hide_relationships: '隱藏關係',
             },
             share: {
                 share: '分享',

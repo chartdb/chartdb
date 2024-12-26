@@ -133,7 +133,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDependenciesOnCanvas, showRelationshipsOnCanvas, } = useLocalConfig();
+    const {
+        scrollAction,
+        showDependenciesOnCanvas,
+        showRelationshipsOnCanvas,
+    } = useLocalConfig();
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);

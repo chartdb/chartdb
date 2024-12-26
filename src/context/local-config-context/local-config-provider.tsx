@@ -95,7 +95,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     }, [showCardinality]);
     useEffect(() => {
         localStorage.setItem(
-            showRelationshipsOnCanvasKey, showRelationshipsOnCanvas.toString()
+            showRelationshipsOnCanvasKey,
+            showRelationshipsOnCanvas.toString()
         );
     }, [showRelationshipsOnCanvas]);
 

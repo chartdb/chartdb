@@ -30,6 +30,9 @@ export const id_ID: LanguageTranslation = {
                 theme: 'Tema',
                 show_dependencies: 'Tampilkan Dependensi',
                 hide_dependencies: 'Sembunyikan Dependensi',
+                //TODO: TRANSLATE
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             share: {
                 share: 'Bagikan',

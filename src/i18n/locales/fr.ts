@@ -30,6 +30,8 @@ export const fr: LanguageTranslation = {
                 theme: 'Thème',
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
+                show_relationships: 'Afficher les relations',
+                hide_relationships: 'Masquer les relations',
             },
             share: {
                 share: 'Partage',

@@ -517,15 +517,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ? t('menu.view.hide_dependencies')
                                         : t('menu.view.show_dependencies')}
                                 </MenubarItem>
-                                
                             ) : null}
-                            {databaseType !== DatabaseType.CLICKHOUSE ?(
-                            <MenubarItem onClick={showOrHideRelationships}>
-                            {showRelationshipsOnCanvas
-                                ? t('menu.view.hide_relationships')
-                                : t('menu.view.show_relationships')}
-                           </MenubarItem>
-                           ) : null}
+                            {databaseType !== DatabaseType.CLICKHOUSE ? (
+                                <MenubarItem onClick={showOrHideRelationships}>
+                                    {showRelationshipsOnCanvas
+                                        ? t('menu.view.hide_relationships')
+                                        : t('menu.view.show_relationships')}
+                                </MenubarItem>
+                            ) : null}
                             <MenubarSeparator />
                             <MenubarSub>
                                 <MenubarSubTrigger>

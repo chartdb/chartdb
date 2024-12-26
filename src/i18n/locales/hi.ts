@@ -33,11 +33,11 @@ export const hi: LanguageTranslation = {
                 show_relationships: 'संबंध दिखाएँ',
                 hide_relationships: 'संबंध छिपाएँ',
             },
-            // TODO: Translate
+
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: 'शेयर करें',
+                export_diagram: 'निर्यात आरेख',
+                import_diagram: 'आयात आरेख',
             },
             help: {
                 help: 'मदद',
