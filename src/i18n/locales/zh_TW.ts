@@ -394,6 +394,6 @@ export const zh_TW: LanguageTranslation = {
 
 export const zh_TWMetadata: LanguageMetadata = {
     nativeName: '繁體中文',
-    name: 'Traditional Chinese',
+    name: 'Chinese (Traditional)',
     code: 'zh_TW',
 };

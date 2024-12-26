@@ -22,28 +22,30 @@ import { te, teMetadata } from './locales/te';
 import { bn, bnMetadata } from './locales/bn';
 import { gu, guMetadata } from './locales/gu';
 import { vi, viMetadata } from './locales/vi';
+import { ar, arMetadata } from './locales/ar';
 
 export const languages: LanguageMetadata[] = [
-    enMetadata,
-    esMetadata,
-    frMetadata,
-    deMetadata,
-    hiMetadata,
-    jaMetadata,
-    ko_KRMetadata,
-    pt_BRMetadata,
-    ukMetadata,
-    ruMetadata,
-    zh_CNMetadata,
-    zh_TWMetadata,
-    neMetadata,
-    mrMetadata,
-    trMetadata,
-    id_IDMetadata,
-    teMetadata,
-    bnMetadata,
-    guMetadata,
-    viMetadata,
+    arMetadata,          // Arabic
+    bnMetadata,          // Bengali
+    zh_CNMetadata,       // Chinese (Simplified)
+    zh_TWMetadata,       // Chinese (Traditional)
+    enMetadata,          // English
+    frMetadata,          // French
+    deMetadata,          // German
+    guMetadata,          // Gujarati
+    hiMetadata,          // Hindi
+    id_IDMetadata,       // Indonesian
+    jaMetadata,          // Japanese
+    ko_KRMetadata,       // Korean
+    mrMetadata,          // Marathi
+    neMetadata,          // Nepali
+    pt_BRMetadata,       // Portuguese (Brazil)
+    ruMetadata,          // Russian
+    esMetadata,          // Spanish
+    teMetadata,          // Telugu
+    trMetadata,          // Turkish
+    ukMetadata,          // Ukrainian
+    viMetadata,          // Vietnamese
 ];
 
 const resources = {
@@ -67,6 +69,7 @@ const resources = {
     bn,
     gu,
     vi,
+    ar,
 };
 
 i18n.use(LanguageDetector)
