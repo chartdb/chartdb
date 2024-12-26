@@ -153,7 +153,9 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setStarUsDialogLastOpen,
                 showDependenciesOnCanvas,
                 setShowDependenciesOnCanvas,
-               feature/show-hide-relationships
+
+                'feature/show-hide-relationships': false, // Placeholder corrected
+
                 showRelationshipsOnCanvas,
                 setShowRelationshipsOnCanvas,
 
@@ -161,7 +163,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 buckleDialogLastOpen,
                 buckleWaitlistOpened,
                 setBuckleWaitlistOpened,
-                main
+
+                main: false, // Placeholder corrected
             }}
         >
             {children}
