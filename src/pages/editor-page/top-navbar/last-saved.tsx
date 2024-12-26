@@ -7,10 +7,11 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
-import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 import type { LocaleFunc } from 'timeago.js';
 import { register as registerLocale } from 'timeago.js';
+import { Save } from 'lucide-react';
+
 export interface LastSavedProps {}
 
 const timeAgolocaleFromLanguage = async (
@@ -73,8 +74,7 @@ const timeAgolocaleFromLanguage = async (
 
 export const LastSaved: React.FC<LastSavedProps> = () => {
     const { currentDiagram } = useChartDB();
-    const { t, i18n } = useTranslation();
-    const { isLg: isDesktop } = useBreakpoint('lg');
+    const { i18n } = useTranslation();
     const [language, setLanguage] = useState<string>('en_US');
 
     useEffect(() => {
@@ -95,9 +95,9 @@ export const LastSaved: React.FC<LastSavedProps> = () => {
             <TooltipTrigger>
                 <Badge
                     variant="secondary"
-                    className="flex gap-1 whitespace-nowrap"
+                    className="flex gap-1.5 whitespace-nowrap"
                 >
-                    {isDesktop ? t('last_saved') : t('saved')}
+                    <Save size={16} />
                     <TimeAgo
                         datetime={currentDiagram.updatedAt}
                         locale={language}
