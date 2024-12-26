@@ -72,7 +72,7 @@ export const ar = {
             title: 'Multiple Schemas (نظم متعددة)',
             description:
                 '{{schemasCount}} النظم في هذا المخطط. تعرض حالياً: {{formattedSchemas}}.',
-            dont_show_again: "لا تظهره مجدداً",
+            dont_show_again: 'لا تظهره مجدداً',
             change_schema: 'تغيير النظام',
             none: 'لا شيء',
         },
@@ -261,8 +261,7 @@ export const ar = {
 
         export_sql_dialog: {
             title: 'تصدير SQL',
-            description:
-                'استخرج نظام قاعدة بياناتك إالى كود {{databaseType}}',
+            description: 'استخرج نظام قاعدة بياناتك إالى كود {{databaseType}}',
             close: 'إغلاق',
             loading: {
                 text: 'الذكاء الاصطناعي يقوم بتوليد كود SQL لـ {{databaseType}}...',
@@ -340,7 +339,7 @@ export const ar = {
         star_us_dialog: {
             title: 'ساعدنا على التحسين!',
             description:
-                "هل ترغب في منحنا نجمة على GitHub؟ كل ما عليك فعله هو نقرة واحدة فقط!",
+                'هل ترغب في منحنا نجمة على GitHub؟ كل ما عليك فعله هو نقرة واحدة فقط!',
             close: 'ليس الآن',
             confirm: 'بالتأكيد!',
         },
