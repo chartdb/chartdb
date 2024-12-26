@@ -394,7 +394,7 @@ export const zh_CN: LanguageTranslation = {
 };
 
 export const zh_CNMetadata: LanguageMetadata = {
-    name: 'Chinese',
+    name: 'Chinese (Simplified)',
     nativeName: '简体中文',
     code: 'zh_CN',
 };
