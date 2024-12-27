@@ -9,9 +9,9 @@ export const ar: LanguageTranslation = {
                 open: 'فتح',
                 save: 'حفظ',
                 import_database: 'استيراد قاعدة بيانات',
-                export_sql: 'تصدير SQL',
+                export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',
-                delete_diagram: 'حذف المخطط',
+                delete_diagram: 'حذف الرسم البياني',
                 exit: 'خروج',
             },
             edit: {
@@ -24,9 +24,9 @@ export const ar: LanguageTranslation = {
                 view: 'عرض',
                 show_sidebar: 'إظهار الشريط الجانبي',
                 hide_sidebar: 'إخفاء الشريط الجانبي',
-                hide_cardinality: 'إخفاء تفاصيل العلاقات',
-                show_cardinality: 'إظهار تفاصيل العلاقات',
-                zoom_on_scroll: 'التكبير عند التمرير',
+                hide_cardinality: 'إخفاء الكاردينالية',
+                show_cardinality: 'إظهار الكاردينالية',
+                zoom_on_scroll: 'تكبير/تصغير عند التمرير',
                 theme: 'المظهر',
                 show_dependencies: 'إظهار الاعتمادات',
                 hide_dependencies: 'إخفاء الاعتمادات',
@@ -38,49 +38,49 @@ export const ar: LanguageTranslation = {
             },
             help: {
                 help: 'مساعدة',
-                visit_website: 'زيارة CHARTDB.IO',
-                join_discord: 'الانضمام إلى ديسكورد',
-                schedule_a_call: 'تواصل معنا!',
+                visit_website: 'ChartDB قم بزيارة',
+                join_discord: 'Discord انضم إلينا على',
+                schedule_a_call: '!تحدث معنا',
             },
         },
 
         delete_diagram_alert: {
             title: 'حذف المخطط',
             description:
-                'هذا الإجراء لا يمكن التراجع عنه. سيتم حذف المخطط بشكل دائم.',
+            '.لا يمكن التراجع عن هذا الإجراء. سيتم حذف الرسم البياني بشكل دائم',
             cancel: 'إلغاء',
             delete: 'حذف',
         },
 
         clear_diagram_alert: {
-            title: 'Clear Diagram',
+            title: 'مسح الرسم البياني',
             description:
-                'هذا الإجراء لا يمكن التراجع عنه. سيتم مسح جميع البيانات في المخطط بشكل دائم.',
+            '.لا يمكن التراجع عن هذا الاجراء. سيتم حذف جميع البيانات في الرسم البياني بشكل دائم',
             cancel: 'إلغاء',
             clear: 'مسح',
         },
 
         reorder_diagram_alert: {
-            title: 'ترتيب المخطط',
+            title: 'إعادة ترتيب الرسم البياني',
             description:
-                'هذا الإجراء سيقوم بترتيب الجداول في المخطط بشكل تلقائي. هل تريد المتابعة؟',
-            reorder: 'ترتيب',
+                'هذا الإجراء سيقوم بإعادة ترتيب الجداول في المخطط بشكل تلقائي. هل تريد المتابعة؟',
+            reorder: 'إعادة ترتيب',
             cancel: 'إلغاء',
         },
 
         multiple_schemas_alert: {
-            title: 'Multiple Schemas (نظم متعددة)',
+            title: 'مخططات متعددة',
             description:
-                '{{schemasCount}} النظم في هذا المخطط. تعرض حالياً: {{formattedSchemas}}.',
+            '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
             dont_show_again: 'لا تظهره مجدداً',
-            change_schema: 'تغيير النظام',
+            change_schema: 'تغيير',
             none: 'لا شيء',
         },
 
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'فشل النسخ',
-                description: 'النسخ إلى الحافظة غير مدعوم في هذا المتصفح.',
+                description: '.الحافظة غير مدعومة',
             },
             failed: {
                 title: 'فشل النسخ',
@@ -101,21 +101,21 @@ export const ar: LanguageTranslation = {
 
         last_saved: 'آخر حفظ',
         saved: 'تم الحفظ',
-        loading_diagram: 'جاري تحميل المخطط...',
+        loading_diagram: '...جارِ تحميل الرسم البياني',
         deselect_all: 'إلغاء تحديد الكل',
         select_all: 'تحديد الكل',
         clear: 'مسح',
         show_more: 'عرض المزيد',
         show_less: 'عرض أقل',
         copy_to_clipboard: 'نسخ إلى الحافظة',
-        copied: 'تم النسخ',
+        copied: '!تم النسخ',
 
         side_panel: {
-            schema: 'النظام(Schema):',
-            filter_by_schema: 'تصفية حسب النظام...',
-            search_schema: 'البحث عن النظام...',
-            no_schemas_found: 'لم يتم العثور على نظم',
-            view_all_options: 'عرض جميع الخيارات...',
+            schema: ':المخطط',
+            filter_by_schema: 'تصفية حسب المخطط',
+            search_schema: '...بحث في المخطط',
+            no_schemas_found: '.لم يتم العثور على مخططات',
+            view_all_options: '...عرض جميع الخيارات',
             tables_section: {
                 tables: 'الجداول',
                 add_table: 'إضافة جدول',
@@ -124,42 +124,42 @@ export const ar: LanguageTranslation = {
 
                 table: {
                     fields: 'الحقول',
-                    nullable: 'Nullable?',
-                    primary_key: 'Primary Key',
-                    indexes: 'Indexes',
+                    nullable: 'يمكن ان يكون فارغاً؟',
+                    primary_key: 'المفتاح الأساسي',
+                    indexes: 'الفهارس',
                     comments: 'تعليقات',
                     no_comments: 'لا توجد تعليقات',
                     add_field: 'إضافة حقل',
-                    add_index: 'إضافة Index',
+                    add_index: 'إضافة فهرس',
                     index_select_fields: 'حدد الحقول',
                     no_types_found: 'لا يوجد أنواع',
                     field_name: 'الإسم',
                     field_type: 'النوع',
                     field_actions: {
-                        title: 'Field Attributes',
-                        unique: 'Unique',
+                        title: 'خصائص الحقل',
+                        unique: 'فريد',
                         comments: 'تعليقات',
                         no_comments: 'لا يوجد تعليقات',
                         delete_field: 'حذف الحقل',
                     },
                     index_actions: {
-                        title: 'Index Attributes',
+                        title: 'خصائص الفهرس',
                         name: 'الإسم',
-                        unique: 'Unique',
-                        delete_index: 'حذف Index',
+                        unique: 'فريد',
+                        delete_index: 'حذف الفهرس',
                     },
                     table_actions: {
                         title: 'إجراءات الجدول',
-                        change_schema: 'تغيير النظام',
+                        change_schema: 'تغيير المخطط',
                         add_field: 'إضافة حقل',
-                        add_index: 'إضافة Index',
+                        add_index: 'إضافة فهرس',
                         duplicate_table: 'نسخ الجدول',
                         delete_table: 'حذف الجدول',
                     },
                 },
                 empty_state: {
                     title: 'لا توجد جداول',
-                    description: 'إنشاء جدول للبدء',
+                    description: 'أنشئ جدولاً للبدء',
                 },
             },
             relationships_section: {
@@ -170,7 +170,7 @@ export const ar: LanguageTranslation = {
                 relationship: {
                     primary: 'الجدول الأساسي',
                     foreign: 'الجدول المرتبط',
-                    cardinality: 'تفاصيل العلاقة',
+                    cardinality: 'الكاردينالية',
                     delete_relationship: 'حذف',
                     relationship_actions: {
                         title: 'إجراءات',
@@ -179,7 +179,7 @@ export const ar: LanguageTranslation = {
                 },
                 empty_state: {
                     title: 'لا توجد علاقات',
-                    description: 'إنشاء علاقة للبدء',
+                    description: 'إنشئ علاقة لربط الجداول',
                 },
             },
             dependencies_section: {
@@ -209,8 +209,8 @@ export const ar: LanguageTranslation = {
             show_all: 'عرض الكل',
             undo: 'تراجع',
             redo: 'إعادة',
-            reorder_diagram: 'ترتيب المخطط',
-            highlight_overlapping_tables: 'تسليط الضوء على الجداول المتداخلة',
+            reorder_diagram: 'إعادة ترتيب الرسم البياني',
+            highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
         },
 
         new_diagram_dialog: {
@@ -224,15 +224,15 @@ export const ar: LanguageTranslation = {
 
             import_database: {
                 title: 'إسترد قاعدة بياناتك',
-                database_edition: 'إصدار قاعدة البيانات:',
-                step_1: 'قم بتشغيل البرنامج النصي التالي في قاعدة بياناتك:',
-                step_2: 'إلصق نتيجة البرنامج النصي هنا:',
-                script_results_placeholder: 'نتيجة البرنامج النصي هنا...',
+                database_edition: ':إصدار قاعدة البيانات',
+                step_1: ':قم بتشغيل هذا البرنامج النصي في قاعدة بياناتك',
+                step_2: ':إلصق نتيجة البرنامج النصي هنا',
+                script_results_placeholder: '...نتيجة البرنامج النصي هنا',
                 ssms_instructions: {
-                    button_text: 'تعليمات SSMS',
+                    button_text: 'SSMS تعليمات',
                     title: 'تعليمات',
-                    step_1: 'Go to Tools > Options > Query Results > SQL Server.',
-                    step_2: 'If you\'re using "Results to Grid," change the Maximum Characters Retrieved for Non-XML data (set to 9999999).',
+                    step_1: 'SQL SERVER < انتقل إلى الأدوات > الخيارات > نتائح الاستعلام',
+                    step_2: '(اضبطها على 9999999) XML اذا كنت تستخدم "نتائج إلى الشبكة"، قم بتغيير الحد الاقصى للاحرف المستردة للبيانات غير',
                 },
                 instructions_link: 'تحتاج مساعدة؟ شاهد الفيديو',
                 check_script_result: 'تحقق من نتيجة البرنامج النصي',
@@ -240,7 +240,7 @@ export const ar: LanguageTranslation = {
 
             cancel: 'إلغاء',
             import_from_file: 'استيراد من ملف',
-            back: 'السابق',
+            back: 'رجوع',
             empty_diagram: 'مخطط فارغ',
             continue: 'متابعة',
             import: 'استيراد',
@@ -248,30 +248,30 @@ export const ar: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'فتح مخطط',
-            description: 'اختر مخططًا لفتحه',
+            description: 'اختر مخططًا لفتحه من القائمة ادناه',
             table_columns: {
                 name: 'الإسم',
                 created_at: 'تاريخ الإنشاء',
                 last_modified: 'آخر تعديل',
-                tables_count: 'عدد الجداول',
+                tables_count: 'الجداول',
             },
             cancel: 'إلغاء',
             open: 'فتح',
         },
 
         export_sql_dialog: {
-            title: 'تصدير SQL',
-            description: 'استخرج نظام قاعدة بياناتك إالى كود {{databaseType}}',
+            title: 'SQL تصدير',
+            description: '{{databaseType}} صدّر مخطط الرسم البياني إلى برنامج نصي لـ',
             close: 'إغلاق',
             loading: {
-                text: 'الذكاء الاصطناعي يقوم بتوليد كود SQL لـ {{databaseType}}...',
+                text: '...{{databaseType}} ل SQL يقوم الذكاء الاصطناعي بإنشاء',
                 description: 'هذا قد يستغرق 30 ثانية',
             },
             error: {
                 message:
-                    'حدث خطأ أثناء تصدير الكود. يرجى المحاولة مرة أخرى أو  <0>التواصل معنا</0>.',
-                description:
-                    'يمكنك استخدام OPENAI_TOKEN الخاص بك , اتطلع على الإرشادات <0>هنا</0>.',
+                    'النصي. يرجى المحاولة مرة اخرى لاحقاً او <0>اتصل بنا</0> SQL خطأ في إنشاء برنامج',
+                    description:
+                    ' الخاصة بك. راجع الدليل <0>هنا</0> OPENAI_TOKEN لا تتردد في استخدام',
             },
         },
 
@@ -296,13 +296,13 @@ export const ar: LanguageTranslation = {
             override_alert: {
                 title: 'استيراد قاعدة بيانات',
                 content: {
-                    alert: 'سيؤدي استيراد هذا المخطط إلى التأثير على الجداول والعلاقات الموجودة.',
+                    alert: 'سيؤدي استيراد هذا المخطط إلى التأثير على الجداول والعلاقات الحالية.',
                     new_tables:
-                        '<bold>{{newTablesNumber}}</bold> جداول جديدة سيتم إضافتها.',
+                    'جداول جديدة <bold>{{newTablesNumber}}</bold> سيتم إضافة',
                     new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> علاقات جديدة سيتم إنشائها.',
+                    'علاقات جديدة <bold>{{newRelationshipsNumber}}</bold> سيتم إنشاء',
                     tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> جداول سيتم الكتابة عليها.',
+                    'جداول <bold>{{tablesOverrideNumber}}</bold> سيتم تعديل',
                     proceed: 'هل تريد المتابعة؟',
                 },
                 import: 'استيراد',
@@ -312,7 +312,7 @@ export const ar: LanguageTranslation = {
 
         export_image_dialog: {
             title: 'تصدير الصورة',
-            description: 'اختر الدقة لتصدير الصورة:',
+            description: ':اختر عامل المقياس للتصدير',
             scale_1x: '1x عادي',
             scale_2x: '2x (موصى به)',
             scale_3x: '3x',
@@ -322,56 +322,56 @@ export const ar: LanguageTranslation = {
         },
 
         new_table_schema_dialog: {
-            title: 'اختر نظاماً (Schema)',
+            title: 'اختر مخططاً',
             description:
-                'يتم عرض أنظمة (Schemas) متعددة حاليًا. حدد أحدها للجدول الجديد.',
+                '.يتم حالياً عرض مخططات متعددة. اختر واحداً للجدول الجديد',
             cancel: 'إلغاء',
-            confirm: 'اختيار',
+            confirm: 'تأكيد',
         },
 
         update_table_schema_dialog: {
-            title: 'تغيير النظام (Schema)',
-            description: 'تحديث نظام (Schema) لجدول: "{{tableName}}"',
+            title: 'تغيير المخطط',
+            description: '"{{tableName}}" تحديث مخطط الجدول',
             cancel: 'إلغاء',
             confirm: 'تغيير',
         },
 
         star_us_dialog: {
-            title: 'ساعدنا على التحسين!',
+            title: '!ساعدنا على التحسن',
             description:
-                'هل ترغب في منحنا نجمة على GitHub؟ كل ما عليك فعله هو نقرة واحدة فقط!',
+            '؟! إنها مجرد نقرة واحدةGITHUB هل ترغب في تقييمنا على',
             close: 'ليس الآن',
-            confirm: 'بالتأكيد!',
+            confirm: '!بالتأكيد',
         },
         export_diagram_dialog: {
             title: 'تصدير المخطط',
-            description: 'اختر التنسيق للتصدير:',
+            description: ':اختر التنسيق للتصدير',
             format_json: 'JSON',
             cancel: 'إلغاء',
             export: 'تصدير',
             error: {
                 title: 'حدث خطأ أثناء التصدير',
                 description:
-                    'حدث خطأ ما. هل تحتاج إلى مساعدة؟ chartdb.io@gmail.com',
+                    'chartdb.io@gmail.com حدث خطأ ما. هل تحتاج إلى مساعدة؟',
             },
         },
 
         import_diagram_dialog: {
-            title: 'استيراد المخطط',
-            description: 'قم بلصق JSON المخطط هنا:',
+            title: 'استيراد الرسم البياني',
+            description: ':للرسم البياني ادناه JSON قم بلصق',
             cancel: 'إلغاء',
             import: 'استيراد',
             error: {
                 title: 'حدث خطأ أثناء الاستيراد',
                 description:
-                    'كود JSON للمخطط غير صالح. من فضلك تحقق من صحته وحاول مرة أخرى. هل تحتاج إلى مساعدة؟ chartdb.io@gmail.com',
+                    'chartdb.io@gmail.com و المحاولة مرة اخرى. هل تحتاج إلى المساعدة؟ JSON غير صالح. يرجى التحقق من JSON الرسم البياني',
             },
         },
         relationship_type: {
-            one_to_one: 'One to One',
-            one_to_many: 'One to Many',
-            many_to_one: 'Many to One',
-            many_to_many: 'Many to Many',
+            one_to_one: 'واحد إلى واحد',
+            one_to_many: 'واحد إلى متعدد',
+            many_to_one: 'متعدد إلى واحد',
+            many_to_many: 'متعدد إلى متعدد',
         },
 
         canvas_context_menu: {
@@ -385,14 +385,14 @@ export const ar: LanguageTranslation = {
             delete_table: 'حذف الجدول',
         },
 
-        snap_to_grid_tooltip: 'مغنطة الشبكة (انقر مطولاً على {{key}})',
+        snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',
 
         tool_tips: {
-            double_click_to_edit: 'انقر نقرًا مزدوجًا للتحرير',
+            double_click_to_edit: 'انقر مرتين للتعديل',
         },
 
         language_select: {
-            change_language: 'تغيير اللغة',
+            change_language: 'اللغة',
         },
     },
 };
