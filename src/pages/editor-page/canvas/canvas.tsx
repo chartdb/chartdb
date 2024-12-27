@@ -131,7 +131,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         events,
         dependencies,
     } = useChartDB();
-    const { showSidePanel } = useLayout();
+    const { showSidePanel, isToolbarShowed } = useLayout();
     const { effectiveTheme } = useTheme();
     const { scrollAction, showDependenciesOnCanvas } = useLocalConfig();
     const { showAlert } = useAlert();
@@ -869,7 +869,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         showInteractive={false}
                         className="!shadow-none"
                     >
-                        <Toolbar readonly={readonly} />
+                        {isToolbarShowed && <Toolbar readonly={readonly} />}
                     </Controls>
                     <MiniMap
                         style={{
