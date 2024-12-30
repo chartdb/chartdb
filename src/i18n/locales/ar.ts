@@ -47,7 +47,7 @@ export const ar: LanguageTranslation = {
         delete_diagram_alert: {
             title: 'حذف المخطط',
             description:
-            '.لا يمكن التراجع عن هذا الإجراء. سيتم حذف الرسم البياني بشكل دائم',
+                '.لا يمكن التراجع عن هذا الإجراء. سيتم حذف الرسم البياني بشكل دائم',
             cancel: 'إلغاء',
             delete: 'حذف',
         },
@@ -55,7 +55,7 @@ export const ar: LanguageTranslation = {
         clear_diagram_alert: {
             title: 'مسح الرسم البياني',
             description:
-            '.لا يمكن التراجع عن هذا الاجراء. سيتم حذف جميع البيانات في الرسم البياني بشكل دائم',
+                '.لا يمكن التراجع عن هذا الاجراء. سيتم حذف جميع البيانات في الرسم البياني بشكل دائم',
             cancel: 'إلغاء',
             clear: 'مسح',
         },
@@ -71,7 +71,7 @@ export const ar: LanguageTranslation = {
         multiple_schemas_alert: {
             title: 'مخططات متعددة',
             description:
-            '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
+                '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
             dont_show_again: 'لا تظهره مجدداً',
             change_schema: 'تغيير',
             none: 'لا شيء',
@@ -261,7 +261,8 @@ export const ar: LanguageTranslation = {
 
         export_sql_dialog: {
             title: 'SQL تصدير',
-            description: '{{databaseType}} صدّر مخطط الرسم البياني إلى برنامج نصي لـ',
+            description:
+                '{{databaseType}} صدّر مخطط الرسم البياني إلى برنامج نصي لـ',
             close: 'إغلاق',
             loading: {
                 text: '...{{databaseType}} ل SQL يقوم الذكاء الاصطناعي بإنشاء',
@@ -270,7 +271,7 @@ export const ar: LanguageTranslation = {
             error: {
                 message:
                     'النصي. يرجى المحاولة مرة اخرى لاحقاً او <0>اتصل بنا</0> SQL خطأ في إنشاء برنامج',
-                    description:
+                description:
                     ' الخاصة بك. راجع الدليل <0>هنا</0> OPENAI_TOKEN لا تتردد في استخدام',
             },
         },
@@ -298,11 +299,11 @@ export const ar: LanguageTranslation = {
                 content: {
                     alert: 'سيؤدي استيراد هذا المخطط إلى التأثير على الجداول والعلاقات الحالية.',
                     new_tables:
-                    'جداول جديدة <bold>{{newTablesNumber}}</bold> سيتم إضافة',
+                        'جداول جديدة <bold>{{newTablesNumber}}</bold> سيتم إضافة',
                     new_relationships:
-                    'علاقات جديدة <bold>{{newRelationshipsNumber}}</bold> سيتم إنشاء',
+                        'علاقات جديدة <bold>{{newRelationshipsNumber}}</bold> سيتم إنشاء',
                     tables_override:
-                    'جداول <bold>{{tablesOverrideNumber}}</bold> سيتم تعديل',
+                        'جداول <bold>{{tablesOverrideNumber}}</bold> سيتم تعديل',
                     proceed: 'هل تريد المتابعة؟',
                 },
                 import: 'استيراد',
@@ -338,8 +339,7 @@ export const ar: LanguageTranslation = {
 
         star_us_dialog: {
             title: '!ساعدنا على التحسن',
-            description:
-            '؟! إنها مجرد نقرة واحدةGITHUB هل ترغب في تقييمنا على',
+            description: '؟! إنها مجرد نقرة واحدةGITHUB هل ترغب في تقييمنا على',
             close: 'ليس الآن',
             confirm: '!بالتأكيد',
         },
