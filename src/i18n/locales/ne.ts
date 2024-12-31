@@ -30,7 +30,7 @@ export const ne: LanguageTranslation = {
                 theme: 'थिम',
                 show_dependencies: 'डिपेन्डेन्सीहरू देखाउनुहोस्',
                 hide_dependencies: 'डिपेन्डेन्सीहरू लुकाउनुहोस्',
-                //TODO: TRANSLATE
+                //TODO: Translate
                 show_relationships: 'Show Relationships',
                 hide_relationships: 'Hide Relationships',
             },

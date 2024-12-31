@@ -30,7 +30,7 @@ export const ko_KR: LanguageTranslation = {
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
-                //TODO: TRANSLATE
+                //TODO: Translate
                 show_relationships: 'Show Relationships',
                 hide_relationships: 'Hide Relationships',
             },

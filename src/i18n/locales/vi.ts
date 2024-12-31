@@ -30,7 +30,7 @@ export const vi: LanguageTranslation = {
                 theme: 'Chủ đề',
                 show_dependencies: 'Hiển thị các phụ thuộc',
                 hide_dependencies: 'Ẩn các phụ thuộc',
-                //TODO: TRANSLATE
+                //TODO: Translate
                 show_relationships: 'Show Relationships',
                 hide_relationships: 'Hide Relationships',
             },

@@ -30,7 +30,7 @@ export const ru: LanguageTranslation = {
                 theme: 'Тема',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
-                //TODO: TRANSLATE
+                //TODO: Translate
                 show_relationships: 'Show Relationships',
                 hide_relationships: 'Hide Relationships',
             },

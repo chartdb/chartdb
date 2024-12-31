@@ -30,6 +30,9 @@ export const ar: LanguageTranslation = {
                 theme: 'المظهر',
                 show_dependencies: 'إظهار الاعتمادات',
                 hide_dependencies: 'إخفاء الاعتمادات',
+                //TODO: Translate
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             share: {
                 share: 'مشاركة',
