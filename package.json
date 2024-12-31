@@ -60,7 +60,7 @@
         "react-i18next": "^15.0.1",
         "react-resizable-panels": "^2.0.22",
         "react-responsive": "^10.0.0",
-        "react-router-dom": "^6.26.0",
+        "react-router-dom": "^7.1.1",
         "react-use": "^17.5.1",
         "tailwind-merge": "^2.4.0",
         "tailwindcss-animate": "^1.0.7",
