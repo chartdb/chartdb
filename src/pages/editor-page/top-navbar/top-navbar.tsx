@@ -57,7 +57,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     } = useDialog();
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
-    const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
+    const {
+        hideSidePanel,
+        isSidePanelShowed,
+        showSidePanel,
+        isToolbarShowed,
+        openToolbar,
+        closeToolbar,
+    } = useLayout();
     const {
         scrollAction,
         setScrollAction,
@@ -204,6 +211,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const openBuckleWaitlist = useCallback(() => {
         window.open('https://waitlist.buckle.dev', '_blank');
     }, []);
+
+    const showOrHideToolBar = useCallback(() => {
+        if (isToolbarShowed) {
+            closeToolbar();
+        } else {
+            openToolbar();
+        }
+    }, [isToolbarShowed, closeToolbar, openToolbar]);
 
     const renderGetBuckleButton = useCallback(() => {
         return (
@@ -498,6 +513,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         ].keyCombinationLabel
                                     }
                                 </MenubarShortcut>
+                            </MenubarItem>
+
+                            <MenubarItem onClick={showOrHideToolBar}>
+                                {isToolbarShowed
+                                    ? t('menu.view.hide_toolbar')
+                                    : t('menu.view.show_toolbar')}
                             </MenubarItem>
                             <MenubarSeparator />
                             <MenubarItem onClick={showOrHideCardinality}>

@@ -21,6 +21,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const [isSelectSchemaOpen, setIsSelectSchemaOpen] =
         React.useState<boolean>(false);
 
+    const [isToolbarShowed, setToolbarShowed] = React.useState<boolean>(true);
+
     const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
         () => setOpenedTableInSidebar('');
 
@@ -67,6 +69,12 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
 
     const closeSelectSchema: LayoutContext['closeSelectSchema'] = () =>
         setIsSelectSchemaOpen(false);
+
+    const openToolbar: LayoutContext['openToolbar'] = () =>
+        setToolbarShowed(true);
+
+    const closeToolbar: LayoutContext['closeToolbar'] = () =>
+        setToolbarShowed(false);
     return (
         <layoutContext.Provider
             value={{
@@ -88,6 +96,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 openedDependencyInSidebar,
                 openDependencyFromSidebar,
                 closeAllDependenciesInSidebar,
+                isToolbarShowed,
+                openToolbar,
+                closeToolbar,
             }}
         >
             {children}
