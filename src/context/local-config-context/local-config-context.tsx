@@ -30,14 +30,24 @@ export interface LocalConfigContext {
     starUsDialogLastOpen: number;
     setStarUsDialogLastOpen: (lastOpen: number) => void;
 
+    // Placeholder for future implementation
+    'feature/show-hide-relationships': boolean; // Corrected syntax for placeholder
+
     buckleWaitlistOpened: boolean;
-    setBuckleWaitlistOpened: (githubRepoOpened: boolean) => void;
+    setBuckleWaitlistOpened: (buckleWaitlistOpened: boolean) => void;
 
     buckleDialogLastOpen: number;
     setBuckleDialogLastOpen: (lastOpen: number) => void;
 
+    // Placeholder for future implementation
+    main: boolean; // Corrected syntax for placeholder
+
     showDependenciesOnCanvas: boolean;
     setShowDependenciesOnCanvas: (showDependenciesOnCanvas: boolean) => void;
+
+    // Add these two new properties
+    showRelationshipsOnCanvas: boolean;
+    setShowRelationshipsOnCanvas: (showRelationshipsOnCanvas: boolean) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -62,12 +72,22 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     starUsDialogLastOpen: 0,
     setStarUsDialogLastOpen: emptyFn,
 
+    // Placeholder for future implementation
+    'feature/show-hide-relationships': false, // Default value for placeholder
+
     buckleWaitlistOpened: false,
     setBuckleWaitlistOpened: emptyFn,
 
     buckleDialogLastOpen: 0,
     setBuckleDialogLastOpen: emptyFn,
 
+    // Placeholder for future implementation
+    main: false, // Default value for placeholder
+
     showDependenciesOnCanvas: false,
     setShowDependenciesOnCanvas: emptyFn,
+
+    // Add default values for the new properties
+    showRelationshipsOnCanvas: false,
+    setShowRelationshipsOnCanvas: emptyFn,
 });

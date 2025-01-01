@@ -13,6 +13,7 @@ const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const buckleWaitlistOpenedKey = 'buckle_waitlist_opened';
 const buckleDialogLastOpenKey = 'buckle_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
+const showRelationshipsOnCanvasKey = 'show_relationships_on_canvas';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -66,6 +67,11 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
             (localStorage.getItem(showDependenciesOnCanvasKey) || 'false') ===
                 'true'
         );
+    const [showRelationshipsOnCanvas, setShowRelationshipsOnCanvas] =
+        React.useState<boolean>(
+            (localStorage.getItem(showRelationshipsOnCanvasKey) || 'false') ===
+                'true'
+        );
 
     useEffect(() => {
         localStorage.setItem(
@@ -114,6 +120,12 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     useEffect(() => {
         localStorage.setItem(showCardinalityKey, showCardinality.toString());
     }, [showCardinality]);
+    useEffect(() => {
+        localStorage.setItem(
+            showRelationshipsOnCanvasKey,
+            showRelationshipsOnCanvas.toString()
+        );
+    }, [showRelationshipsOnCanvas]);
 
     useEffect(() => {
         localStorage.setItem(
@@ -141,10 +153,18 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setStarUsDialogLastOpen,
                 showDependenciesOnCanvas,
                 setShowDependenciesOnCanvas,
+
+                'feature/show-hide-relationships': false, // Placeholder corrected
+
+                showRelationshipsOnCanvas,
+                setShowRelationshipsOnCanvas,
+
                 setBuckleDialogLastOpen,
                 buckleDialogLastOpen,
                 buckleWaitlistOpened,
                 setBuckleWaitlistOpened,
+
+                main: false, // Placeholder corrected
             }}
         >
             {children}

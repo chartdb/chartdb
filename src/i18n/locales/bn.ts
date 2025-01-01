@@ -30,6 +30,8 @@ export const bn: LanguageTranslation = {
                 theme: 'থিম',
                 show_dependencies: 'নির্ভরতাগুলি দেখান',
                 hide_dependencies: 'নির্ভরতাগুলি লুকান',
+                show_relationships: 'সম্পর্ক দেখান',
+                hide_relationships: 'সম্পর্ক লুকানs',
             },
 
             share: {

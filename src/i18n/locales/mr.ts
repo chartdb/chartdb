@@ -30,6 +30,9 @@ export const mr: LanguageTranslation = {
                 theme: 'थीम',
                 show_dependencies: 'डिपेंडेन्सि दाखवा',
                 hide_dependencies: 'डिपेंडेन्सि लपवा',
+                //TODO: Translate
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             share: {
                 // TODO: Add translations
