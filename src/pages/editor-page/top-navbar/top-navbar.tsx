@@ -65,6 +65,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
         showCardinality,
         setShowDependenciesOnCanvas,
         showDependenciesOnCanvas,
+        setShowMiniMapOnCanvas,
+        showMiniMapOnCanvas,
     } = useLocalConfig();
     const { effectiveTheme } = useTheme();
     const { t } = useTranslation();
@@ -204,6 +206,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const openBuckleWaitlist = useCallback(() => {
         window.open('https://waitlist.buckle.dev', '_blank');
     }, []);
+
+    const showOrHideMiniMap = useCallback(() => {
+        setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
+    }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
 
     const renderGetBuckleButton = useCallback(() => {
         return (
@@ -512,6 +518,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                                         : t('menu.view.show_dependencies')}
                                 </MenubarItem>
                             ) : null}
+
+                            <MenubarItem onClick={showOrHideMiniMap}>
+                                {showMiniMapOnCanvas
+                                    ? t('menu.view.hide_minimap')
+                                    : t('menu.view.show_minimap')}
+                            </MenubarItem>
                             <MenubarSeparator />
                             <MenubarSub>
                                 <MenubarSubTrigger>
