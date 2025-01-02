@@ -30,6 +30,9 @@ export const ru: LanguageTranslation = {
                 theme: 'Тема',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
+                // TODO: Translate
+                show_minimap: 'Show Mini Map',
+                hide_minimap: 'Hide Mini Map',
             },
             share: {
                 share: 'Поделиться',

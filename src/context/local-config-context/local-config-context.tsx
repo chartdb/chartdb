@@ -38,6 +38,9 @@ export interface LocalConfigContext {
 
     showDependenciesOnCanvas: boolean;
     setShowDependenciesOnCanvas: (showDependenciesOnCanvas: boolean) => void;
+
+    showMiniMapOnCanvas: boolean;
+    setShowMiniMapOnCanvas: (showMiniMapOnCanvas: boolean) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -70,4 +73,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     showDependenciesOnCanvas: false,
     setShowDependenciesOnCanvas: emptyFn,
+
+    showMiniMapOnCanvas: false,
+    setShowMiniMapOnCanvas: emptyFn,
 });

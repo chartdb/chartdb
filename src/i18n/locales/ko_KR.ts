@@ -30,6 +30,9 @@ export const ko_KR: LanguageTranslation = {
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
+                // TODO: Translate
+                show_minimap: 'Show Mini Map',
+                hide_minimap: 'Hide Mini Map',
             },
             share: {
                 share: '공유',
