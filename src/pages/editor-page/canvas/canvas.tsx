@@ -874,7 +874,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     </Controls>
                     {showMiniMapOnCanvas && (
                         <MiniMap
-                        
                             style={{
                                 width: isDesktop ? 100 : 60,
                                 height: isDesktop ? 100 : 60,
