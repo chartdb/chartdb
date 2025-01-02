@@ -30,8 +30,8 @@ export const en = {
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
-                show_minimap: 'Show MiniMap',
-                hide_minimap: 'Hide MiniMap',
+                show_minimap: 'Show Mini Map',
+                hide_minimap: 'Hide Mini Map',
             },
             share: {
                 share: 'Share',
