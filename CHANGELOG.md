@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/chartdb/chartdb/compare/v1.5.1...v1.6.0) (2025-01-02)
+
+
+### Features
+
+* **view-menu:** add toggle for mini map visibility ([#496](https://github.com/chartdb/chartdb/issues/496)) ([#505](https://github.com/chartdb/chartdb/issues/505)) ([8abf2a7](https://github.com/chartdb/chartdb/commit/8abf2a7bfcc36d39e60ac133b0e5e569de1bbc72))
+
+
+### Bug Fixes
+
+* add loadDiagramFromData logic to chartdb provider ([#513](https://github.com/chartdb/chartdb/issues/513)) ([ee659ea](https://github.com/chartdb/chartdb/commit/ee659eaa038a94ee13801801e84152df4d79683d))
+* **dependency:** upgrade react query to v7 - clean console warnings ([#504](https://github.com/chartdb/chartdb/issues/504)) ([7c5db08](https://github.com/chartdb/chartdb/commit/7c5db0848e49dfdb7e7120f77003d1e37f8d71b0))
+* **i18n:** translation/Arabic ([#509](https://github.com/chartdb/chartdb/issues/509)) ([4b43f72](https://github.com/chartdb/chartdb/commit/4b43f720e90e49d5461e68d188e3865000f52497))
+
 ## [1.5.1](https://github.com/chartdb/chartdb/compare/v1.5.0...v1.5.1) (2024-12-15)
 
 
