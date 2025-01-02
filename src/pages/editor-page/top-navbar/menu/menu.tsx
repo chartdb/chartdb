@@ -59,6 +59,8 @@ export const Menu: React.FC<MenuProps> = () => {
         showCardinality,
         setShowDependenciesOnCanvas,
         showDependenciesOnCanvas,
+        setShowMiniMapOnCanvas,
+        showMiniMapOnCanvas,
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -181,6 +183,10 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideDependencies = useCallback(() => {
         setShowDependenciesOnCanvas(!showDependenciesOnCanvas);
     }, [showDependenciesOnCanvas, setShowDependenciesOnCanvas]);
+
+    const showOrHideMiniMap = useCallback(() => {
+        setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
+    }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
 
     const emojiAI = '✨';
 
@@ -421,6 +427,11 @@ export const Menu: React.FC<MenuProps> = () => {
                                 : t('menu.view.show_dependencies')}
                         </MenubarItem>
                     ) : null}
+                    <MenubarItem onClick={showOrHideMiniMap}>
+                        {showMiniMapOnCanvas
+                            ? t('menu.view.hide_minimap')
+                            : t('menu.view.show_minimap')}
+                    </MenubarItem>
                     <MenubarSeparator />
                     <MenubarSub>
                         <MenubarSubTrigger>
