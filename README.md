@@ -101,7 +101,8 @@ Or like this if you want to have LLM capabilities for generating SQL, the follow
 
 You can set these either in the `.env.local` for running locally, or pass them to a docker image. Examples below show this using Open AI as the provider.
 
-**Note:** If both OpenAI and Ollama variables are set, OpenAI will be used.
+- OpenAI will be enabled if the OPENAI_API_KEY is provided.
+- Ollama will be enabled and the app will attempt to pull available models if OLLAMA_ENABLED is set to a truthy value.
 
 ```sh
 npm install
