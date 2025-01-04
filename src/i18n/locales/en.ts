@@ -44,13 +44,6 @@ export const en = {
                 join_discord: 'Join us on Discord',
                 schedule_a_call: 'Talk with us!',
             },
-            // llm: {
-            //     llm: 'LLM Options',
-            //     providers: {
-            //         open_ai: 'OpenAI',
-            //         ollama: 'Ollama',
-            //     },
-            // },
         },
 
         delete_diagram_alert: {
