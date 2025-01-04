@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
 import type { Theme } from '../theme-context/theme-context';
+import { LLMProvider } from '@/llms/providers';
 
 export type ScrollAction = 'pan' | 'zoom';
 
@@ -41,6 +42,15 @@ export interface LocalConfigContext {
 
     showMiniMapOnCanvas: boolean;
     setShowMiniMapOnCanvas: (showMiniMapOnCanvas: boolean) => void;
+
+    ollamaAvailableModels: string[];
+    setOllamaAvailableModels: (models: string[]) => void;
+
+    ollamaSelectedModel: string;
+    setOllamaSelectedModel: (modelName: string) => void;
+
+    llmProvider: LLMProvider;
+    setLLMProvider: (provider: LLMProvider) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -76,4 +86,13 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     showMiniMapOnCanvas: false,
     setShowMiniMapOnCanvas: emptyFn,
+
+    ollamaAvailableModels: [],
+    setOllamaAvailableModels: emptyFn,
+
+    ollamaSelectedModel: ``,
+    setOllamaSelectedModel: emptyFn,
+
+    llmProvider: LLMProvider.None,
+    setLLMProvider: emptyFn,
 });

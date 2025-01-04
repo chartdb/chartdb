@@ -1,5 +1,4 @@
 import type { Diagram } from '../../domain/diagram';
-import { OLLAMA_MODEL, OPENAI_API_KEY } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
@@ -7,6 +6,8 @@ import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { generateSQLPrompt } from '@/llms/prompts';
 import { promptForSQL as promptForSQLOllama } from '@/llms/providers/ollama';
 import { promptForSQL as promptForSQLOpenAI } from '@/llms/providers/open-ai';
+import { LLMProvider } from '@/llms/providers';
+import { llmProviderKey } from '@/context/local-config-context/local-config-provider';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
@@ -208,8 +209,14 @@ export const exportSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
+    const llmProvider = localStorage.getItem(llmProviderKey) as LLMProvider;
+
     const sqlScript = exportBaseSQL(diagram);
-    const cacheKey = await generateCacheKey(databaseType, sqlScript);
+    const cacheKey = await generateCacheKey(
+        databaseType,
+        sqlScript,
+        llmProvider
+    );
 
     const cachedResult = getFromCache(cacheKey);
     if (cachedResult) {
@@ -219,12 +226,15 @@ export const exportSQL = async (
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
     let resultText = ``;
-
-    // TODO: Better way for knowing and switching which AI to use...
-    if (window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY) {
-        resultText = await promptForSQLOpenAI(prompt, options);
-    } else if (window?.env?.OLLAMA_ENDPOINT ?? OLLAMA_MODEL) {
-        resultText = await promptForSQLOllama(prompt, options);
+    switch (llmProvider) {
+        case LLMProvider.OpenAI:
+            resultText = await promptForSQLOpenAI(prompt, options);
+            break;
+        case LLMProvider.Ollama:
+            resultText = await promptForSQLOllama(prompt, options);
+            break;
+        default:
+            throw new Error(`Unknown LLM provider: ${llmProvider}`);
     }
 
     setInCache(cacheKey, resultText);

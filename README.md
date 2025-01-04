@@ -93,11 +93,11 @@ npm run build
 
 Or like this if you want to have LLM capabilities for generating SQL, the following environment variables are used:
 
-| Provider | Key                    | Value                |
-| -------- | ---------------------- | -------------------- |
-| Open AI  | `VITE_OPENAI_API_KEY`  | `<YOUR_OPEN_AI_KEY>` |
-| Ollama   | `VITE_OLLAMA_MODEL`    | llama3.2:3b          |
-| Ollama   | `VITE_OLLAMA_ENDPOINT` | 127.0.0.1:11434      |
+| Provider | Key                    | Example              | Default           |
+| -------- | ---------------------- | -------------------- | ----------------- |
+| Open AI  | `VITE_OPENAI_API_KEY`  | `<YOUR_OPEN_AI_KEY>` | ``                |
+| Ollama   | `VITE_OLLAMA_ENABLED`  | `true`               | `false`           |
+| Ollama   | `VITE_OLLAMA_ENDPOINT` | `127.0.0.1:11434`    | `127.0.0.1:11434` |
 
 You can set these either in the `.env.local` for running locally, or pass them to a docker image. Examples below show this using Open AI as the provider.
 
@@ -105,7 +105,7 @@ You can set these either in the `.env.local` for running locally, or pass them t
 
 ```sh
 npm install
-echo `VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY>` > .env.local
+echo 'VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY>' > .env.local
 npm run dev
 ```
 

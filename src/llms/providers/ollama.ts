@@ -1,8 +1,6 @@
-import { OLLAMA_MODEL, OLLAMA_ENDPOINT } from '@/lib/env';
-
-// fallback model if one is not supplied via env var.
-// llama3.2:3b is a 2GB model
-const DEFAULT_OLLAMA_MODEL = 'llama3.2:3b';
+import { ollamaSelectedModelKey } from '@/context/local-config-context/local-config-provider';
+import { OLLAMA_ENDPOINT } from '@/lib/env';
+import { Ollama, type ModelResponse } from 'ollama';
 
 export const promptForSQL = async (
     prompt: string,
@@ -12,14 +10,19 @@ export const promptForSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
-    const [{ Ollama }] = await Promise.all([import('ollama')]);
+    const ollamaSelectedModel = localStorage.getItem(ollamaSelectedModelKey);
 
-    const ollama = new Ollama({ host: OLLAMA_ENDPOINT });
-    const modelToUse = OLLAMA_MODEL ?? DEFAULT_OLLAMA_MODEL;
+    const ollama = new Ollama({
+        host: window?.env?.OLLAMA_ENDPOINT ?? OLLAMA_ENDPOINT,
+    });
+
+    if (!ollamaSelectedModel) {
+        throw Error(`No Ollama model selected.`);
+    }
 
     if (options?.stream) {
         const response = await ollama.generate({
-            model: modelToUse,
+            model: ollamaSelectedModel,
             prompt: prompt,
             stream: true,
         });
@@ -40,9 +43,35 @@ export const promptForSQL = async (
     }
 
     const { response } = await ollama.generate({
-        model: modelToUse,
+        model: ollamaSelectedModel,
         prompt: prompt,
     });
 
     return response;
+};
+
+// The response from `ollama.list()` has the `model` field in the data, but not
+// in the interface exposed by the package.
+interface OllamaModelResponse extends ModelResponse {
+    model: string;
+}
+
+export const getModels = async () => {
+    const ollama = new Ollama({
+        host: window?.env?.OLLAMA_ENDPOINT ?? OLLAMA_ENDPOINT,
+    });
+
+    try {
+        const availableModels = await ollama.list();
+
+        return (availableModels.models as OllamaModelResponse[]).map(
+            (m) => m.model
+        );
+    } catch {
+        console.warn(
+            `no running ollama instance found or unable to fetch models`
+        );
+    }
+
+    return [];
 };

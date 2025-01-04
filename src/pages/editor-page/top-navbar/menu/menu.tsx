@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     Menubar,
     MenubarCheckboxItem,
@@ -18,7 +18,7 @@ import { useExportImage } from '@/hooks/use-export-image';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useConfig } from '@/hooks/use-config';
-import { IS_CHARTDB_IO } from '@/lib/env';
+import { IS_CHARTDB_IO, OLLAMA_ENABLED, OPENAI_API_KEY } from '@/lib/env';
 import {
     KeyboardShortcutAction,
     keyboardShortcutsForOS,
@@ -30,8 +30,9 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
-import { Badge } from '@/components/badge/badge';
-import { OPENAI_API_KEY, OLLAMA_MODEL } from '@/lib/env';
+import { getModels } from '@/llms/providers/ollama';
+import { CheckIcon } from '@radix-ui/react-icons';
+import { LLMProvider } from '@/llms/providers';
 
 export interface MenuProps {}
 
@@ -63,6 +64,12 @@ export const Menu: React.FC<MenuProps> = () => {
         showDependenciesOnCanvas,
         setShowMiniMapOnCanvas,
         showMiniMapOnCanvas,
+        ollamaAvailableModels,
+        setOllamaAvailableModels,
+        ollamaSelectedModel,
+        setOllamaSelectedModel,
+        llmProvider,
+        setLLMProvider,
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -110,6 +117,19 @@ export const Menu: React.FC<MenuProps> = () => {
     const openCalendly = useCallback(() => {
         window.open('https://calendly.com/fishner/15min', '_blank');
     }, []);
+
+    const getAvailableOllamaModels = useCallback(async () => {
+        if (!window?.env?.OLLAMA_ENABLED && !OLLAMA_ENABLED) {
+            setOllamaAvailableModels([]);
+            return;
+        }
+        const models = await getModels();
+        setOllamaAvailableModels(models);
+    }, [setOllamaAvailableModels]);
+
+    useEffect(() => {
+        getAvailableOllamaModels();
+    }, [getAvailableOllamaModels]);
 
     const exportSQL = useCallback(
         (databaseType: DatabaseType) => {
@@ -511,46 +531,59 @@ export const Menu: React.FC<MenuProps> = () => {
             </MenubarMenu>
 
             <MenubarMenu>
-                <MenubarTrigger>
-                    {/* {t('menu.llm.llm')} {emojiAI} */}
-                    LLM Availability {emojiAI}
-                </MenubarTrigger>
+                <MenubarTrigger>LLMs {emojiAI}</MenubarTrigger>
                 <MenubarContent>
-                    <LLMProviderMenuItem
-                        isAvailable={
-                            !!(window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY)
+                    <MenubarCheckboxItem
+                        key="llm-provider-openai"
+                        checked={LLMProvider.OpenAI === llmProvider}
+                        onClick={() => setLLMProvider(LLMProvider.OpenAI)}
+                        disabled={
+                            !(window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY)
                         }
                     >
-                        {/* {t('menu.llm.providers.open_ai')} */}
                         OpenAI
-                    </LLMProviderMenuItem>
-                    <LLMProviderMenuItem
-                        isAvailable={
-                            !!(window?.env?.OLLAMA_MODEL ?? OLLAMA_MODEL)
-                        }
-                    >
-                        {/* {t('menu.llm.providers.ollama')} */}
-                        Ollama
-                    </LLMProviderMenuItem>
+                    </MenubarCheckboxItem>
+
+                    <MenubarSub>
+                        <MenubarSubTrigger
+                            disabled={!ollamaAvailableModels.length}
+                            className="relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                        >
+                            <span className="absolute left-2 flex size-3.5 items-center justify-center">
+                                {llmProvider == LLMProvider.Ollama &&
+                                    ollamaAvailableModels.includes(
+                                        ollamaSelectedModel
+                                    ) && (
+                                        <span data-state="checked">
+                                            <CheckIcon className="size-4" />
+                                        </span>
+                                    )}
+                            </span>
+                            Ollama
+                        </MenubarSubTrigger>
+
+                        <MenubarSubContent>
+                            {(ollamaAvailableModels.length &&
+                                ollamaAvailableModels?.map((model) => (
+                                    <MenubarCheckboxItem
+                                        key={model}
+                                        checked={
+                                            model === ollamaSelectedModel &&
+                                            llmProvider == LLMProvider.Ollama
+                                        }
+                                        onClick={() => {
+                                            setOllamaSelectedModel(model);
+                                            setLLMProvider(LLMProvider.Ollama);
+                                        }}
+                                    >
+                                        {model}
+                                    </MenubarCheckboxItem>
+                                ))) ??
+                                []}
+                        </MenubarSubContent>
+                    </MenubarSub>
                 </MenubarContent>
             </MenubarMenu>
         </Menubar>
     );
 };
-
-interface LLMProviderMenuItemProps {
-    isAvailable?: boolean;
-}
-
-const LLMProviderMenuItem: React.FC<
-    React.PropsWithChildren<LLMProviderMenuItemProps>
-> = ({ children, isAvailable = false }) => (
-    <MenubarItem>
-        {children}
-        <MenubarShortcut className="text-base">
-            <Badge variant={isAvailable ? `default` : `outline`}>
-                {isAvailable ? `Available` : `Unavailable`}
-            </Badge>
-        </MenubarShortcut>
-    </MenubarItem>
-);
