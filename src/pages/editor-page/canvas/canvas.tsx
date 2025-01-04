@@ -736,96 +736,101 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
                 >
-                    <Controls
-                        position="top-left"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <div className="flex flex-col items-center gap-2 md:flex-row">
-                            {!readonly ? (
-                                <>
+                    {isToolbarShowed && (
+                        <Controls
+                            position="top-left"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <div className="flex flex-col items-center gap-2 md:flex-row">
+                                {!readonly ? (
+                                    <>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <span>
+                                                    <Button
+                                                        variant="secondary"
+                                                        className="size-8 p-1 shadow-none"
+                                                        onClick={
+                                                            showReorderConfirmation
+                                                        }
+                                                    >
+                                                        <LayoutGrid className="size-4" />
+                                                    </Button>
+                                                </span>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                {t('toolbar.reorder_diagram')}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <span>
+                                                    <Button
+                                                        variant="secondary"
+                                                        className={cn(
+                                                            'size-8 p-1 shadow-none',
+                                                            snapToGridEnabled ||
+                                                                shiftPressed
+                                                                ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
+                                                                : ''
+                                                        )}
+                                                        onClick={() =>
+                                                            setSnapToGridEnabled(
+                                                                (prev) => !prev
+                                                            )
+                                                        }
+                                                    >
+                                                        <Magnet className="size-4" />
+                                                    </Button>
+                                                </span>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                {t('snap_to_grid_tooltip', {
+                                                    key:
+                                                        operatingSystem ===
+                                                        'mac'
+                                                            ? '⇧'
+                                                            : 'Shift',
+                                                })}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </>
+                                ) : null}
+
+                                <div
+                                    className={`transition-opacity duration-300 ease-in-out ${
+                                        hasOverlappingTables
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    }`}
+                                >
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <span>
                                                 <Button
-                                                    variant="secondary"
+                                                    variant="default"
                                                     className="size-8 p-1 shadow-none"
                                                     onClick={
-                                                        showReorderConfirmation
+                                                        pulseOverlappingTables
                                                     }
                                                 >
-                                                    <LayoutGrid className="size-4" />
+                                                    <AlertTriangle className="size-4 text-white" />
                                                 </Button>
                                             </span>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            {t('toolbar.reorder_diagram')}
+                                            {t(
+                                                'toolbar.highlight_overlapping_tables'
+                                            )}
                                         </TooltipContent>
                                     </Tooltip>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <span>
-                                                <Button
-                                                    variant="secondary"
-                                                    className={cn(
-                                                        'size-8 p-1 shadow-none',
-                                                        snapToGridEnabled ||
-                                                            shiftPressed
-                                                            ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
-                                                            : ''
-                                                    )}
-                                                    onClick={() =>
-                                                        setSnapToGridEnabled(
-                                                            (prev) => !prev
-                                                        )
-                                                    }
-                                                >
-                                                    <Magnet className="size-4" />
-                                                </Button>
-                                            </span>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {t('snap_to_grid_tooltip', {
-                                                key:
-                                                    operatingSystem === 'mac'
-                                                        ? '⇧'
-                                                        : 'Shift',
-                                            })}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </>
-                            ) : null}
-
-                            <div
-                                className={`transition-opacity duration-300 ease-in-out ${
-                                    hasOverlappingTables
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                }`}
-                            >
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span>
-                                            <Button
-                                                variant="default"
-                                                className="size-8 p-1 shadow-none"
-                                                onClick={pulseOverlappingTables}
-                                            >
-                                                <AlertTriangle className="size-4 text-white" />
-                                            </Button>
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t(
-                                            'toolbar.highlight_overlapping_tables'
-                                        )}
-                                    </TooltipContent>
-                                </Tooltip>
+                                </div>
                             </div>
-                        </div>
-                    </Controls>
+                        </Controls>
+                    )}
                     {isLoadingDOM ? (
                         <Controls
                             position="top-center"
