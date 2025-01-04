@@ -44,6 +44,13 @@ export const en = {
                 join_discord: 'Join us on Discord',
                 schedule_a_call: 'Talk with us!',
             },
+            // llm: {
+            //     llm: 'LLM Options',
+            //     providers: {
+            //         open_ai: 'OpenAI',
+            //         ollama: 'Ollama',
+            //     },
+            // },
         },
 
         delete_diagram_alert: {
@@ -274,7 +281,7 @@ export const en = {
                 message:
                     'Error generating SQL script. Please try again later or <0>contact us</0>.',
                 description:
-                    'Feel free to use your OPENAI_TOKEN, see the manual <0>here</0>.',
+                    'Pease ensure that you have set up an AI provider. See the manual <0>here</0>.',
             },
         },
 

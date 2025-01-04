@@ -30,6 +30,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { Badge } from '@/components/badge/badge';
+import { OPENAI_API_KEY, OLLAMA_MODEL } from '@/lib/env';
 
 export interface MenuProps {}
 
@@ -507,6 +509,48 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
+
+            <MenubarMenu>
+                <MenubarTrigger>
+                    {/* {t('menu.llm.llm')} {emojiAI} */}
+                    LLM Availability {emojiAI}
+                </MenubarTrigger>
+                <MenubarContent>
+                    <LLMProviderMenuItem
+                        isAvailable={
+                            !!(window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY)
+                        }
+                    >
+                        {/* {t('menu.llm.providers.open_ai')} */}
+                        OpenAI
+                    </LLMProviderMenuItem>
+                    <LLMProviderMenuItem
+                        isAvailable={
+                            !!(window?.env?.OLLAMA_MODEL ?? OLLAMA_MODEL)
+                        }
+                    >
+                        {/* {t('menu.llm.providers.ollama')} */}
+                        Ollama
+                    </LLMProviderMenuItem>
+                </MenubarContent>
+            </MenubarMenu>
         </Menubar>
     );
 };
+
+interface LLMProviderMenuItemProps {
+    isAvailable?: boolean;
+}
+
+const LLMProviderMenuItem: React.FC<
+    React.PropsWithChildren<LLMProviderMenuItemProps>
+> = ({ children, isAvailable = false }) => (
+    <MenubarItem>
+        {children}
+        <MenubarShortcut className="text-base">
+            <Badge variant={isAvailable ? `default` : `outline`}>
+                {isAvailable ? `Available` : `Unavailable`}
+            </Badge>
+        </MenubarShortcut>
+    </MenubarItem>
+);
