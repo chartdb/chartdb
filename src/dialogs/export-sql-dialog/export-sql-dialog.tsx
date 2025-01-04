@@ -38,6 +38,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>(``);
     const [isScriptLoading, setIsScriptLoading] =
         React.useState<boolean>(false);
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -64,13 +65,19 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
         abortControllerRef.current = new AbortController();
         setScript(undefined);
         setError(false);
+        setErrorMessage(``);
         const fetchScript = async () => {
             try {
                 setIsScriptLoading(true);
                 const script = await exportSQLScript();
                 setScript(script);
                 setIsScriptLoading(false);
-            } catch {
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setErrorMessage(err.message);
+                } else {
+                    console.error(err);
+                }
                 setError(true);
             }
         };
@@ -79,7 +86,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
         return () => {
             abortControllerRef.current?.abort();
         };
-    }, [dialog.open, setScript, exportSQLScript, setError]);
+    }, [dialog.open, setScript, exportSQLScript, setError, setErrorMessage]);
 
     const renderError = useCallback(
         () => (
@@ -114,10 +121,11 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                             ]}
                         />
                     </div>
+                    {errorMessage && <div>Error Message: {errorMessage}</div>}
                 </div>
             </div>
         ),
-        []
+        [errorMessage]
     );
 
     const renderLoader = useCallback(
@@ -174,7 +182,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                             renderError()
                         ) : script === undefined ? (
                             renderLoader()
-                        ) : script.length === 0 ? (
+                        ) : script.length === 0 && !!isScriptLoading ? (
                             renderError()
                         ) : (
                             <CodeSnippet
