@@ -1,6 +1,6 @@
 import { ollamaSelectedModelKey } from '@/context/local-config-context/local-config-provider';
 import { OLLAMA_ENDPOINT } from '@/lib/env';
-import { Ollama, type ModelResponse } from 'ollama';
+import { Ollama, type ModelResponse } from 'ollama/browser';
 
 export const promptForSQL = async (
     prompt: string,
