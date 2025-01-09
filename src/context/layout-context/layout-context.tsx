@@ -27,6 +27,10 @@ export interface LayoutContext {
     isSelectSchemaOpen: boolean;
     openSelectSchema: () => void;
     closeSelectSchema: () => void;
+
+    isToolbarShowed: boolean;
+    showToolbar: () => void;
+    hideToolbar: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -53,4 +57,8 @@ export const layoutContext = createContext<LayoutContext>({
     isSelectSchemaOpen: false,
     openSelectSchema: emptyFn,
     closeSelectSchema: emptyFn,
+
+    isToolbarShowed: false,
+    showToolbar: emptyFn,
+    hideToolbar: emptyFn,
 });
