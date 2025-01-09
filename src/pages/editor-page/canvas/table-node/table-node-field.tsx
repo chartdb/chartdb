@@ -6,11 +6,15 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { KeyRound, Trash2 } from 'lucide-react';
-
+import { KeyRound, MessageCircleMore, Trash2 } from 'lucide-react';
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -113,8 +117,27 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         />
                     </>
                 )}
-                <div className="block truncate text-left">{field.name}</div>
-                <div className="flex max-w-[35%] justify-end gap-2 truncate hover:shrink-0">
+                <div
+                    className={cn(
+                        'flex items-center gap-1 truncate text-left',
+                        {
+                            'font-semibold': field.primaryKey || field.unique,
+                        }
+                    )}
+                >
+                    <span className="truncate">{field.name}</span>
+                    {field.comments ? (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="shrink-0 cursor-pointer text-muted-foreground">
+                                    <MessageCircleMore size={14} />
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>{field.comments}</TooltipContent>
+                        </Tooltip>
+                    ) : null}
+                </div>
+                <div className="flex max-w-[35%] justify-end gap-1.5 truncate hover:shrink-0">
                     {field.primaryKey ? (
                         <div
                             className={cn(
@@ -128,11 +151,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
                     <div
                         className={cn(
-                            'content-center truncate text-right text-xs text-muted-foreground',
+                            'content-center truncate text-right text-xs text-muted-foreground shrink-0',
                             !readonly ? 'group-hover:hidden' : ''
                         )}
                     >
                         {field.type.name}
+                        {field.nullable ? '?' : ''}
                     </div>
                     {readonly ? null : (
                         <div className="hidden flex-row group-hover:flex">

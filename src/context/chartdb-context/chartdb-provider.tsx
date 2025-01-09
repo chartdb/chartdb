@@ -1336,15 +1336,9 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
-    const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
-        async (diagramId: string) => {
-            const diagram = await db.getDiagram(diagramId, {
-                includeRelationships: true,
-                includeTables: true,
-                includeDependencies: true,
-            });
-
-            if (diagram) {
+    const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
+        useCallback(
+            async (diagram) => {
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
@@ -1356,23 +1350,36 @@ export const ChartDBProvider: React.FC<
                 setDiagramUpdatedAt(diagram.updatedAt);
 
                 events.emit({ action: 'load_diagram', data: { diagram } });
+            },
+            [
+                setDiagramId,
+                setDiagramName,
+                setDatabaseType,
+                setDatabaseEdition,
+                setTables,
+                setRelationships,
+                setDependencies,
+                setDiagramCreatedAt,
+                setDiagramUpdatedAt,
+                events,
+            ]
+        );
+
+    const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
+        async (diagramId: string) => {
+            const diagram = await db.getDiagram(diagramId, {
+                includeRelationships: true,
+                includeTables: true,
+                includeDependencies: true,
+            });
+
+            if (diagram) {
+                loadDiagramFromData(diagram);
             }
 
             return diagram;
         },
-        [
-            db,
-            setDiagramId,
-            setDiagramName,
-            setDatabaseType,
-            setDatabaseEdition,
-            setTables,
-            setRelationships,
-            setDependencies,
-            setDiagramCreatedAt,
-            setDiagramUpdatedAt,
-            events,
-        ]
+        [db, loadDiagramFromData]
     );
 
     return (
@@ -1393,6 +1400,7 @@ export const ChartDBProvider: React.FC<
                 updateDiagramId,
                 updateDiagramName,
                 loadDiagram,
+                loadDiagramFromData,
                 updateDatabaseType,
                 updateDatabaseEdition,
                 clearDiagramData,

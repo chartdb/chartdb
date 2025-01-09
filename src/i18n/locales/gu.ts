@@ -30,6 +30,9 @@ export const gu: LanguageTranslation = {
                 theme: 'થિમ',
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',
                 hide_dependencies: 'નિર્ભરતાઓ છુપાવો',
+                // TODO: Translate
+                show_minimap: 'Show Mini Map',
+                hide_minimap: 'Hide Mini Map',
             },
 
             share: {

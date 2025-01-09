@@ -30,6 +30,9 @@ export const te: LanguageTranslation = {
                 theme: 'థీమ్',
                 show_dependencies: 'ఆధారాలు చూపించండి',
                 hide_dependencies: 'ఆధారాలను దాచండి',
+                // TODO: Translate
+                show_minimap: 'Show Mini Map',
+                hide_minimap: 'Hide Mini Map',
             },
             // TODO: Translate
             share: {
