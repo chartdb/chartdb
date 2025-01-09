@@ -51,7 +51,14 @@ export const Menu: React.FC<MenuProps> = () => {
     } = useDialog();
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
-    const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
+    const {
+        hideSidePanel,
+        isSidePanelShowed,
+        showSidePanel,
+        isToolbarShowed,
+        hideToolbar,
+        showToolbar,
+    } = useLayout();
     const {
         scrollAction,
         setScrollAction,
@@ -187,6 +194,14 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideMiniMap = useCallback(() => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
+
+    const showOrHideToolBar = useCallback(() => {
+        if (isToolbarShowed) {
+            hideToolbar();
+        } else {
+            showToolbar();
+        }
+    }, [isToolbarShowed, hideToolbar, showToolbar]);
 
     const emojiAI = '✨';
 
@@ -413,6 +428,11 @@ export const Menu: React.FC<MenuProps> = () => {
                                 ].keyCombinationLabel
                             }
                         </MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem onClick={showOrHideToolBar}>
+                        {isToolbarShowed
+                            ? t('menu.view.hide_toolbar')
+                            : t('menu.view.show_toolbar')}
                     </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem onClick={showOrHideCardinality}>
