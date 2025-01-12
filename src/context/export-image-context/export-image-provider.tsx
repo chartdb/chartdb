@@ -166,6 +166,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         },
                         quality: 1,
                         pixelRatio: scale,
+                        skipFonts: true,
                     });
 
                     downloadImage(dataUrl, type);
