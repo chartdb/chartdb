@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/chartdb/chartdb/compare/v1.6.0...v1.6.1) (2025-01-14)
+
+
+### Bug Fixes
+
+* **Image Export:** importing css rules error while download image ([#524](https://github.com/chartdb/chartdb/issues/524)) ([e9e2736](https://github.com/chartdb/chartdb/commit/e9e2736cb2203702d53df9afc30b8e989a8c9953))
+
 ## [1.6.0](https://github.com/chartdb/chartdb/compare/v1.5.1...v1.6.0) (2025-01-02)
 
 
