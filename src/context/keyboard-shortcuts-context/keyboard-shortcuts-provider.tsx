@@ -9,6 +9,7 @@ import { useHistory } from '@/hooks/use-history';
 import { useDialog } from '@/hooks/use-dialog';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
+import { useReactFlow } from '@xyflow/react';
 
 export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -17,6 +18,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     const { openOpenDiagramDialog } = useDialog();
     const { updateDiagramUpdatedAt } = useChartDB();
     const { toggleSidePanel } = useLayout();
+    const { fitView } = useReactFlow();
 
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.REDO].keyCombination,
@@ -60,6 +62,20 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
             preventDefault: true,
         },
         [toggleSidePanel]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.SHOW_ALL].keyCombination,
+        () => {
+            fitView({
+                duration: 500,
+                padding: 0.1,
+                maxZoom: 0.8,
+            });
+        },
+        {
+            preventDefault: true,
+        },
+        [fitView]
     );
 
     return (

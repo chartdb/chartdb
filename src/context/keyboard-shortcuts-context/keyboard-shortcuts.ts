@@ -6,6 +6,7 @@ export enum KeyboardShortcutAction {
     OPEN_DIAGRAM = 'open_diagram',
     SAVE_DIAGRAM = 'save_diagram',
     TOGGLE_SIDE_PANEL = 'toggle_side_panel',
+    SHOW_ALL = 'show_all',
 }
 
 export interface KeyboardShortcut {
@@ -54,6 +55,13 @@ export const keyboardShortcuts: Record<
         keyCombinationLabelWin: 'Ctrl+B',
         keyCombinationMac: 'meta+b',
         keyCombinationWin: 'ctrl+b',
+    },
+    [KeyboardShortcutAction.SHOW_ALL]: {
+        action: KeyboardShortcutAction.SHOW_ALL,
+        keyCombinationLabelMac: '⌘0',
+        keyCombinationLabelWin: 'Ctrl+0',
+        keyCombinationMac: 'meta+0',
+        keyCombinationWin: 'ctrl+0',
     },
 };
 
