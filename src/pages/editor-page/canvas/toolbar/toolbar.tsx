@@ -77,7 +77,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     {t('toolbar.save')}
-                                    <span className="ml-2 text-xs text-muted-foreground">
+                                    <span className="ml-2 text-muted-foreground">
                                         {
                                             keyboardShortcutsForOS[
                                                 KeyboardShortcutAction
@@ -100,7 +100,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                         </TooltipTrigger>
                         <TooltipContent>
                             {t('toolbar.show_all')}
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className="ml-2 text-muted-foreground">
                                 {
                                     keyboardShortcutsForOS[
                                         KeyboardShortcutAction.SHOW_ALL
@@ -151,7 +151,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                         </TooltipTrigger>
                         <TooltipContent>
                             {t('toolbar.undo')}
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className="ml-2 text-muted-foreground">
                                 {
                                     keyboardShortcutsForOS[
                                         KeyboardShortcutAction.UNDO
@@ -173,7 +173,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                         </TooltipTrigger>
                         <TooltipContent>
                             {t('toolbar.redo')}
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className="ml-2 text-muted-foreground">
                                 {
                                     keyboardShortcutsForOS[
                                         KeyboardShortcutAction.REDO
