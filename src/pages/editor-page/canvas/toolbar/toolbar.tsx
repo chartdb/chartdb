@@ -13,6 +13,8 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
+import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
+import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -75,6 +77,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     {t('toolbar.save')}
+                                    <span className="ml-2 text-muted-foreground">
+                                        {
+                                            keyboardShortcutsForOS[
+                                                KeyboardShortcutAction
+                                                    .SAVE_DIAGRAM
+                                            ].keyCombinationLabel
+                                        }
+                                    </span>
                                 </TooltipContent>
                             </Tooltip>
                             <Separator orientation="vertical" />
@@ -88,7 +98,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 </ToolbarButton>
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent>{t('toolbar.show_all')}</TooltipContent>
+                        <TooltipContent>
+                            {t('toolbar.show_all')}
+                            <span className="ml-2 text-muted-foreground">
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.SHOW_ALL
+                                    ].keyCombinationLabel
+                                }
+                            </span>
+                        </TooltipContent>
                     </Tooltip>
                     <Separator orientation="vertical" />
                     <Tooltip>
@@ -130,7 +149,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 </ToolbarButton>
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent>{t('toolbar.undo')}</TooltipContent>
+                        <TooltipContent>
+                            {t('toolbar.undo')}
+                            <span className="ml-2 text-muted-foreground">
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.UNDO
+                                    ].keyCombinationLabel
+                                }
+                            </span>
+                        </TooltipContent>
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -143,7 +171,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 </ToolbarButton>
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent>{t('toolbar.redo')}</TooltipContent>
+                        <TooltipContent>
+                            {t('toolbar.redo')}
+                            <span className="ml-2 text-muted-foreground">
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.REDO
+                                    ].keyCombinationLabel
+                                }
+                            </span>
+                        </TooltipContent>
                     </Tooltip>
                 </CardContent>
             </Card>
