@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, ListCollapse, X } from 'lucide-react';
+import { Table, ListCollapse, X, Code } from 'lucide-react';
 import { Input } from '@/components/input/input';
-
+import type { Monaco } from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -21,13 +22,32 @@ import { useDialog } from '@/hooks/use-dialog';
 
 export interface TablesSectionProps {}
 
+const setupDBMLLanguage = (monaco: Monaco) => {
+    monaco.languages.register({ id: 'dbml' });
+    monaco.languages.setMonarchTokensProvider('dbml', {
+        keywords: ['Table', 'Ref'],
+        tokenizer: {
+            root: [
+                [/\b(Table|Ref)\b/, 'keyword'],
+                [/\[.*?\]/, 'annotation'],
+                [/".*?"/, 'string'],
+                [/'.*?'/, 'string'],
+                [/[{}]/, 'delimiter'],
+                [/[<>]/, 'operator'],
+            ],
+        },
+    });
+};
+
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, filteredSchemas, schemas } = useChartDB();
+    const { createTable, tables, filteredSchemas, schemas, relationships } =
+        useChartDB();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
-    const { closeAllTablesInSidebar, openTableFromSidebar } = useLayout();
+    const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
+    const [showDBML, setShowDBML] = useState(false);
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -92,6 +112,45 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText('');
     }, []);
 
+    const generateDBML = useCallback(() => {
+        let dbml = '\n';
+
+        // Generate Tables
+        tables.forEach((table) => {
+            dbml += `Table ${table.name} {\n`;
+            table.fields?.forEach((field) => {
+                let fieldLine = `  ${field.name} ${field.type.name}`;
+                if (field.primaryKey) fieldLine += ' [primary key]';
+                if (field.unique && !field.primaryKey) fieldLine += ' [unique]';
+                if (!field.nullable) fieldLine += ' [not null]';
+                if (field.default) fieldLine += ` [default: ${field.default}]`;
+                dbml += fieldLine + '\n';
+            });
+            dbml += '}\n\n';
+        });
+
+        // Generate Relationships
+        relationships?.forEach((rel) => {
+            const sourceTable = tables.find((t) => t.id === rel.sourceTableId);
+            const targetTable = tables.find((t) => t.id === rel.targetTableId);
+            if (sourceTable && targetTable) {
+                const sourceField = sourceTable.fields.find(
+                    (f) => f.id === rel.sourceFieldId
+                );
+                const targetField = targetTable.fields.find(
+                    (f) => f.id === rel.targetFieldId
+                );
+                if (sourceField && targetField) {
+                    const cardinality =
+                        rel.sourceCardinality === 'many' ? '>' : '<';
+                    dbml += `Ref: ${sourceTable.name}.${sourceField.name} ${cardinality} ${targetTable.name}.${targetField.name}\n\n`;
+                }
+            }
+        });
+
+        return dbml;
+    }, [tables, relationships]);
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -105,14 +164,20 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 <Button
                                     variant="ghost"
                                     className="size-8 p-0"
-                                    onClick={closeAllTablesInSidebar}
+                                    onClick={() => setShowDBML(!showDBML)}
                                 >
-                                    <ListCollapse className="size-4" />
+                                    {showDBML ? (
+                                        <ListCollapse className="size-4" />
+                                    ) : (
+                                        <Code className="size-4" />
+                                    )}
                                 </Button>
                             </span>
                         </TooltipTrigger>
                         <TooltipContent>
-                            {t('side_panel.tables_section.collapse')}
+                            {showDBML
+                                ? t('side_panel.tables_section.show_list')
+                                : t('side_panel.tables_section.show_dbml')}
                         </TooltipContent>
                     </Tooltip>
                 </div>
@@ -135,36 +200,51 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 </Button>
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
-                <ScrollArea className="h-full">
-                    {tables.length === 0 ? (
-                        <EmptyState
-                            title={t(
-                                'side_panel.tables_section.empty_state.title'
-                            )}
-                            description={t(
-                                'side_panel.tables_section.empty_state.description'
-                            )}
-                            className="mt-20"
-                        />
-                    ) : filterText && filteredTables.length === 0 ? (
-                        <div className="mt-10 flex flex-col items-center gap-2">
-                            <div className="text-sm text-muted-foreground">
-                                {t('side_panel.tables_section.no_results')}
+                {showDBML ? (
+                    <Editor
+                        height="100%"
+                        defaultLanguage="dbml"
+                        value={generateDBML()}
+                        beforeMount={setupDBMLLanguage}
+                        options={{
+                            readOnly: true,
+                            minimap: { enabled: false },
+                            scrollBeyondLastLine: false,
+                            wordWrap: 'on',
+                        }}
+                    />
+                ) : (
+                    <ScrollArea className="h-full">
+                        {tables.length === 0 ? (
+                            <EmptyState
+                                title={t(
+                                    'side_panel.tables_section.empty_state.title'
+                                )}
+                                description={t(
+                                    'side_panel.tables_section.empty_state.description'
+                                )}
+                                className="mt-20"
+                            />
+                        ) : filterText && filteredTables.length === 0 ? (
+                            <div className="mt-10 flex flex-col items-center gap-2">
+                                <div className="text-sm text-muted-foreground">
+                                    {t('side_panel.tables_section.no_results')}
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleClearFilter}
+                                    className="gap-1"
+                                >
+                                    <X className="size-3.5" />
+                                    {t('side_panel.tables_section.clear')}
+                                </Button>
                             </div>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleClearFilter}
-                                className="gap-1"
-                            >
-                                <X className="size-3.5" />
-                                {t('side_panel.tables_section.clear')}
-                            </Button>
-                        </div>
-                    ) : (
-                        <TableList tables={filteredTables} />
-                    )}
-                </ScrollArea>
+                        ) : (
+                            <TableList tables={filteredTables} />
+                        )}
+                    </ScrollArea>
+                )}
             </div>
         </section>
     );
