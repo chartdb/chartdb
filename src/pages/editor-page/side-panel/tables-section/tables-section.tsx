@@ -176,7 +176,13 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
 
         // Generate Tables
         sortedTables.forEach((table) => {
-            dbml += `Table ${table.name} {\n`;
+            // Add table with note if description exists
+            if (table.comments) {
+                dbml += `Table ${table.name} [note: "${table.comments}"] {\n`;
+            } else {
+                dbml += `Table ${table.name} {\n`;
+            }
+
             table.fields?.forEach((field) => {
                 // Temp fix for 'varchar' to be text
                 if (field.type.name.toLowerCase().includes('character')) {
@@ -184,22 +190,29 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 }
 
                 let fieldLine = `  ${field.name} ${field.type.name}`;
-                if (
-                    field.primaryKey ||
-                    field.unique ||
-                    !field.nullable ||
-                    field.default
-                ) {
-                    const attributes = [];
-                    if (field.primaryKey) attributes.push('primary key');
-                    if (field.unique && !field.primaryKey)
-                        attributes.push('unique');
-                    if (!field.nullable) attributes.push('not null');
-                    if (field.default)
-                        attributes.push(`default: ${field.default}`);
 
-                    fieldLine += ` [${attributes.join(', ')}]`;
+                // Collect field attributes
+                const attributes = [];
+                if (field.primaryKey) attributes.push('primary key');
+                if (field.unique && !field.primaryKey)
+                    attributes.push('unique');
+                if (!field.nullable) attributes.push('not null');
+                if (field.default) attributes.push(`default: ${field.default}`);
+
+                // Add field attributes if any exist
+                if (attributes.length > 0) {
+                    fieldLine += ` [${attributes.join(', ')}`;
+                    // Add field note if description exists
+                    if (field.comments) {
+                        fieldLine += `, note: "${field.comments}"`;
+                    }
+                    fieldLine += ']';
                 }
+                // Add field note if description exists but no other attributes
+                else if (field.comments) {
+                    fieldLine += ` [note: "${field.comments}"]`;
+                }
+
                 dbml += fieldLine + '\n';
             });
             dbml += '}\n\n';
