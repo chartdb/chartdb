@@ -149,8 +149,33 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const generateDBML = useCallback(() => {
         let dbml = '\n';
 
+        // Sort tables using the same logic as table-list
+        const sortedTables = [...tables].sort((table1, table2) => {
+            // if one table has order and the other doesn't, the one with order should come first
+            if (table1.order && table2.order === undefined) {
+                return -1;
+            }
+
+            if (table1.order === undefined && table2.order) {
+                return 1;
+            }
+
+            // if both tables have order, sort by order
+            if (table1.order !== undefined && table2.order !== undefined) {
+                return table1.order - table2.order;
+            }
+
+            // if both tables don't have order, sort by name
+            if (table1.isView === table2.isView) {
+                // Both are either tables or views, so sort alphabetically by name
+                return table1.name.localeCompare(table2.name);
+            }
+            // If one is a view and the other is not, put tables first
+            return table1.isView ? 1 : -1;
+        });
+
         // Generate Tables
-        tables.forEach((table) => {
+        sortedTables.forEach((table) => {
             dbml += `Table ${table.name} {\n`;
             table.fields?.forEach((field) => {
                 // Temp fix for 'varchar' to be text
@@ -257,12 +282,12 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         defaultLanguage="dbml"
                         value={generateDBML()}
                         beforeMount={setupDBMLLanguage}
-                        theme={getEditorTheme(theme)}
+                        theme={getEditorTheme(theme as 'dark' | 'light')}
                         options={{
                             readOnly: true,
                             minimap: { enabled: false },
                             scrollBeyondLastLine: false,
-                            wordWrap: 'on',
+                            wordWrap: 'off',
                         }}
                     />
                 ) : (
