@@ -19,11 +19,40 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useViewport } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
+import { useTheme } from '@/hooks/use-theme';
 
 export interface TablesSectionProps {}
 
 const setupDBMLLanguage = (monaco: Monaco) => {
     monaco.languages.register({ id: 'dbml' });
+
+    // Define themes for DBML
+    monaco.editor.defineTheme('dbml-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+            { token: 'keyword', foreground: '569CD6' },
+            { token: 'string', foreground: 'CE9178' },
+            { token: 'annotation', foreground: '9CDCFE' },
+            { token: 'delimiter', foreground: 'D4D4D4' },
+            { token: 'operator', foreground: 'D4D4D4' },
+        ],
+        colors: {},
+    });
+
+    monaco.editor.defineTheme('dbml-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [
+            { token: 'keyword', foreground: '0000FF' },
+            { token: 'string', foreground: 'A31515' },
+            { token: 'annotation', foreground: '001080' },
+            { token: 'delimiter', foreground: '000000' },
+            { token: 'operator', foreground: '000000' },
+        ],
+        colors: {},
+    });
+
     monaco.languages.setMonarchTokensProvider('dbml', {
         keywords: ['Table', 'Ref'],
         tokenizer: {
@@ -39,6 +68,10 @@ const setupDBMLLanguage = (monaco: Monaco) => {
     });
 };
 
+const getEditorTheme = (theme: 'dark' | 'light') => {
+    return theme === 'dark' ? 'vs-dark' : 'vs';
+};
+
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables, filteredSchemas, schemas, relationships } =
         useChartDB();
@@ -48,6 +81,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
+    const { theme } = useTheme();
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -119,11 +153,28 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         tables.forEach((table) => {
             dbml += `Table ${table.name} {\n`;
             table.fields?.forEach((field) => {
+                // Temp fix for 'varchar' to be text
+                if (field.type.name.toLowerCase().includes('character')) {
+                    field.type.name = 'varchar';
+                }
+
                 let fieldLine = `  ${field.name} ${field.type.name}`;
-                if (field.primaryKey) fieldLine += ' [primary key]';
-                if (field.unique && !field.primaryKey) fieldLine += ' [unique]';
-                if (!field.nullable) fieldLine += ' [not null]';
-                if (field.default) fieldLine += ` [default: ${field.default}]`;
+                if (
+                    field.primaryKey ||
+                    field.unique ||
+                    !field.nullable ||
+                    field.default
+                ) {
+                    const attributes = [];
+                    if (field.primaryKey) attributes.push('primary key');
+                    if (field.unique && !field.primaryKey)
+                        attributes.push('unique');
+                    if (!field.nullable) attributes.push('not null');
+                    if (field.default)
+                        attributes.push(`default: ${field.default}`);
+
+                    fieldLine += ` [${attributes.join(', ')}]`;
+                }
                 dbml += fieldLine + '\n';
             });
             dbml += '}\n\n';
@@ -206,6 +257,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         defaultLanguage="dbml"
                         value={generateDBML()}
                         beforeMount={setupDBMLLanguage}
+                        theme={getEditorTheme(theme)}
                         options={{
                             readOnly: true,
                             minimap: { enabled: false },
