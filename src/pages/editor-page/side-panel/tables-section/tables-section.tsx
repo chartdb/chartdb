@@ -31,11 +31,12 @@ const setupDBMLLanguage = (monaco: Monaco) => {
         base: 'vs-dark',
         inherit: true,
         rules: [
-            { token: 'keyword', foreground: '569CD6' },
-            { token: 'string', foreground: 'CE9178' },
-            { token: 'annotation', foreground: '9CDCFE' },
-            { token: 'delimiter', foreground: 'D4D4D4' },
-            { token: 'operator', foreground: 'D4D4D4' },
+            { token: 'keyword', foreground: '569CD6' }, // Table, Ref keywords
+            { token: 'string', foreground: 'CE9178' }, // Strings
+            { token: 'annotation', foreground: '9CDCFE' }, // [annotations]
+            { token: 'delimiter', foreground: 'D4D4D4' }, // Braces {}
+            { token: 'operator', foreground: 'D4D4D4' }, // Operators
+            { token: 'datatype', foreground: '4EC9B0' }, // Data types
         ],
         colors: {},
     });
@@ -44,17 +45,48 @@ const setupDBMLLanguage = (monaco: Monaco) => {
         base: 'vs',
         inherit: true,
         rules: [
-            { token: 'keyword', foreground: '0000FF' },
-            { token: 'string', foreground: 'A31515' },
-            { token: 'annotation', foreground: '001080' },
-            { token: 'delimiter', foreground: '000000' },
-            { token: 'operator', foreground: '000000' },
+            { token: 'keyword', foreground: '0000FF' }, // Table, Ref keywords
+            { token: 'string', foreground: 'A31515' }, // Strings
+            { token: 'annotation', foreground: '001080' }, // [annotations]
+            { token: 'delimiter', foreground: '000000' }, // Braces {}
+            { token: 'operator', foreground: '000000' }, // Operators
+            { token: 'type', foreground: '267F99' }, // Data types
         ],
         colors: {},
     });
 
+    // Create a regex pattern from the datatypes array
+    const datatypes = [
+        'varchar',
+        'char',
+        'text',
+        'int',
+        'bigint',
+        'boolean',
+        'date',
+        'timestamp',
+        'numeric',
+        'decimal',
+        'double',
+        'float',
+        'enum',
+        'jsonb',
+        'uuid',
+        'time',
+        'integer',
+        'character',
+        'character_varying',
+        'smallint',
+        'tinyint',
+        'datetime',
+        'timestamp_without_time_zone',
+        'timestamp_with_time_zone',
+    ];
+    const datatypePattern = datatypes.join('|');
+
     monaco.languages.setMonarchTokensProvider('dbml', {
         keywords: ['Table', 'Ref'],
+        datatypes: datatypes,
         tokenizer: {
             root: [
                 [/\b(Table|Ref)\b/, 'keyword'],
@@ -63,6 +95,7 @@ const setupDBMLLanguage = (monaco: Monaco) => {
                 [/'.*?'/, 'string'],
                 [/[{}]/, 'delimiter'],
                 [/[<>]/, 'operator'],
+                [new RegExp(`\\b(${datatypePattern})\\b`, 'i'), 'type'], // Added 'i' flag for case-insensitive matching
             ],
         },
     });
@@ -149,8 +182,8 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const generateDBML = useCallback(() => {
         let dbml = '\n';
 
-        // Sort tables using the same logic as table-list
-        const sortedTables = [...tables].sort((table1, table2) => {
+        // Use filteredTables instead of tables for sorting
+        const sortedTables = [...filteredTables].sort((table1, table2) => {
             // if one table has order and the other doesn't, the one with order should come first
             if (table1.order && table2.order === undefined) {
                 return -1;
@@ -218,27 +251,39 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             dbml += '}\n\n';
         });
 
+        // Filter relationships to only include those between filtered tables
+        const filteredRelationships = relationships?.filter((rel) => {
+            const sourceTable = filteredTables.find(
+                (t) => t.id === rel.sourceTableId
+            );
+            const targetTable = filteredTables.find(
+                (t) => t.id === rel.targetTableId
+            );
+            const included = sourceTable || targetTable;
+
+            return included;
+        });
+
         // Generate Relationships
-        relationships?.forEach((rel) => {
+        filteredRelationships?.forEach((rel) => {
             const sourceTable = tables.find((t) => t.id === rel.sourceTableId);
             const targetTable = tables.find((t) => t.id === rel.targetTableId);
-            if (sourceTable && targetTable) {
-                const sourceField = sourceTable.fields.find(
-                    (f) => f.id === rel.sourceFieldId
-                );
-                const targetField = targetTable.fields.find(
-                    (f) => f.id === rel.targetFieldId
-                );
-                if (sourceField && targetField) {
-                    const cardinality =
-                        rel.sourceCardinality === 'many' ? '>' : '<';
-                    dbml += `Ref: ${sourceTable.name}.${sourceField.name} ${cardinality} ${targetTable.name}.${targetField.name}\n\n`;
-                }
+            const sourceField = sourceTable?.fields.find(
+                (f) => f.id === rel.sourceFieldId
+            );
+            const targetField = targetTable?.fields.find(
+                (f) => f.id === rel.targetFieldId
+            );
+            if (sourceField && targetField) {
+                const cardinality =
+                    rel.sourceCardinality === 'many' ? '>' : '<';
+                dbml += `Ref: ${sourceTable?.name}.${sourceField.name} ${cardinality} ${targetTable?.name}.${targetField.name}\n\n`;
             }
         });
 
+        console.log('Generated DBML:', dbml);
         return dbml;
-    }, [tables, relationships]);
+    }, [tables, filteredTables, relationships]);
 
     return (
         <section
