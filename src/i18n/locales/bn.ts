@@ -125,6 +125,9 @@ export const bn: LanguageTranslation = {
                 add_table: 'টেবিল যোগ করুন',
                 filter: 'ফিল্টার',
                 collapse: 'সব ভাঁজ করুন',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'ফিল্ড',

@@ -125,6 +125,9 @@ export const te: LanguageTranslation = {
                 add_table: 'పట్టికను జోడించు',
                 filter: 'ఫిల్టర్',
                 collapse: 'అన్ని కూల్ చేయి',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'ఫీల్డులు',

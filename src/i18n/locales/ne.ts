@@ -124,6 +124,9 @@ export const ne: LanguageTranslation = {
                 add_table: 'तालिका थप्नुहोस्',
                 filter: 'फिल्टर',
                 collapse: 'सबै लुकाउनुहोस्',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'क्षेत्रहरू',

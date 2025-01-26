@@ -125,6 +125,9 @@ export const pt_BR: LanguageTranslation = {
                 add_table: 'Adicionar Tabela',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todas',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Campos',

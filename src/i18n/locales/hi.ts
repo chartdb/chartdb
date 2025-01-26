@@ -126,6 +126,9 @@ export const hi: LanguageTranslation = {
                 add_table: 'तालिका जोड़ें',
                 filter: 'फ़िल्टर',
                 collapse: 'सभी को संक्षिप्त करें',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'फ़ील्ड्स',

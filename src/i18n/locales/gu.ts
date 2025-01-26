@@ -125,6 +125,9 @@ export const gu: LanguageTranslation = {
                 add_table: 'ટેબલ ઉમેરો',
                 filter: 'ફિલ્ટર',
                 collapse: 'બધાને સકુચિત કરો',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'ફીલ્ડ્સ',

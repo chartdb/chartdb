@@ -125,6 +125,9 @@ export const uk: LanguageTranslation = {
                 add_table: 'Додати таблицю',
                 filter: 'фільтр',
                 collapse: 'Згорнути все',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'поля',

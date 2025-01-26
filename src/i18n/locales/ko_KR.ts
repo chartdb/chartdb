@@ -124,6 +124,9 @@ export const ko_KR: LanguageTranslation = {
                 add_table: '테이블 추가',
                 filter: '필터',
                 collapse: '모두 접기',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: '필드',
