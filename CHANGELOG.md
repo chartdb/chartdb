@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.1](https://github.com/chartdb/chartdb/compare/v1.6.0...v1.6.1) (2025-01-26)
+
+
+### Bug Fixes
+
+* change empty state image ([#531](https://github.com/chartdb/chartdb/issues/531)) ([42d4cba](https://github.com/chartdb/chartdb/commit/42d4cbac8ce352e0e4e155d7003bfb85296b897f))
+* **chat-type:** remove typo of char datatype in examples ([#530](https://github.com/chartdb/chartdb/issues/530)) ([58231c9](https://github.com/chartdb/chartdb/commit/58231c91393de30ebff817f0ebc57a5c5579f106))
+* **empty_state:** customize empty state ([#533](https://github.com/chartdb/chartdb/issues/533)) ([1643e7b](https://github.com/chartdb/chartdb/commit/1643e7bdeb1bbaf081ab064e871d102c87243c0a))
+* **Image Export:** importing css rules error while download image ([#524](https://github.com/chartdb/chartdb/issues/524)) ([e9e2736](https://github.com/chartdb/chartdb/commit/e9e2736cb2203702d53df9afc30b8e989a8c9953))
+* **shortcuts:** add zoom all shortcut ([#528](https://github.com/chartdb/chartdb/issues/528)) ([7452ca6](https://github.com/chartdb/chartdb/commit/7452ca6965b0332a93b686c397ddf51013e42506))
+
 ## [1.6.0](https://github.com/chartdb/chartdb/compare/v1.5.1...v1.6.0) (2025-01-02)
 
 
