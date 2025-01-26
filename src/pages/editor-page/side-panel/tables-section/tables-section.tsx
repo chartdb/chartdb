@@ -30,14 +30,14 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
-        const filterName: (table: DBTable) => boolean = (table) =>
+        const filterTableName: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
         const filterSchema: (table: DBTable) => boolean = (table) =>
             shouldShowTablesBySchemaFilter(table, filteredSchemas);
 
-        return tables.filter(filterSchema).filter(filterName);
+        return tables.filter(filterSchema).filter(filterTableName);
     }, [tables, filterText, filteredSchemas]);
 
     const createTableWithLocation = useCallback(
@@ -97,7 +97,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             className="flex flex-1 flex-col overflow-hidden px-2"
             data-vaul-no-drag
         >
-            <div className="z-10 flex items-center justify-between gap-4 bg-background py-1">
+            <div className="flex items-center justify-between gap-4 py-1">
                 <div>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -134,7 +134,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     {t('side_panel.tables_section.add_table')}
                 </Button>
             </div>
-            <div className="relative flex flex-1 flex-col overflow-hidden">
+            <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
                     {tables.length === 0 ? (
                         <EmptyState
@@ -147,7 +147,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             className="mt-20"
                         />
                     ) : filterText && filteredTables.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center gap-4 p-8">
+                        <div className="mt-10 flex flex-col items-center gap-2">
                             <div className="text-sm text-muted-foreground">
                                 {t('side_panel.tables_section.no_results')}
                             </div>
@@ -155,7 +155,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 variant="outline"
                                 size="sm"
                                 onClick={handleClearFilter}
-                                className="flex items-center gap-2 text-xs"
+                                className="gap-1"
                             >
                                 <X className="size-3.5" />
                                 {t('side_panel.tables_section.clear')}
