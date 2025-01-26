@@ -116,6 +116,9 @@ export const es: LanguageTranslation = {
                 add_table: 'Agregar Tabla',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todo',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Campos',

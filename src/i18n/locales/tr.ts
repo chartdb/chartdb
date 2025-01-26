@@ -124,6 +124,10 @@ export const tr: LanguageTranslation = {
                 add_table: 'Tablo Ekle',
                 filter: 'Filtrele',
                 collapse: 'Hepsini Daralt',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
+
                 table: {
                     fields: 'Alanlar',
                     nullable: 'Boş Bırakılabilir?',

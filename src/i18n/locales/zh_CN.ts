@@ -121,6 +121,9 @@ export const zh_CN: LanguageTranslation = {
                 add_table: '添加表',
                 filter: '筛选',
                 collapse: '全部折叠',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: '字段',

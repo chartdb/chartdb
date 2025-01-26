@@ -126,6 +126,9 @@ export const de: LanguageTranslation = {
                 add_table: 'Tabelle hinzufügen',
                 filter: 'Filter',
                 collapse: 'Alle einklappen',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Felder',

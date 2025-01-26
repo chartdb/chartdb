@@ -124,6 +124,9 @@ export const vi: LanguageTranslation = {
                 add_table: 'Thêm bảng',
                 filter: 'Lọc',
                 collapse: 'Thu gọn tất cả',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Trường',
