@@ -272,6 +272,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setTableName(e.target.value)}
                         className="h-7 w-full focus-visible:ring-0"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') {
+                                setEditMode(false);
+                                setTableName(table.name);
+                            }
+                        }}
                     />
                 ) : (
                     <Tooltip>
