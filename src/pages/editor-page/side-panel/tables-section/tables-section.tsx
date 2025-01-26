@@ -20,8 +20,11 @@ import {
 import { useViewport } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
 import { useTheme } from '@/hooks/use-theme';
+import { useToast } from '@/components/toast/use-toast';
 
 export interface TablesSectionProps {}
+
+let activeReadOnlyToast = false;
 
 const setupDBMLLanguage = (monaco: Monaco) => {
     monaco.languages.register({ id: 'dbml' });
@@ -115,6 +118,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
     const { theme } = useTheme();
+    const { toast } = useToast();
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -340,12 +344,56 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         defaultLanguage="dbml"
                         value={generateDBML()}
                         beforeMount={setupDBMLLanguage}
+                        onMount={(editor) => {
+                            console.log('Editor mounted');
+                            const messageController = editor.getContribution(
+                                'editor.contrib.messageController'
+                            );
+                            console.log(
+                                'Message controller:',
+                                messageController
+                            );
+
+                            // Make sure the editor is read-only
+                            editor.updateOptions({
+                                readOnly: true,
+                                domReadOnly: true,
+                            });
+
+                            console.log('onMount');
+
+                            // Add the message controller
+                            editor.onKeyDown((e) => {
+                                const isModifierKey = e.metaKey || e.ctrlKey;
+
+                                if (!isModifierKey && !activeReadOnlyToast) {
+                                    activeReadOnlyToast = true;
+
+                                    toast({
+                                        title: t('editor.read_only_mode'),
+                                        description: t(
+                                            'editor.read_only_mode_description'
+                                        ),
+                                        duration: 5000,
+                                        className:
+                                            'fixed top-4 left-4 w-full max-w-sm',
+                                    });
+                                    // Reset the flag after the toast is dismissed
+                                    setTimeout(() => {
+                                        activeReadOnlyToast = false;
+                                    }, 5000); // Small delay to ensure smooth transitions
+                                }
+                            });
+                        }}
                         theme={getEditorTheme(theme as 'dark' | 'light')}
                         options={{
                             readOnly: true,
                             minimap: { enabled: false },
                             scrollBeyondLastLine: false,
                             wordWrap: 'off',
+                            mouseWheelZoom: false,
+                            domReadOnly: true,
+                            contextmenu: false,
                         }}
                     />
                 ) : (

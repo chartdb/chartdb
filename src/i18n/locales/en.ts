@@ -2,6 +2,11 @@ import type { LanguageMetadata } from '../types';
 
 export const en = {
     translation: {
+        editor: {
+            read_only_mode: 'Read-only mode',
+            read_only_mode_description:
+                "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
+        },
         menu: {
             file: {
                 file: 'File',
