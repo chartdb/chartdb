@@ -6,7 +6,7 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { KeyRound, MessageCircleMore, Trash2 } from 'lucide-react';
+import { KeyRound, MessageCircleMore, Trash2, Check } from 'lucide-react';
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
@@ -31,9 +31,12 @@ export interface TableNodeFieldProps {
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
-        const { removeField, relationships, readonly } = useChartDB();
+        const { removeField, relationships, readonly, updateField } =
+            useChartDB();
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
+        const [isEditing, setIsEditing] = React.useState(false);
+        const inputRef = useRef<HTMLInputElement>(null);
         const isTarget = useMemo(
             () =>
                 connection.inProgress &&
@@ -55,6 +58,36 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         );
 
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
+
+        const handleDoubleClick = (e: React.MouseEvent) => {
+            if (readonly) return;
+            e.stopPropagation();
+            setIsEditing(true);
+        };
+
+        const handleBlur = () => {
+            setIsEditing(false);
+        };
+
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+                const newName = inputRef.current?.value.trim();
+                if (newName && newName !== field.name) {
+                    updateField(tableNodeId, field.id, { name: newName });
+                }
+                setIsEditing(false);
+            }
+            if (e.key === 'Escape') {
+                setIsEditing(false);
+            }
+        };
+
+        useEffect(() => {
+            if (isEditing && inputRef.current) {
+                inputRef.current.focus();
+                inputRef.current.select();
+            }
+        }, [isEditing]);
 
         useEffect(() => {
             if (
@@ -124,8 +157,40 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             'font-semibold': field.primaryKey || field.unique,
                         }
                     )}
+                    onDoubleClick={handleDoubleClick}
                 >
-                    <span className="truncate">{field.name}</span>
+                    {isEditing ? (
+                        <div className="flex w-full items-center gap-1">
+                            <input
+                                ref={inputRef}
+                                className="w-full rounded-sm bg-background px-1 outline-none ring-1 ring-pink-500"
+                                defaultValue={field.name}
+                                onBlur={handleBlur}
+                                onKeyDown={handleKeyDown}
+                            />
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-6 p-0 hover:bg-primary-foreground"
+                                onClick={() => {
+                                    const newName =
+                                        inputRef.current?.value.trim();
+                                    if (newName && newName !== field.name) {
+                                        updateField(tableNodeId, field.id, {
+                                            name: newName,
+                                        });
+                                    }
+                                    setIsEditing(false);
+                                }}
+                            >
+                                <Check className="size-3.5 text-green-700" />
+                            </Button>
+                        </div>
+                    ) : (
+                        <span className="truncate px-2 py-0.5">
+                            {field.name}
+                        </span>
+                    )}
                     {field.comments ? (
                         <Tooltip>
                             <TooltipTrigger asChild>
