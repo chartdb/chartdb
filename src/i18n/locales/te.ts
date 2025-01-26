@@ -121,6 +121,12 @@ export const te: LanguageTranslation = {
             no_schemas_found: 'ఏ స్కీమాలు కూడా కనుగొనబడలేదు.',
             view_all_options: 'అన్ని ఎంపికలను చూడండి...',
             tables_section: {
+                dbml_editor: {
+                    // TODO: Translate
+                    read_only_mode: 'Read-only mode',
+                    read_only_mode_description:
+                        "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
+                },
                 tables: 'పట్టికలు',
                 add_table: 'పట్టికను జోడించు',
                 filter: 'ఫిల్టర్',
@@ -128,6 +134,12 @@ export const te: LanguageTranslation = {
                 // TODO: Translate
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
+                // TODO: Translate
+                show_list: 'Show Table List',
+                show_dbml: 'Show DBML Editor',
+                save_dbml: 'Save DBML Changes',
+                edit_dbml: 'Edit DBML',
+                view_dbml: 'View DBML',
 
                 table: {
                     fields: 'ఫీల్డులు',

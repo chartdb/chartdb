@@ -370,9 +370,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                     activeReadOnlyToast = true;
 
                                     toast({
-                                        title: t('editor.read_only_mode'),
+                                        title: t(
+                                            'side_panel.tables_section.dbml_editor.read_only_mode'
+                                        ),
                                         description: t(
-                                            'editor.read_only_mode_description'
+                                            'side_panel.tables_section.dbml_editor.read_only_mode_description'
                                         ),
                                         duration: 5000,
                                         className:

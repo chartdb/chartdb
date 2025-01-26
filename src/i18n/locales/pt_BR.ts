@@ -121,6 +121,12 @@ export const pt_BR: LanguageTranslation = {
             no_schemas_found: 'Nenhum esquema encontrado.',
             view_all_options: 'Ver todas as Opções...',
             tables_section: {
+                dbml_editor: {
+                    // TODO: Translate
+                    read_only_mode: 'Read-only mode',
+                    read_only_mode_description:
+                        "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
+                },
                 tables: 'Tabelas',
                 add_table: 'Adicionar Tabela',
                 filter: 'Filtrar',
@@ -128,6 +134,12 @@ export const pt_BR: LanguageTranslation = {
                 // TODO: Translate
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
+                // TODO: Translate
+                show_list: 'Show Table List',
+                show_dbml: 'Show DBML Editor',
+                save_dbml: 'Save DBML Changes',
+                edit_dbml: 'Edit DBML',
+                view_dbml: 'View DBML',
 
                 table: {
                     fields: 'Campos',
