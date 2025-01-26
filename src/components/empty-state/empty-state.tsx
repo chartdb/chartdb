@@ -19,7 +19,7 @@ export const EmptyState = forwardRef<
             className
         )}
     >
-        <img src={EmptyStateImage} alt="Empty state" className="w-32" />
+        <img src={EmptyStateImage} alt="Empty state" className="mb-2 w-20" />
         <Label className="text-base">{title}</Label>
         <Label className="text-sm font-normal text-muted-foreground">
             {description}
