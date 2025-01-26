@@ -30,7 +30,7 @@ export const visualNovelDb: Template = {
                     {
                         id: 'gaj3scrtaz46ezfmc162ingxf',
                         name: 'dept_no',
-                        type: { id: 'char', name: 'chat' },
+                        type: { id: 'char', name: 'char' },
                         primaryKey: true,
                         unique: true,
                         nullable: false,
@@ -89,7 +89,7 @@ export const visualNovelDb: Template = {
                     {
                         id: 'jdw1yrh9xf1i7927gzs9pob2p',
                         name: 'dept_no',
-                        type: { id: 'char', name: 'chat' },
+                        type: { id: 'char', name: 'char' },
                         primaryKey: true,
                         unique: true,
                         nullable: false,
@@ -162,7 +162,7 @@ export const visualNovelDb: Template = {
                     {
                         id: 'v8plj7wq1cly03y178bysft2f',
                         name: 'dept_no',
-                        type: { id: 'char', name: 'chat' },
+                        type: { id: 'char', name: 'char' },
                         primaryKey: true,
                         unique: true,
                         nullable: false,
@@ -466,7 +466,7 @@ export const visualNovelDb: Template = {
                     {
                         id: 'fv7o6txqvmy2349aq3pg0hnkm',
                         name: 'dept_no',
-                        type: { id: 'char', name: 'chat' },
+                        type: { id: 'char', name: 'char' },
                         primaryKey: false,
                         unique: false,
                         nullable: false,
