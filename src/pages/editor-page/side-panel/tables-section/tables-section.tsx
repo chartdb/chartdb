@@ -376,7 +376,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                         ),
                                         duration: 5000,
                                         className:
-                                            'fixed top-4 left-4 w-full max-w-sm',
+                                            'fixed top-12 left-4 w-full max-w-sm',
                                     });
                                     // Reset the flag after the toast is dismissed
                                     setTimeout(() => {
