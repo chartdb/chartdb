@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, ListCollapse } from 'lucide-react';
+import { Table, ListCollapse, X } from 'lucide-react';
 import { Input } from '@/components/input/input';
 
 import type { DBTable } from '@/lib/domain/db-table';
@@ -30,14 +30,14 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
 
     const filteredTables = useMemo(() => {
-        const filterTableName: (table: DBTable) => boolean = (table) =>
+        const filterName: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
         const filterSchema: (table: DBTable) => boolean = (table) =>
             shouldShowTablesBySchemaFilter(table, filteredSchemas);
 
-        return tables.filter(filterSchema).filter(filterTableName);
+        return tables.filter(filterSchema).filter(filterName);
     }, [tables, filterText, filteredSchemas]);
 
     const createTableWithLocation = useCallback(
@@ -88,12 +88,16 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText,
     ]);
 
+    const handleClearFilter = useCallback(() => {
+        setFilterText('');
+    }, []);
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
             data-vaul-no-drag
         >
-            <div className="flex items-center justify-between gap-4 py-1">
+            <div className="z-10 flex items-center justify-between gap-4 bg-background py-1">
                 <div>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -130,7 +134,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     {t('side_panel.tables_section.add_table')}
                 </Button>
             </div>
-            <div className="flex flex-1 flex-col overflow-hidden">
+            <div className="relative flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
                     {tables.length === 0 ? (
                         <EmptyState
@@ -142,6 +146,21 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             )}
                             className="mt-20"
                         />
+                    ) : filterText && filteredTables.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center gap-4 p-8">
+                            <div className="text-sm text-muted-foreground">
+                                {t('side_panel.tables_section.no_results')}
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleClearFilter}
+                                className="flex items-center gap-2 text-xs"
+                            >
+                                <X className="size-3.5" />
+                                {t('side_panel.tables_section.clear')}
+                            </Button>
+                        </div>
                     ) : (
                         <TableList tables={filteredTables} />
                     )}
