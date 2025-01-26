@@ -22,7 +22,7 @@ import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { BaseDialogProps } from '../common/base-dialog-props';
@@ -42,8 +42,13 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         string | undefined
     >();
 
+    const firstDiagramRef = useRef<HTMLTableRowElement>(null);
+
     useEffect(() => {
         setSelectedDiagramId(undefined);
+        if (dialog.open && firstDiagramRef.current) {
+            firstDiagramRef.current.focus();
+        }
     }, [dialog.open]);
 
     useEffect(() => {
@@ -64,6 +69,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             navigate(`/diagrams/${diagramId}`);
         }
     };
+
     return (
         <Dialog
             {...dialog}
@@ -112,10 +118,19 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {diagrams.map((diagram) => (
+                                {diagrams.map((diagram, index) => (
                                     <TableRow
+                                        ref={
+                                            index === 0
+                                                ? firstDiagramRef
+                                                : undefined
+                                        }
                                         key={diagram.id}
                                         data-state={`${selectedDiagramId === diagram.id ? 'selected' : ''}`}
+                                        data-diagram-item
+                                        data-diagram-id={diagram.id}
+                                        tabIndex={0}
+                                        className="focus:bg-accent focus:text-accent-foreground focus:outline-none"
                                         onClick={(e) => {
                                             switch (e.detail) {
                                                 case 1:
@@ -131,6 +146,66 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                                     setSelectedDiagramId(
                                                         diagram.id
                                                     );
+                                            }
+                                        }}
+                                        onKeyDown={(
+                                            e: React.KeyboardEvent<HTMLTableRowElement>
+                                        ) => {
+                                            switch (e.key) {
+                                                case 'Enter':
+                                                case ' ':
+                                                    e.preventDefault();
+                                                    openDiagram(diagram.id);
+                                                    closeOpenDiagramDialog();
+                                                    break;
+                                                case 'ArrowDown': {
+                                                    e.preventDefault();
+                                                    const currentIndex =
+                                                        diagrams.findIndex(
+                                                            (d) =>
+                                                                d.id ===
+                                                                diagram.id
+                                                        );
+                                                    const nextDiagram =
+                                                        diagrams[
+                                                            currentIndex + 1
+                                                        ];
+                                                    if (nextDiagram) {
+                                                        setSelectedDiagramId(
+                                                            nextDiagram.id
+                                                        );
+                                                        (
+                                                            document.querySelector(
+                                                                `[data-diagram-id="${nextDiagram.id}"]`
+                                                            ) as HTMLElement
+                                                        )?.focus();
+                                                    }
+                                                    break;
+                                                }
+                                                case 'ArrowUp': {
+                                                    e.preventDefault();
+                                                    const currentIndex =
+                                                        diagrams.findIndex(
+                                                            (d) =>
+                                                                d.id ===
+                                                                diagram.id
+                                                        );
+                                                    const prevDiagram =
+                                                        diagrams[
+                                                            currentIndex - 1
+                                                        ];
+                                                    if (prevDiagram) {
+                                                        setSelectedDiagramId(
+                                                            prevDiagram.id
+                                                        );
+                                                        (
+                                                            document.querySelector(
+                                                                `[data-diagram-id="${prevDiagram.id}"]`
+                                                            ) as HTMLElement
+                                                        )?.focus();
+                                                    }
+                                                    break;
+                                                }
                                             }
                                         }}
                                     >
