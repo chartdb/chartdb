@@ -10,6 +10,7 @@
 * **empty_state:** customize empty state ([#533](https://github.com/chartdb/chartdb/issues/533)) ([1643e7b](https://github.com/chartdb/chartdb/commit/1643e7bdeb1bbaf081ab064e871d102c87243c0a))
 * **Image Export:** importing css rules error while download image ([#524](https://github.com/chartdb/chartdb/issues/524)) ([e9e2736](https://github.com/chartdb/chartdb/commit/e9e2736cb2203702d53df9afc30b8e989a8c9953))
 * **shortcuts:** add zoom all shortcut ([#528](https://github.com/chartdb/chartdb/issues/528)) ([7452ca6](https://github.com/chartdb/chartdb/commit/7452ca6965b0332a93b686c397ddf51013e42506))
+* **filter-tables:** show clean filter if no-results ([#532](https://github.com/chartdb/chartdb/issues/532)) ([c36cd33](https://github.com/chartdb/chartdb/commit/c36cd33180badaa9b7f9e27c765f19cb03a50ccd))
 
 ## [1.6.0](https://github.com/chartdb/chartdb/compare/v1.5.1...v1.6.0) (2025-01-02)
 
