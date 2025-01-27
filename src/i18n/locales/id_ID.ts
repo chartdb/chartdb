@@ -124,6 +124,9 @@ export const id_ID: LanguageTranslation = {
                 add_table: 'Tambah Tabel',
                 filter: 'Saring',
                 collapse: 'Lipat Semua',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Kolom',

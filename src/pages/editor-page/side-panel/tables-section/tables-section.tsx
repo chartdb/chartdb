@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, ListCollapse } from 'lucide-react';
+import { Table, ListCollapse, X } from 'lucide-react';
 import { Input } from '@/components/input/input';
 
 import type { DBTable } from '@/lib/domain/db-table';
@@ -88,6 +88,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText,
     ]);
 
+    const handleClearFilter = useCallback(() => {
+        setFilterText('');
+    }, []);
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -142,6 +146,21 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             )}
                             className="mt-20"
                         />
+                    ) : filterText && filteredTables.length === 0 ? (
+                        <div className="mt-10 flex flex-col items-center gap-2">
+                            <div className="text-sm text-muted-foreground">
+                                {t('side_panel.tables_section.no_results')}
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleClearFilter}
+                                className="gap-1"
+                            >
+                                <X className="size-3.5" />
+                                {t('side_panel.tables_section.clear')}
+                            </Button>
+                        </div>
                     ) : (
                         <TableList tables={filteredTables} />
                     )}

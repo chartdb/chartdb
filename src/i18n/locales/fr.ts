@@ -116,6 +116,9 @@ export const fr: LanguageTranslation = {
                 add_table: 'Ajouter une Table',
                 filter: 'Filtrer',
                 collapse: 'Réduire Tout',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Champs',

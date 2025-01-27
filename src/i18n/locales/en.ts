@@ -123,6 +123,8 @@ export const en = {
                 add_table: 'Add Table',
                 filter: 'Filter',
                 collapse: 'Collapse All',
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'Fields',

@@ -127,6 +127,9 @@ export const mr: LanguageTranslation = {
                 add_table: 'टेबल जोडा',
                 filter: 'फिल्टर',
                 collapse: 'सर्व संकुचित करा',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'फील्ड्स',

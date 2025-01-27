@@ -124,6 +124,9 @@ export const ar: LanguageTranslation = {
                 add_table: 'إضافة جدول',
                 filter: 'تصفية',
                 collapse: 'طي الكل',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'الحقول',

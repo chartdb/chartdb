@@ -128,6 +128,9 @@ export const ja: LanguageTranslation = {
                 add_table: 'テーブルを追加',
                 filter: 'フィルタ',
                 collapse: 'すべて折りたたむ',
+                // TODO: Translate
+                clear: 'Clear Filter',
+                no_results: 'No tables found matching your filter.',
 
                 table: {
                     fields: 'フィールド',
