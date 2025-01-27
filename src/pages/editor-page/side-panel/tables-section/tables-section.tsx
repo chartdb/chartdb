@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
 import { Table, List, X, Code } from 'lucide-react';
@@ -29,6 +29,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
+    const filterInputRef = React.useRef<HTMLInputElement>(null);
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -93,6 +94,25 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText('');
     }, []);
 
+    // Add useEffect for keyboard shortcut
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Focus filter on Ctrl/Cmd + F
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+                e.preventDefault();
+                filterInputRef.current?.focus();
+            }
+            // Toggle DBML on Ctrl/Cmd + P
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                setShowDBML((prev) => !prev);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -122,11 +142,13 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             {showDBML
                                 ? t('side_panel.tables_section.show_list')
                                 : t('side_panel.tables_section.show_dbml')}
+                            {' (⌘P)'}
                         </TooltipContent>
                     </Tooltip>
                 </div>
                 <div className="flex-1">
                     <Input
+                        ref={filterInputRef}
                         type="text"
                         placeholder={t('side_panel.tables_section.filter')}
                         className="h-8 w-full focus-visible:ring-0"
