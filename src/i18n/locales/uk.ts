@@ -135,7 +135,7 @@ export const uk: LanguageTranslation = {
                     add_index: 'Додати індекс',
                     index_select_fields: 'Виберіть поля',
                     no_types_found: 'Типи не знайдено',
-                    field_name: "Назва поля",
+                    field_name: 'Назва поля',
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибути полів',
@@ -146,7 +146,7 @@ export const uk: LanguageTranslation = {
                     },
                     index_actions: {
                         title: 'Атрибути індексу',
-                        name: "Назва індекса",
+                        name: 'Назва індекса',
                         unique: 'Унікальний',
                         delete_index: 'Видалити індекс',
                     },
@@ -167,7 +167,7 @@ export const uk: LanguageTranslation = {
             relationships_section: {
                 relationships: 'Звʼязки',
                 filter: 'Фільтр',
-                add_relationship: "Додати звʼязок",
+                add_relationship: 'Додати звʼязок',
                 collapse: 'Згорнути все',
                 relationship: {
                     primary: 'Первинна таблиця',
@@ -253,7 +253,7 @@ export const uk: LanguageTranslation = {
             description:
                 'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
             table_columns: {
-                name: "Назва",
+                name: 'Назва',
                 created_at: 'Створено0',
                 last_modified: 'Востаннє змінено',
                 tables_count: 'Таблиці',
@@ -273,7 +273,7 @@ export const uk: LanguageTranslation = {
             },
             error: {
                 message:
-                    "Помилка створення сценарію SQL. Спробуйте пізніше або <0>звʼяжіться з нами</0>.",
+                    'Помилка створення сценарію SQL. Спробуйте пізніше або <0>звʼяжіться з нами</0>.',
                 description:
                     'Не соромтеся використовувати свій OPENAI_TOKEN, дивіться посібник <0>тут</0>.',
             },
