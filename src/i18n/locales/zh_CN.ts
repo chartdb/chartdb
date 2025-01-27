@@ -117,12 +117,6 @@ export const zh_CN: LanguageTranslation = {
             no_schemas_found: '未找到模式。',
             view_all_options: '查看所有选项...',
             tables_section: {
-                dbml_editor: {
-                    // TODO: Translate
-                    read_only_mode: 'Read-only mode',
-                    read_only_mode_description:
-                        "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
-                },
                 tables: '表',
                 add_table: '添加表',
                 filter: '筛选',
@@ -133,9 +127,6 @@ export const zh_CN: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                save_dbml: 'Save DBML Changes',
-                edit_dbml: 'Edit DBML',
-                view_dbml: 'View DBML',
 
                 table: {
                     fields: '字段',

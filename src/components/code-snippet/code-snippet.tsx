@@ -12,6 +12,14 @@ import { DarkTheme } from './themes/dark';
 import { LightTheme } from './themes/light';
 import './config.ts';
 
+export const Editor = lazy(() =>
+    import('./code-editor').then((module) => ({
+        default: module.Editor,
+    }))
+);
+
+type EditorType = typeof Editor;
+
 export interface CodeSnippetProps {
     className?: string;
     code: string;
@@ -19,13 +27,8 @@ export interface CodeSnippetProps {
     loading?: boolean;
     autoScroll?: boolean;
     isComplete?: boolean;
+    editorProps?: React.ComponentProps<EditorType>;
 }
-
-export const Editor = lazy(() =>
-    import('./code-editor').then((module) => ({
-        default: module.Editor,
-    }))
-);
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
     ({
@@ -35,6 +38,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         language = 'sql',
         autoScroll = false,
         isComplete = true,
+        editorProps,
     }) => {
         const { t } = useTranslation();
         const monaco = useMonaco();
@@ -144,27 +148,32 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             language={language}
                             loading={<Spinner />}
                             theme={effectiveTheme}
+                            {...editorProps}
                             options={{
-                                minimap: {
-                                    enabled: false,
-                                },
                                 readOnly: true,
                                 automaticLayout: true,
-                                scrollbar: {
-                                    vertical: 'hidden',
-                                    horizontal: 'hidden',
-                                    alwaysConsumeMouseWheel: false,
-                                },
                                 scrollBeyondLastLine: false,
                                 renderValidationDecorations: 'off',
                                 lineDecorationsWidth: 0,
                                 overviewRulerBorder: false,
                                 overviewRulerLanes: 0,
                                 hideCursorInOverviewRuler: true,
+                                contextmenu: false,
+                                ...editorProps?.options,
                                 guides: {
                                     indentation: false,
+                                    ...editorProps?.options?.guides,
                                 },
-                                contextmenu: false,
+                                scrollbar: {
+                                    vertical: 'hidden',
+                                    horizontal: 'hidden',
+                                    alwaysConsumeMouseWheel: false,
+                                    ...editorProps?.options?.scrollbar,
+                                },
+                                minimap: {
+                                    enabled: false,
+                                    ...editorProps?.options?.minimap,
+                                },
                             }}
                         />
                         {!isComplete ? (

@@ -119,11 +119,6 @@ export const en = {
             no_schemas_found: 'No schemas found.',
             view_all_options: 'View all Options...',
             tables_section: {
-                dbml_editor: {
-                    read_only_mode: 'Read-only mode',
-                    read_only_mode_description:
-                        "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
-                },
                 tables: 'Tables',
                 add_table: 'Add Table',
                 filter: 'Filter',
@@ -132,9 +127,6 @@ export const en = {
                 no_results: 'No tables found matching your filter.',
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                save_dbml: 'Save DBML Changes',
-                edit_dbml: 'Edit DBML',
-                view_dbml: 'View DBML',
 
                 table: {
                     fields: 'Fields',

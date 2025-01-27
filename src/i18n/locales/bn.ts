@@ -121,12 +121,6 @@ export const bn: LanguageTranslation = {
             no_schemas_found: 'কোনো স্কিমা পাওয়া যায়নি।',
             view_all_options: 'সমস্ত বিকল্প দেখুন...',
             tables_section: {
-                dbml_editor: {
-                    // TODO: Translate
-                    read_only_mode: 'Read-only mode',
-                    read_only_mode_description:
-                        "This editor is read-only. You can't edit the schema. You can only view the DBML, Copy/Paste the DBML.",
-                },
                 tables: 'টেবিল',
                 add_table: 'টেবিল যোগ করুন',
                 filter: 'ফিল্টার',
@@ -137,9 +131,6 @@ export const bn: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                save_dbml: 'Save DBML Changes',
-                edit_dbml: 'Edit DBML',
-                view_dbml: 'View DBML',
 
                 table: {
                     fields: 'ফিল্ড',
