@@ -127,6 +127,9 @@ export const vi: LanguageTranslation = {
                 // TODO: Translate
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
+                // TODO: Translate
+                show_list: 'Show Table List',
+                show_dbml: 'Show DBML Editor',
 
                 table: {
                     fields: 'Trường',

@@ -62,3 +62,5 @@ export function areFieldTypesCompatible(
         dbCompatibleTypes[type2.id]?.includes(type1.id)
     );
 }
+
+export const dataTypes = Object.values(dataTypeMap).flat();

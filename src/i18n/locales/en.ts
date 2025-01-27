@@ -125,6 +125,8 @@ export const en = {
                 collapse: 'Collapse All',
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
+                show_list: 'Show Table List',
+                show_dbml: 'Show DBML Editor',
 
                 table: {
                     fields: 'Fields',
