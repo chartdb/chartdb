@@ -4,24 +4,24 @@ export const uk: LanguageTranslation = {
     translation: {
         menu: {
             file: {
-                file: 'файл',
-                new: 'новий',
-                open: 'відкрити',
-                save: 'зберегти',
+                file: 'Файл',
+                new: 'Новий',
+                open: 'Відкрити',
+                save: 'Зберегти',
                 import_database: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',
                 delete_diagram: 'Видалити діаграму',
-                exit: 'вийти',
+                exit: 'Вийти',
             },
             edit: {
-                edit: 'редагувати',
+                edit: 'Редагувати',
                 undo: 'Скасувати',
                 redo: 'Повторити',
-                clear: 'очистити',
+                clear: 'Очистити',
             },
             view: {
-                view: 'переглянути',
+                view: 'Перегляд',
                 show_sidebar: 'Показати бічну панель',
                 hide_sidebar: 'Приховати бічну панель',
                 hide_cardinality: 'Приховати потужність',
@@ -30,21 +30,19 @@ export const uk: LanguageTranslation = {
                 theme: 'Тема',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Показати мінімапу',
+                hide_minimap: 'Приховати мінімапу',
             },
-            // TODO: Translate
             share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                share: 'Поширити',
+                export_diagram: 'Експорт діаграми',
+                import_diagram: 'Імпорт діаграми',
             },
             help: {
-                help: 'Допомога',
-                visit_website: 'Відвідайте ChartDB',
+                help: 'Довідка',
+                visit_website: 'Сайт ChartDB',
                 join_discord: 'Приєднуйтесь до нас в Діскорд',
-                schedule_a_call: 'Поговоріть з нами!',
+                schedule_a_call: 'Забронювати зустріч!',
             },
         },
 
@@ -57,18 +55,18 @@ export const uk: LanguageTranslation = {
         },
 
         clear_diagram_alert: {
-            title: 'Чітка діаграма',
+            title: 'Очистити діаграму',
             description:
                 'Цю дію не можна скасувати. Це назавжди видалить усі дані на діаграмі.',
             cancel: 'Скасувати',
-            clear: 'очистити',
+            clear: 'Очистити',
         },
 
         reorder_diagram_alert: {
-            title: 'Діаграма зміни порядку',
+            title: 'Перевпорядкувати діаграму',
             description:
                 'Ця дія перевпорядкує всі таблиці на діаграмі. Хочете продовжити?',
-            reorder: 'Змінити порядок',
+            reorder: 'Перевпорядкувати',
             cancel: 'Скасувати',
         },
 
@@ -93,23 +91,23 @@ export const uk: LanguageTranslation = {
         },
 
         theme: {
-            system: 'система',
-            light: 'світлий',
-            dark: 'Темний',
+            system: 'Системна',
+            light: 'Світла',
+            dark: 'Темна',
         },
 
         zoom: {
-            on: 'увімкнути',
-            off: 'вимкнути',
+            on: 'Увімкнути',
+            off: 'Вимкнути',
         },
 
         last_saved: 'Востаннє збережено',
         saved: 'Збережено',
-        loading_diagram: 'Діаграма завантаження...',
-        deselect_all: 'Зняти вибір із усіх',
+        loading_diagram: 'Завантаження діаграми…',
+        deselect_all: 'Зняти виділення з усіх',
         select_all: 'Вибрати усі',
         clear: 'Очистити',
-        show_more: 'показати більше',
+        show_more: 'Показати більше',
         show_less: 'Показати менше',
         copy_to_clipboard: 'Копіювати в буфер обміну',
         copied: 'Скопійовано!',
@@ -117,50 +115,50 @@ export const uk: LanguageTranslation = {
         side_panel: {
             schema: 'Схема:',
             filter_by_schema: 'Фільтрувати за схемою',
-            search_schema: 'Схема пошуку...',
+            search_schema: 'Пошук схеми…',
             no_schemas_found: 'Схеми не знайдено.',
-            view_all_options: 'Переглянути всі параметри...',
+            view_all_options: 'Переглянути всі параметри…',
             tables_section: {
                 tables: 'Таблиці',
                 add_table: 'Додати таблицю',
-                filter: 'фільтр',
+                filter: 'Фільтр',
                 collapse: 'Згорнути все',
                 // TODO: Translate
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
 
                 table: {
-                    fields: 'поля',
-                    nullable: 'Зведений нанівець?',
+                    fields: 'Поля',
+                    nullable: 'Може бути Null?',
                     primary_key: 'Первинний ключ',
                     indexes: 'Індекси',
                     comments: 'Коментарі',
-                    no_comments: 'Без коментарів',
+                    no_comments: 'Немає коментарів',
                     add_field: 'Додати поле',
                     add_index: 'Додати індекс',
                     index_select_fields: 'Виберіть поля',
                     no_types_found: 'Типи не знайдено',
-                    field_name: "Ім'я",
+                    field_name: 'Назва поля',
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибути полів',
-                        unique: 'Унікальний',
+                        unique: 'Унікальне',
                         comments: 'Коментарі',
-                        no_comments: 'Без коментарів',
+                        no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
                     },
                     index_actions: {
                         title: 'Атрибути індексу',
-                        name: "Ім'я",
+                        name: 'Назва індекса',
                         unique: 'Унікальний',
                         delete_index: 'Видалити індекс',
                     },
                     table_actions: {
-                        title: 'Дії таблиці',
+                        title: 'Дії з таблицею',
                         change_schema: 'Змінити схему',
                         add_field: 'Додати поле',
                         add_index: 'Додати індекс',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Дублювати таблицю',
                         delete_table: 'Видалити таблицю',
                     },
                 },
@@ -170,14 +168,14 @@ export const uk: LanguageTranslation = {
                 },
             },
             relationships_section: {
-                relationships: 'стосунки',
-                filter: 'фільтр',
-                add_relationship: "Додати зв'язок",
+                relationships: 'Звʼязки',
+                filter: 'Фільтр',
+                add_relationship: 'Додати звʼязок',
                 collapse: 'Згорнути все',
                 relationship: {
                     primary: 'Первинна таблиця',
                     foreign: 'Посилання на таблицю',
-                    cardinality: 'Кардинальність',
+                    cardinality: 'Звʼязок',
                     delete_relationship: 'Видалити',
                     relationship_actions: {
                         title: 'Дії',
@@ -185,17 +183,17 @@ export const uk: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Жодних стосунків',
-                    description: 'Створіть зв’язок для з’єднання таблиць',
+                    title: 'Звʼязків немає',
+                    description: 'Створіть звʼязок для зʼєднання таблиць',
                 },
             },
             dependencies_section: {
                 dependencies: 'Залежності',
-                filter: 'фільтр',
+                filter: 'Фільтр',
                 collapse: 'Згорнути все',
                 dependency: {
                     table: 'Таблиця',
-                    dependent_table: 'Залежний вид',
+                    dependent_table: 'Залежне подання',
                     delete_dependency: 'Видалити',
                     dependency_actions: {
                         title: 'Дії',
@@ -212,34 +210,34 @@ export const uk: LanguageTranslation = {
         toolbar: {
             zoom_in: 'Збільшити',
             zoom_out: 'Зменшити',
-            save: 'зберегти',
+            save: 'Зберегти',
             show_all: 'Показати все',
             undo: 'Скасувати',
             redo: 'Повторити',
-            reorder_diagram: 'Діаграма зміни порядку',
-            highlight_overlapping_tables: 'Виділіть таблиці, що перекриваються',
+            reorder_diagram: 'Перевпорядкувати діаграму',
+            highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
         },
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Що таке ваша база даних?',
+                title: 'Яка у вас база даних?',
                 description:
                     'Кожна база даних має свої унікальні особливості та можливості.',
-                check_examples_long: 'Перевірте приклади',
+                check_examples_long: 'Подивіться приклади',
                 check_examples_short: 'Приклади',
             },
 
             import_database: {
                 title: 'Імпортуйте вашу базу даних',
-                database_edition: 'Редакція бази даних:',
+                database_edition: 'Варіант бази даних:',
                 step_1: 'Запустіть цей сценарій у своїй базі даних:',
                 step_2: 'Вставте сюди результат сценарію:',
-                script_results_placeholder: 'Результати сценарію тут...',
+                script_results_placeholder: 'Результати сценарію має бути тут…',
                 ssms_instructions: {
                     button_text: 'SSMS Інструкції',
                     title: 'Інструкції',
                     step_1: 'Перейдіть до Інструменти > Опції > Результати запиту > SQL Сервер.',
-                    step_2: 'Якщо ви використовуєте «Результати в сітку», змініть максимальну кількість символів, отриманих для даних, що не є XML (встановіть на 9999999).',
+                    step_2: 'Якщо ви використовуєте «Results to Grid», змініть максимальну кількість символів, отриманих для даних, що не є XML (встановіть на 9999999).',
                 },
                 instructions_link: 'Потрібна допомога? Подивіться як',
                 check_script_result: 'Перевірте результат сценарію',
@@ -247,20 +245,19 @@ export const uk: LanguageTranslation = {
 
             cancel: 'Скасувати',
             back: 'Назад',
-            // TODO: Translate
-            import_from_file: 'Import from File',
+            import_from_file: 'Імпортувати з файлу',
             empty_diagram: 'Порожня діаграма',
             continue: 'Продовжити',
             import: 'Імпорт',
         },
 
         open_diagram_dialog: {
-            title: 'Відкрита діаграма',
+            title: 'Відкрити діаграму',
             description:
                 'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
             table_columns: {
-                name: "Ім'я",
-                created_at: 'Створено в',
+                name: 'Назва',
+                created_at: 'Створено0',
                 last_modified: 'Востаннє змінено',
                 tables_count: 'Таблиці',
             },
@@ -274,23 +271,23 @@ export const uk: LanguageTranslation = {
                 'Експортуйте свою схему діаграми в {{databaseType}} сценарій',
             close: 'Закрити',
             loading: {
-                text: 'ШІ створює SQL для {{databaseType}}...',
+                text: 'ШІ створює SQL для {{databaseType}}…',
                 description: 'Це має зайняти до 30 секунд.',
             },
             error: {
                 message:
-                    "Помилка створення сценарію SQL. Спробуйте пізніше або <0>зв'яжіться з нами</0>.",
+                    'Помилка створення сценарію SQL. Спробуйте пізніше або <0>звʼяжіться з нами</0>.',
                 description:
                     'Не соромтеся використовувати свій OPENAI_TOKEN, дивіться посібник <0>тут</0>.',
             },
         },
 
         create_relationship_dialog: {
-            title: 'Створити відносини',
+            title: 'Створити звʼязок',
             primary_table: 'Первинна таблиця',
             primary_field: 'Первинне поле',
-            referenced_table: 'Посилання на таблицю',
-            referenced_field: 'Поле посилання',
+            referenced_table: 'Звʼязана таблиця',
+            referenced_field: 'Повʼязане поле',
             primary_table_placeholder: 'Виберіть таблицю',
             primary_field_placeholder: 'Виберіть поле',
             referenced_table_placeholder: 'Виберіть таблицю',
@@ -310,12 +307,12 @@ export const uk: LanguageTranslation = {
                     new_tables:
                         '<bold>{{newTablesNumber}}</bold> будуть додані нові таблиці.',
                     new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> будуть створені нові відносини.',
+                        '<bold>{{newRelationshipsNumber}}</bold> будуть створені нові звʼязки.',
                     tables_override:
                         '<bold>{{tablesOverrideNumber}}</bold> таблиці будуть перезаписані.',
                     proceed: 'Ви хочете продовжити?',
                 },
-                import: 'Імпорт',
+                import: 'Імпортувати',
                 cancel: 'Скасувати',
             },
         },
@@ -323,83 +320,80 @@ export const uk: LanguageTranslation = {
         export_image_dialog: {
             title: 'Експорт зображення',
             description: 'Виберіть коефіцієнт масштабування для експорту:',
-            scale_1x: '1x Регулярний',
+            scale_1x: '1x Звичайний',
             scale_2x: '2x (Рекомендовано)',
             scale_3x: '3x',
             scale_4x: '4x',
             cancel: 'Скасувати',
-            export: 'Експорт',
+            export: 'Експортувати',
         },
 
         new_table_schema_dialog: {
             title: 'Виберіть Схему',
             description:
-                'Наразі відображається кілька схем. Виберіть один для нової таблиці.',
+                'Наразі показується кілька схем. Виберіть одну для нової таблиці.',
             cancel: 'Скасувати',
             confirm: 'Підтвердити',
         },
 
         update_table_schema_dialog: {
             title: 'Змінити схему',
-            description: 'Оновити таблицю "{{tableName}}" схему',
+            description: 'Оновити схему таблиці "{{tableName}}"',
             cancel: 'Скасувати',
             confirm: 'Змінити',
         },
 
         star_us_dialog: {
             title: 'Допоможіть нам покращитися!',
-            description: 'Хочете позначити нас на Ґітхаб? Це лише один клік!',
+            description: 'Поставне на зірку на GitHub? Це лише один клік!',
             close: 'Не зараз',
-            confirm: 'звичайно!',
+            confirm: 'Звісно!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Експорт Діаграми',
+            description: 'Оберіть формат експорту:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Скасувати',
+            export: 'Експортувати',
             error: {
-                title: 'Error exporting diagram',
+                title: 'Помилка експорут діаграми',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Щось пішло не так. Потрібна допомога? chartdb.io@gmail.com',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            title: 'Імпорт Діаграми',
+            description: 'Вставте JSON діаграми нижче:',
+            cancel: 'Скасувати',
+            import: 'Імпортувати',
             error: {
-                title: 'Error importing diagram',
+                title: 'Помилка імпорту діаграми',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'JSON діаграми є неправильним. Будь ласка, перевірте JSON і спробуйте ще раз. Потрібна допомога? chartdb.io@gmail.com',
             },
         },
         relationship_type: {
-            one_to_one: 'Один до одного',
-            one_to_many: 'Один до багатьох',
-            many_to_one: 'Багато до одного',
-            many_to_many: 'Багато до багатьох',
+            one_to_one: 'Один до Одного',
+            one_to_many: 'Один до Багатьох',
+            many_to_one: 'Багато до Одного',
+            many_to_many: 'Багато до Багатьох',
         },
 
         canvas_context_menu: {
             new_table: 'Нова таблиця',
-            new_relationship: 'Нові стосунки',
+            new_relationship: 'Новий звʼязок',
         },
 
         table_node_context_menu: {
             edit_table: 'Редагувати таблицю',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Дублювати таблицю',
             delete_table: 'Видалити таблицю',
         },
 
-        // TODO: Add translations
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+        snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',
 
         tool_tips: {
-            double_click_to_edit: 'Двойной клик для редактирования',
+            double_click_to_edit: 'Подвійне клацання для редагування',
         },
 
         language_select: {
