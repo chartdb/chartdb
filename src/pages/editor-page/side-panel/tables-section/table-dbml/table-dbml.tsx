@@ -5,10 +5,10 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { dataTypes } from '@/lib/data/data-types/data-types';
-import { EffectiveTheme } from '@/context/theme-context/theme-context';
+import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 import { importer } from '@dbml/core';
 import { exportBaseSQL } from '@/lib/data/export-metadata/export-sql-script';
-import { Diagram } from '@/lib/domain/diagram';
+import type { Diagram } from '@/lib/domain/diagram';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
