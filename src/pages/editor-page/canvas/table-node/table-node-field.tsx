@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     Handle,
     Position,
@@ -6,7 +12,7 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import { Button } from '@/components/button/button';
-import { KeyRound, MessageCircleMore, Trash2, Check } from 'lucide-react';
+import { Check, KeyRound, MessageCircleMore, Trash2 } from 'lucide-react';
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
@@ -15,6 +21,8 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useClickAway, useKeyPressEvent } from 'react-use';
+import { Input } from '@/components/input/input';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -33,10 +41,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
         const { removeField, relationships, readonly, updateField } =
             useChartDB();
+        const [editMode, setEditMode] = useState(false);
+        const [fieldName, setFieldName] = useState(field.name);
+        const inputRef = React.useRef<HTMLInputElement>(null);
+
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
-        const [isEditing, setIsEditing] = React.useState(false);
-        const inputRef = useRef<HTMLInputElement>(null);
         const isTarget = useMemo(
             () =>
                 connection.inProgress &&
@@ -59,36 +69,6 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
 
-        const handleDoubleClick = (e: React.MouseEvent) => {
-            if (readonly) return;
-            e.stopPropagation();
-            setIsEditing(true);
-        };
-
-        const handleBlur = () => {
-            setIsEditing(false);
-        };
-
-        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter') {
-                const newName = inputRef.current?.value.trim();
-                if (newName && newName !== field.name) {
-                    updateField(tableNodeId, field.id, { name: newName });
-                }
-                setIsEditing(false);
-            }
-            if (e.key === 'Escape') {
-                setIsEditing(false);
-            }
-        };
-
-        useEffect(() => {
-            if (isEditing && inputRef.current) {
-                inputRef.current.focus();
-                inputRef.current.select();
-            }
-        }, [isEditing]);
-
         useEffect(() => {
             if (
                 previousNumberOfEdgesToFieldRef.current !== numberOfEdgesToField
@@ -97,6 +77,28 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 previousNumberOfEdgesToFieldRef.current = numberOfEdgesToField;
             }
         }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
+
+        const editFieldName = useCallback(() => {
+            if (!editMode) return;
+            if (fieldName.trim()) {
+                updateField(tableNodeId, field.id, { name: fieldName.trim() });
+            }
+            setEditMode(false);
+        }, [fieldName, field.id, updateField, editMode, tableNodeId]);
+
+        const abortEdit = useCallback(() => {
+            setEditMode(false);
+            setFieldName(field.name);
+        }, [field.name]);
+
+        useClickAway(inputRef, editFieldName);
+        useKeyPressEvent('Enter', editFieldName);
+        useKeyPressEvent('Escape', abortEdit);
+
+        const enterEditMode = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            setEditMode(true);
+        };
 
         return (
             <div
@@ -155,43 +157,47 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         'flex items-center gap-1 truncate text-left',
                         {
                             'font-semibold': field.primaryKey || field.unique,
+                            'w-full': editMode,
                         }
                     )}
-                    onDoubleClick={handleDoubleClick}
                 >
-                    {isEditing ? (
-                        <div className="flex w-full items-center gap-1">
-                            <input
+                    {editMode ? (
+                        <>
+                            <Input
                                 ref={inputRef}
-                                className="w-full rounded-sm bg-background px-1 outline-none ring-1 ring-pink-500"
-                                defaultValue={field.name}
-                                onBlur={handleBlur}
-                                onKeyDown={handleKeyDown}
+                                onBlur={editFieldName}
+                                placeholder={field.name}
+                                autoFocus
+                                type="text"
+                                value={fieldName}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => setFieldName(e.target.value)}
+                                className="h-5 w-full border-[0.5px] border-blue-400 bg-slate-100 focus-visible:ring-0 dark:bg-slate-900"
                             />
                             <Button
                                 variant="ghost"
-                                size="icon"
-                                className="size-6 p-0 hover:bg-primary-foreground"
-                                onClick={() => {
-                                    const newName =
-                                        inputRef.current?.value.trim();
-                                    if (newName && newName !== field.name) {
-                                        updateField(tableNodeId, field.id, {
-                                            name: newName,
-                                        });
-                                    }
-                                    setIsEditing(false);
-                                }}
+                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                onClick={editFieldName}
                             >
-                                <Check className="size-3.5 text-green-700" />
+                                <Check className="size-4" />
                             </Button>
-                        </div>
+                        </>
                     ) : (
-                        <span className="truncate px-2 py-0.5">
+                        // <span
+                        //     className="truncate"
+                        //     onClick={readonly ? undefined : enterEditMode}
+                        // >
+                        //     {field.name}
+                        // </span>
+                        <span
+                            className="truncate"
+                            onDoubleClick={enterEditMode}
+                        >
                             {field.name}
                         </span>
                     )}
-                    {field.comments ? (
+                    {/* <span className="truncate">{field.name}</span> */}
+                    {field.comments && !editMode ? (
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div className="shrink-0 cursor-pointer text-muted-foreground">
@@ -202,42 +208,44 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         </Tooltip>
                     ) : null}
                 </div>
-                <div className="flex max-w-[35%] justify-end gap-1.5 truncate hover:shrink-0">
-                    {field.primaryKey ? (
+                {editMode ? null : (
+                    <div className="flex max-w-[35%] justify-end gap-1.5 truncate hover:shrink-0">
+                        {field.primaryKey ? (
+                            <div
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !readonly ? 'group-hover:hidden' : ''
+                                )}
+                            >
+                                <KeyRound size={14} />
+                            </div>
+                        ) : null}
+
                         <div
                             className={cn(
-                                'text-muted-foreground',
+                                'content-center truncate text-right text-xs text-muted-foreground shrink-0',
                                 !readonly ? 'group-hover:hidden' : ''
                             )}
                         >
-                            <KeyRound size={14} />
+                            {field.type.name}
+                            {field.nullable ? '?' : ''}
                         </div>
-                    ) : null}
-
-                    <div
-                        className={cn(
-                            'content-center truncate text-right text-xs text-muted-foreground shrink-0',
-                            !readonly ? 'group-hover:hidden' : ''
+                        {readonly ? null : (
+                            <div className="hidden flex-row group-hover:flex">
+                                <Button
+                                    variant="ghost"
+                                    className="size-6 p-0 hover:bg-primary-foreground"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        removeField(tableNodeId, field.id);
+                                    }}
+                                >
+                                    <Trash2 className="size-3.5 text-red-700" />
+                                </Button>
+                            </div>
                         )}
-                    >
-                        {field.type.name}
-                        {field.nullable ? '?' : ''}
                     </div>
-                    {readonly ? null : (
-                        <div className="hidden flex-row group-hover:flex">
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 hover:bg-primary-foreground"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeField(tableNodeId, field.id);
-                                }}
-                            >
-                                <Trash2 className="size-3.5 text-red-700" />
-                            </Button>
-                        </div>
-                    )}
-                </div>
+                )}
             </div>
         );
     }

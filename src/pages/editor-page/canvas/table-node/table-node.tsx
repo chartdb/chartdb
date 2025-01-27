@@ -144,8 +144,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             setEditMode(false);
         }, [tableName, table.id, updateTable, editMode]);
 
+        const abortEdit = useCallback(() => {
+            setEditMode(false);
+            setTableName(table.name);
+        }, [table.name]);
+
         useClickAway(inputRef, editTableName);
         useKeyPressEvent('Enter', editTableName);
+        useKeyPressEvent('Escape', abortEdit);
 
         const enterEditMode = (e: React.MouseEvent) => {
             e.stopPropagation();
@@ -199,6 +205,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 <>
                                     <Input
                                         ref={inputRef}
+                                        onBlur={editTableName}
+                                        placeholder={table.name}
                                         autoFocus
                                         type="text"
                                         value={tableName}
@@ -206,13 +214,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                         onChange={(e) =>
                                             setTableName(e.target.value)
                                         }
-                                        className="h-7 w-full bg-background focus-visible:ring-0"
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Escape') {
-                                                setEditMode(false);
-                                                setTableName(table.name);
-                                            }
-                                        }}
+                                        className="h-6 w-full border-[0.5px] border-blue-400 bg-slate-100 focus-visible:ring-0 dark:bg-slate-900"
                                     />
                                     <Button
                                         variant="ghost"
@@ -248,21 +250,23 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     <Pencil className="size-4" />
                                 </Button>
                             )}
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                onClick={
-                                    table.width !== MAX_TABLE_SIZE
-                                        ? expandTable
-                                        : shrinkTable
-                                }
-                            >
-                                {table.width !== MAX_TABLE_SIZE ? (
-                                    <ChevronsLeftRight className="size-4" />
-                                ) : (
-                                    <ChevronsRightLeft className="size-4" />
-                                )}
-                            </Button>
+                            {editMode ? null : (
+                                <Button
+                                    variant="ghost"
+                                    className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                    onClick={
+                                        table.width !== MAX_TABLE_SIZE
+                                            ? expandTable
+                                            : shrinkTable
+                                    }
+                                >
+                                    {table.width !== MAX_TABLE_SIZE ? (
+                                        <ChevronsLeftRight className="size-4" />
+                                    ) : (
+                                        <ChevronsRightLeft className="size-4" />
+                                    )}
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div

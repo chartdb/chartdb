@@ -73,8 +73,14 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         setEditMode(false);
     }, [tableName, table.id, updateTable, editMode]);
 
+    const abortEdit = useCallback(() => {
+        setEditMode(false);
+        setTableName(table.name);
+    }, [table.name]);
+
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
+    useKeyPressEvent('Escape', abortEdit);
 
     const enterEditMode = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -272,12 +278,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setTableName(e.target.value)}
                         className="h-7 w-full focus-visible:ring-0"
-                        onKeyDown={(e) => {
-                            if (e.key === 'Escape') {
-                                setEditMode(false);
-                                setTableName(table.name);
-                            }
-                        }}
                     />
                 ) : (
                     <Tooltip>
