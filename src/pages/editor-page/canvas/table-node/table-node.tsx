@@ -9,6 +9,7 @@ import {
     Table2,
     ChevronDown,
     ChevronUp,
+    Check,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -22,6 +23,13 @@ import { TableNodeContextMenu } from './table-node-context-menu';
 import { cn } from '@/lib/utils';
 import { TableNodeDependencyIndicator } from './table-node-dependency-indicator';
 import type { EdgeType } from '../canvas';
+import { Input } from '@/components/input/input';
+import { useClickAway, useKeyPressEvent } from 'react-use';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export type TableNodeType = Node<
     {
@@ -49,6 +57,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
         const [expanded, setExpanded] = useState(false);
         const { t } = useTranslation();
+        const [editMode, setEditMode] = useState(false);
+        const [tableName, setTableName] = useState(table.name);
+        const inputRef = React.useRef<HTMLInputElement>(null);
 
         const selectedRelEdges = edges.filter(
             (edge) =>
@@ -125,6 +136,28 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
         }, [expanded, table.fields, isMustDisplayedField]);
 
+        const editTableName = useCallback(() => {
+            if (!editMode) return;
+            if (tableName.trim()) {
+                updateTable(table.id, { name: tableName.trim() });
+            }
+            setEditMode(false);
+        }, [tableName, table.id, updateTable, editMode]);
+
+        const abortEdit = useCallback(() => {
+            setEditMode(false);
+            setTableName(table.name);
+        }, [table.name]);
+
+        useClickAway(inputRef, editTableName);
+        useKeyPressEvent('Enter', editTableName);
+        useKeyPressEvent('Escape', abortEdit);
+
+        const enterEditMode = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            setEditMode(true);
+        };
+
         return (
             <TableNodeContextMenu table={table}>
                 <div
@@ -168,12 +201,47 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                         <div className="flex min-w-0 flex-1 items-center gap-2">
                             <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
-                            <Label className="truncate text-sm font-bold">
-                                {table.name}
-                            </Label>
+                            {editMode ? (
+                                <>
+                                    <Input
+                                        ref={inputRef}
+                                        onBlur={editTableName}
+                                        placeholder={table.name}
+                                        autoFocus
+                                        type="text"
+                                        value={tableName}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e) =>
+                                            setTableName(e.target.value)
+                                        }
+                                        className="h-6 w-full border-[0.5px] border-blue-400 bg-slate-100 focus-visible:ring-0 dark:bg-slate-900"
+                                    />
+                                    <Button
+                                        variant="ghost"
+                                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                        onClick={editTableName}
+                                    >
+                                        <Check className="size-4" />
+                                    </Button>
+                                </>
+                            ) : (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Label
+                                            className="text-editable truncate px-2 py-0.5 text-sm font-bold"
+                                            onDoubleClick={enterEditMode}
+                                        >
+                                            {table.name}
+                                        </Label>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {t('tool_tips.double_click_to_edit')}
+                                    </TooltipContent>
+                                </Tooltip>
+                            )}
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
-                            {readonly ? null : (
+                            {readonly || editMode ? null : (
                                 <Button
                                     variant="ghost"
                                     className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
@@ -182,21 +250,23 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     <Pencil className="size-4" />
                                 </Button>
                             )}
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                onClick={
-                                    table.width !== MAX_TABLE_SIZE
-                                        ? expandTable
-                                        : shrinkTable
-                                }
-                            >
-                                {table.width !== MAX_TABLE_SIZE ? (
-                                    <ChevronsLeftRight className="size-4" />
-                                ) : (
-                                    <ChevronsRightLeft className="size-4" />
-                                )}
-                            </Button>
+                            {editMode ? null : (
+                                <Button
+                                    variant="ghost"
+                                    className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                    onClick={
+                                        table.width !== MAX_TABLE_SIZE
+                                            ? expandTable
+                                            : shrinkTable
+                                    }
+                                >
+                                    {table.width !== MAX_TABLE_SIZE ? (
+                                        <ChevronsLeftRight className="size-4" />
+                                    ) : (
+                                        <ChevronsRightLeft className="size-4" />
+                                    )}
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div

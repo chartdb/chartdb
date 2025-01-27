@@ -73,8 +73,14 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         setEditMode(false);
     }, [tableName, table.id, updateTable, editMode]);
 
+    const abortEdit = useCallback(() => {
+        setEditMode(false);
+        setTableName(table.name);
+    }, [table.name]);
+
     useClickAway(inputRef, editTableName);
     useKeyPressEvent('Enter', editTableName);
+    useKeyPressEvent('Escape', abortEdit);
 
     const enterEditMode = (e: React.MouseEvent) => {
         e.stopPropagation();
