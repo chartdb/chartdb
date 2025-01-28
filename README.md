@@ -45,17 +45,20 @@
 ### 🎉 ChartDB
 
 ChartDB is a powerful, web-based database diagramming editor.
+
 Instantly visualize your database schema with a single **"Smart Query."** Customize diagrams, export SQL scripts, and access all features—no account required. Experience seamless database design here.
 
 **What it does**:
 
--   **Instant Schema Import**
-    Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
+- **Instant Schema Import**
 
--   **AI-Powered Export for Easy Migration**
-    Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
--   **Interactive Editing**
-    Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
+  Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
+- **AI-Powered Export for Easy Migration**
+
+  Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you’re migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
+- **Interactive Editing**
+
+  Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
 
 ### Status
 
@@ -63,13 +66,13 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 
 ### Supported Databases
 
--   ✅ PostgreSQL (<img src="./src/assets/postgresql_logo_2.png" width="15"/> + <img src="./src/assets/supabase.png" alt="Supabase" width="15"/> + <img src="./src/assets/timescale.png" alt="Timescale" width="15"/> )
--   ✅ MySQL
--   ✅ SQL Server
--   ✅ MariaDB
--   ✅ SQLite
--   ✅ CockroachDB
--   ✅ ClickHouse
+- ✅ PostgreSQL (<img src="./src/assets/postgresql_logo_2.png" width="15"/> + <img src="./src/assets/supabase.png" alt="Supabase" width="15"/> + <img src="./src/assets/timescale.png" alt="Timescale" width="15"/> )
+- ✅ MySQL
+- ✅ SQL Server
+- ✅ MariaDB
+- ✅ SQLite
+- ✅ CockroachDB
+- ✅ ClickHouse
 
 ## Getting Started
 
@@ -89,25 +92,67 @@ npm install
 npm run build
 ```
 
-Or like this if you want to have AI capabilities:
+### AI Capabilities Configuration
 
-```
+You have two options for enabling AI capabilities:
+
+#### Option 1: Using OpenAI API
+
+```bash
 npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
+#### Option 2: Using Custom Inference Server
+
+```bash
+npm install
+VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> npm run build
+```
+
 ### Run the Docker Container
+
+#### Using OpenAI API
+
 ```bash
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
 ```
 
-#### Build and Run locally
+### Build and Run Locally
+
+#### Using OpenAI API
+
 ```bash
 docker build -t chartdb .
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 chartdb
 ```
 
+#### Using Custom Inference Server
+
+```bash
+# Build
+docker build \
+  --build-arg VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
+  --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -t chartdb .
+
+# Run
+docker run \
+  -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
+  -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -p 8080:80 chartdb
+```
+
+> **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+
 Open your browser and navigate to `http://localhost:8080`.
+
+Example configuration for a local vLLM server:
+
+```bash
+VITE_OPENAI_API_ENDPOINT=http://localhost:8000/v1
+VITE_LLM_MODEL_NAME=Qwen/Qwen2.5-32B-Instruct-AWQ
+```
 
 ## Try it on our website
 
@@ -120,19 +165,22 @@ Open your browser and navigate to `http://localhost:8080`.
 
 ## 💚 Community & Support
 
--   [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team)
--   [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
--   [Twitter](https://x.com/chartdb_io) (Get news fast)
+- [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team)
+- [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
+- [Twitter](https://x.com/chartdb_io) (Get news fast)
 
 ## Contributing
 
 We welcome community contributions, big or small, and are here to guide you along
+
 the way. Message us in the [ChartDB Community Discord](https://discord.gg/QeFwyWSKwC).
 
 For more information on how to contribute, please see our
+
 [Contributing Guide](/CONTRIBUTING.md).
 
 This project is released with a [Contributor Code of Conduct](/CODE_OF_CONDUCT.md).
+
 By participating in this project, you agree to follow its terms.
 
 Thank you for helping us make ChartDB better for everyone :heart:.
