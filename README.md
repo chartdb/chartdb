@@ -107,7 +107,32 @@ docker build -t chartdb .
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 chartdb
 ```
 
+#### Using Custom Inference Server
+
+```bash
+# Build
+docker build \
+  --build-arg VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
+  --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -t chartdb .
+
+# Run
+docker run \
+  -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
+  -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -p 8080:80 chartdb
+```
+
+> **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+
 Open your browser and navigate to `http://localhost:8080`.
+
+Example configuration for a local vLLM server:
+
+```bash
+VITE_OPENAI_API_ENDPOINT=http://localhost:8000/v1
+VITE_LLM_MODEL_NAME=Qwen/Qwen2.5-32B-Instruct-AWQ
+```
 
 ## Try it on our website
 

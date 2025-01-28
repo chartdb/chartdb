@@ -1,5 +1,5 @@
 import type { Diagram } from '../../domain/diagram';
-import { OPENAI_API_KEY } from '@/lib/env';
+import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
@@ -196,6 +196,26 @@ export const exportBaseSQL = (diagram: Diagram): string => {
     return sqlScript;
 };
 
+const validateConfiguration = () => {
+    const apiKey = window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY;
+    const baseUrl = window?.env?.OPENAI_API_ENDPOINT ?? OPENAI_API_ENDPOINT;
+    const modelName = window?.env?.LLM_MODEL_NAME ?? LLM_MODEL_NAME;
+
+    // If using custom endpoint and model, don't require OpenAI API key
+    if (baseUrl && modelName) {
+        return { useCustomEndpoint: true };
+    }
+
+    // If using OpenAI's service, require API key
+    if (apiKey) {
+        return { useCustomEndpoint: false };
+    }
+
+    throw new Error(
+        'Configuration Error: Either provide an OpenAI API key or both a custom endpoint and model name'
+    );
+};
+
 export const exportSQL = async (
     diagram: Diagram,
     databaseType: DatabaseType,
@@ -213,43 +233,73 @@ export const exportSQL = async (
         return cachedResult;
     }
 
+    // Validate configuration before proceeding
+    const { useCustomEndpoint } = validateConfiguration();
+
     const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
         import('ai'),
         import('@ai-sdk/openai'),
     ]);
 
-    const openai = createOpenAI({
-        apiKey: window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY,
-    });
+    const apiKey = window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY;
+    const baseUrl = window?.env?.OPENAI_API_ENDPOINT ?? OPENAI_API_ENDPOINT;
+    const modelName = window?.env?.LLM_MODEL_NAME || 'gpt-4o-mini-2024-07-18';
+
+    let config: { apiKey: string; baseUrl?: string };
+
+    if (useCustomEndpoint) {
+        config = {
+            apiKey: 'sk-xxx', // minimal valid API key format
+            baseUrl: baseUrl,
+        };
+    } else {
+        config = {
+            apiKey: apiKey,
+        };
+    }
+
+    const openai = createOpenAI(config);
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
-    if (options?.stream) {
-        const { textStream, text: textPromise } = await streamText({
-            model: openai('gpt-4o-mini-2024-07-18'),
+    try {
+        if (options?.stream) {
+            const { textStream, text: textPromise } = await streamText({
+                model: openai(modelName),
+                prompt: prompt,
+            });
+
+            for await (const textPart of textStream) {
+                if (options.signal?.aborted) {
+                    return '';
+                }
+                options.onResultStream(textPart);
+            }
+
+            const text = await textPromise;
+
+            setInCache(cacheKey, text);
+            return text;
+        }
+
+        const { text } = await generateText({
+            model: openai(modelName),
             prompt: prompt,
         });
 
-        for await (const textPart of textStream) {
-            if (options.signal?.aborted) {
-                return '';
-            }
-            options.onResultStream(textPart);
-        }
-
-        const text = await textPromise;
-
         setInCache(cacheKey, text);
         return text;
+    } catch (error: unknown) {
+        console.error('Error generating SQL:', error);
+        if (error instanceof Error && error.message.includes('API key')) {
+            throw new Error(
+                'Error: Please check your API configuration. If using a custom endpoint, make sure the endpoint URL is correct.'
+            );
+        }
+        throw new Error(
+            'Error generating SQL script. Please check your configuration and try again.'
+        );
     }
-
-    const { text } = await generateText({
-        model: openai('gpt-4o-mini-2024-07-18'),
-        prompt: prompt,
-    });
-
-    setInCache(cacheKey, text);
-    return text;
 };
 
 function getMySQLDataTypeSize(type: DataType) {
