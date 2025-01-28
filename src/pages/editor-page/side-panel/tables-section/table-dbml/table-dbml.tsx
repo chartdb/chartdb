@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import type { Monaco } from '@monaco-editor/react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -9,6 +9,7 @@ import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 import { importer } from '@dbml/core';
 import { exportBaseSQL } from '@/lib/data/export-metadata/export-sql-script';
 import type { Diagram } from '@/lib/domain/diagram';
+import { useToast } from '@/components/toast/use-toast';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -73,8 +74,9 @@ const getEditorTheme = (theme: EffectiveTheme) => {
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { currentDiagram } = useChartDB();
     const { effectiveTheme } = useTheme();
+    const { toast } = useToast();
 
-    const generateDBML = useCallback(() => {
+    const generateDBML = useMemo(() => {
         const filteredDiagram: Diagram = {
             ...currentDiagram,
             tables: filteredTables,
@@ -110,12 +112,25 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
 
         const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces);
 
-        return importer.import(baseScript, 'postgres');
-    }, [currentDiagram, filteredTables]);
+        try {
+            return importer.import(baseScript, 'postgres');
+        } catch (e) {
+            console.error(e);
+
+            toast({
+                title: 'Error',
+                description:
+                    'Failed to generate DBML. We would appreciate if you could report this issue!',
+                variant: 'destructive',
+            });
+
+            return '';
+        }
+    }, [currentDiagram, filteredTables, toast]);
 
     return (
         <CodeSnippet
-            code={generateDBML()}
+            code={generateDBML}
             className="my-0.5"
             editorProps={{
                 height: '100%',
