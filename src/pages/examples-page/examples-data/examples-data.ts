@@ -63,7 +63,7 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: '87iu197demih0wymjooqm9dmh',
-                            name: 'PRIMARY',
+                            name: 'dept_no',
                             unique: true,
                             fieldIds: ['gaj3scrtaz46ezfmc162ingxf'],
                             createdAt: Date.now(),
@@ -129,14 +129,14 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: 'rqb91465yc51xpvd54o5a8d0l',
-                            name: 'PRIMARY',
+                            name: 'emp_no',
                             unique: true,
                             fieldIds: ['wcgycjif09xrq0ly3txkq6ocu'],
                             createdAt: Date.now(),
                         },
                         {
                             id: '8wh6op49abv143qdfjzm211xj',
-                            name: 'PRIMARY',
+                            name: 'dept_no',
                             unique: true,
                             fieldIds: ['jdw1yrh9xf1i7927gzs9pob2p'],
                             createdAt: Date.now(),
@@ -202,14 +202,14 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: 'cbahnbrxaaj7cg29act50izy4',
-                            name: 'PRIMARY',
+                            name: 'emp_no',
                             unique: true,
                             fieldIds: ['ecx2zbzdc5o54e04aeg7tlg54'],
                             createdAt: Date.now(),
                         },
                         {
                             id: 'vgxv8rkf4890yf659o2oklffv',
-                            name: 'PRIMARY',
+                            name: 'dept_no',
                             unique: true,
                             fieldIds: ['v8plj7wq1cly03y178bysft2f'],
                             createdAt: Date.now(),
@@ -297,7 +297,7 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: '8zg1ccoj4jb4kv6eleih38ni5',
-                            name: 'PRIMARY',
+                            name: 'emp_no',
                             unique: true,
                             fieldIds: ['04csyx8ds9t3rh93txiqs4dm4'],
                             createdAt: Date.now(),
@@ -366,14 +366,14 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: 'nky2wepp8yr5g6rzvnbta1hxb',
-                            name: 'PRIMARY',
+                            name: 'emp_no',
                             unique: true,
                             fieldIds: ['b8c9v5vtpbnt5tjzcd3iat85f'],
                             createdAt: Date.now(),
                         },
                         {
                             id: 'w40nnsrsnlz7z7vycs4yf0s8d',
-                            name: 'PRIMARY',
+                            name: 'from_date',
                             unique: true,
                             fieldIds: ['0s10erufqpl6y3hpqmvbcneol'],
                             createdAt: Date.now(),
@@ -433,21 +433,21 @@ export const examples: Example[] = [
                     indexes: [
                         {
                             id: 'ijhmb7tq6i4fd72ndvotnwo45',
-                            name: 'PRIMARY',
+                            name: 'emp_no',
                             unique: true,
                             fieldIds: ['hr2gdoc0wtwvs4pfqo6m0fwc3'],
                             createdAt: Date.now(),
                         },
                         {
                             id: 'wgneqfte0nq7d5vzed2hcqie6',
-                            name: 'PRIMARY',
+                            name: 'title',
                             unique: true,
                             fieldIds: ['5evr59tury66sayiu59esoc61'],
                             createdAt: Date.now(),
                         },
                         {
                             id: 'jbe9t9adhluqy8d3i7w1vgygd',
-                            name: 'PRIMARY',
+                            name: 'from_date',
                             unique: true,
                             fieldIds: ['0vs1nqvrb6t53niz5ns2eskre'],
                             createdAt: Date.now(),
