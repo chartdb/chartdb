@@ -8,7 +8,7 @@ export const ru: LanguageTranslation = {
                 new: 'Создать',
                 open: 'Открыть',
                 save: 'Сохранить',
-                import_database: 'Импортировать базу данных',
+                import: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
                 delete_diagram: 'Удалить диаграмму',

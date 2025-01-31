@@ -8,7 +8,7 @@ export const en = {
                 new: 'New',
                 open: 'Open',
                 save: 'Save',
-                import_database: 'Import Database',
+                import: 'Import',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
                 delete_diagram: 'Delete Diagram',
@@ -365,13 +365,23 @@ export const en = {
 
         import_diagram_dialog: {
             title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
+            description: 'Import a diagram from a JSON file.',
             import: 'Import',
+            cancel: 'Cancel',
             error: {
-                title: 'Error importing diagram',
+                title: 'Error',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'Failed to import diagram. Please check the file format.',
+            },
+        },
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

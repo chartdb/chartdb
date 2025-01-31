@@ -8,7 +8,7 @@ export const mr: LanguageTranslation = {
                 new: 'नवीन',
                 open: 'उघडा',
                 save: 'जतन करा',
-                import_database: 'डेटाबेस इम्पोर्ट करा',
+                import: 'डेटाबेस इम्पोर्ट करा',
                 export_sql: 'SQL एक्स्पोर्ट करा',
                 export_as: 'म्हणून एक्स्पोर्ट करा',
                 delete_diagram: 'आरेख हटवा',

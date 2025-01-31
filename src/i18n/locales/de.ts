@@ -8,7 +8,7 @@ export const de: LanguageTranslation = {
                 new: 'Neu',
                 open: 'Öffnen',
                 save: 'Speichern',
-                import_database: 'Datenbank importieren',
+                import: 'Datenbank importieren',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
                 delete_diagram: 'Diagramm löschen',

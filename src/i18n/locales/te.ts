@@ -8,7 +8,7 @@ export const te: LanguageTranslation = {
                 new: 'కొత్తది',
                 open: 'తెరవు',
                 save: 'సేవ్',
-                import_database: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
+                import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',
                 delete_diagram: 'చిత్రాన్ని తొలగించండి',

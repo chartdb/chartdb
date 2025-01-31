@@ -8,7 +8,7 @@ export const zh_TW: LanguageTranslation = {
                 new: '新增',
                 open: '開啟',
                 save: '儲存',
-                import_database: '匯入資料庫',
+                import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
                 delete_diagram: '刪除圖表',

@@ -8,7 +8,7 @@ export const ko_KR: LanguageTranslation = {
                 new: '새 다이어그램',
                 open: '열기',
                 save: '저장',
-                import_database: '데이터베이스 가져오기',
+                import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
                 delete_diagram: '다이어그램 삭제',

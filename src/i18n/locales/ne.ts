@@ -8,7 +8,7 @@ export const ne: LanguageTranslation = {
                 new: 'नयाँ',
                 open: 'खोल्नुहोस्',
                 save: 'सुरक्षित गर्नुहोस्',
-                import_database: 'डाटाबेस आयात गर्नुहोस्',
+                import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
                 delete_diagram: 'डायाग्राम हटाउनुहोस्',

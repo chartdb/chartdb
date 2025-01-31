@@ -8,7 +8,7 @@ export const id_ID: LanguageTranslation = {
                 new: 'Buat Baru',
                 open: 'Buka',
                 save: 'Simpan',
-                import_database: 'Impor Database',
+                import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
                 delete_diagram: 'Hapus Diagram',

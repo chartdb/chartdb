@@ -8,7 +8,7 @@ export const gu: LanguageTranslation = {
                 new: 'નવું',
                 open: 'ખોલો',
                 save: 'સાચવો',
-                import_database: 'ડેટાબેસ આયાત કરો',
+                import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
                 delete_diagram: 'ડાયાગ્રામ કાઢી નાખો',
