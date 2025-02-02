@@ -73,6 +73,16 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         removeRelationships,
     } = useChartDB();
     const { reorderTables } = useCanvas();
+    const [reorder, setReorder] = useState(false);
+
+    useEffect(() => {
+        if (reorder) {
+            reorderTables({
+                updateHistory: false,
+            });
+            setReorder(false);
+        }
+    }, [reorder, reorderTables]);
 
     useEffect(() => {
         if (!dialog.open) return;
@@ -157,10 +167,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                     updateHistory: false,
                 }),
             ]);
-
-            reorderTables({
-                updateHistory: false,
-            });
+            setReorder(true);
             closeImportDBMLDialog();
         } catch (e) {
             toast({
@@ -178,7 +185,6 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         dbmlContent,
         closeImportDBMLDialog,
         tables,
-        reorderTables,
         relationships,
         removeTables,
         removeRelationships,
@@ -186,6 +192,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         addRelationships,
         errorMessage,
         toast,
+        setReorder,
         t,
     ]);
 

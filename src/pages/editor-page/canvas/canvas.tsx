@@ -74,7 +74,6 @@ import {
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useCanvas } from '@/hooks/use-canvas';
-import { useDebounce } from '@/hooks/use-debounce';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
@@ -164,21 +163,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         }
     }, [initialTables, nodes, filteredSchemas]);
 
-    const fitViewDebounce = useDebounce(
-        () =>
-            fitView({
-                duration: 200,
-                padding: 0.1,
-                maxZoom: 0.8,
-            }),
-        500
-    );
-
     useEffect(() => {
         if (!isInitialLoadingNodes) {
-            fitViewDebounce();
+            debounce(() => {
+                fitView({
+                    duration: 200,
+                    padding: 0.1,
+                    maxZoom: 0.8,
+                });
+            }, 500)();
         }
-    }, [isInitialLoadingNodes, fitView, fitViewDebounce]);
+    }, [isInitialLoadingNodes, fitView]);
 
     useEffect(() => {
         const targetIndexes: Record<string, number> = relationships.reduce(

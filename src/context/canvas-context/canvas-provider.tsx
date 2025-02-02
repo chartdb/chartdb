@@ -59,8 +59,6 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
 
             setOverlapGraph(updatedOverlapGraph);
 
-            setOverlapGraph(updatedOverlapGraph);
-
             setTimeout(() => {
                 fitView({
                     duration: 500,
