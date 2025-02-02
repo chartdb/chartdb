@@ -18,6 +18,8 @@ import {
 import { useViewport } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
 import { TableDBML } from './table-dbml/table-dbml';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { getOperatingSystem } from '@/lib/utils';
 
 export interface TablesSectionProps {}
 
@@ -29,6 +31,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
+    const filterInputRef = React.useRef<HTMLInputElement>(null);
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -93,6 +96,30 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText('');
     }, []);
 
+    const operatingSystem = useMemo(() => getOperatingSystem(), []);
+
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
+        () => {
+            filterInputRef.current?.focus();
+        },
+        {
+            preventDefault: true,
+        },
+        [filterInputRef]
+    );
+
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+p' : 'ctrl+p',
+        () => {
+            setShowDBML((value) => !value);
+        },
+        {
+            preventDefault: true,
+        },
+        [setShowDBML]
+    );
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -122,11 +149,13 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             {showDBML
                                 ? t('side_panel.tables_section.show_list')
                                 : t('side_panel.tables_section.show_dbml')}
+                            {operatingSystem === 'mac' ? ' (⌘P)' : ' (Ctrl+P)'}
                         </TooltipContent>
                     </Tooltip>
                 </div>
                 <div className="flex-1">
                     <Input
+                        ref={filterInputRef}
                         type="text"
                         placeholder={t('side_panel.tables_section.filter')}
                         className="h-8 w-full focus-visible:ring-0"
