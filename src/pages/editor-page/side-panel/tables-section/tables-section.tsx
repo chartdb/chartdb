@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
 import { Table, List, X, Code } from 'lucide-react';
@@ -18,6 +18,8 @@ import {
 import { useViewport } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
 import { TableDBML } from './table-dbml/table-dbml';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { getOperatingSystem } from '@/lib/utils';
 
 export interface TablesSectionProps {}
 
@@ -94,24 +96,29 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText('');
     }, []);
 
-    // Add useEffect for keyboard shortcut
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            // Focus filter on Ctrl/Cmd + F
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
-                e.preventDefault();
-                filterInputRef.current?.focus();
-            }
-            // Toggle DBML on Ctrl/Cmd + P
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-                e.preventDefault();
-                setShowDBML((prev) => !prev);
-            }
-        };
+    const operatingSystem = useMemo(() => getOperatingSystem(), []);
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
+        () => {
+            filterInputRef.current?.focus();
+        },
+        {
+            preventDefault: true,
+        },
+        [filterInputRef]
+    );
+
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+p' : 'ctrl+p',
+        () => {
+            setShowDBML((value) => !value);
+        },
+        {
+            preventDefault: true,
+        },
+        [setShowDBML]
+    );
 
     return (
         <section
@@ -142,7 +149,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                             {showDBML
                                 ? t('side_panel.tables_section.show_list')
                                 : t('side_panel.tables_section.show_dbml')}
-                            {' (⌘P)'}
+                            {operatingSystem === 'mac' ? ' (⌘P)' : ' (Ctrl+P)'}
                         </TooltipContent>
                     </Tooltip>
                 </div>
