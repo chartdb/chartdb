@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Suspense } from 'react';
 import { useDialog } from '@/hooks/use-dialog';
 import {
     Dialog,
@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/button/button';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useTranslation } from 'react-i18next';
-import { Editor } from '@/components/code-snippet/code-snippet';
+import { Editor } from '@/components/code-snippet/code-editor';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
 import { importDBMLToDiagram } from '@/lib/dbml-import';
@@ -22,6 +22,7 @@ import { Parser } from '@dbml/core';
 import { useCanvas } from '@/hooks/use-canvas';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import { useToast } from '@/components/toast/use-toast';
+import { Spinner } from '@/components/spinner/spinner';
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {}
 
@@ -216,27 +217,29 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                     </DialogDescription>
                 </DialogHeader>
                 <DialogInternalContent>
-                    <Editor
-                        value={dbmlContent}
-                        onChange={(value) => setDBMLContent(value || '')}
-                        language="dbml"
-                        theme={
-                            effectiveTheme === 'dark'
-                                ? 'dbml-dark'
-                                : 'dbml-light'
-                        }
-                        beforeMount={setupDBMLLanguage}
-                        options={{
-                            minimap: { enabled: false },
-                            scrollBeyondLastLine: false,
-                            automaticLayout: true,
-                            scrollbar: {
-                                vertical: 'visible',
-                                horizontal: 'visible',
-                            },
-                        }}
-                        className="size-full"
-                    />
+                    <Suspense fallback={<Spinner />}>
+                        <Editor
+                            value={dbmlContent}
+                            onChange={(value) => setDBMLContent(value || '')}
+                            language="dbml"
+                            theme={
+                                effectiveTheme === 'dark'
+                                    ? 'dbml-dark'
+                                    : 'dbml-light'
+                            }
+                            beforeMount={setupDBMLLanguage}
+                            options={{
+                                minimap: { enabled: false },
+                                scrollBeyondLastLine: false,
+                                automaticLayout: true,
+                                scrollbar: {
+                                    vertical: 'visible',
+                                    horizontal: 'visible',
+                                },
+                            }}
+                            className="size-full"
+                        />
+                    </Suspense>
                 </DialogInternalContent>
                 <DialogFooter>
                     <div className="flex w-full items-center justify-between">
