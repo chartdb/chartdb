@@ -123,30 +123,36 @@ export const importDBMLToDiagram = async (
         };
 
         // Convert DBML tables to ChartDB table objects
-        const tables: DBTable[] = extractedData.tables.map((table, index) => ({
-            id: generateId(),
-            name: table.name.replace(/['"]/g, ''),
-            schema:
-                typeof table.schema === 'string'
-                    ? table.schema
-                    : table.schema?.name || '',
-            order: index,
-            fields: table.fields.map((field) => ({
+        const tables: DBTable[] = extractedData.tables.map((table, index) => {
+            const row = Math.floor(index / 4);
+            const col = index % 4;
+            const tableSpacing = 300; // Increased spacing between tables
+
+            return {
                 id: generateId(),
-                name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToGenericType(field.type.type_name),
-                nullable: !field.not_null,
-                primaryKey: field.pk || false,
-                unique: field.unique || false,
+                name: table.name.replace(/['"]/g, ''),
+                schema:
+                    typeof table.schema === 'string'
+                        ? table.schema
+                        : table.schema?.name || '',
+                order: index,
+                fields: table.fields.map((field) => ({
+                    id: generateId(),
+                    name: field.name.replace(/['"]/g, ''),
+                    type: mapDBMLTypeToGenericType(field.type.type_name),
+                    nullable: !field.not_null,
+                    primaryKey: field.pk || false,
+                    unique: field.unique || false,
+                    createdAt: Date.now(),
+                })),
+                x: col * tableSpacing,
+                y: row * tableSpacing,
+                indexes: [],
+                color: randomColor(),
+                isView: false,
                 createdAt: Date.now(),
-            })),
-            x: 0,
-            y: 0,
-            indexes: [],
-            color: randomColor(),
-            isView: false,
-            createdAt: Date.now(),
-        }));
+            };
+        });
 
         // Create relationships using the refs
         const relationships: DBRelationship[] = extractedData.refs.map(

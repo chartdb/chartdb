@@ -176,7 +176,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                 }, 100);
             }, 1000);
         }
-    }, [isInitialLoadingNodes, fitView, reorderTables]);
+    }, [isInitialLoadingNodes, fitView]);
 
     useEffect(() => {
         const targetIndexes: Record<string, number> = relationships.reduce(
@@ -328,6 +328,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
+
     useEffect(() => {
         if (!equal(filteredSchemas, prevFilteredSchemas.current)) {
             debounce(() => {
