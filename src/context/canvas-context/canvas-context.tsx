@@ -4,7 +4,7 @@ import type { Graph } from '@/lib/graph';
 import { createGraph } from '@/lib/graph';
 
 export interface CanvasContext {
-    reorderTables: () => void;
+    reorderTables: (options?: { updateHistory?: boolean }) => void;
     fitView: (options?: {
         duration?: number;
         padding?: number;

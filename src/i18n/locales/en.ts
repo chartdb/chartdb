@@ -366,21 +366,22 @@ export const en = {
         import_diagram_dialog: {
             title: 'Import Diagram',
             description: 'Import a diagram from a JSON file.',
-            import: 'Import',
             cancel: 'Cancel',
+            import: 'Import',
             error: {
-                title: 'Error',
+                title: 'Error importing diagram',
                 description:
-                    'Failed to import diagram. Please check the file format.',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
             },
         },
+
         import_dbml_dialog: {
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
             error: {
-                title: 'Error',
+                title: 'Error importing DBML',
                 description: 'Failed to import DBML. Please check the syntax.',
             },
         },

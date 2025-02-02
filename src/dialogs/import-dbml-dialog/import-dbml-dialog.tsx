@@ -16,13 +16,12 @@ import { useTranslation } from 'react-i18next';
 import { Editor } from '@/components/code-snippet/code-editor';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
-import { useMonaco } from '@monaco-editor/react';
-import { setupDBMLLanguage } from '@/lib/monaco/dbml-language';
 import { importDBMLToDiagram } from '@/lib/dbml-import';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Parser } from '@dbml/core';
 import { useCanvas } from '@/hooks/use-canvas';
-import { DatabaseType } from '@/lib/domain/database-type';
+import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import { useToast } from '@/components/toast/use-toast';
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {}
 
@@ -62,11 +61,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
 
     const [dbmlContent, setDBMLContent] = useState<string>(initialDBML);
     const { closeImportDBMLDialog } = useDialog();
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const [isValidDBML, setIsValidDBML] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>();
     const { effectiveTheme } = useTheme();
-    const monaco = useMonaco();
+    const { toast } = useToast();
     const {
         addTables,
         addRelationships,
@@ -74,55 +71,40 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         relationships,
         removeTables,
         removeRelationships,
-        databaseType: currentDatabaseType,
-        updateDatabaseType,
     } = useChartDB();
-    const { reorderTables, fitView } = useCanvas();
-    const [reordered, setReordered] = useState(false);
-
-    useEffect(() => {
-        if (!monaco) return;
-        setupDBMLLanguage(monaco);
-    }, [monaco]);
+    const { reorderTables } = useCanvas();
 
     useEffect(() => {
         if (!dialog.open) return;
-        setError(false);
-        setErrorMessage('');
-        setIsValidDBML(true);
+        setErrorMessage(undefined);
         setDBMLContent(initialDBML);
     }, [dialog.open, initialDBML]);
 
-    // Validate DBML content
     useEffect(() => {
         const validateDBML = async () => {
             if (!dbmlContent.trim()) {
-                setIsValidDBML(false);
-                setError(false);
-                setErrorMessage('');
+                setErrorMessage(undefined);
                 return;
             }
 
             try {
                 const parser = new Parser();
                 parser.parse(dbmlContent, 'dbml');
-                setIsValidDBML(true);
-                setError(false);
-                setErrorMessage('');
+                setErrorMessage(undefined);
             } catch (e) {
-                setIsValidDBML(false);
-                setError(true);
                 setErrorMessage(
-                    e instanceof Error ? e.message : 'Invalid DBML syntax'
+                    e instanceof Error
+                        ? e.message
+                        : t('import_dbml_dialog.error.description')
                 );
             }
         };
 
         validateDBML();
-    }, [dbmlContent]);
+    }, [dbmlContent, t]);
 
     const handleImport = useCallback(async () => {
-        if (!dbmlContent.trim() || !isValidDBML) return;
+        if (!dbmlContent.trim() || errorMessage) return;
 
         try {
             const importedDiagram = await importDBMLToDiagram(dbmlContent);
@@ -176,41 +158,36 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 }),
             ]);
 
-            if (currentDatabaseType === DatabaseType.GENERIC) {
-                await updateDatabaseType(DatabaseType.GENERIC);
-            }
-
-            setReordered(true);
+            reorderTables({
+                updateHistory: false,
+            });
             closeImportDBMLDialog();
         } catch (e) {
-            setError(true);
-            setErrorMessage(
-                e instanceof Error
-                    ? `Failed to import DBML: ${e.message}`
-                    : 'Failed to import DBML'
-            );
+            toast({
+                title: t('import_dbml_dialog.error.title'),
+                variant: 'destructive',
+                description: (
+                    <>
+                        <div>{t('import_dbml_dialog.error.description')}</div>
+                        {e instanceof Error ? <div>{e.message}</div> : null}
+                    </>
+                ),
+            });
         }
     }, [
         dbmlContent,
-        isValidDBML,
         closeImportDBMLDialog,
         tables,
+        reorderTables,
         relationships,
         removeTables,
         removeRelationships,
         addTables,
         addRelationships,
-        currentDatabaseType,
-        updateDatabaseType,
+        errorMessage,
+        toast,
+        t,
     ]);
-
-    useEffect(() => {
-        if (reordered) {
-            // First reorder the tables
-            reorderTables();
-            setReordered(false);
-        }
-    }, [reordered, reorderTables, fitView]);
 
     return (
         <Dialog
@@ -245,6 +222,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                                         ? 'dbml-dark'
                                         : 'dbml-light'
                                 }
+                                beforeMount={setupDBMLLanguage}
                                 options={{
                                     minimap: { enabled: false },
                                     scrollBeyondLastLine: false,
@@ -267,31 +245,22 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                                     {t('import_dbml_dialog.cancel')}
                                 </Button>
                             </DialogClose>
-                            {error && (
-                                <div className="flex items-center gap-2">
+                            {errorMessage ? (
+                                <div className="flex items-center gap-1">
                                     <AlertCircle className="size-4 text-destructive" />
-                                    <div className="flex flex-col">
-                                        <span className="text-xs text-destructive">
-                                            {errorMessage ||
-                                                t(
-                                                    'import_dbml_dialog.error.description'
-                                                )}
-                                        </span>
-                                        <a
-                                            href="https://dbml.dbdiagram.io/docs#table-definition"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-xs text-muted-foreground hover:text-primary hover:underline"
-                                        >
-                                            use .dbml docs
-                                        </a>
-                                    </div>
+
+                                    <span className="text-xs text-destructive">
+                                        {errorMessage ||
+                                            t(
+                                                'import_dbml_dialog.error.description'
+                                            )}
+                                    </span>
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                         <Button
                             onClick={handleImport}
-                            disabled={!dbmlContent.trim() || !isValidDBML}
+                            disabled={!dbmlContent.trim() || !!errorMessage}
                         >
                             {t('import_dbml_dialog.import')}
                         </Button>

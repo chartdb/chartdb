@@ -61,7 +61,7 @@ import {
     findTableOverlapping,
 } from './canvas-utils';
 import type { Graph } from '@/lib/graph';
-import { createGraph, removeVertex } from '@/lib/graph';
+import { removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { cn, debounce, getOperatingSystem } from '@/lib/utils';
 import type { DependencyEdgeType } from './dependency-edge';
@@ -74,6 +74,7 @@ import {
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useDebounce } from '@/hooks/use-debounce';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
@@ -137,11 +138,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
-    const { reorderTables, fitView, setOverlapGraph } = useCanvas();
+    const { reorderTables, fitView, setOverlapGraph, overlapGraph } =
+        useCanvas();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
-    const [overlapGraph, setLocalOverlapGraph] =
-        useState<Graph<string>>(createGraph());
 
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
@@ -164,19 +164,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         }
     }, [initialTables, nodes, filteredSchemas]);
 
+    const fitViewDebounce = useDebounce(
+        () =>
+            fitView({
+                duration: 200,
+                padding: 0.1,
+                maxZoom: 0.8,
+            }),
+        500
+    );
+
     useEffect(() => {
         if (!isInitialLoadingNodes) {
-            setTimeout(() => {
-                setTimeout(() => {
-                    fitView({
-                        duration: 200,
-                        padding: 0.1,
-                        maxZoom: 0.8,
-                    });
-                }, 100);
-            }, 1000);
+            fitViewDebounce();
         }
-    }, [isInitialLoadingNodes, fitView]);
+    }, [isInitialLoadingNodes, fitView, fitViewDebounce]);
 
     useEffect(() => {
         const targetIndexes: Record<string, number> = relationships.reduce(
@@ -328,7 +330,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
-
     useEffect(() => {
         if (!equal(filteredSchemas, prevFilteredSchemas.current)) {
             debounce(() => {
@@ -337,7 +338,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         shouldShowTablesBySchemaFilter(table, filteredSchemas)
                     ),
                 });
-                setLocalOverlapGraph(overlappingTablesInDiagram);
+                setOverlapGraph(overlappingTablesInDiagram);
                 fitView({
                     duration: 500,
                     padding: 0.1,
@@ -346,11 +347,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
             }, 500)();
             prevFilteredSchemas.current = filteredSchemas;
         }
-    }, [filteredSchemas, fitView, tables]);
-
-    useEffect(() => {
-        setOverlapGraph(overlapGraph);
-    }, [overlapGraph, setOverlapGraph]);
+    }, [filteredSchemas, fitView, tables, setOverlapGraph]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -486,10 +483,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     );
                 }
 
-                setLocalOverlapGraph(newOverlappingGraph);
+                setOverlapGraph(newOverlappingGraph);
             }
         },
-        [nodes, overlapGraph, getNode]
+        [nodes, overlapGraph, setOverlapGraph, getNode]
     );
 
     const updateOverlappingGraphOnChangesDebounced = debounce(
@@ -590,7 +587,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     );
                 }
 
-                setLocalOverlapGraph(newOverlappingGraph);
+                setOverlapGraph(newOverlappingGraph);
             } else if (event.action === 'remove_tables') {
                 for (const tableId of event.data.tableIds) {
                     newOverlappingGraph = removeVertex(
@@ -599,7 +596,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     );
                 }
 
-                setLocalOverlapGraph(newOverlappingGraph);
+                setOverlapGraph(newOverlappingGraph);
             } else if (
                 event.action === 'update_table' &&
                 event.data.table.width
@@ -621,7 +618,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     { nodes: nodes.filter((node) => !node.hidden) },
                     overlapGraph
                 );
-                setLocalOverlapGraph(newOverlappingGraph);
+                setOverlapGraph(newOverlappingGraph);
             } else if (
                 event.action === 'add_field' ||
                 event.action === 'remove_field'
@@ -643,7 +640,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                     { nodes: nodes.filter((node) => !node.hidden) },
                     overlapGraph
                 );
-                setLocalOverlapGraph(newOverlappingGraph);
+                setOverlapGraph(newOverlappingGraph);
             } else if (event.action === 'load_diagram') {
                 const diagramTables = event.data.diagram.tables ?? [];
                 const overlappingTablesInDiagram = findOverlappingTables({
@@ -651,10 +648,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
                         shouldShowTablesBySchemaFilter(table, filteredSchemas)
                     ),
                 });
-                setLocalOverlapGraph(overlappingTablesInDiagram);
+                setOverlapGraph(overlappingTablesInDiagram);
             }
         },
-        [overlapGraph, getNode, nodes, filteredSchemas]
+        [overlapGraph, setOverlapGraph, getNode, nodes, filteredSchemas]
     );
 
     events.useSubscription(eventConsumer);
