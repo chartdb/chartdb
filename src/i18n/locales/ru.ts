@@ -8,7 +8,7 @@ export const ru: LanguageTranslation = {
                 new: 'Создать',
                 open: 'Открыть',
                 save: 'Сохранить',
-                import_database: 'Импортировать базу данных',
+                import: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
                 delete_diagram: 'Удалить диаграмму',
@@ -374,6 +374,17 @@ export const ru: LanguageTranslation = {
                 title: 'Ошибка при импорте диаграммы',
                 description:
                     'Код JSON диаграммы некорректен. Проверьте, пожалуйста, код и попробуйте снова. Проблема не решается? Напишите нам: chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

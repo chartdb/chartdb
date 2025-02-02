@@ -8,7 +8,7 @@ export const id_ID: LanguageTranslation = {
                 new: 'Buat Baru',
                 open: 'Buka',
                 save: 'Simpan',
-                import_database: 'Impor Database',
+                import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
                 delete_diagram: 'Hapus Diagram',
@@ -375,6 +375,17 @@ export const id_ID: LanguageTranslation = {
                 title: 'Error impor diagram',
                 description:
                     'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
 

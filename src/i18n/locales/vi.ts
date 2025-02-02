@@ -8,7 +8,7 @@ export const vi: LanguageTranslation = {
                 new: 'Tạo mới',
                 open: 'Mở',
                 save: 'Lưu',
-                import_database: 'Nhập cơ sở dữ liệu',
+                import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
                 delete_diagram: 'Xóa sơ đồ',
@@ -374,6 +374,17 @@ export const vi: LanguageTranslation = {
                 title: 'Lỗi khi nhập sơ đồ',
                 description:
                     'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

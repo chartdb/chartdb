@@ -8,7 +8,7 @@ export const zh_TW: LanguageTranslation = {
                 new: '新增',
                 open: '開啟',
                 save: '儲存',
-                import_database: '匯入資料庫',
+                import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
                 delete_diagram: '刪除圖表',
@@ -369,6 +369,17 @@ export const zh_TW: LanguageTranslation = {
                 title: '匯入圖表時發生錯誤',
                 description:
                     '圖表的 JSON 無效。請檢查 JSON 並再試一次。如需幫助，請聯繫 chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

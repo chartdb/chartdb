@@ -18,6 +18,7 @@ import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-di
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { BuckleDialog } from '@/dialogs/buckle-dialog/buckle-dialog';
+import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -88,13 +89,16 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             [setOpenTableSchemaDialog]
         );
 
-    // Export image dialog
+    // Export diagram dialog
     const [openExportDiagramDialog, setOpenExportDiagramDialog] =
         useState(false);
 
     // Import diagram dialog
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
+
+    // Import DBML dialog
+    const [openImportDBMLDialog, setOpenImportDBMLDialog] = useState(false);
 
     return (
         <dialogContext.Provider
@@ -126,6 +130,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 openImportDiagramDialog: () => setOpenImportDiagramDialog(true),
                 closeImportDiagramDialog: () =>
                     setOpenImportDiagramDialog(false),
+                openImportDBMLDialog: () => setOpenImportDBMLDialog(true),
+                closeImportDBMLDialog: () => setOpenImportDBMLDialog(false),
             }}
         >
             {children}
@@ -154,6 +160,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             <BuckleDialog dialog={{ open: openBuckleDialog }} />
+            <ImportDBMLDialog dialog={{ open: openImportDBMLDialog }} />
         </dialogContext.Provider>
     );
 };

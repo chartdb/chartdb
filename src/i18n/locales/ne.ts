@@ -8,7 +8,7 @@ export const ne: LanguageTranslation = {
                 new: 'नयाँ',
                 open: 'खोल्नुहोस्',
                 save: 'सुरक्षित गर्नुहोस्',
-                import_database: 'डाटाबेस आयात गर्नुहोस्',
+                import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
                 delete_diagram: 'डायाग्राम हटाउनुहोस्',
@@ -378,6 +378,17 @@ export const ne: LanguageTranslation = {
                 title: 'डायाग्राम आयात गर्दा समस्या आयो',
                 description:
                     'डायाग्राम JSON अमान्य छ। कृपया JSON जाँच गर्नुहोस् र पुन: प्रयास गर्नुहोस्। मद्दत चाहिन्छ? chartdb.io@gmail.com मा सम्पर्क गर्नुहोस्',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
 

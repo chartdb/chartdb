@@ -8,7 +8,7 @@ export const ko_KR: LanguageTranslation = {
                 new: '새 다이어그램',
                 open: '열기',
                 save: '저장',
-                import_database: '데이터베이스 가져오기',
+                import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
                 delete_diagram: '다이어그램 삭제',
@@ -373,6 +373,17 @@ export const ko_KR: LanguageTranslation = {
                 title: '다이어그램 가져오기 오류',
                 description:
                     '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 chartdb.io@gmail.com으로 연락해주세요.',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

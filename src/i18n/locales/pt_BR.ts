@@ -8,7 +8,7 @@ export const pt_BR: LanguageTranslation = {
                 new: 'Novo',
                 open: 'Abrir',
                 save: 'Salvar',
-                import_database: 'Importar Banco de Dados',
+                import: 'Importar Banco de Dados',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
                 delete_diagram: 'Excluir Diagrama',
@@ -378,6 +378,17 @@ export const pt_BR: LanguageTranslation = {
                 title: 'Error importing diagram',
                 description:
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

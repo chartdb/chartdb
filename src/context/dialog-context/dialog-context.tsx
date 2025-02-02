@@ -61,6 +61,10 @@ export interface DialogContext {
         params: Omit<ImportDiagramDialogProps, 'dialog'>
     ) => void;
     closeImportDiagramDialog: () => void;
+
+    // Import DBML dialog
+    openImportDBMLDialog: () => void;
+    closeImportDBMLDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -86,4 +90,6 @@ export const dialogContext = createContext<DialogContext>({
     closeImportDiagramDialog: emptyFn,
     openBuckleDialog: emptyFn,
     closeBuckleDialog: emptyFn,
+    openImportDBMLDialog: emptyFn,
+    closeImportDBMLDialog: emptyFn,
 });

@@ -8,7 +8,7 @@ export const tr: LanguageTranslation = {
                 new: 'Yeni',
                 open: 'Aç',
                 save: 'Kaydet',
-                import_database: 'Veritabanı İçe Aktar',
+                import: 'Veritabanı İçe Aktar',
                 export_sql: 'SQL Olarak Dışa Aktar',
                 export_as: 'Olarak Dışa Aktar',
                 delete_diagram: 'Diyagramı Sil',
@@ -368,6 +368,17 @@ export const tr: LanguageTranslation = {
                 title: 'Error importing diagram',
                 description:
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

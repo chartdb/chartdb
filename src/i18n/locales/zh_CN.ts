@@ -8,7 +8,7 @@ export const zh_CN: LanguageTranslation = {
                 new: '新建',
                 open: '打开',
                 save: '保存',
-                import_database: '导入数据库',
+                import: '导入数据库',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
                 delete_diagram: '删除关系图',
@@ -370,6 +370,17 @@ export const zh_CN: LanguageTranslation = {
                 title: '导入关系图时出错',
                 description:
                     '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

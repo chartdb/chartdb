@@ -8,7 +8,7 @@ export const te: LanguageTranslation = {
                 new: 'కొత్తది',
                 open: 'తెరవు',
                 save: 'సేవ్',
-                import_database: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
+                import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',
                 delete_diagram: 'చిత్రాన్ని తొలగించండి',
@@ -381,6 +381,17 @@ export const te: LanguageTranslation = {
                 title: 'Error importing diagram',
                 description:
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
 

@@ -45,10 +45,7 @@ import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
 import type { DBTable } from '@/lib/domain/db-table';
-import {
-    adjustTablePositions,
-    shouldShowTablesBySchemaFilter,
-} from '@/lib/domain/db-table';
+import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import {
     Tooltip,
@@ -64,7 +61,7 @@ import {
     findTableOverlapping,
 } from './canvas-utils';
 import type { Graph } from '@/lib/graph';
-import { createGraph, removeVertex } from '@/lib/graph';
+import { removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { cn, debounce, getOperatingSystem } from '@/lib/utils';
 import type { DependencyEdgeType } from './dependency-edge';
@@ -76,6 +73,7 @@ import {
 } from './table-node/table-node-dependency-indicator';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
@@ -109,8 +107,7 @@ export interface CanvasProps {
 }
 
 export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
-    const { getEdge, getInternalNode, fitView, getEdges, getNode } =
-        useReactFlow();
+    const { getEdge, getInternalNode, getEdges, getNode } = useReactFlow();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
     const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
         string[]
@@ -140,10 +137,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
     const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
+    const { reorderTables, fitView, setOverlapGraph, overlapGraph } =
+        useCanvas();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
-    const [overlapGraph, setOverlapGraph] =
-        useState<Graph<string>>(createGraph());
 
     const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
@@ -345,7 +342,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
             }, 500)();
             prevFilteredSchemas.current = filteredSchemas;
         }
-    }, [filteredSchemas, fitView, tables]);
+    }, [filteredSchemas, fitView, tables, setOverlapGraph]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -656,33 +653,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
 
     const isLoadingDOM =
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
-
-    const reorderTables = useCallback(() => {
-        const newTables = adjustTablePositions({
-            relationships,
-            tables: tables.filter((table) =>
-                shouldShowTablesBySchemaFilter(table, filteredSchemas)
-            ),
-            mode: 'all', // Use 'all' mode for manual reordering
-        });
-
-        const updatedOverlapGraph = findOverlappingTables({
-            tables: newTables,
-        });
-
-        updateTablesState((currentTables) =>
-            currentTables.map((table) => {
-                const newTable = newTables.find((t) => t.id === table.id);
-                return {
-                    id: table.id,
-                    x: newTable?.x ?? table.x,
-                    y: newTable?.y ?? table.y,
-                };
-            })
-        );
-
-        setOverlapGraph(updatedOverlapGraph);
-    }, [filteredSchemas, relationships, tables, updateTablesState]);
 
     const showReorderConfirmation = useCallback(() => {
         showAlert({

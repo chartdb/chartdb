@@ -8,7 +8,7 @@ export const bn: LanguageTranslation = {
                 new: 'নতুন',
                 open: 'খুলুন',
                 save: 'সংরক্ষণ করুন',
-                import_database: 'ডাটাবেস আমদানি করুন',
+                import: 'ডাটাবেস আমদানি করুন',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
                 delete_diagram: 'ডায়াগ্রাম মুছুন',
@@ -377,6 +377,17 @@ export const bn: LanguageTranslation = {
                 title: 'চিত্র আমদানিতে ত্রুটি',
                 description:
                     'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? chartdb.io@gmail.com-এ যোগাযোগ করুন।',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

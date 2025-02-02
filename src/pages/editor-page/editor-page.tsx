@@ -37,6 +37,7 @@ import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
 import { useStorage } from '@/hooks/use-storage';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
+import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -315,15 +316,17 @@ export const EditorPage: React.FC = () => (
                                 <ChartDBProvider>
                                     <HistoryProvider>
                                         <ReactFlowProvider>
-                                            <ExportImageProvider>
-                                                <AlertProvider>
-                                                    <DialogProvider>
-                                                        <KeyboardShortcutsProvider>
-                                                            <EditorPageComponent />
-                                                        </KeyboardShortcutsProvider>
-                                                    </DialogProvider>
-                                                </AlertProvider>
-                                            </ExportImageProvider>
+                                            <CanvasProvider>
+                                                <ExportImageProvider>
+                                                    <AlertProvider>
+                                                        <DialogProvider>
+                                                            <KeyboardShortcutsProvider>
+                                                                <EditorPageComponent />
+                                                            </KeyboardShortcutsProvider>
+                                                        </DialogProvider>
+                                                    </AlertProvider>
+                                                </ExportImageProvider>
+                                            </CanvasProvider>
                                         </ReactFlowProvider>
                                     </HistoryProvider>
                                 </ChartDBProvider>

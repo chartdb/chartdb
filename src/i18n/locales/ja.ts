@@ -8,7 +8,7 @@ export const ja: LanguageTranslation = {
                 new: '新規',
                 open: '開く',
                 save: '保存',
-                import_database: 'データベースをインポート',
+                import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
                 delete_diagram: 'ダイアグラムを削除',
@@ -384,6 +384,17 @@ export const ja: LanguageTranslation = {
                 title: 'Error importing diagram',
                 description:
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+            },
+        },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {

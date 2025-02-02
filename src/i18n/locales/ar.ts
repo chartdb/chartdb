@@ -8,7 +8,7 @@ export const ar: LanguageTranslation = {
                 new: 'جديد',
                 open: 'فتح',
                 save: 'حفظ',
-                import_database: 'استيراد قاعدة بيانات',
+                import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',
                 delete_diagram: 'حذف الرسم البياني',
@@ -364,7 +364,6 @@ export const ar: LanguageTranslation = {
                     'chartdb.io@gmail.com حدث خطأ ما. هل تحتاج إلى مساعدة؟',
             },
         },
-
         import_diagram_dialog: {
             title: 'استيراد الرسم البياني',
             description: ':للرسم البياني ادناه JSON قم بلصق',
@@ -374,6 +373,17 @@ export const ar: LanguageTranslation = {
                 title: 'حدث خطأ أثناء الاستيراد',
                 description:
                     'chartdb.io@gmail.com و المحاولة مرة اخرى. هل تحتاج إلى المساعدة؟ JSON غير صالح. يرجى التحقق من JSON الرسم البياني',
+            },
+        },
+        import_dbml_dialog: {
+            // TODO: Translate
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
             },
         },
         relationship_type: {
