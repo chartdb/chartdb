@@ -215,34 +215,28 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                         {t('import_dbml_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <DialogInternalContent className="flex-1">
-                    <div className="flex h-full flex-col gap-4">
-                        <div className="relative size-full min-h-[400px]">
-                            <Editor
-                                value={dbmlContent}
-                                onChange={(value) =>
-                                    setDBMLContent(value || '')
-                                }
-                                language="dbml"
-                                theme={
-                                    effectiveTheme === 'dark'
-                                        ? 'dbml-dark'
-                                        : 'dbml-light'
-                                }
-                                beforeMount={setupDBMLLanguage}
-                                options={{
-                                    minimap: { enabled: false },
-                                    scrollBeyondLastLine: false,
-                                    automaticLayout: true,
-                                    scrollbar: {
-                                        vertical: 'visible',
-                                        horizontal: 'visible',
-                                    },
-                                }}
-                                className="size-full"
-                            />
-                        </div>
-                    </div>
+                <DialogInternalContent>
+                    <Editor
+                        value={dbmlContent}
+                        onChange={(value) => setDBMLContent(value || '')}
+                        language="dbml"
+                        theme={
+                            effectiveTheme === 'dark'
+                                ? 'dbml-dark'
+                                : 'dbml-light'
+                        }
+                        beforeMount={setupDBMLLanguage}
+                        options={{
+                            minimap: { enabled: false },
+                            scrollBeyondLastLine: false,
+                            automaticLayout: true,
+                            scrollbar: {
+                                vertical: 'visible',
+                                horizontal: 'visible',
+                            },
+                        }}
+                        className="size-full"
+                    />
                 </DialogInternalContent>
                 <DialogFooter>
                     <div className="flex w-full items-center justify-between">
