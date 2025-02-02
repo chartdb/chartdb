@@ -65,7 +65,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                     padding: 0.2,
                     maxZoom: 0.8,
                 });
-            }, 100);
+            }, 500);
         },
         [filteredSchemas, relationships, tables, updateTablesState, fitView]
     );
