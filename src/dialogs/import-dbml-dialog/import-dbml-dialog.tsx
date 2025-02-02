@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/button/button';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useTranslation } from 'react-i18next';
-import { Editor } from '@/components/code-snippet/code-editor';
+import { Editor } from '@/components/code-snippet/code-snippet';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
 import { importDBMLToDiagram } from '@/lib/dbml-import';
