@@ -371,6 +371,17 @@ export const zh_TW: LanguageTranslation = {
                     '圖表的 JSON 無效。請檢查 JSON 並再試一次。如需幫助，請聯繫 chartdb.io@gmail.com',
             },
         },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
+            },
+        },
         relationship_type: {
             one_to_one: '一對一',
             one_to_many: '一對多',

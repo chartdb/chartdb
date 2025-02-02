@@ -372,6 +372,17 @@ export const zh_CN: LanguageTranslation = {
                     '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 chartdb.io@gmail.com',
             },
         },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
+            },
+        },
         relationship_type: {
             one_to_one: '一对一',
             one_to_many: '一对多',

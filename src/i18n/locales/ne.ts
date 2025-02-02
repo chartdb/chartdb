@@ -380,6 +380,17 @@ export const ne: LanguageTranslation = {
                     'डायाग्राम JSON अमान्य छ। कृपया JSON जाँच गर्नुहोस् र पुन: प्रयास गर्नुहोस्। मद्दत चाहिन्छ? chartdb.io@gmail.com मा सम्पर्क गर्नुहोस्',
             },
         },
+        // TODO: Translate
+        import_dbml_dialog: {
+            title: 'Import DBML',
+            description: 'Import a database schema from DBML format.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error',
+                description: 'Failed to import DBML. Please check the syntax.',
+            },
+        },
 
         relationship_type: {
             one_to_one: 'एक देखि एक',
