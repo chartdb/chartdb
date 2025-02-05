@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.7.0](https://github.com/chartdb/chartdb/compare/v1.6.1...v1.7.0) (2025-02-03)
+
+
+### Features
+
+* **dbml-editor:** add dbml editor in side pannel ([#534](https://github.com/chartdb/chartdb/issues/534)) ([88be6c1](https://github.com/chartdb/chartdb/commit/88be6c1fd4a7e1f20937e8204c14d8fc1c2665b4))
+* **import-dbml:** add import dbml functionality ([#549](https://github.com/chartdb/chartdb/issues/549)) ([b424518](https://github.com/chartdb/chartdb/commit/b424518212290a870fdb7c420a303f65f5901429))
+
+
+### Bug Fixes
+
+* **canvas edit:** add option to edit names in canvas ([#536](https://github.com/chartdb/chartdb/issues/536)) ([0dcc9b9](https://github.com/chartdb/chartdb/commit/0dcc9b9568cfe749d44d2e93cb365ba3d3a1e71c))
+* **dbml-editor:** add shortcuts to dbml and filter: [#534](https://github.com/chartdb/chartdb/issues/534) ([#535](https://github.com/chartdb/chartdb/issues/535)) ([3b3be08](https://github.com/chartdb/chartdb/commit/3b3be086b1e8d5acf999f8504580d9e2f956f7da))
+* **dbml:** add error handling ([#545](https://github.com/chartdb/chartdb/issues/545)) ([fef6d3f](https://github.com/chartdb/chartdb/commit/fef6d3f4996130a3769d1f25b4b1f2090293a1bf))
+* **empty-state:** fix dark-mode for empty-state ([#547](https://github.com/chartdb/chartdb/issues/547)) ([99a8201](https://github.com/chartdb/chartdb/commit/99a820139861546a012d7b562ddbb9b77698151a))
+* **examples:** fix employee example dbml ([#544](https://github.com/chartdb/chartdb/issues/544)) ([2118bce](https://github.com/chartdb/chartdb/commit/2118bce0f00d55eb19d22b9fa2d4964ba2533a09))
+* **i18n:** translation/Ukrainian ([#529](https://github.com/chartdb/chartdb/issues/529)) ([ff3269e](https://github.com/chartdb/chartdb/commit/ff3269ec0510bbae4bc114e65a1ea86a656e8785))
+* **open-diagram:** add arrow keys navigation in open diagram dialog ([#537](https://github.com/chartdb/chartdb/issues/537)) ([14f11c2](https://github.com/chartdb/chartdb/commit/14f11c27a7ad5b990131c8495148cabf12835082))
+* **performance:** fix bundle size ([#551](https://github.com/chartdb/chartdb/issues/551)) ([4c93326](https://github.com/chartdb/chartdb/commit/4c93326bb6e3eaa143373c500a0c641e95a53fb9))
+* **performance:** reduce bundle size ([#553](https://github.com/chartdb/chartdb/issues/553)) ([004d530](https://github.com/chartdb/chartdb/commit/004d530880a50dea6e9786eb9ae63cf592a4d852))
+* **performance:** resolve error on startup ([#552](https://github.com/chartdb/chartdb/issues/552)) ([fd2cc9f](https://github.com/chartdb/chartdb/commit/fd2cc9fcfc8f4a9f0bc79def47d89114159392fb))
+* **psql-import:** remove typo for import command (psql) ([#546](https://github.com/chartdb/chartdb/issues/546)) ([eb9b41e](https://github.com/chartdb/chartdb/commit/eb9b41e4f656bec1451c45763f4ea5b547aeec5c))
+* **scroll:** fix scroll area ([#550](https://github.com/chartdb/chartdb/issues/550)) ([ef3d7a8](https://github.com/chartdb/chartdb/commit/ef3d7a8b67431e923b75bf8287b86bbc8abe723b))
+
 ## [1.6.1](https://github.com/chartdb/chartdb/compare/v1.6.0...v1.6.1) (2025-01-26)
 
 
