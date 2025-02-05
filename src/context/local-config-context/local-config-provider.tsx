@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import type { SchemasFilter, ScrollAction } from './local-config-context';
 import { LocalConfigContext } from './local-config-context';
 import type { Theme } from '../theme-context/theme-context';
+import { LLMProvider } from '@/llms/providers';
 
 const themeKey = 'theme';
 const scrollActionKey = 'scroll_action';
@@ -14,6 +15,9 @@ const buckleWaitlistOpenedKey = 'buckle_waitlist_opened';
 const buckleDialogLastOpenKey = 'buckle_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
+const ollamaAvailableModelKey = 'ollama_avaialble_models';
+export const ollamaSelectedModelKey = 'ollama_selected_model';
+export const llmProviderKey = 'llm_provider';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -72,6 +76,24 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<boolean>(
             (localStorage.getItem(showMiniMapOnCanvasKey) || 'true') === 'true'
         );
+
+    const [ollamaAvailableModels, setOllamaAvailableModels] = React.useState<
+        string[]
+    >(
+        JSON.parse(
+            localStorage.getItem(ollamaAvailableModelKey) || '[]'
+        ) as string[]
+    );
+
+    const [ollamaSelectedModel, setOllamaSelectedModel] =
+        React.useState<string>(
+            localStorage.getItem(ollamaSelectedModelKey) || ''
+        );
+
+    const [llmProvider, setLLMProvider] = React.useState<LLMProvider>(
+        (localStorage.getItem(llmProviderKey) as LLMProvider) ||
+            LLMProvider.None
+    );
 
     useEffect(() => {
         localStorage.setItem(
@@ -135,6 +157,21 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         );
     }, [showMiniMapOnCanvas]);
 
+    useEffect(() => {
+        localStorage.setItem(
+            ollamaAvailableModelKey,
+            JSON.stringify(ollamaAvailableModels)
+        );
+    }, [ollamaAvailableModels]);
+
+    useEffect(() => {
+        localStorage.setItem(ollamaSelectedModelKey, ollamaSelectedModel);
+    }, [ollamaSelectedModel]);
+
+    useEffect(() => {
+        localStorage.setItem(llmProviderKey, llmProvider);
+    }, [llmProvider]);
+
     return (
         <LocalConfigContext.Provider
             value={{
@@ -160,6 +197,12 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setBuckleWaitlistOpened,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
+                ollamaAvailableModels,
+                setOllamaAvailableModels,
+                ollamaSelectedModel,
+                setOllamaSelectedModel,
+                llmProvider,
+                setLLMProvider,
             }}
         >
             {children}

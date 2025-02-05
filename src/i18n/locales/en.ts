@@ -278,7 +278,7 @@ export const en = {
                 message:
                     'Error generating SQL script. Please try again later or <0>contact us</0>.',
                 description:
-                    'Feel free to use your OPENAI_TOKEN, see the manual <0>here</0>.',
+                    'Pease ensure that you have set up an AI provider. See the manual <0>here</0>.',
             },
         },
 

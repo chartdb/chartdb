@@ -10,7 +10,7 @@ server {
 
     location /config.js {
         default_type application/javascript;
-        return 200 "window.env = { OPENAI_API_KEY: \"$OPENAI_API_KEY\" };";
+        return 200 "window.env = { OPENAI_API_KEY: \"$OPENAI_API_KEY\", OLLAMA_ENDPOINT: \"$OLLAMA_ENDPOINT\", OLLAMA_ENABLED: \"$OLLAMA_ENABLED\" };";
     }
 
     error_page   500 502 503 504  /50x.html;

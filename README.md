@@ -89,14 +89,33 @@ npm install
 npm run build
 ```
 
-Or like this if you want to have AI capabilities:
+### LLM Support
 
+Or like this if you want to have LLM capabilities for generating SQL, the following environment variables are used:
+
+| Provider | Key                    | Example              | Default           |
+| -------- | ---------------------- | -------------------- | ----------------- |
+| Open AI  | `VITE_OPENAI_API_KEY`  | `<YOUR_OPEN_AI_KEY>` | ``                |
+| Ollama   | `VITE_OLLAMA_ENABLED`  | `true`               | `false`           |
+| Ollama   | `VITE_OLLAMA_ENDPOINT` | `127.0.0.1:11434`    | `127.0.0.1:11434` |
+
+You can set these either in the `.env.local` for running locally, or pass them to a docker image. Examples below show this using Open AI as the provider.
+
+- OpenAI will be enabled if the OPENAI_API_KEY is provided.
+- Ollama will be enabled and the app will attempt to pull available models if OLLAMA_ENABLED is set to a truthy value.
+
+```sh
+npm install
+echo 'VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY>' > .env.local
+npm run dev
 ```
+
+```sh
 npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
-### Run the Docker Container
+#### Run the Docker Container
 ```bash
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
 ```
