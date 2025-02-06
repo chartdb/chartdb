@@ -5,11 +5,11 @@ import { Button } from '@/components/button/button';
 import {
     ChevronsLeftRight,
     ChevronsRightLeft,
-    Pencil,
     Table2,
     ChevronDown,
     ChevronUp,
     Check,
+    CircleDotDashed,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -247,7 +247,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                                     onClick={openTableInEditor}
                                 >
-                                    <Pencil className="size-4" />
+                                    <CircleDotDashed className="size-4" />
                                 </Button>
                             )}
                             {editMode ? null : (
