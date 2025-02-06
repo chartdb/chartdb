@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useState, Suspense } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useState,
+    Suspense,
+    useRef,
+} from 'react';
+import * as monaco from 'monaco-editor';
 import { useDialog } from '@/hooks/use-dialog';
 import {
     Dialog,
@@ -23,6 +30,46 @@ import { useCanvas } from '@/hooks/use-canvas';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import { useToast } from '@/components/toast/use-toast';
 import { Spinner } from '@/components/spinner/spinner';
+import { debounce } from '@/lib/utils';
+
+interface DBMLError {
+    message: string;
+    line: number;
+    column: number;
+}
+
+function parseDBMLError(error: unknown): DBMLError | null {
+    try {
+        if (typeof error === 'string') {
+            const parsed = JSON.parse(error);
+            if (parsed.diags?.[0]) {
+                const diag = parsed.diags[0];
+                return {
+                    message: diag.message,
+                    line: diag.location.start.line,
+                    column: diag.location.start.column,
+                };
+            }
+        } else if (error && typeof error === 'object' && 'diags' in error) {
+            const parsed = error as {
+                diags: Array<{
+                    message: string;
+                    location: { start: { line: number; column: number } };
+                }>;
+            };
+            if (parsed.diags?.[0]) {
+                return {
+                    message: parsed.diags[0].message,
+                    line: parsed.diags[0].location.start.line,
+                    column: parsed.diags[0].location.start.column,
+                };
+            }
+        }
+    } catch (e) {
+        console.error('Error parsing DBML error:', e);
+    }
+    return null;
+}
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {}
 
@@ -75,6 +122,14 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
     } = useChartDB();
     const { reorderTables } = useCanvas();
     const [reorder, setReorder] = useState(false);
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+    const [errorDecorations, setErrorDecorations] = useState<string[]>([]);
+
+    const handleEditorDidMount = (
+        editor: monaco.editor.IStandaloneCodeEditor
+    ) => {
+        editorRef.current = editor;
+    };
 
     useEffect(() => {
         if (reorder) {
@@ -85,34 +140,107 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         }
     }, [reorder, reorderTables]);
 
-    useEffect(() => {
-        if (!dialog.open) return;
-        setErrorMessage(undefined);
-        setDBMLContent(initialDBML);
-    }, [dialog.open, initialDBML]);
+    const highlightErrorLine = useCallback((error: DBMLError) => {
+        if (!editorRef.current) return;
 
-    useEffect(() => {
-        const validateDBML = async () => {
-            if (!dbmlContent.trim()) {
-                setErrorMessage(undefined);
-                return;
-            }
+        const model = editorRef.current.getModel();
+        if (!model) return;
+
+        const decorations = [
+            {
+                range: new monaco.Range(
+                    error.line,
+                    1,
+                    error.line,
+                    model.getLineMaxColumn(error.line)
+                ),
+                options: {
+                    isWholeLine: true,
+                    className: 'dbml-error-line',
+                    glyphMarginClassName: 'dbml-error-glyph',
+                    hoverMessage: { value: error.message },
+                    overviewRuler: {
+                        color: '#ff0000',
+                        position: monaco.editor.OverviewRulerLane.Right,
+                        darkColor: '#ff0000',
+                    },
+                },
+            },
+        ];
+
+        const newDecorations = editorRef.current.deltaDecorations(
+            [],
+            decorations
+        );
+        setErrorDecorations(newDecorations);
+    }, []);
+
+    const clearDecorations = useCallback(() => {
+        if (editorRef.current && errorDecorations.length > 0) {
+            const newDecorations = editorRef.current.deltaDecorations(
+                errorDecorations,
+                []
+            );
+            setErrorDecorations(newDecorations);
+        }
+    }, [errorDecorations]);
+
+    const validateDBML = useCallback(
+        async (content: string) => {
+            // Clear previous errors
+            setErrorMessage(undefined);
+            clearDecorations();
+
+            if (!content.trim()) return;
 
             try {
                 const parser = new Parser();
-                parser.parse(dbmlContent, 'dbml');
-                setErrorMessage(undefined);
+                parser.parse(content, 'dbml');
             } catch (e) {
-                setErrorMessage(
-                    e instanceof Error
-                        ? e.message
-                        : t('import_dbml_dialog.error.description')
-                );
+                const parsedError = parseDBMLError(e);
+                if (parsedError) {
+                    setErrorMessage(
+                        t('import_dbml_dialog.error.description') +
+                            ` (1 error found - in line ${parsedError.line})`
+                    );
+                    highlightErrorLine(parsedError);
+                } else {
+                    setErrorMessage(
+                        e instanceof Error ? e.message : JSON.stringify(e)
+                    );
+                }
             }
-        };
+        },
+        [clearDecorations, highlightErrorLine, t]
+    );
 
-        validateDBML();
-    }, [dbmlContent, t]);
+    const debouncedValidateRef = useRef<((value: string) => void) | null>(null);
+
+    // Set up debounced validation
+    useEffect(() => {
+        debouncedValidateRef.current = debounce((value: string) => {
+            validateDBML(value);
+        }, 500);
+
+        return () => {
+            debouncedValidateRef.current = null;
+        };
+    }, [validateDBML]);
+
+    // Trigger validation when content changes
+    useEffect(() => {
+        if (debouncedValidateRef.current) {
+            debouncedValidateRef.current(dbmlContent);
+        }
+    }, [dbmlContent]);
+
+    useEffect(() => {
+        if (!dialog.open) {
+            setErrorMessage(undefined);
+            clearDecorations();
+            setDBMLContent(initialDBML);
+        }
+    }, [dialog.open, initialDBML, clearDecorations]);
 
     const handleImport = useCallback(async () => {
         if (!dbmlContent.trim() || errorMessage) return;
@@ -177,7 +305,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 description: (
                     <>
                         <div>{t('import_dbml_dialog.error.description')}</div>
-                        {e instanceof Error ? <div>{e.message}</div> : null}
+                        {e instanceof Error ? e.message : JSON.stringify(e)}
                     </>
                 ),
             });
@@ -222,6 +350,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                             value={dbmlContent}
                             onChange={(value) => setDBMLContent(value || '')}
                             language="dbml"
+                            onMount={handleEditorDidMount}
                             theme={
                                 effectiveTheme === 'dark'
                                     ? 'dbml-dark'
@@ -232,6 +361,8 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,
+                                glyphMargin: true,
+                                lineNumbers: 'on',
                                 scrollbar: {
                                     vertical: 'visible',
                                     horizontal: 'visible',

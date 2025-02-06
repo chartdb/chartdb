@@ -109,6 +109,10 @@
     animation: rainbow-text-simple-animation 0.5s ease-in forwards;
 }
 
+.dbml-error-line {
+    background-color: rgba(255, 0, 0, 0.2) !important;
+}
+
 @keyframes rainbow-text-simple-animation-rev {
     0% {
         background-size: 650%;

@@ -382,7 +382,7 @@ export const en = {
             cancel: 'Cancel',
             error: {
                 title: 'Error importing DBML',
-                description: 'Failed to import DBML. Please check the syntax.',
+                description: 'Failed to parse DBML. Please check the syntax.',
             },
         },
         relationship_type: {
