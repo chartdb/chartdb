@@ -123,12 +123,14 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
     const { reorderTables } = useCanvas();
     const [reorder, setReorder] = useState(false);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
-    const [errorDecorations, setErrorDecorations] = useState<string[]>([]);
+    const decorationsCollection =
+        useRef<monaco.editor.IEditorDecorationsCollection>();
 
     const handleEditorDidMount = (
         editor: monaco.editor.IStandaloneCodeEditor
     ) => {
         editorRef.current = editor;
+        decorationsCollection.current = editor.createDecorationsCollection();
     };
 
     useEffect(() => {
@@ -168,22 +170,12 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             },
         ];
 
-        const newDecorations = editorRef.current.deltaDecorations(
-            [],
-            decorations
-        );
-        setErrorDecorations(newDecorations);
+        decorationsCollection.current?.set(decorations);
     }, []);
 
     const clearDecorations = useCallback(() => {
-        if (editorRef.current && errorDecorations.length > 0) {
-            const newDecorations = editorRef.current.deltaDecorations(
-                errorDecorations,
-                []
-            );
-            setErrorDecorations(newDecorations);
-        }
-    }, [errorDecorations]);
+        decorationsCollection.current?.clear();
+    }, []);
 
     const validateDBML = useCallback(
         async (content: string) => {
