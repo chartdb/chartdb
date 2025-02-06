@@ -26,7 +26,7 @@ export const uk: LanguageTranslation = {
                 hide_sidebar: 'Приховати бічну панель',
                 hide_cardinality: 'Приховати потужність',
                 show_cardinality: 'Показати кардинальність',
-                zoom_on_scroll: 'Збільшити прокручування',
+                zoom_on_scroll: 'Масштабувати прокручуванням',
                 theme: 'Тема',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
