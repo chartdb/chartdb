@@ -28,6 +28,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 
     const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
         useState(false);
+    const [createRelationshipDialogParams, setCreateRelationshipDialogParams] =
+        useState<{ sourceTableId?: string } | undefined>(undefined);
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
     const [openBuckleDialog, setOpenBuckleDialog] = useState(false);
 
@@ -100,6 +102,15 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     // Import DBML dialog
     const [openImportDBMLDialog, setOpenImportDBMLDialog] = useState(false);
 
+    const openCreateRelationshipDialogHandler: DialogContext['openCreateRelationshipDialog'] =
+        useCallback(
+            (params) => {
+                setCreateRelationshipDialogParams(params);
+                setOpenCreateRelationshipDialog(true);
+            },
+            [setOpenCreateRelationshipDialog]
+        );
+
     return (
         <dialogContext.Provider
             value={{
@@ -109,8 +120,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
-                openCreateRelationshipDialog: () =>
-                    setOpenCreateRelationshipDialog(true),
+                openCreateRelationshipDialog:
+                    openCreateRelationshipDialogHandler,
                 closeCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(false),
                 openImportDatabaseDialog: openImportDatabaseDialogHandler,
@@ -135,14 +146,30 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             }}
         >
             {children}
-            <CreateDiagramDialog dialog={{ open: openNewDiagramDialog }} />
-            <OpenDiagramDialog dialog={{ open: openOpenDiagramDialog }} />
+            <CreateDiagramDialog
+                dialog={{
+                    open: openNewDiagramDialog,
+                    onOpenChange: setOpenNewDiagramDialog,
+                }}
+            />
+            <OpenDiagramDialog
+                dialog={{
+                    open: openOpenDiagramDialog,
+                    onOpenChange: setOpenOpenDiagramDialog,
+                }}
+            />
+            <CreateRelationshipDialog
+                dialog={{
+                    open: openCreateRelationshipDialog,
+                    onOpenChange: setOpenCreateRelationshipDialog,
+                }}
+                preSelectedSourceTableId={
+                    createRelationshipDialogParams?.sourceTableId
+                }
+            />
             <ExportSQLDialog
                 dialog={{ open: openExportSQLDialog }}
                 {...exportSQLDialogParams}
-            />
-            <CreateRelationshipDialog
-                dialog={{ open: openCreateRelationshipDialog }}
             />
             <ImportDatabaseDialog
                 dialog={{ open: openImportDatabaseDialog }}

@@ -9,9 +9,10 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cloneTable } from '@/lib/clone';
 import type { DBTable } from '@/lib/domain/db-table';
-import { Copy, Pencil, Trash2 } from 'lucide-react';
+import { Copy, Pencil, Trash2, Workflow } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
@@ -24,6 +25,7 @@ export const TableNodeContextMenu: React.FC<
     const { openTableFromSidebar } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
+    const { openCreateRelationshipDialog } = useDialog();
 
     const duplicateTableHandler = useCallback(() => {
         const clonedTable = cloneTable(table);
@@ -42,6 +44,12 @@ export const TableNodeContextMenu: React.FC<
     const removeTableHandler = useCallback(() => {
         removeTable(table.id);
     }, [removeTable, table.id]);
+
+    const addRelationshipHandler = useCallback(() => {
+        openCreateRelationshipDialog({
+            sourceTableId: table.id,
+        });
+    }, [openCreateRelationshipDialog, table.id]);
 
     if (!isDesktop || readonly) {
         return <>{children}</>;
@@ -63,6 +71,13 @@ export const TableNodeContextMenu: React.FC<
                 >
                     <span>{t('table_node_context_menu.duplicate_table')}</span>
                     <Copy className="size-3.5" />
+                </ContextMenuItem>
+                <ContextMenuItem
+                    onClick={addRelationshipHandler}
+                    className="flex justify-between gap-3"
+                >
+                    <span>{t('table_node_context_menu.add_relationship')}</span>
+                    <Workflow className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuItem
                     onClick={removeTableHandler}

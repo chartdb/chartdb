@@ -1,11 +1,9 @@
-import { createContext } from 'react';
-import { emptyFn } from '@/lib/utils';
-import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
-import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
+import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
-import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
-import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import { emptyFn } from '@/lib/utils';
+import { createContext } from 'react';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -17,11 +15,11 @@ export interface DialogContext {
     closeOpenDiagramDialog: () => void;
 
     // Export SQL dialog
-    openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
+    openExportSQLDialog: (params: { targetDatabaseType: DatabaseType }) => void;
     closeExportSQLDialog: () => void;
 
     // Create relationship dialog
-    openCreateRelationshipDialog: () => void;
+    openCreateRelationshipDialog: (params?: { sourceTableId?: string }) => void;
     closeCreateRelationshipDialog: () => void;
 
     // Import database dialog
@@ -51,15 +49,11 @@ export interface DialogContext {
     closeExportImageDialog: () => void;
 
     // Export diagram dialog
-    openExportDiagramDialog: (
-        params: Omit<ExportDiagramDialogProps, 'dialog'>
-    ) => void;
+    openExportDiagramDialog: () => void;
     closeExportDiagramDialog: () => void;
 
     // Import diagram dialog
-    openImportDiagramDialog: (
-        params: Omit<ImportDiagramDialogProps, 'dialog'>
-    ) => void;
+    openImportDiagramDialog: () => void;
     closeImportDiagramDialog: () => void;
 
     // Import DBML dialog
