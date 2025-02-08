@@ -20,6 +20,7 @@ import {
 } from '@/lib/data/export-metadata/export-sql-script';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -34,7 +35,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     targetDatabaseType,
 }) => {
     const { closeExportSQLDialog } = useDialog();
-    const { currentDiagram } = useChartDB();
+    const { currentDiagram, filteredSchemas } = useChartDB();
     const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
@@ -43,17 +44,42 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const abortControllerRef = useRef<AbortController | null>(null);
 
     const exportSQLScript = useCallback(async () => {
+        // Create a filtered diagram with only the tables from selected schemas
+        const filteredDiagram = {
+            ...currentDiagram,
+            tables: currentDiagram.tables?.filter((table) =>
+                shouldShowTablesBySchemaFilter(table, filteredSchemas)
+            ),
+            relationships: currentDiagram.relationships?.filter((rel) => {
+                const sourceTable = currentDiagram.tables?.find(
+                    (t) => t.id === rel.sourceTableId
+                );
+                const targetTable = currentDiagram.tables?.find(
+                    (t) => t.id === rel.targetTableId
+                );
+                return (
+                    sourceTable &&
+                    targetTable &&
+                    shouldShowTablesBySchemaFilter(
+                        sourceTable,
+                        filteredSchemas
+                    ) &&
+                    shouldShowTablesBySchemaFilter(targetTable, filteredSchemas)
+                );
+            }),
+        };
+
         if (targetDatabaseType === DatabaseType.GENERIC) {
-            return Promise.resolve(exportBaseSQL(currentDiagram));
+            return Promise.resolve(exportBaseSQL(filteredDiagram));
         } else {
-            return exportSQL(currentDiagram, targetDatabaseType, {
+            return exportSQL(filteredDiagram, targetDatabaseType, {
                 stream: true,
                 onResultStream: (text) =>
                     setScript((prev) => (prev ? prev + text : text)),
                 signal: abortControllerRef.current?.signal,
             });
         }
-    }, [targetDatabaseType, currentDiagram]);
+    }, [targetDatabaseType, currentDiagram, filteredSchemas]);
 
     useEffect(() => {
         if (!dialog.open) {
