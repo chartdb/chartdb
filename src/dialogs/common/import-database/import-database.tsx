@@ -85,6 +85,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
     const [isCheckingJson, setIsCheckingJson] = useState(false);
 
+    const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
+
     useEffect(() => {
         const loadScripts = async () => {
             const { importMetadataScripts } = await import(
@@ -127,6 +129,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             const inputValue = e.target.value;
             setScriptResult(inputValue);
+
+            // Automatically open SSMS info when input length is exactly 65535
+            if (inputValue.length === 65535) {
+                setShowSSMSInfoDialog(true);
+            }
         },
         [setScriptResult]
     );
@@ -245,7 +252,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 {t('new_diagram_dialog.import_database.step_1')}
                             </div>
                             {databaseType === DatabaseType.SQL_SERVER && (
-                                <SSMSInfo />
+                                <SSMSInfo
+                                    open={showSSMSInfoDialog}
+                                    onOpenChange={setShowSSMSInfoDialog}
+                                />
                             )}
                         </div>
                         {databaseTypeToClientsMap[databaseType].length > 0 ? (
@@ -369,6 +379,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         showCheckJsonButton,
         isCheckingJson,
         handleCheckJson,
+        showSSMSInfoDialog,
+        setShowSSMSInfoDialog,
     ]);
 
     const renderFooter = useCallback(() => {
