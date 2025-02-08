@@ -403,6 +403,7 @@ export const ru: LanguageTranslation = {
             edit_table: 'Изменить таблицу',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Удалить таблицу',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         copy_to_clipboard: 'Скопировать в буфер обмена',

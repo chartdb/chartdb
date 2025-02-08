@@ -407,6 +407,7 @@ export const pt_BR: LanguageTranslation = {
             edit_table: 'Editar Tabela',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Excluir Tabela',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

@@ -413,6 +413,7 @@ export const ja: LanguageTranslation = {
             edit_table: 'テーブルを編集',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'テーブルを削除',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

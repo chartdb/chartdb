@@ -402,6 +402,7 @@ export const uk: LanguageTranslation = {
             edit_table: 'Редагувати таблицю',
             duplicate_table: 'Дублювати таблицю',
             delete_table: 'Видалити таблицю',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',
