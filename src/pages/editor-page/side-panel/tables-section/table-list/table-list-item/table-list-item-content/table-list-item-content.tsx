@@ -54,6 +54,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
     >(['fields']);
+    const [newIndexId, setNewIndexId] = React.useState<string | null>(null);
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -70,7 +71,8 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         }
     };
 
-    const createIndexHandler = () => {
+    const createIndexHandler = async (e: React.MouseEvent) => {
+        e.stopPropagation();
         setSelectedItems((prev) => {
             if (prev.includes('indexes')) {
                 return prev;
@@ -79,8 +81,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             return [...prev, 'indexes'];
         });
 
-        createIndex(table.id);
+        const newIndex = await createIndex(table.id);
+        setNewIndexId(newIndex.id);
     };
+
+    // Reset newIndexId when it's no longer needed
+    React.useEffect(() => {
+        if (newIndexId) {
+            const timeoutId = setTimeout(() => {
+                setNewIndexId(null);
+            }, 500);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [newIndexId]);
 
     return (
         <div
@@ -188,7 +201,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            createIndexHandler();
+                                            createIndexHandler(e);
                                         }}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
@@ -209,6 +222,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     updateIndex(table.id, index.id, attrs)
                                 }
                                 fields={table.fields}
+                                isNewlyCreated={index.id === newIndexId}
                             />
                         ))}
                         <div className="flex justify-start py-1">
@@ -217,7 +231,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    createIndexHandler();
+                                    createIndexHandler(e);
                                 }}
                             >
                                 <Plus className="size-4 text-muted-foreground" />
@@ -266,7 +280,10 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
-                        onClick={createIndexHandler}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            createIndexHandler(e);
+                        }}
                     >
                         <FileKey2 className="h-4" />
                         {t('side_panel.tables_section.table.add_index')}
