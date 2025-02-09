@@ -153,6 +153,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     />
                                 ))}
                             </SortableContext>
+                            <div className="flex justify-start py-1">
+                                <Button
+                                    variant="ghost"
+                                    className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        createField(table.id);
+                                    }}
+                                >
+                                    <Plus className="size-4 text-muted-foreground" />
+                                    <span>Add Field</span>
+                                </Button>
+                            </div>
                         </DndContext>
                     </AccordionContent>
                 </AccordionItem>
@@ -198,6 +211,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 fields={table.fields}
                             />
                         ))}
+                        <div className="flex justify-start py-1">
+                            <Button
+                                variant="ghost"
+                                className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    createIndexHandler();
+                                }}
+                            >
+                                <Plus className="size-4 text-muted-foreground" />
+                                <span>Add Index</span>
+                            </Button>
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
 
