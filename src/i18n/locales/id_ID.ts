@@ -379,10 +379,13 @@ export const id_ID: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            empty_triggered_title: 'Import DBML - Contoh (Anda bisa melewati)',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',

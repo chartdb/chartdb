@@ -378,9 +378,12 @@ export const ar: LanguageTranslation = {
         import_dbml_dialog: {
             // TODO: Translate
             title: 'Import DBML',
+            empty_triggered_title: 'Import DBML - Example (you can skip)',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
