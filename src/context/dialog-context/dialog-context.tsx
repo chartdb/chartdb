@@ -66,7 +66,7 @@ export interface DialogContext {
     closeImportDiagramDialog: () => void;
 
     // Import DBML dialog
-    openImportDBMLDialog: () => void;
+    openImportDBMLDialog: (params?: { isFromEmptyDiagram?: boolean }) => void;
     closeImportDBMLDialog: () => void;
 }
 
