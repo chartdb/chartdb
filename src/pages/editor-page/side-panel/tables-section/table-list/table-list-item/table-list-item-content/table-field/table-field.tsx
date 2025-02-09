@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Ellipsis, GripVertical, Trash2, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
+import { useDebounce } from '@/hooks/use-debounce';
 
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -30,17 +31,35 @@ export interface TableFieldProps {
     field: DBField;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
+    isNewlyCreated?: boolean;
 }
 
 export const TableField: React.FC<TableFieldProps> = ({
     field,
     updateField,
     removeField,
+    isNewlyCreated = false,
 }) => {
     const { databaseType } = useChartDB();
     const { t } = useTranslation();
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
+    const focusInput = useCallback(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+        }
+    }, []);
+
+    const debouncedFocus = useDebounce(focusInput, 100);
+
+    React.useEffect(() => {
+        if (isNewlyCreated) {
+            debouncedFocus();
+        }
+    }, [isNewlyCreated, debouncedFocus]);
 
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
         label: type.name,
@@ -70,6 +89,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <TooltipTrigger asChild>
                         <span className="w-5/12">
                             <Input
+                                ref={inputRef}
                                 className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
                                 placeholder={t(

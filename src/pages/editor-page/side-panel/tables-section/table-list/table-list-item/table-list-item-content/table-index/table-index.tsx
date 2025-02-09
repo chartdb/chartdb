@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBField } from '@/lib/domain/db-field';
+import { useDebounce } from '@/hooks/use-debounce';
 import {
     Popover,
     PopoverContent,
@@ -41,12 +42,17 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     const [isAttributesOpen, setIsAttributesOpen] = React.useState(false);
     const triggerRef = React.useRef<HTMLDivElement>(null);
 
+    const openAttributes = useCallback(() => {
+        setIsAttributesOpen(true);
+    }, []);
+
+    const debouncedOpen = useDebounce(openAttributes, 100);
+
     React.useEffect(() => {
         if (isNewlyCreated) {
-            // Open the attributes popover when newly created
-            setIsAttributesOpen(true);
+            debouncedOpen();
         }
-    }, [isNewlyCreated]);
+    }, [isNewlyCreated, debouncedOpen]);
 
     const fieldOptions = fields.map((field) => ({
         label: field.name,

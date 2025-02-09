@@ -55,6 +55,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         AccordionItemValue[]
     >(['fields']);
     const [newIndexId, setNewIndexId] = React.useState<string | null>(null);
+    const [newFieldId, setNewFieldId] = React.useState<string | null>(null);
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -85,15 +86,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         setNewIndexId(newIndex.id);
     };
 
-    // Reset newIndexId when it's no longer needed
-    React.useEffect(() => {
-        if (newIndexId) {
-            const timeoutId = setTimeout(() => {
-                setNewIndexId(null);
-            }, 500);
-            return () => clearTimeout(timeoutId);
-        }
-    }, [newIndexId]);
+    const createFieldHandler = async (e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        setSelectedItems((prev) => {
+            if (prev.includes('fields')) {
+                return prev;
+            }
+
+            return [...prev, 'fields'];
+        });
+
+        const newField = await createField(table.id);
+        setNewFieldId(newField.id);
+    };
 
     return (
         <div
@@ -128,7 +133,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            createField(table.id);
+                                            createFieldHandler(e);
                                         }}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
@@ -163,6 +168,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         removeField={() =>
                                             removeField(table.id, field.id)
                                         }
+                                        isNewlyCreated={field.id === newFieldId}
                                     />
                                 ))}
                             </SortableContext>
@@ -172,7 +178,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        createField(table.id);
+                                        createFieldHandler(e);
                                     }}
                                 >
                                     <Plus className="size-4 text-muted-foreground" />
@@ -291,7 +297,10 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
-                        onClick={() => createField(table.id)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            createFieldHandler(e);
+                        }}
                     >
                         <FileType2 className="h-4" />
                         {t('side_panel.tables_section.table.add_field')}
