@@ -1,6 +1,7 @@
 import { DatabaseEdition } from '@/lib/domain/database-edition';
 
-const sqlServerQuery = `WITH fk_info AS (
+const sqlServerQuery = `${`/* SQL Server 2017 and above edition (14.0, 15.0, 16.0, 17.0)*/`}
+WITH fk_info AS (
     SELECT
         JSON_QUERY(
             '[' + STRING_AGG(
@@ -213,7 +214,8 @@ SELECT JSON_QUERY(
 ) AS metadata_json_to_import;
 `;
 
-const sqlServer2016AndBelowQuery = `WITH fk_info AS (
+const sqlServer2016AndBelowQuery = `${`/* SQL Server 2016 and below edition (13.0, 12.0, 11.0..) */`}
+WITH fk_info AS (
     SELECT
         JSON_QUERY(
             '[' + ISNULL(
