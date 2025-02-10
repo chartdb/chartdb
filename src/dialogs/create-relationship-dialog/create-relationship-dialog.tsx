@@ -23,12 +23,12 @@ const ErrorMessageRelationshipFieldsNotSameType =
     'Relationships can only be created between fields of the same type';
 
 export interface CreateRelationshipDialogProps extends BaseDialogProps {
-    preSelectedSourceTableId?: string;
+    sourceTableId?: string;
 }
 
 export const CreateRelationshipDialog: React.FC<
     CreateRelationshipDialogProps
-> = ({ dialog, preSelectedSourceTableId }) => {
+> = ({ dialog, sourceTableId: preSelectedSourceTableId }) => {
     const { closeCreateRelationshipDialog } = useDialog();
     const [primaryTableId, setPrimaryTableId] = useState<string | undefined>(
         preSelectedSourceTableId
@@ -47,8 +47,6 @@ export const CreateRelationshipDialog: React.FC<
     const [canCreateRelationship, setCanCreateRelationship] = useState(false);
     const { fitView, setEdges } = useReactFlow();
     const { databaseType } = useChartDB();
-    const primaryFieldSelectRef = React.useRef<HTMLDivElement>(null);
-    const referencedTableSelectRef = React.useRef<HTMLDivElement>(null);
     const [primaryFieldSelectOpen, setPrimaryFieldSelectOpen] = useState(false);
     const [referencedTableSelectOpen, setReferencedTableSelectOpen] =
         useState(false);
@@ -67,7 +65,7 @@ export const CreateRelationshipDialog: React.FC<
         if (!primaryTableId) return [];
         const table = getTable(primaryTableId);
         if (!table) return [];
-        const options = table.fields.map(
+        return table.fields.map(
             (field) =>
                 ({
                     label: field.name,
@@ -75,7 +73,6 @@ export const CreateRelationshipDialog: React.FC<
                     description: `(${field.type.name})`,
                 }) as SelectBoxOption
         );
-        return options;
     }, [primaryTableId, getTable]);
 
     const referencedFieldOptions = useMemo(() => {
@@ -94,25 +91,27 @@ export const CreateRelationshipDialog: React.FC<
 
     useEffect(() => {
         if (!dialog.open) return;
+        setPrimaryTableId(undefined);
+        setPrimaryFieldId(undefined);
+        setReferencedTableId(undefined);
+        setReferencedFieldId(undefined);
+        setErrorMessage('');
+        setPrimaryFieldSelectOpen(false);
+        setReferencedTableSelectOpen(false);
+    }, [dialog.open]);
 
-        if (!preSelectedSourceTableId) {
-            setPrimaryTableId(undefined);
-            setPrimaryFieldId(undefined);
-            setReferencedTableId(undefined);
-        } else if (preSelectedSourceTableId) {
+    useEffect(() => {
+        if (preSelectedSourceTableId) {
             const table = getTable(preSelectedSourceTableId);
             if (table) {
                 setPrimaryTableId(preSelectedSourceTableId);
             }
-            setReferencedTableId(undefined);
 
-            // Open the appropriate SelectBox after a short delay
             setTimeout(() => {
                 setPrimaryFieldSelectOpen(true);
             }, 100);
         }
-        setErrorMessage('');
-    }, [dialog.open, preSelectedSourceTableId, getTable]);
+    }, [preSelectedSourceTableId, getTable]);
 
     useEffect(() => {
         setCanCreateRelationship(false);
@@ -217,8 +216,6 @@ export const CreateRelationshipDialog: React.FC<
             onOpenChange={(open) => {
                 if (!open) {
                     closeCreateRelationshipDialog();
-                    setPrimaryFieldSelectOpen(false);
-                    setReferencedTableSelectOpen(false);
                 }
             }}
         >
@@ -250,7 +247,6 @@ export const CreateRelationshipDialog: React.FC<
                                     onChange={(value) => {
                                         const newTableId = value as string;
                                         setPrimaryTableId(newTableId);
-                                        // Only clear field if we're changing to a different table
                                         if (
                                             newTableId !==
                                             preSelectedSourceTableId
@@ -274,10 +270,7 @@ export const CreateRelationshipDialog: React.FC<
                                 </div>
                             </div>
                             <div>
-                                <div
-                                    className="flex min-w-0 grow-0"
-                                    ref={primaryFieldSelectRef}
-                                >
+                                <div className="flex min-w-0 grow-0">
                                     <SelectBox
                                         disabled={
                                             primaryFieldOptions.length === 0
@@ -290,10 +283,9 @@ export const CreateRelationshipDialog: React.FC<
                                         value={primaryFieldId}
                                         open={primaryFieldSelectOpen}
                                         onOpenChange={setPrimaryFieldSelectOpen}
-                                        onChange={(value) => {
-                                            setPrimaryFieldId(value as string);
-                                            setPrimaryFieldSelectOpen(false);
-                                        }}
+                                        onChange={(value) =>
+                                            setPrimaryFieldId(value as string)
+                                        }
                                         emptyPlaceholder={t(
                                             'create_relationship_dialog.no_fields_found'
                                         )}
@@ -313,10 +305,7 @@ export const CreateRelationshipDialog: React.FC<
                                     )}
                                 </div>
                             </div>
-                            <div
-                                className="flex min-w-0 grow-0"
-                                ref={referencedTableSelectRef}
-                            >
+                            <div className="flex min-w-0 grow-0">
                                 <SelectBox
                                     className="flex h-8 min-h-8 w-full"
                                     options={tableOptions}
@@ -328,7 +317,6 @@ export const CreateRelationshipDialog: React.FC<
                                     onOpenChange={setReferencedTableSelectOpen}
                                     onChange={(value) => {
                                         setReferencedTableId(value as string);
-                                        setReferencedTableSelectOpen(false);
                                         setReferencedFieldId(undefined);
                                     }}
                                     emptyPlaceholder={t(

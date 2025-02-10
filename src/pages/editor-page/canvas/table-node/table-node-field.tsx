@@ -100,7 +100,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             setEditMode(true);
         };
 
-        return visible ? (
+        return (
             <div
                 className={`group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800 ${
                     highlighted ? 'bg-pink-100 dark:bg-pink-900' : ''
@@ -183,6 +183,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             </Button>
                         </>
                     ) : (
+                        // <span
+                        //     className="truncate"
+                        //     onClick={readonly ? undefined : enterEditMode}
+                        // >
+                        //     {field.name}
+                        // </span>
                         <span
                             className="truncate"
                             onDoubleClick={enterEditMode}
@@ -190,6 +196,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             {field.name}
                         </span>
                     )}
+                    {/* <span className="truncate">{field.name}</span> */}
                     {field.comments && !editMode ? (
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -240,7 +247,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     </div>
                 )}
             </div>
-        ) : null;
+        );
     }
 );
 
