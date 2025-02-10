@@ -254,7 +254,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             {databaseType === DatabaseType.SQL_SERVER && (
                                 <SSMSInfo
                                     open={showSSMSInfoDialog}
-                                    onOpenChange={setShowSSMSInfoDialog}
+                                    setOpen={setShowSSMSInfoDialog}
                                 />
                             )}
                         </div>

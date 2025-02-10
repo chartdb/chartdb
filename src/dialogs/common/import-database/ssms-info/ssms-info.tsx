@@ -5,48 +5,44 @@ import {
 } from '@/components/hover-card/hover-card';
 import { Label } from '@/components/label/label';
 import { Info, X } from 'lucide-react';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import SSMSInstructions from '@/assets/ssms-instructions.png';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
 import { useTranslation } from 'react-i18next';
 
 export interface SSMSInfoProps {
     open?: boolean;
-    onOpenChange?: (open: boolean) => void;
+    setOpen?: (open: boolean) => void;
 }
 
 export const SSMSInfo = React.forwardRef<
     React.ElementRef<typeof HoverCardTrigger>,
     SSMSInfoProps
->(({ open: controlledOpen, onOpenChange }, ref) => {
-    const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
-    const [forceOpen, setForceOpen] = React.useState(false);
+>(({ open: controlledOpen, setOpen: setControlledOpen }, ref) => {
+    const [open, setOpen] = React.useState(false);
     const { t } = useTranslation();
 
-    // When controlledOpen becomes true, set forceOpen to true
-    React.useEffect(() => {
+    useEffect(() => {
         if (controlledOpen) {
-            setForceOpen(true);
+            setOpen(true);
         }
     }, [controlledOpen]);
 
-    const isControlled = controlledOpen !== undefined;
-    const open = isControlled ? forceOpen && controlledOpen : uncontrolledOpen;
-    const setOpen = (isOpen: boolean) => {
-        if (isControlled) {
-            setForceOpen(isOpen);
-            onOpenChange?.(isOpen);
-        } else {
-            setUncontrolledOpen(isOpen);
-        }
-    };
+    const closeHandler = useCallback(() => {
+        setOpen(false);
+        setControlledOpen?.(false);
+    }, [setControlledOpen]);
+
+    const isOpen = useMemo(
+        () => open || controlledOpen,
+        [open, controlledOpen]
+    );
 
     return (
         <HoverCard
-            open={open}
+            open={isOpen}
             onOpenChange={(isOpen) => {
-                // Only allow closing through the X button when in controlled mode
-                if (isControlled && forceOpen && !isOpen) {
+                if (controlledOpen) {
                     return;
                 }
                 setOpen(isOpen);
@@ -76,7 +72,7 @@ export const SSMSInfo = React.forwardRef<
                             )}
                         </h4>
                         <button
-                            onClick={() => setOpen(false)}
+                            onClick={closeHandler}
                             className="text-muted-foreground hover:text-foreground"
                         >
                             <X size={16} />
