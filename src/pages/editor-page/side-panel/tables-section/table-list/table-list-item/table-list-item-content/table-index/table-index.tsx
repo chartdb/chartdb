@@ -14,6 +14,12 @@ import { Label } from '@/components/label/label';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { SelectBox } from '@/components/select-box/select-box';
+import { TableIndexToggle } from './table-index-toggle';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -54,7 +60,28 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 )}
                 keepOrder
             />
-            <div className="flex shrink-0">
+            <div className="flex shrink-0 gap-1">
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span>
+                            <TableIndexToggle
+                                pressed={index.unique}
+                                onPressedChange={(value) =>
+                                    updateIndex({
+                                        unique: !!value,
+                                    })
+                                }
+                            >
+                                U
+                            </TableIndexToggle>
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {t(
+                            'side_panel.tables_section.table.index_actions.unique'
+                        )}
+                    </TooltipContent>
+                </Tooltip>
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button

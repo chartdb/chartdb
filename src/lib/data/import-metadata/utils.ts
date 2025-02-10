@@ -10,14 +10,20 @@ export const fixMetadataJson = async (
     return (
         metadataJson
             .trim()
+            // First unescape the JSON string
+            .replace(/\\"/g, '"')
+            .replace(/\\\\/g, '\\')
             .replace(/^[^{]*/, '') // Remove everything before the first '{'
             .replace(/}[^}]*$/, '}') // Remove everything after the last '}'
+            .replace(/:""([^"]+)""/g, ':"$1"') // Convert :""value"" to :"value"
+            .replace(/""(\w+)""/g, '"$1"') // Convert ""key"" to "key"
             .replace(/^\s+|\s+$/g, '')
             .replace(/^"|"$/g, '')
             .replace(/^'|'$/g, '')
             .replace(/""""/g, '""') // Remove Quadruple quotes from keys
             .replace(/"""([^",}]+)"""/g, '"$1"') // Remove tripple quotes from keys
             .replace(/""([^",}]+)""/g, '"$1"') // Remove double quotes from keys
+
             /* eslint-disable-next-line no-useless-escape */
             .replace(/\"/g, '___ESCAPED_QUOTE___') // Temporarily replace empty strings
             .replace(/(?<=:\s*)""(?=\s*[,}])/g, '___EMPTY___') // Temporarily replace empty strings

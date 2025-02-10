@@ -98,10 +98,16 @@ export const RelationshipListItemContent: React.FC<
                         <Tooltip>
                             <TooltipTrigger>
                                 <div className="truncate text-left text-sm">
+                                    {sourceTable?.schema
+                                        ? `${sourceTable.schema}.`
+                                        : ''}
                                     {sourceTable?.name}({sourceField?.name})
                                 </div>
                             </TooltipTrigger>
                             <TooltipContent>
+                                {sourceTable?.schema
+                                    ? `${sourceTable.schema}.`
+                                    : ''}
                                 {sourceTable?.name}({sourceField?.name})
                             </TooltipContent>
                         </Tooltip>
@@ -117,11 +123,17 @@ export const RelationshipListItemContent: React.FC<
                         </div>
                         <Tooltip>
                             <TooltipTrigger>
-                                <div className="truncate text-left text-sm	">
+                                <div className="truncate text-left text-sm">
+                                    {targetTable?.schema
+                                        ? `${targetTable.schema}.`
+                                        : ''}
                                     {targetTable?.name}({targetField?.name})
                                 </div>
                             </TooltipTrigger>
                             <TooltipContent>
+                                {targetTable?.schema
+                                    ? `${targetTable.schema}.`
+                                    : ''}
                                 {targetTable?.name}({targetField?.name})
                             </TooltipContent>
                         </Tooltip>

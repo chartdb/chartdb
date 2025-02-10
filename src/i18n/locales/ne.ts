@@ -388,7 +388,7 @@ export const ne: LanguageTranslation = {
             cancel: 'Cancel',
             error: {
                 title: 'Error',
-                description: 'Failed to import DBML. Please check the syntax.',
+                description: 'Failed to parse DBML. Please check the syntax.',
             },
         },
 
