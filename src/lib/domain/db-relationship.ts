@@ -103,6 +103,8 @@ export const createRelationshipsFromMetadata = ({
         sourceField?: DBField;
         targetField?: DBField;
         fk: ForeignKeyInfo;
+        sourceSchema?: string;
+        targetSchema?: string;
     }> = [];
 
     // First pass to collect unique relationships
@@ -130,6 +132,8 @@ export const createRelationshipsFromMetadata = ({
             sourceField,
             targetField,
             fk,
+            sourceSchema: schema,
+            targetSchema,
         };
 
         // Check if this relationship already exists
@@ -144,46 +148,56 @@ export const createRelationshipsFromMetadata = ({
 
     // Second pass to create the actual relationships
     return uniqueRelationships
-        .map(({ sourceTable, targetTable, sourceField, targetField, fk }) => {
-            if (sourceTable && targetTable && sourceField && targetField) {
-                const isSourceTablePKComplex =
-                    (
-                        sourceTable.fields.filter(
-                            (field) => field.primaryKey
-                        ) ?? []
-                    ).length > 1;
-                const isTargetTablePKComplex =
-                    (
-                        targetTable.fields.filter(
-                            (field) => field.primaryKey
-                        ) ?? []
-                    ).length > 1;
+        .map(
+            ({
+                sourceTable,
+                targetTable,
+                sourceField,
+                targetField,
+                fk,
+                sourceSchema,
+                targetSchema,
+            }) => {
+                if (sourceTable && targetTable && sourceField && targetField) {
+                    const isSourceTablePKComplex =
+                        (
+                            sourceTable.fields.filter(
+                                (field) => field.primaryKey
+                            ) ?? []
+                        ).length > 1;
+                    const isTargetTablePKComplex =
+                        (
+                            targetTable.fields.filter(
+                                (field) => field.primaryKey
+                            ) ?? []
+                        ).length > 1;
 
-                const sourceCardinality = determineCardinality(
-                    sourceField,
-                    isSourceTablePKComplex
-                );
-                const targetCardinality = determineCardinality(
-                    targetField,
-                    isTargetTablePKComplex
-                );
+                    const sourceCardinality = determineCardinality(
+                        sourceField,
+                        isSourceTablePKComplex
+                    );
+                    const targetCardinality = determineCardinality(
+                        targetField,
+                        isTargetTablePKComplex
+                    );
 
-                return {
-                    id: generateId(),
-                    name: fk.foreign_key_name,
-                    sourceSchema: sourceTable.schema,
-                    targetSchema: targetTable.schema,
-                    sourceTableId: sourceTable.id,
-                    targetTableId: targetTable.id,
-                    sourceFieldId: sourceField.id,
-                    targetFieldId: targetField.id,
-                    sourceCardinality,
-                    targetCardinality,
-                    createdAt: Date.now(),
-                };
+                    return {
+                        id: generateId(),
+                        name: fk.foreign_key_name,
+                        sourceSchema,
+                        targetSchema,
+                        sourceTableId: sourceTable.id,
+                        targetTableId: targetTable.id,
+                        sourceFieldId: sourceField.id,
+                        targetFieldId: targetField.id,
+                        sourceCardinality,
+                        targetCardinality,
+                        createdAt: Date.now(),
+                    };
+                }
+                return null;
             }
-            return null;
-        })
+        )
         .filter((rel) => rel !== null) as DBRelationship[];
 };
 
