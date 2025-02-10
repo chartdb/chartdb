@@ -402,6 +402,7 @@ export const ar: LanguageTranslation = {
             edit_table: 'تعديل الجدول',
             duplicate_table: 'نسخ الجدول',
             delete_table: 'حذف الجدول',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',

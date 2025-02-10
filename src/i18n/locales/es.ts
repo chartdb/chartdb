@@ -408,6 +408,7 @@ export const es: LanguageTranslation = {
             edit_table: 'Editar Tabla',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Eliminar Tabla',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

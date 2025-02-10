@@ -410,6 +410,7 @@ export const fr: LanguageTranslation = {
             edit_table: 'Éditer la Table',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Supprimer la Table',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

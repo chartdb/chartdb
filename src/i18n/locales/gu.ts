@@ -406,6 +406,7 @@ export const gu: LanguageTranslation = {
             edit_table: 'ટેબલ સંપાદિત કરો',
             duplicate_table: 'ટેબલ નકલ કરો',
             delete_table: 'ટેબલ કાઢી નાખો',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'ગ્રિડ પર સ્નેપ કરો (જમાવટ {{key}})',

@@ -6,6 +6,7 @@ import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-di
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { ExportSQLDialog } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
+import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-database-dialog';
@@ -28,6 +29,17 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 
     const [openCreateRelationshipDialog, setOpenCreateRelationshipDialog] =
         useState(false);
+    const [createRelationshipDialogParams, setCreateRelationshipDialogParams] =
+        useState<Omit<CreateRelationshipDialogProps, 'dialog'>>();
+    const openCreateRelationshipDialogHandler: DialogContext['openCreateRelationshipDialog'] =
+        useCallback(
+            (params) => {
+                setCreateRelationshipDialogParams(params);
+                setOpenCreateRelationshipDialog(true);
+            },
+            [setOpenCreateRelationshipDialog]
+        );
+
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
     const [openBuckleDialog, setOpenBuckleDialog] = useState(false);
 
@@ -109,8 +121,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
-                openCreateRelationshipDialog: () =>
-                    setOpenCreateRelationshipDialog(true),
+                openCreateRelationshipDialog:
+                    openCreateRelationshipDialogHandler,
                 closeCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(false),
                 openImportDatabaseDialog: openImportDatabaseDialogHandler,
@@ -143,6 +155,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             />
             <CreateRelationshipDialog
                 dialog={{ open: openCreateRelationshipDialog }}
+                {...createRelationshipDialogParams}
             />
             <ImportDatabaseDialog
                 dialog={{ open: openImportDatabaseDialog }}

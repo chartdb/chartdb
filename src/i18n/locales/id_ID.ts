@@ -405,6 +405,7 @@ export const id_ID: LanguageTranslation = {
             edit_table: 'Ubah Tabel',
             delete_table: 'Hapus Tabel',
             duplicate_table: 'Duplikat Tabel',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',

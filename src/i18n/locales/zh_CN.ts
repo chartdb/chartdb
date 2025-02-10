@@ -399,6 +399,7 @@ export const zh_CN: LanguageTranslation = {
             edit_table: '编辑表',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: '删除表',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '对齐到网格（按住 {{key}}）',

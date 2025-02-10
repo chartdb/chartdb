@@ -401,6 +401,7 @@ export const en = {
             edit_table: 'Edit Table',
             duplicate_table: 'Duplicate Table',
             delete_table: 'Delete Table',
+            add_relationship: 'Add Relationship',
         },
 
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',

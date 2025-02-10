@@ -406,6 +406,7 @@ export const bn: LanguageTranslation = {
             edit_table: 'টেবিল সম্পাদনা করুন',
             duplicate_table: 'টেবিল নকল করুন',
             delete_table: 'টেবিল মুছে ফেলুন',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'গ্রিডে স্ন্যাপ করুন (অবস্থান {{key}})',

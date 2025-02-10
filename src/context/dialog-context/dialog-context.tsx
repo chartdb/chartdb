@@ -6,6 +6,7 @@ import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sq
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -21,7 +22,9 @@ export interface DialogContext {
     closeExportSQLDialog: () => void;
 
     // Create relationship dialog
-    openCreateRelationshipDialog: () => void;
+    openCreateRelationshipDialog: (
+        params?: Omit<CreateRelationshipDialogProps, 'dialog'>
+    ) => void;
     closeCreateRelationshipDialog: () => void;
 
     // Import database dialog

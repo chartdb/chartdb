@@ -410,6 +410,7 @@ export const hi: LanguageTranslation = {
             edit_table: 'तालिका संपादित करें',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'तालिका हटाएँ',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

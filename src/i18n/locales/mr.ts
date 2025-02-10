@@ -414,8 +414,8 @@ export const mr: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'टेबल संपादित करा',
             delete_table: 'टेबल हटवा',
-            // TODO: Add translations
-            duplicate_table: 'Duplicate Table',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

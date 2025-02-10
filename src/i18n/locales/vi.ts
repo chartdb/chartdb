@@ -403,6 +403,7 @@ export const vi: LanguageTranslation = {
             edit_table: 'Sửa bảng',
             duplicate_table: 'Nhân đôi bảng',
             delete_table: 'Xóa bảng',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'Căn lưới (Giữ phím {{key}})',

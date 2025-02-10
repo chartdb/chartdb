@@ -398,6 +398,7 @@ export const zh_TW: LanguageTranslation = {
             edit_table: '編輯表格',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: '刪除表格',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '對齊網格（按住 {{key}}）',
