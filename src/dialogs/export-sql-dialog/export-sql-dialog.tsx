@@ -25,6 +25,7 @@ import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import type { Diagram } from '@/lib/domain/diagram';
 
 export interface ExportSQLDialogProps extends BaseDialogProps {
     targetDatabaseType: DatabaseType;
@@ -44,8 +45,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const abortControllerRef = useRef<AbortController | null>(null);
 
     const exportSQLScript = useCallback(async () => {
-        // Create a filtered diagram with only the tables from selected schemas
-        const filteredDiagram = {
+        const filteredDiagram: Diagram = {
             ...currentDiagram,
             tables: currentDiagram.tables?.filter((table) =>
                 shouldShowTablesBySchemaFilter(table, filteredSchemas)
@@ -65,6 +65,23 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                         filteredSchemas
                     ) &&
                     shouldShowTablesBySchemaFilter(targetTable, filteredSchemas)
+                );
+            }),
+            dependencies: currentDiagram.dependencies?.filter((dep) => {
+                const table = currentDiagram.tables?.find(
+                    (t) => t.id === dep.tableId
+                );
+                const dependentTable = currentDiagram.tables?.find(
+                    (t) => t.id === dep.dependentTableId
+                );
+                return (
+                    table &&
+                    dependentTable &&
+                    shouldShowTablesBySchemaFilter(table, filteredSchemas) &&
+                    shouldShowTablesBySchemaFilter(
+                        dependentTable,
+                        filteredSchemas
+                    )
                 );
             }),
         };
