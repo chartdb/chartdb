@@ -162,7 +162,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         <EllipsisVertical />
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-fit">
+                <DropdownMenuContent className="w-fit min-w-40">
                     <DropdownMenuLabel>
                         {t(
                             'side_panel.tables_section.table.table_actions.title'
