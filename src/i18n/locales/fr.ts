@@ -30,9 +30,8 @@ export const fr: LanguageTranslation = {
                 theme: 'Thème',
                 show_dependencies: 'Afficher les Dépendances',
                 hide_dependencies: 'Masquer les Dépendances',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Afficher la Mini Carte',
+                hide_minimap: 'Masquer la Mini Carte',
             },
             share: {
                 share: 'Partage',
@@ -101,9 +100,8 @@ export const fr: LanguageTranslation = {
         clear: 'Effacer',
         show_more: 'Afficher Plus',
         show_less: 'Afficher Moins',
-        // TODO: Translate
-        copy_to_clipboard: 'Copy to Clipboard',
-        copied: 'Copied!',
+        copy_to_clipboard: 'Copier dans le presse-papiers',
+        copied: 'Copié !',
 
         side_panel: {
             schema: 'Schéma:',
@@ -116,12 +114,11 @@ export const fr: LanguageTranslation = {
                 add_table: 'Ajouter une Table',
                 filter: 'Filtrer',
                 collapse: 'Réduire Tout',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'Effacer le Filtre',
+                no_results:
+                    'Aucune table trouvée correspondant à votre filtre.',
+                show_list: 'Afficher la Liste des Tableaux',
+                show_dbml: "Afficher l'éditeur DBML",
 
                 table: {
                     fields: 'Champs',
@@ -153,7 +150,7 @@ export const fr: LanguageTranslation = {
                         title: 'Actions de la Table',
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Tableau dupliqué',
                         delete_table: 'Supprimer la Table',
                         change_schema: 'Changer le Schéma',
                     },
@@ -236,14 +233,12 @@ export const fr: LanguageTranslation = {
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
                 instructions_link: "Besoin d'aide ? Regardez comment",
-                // TODO: Translate
-                check_script_result: 'Check Script Result',
+                check_script_result: 'Vérifier le résultat du Script',
             },
 
             cancel: 'Annuler',
             back: 'Retour',
-            // TODO: Translate
-            import_from_file: 'Import from File',
+            import_from_file: "Importer à partir d'un fichier",
             empty_diagram: 'Diagramme vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -358,40 +353,39 @@ export const fr: LanguageTranslation = {
                 cancel: 'Annuler',
             },
         },
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Exporter le Diagramme',
+            description: "Sélectionner le format d'exportation :",
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Annuler',
+            export: 'Exporter',
             error: {
-                title: 'Error exporting diagram',
+                title: "Erreur lors de l'exportation du diagramme",
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    "Une erreur s'est produite. Besoin d'aide ? chartdb.io@gmail.com",
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            title: 'Importer un diagramme',
+            description: 'Coller le diagramme au format JSON ci-dessous :',
+            cancel: 'Annuler',
+            import: 'Exporter',
             error: {
-                title: 'Error importing diagram',
+                title: "Erreur lors de l'exportation du diagramme",
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    "Le diagramme JSON n'est pas valide. Veuillez vérifier le JSON et réessayer. Besoin d'aide ? chartdb.io@gmail.com",
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             title: 'Import DBML',
-            description: 'Import a database schema from DBML format.',
-            import: 'Import',
-            cancel: 'Cancel',
+            description:
+                'Importer un schéma de base de données à partir du format DBML.',
+            import: 'Importer',
+            cancel: 'Annuler',
             error: {
-                title: 'Error',
-                description: 'Failed to parse DBML. Please check the syntax.',
+                title: 'Erreur',
+                description:
+                    "Erreur d'analyse du DBML. Veuillez vérifier la syntaxe.",
             },
         },
         relationship_type: {
@@ -408,13 +402,13 @@ export const fr: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Éditer la Table',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Tableau Dupliqué',
             delete_table: 'Supprimer la Table',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'Ajouter une Relation',
         },
 
-        // TODO: Add translations
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
+        snap_to_grid_tooltip:
+            'Aligner sur la grille (maintenir la touche {{key}})',
 
         tool_tips: {
             double_click_to_edit: 'Double-cliquez pour modifier',
