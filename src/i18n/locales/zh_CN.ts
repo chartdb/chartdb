@@ -374,7 +374,7 @@ export const zh_CN: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
-            empty_triggered_title: 'Import DBML - Example (you can skip)',
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',

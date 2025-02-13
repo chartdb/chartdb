@@ -104,7 +104,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
-        openImportDBMLDialog({ isFromEmptyDiagram: true });
+        setTimeout(
+            () => openImportDBMLDialog({ withCreateEmptyDiagram: true }),
+            700
+        );
     }, [
         databaseType,
         addDiagram,

@@ -378,7 +378,7 @@ export const ar: LanguageTranslation = {
         import_dbml_dialog: {
             // TODO: Translate
             title: 'Import DBML',
-            empty_triggered_title: 'Import DBML - Example (you can skip)',
+            example_title: 'Import Example DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',

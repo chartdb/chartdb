@@ -379,7 +379,7 @@ export const id_ID: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
-            empty_triggered_title: 'Import DBML - Contoh (Anda bisa melewati)',
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',

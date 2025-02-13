@@ -19,6 +19,7 @@ import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-di
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { BuckleDialog } from '@/dialogs/buckle-dialog/buckle-dialog';
+import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
@@ -111,9 +112,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 
     // Import DBML dialog
     const [openImportDBMLDialog, setOpenImportDBMLDialog] = useState(false);
-    const [importDBMLDialogParams, setImportDBMLDialogParams] = useState<{
-        isFromEmptyDiagram?: boolean;
-    }>();
+    const [importDBMLDialogParams, setImportDBMLDialogParams] =
+        useState<Omit<ImportDBMLDialogProps, 'dialog'>>();
 
     return (
         <dialogContext.Provider
@@ -181,7 +181,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <BuckleDialog dialog={{ open: openBuckleDialog }} />
             <ImportDBMLDialog
                 dialog={{ open: openImportDBMLDialog }}
-                isFromEmptyDiagram={importDBMLDialogParams?.isFromEmptyDiagram}
+                {...importDBMLDialogParams}
             />
         </dialogContext.Provider>
     );

@@ -72,12 +72,12 @@ function parseDBMLError(error: unknown): DBMLError | null {
 }
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {
-    isFromEmptyDiagram?: boolean;
+    withCreateEmptyDiagram?: boolean;
 }
 
 export const ImportDBMLDialog: React.FC<ImportDBMLDialogProps> = ({
     dialog,
-    isFromEmptyDiagram,
+    withCreateEmptyDiagram,
 }) => {
     const { t } = useTranslation();
     const initialDBML = `// Use DBML to define your database structure
@@ -335,8 +335,8 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {isFromEmptyDiagram
-                            ? t('import_dbml_dialog.empty_triggered_title')
+                        {withCreateEmptyDiagram
+                            ? t('import_dbml_dialog.example_title')
                             : t('import_dbml_dialog.title')}
                     </DialogTitle>
                     <DialogDescription>
@@ -376,7 +376,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                         <div className="flex items-center gap-4">
                             <DialogClose asChild>
                                 <Button variant="secondary">
-                                    {isFromEmptyDiagram
+                                    {withCreateEmptyDiagram
                                         ? t('import_dbml_dialog.skip_and_empty')
                                         : t('import_dbml_dialog.cancel')}
                                 </Button>
@@ -398,7 +398,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                             onClick={handleImport}
                             disabled={!dbmlContent.trim() || !!errorMessage}
                         >
-                            {isFromEmptyDiagram
+                            {withCreateEmptyDiagram
                                 ? t('import_dbml_dialog.show_example')
                                 : t('import_dbml_dialog.import')}
                         </Button>
