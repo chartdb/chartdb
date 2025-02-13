@@ -77,6 +77,22 @@ Use the [cloud version](https://app.chartdb.io?ref=github_readme_2) or deploy lo
 
 ### How To Use
 
+> <details>
+>   <summary>
+>     <b>Note:</b> This won't work on PNPM in the usual way
+>   </summary>
+> 
+> If you attempt to run this project with normal `pnpm install`, it will install like normal but you won't get the app run in dev mode (`pnpm run dev`). It is because of hoisting. To use PNPM, you need to create `.npmrc` at the root of this repository with content:
+> 
+> ```npmrc
+> node-linker=hoisted
+> ```
+> 
+> Then run `pnpm install` as usual.
+> 
+> </details>
+
+
 ```bash
 npm install
 npm run dev
