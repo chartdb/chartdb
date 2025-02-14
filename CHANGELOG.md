@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.8.0](https://github.com/chartdb/chartdb/compare/v1.7.0...v1.8.0) (2025-02-13)
+
+
+### Features
+
+* **dbml-import:** add error highlighting for dbml imports ([#556](https://github.com/chartdb/chartdb/issues/556)) ([190e4f4](https://github.com/chartdb/chartdb/commit/190e4f4ffa834fa621f264dc608ca3f3b393a331))
+* **docker image:** add support for custom inference servers ([#543](https://github.com/chartdb/chartdb/issues/543)) ([1878083](https://github.com/chartdb/chartdb/commit/1878083056ea4db7a05cdeeb38a4f7b9f5f95bd1))
+
+
+### Bug Fixes
+
+* **canvas:** add right-click option to create relationships ([#568](https://github.com/chartdb/chartdb/issues/568)) ([e993f15](https://github.com/chartdb/chartdb/commit/e993f1549c4c86bb9e7e36062db803ba6613b3b3))
+* **canvas:** locate table from canvas ([#560](https://github.com/chartdb/chartdb/issues/560)) ([dc404c9](https://github.com/chartdb/chartdb/commit/dc404c9d7ee272c93aac69646bac859829a5234e))
+* **docker:** add option to hide popups ([#580](https://github.com/chartdb/chartdb/issues/580)) ([a96c2e1](https://github.com/chartdb/chartdb/commit/a96c2e107838d2dc13b586923fd9dbe06598cdd8))
+* **export-sql:** show create script for only filtered schemas ([#570](https://github.com/chartdb/chartdb/issues/570)) ([85fd14f](https://github.com/chartdb/chartdb/commit/85fd14fa02bb2879c36bba53369dbf2e7fa578d4))
+* **i18n:** fix Ukrainian ([#554](https://github.com/chartdb/chartdb/issues/554)) ([7b62719](https://github.com/chartdb/chartdb/commit/7b6271962a99bfe5ffbd0176e714c76368ef5c41))
+* **import dbml:** add import for indexes ([#566](https://github.com/chartdb/chartdb/issues/566)) ([0db67ea](https://github.com/chartdb/chartdb/commit/0db67ea42a5f9585ca1d246db7a7ff0239bec0ba))
+* **import-query:** improve the cleanup for messy json input ([#562](https://github.com/chartdb/chartdb/issues/562)) ([93d59f8](https://github.com/chartdb/chartdb/commit/93d59f8887765098d040a3184aaee32112f67267))
+* **index unique:** extract unique toggle for faster editing ([#559](https://github.com/chartdb/chartdb/issues/559)) ([dd4324d](https://github.com/chartdb/chartdb/commit/dd4324d64f7638ada5c022a2ab38bd8e6986af25))
+* **mssql-import:** improve script readability by adding edition comment ([#572](https://github.com/chartdb/chartdb/issues/572)) ([be65328](https://github.com/chartdb/chartdb/commit/be65328f24b0361638b9e2edb39eaa9906e77f67))
+* **realtionships section:** add the schema to source/target tables ([#561](https://github.com/chartdb/chartdb/issues/561)) ([b9e621b](https://github.com/chartdb/chartdb/commit/b9e621bd680730a0ffbf1054d735bfa418711cae))
+* **sqlserver-import:** open ssms guide when max chars ([#565](https://github.com/chartdb/chartdb/issues/565)) ([9c485b3](https://github.com/chartdb/chartdb/commit/9c485b3b01a131bf551c7e95916b0c416f6aa0b5))
+* **table actions:** fix size of table actions ([#578](https://github.com/chartdb/chartdb/issues/578)) ([26d95ee](https://github.com/chartdb/chartdb/commit/26d95eed25d86452d9168a9d93a301ba50d934e3))
+
 ## [1.7.0](https://github.com/chartdb/chartdb/compare/v1.6.1...v1.7.0) (2025-02-03)
 
 

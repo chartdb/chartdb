@@ -19,6 +19,7 @@ import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-di
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { BuckleDialog } from '@/dialogs/buckle-dialog/buckle-dialog';
+import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
@@ -111,6 +112,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 
     // Import DBML dialog
     const [openImportDBMLDialog, setOpenImportDBMLDialog] = useState(false);
+    const [importDBMLDialogParams, setImportDBMLDialogParams] =
+        useState<Omit<ImportDBMLDialogProps, 'dialog'>>();
 
     return (
         <dialogContext.Provider
@@ -142,7 +145,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 openImportDiagramDialog: () => setOpenImportDiagramDialog(true),
                 closeImportDiagramDialog: () =>
                     setOpenImportDiagramDialog(false),
-                openImportDBMLDialog: () => setOpenImportDBMLDialog(true),
+                openImportDBMLDialog: (params) => {
+                    setImportDBMLDialogParams(params);
+                    setOpenImportDBMLDialog(true);
+                },
                 closeImportDBMLDialog: () => setOpenImportDBMLDialog(false),
             }}
         >
@@ -173,7 +179,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             <BuckleDialog dialog={{ open: openBuckleDialog }} />
-            <ImportDBMLDialog dialog={{ open: openImportDBMLDialog }} />
+            <ImportDBMLDialog
+                dialog={{ open: openImportDBMLDialog }}
+                {...importDBMLDialogParams}
+            />
         </dialogContext.Provider>
     );
 };

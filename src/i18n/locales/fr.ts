@@ -377,11 +377,14 @@ export const fr: LanguageTranslation = {
             },
         },
         import_dbml_dialog: {
+            example_title: "Exemple d'importation DBML",
             title: 'Import DBML',
             description:
                 'Importer un schéma de base de données à partir du format DBML.',
             import: 'Importer',
             cancel: 'Annuler',
+            skip_and_empty: 'Passer et vider',
+            show_example: 'Afficher un exemple',
             error: {
                 title: 'Erreur',
                 description:
