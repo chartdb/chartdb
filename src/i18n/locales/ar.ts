@@ -378,9 +378,12 @@ export const ar: LanguageTranslation = {
         import_dbml_dialog: {
             // TODO: Translate
             title: 'Import DBML',
+            example_title: 'Import Example DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -402,6 +405,7 @@ export const ar: LanguageTranslation = {
             edit_table: 'تعديل الجدول',
             duplicate_table: 'نسخ الجدول',
             delete_table: 'حذف الجدول',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',

@@ -7,6 +7,7 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
+import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 
 export interface TopNavbarProps {}
 
@@ -30,6 +31,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
     }, []);
 
     const renderGetBuckleButton = useCallback(() => {
+        if (HIDE_BUCKLE_DOT_DEV) {
+            return null;
+        }
+
         return (
             <button
                 className="gradient-background relative inline-flex items-center justify-center overflow-hidden rounded-lg p-0.5 text-base text-gray-700 focus:outline-none focus:ring-0"

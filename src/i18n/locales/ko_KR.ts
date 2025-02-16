@@ -377,10 +377,13 @@ export const ko_KR: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -402,6 +405,7 @@ export const ko_KR: LanguageTranslation = {
             edit_table: '테이블 수정',
             duplicate_table: '테이블 복제',
             delete_table: '테이블 삭제',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',

@@ -382,10 +382,13 @@ export const ne: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -408,6 +411,7 @@ export const ne: LanguageTranslation = {
             edit_table: 'तालिका सम्पादन गर्नुहोस्',
             duplicate_table: 'तालिका नक्कली गर्नुहोस्',
             delete_table: 'तालिका हटाउनुहोस्',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'ग्रिडमा स्न्याप गर्नुहोस् ({{key}} थिच्नुहोस)',

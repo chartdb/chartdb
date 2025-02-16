@@ -377,10 +377,13 @@ export const uk: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -402,6 +405,7 @@ export const uk: LanguageTranslation = {
             edit_table: 'Редагувати таблицю',
             duplicate_table: 'Дублювати таблицю',
             delete_table: 'Видалити таблицю',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',

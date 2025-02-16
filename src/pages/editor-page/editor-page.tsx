@@ -38,6 +38,7 @@ import { Helmet } from 'react-helmet-async';
 import { useStorage } from '@/hooks/use-storage';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
+import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -153,6 +154,10 @@ const EditorPageComponent: React.FC = () => {
     ]);
 
     useEffect(() => {
+        if (HIDE_BUCKLE_DOT_DEV) {
+            return;
+        }
+
         if (!currentDiagram?.id || githubRepoOpened) {
             return;
         }
@@ -174,6 +179,10 @@ const EditorPageComponent: React.FC = () => {
     ]);
 
     useEffect(() => {
+        if (HIDE_BUCKLE_DOT_DEV) {
+            return;
+        }
+
         if (!currentDiagram?.id) {
             return;
         }

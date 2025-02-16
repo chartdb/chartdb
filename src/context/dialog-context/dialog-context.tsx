@@ -6,6 +6,8 @@ import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sq
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
+import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -21,7 +23,9 @@ export interface DialogContext {
     closeExportSQLDialog: () => void;
 
     // Create relationship dialog
-    openCreateRelationshipDialog: () => void;
+    openCreateRelationshipDialog: (
+        params?: Omit<CreateRelationshipDialogProps, 'dialog'>
+    ) => void;
     closeCreateRelationshipDialog: () => void;
 
     // Import database dialog
@@ -63,7 +67,9 @@ export interface DialogContext {
     closeImportDiagramDialog: () => void;
 
     // Import DBML dialog
-    openImportDBMLDialog: () => void;
+    openImportDBMLDialog: (
+        params?: Omit<ImportDBMLDialogProps, 'dialog'>
+    ) => void;
     closeImportDBMLDialog: () => void;
 }
 

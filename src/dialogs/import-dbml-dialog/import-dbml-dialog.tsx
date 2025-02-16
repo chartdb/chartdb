@@ -71,10 +71,13 @@ function parseDBMLError(error: unknown): DBMLError | null {
     return null;
 }
 
-export interface ImportDBMLDialogProps extends BaseDialogProps {}
+export interface ImportDBMLDialogProps extends BaseDialogProps {
+    withCreateEmptyDiagram?: boolean;
+}
 
 export const ImportDBMLDialog: React.FC<ImportDBMLDialogProps> = ({
     dialog,
+    withCreateEmptyDiagram,
 }) => {
     const { t } = useTranslation();
     const initialDBML = `// Use DBML to define your database structure
@@ -331,7 +334,11 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 showClose
             >
                 <DialogHeader>
-                    <DialogTitle>{t('import_dbml_dialog.title')}</DialogTitle>
+                    <DialogTitle>
+                        {withCreateEmptyDiagram
+                            ? t('import_dbml_dialog.example_title')
+                            : t('import_dbml_dialog.title')}
+                    </DialogTitle>
                     <DialogDescription>
                         {t('import_dbml_dialog.description')}
                     </DialogDescription>
@@ -369,7 +376,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                         <div className="flex items-center gap-4">
                             <DialogClose asChild>
                                 <Button variant="secondary">
-                                    {t('import_dbml_dialog.cancel')}
+                                    {withCreateEmptyDiagram
+                                        ? t('import_dbml_dialog.skip_and_empty')
+                                        : t('import_dbml_dialog.cancel')}
                                 </Button>
                             </DialogClose>
                             {errorMessage ? (
@@ -389,7 +398,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                             onClick={handleImport}
                             disabled={!dbmlContent.trim() || !!errorMessage}
                         >
-                            {t('import_dbml_dialog.import')}
+                            {withCreateEmptyDiagram
+                                ? t('import_dbml_dialog.show_example')
+                                : t('import_dbml_dialog.import')}
                         </Button>
                     </div>
                 </DialogFooter>

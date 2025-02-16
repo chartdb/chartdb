@@ -373,10 +373,13 @@ export const zh_TW: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -398,6 +401,7 @@ export const zh_TW: LanguageTranslation = {
             edit_table: '編輯表格',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: '刪除表格',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         snap_to_grid_tooltip: '對齊網格（按住 {{key}}）',

@@ -385,10 +385,13 @@ export const hi: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -410,6 +413,7 @@ export const hi: LanguageTranslation = {
             edit_table: 'तालिका संपादित करें',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'तालिका हटाएँ',
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Add translations

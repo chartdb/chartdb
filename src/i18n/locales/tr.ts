@@ -372,10 +372,13 @@ export const tr: LanguageTranslation = {
         },
         // TODO: Translate
         import_dbml_dialog: {
+            example_title: 'Import Example DBML',
             title: 'Import DBML',
             description: 'Import a database schema from DBML format.',
             import: 'Import',
             cancel: 'Cancel',
+            skip_and_empty: 'Skip & Empty',
+            show_example: 'Show Example',
             error: {
                 title: 'Error',
                 description: 'Failed to parse DBML. Please check the syntax.',
@@ -394,8 +397,8 @@ export const tr: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',
             delete_table: 'Tabloyu Sil',
-            // TODO: Translate
-            duplicate_table: 'Duplicate Table',
+            duplicate_table: 'Duplicate Table', // TODO: Translate
+            add_relationship: 'Add Relationship', // TODO: Translate
         },
 
         // TODO: Translate

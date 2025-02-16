@@ -22,13 +22,17 @@ import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
 const ErrorMessageRelationshipFieldsNotSameType =
     'Relationships can only be created between fields of the same type';
 
-export interface CreateRelationshipDialogProps extends BaseDialogProps {}
+export interface CreateRelationshipDialogProps extends BaseDialogProps {
+    sourceTableId?: string;
+}
 
 export const CreateRelationshipDialog: React.FC<
     CreateRelationshipDialogProps
-> = ({ dialog }) => {
+> = ({ dialog, sourceTableId: preSelectedSourceTableId }) => {
     const { closeCreateRelationshipDialog } = useDialog();
-    const [primaryTableId, setPrimaryTableId] = useState<string | undefined>();
+    const [primaryTableId, setPrimaryTableId] = useState<string | undefined>(
+        preSelectedSourceTableId
+    );
     const [primaryFieldId, setPrimaryFieldId] = useState<string | undefined>();
     const [referencedTableId, setReferencedTableId] = useState<
         string | undefined
@@ -43,6 +47,9 @@ export const CreateRelationshipDialog: React.FC<
     const [canCreateRelationship, setCanCreateRelationship] = useState(false);
     const { fitView, setEdges } = useReactFlow();
     const { databaseType } = useChartDB();
+    const [primaryFieldSelectOpen, setPrimaryFieldSelectOpen] = useState(false);
+    const [referencedTableSelectOpen, setReferencedTableSelectOpen] =
+        useState(false);
 
     const tableOptions = useMemo(() => {
         return tables.map(
@@ -89,7 +96,22 @@ export const CreateRelationshipDialog: React.FC<
         setReferencedTableId(undefined);
         setReferencedFieldId(undefined);
         setErrorMessage('');
+        setPrimaryFieldSelectOpen(false);
+        setReferencedTableSelectOpen(false);
     }, [dialog.open]);
+
+    useEffect(() => {
+        if (preSelectedSourceTableId) {
+            const table = getTable(preSelectedSourceTableId);
+            if (table) {
+                setPrimaryTableId(preSelectedSourceTableId);
+            }
+
+            setTimeout(() => {
+                setPrimaryFieldSelectOpen(true);
+            }, 100);
+        }
+    }, [preSelectedSourceTableId, getTable]);
 
     useEffect(() => {
         setCanCreateRelationship(false);
@@ -223,8 +245,14 @@ export const CreateRelationshipDialog: React.FC<
                                     )}
                                     value={primaryTableId}
                                     onChange={(value) => {
-                                        setPrimaryTableId(value as string);
-                                        setPrimaryFieldId(undefined);
+                                        const newTableId = value as string;
+                                        setPrimaryTableId(newTableId);
+                                        if (
+                                            newTableId !==
+                                            preSelectedSourceTableId
+                                        ) {
+                                            setPrimaryFieldId(undefined);
+                                        }
                                     }}
                                     emptyPlaceholder={t(
                                         'create_relationship_dialog.no_tables_found'
@@ -253,6 +281,8 @@ export const CreateRelationshipDialog: React.FC<
                                             'create_relationship_dialog.primary_field_placeholder'
                                         )}
                                         value={primaryFieldId}
+                                        open={primaryFieldSelectOpen}
+                                        onOpenChange={setPrimaryFieldSelectOpen}
                                         onChange={(value) =>
                                             setPrimaryFieldId(value as string)
                                         }
@@ -283,6 +313,8 @@ export const CreateRelationshipDialog: React.FC<
                                         'create_relationship_dialog.referenced_table_placeholder'
                                     )}
                                     value={referencedTableId}
+                                    open={referencedTableSelectOpen}
+                                    onOpenChange={setReferencedTableSelectOpen}
                                     onChange={(value) => {
                                         setReferencedTableId(value as string);
                                         setReferencedFieldId(undefined);
