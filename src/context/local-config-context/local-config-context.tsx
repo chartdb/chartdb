@@ -53,7 +53,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     schemasFilter: {},
     setSchemasFilter: emptyFn,
 
-    showCardinality: false,
+    showCardinality: true,
     setShowCardinality: emptyFn,
 
     hideMultiSchemaNotification: false,
