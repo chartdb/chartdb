@@ -85,7 +85,7 @@ export const sqliteQuery = `WITH fk_info AS (
                       ELSE LOWER(p.type)
                   END,
               'ordinal_position', p.cid,
-              'nullable', (CASE WHEN p."notnull" = 0 THEN 'true' ELSE 'false' END),
+              'nullable', (CASE WHEN p."notnull" = 0 THEN true ELSE false END),
               'collation', '',
               'character_maximum_length',
                   CASE
