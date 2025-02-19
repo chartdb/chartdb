@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Plus, FileType2, FileKey2, MessageCircleMore } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
@@ -54,8 +54,6 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
     >(['fields']);
-    const [newIndexId, setNewIndexId] = React.useState<string | null>(null);
-    const [newFieldId, setNewFieldId] = React.useState<string | null>(null);
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -72,33 +70,29 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         }
     };
 
-    const createIndexHandler = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setSelectedItems((prev) => {
-            if (prev.includes('indexes')) {
-                return prev;
-            }
+    const createIndexHandler = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            setSelectedItems((prev) => {
+                if (prev.includes('indexes')) {
+                    return prev;
+                }
 
-            return [...prev, 'indexes'];
-        });
+                return [...prev, 'indexes'];
+            });
 
-        const newIndex = await createIndex(table.id);
-        setNewIndexId(newIndex.id);
-    };
+            createIndex(table.id);
+        },
+        [createIndex, table.id, setSelectedItems]
+    );
 
-    const createFieldHandler = async (e?: React.MouseEvent) => {
-        e?.stopPropagation();
-        setSelectedItems((prev) => {
-            if (prev.includes('fields')) {
-                return prev;
-            }
-
-            return [...prev, 'fields'];
-        });
-
-        const newField = await createField(table.id);
-        setNewFieldId(newField.id);
-    };
+    const createFieldHandler = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            createField(table.id);
+        },
+        [createField, table.id]
+    );
 
     return (
         <div
@@ -131,10 +125,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     <Button
                                         variant="ghost"
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            createFieldHandler(e);
-                                        }}
+                                        onClick={createFieldHandler}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
@@ -168,21 +159,19 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         removeField={() =>
                                             removeField(table.id, field.id)
                                         }
-                                        isNewlyCreated={field.id === newFieldId}
                                     />
                                 ))}
                             </SortableContext>
-                            <div className="flex justify-start py-1">
+                            <div className="flex justify-start p-1">
                                 <Button
                                     variant="ghost"
-                                    className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        createFieldHandler(e);
-                                    }}
+                                    className="flex h-7 items-center gap-1 px-2 text-xs"
+                                    onClick={createFieldHandler}
                                 >
                                     <Plus className="size-4 text-muted-foreground" />
-                                    <span>Add Field</span>
+                                    {t(
+                                        'side_panel.tables_section.table.add_field'
+                                    )}
                                 </Button>
                             </div>
                         </DndContext>
@@ -205,10 +194,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     <Button
                                         variant="ghost"
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            createIndexHandler(e);
-                                        }}
+                                        onClick={createIndexHandler}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
@@ -228,20 +214,16 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     updateIndex(table.id, index.id, attrs)
                                 }
                                 fields={table.fields}
-                                isNewlyCreated={index.id === newIndexId}
                             />
                         ))}
-                        <div className="flex justify-start py-1">
+                        <div className="flex justify-start p-1">
                             <Button
                                 variant="ghost"
-                                className="flex h-8 items-center gap-1 px-2 text-xs hover:bg-primary-foreground"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    createIndexHandler(e);
-                                }}
+                                className="flex h-7 items-center gap-1 px-2 text-xs"
+                                onClick={createIndexHandler}
                             >
                                 <Plus className="size-4 text-muted-foreground" />
-                                <span>Add Index</span>
+                                {t('side_panel.tables_section.table.add_index')}
                             </Button>
                         </div>
                     </AccordionContent>
@@ -286,10 +268,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            createIndexHandler(e);
-                        }}
+                        onClick={createIndexHandler}
                     >
                         <FileKey2 className="h-4" />
                         {t('side_panel.tables_section.table.add_index')}
@@ -297,10 +276,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            createFieldHandler(e);
-                        }}
+                        onClick={createFieldHandler}
                     >
                         <FileType2 className="h-4" />
                         {t('side_panel.tables_section.table.add_field')}

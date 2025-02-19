@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBField } from '@/lib/domain/db-field';
-import { useDebounce } from '@/hooks/use-debounce';
 import {
     Popover,
     PopoverContent,
@@ -27,7 +26,6 @@ export interface TableIndexProps {
     updateIndex: (attrs: Partial<DBIndex>) => void;
     removeIndex: () => void;
     fields: DBField[];
-    isNewlyCreated?: boolean;
 }
 
 export const TableIndex: React.FC<TableIndexProps> = ({
@@ -35,40 +33,18 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     index,
     updateIndex,
     removeIndex,
-    isNewlyCreated = false,
 }) => {
     const { t } = useTranslation();
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [isAttributesOpen, setIsAttributesOpen] = React.useState(false);
-    const triggerRef = React.useRef<HTMLDivElement>(null);
-
-    const openAttributes = useCallback(() => {
-        setIsAttributesOpen(true);
-    }, []);
-
-    const debouncedOpen = useDebounce(openAttributes, 100);
-
-    React.useEffect(() => {
-        if (isNewlyCreated) {
-            debouncedOpen();
-        }
-    }, [isNewlyCreated, debouncedOpen]);
-
     const fieldOptions = fields.map((field) => ({
         label: field.name,
         value: field.id,
     }));
-
     const updateIndexFields = (fieldIds: string | string[]) => {
         const ids = Array.isArray(fieldIds) ? fieldIds : [fieldIds];
         updateIndex({ fieldIds: ids });
     };
-
     return (
-        <div
-            className="flex flex-1 flex-row justify-between gap-2 p-1"
-            ref={triggerRef}
-        >
+        <div className="flex flex-1 flex-row justify-between gap-2 p-1">
             <SelectBox
                 className="flex h-8 min-h-8 min-w-0 flex-1"
                 multiple
@@ -83,8 +59,6 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     'side_panel.tables_section.table.no_types_found'
                 )}
                 keepOrder
-                open={isOpen}
-                onOpenChange={setIsOpen}
             />
             <div className="flex shrink-0 gap-1">
                 <Tooltip>
@@ -108,10 +82,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                         )}
                     </TooltipContent>
                 </Tooltip>
-                <Popover
-                    open={isAttributesOpen}
-                    onOpenChange={setIsAttributesOpen}
-                >
+                <Popover>
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
@@ -144,7 +115,6 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             name: value.target.value,
                                         })
                                     }
-                                    autoFocus={isNewlyCreated}
                                 />
                             </div>
                             <div className="mt-2 flex items-center justify-between">
