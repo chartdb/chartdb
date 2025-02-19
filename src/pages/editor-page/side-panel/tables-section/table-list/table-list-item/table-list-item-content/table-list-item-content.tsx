@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Plus, FileType2, FileKey2, MessageCircleMore } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
@@ -70,17 +70,29 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         }
     };
 
-    const createIndexHandler = () => {
-        setSelectedItems((prev) => {
-            if (prev.includes('indexes')) {
-                return prev;
-            }
+    const createIndexHandler = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            setSelectedItems((prev) => {
+                if (prev.includes('indexes')) {
+                    return prev;
+                }
 
-            return [...prev, 'indexes'];
-        });
+                return [...prev, 'indexes'];
+            });
 
-        createIndex(table.id);
-    };
+            createIndex(table.id);
+        },
+        [createIndex, table.id, setSelectedItems]
+    );
+
+    const createFieldHandler = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            createField(table.id);
+        },
+        [createField, table.id]
+    );
 
     return (
         <div
@@ -113,10 +125,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     <Button
                                         variant="ghost"
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            createField(table.id);
-                                        }}
+                                        onClick={createFieldHandler}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
@@ -153,6 +162,18 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     />
                                 ))}
                             </SortableContext>
+                            <div className="flex justify-start p-1">
+                                <Button
+                                    variant="ghost"
+                                    className="flex h-7 items-center gap-1 px-2 text-xs"
+                                    onClick={createFieldHandler}
+                                >
+                                    <Plus className="size-4 text-muted-foreground" />
+                                    {t(
+                                        'side_panel.tables_section.table.add_field'
+                                    )}
+                                </Button>
+                            </div>
                         </DndContext>
                     </AccordionContent>
                 </AccordionItem>
@@ -173,10 +194,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     <Button
                                         variant="ghost"
                                         className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            createIndexHandler();
-                                        }}
+                                        onClick={createIndexHandler}
                                     >
                                         <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                                     </Button>
@@ -198,6 +216,16 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 fields={table.fields}
                             />
                         ))}
+                        <div className="flex justify-start p-1">
+                            <Button
+                                variant="ghost"
+                                className="flex h-7 items-center gap-1 px-2 text-xs"
+                                onClick={createIndexHandler}
+                            >
+                                <Plus className="size-4 text-muted-foreground" />
+                                {t('side_panel.tables_section.table.add_index')}
+                            </Button>
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
 
@@ -248,7 +276,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"
-                        onClick={() => createField(table.id)}
+                        onClick={createFieldHandler}
                     >
                         <FileType2 className="h-4" />
                         {t('side_panel.tables_section.table.add_field')}
