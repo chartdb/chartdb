@@ -174,18 +174,32 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 );
 
                 try {
-                    // First, export the diagram without the watermark
+                    // Handle SVG export differently
+                    if (type === 'svg') {
+                        const dataUrl = await imageCreateFn(viewportElement, {
+                            width: reactFlowBounds.width,
+                            height: reactFlowBounds.height,
+                            style: {
+                                width: `${reactFlowBounds.width}px`,
+                                height: `${reactFlowBounds.height}px`,
+                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                            },
+                            quality: 1,
+                            pixelRatio: scale,
+                            skipFonts: true,
+                        });
+                        downloadImage(dataUrl, type);
+                        return;
+                    }
+
+                    // For PNG and JPEG, continue with the watermark process
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
-                            ...(type === 'jpeg' || type === 'png'
-                                ? {
-                                      backgroundColor:
-                                          effectiveTheme === 'light'
-                                              ? '#ffffff'
-                                              : '#141414',
-                                  }
-                                : {}),
+                            backgroundColor:
+                                effectiveTheme === 'light'
+                                    ? '#ffffff'
+                                    : '#141414',
                             width: reactFlowBounds.width,
                             height: reactFlowBounds.height,
                             style: {
