@@ -223,11 +223,11 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
 
                             // Calculate logo size
                             const logoHeight = Math.max(
-                                40,
-                                Math.floor(canvas.width * 0.04)
+                                24,
+                                Math.floor(canvas.width * 0.024)
                             );
                             const padding = Math.max(
-                                20,
+                                12,
                                 Math.floor(logoHeight * 0.5)
                             );
 
