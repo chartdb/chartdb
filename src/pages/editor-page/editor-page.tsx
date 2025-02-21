@@ -134,9 +134,17 @@ const EditorPageComponent: React.FC = () => {
             } else {
                 const diagrams = await listDiagrams();
 
-                // Only open create dialog if we have no diagrams AND haven't auto-imported any
                 if (diagrams.length === 0 && !hasImportedDiagrams.current) {
-                    openCreateDiagramDialog();
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                    const updatedDiagrams = await listDiagrams();
+                    if (updatedDiagrams.length === 0) {
+                        openCreateDiagramDialog();
+                    } else {
+                        const defaultDiagramId = updatedDiagrams[0].id;
+                        await updateConfig({ defaultDiagramId });
+                        navigate(`/diagrams/${defaultDiagramId}`);
+                    }
                 } else if (diagrams.length > 0) {
                     const defaultDiagramId = diagrams[0].id;
                     await updateConfig({ defaultDiagramId });
@@ -158,7 +166,7 @@ const EditorPageComponent: React.FC = () => {
         showLoader,
         currentDiagram?.id,
         updateConfig,
-        hasImportedDiagrams, // Add this to dependencies
+        hasImportedDiagrams,
     ]);
 
     useEffect(() => {
