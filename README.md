@@ -141,6 +141,7 @@ docker run \
 ```
 
 > **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+
 > **Auto-Import Note:** Place your diagram JSON files in a `diagrams` directory and mount it to `/usr/share/nginx/html/diagrams` in the container. All JSON files in this directory will be automatically imported when the application starts if `VITE_AUTO_LOAD_DIAGRAM=true` is set.
 
 Open your browser and navigate to `http://localhost:8080`.
