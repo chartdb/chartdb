@@ -35,10 +35,11 @@ export const gu: LanguageTranslation = {
                 hide_minimap: 'Hide Mini Map',
             },
 
-            share: {
-                share: 'શેર કરો',
-                export_diagram: 'ડાયાગ્રામ નિકાસ કરો',
-                import_diagram: 'ડાયાગ્રામ આયાત કરો',
+            backup: {
+                backup: 'બેકઅપ',
+                export_diagram: 'ડાયાગ્રામ નિકાસ કરો (JSON)',
+                restore_diagram: 'ડાયાગ્રામ પુનઃસ્થાપિત કરો (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'મદદ',

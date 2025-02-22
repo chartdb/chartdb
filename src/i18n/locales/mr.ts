@@ -34,11 +34,12 @@ export const mr: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
+            backup: {
                 // TODO: Add translations
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                backup: 'Backup',
+                export_diagram: 'Export Diagram (JSON)',
+                restore_diagram: 'Restore Diagram (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'मदत',

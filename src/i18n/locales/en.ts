@@ -33,10 +33,11 @@ export const en = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+            backup: {
+                backup: 'Backup',
+                export_diagram: 'Export Diagram (JSON)',
+                restore_diagram: 'Restore Diagram (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'Help',

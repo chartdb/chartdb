@@ -34,10 +34,11 @@ export const zh_CN: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: '分享',
-                export_diagram: '导出关系图',
-                import_diagram: '导入关系图',
+            backup: {
+                backup: '备份',
+                export_diagram: '导出关系图 (JSON)',
+                restore_diagram: '还原图表 (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: '帮助',

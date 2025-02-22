@@ -35,10 +35,11 @@ export const bn: LanguageTranslation = {
                 hide_minimap: 'Hide Mini Map',
             },
 
-            share: {
-                share: 'শেয়ার করুন',
-                export_diagram: 'ডায়াগ্রাম রপ্তানি করুন',
-                import_diagram: 'ডায়াগ্রাম আমদানি করুন',
+            backup: {
+                backup: 'ব্যাকআপ',
+                export_diagram: 'ডায়াগ্রাম রপ্তানি করুন (JSON)',
+                restore_diagram: 'ডায়াগ্রাম পুনরুদ্ধার করুন (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'সাহায্য',

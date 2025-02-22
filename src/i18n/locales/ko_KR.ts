@@ -34,10 +34,11 @@ export const ko_KR: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: '공유',
-                export_diagram: '다이어그램 내보내기',
-                import_diagram: '다이어그램 가져오기',
+            backup: {
+                backup: '백업',
+                export_diagram: '다이어그램 내보내기 (JSON)',
+                restore_diagram: '다이어그램 복구 (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: '도움말',

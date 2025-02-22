@@ -33,10 +33,11 @@ export const uk: LanguageTranslation = {
                 show_minimap: 'Показати мінімапу',
                 hide_minimap: 'Приховати мінімапу',
             },
-            share: {
-                share: 'Поширити',
-                export_diagram: 'Експорт діаграми',
-                import_diagram: 'Імпорт діаграми',
+            backup: {
+                backup: 'Резервне копіювання',
+                export_diagram: 'Експорт діаграми (JSON)',
+                restore_diagram: 'Відновити діаграму (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'Довідка',

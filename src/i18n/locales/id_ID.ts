@@ -34,10 +34,11 @@ export const id_ID: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'Bagikan',
-                export_diagram: 'Ekspor Diagram',
-                import_diagram: 'Impor Diagram',
+            backup: {
+                backup: 'Cadangan',
+                export_diagram: 'Ekspor Diagram (JSON)',
+                restore_diagram: 'Pulihkan Diagram (JSON)',
+                import_diagram: '.json (ChartDB)',
             },
             help: {
                 help: 'Bantuan',

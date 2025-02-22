@@ -225,6 +225,9 @@ export const Menu: React.FC<MenuProps> = () => {
                             {t('menu.file.import')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
+                            <MenubarItem onClick={openImportDiagramDialog}>
+                                {t('menu.backup.import_diagram')}
+                            </MenubarItem>
                             <MenubarItem onClick={() => openImportDBMLDialog()}>
                                 .dbml
                             </MenubarItem>
@@ -341,6 +344,9 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={exportPNG}>PNG</MenubarItem>
                             <MenubarItem onClick={exportJPG}>JPG</MenubarItem>
                             <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
+                            <MenubarItem onClick={openExportDiagramDialog}>
+                                {t('menu.backup.export_diagram')}
+                            </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />
@@ -487,13 +493,13 @@ export const Menu: React.FC<MenuProps> = () => {
             </MenubarMenu>
 
             <MenubarMenu>
-                <MenubarTrigger>{t('menu.share.share')}</MenubarTrigger>
+                <MenubarTrigger>{t('menu.backup.backup')}</MenubarTrigger>
                 <MenubarContent>
                     <MenubarItem onClick={openExportDiagramDialog}>
-                        {t('menu.share.export_diagram')}
+                        {t('menu.backup.export_diagram')}
                     </MenubarItem>
                     <MenubarItem onClick={openImportDiagramDialog}>
-                        {t('menu.share.import_diagram')}
+                        {t('menu.backup.restore_diagram')}
                     </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
