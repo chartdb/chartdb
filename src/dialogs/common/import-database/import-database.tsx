@@ -130,8 +130,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             const inputValue = e.target.value;
             setScriptResult(inputValue);
 
-            // Automatically open SSMS info when input length is exactly 65535
-            if (inputValue.length === 65535) {
+            // Automatically open SSMS info when input length is close to 65535 (±500)
+            if (inputValue.length >= 65035 && inputValue.length <= 66035) {
                 setShowSSMSInfoDialog(true);
             }
         },
