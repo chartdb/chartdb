@@ -45,34 +45,34 @@ export const useDiagramLoader = () => {
 
                 setInitialDiagram(diagram);
                 hideLoader();
+
+                return;
             } else if (!diagramId && config.defaultDiagramId) {
-                currentDiagramLoadingRef.current = diagramId;
                 const diagram = await loadDiagram(config.defaultDiagramId);
-                if (!diagram) {
-                    openOpenDiagramDialog({ canClose: false });
-                    hideLoader();
+                if (diagram) {
+                    navigate(`/diagrams/${config.defaultDiagramId}`);
+
                     return;
                 }
-                navigate(`/diagrams/${config.defaultDiagramId}`);
-            } else {
-                const diagrams = await listDiagrams();
+            }
+            const diagrams = await listDiagrams();
 
-                if (diagrams.length > 0) {
-                    openOpenDiagramDialog({ canClose: false });
-                } else {
-                    openCreateDiagramDialog();
-                }
+            if (diagrams.length > 0) {
+                openOpenDiagramDialog({ canClose: false });
+            } else {
+                openCreateDiagramDialog();
             }
         };
+
         if (
             currentDiagramLoadingRef.current === (diagramId ?? '') &&
             currentDiagramLoadingRef.current !== undefined
         ) {
             return;
         }
+        currentDiagramLoadingRef.current = diagramId ?? '';
 
         loadDefaultDiagram();
-        currentDiagramLoadingRef.current = diagramId ?? '';
     }, [
         diagramId,
         openCreateDiagramDialog,
