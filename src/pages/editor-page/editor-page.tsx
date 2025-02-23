@@ -39,6 +39,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
+import { useAutoImportDiagram } from '@/hooks/use-auto-import-diagram';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -86,6 +87,11 @@ const EditorPageComponent: React.FC = () => {
     const { toast } = useToast();
     const { t } = useTranslation();
     const { listDiagrams } = useStorage();
+    const hasImportedDiagrams = useAutoImportDiagram((diagramId) => {
+        updateConfig({ defaultDiagramId: diagramId }).then(() => {
+            navigate(`/diagrams/${diagramId}`);
+        });
+    });
 
     useEffect(() => {
         if (!config) {
@@ -128,12 +134,21 @@ const EditorPageComponent: React.FC = () => {
             } else {
                 const diagrams = await listDiagrams();
 
-                if (diagrams.length > 0) {
+                if (diagrams.length === 0 && !hasImportedDiagrams.current) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                    const updatedDiagrams = await listDiagrams();
+                    if (updatedDiagrams.length === 0) {
+                        openCreateDiagramDialog();
+                    } else {
+                        const defaultDiagramId = updatedDiagrams[0].id;
+                        await updateConfig({ defaultDiagramId });
+                        navigate(`/diagrams/${defaultDiagramId}`);
+                    }
+                } else if (diagrams.length > 0) {
                     const defaultDiagramId = diagrams[0].id;
                     await updateConfig({ defaultDiagramId });
                     navigate(`/diagrams/${defaultDiagramId}`);
-                } else {
-                    openCreateDiagramDialog();
                 }
             }
         };
@@ -151,6 +166,7 @@ const EditorPageComponent: React.FC = () => {
         showLoader,
         currentDiagram?.id,
         updateConfig,
+        hasImportedDiagrams,
     ]);
 
     useEffect(() => {

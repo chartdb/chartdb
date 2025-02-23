@@ -9,3 +9,6 @@ export const HOST_URL: string = import.meta.env.VITE_HOST_URL ?? '';
 export const HIDE_BUCKLE_DOT_DEV: boolean =
     (window?.env?.HIDE_BUCKLE_DOT_DEV ??
         import.meta.env.VITE_HIDE_BUCKLE_DOT_DEV) === 'true';
+export const AUTO_LOAD_DIAGRAM: boolean =
+    (window?.env?.AUTO_LOAD_DIAGRAM ??
+        import.meta.env.VITE_AUTO_LOAD_DIAGRAM) === 'true';

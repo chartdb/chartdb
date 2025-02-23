@@ -101,6 +101,21 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
 ```
 
+#### With Auto-Import Diagrams
+You can automatically import diagrams by mounting a directory containing JSON diagram files:
+```bash
+# Create a diagrams directory and add your JSON files
+mkdir diagrams
+cp your-diagram.json diagrams/
+
+# Run container with mounted diagrams
+docker run \
+  -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> \
+  -e VITE_AUTO_LOAD_DIAGRAM=true \
+  -v $PWD/diagrams:/usr/share/nginx/html/diagrams \
+  -p 8080:80 ghcr.io/chartdb/chartdb:latest
+```
+
 #### Build and Run locally
 ```bash
 docker build -t chartdb .
@@ -116,14 +131,18 @@ docker build \
   --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
   -t chartdb .
 
-# Run
+# Run with Custom Inference Server and Auto-Import
 docker run \
   -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
   -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -e VITE_AUTO_LOAD_DIAGRAM=true \
+  -v $PWD/diagrams:/usr/share/nginx/html/diagrams \
   -p 8080:80 chartdb
 ```
 
 > **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+
+> **Auto-Import Note:** Place your diagram JSON files in a `diagrams` directory and mount it to `/usr/share/nginx/html/diagrams` in the container. All JSON files in this directory will be automatically imported when the application starts if `VITE_AUTO_LOAD_DIAGRAM=true` is set.
 
 Open your browser and navigate to `http://localhost:8080`.
 
