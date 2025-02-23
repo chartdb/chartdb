@@ -4,8 +4,8 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useStorage } from '@/hooks/use-storage';
-import { Diagram } from '@/lib/domain/diagram';
-import React, { useEffect, useState } from 'react';
+import type { Diagram } from '@/lib/domain/diagram';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const useDiagramLoader = () => {
