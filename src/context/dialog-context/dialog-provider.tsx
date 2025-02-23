@@ -28,9 +28,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [openOpenDiagramDialog, setOpenOpenDiagramDialog] = useState(false);
-    const [openDiagramDialogParams, setOpenDiagramDialogParams] = useState<
-        Omit<OpenDiagramDialogProps, 'dialog'>
-    >({});
+    const [openDiagramDialogParams, setOpenDiagramDialogParams] =
+        useState<Omit<OpenDiagramDialogProps, 'dialog'>>();
 
     const openOpenDiagramDialogHandler: DialogContext['openOpenDiagramDialog'] =
         useCallback(
