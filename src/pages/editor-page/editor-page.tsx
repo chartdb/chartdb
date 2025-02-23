@@ -1,22 +1,12 @@
-import React, {
-    Suspense,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { Suspense, useCallback, useEffect, useRef } from 'react';
 import { TopNavbar } from './top-navbar/top-navbar';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useConfig } from '@/hooks/use-config';
+import { useParams } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
-import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Toaster } from '@/components/toast/toaster';
-import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useLayout } from '@/hooks/use-layout';
 import { useToast } from '@/components/toast/use-toast';
-import type { Diagram } from '@/lib/domain/diagram';
 import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useTranslation } from 'react-i18next';
@@ -35,10 +25,10 @@ import { DialogProvider } from '@/context/dialog-context/dialog-provider';
 import { KeyboardShortcutsProvider } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts-provider';
 import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
-import { useStorage } from '@/hooks/use-storage';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
+import { useDiagramLoader } from './use-diagram-loader';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -56,23 +46,12 @@ export const EditorMobileLayoutLazy = React.lazy(
 );
 
 const EditorPageComponent: React.FC = () => {
-    const {
-        loadDiagram,
-        diagramName,
-        currentDiagram,
-        schemas,
-        filteredSchemas,
-    } = useChartDB();
+    const { diagramName, currentDiagram, schemas, filteredSchemas } =
+        useChartDB();
     const { openSelectSchema, showSidePanel } = useLayout();
-    const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
-    const { showLoader, hideLoader } = useFullScreenLoader();
-    const { openCreateDiagramDialog, openStarUsDialog, openBuckleDialog } =
-        useDialog();
+    const { openStarUsDialog, openBuckleDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
-    const { config, updateConfig } = useConfig();
-    const navigate = useNavigate();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const {
         hideMultiSchemaNotification,
         setHideMultiSchemaNotification,
@@ -85,73 +64,7 @@ const EditorPageComponent: React.FC = () => {
     } = useLocalConfig();
     const { toast } = useToast();
     const { t } = useTranslation();
-    const { listDiagrams } = useStorage();
-
-    useEffect(() => {
-        if (!config) {
-            return;
-        }
-
-        if (currentDiagram?.id === diagramId) {
-            return;
-        }
-
-        const loadDefaultDiagram = async () => {
-            if (diagramId) {
-                setInitialDiagram(undefined);
-                showLoader();
-                resetRedoStack();
-                resetUndoStack();
-                const diagram = await loadDiagram(diagramId);
-                if (!diagram) {
-                    if (currentDiagram?.id) {
-                        await updateConfig({
-                            defaultDiagramId: currentDiagram.id,
-                        });
-                        navigate(`/diagrams/${currentDiagram.id}`);
-                    } else {
-                        navigate('/');
-                    }
-                }
-                setInitialDiagram(diagram);
-                hideLoader();
-            } else if (!diagramId && config.defaultDiagramId) {
-                const diagram = await loadDiagram(config.defaultDiagramId);
-                if (!diagram) {
-                    await updateConfig({
-                        defaultDiagramId: '',
-                    });
-                    navigate('/');
-                } else {
-                    navigate(`/diagrams/${config.defaultDiagramId}`);
-                }
-            } else {
-                const diagrams = await listDiagrams();
-
-                if (diagrams.length > 0) {
-                    const defaultDiagramId = diagrams[0].id;
-                    await updateConfig({ defaultDiagramId });
-                    navigate(`/diagrams/${defaultDiagramId}`);
-                } else {
-                    openCreateDiagramDialog();
-                }
-            }
-        };
-        loadDefaultDiagram();
-    }, [
-        diagramId,
-        openCreateDiagramDialog,
-        config,
-        navigate,
-        listDiagrams,
-        loadDiagram,
-        resetRedoStack,
-        resetUndoStack,
-        hideLoader,
-        showLoader,
-        currentDiagram?.id,
-        updateConfig,
-    ]);
+    const { initialDiagram } = useDiagramLoader();
 
     useEffect(() => {
         if (HIDE_BUCKLE_DOT_DEV) {
