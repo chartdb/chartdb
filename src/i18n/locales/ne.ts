@@ -34,10 +34,11 @@ export const ne: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'शेयर गर्नुहोस्',
-                export_diagram: 'डायाग्राम निर्यात गर्नुहोस्',
-                import_diagram: 'डायाग्राम आयात गर्नुहोस्',
+            // TODO: Translate
+            backup: {
+                backup: 'Backup',
+                export_diagram: 'Export Diagram',
+                restore_diagram: 'Restore Diagram',
             },
             help: {
                 help: 'मद्दत',

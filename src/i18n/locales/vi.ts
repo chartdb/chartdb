@@ -34,10 +34,10 @@ export const vi: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'Chia sẻ',
+            backup: {
+                backup: 'Hỗ trợ',
                 export_diagram: 'Xuất sơ đồ',
-                import_diagram: 'Nhập sơ đồ',
+                restore_diagram: 'Khôi phục sơ đồ',
             },
             help: {
                 help: 'Trợ giúp',

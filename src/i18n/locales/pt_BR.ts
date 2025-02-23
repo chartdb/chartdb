@@ -35,10 +35,10 @@ export const pt_BR: LanguageTranslation = {
                 hide_minimap: 'Hide Mini Map',
             },
             // TODO: Translate
-            share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+            backup: {
+                backup: 'Backup',
+                export_diagram: 'Exportar Diagrama',
+                restore_diagram: 'Restaurar Diagrama',
             },
             help: {
                 help: 'Ajuda',

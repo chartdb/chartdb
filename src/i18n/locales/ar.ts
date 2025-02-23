@@ -34,10 +34,10 @@ export const ar: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'مشاركة',
+            backup: {
+                backup: 'النسخ الاحتياطي',
                 export_diagram: 'تصدير المخطط',
-                import_diagram: 'استيراد المخطط',
+                restore_diagram: 'استعادة المخطط',
             },
             help: {
                 help: 'مساعدة',

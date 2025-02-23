@@ -36,10 +36,10 @@ export const ja: LanguageTranslation = {
                 hide_minimap: 'Hide Mini Map',
             },
             // TODO: Translate
-            share: {
-                share: 'Share',
+            backup: {
+                backup: 'Backup',
                 export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+                restore_diagram: 'Restore Diagram',
             },
             help: {
                 help: 'ヘルプ',

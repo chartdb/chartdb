@@ -34,11 +34,10 @@ export const hi: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            // TODO: Translate
-            share: {
-                share: 'Share',
-                export_diagram: 'Export Diagram',
-                import_diagram: 'Import Diagram',
+            backup: {
+                backup: 'बैकअप',
+                export_diagram: 'आरेख निर्यात करें',
+                restore_diagram: 'आरेख पुनर्स्थापित करें',
             },
             help: {
                 help: 'मदद',

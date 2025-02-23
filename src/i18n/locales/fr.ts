@@ -33,10 +33,10 @@ export const fr: LanguageTranslation = {
                 show_minimap: 'Afficher la Mini Carte',
                 hide_minimap: 'Masquer la Mini Carte',
             },
-            share: {
-                share: 'Partage',
+            backup: {
+                backup: 'Sauvegarde',
                 export_diagram: 'Exporter le diagramme',
-                import_diagram: 'Importer un diagramme',
+                restore_diagram: 'Restaurer le diagramme',
             },
             help: {
                 help: 'Aide',

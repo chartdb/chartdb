@@ -34,10 +34,10 @@ export const zh_TW: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: '分享',
+            backup: {
+                backup: '備份',
                 export_diagram: '匯出圖表',
-                import_diagram: '匯入圖表',
+                restore_diagram: '恢復圖表',
             },
             help: {
                 help: '幫助',

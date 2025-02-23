@@ -34,10 +34,11 @@ export const ru: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            share: {
-                share: 'Поделиться',
-                export_diagram: 'Экспорт кода диаграммы',
-                import_diagram: 'Импорт кода диаграммы',
+            // TODO: Translate
+            backup: {
+                backup: 'Backup',
+                export_diagram: 'Export Diagram',
+                restore_diagram: 'Restore Diagram',
             },
             help: {
                 help: 'Помощь',
