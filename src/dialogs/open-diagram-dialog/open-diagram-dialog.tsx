@@ -28,10 +28,13 @@ import { useNavigate } from 'react-router-dom';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useDebounce } from '@/hooks/use-debounce';
 
-export interface OpenDiagramDialogProps extends BaseDialogProps {}
+export interface OpenDiagramDialogProps extends BaseDialogProps {
+    canClose?: boolean;
+}
 
 export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
+    canClose = true,
 }) => {
     const { closeOpenDiagramDialog } = useDialog();
     const { t } = useTranslation();
@@ -122,14 +125,14 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
-                if (!open) {
+                if (!open && canClose) {
                     closeOpenDiagramDialog();
                 }
             }}
         >
             <DialogContent
                 className="flex h-[30rem] max-h-screen flex-col overflow-y-auto md:min-w-[80vw] xl:min-w-[55vw]"
-                showClose
+                showClose={canClose}
             >
                 <DialogHeader>
                     <DialogTitle>{t('open_diagram_dialog.title')}</DialogTitle>
@@ -226,11 +229,15 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 </DialogInternalContent>
 
                 <DialogFooter className="flex !justify-between gap-2">
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            {t('open_diagram_dialog.cancel')}
-                        </Button>
-                    </DialogClose>
+                    {canClose ? (
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                                {t('open_diagram_dialog.cancel')}
+                            </Button>
+                        </DialogClose>
+                    ) : (
+                        <div />
+                    )}
                     <DialogClose asChild>
                         <Button
                             type="submit"

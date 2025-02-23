@@ -39,7 +39,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.OPEN_DIAGRAM]
             .keyCombination,
-        openOpenDiagramDialog,
+        () => openOpenDiagramDialog(),
         {
             preventDefault: true,
         },

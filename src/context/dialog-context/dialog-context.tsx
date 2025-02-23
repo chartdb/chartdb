@@ -8,6 +8,7 @@ import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/e
 import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
+import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -15,7 +16,9 @@ export interface DialogContext {
     closeCreateDiagramDialog: () => void;
 
     // Open diagram dialog
-    openOpenDiagramDialog: () => void;
+    openOpenDiagramDialog: (
+        params?: Omit<OpenDiagramDialogProps, 'dialog'>
+    ) => void;
     closeOpenDiagramDialog: () => void;
 
     // Export SQL dialog
