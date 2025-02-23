@@ -36,9 +36,8 @@ export const zh_TW: LanguageTranslation = {
             },
             backup: {
                 backup: '備份',
-                export_diagram: '匯出圖表 (JSON)',
-                restore_diagram: '恢復圖表 (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: '匯出圖表',
+                restore_diagram: '恢復圖表',
             },
             help: {
                 help: '幫助',

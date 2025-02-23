@@ -36,9 +36,8 @@ export const ko_KR: LanguageTranslation = {
             },
             backup: {
                 backup: '백업',
-                export_diagram: '다이어그램 내보내기 (JSON)',
-                restore_diagram: '다이어그램 복구 (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: '다이어그램 내보내기',
+                restore_diagram: '다이어그램 복구',
             },
             help: {
                 help: '도움말',

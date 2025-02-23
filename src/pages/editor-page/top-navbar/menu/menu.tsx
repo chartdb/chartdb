@@ -226,7 +226,7 @@ export const Menu: React.FC<MenuProps> = () => {
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             <MenubarItem onClick={openImportDiagramDialog}>
-                                {t('menu.backup.import_diagram')}
+                                .json
                             </MenubarItem>
                             <MenubarItem onClick={() => openImportDBMLDialog()}>
                                 .dbml
@@ -344,8 +344,9 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={exportPNG}>PNG</MenubarItem>
                             <MenubarItem onClick={exportJPG}>JPG</MenubarItem>
                             <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
+                            <MenubarSeparator />
                             <MenubarItem onClick={openExportDiagramDialog}>
-                                {t('menu.backup.export_diagram')}
+                                JSON
                             </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>

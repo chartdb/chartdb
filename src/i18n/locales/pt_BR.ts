@@ -37,9 +37,8 @@ export const pt_BR: LanguageTranslation = {
             // TODO: Translate
             backup: {
                 backup: 'Backup',
-                export_diagram: 'Exportar Diagrama (JSON)',
-                restore_diagram: 'Restaurar Diagrama (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Exportar Diagrama',
+                restore_diagram: 'Restaurar Diagrama',
             },
             help: {
                 help: 'Ajuda',

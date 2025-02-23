@@ -36,9 +36,8 @@ export const zh_CN: LanguageTranslation = {
             },
             backup: {
                 backup: '备份',
-                export_diagram: '导出关系图 (JSON)',
-                restore_diagram: '还原图表 (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: '导出关系图',
+                restore_diagram: '还原图表',
             },
             help: {
                 help: '帮助',

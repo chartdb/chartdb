@@ -36,9 +36,8 @@ export const ar: LanguageTranslation = {
             },
             backup: {
                 backup: 'النسخ الاحتياطي',
-                export_diagram: 'تصدير المخطط (JSON)',
-                restore_diagram: 'استعادة المخطط (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'تصدير المخطط',
+                restore_diagram: 'استعادة المخطط',
             },
             help: {
                 help: 'مساعدة',

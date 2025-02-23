@@ -35,9 +35,8 @@ export const uk: LanguageTranslation = {
             },
             backup: {
                 backup: 'Резервне копіювання',
-                export_diagram: 'Експорт діаграми (JSON)',
-                restore_diagram: 'Відновити діаграму (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Експорт діаграми',
+                restore_diagram: 'Відновити діаграму',
             },
             help: {
                 help: 'Довідка',

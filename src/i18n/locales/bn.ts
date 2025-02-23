@@ -37,9 +37,8 @@ export const bn: LanguageTranslation = {
 
             backup: {
                 backup: 'ব্যাকআপ',
-                export_diagram: 'ডায়াগ্রাম রপ্তানি করুন (JSON)',
-                restore_diagram: 'ডায়াগ্রাম পুনরুদ্ধার করুন (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'ডায়াগ্রাম রপ্তানি করুন',
+                restore_diagram: 'ডায়াগ্রাম পুনরুদ্ধার করুন',
             },
             help: {
                 help: 'সাহায্য',

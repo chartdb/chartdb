@@ -37,9 +37,8 @@ export const gu: LanguageTranslation = {
 
             backup: {
                 backup: 'બેકઅપ',
-                export_diagram: 'ડાયાગ્રામ નિકાસ કરો (JSON)',
-                restore_diagram: 'ડાયાગ્રામ પુનઃસ્થાપિત કરો (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'ડાયાગ્રામ નિકાસ કરો',
+                restore_diagram: 'ડાયાગ્રામ પુનઃસ્થાપિત કરો',
             },
             help: {
                 help: 'મદદ',

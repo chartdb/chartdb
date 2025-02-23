@@ -38,9 +38,8 @@ export const ja: LanguageTranslation = {
             // TODO: Translate
             backup: {
                 backup: 'Backup',
-                export_diagram: 'Export Diagram (JSON)',
-                restore_diagram: 'Restore Diagram (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Export Diagram',
+                restore_diagram: 'Restore Diagram',
             },
             help: {
                 help: 'ヘルプ',

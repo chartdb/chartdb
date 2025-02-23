@@ -36,9 +36,8 @@ export const es: LanguageTranslation = {
             },
             backup: {
                 backup: 'Respaldo',
-                export_diagram: 'Exportar Diagrama (JSON)',
-                restore_diagram: 'Restaurar Diagrama (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Exportar Diagrama',
+                restore_diagram: 'Restaurar Diagrama',
             },
             help: {
                 help: 'Ayuda',

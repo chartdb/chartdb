@@ -36,9 +36,8 @@ export const vi: LanguageTranslation = {
             },
             backup: {
                 backup: 'Hỗ trợ',
-                export_diagram: 'Xuất sơ đồ (JSON)',
-                restore_diagram: 'Khôi phục sơ đồ (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Xuất sơ đồ',
+                restore_diagram: 'Khôi phục sơ đồ',
             },
             help: {
                 help: 'Trợ giúp',

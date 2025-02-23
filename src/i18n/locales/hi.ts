@@ -36,9 +36,8 @@ export const hi: LanguageTranslation = {
             },
             backup: {
                 backup: 'बैकअप',
-                export_diagram: 'आरेख निर्यात करें (JSON)',
-                restore_diagram: 'आरेख पुनर्स्थापित करें (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'आरेख निर्यात करें',
+                restore_diagram: 'आरेख पुनर्स्थापित करें',
             },
             help: {
                 help: 'मदद',

@@ -36,9 +36,8 @@ export const id_ID: LanguageTranslation = {
             },
             backup: {
                 backup: 'Cadangan',
-                export_diagram: 'Ekspor Diagram (JSON)',
-                restore_diagram: 'Pulihkan Diagram (JSON)',
-                import_diagram: '.json (ChartDB)',
+                export_diagram: 'Ekspor Diagram',
+                restore_diagram: 'Pulihkan Diagram',
             },
             help: {
                 help: 'Bantuan',
