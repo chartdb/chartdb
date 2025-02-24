@@ -43,6 +43,7 @@ export const ja: LanguageTranslation = {
             },
             help: {
                 help: 'ヘルプ',
+                docs_website: 'ドキュメント',
                 visit_website: 'ChartDBにアクセス',
                 join_discord: 'Discordに参加',
                 schedule_a_call: '話しかけてください！',

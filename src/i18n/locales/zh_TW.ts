@@ -41,6 +41,7 @@ export const zh_TW: LanguageTranslation = {
             },
             help: {
                 help: '幫助',
+                docs_website: '文件',
                 visit_website: '訪問 ChartDB 網站',
                 join_discord: '加入 Discord',
                 schedule_a_call: '與我們聯絡！',

@@ -42,6 +42,7 @@ export const de: LanguageTranslation = {
             },
             help: {
                 help: 'Hilfe',
+                docs_website: 'Dokumentation',
                 visit_website: 'ChartDB Webseite',
                 join_discord: 'Auf Discord beitreten',
                 schedule_a_call: 'Gespräch vereinbaren',

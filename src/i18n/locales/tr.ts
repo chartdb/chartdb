@@ -42,6 +42,7 @@ export const tr: LanguageTranslation = {
             },
             help: {
                 help: 'Yardım',
+                docs_website: 'Belgeleme',
                 visit_website: "ChartDB'yi Ziyaret Et",
                 join_discord: "Discord'a Katıl",
                 schedule_a_call: 'Bize Ulaş!',
