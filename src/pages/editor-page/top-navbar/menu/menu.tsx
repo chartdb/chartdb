@@ -102,6 +102,10 @@ export const Menu: React.FC<MenuProps> = () => {
         window.location.href = 'https://chartdb.io';
     }, []);
 
+    const openChartDBDocs = useCallback(() => {
+        window.open('https://docs.chartdb.io', '_blank');
+    }, []);
+
     const openJoinDiscord = useCallback(() => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
@@ -508,6 +512,9 @@ export const Menu: React.FC<MenuProps> = () => {
             <MenubarMenu>
                 <MenubarTrigger>{t('menu.help.help')}</MenubarTrigger>
                 <MenubarContent>
+                    <MenubarItem onClick={openChartDBDocs}>
+                        {t('menu.help.docs_website')}
+                    </MenubarItem>
                     <MenubarItem onClick={openChartDBIO}>
                         {t('menu.help.visit_website')}
                     </MenubarItem>

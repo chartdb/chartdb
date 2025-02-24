@@ -42,6 +42,7 @@ export const te: LanguageTranslation = {
             },
             help: {
                 help: 'సహాయం',
+                docs_website: 'డాక్యుమెంటేషన్',
                 visit_website: 'ChartDB సందర్శించండి',
                 join_discord: 'డిస్కార్డ్‌లో మా నుంచి చేరండి',
                 schedule_a_call: 'మాతో మాట్లాడండి!',

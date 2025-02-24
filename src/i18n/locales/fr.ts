@@ -40,6 +40,7 @@ export const fr: LanguageTranslation = {
             },
             help: {
                 help: 'Aide',
+                docs_website: 'Documentation',
                 visit_website: 'Visitez ChartDB',
                 join_discord: 'Rejoignez-nous sur Discord',
                 schedule_a_call: 'Parlez avec nous !',

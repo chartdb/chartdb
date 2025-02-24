@@ -42,6 +42,7 @@ export const ne: LanguageTranslation = {
             },
             help: {
                 help: 'मद्दत',
+                docs_website: 'कागजात',
                 visit_website: 'वेबसाइटमा जानुहोस्',
                 join_discord: 'डिस्कोर्डमा सामिल हुनुहोस्',
                 schedule_a_call: 'कल अनुसूची गर्नुहोस्',

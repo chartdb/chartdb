@@ -41,6 +41,7 @@ export const vi: LanguageTranslation = {
             },
             help: {
                 help: 'Trợ giúp',
+                docs_website: 'Tài liệu',
                 visit_website: 'Truy cập ChartDB',
                 join_discord: 'Tham gia Discord',
                 schedule_a_call: 'Trò chuyện cùng chúng tôi!',
