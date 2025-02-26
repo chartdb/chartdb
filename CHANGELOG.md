@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.8.1](https://github.com/chartdb/chartdb/compare/v1.8.0...v1.8.1) (2025-02-26)
+
+
+### Bug Fixes
+
+* **add-docs:** add link to ChartDB documentation ([#597](https://github.com/chartdb/chartdb/issues/597)) ([b55d631](https://github.com/chartdb/chartdb/commit/b55d631146ff3a1f7d63c800d44b5d3d3a223c76))
+* components config ([#591](https://github.com/chartdb/chartdb/issues/591)) ([cbc4e85](https://github.com/chartdb/chartdb/commit/cbc4e85a14e24a43f9ff470518f8fe2845046bdb))
+* **empty-state:** show diff buttons on import-dbml when triggered by empty ([#574](https://github.com/chartdb/chartdb/issues/574)) ([4834247](https://github.com/chartdb/chartdb/commit/48342471ac231922f2ca4455b74a9879127a54f1))
+* **i18n:** add [FR] translation ([#579](https://github.com/chartdb/chartdb/issues/579)) ([ab89bad](https://github.com/chartdb/chartdb/commit/ab89bad6d544ba4c339a3360eeec7d29e5579511))
+* **img-export:** add ChartDB watermark to exported image ([#588](https://github.com/chartdb/chartdb/issues/588)) ([b935b7f](https://github.com/chartdb/chartdb/commit/b935b7f25111d5f72b7f8d7c552a4ea5974f791e))
+* **import-mssql:** fix import/export scripts to handle data correctly ([#598](https://github.com/chartdb/chartdb/issues/598)) ([e06eb2a](https://github.com/chartdb/chartdb/commit/e06eb2a48e6bd3bcf352f4bcf128214c7da4c1b1))
+* **menu-backup:** update export to be backup ([#590](https://github.com/chartdb/chartdb/issues/590)) ([26a0a5b](https://github.com/chartdb/chartdb/commit/26a0a5b550ef5e47e89b00d0232dc98936f63f23))
+* open create new diagram when there is no diagram ([#594](https://github.com/chartdb/chartdb/issues/594)) ([ef11892](https://github.com/chartdb/chartdb/commit/ef118929ad5d5cbfae0290061bd8ea30bd262496))
+* **open diagram:** in case there is no diagram, opens the dialog ([#593](https://github.com/chartdb/chartdb/issues/593)) ([68f4819](https://github.com/chartdb/chartdb/commit/68f48190c93f155398cca15dd7af2a025de2d45f))
+* **side-panel:** simplify how to add field and index ([#573](https://github.com/chartdb/chartdb/issues/573)) ([a1c0cf1](https://github.com/chartdb/chartdb/commit/a1c0cf102add4fb235e913e75078139b3961341b))
+* **sql_server_export:** use sql server export ([#600](https://github.com/chartdb/chartdb/issues/600)) ([56382a9](https://github.com/chartdb/chartdb/commit/56382a9fdc5e3044f8811873dd8a79f590771896))
+* **sqlite-import:** import nuallable columns correctly + add json type ([#571](https://github.com/chartdb/chartdb/issues/571)) ([deb2184](https://github.com/chartdb/chartdb/commit/deb218423f77f0c0945a93005696456f62b00ce3))
+
 ## [1.8.0](https://github.com/chartdb/chartdb/compare/v1.7.0...v1.8.0) (2025-02-13)
 
 
