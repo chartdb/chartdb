@@ -4,7 +4,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
-import { exportMSSQL } from './ExportPerType/mssql';
+import { exportMSSQL } from './export-per-type/mssql';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
