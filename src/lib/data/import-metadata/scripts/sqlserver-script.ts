@@ -117,7 +117,7 @@ indexes AS (
     JOIN sys.schemas s ON t.schema_id = s.schema_id
     JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
     JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
-    WHERE s.name LIKE '%' AND i.name IS NOT NULL
+    WHERE s.name LIKE '%' AND i.name IS NOT NULL AND ic.is_included_column = 0
 ),
 tbls AS (
     SELECT
@@ -324,6 +324,7 @@ indexes AS (
                 JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
                 WHERE s.name LIKE '%'
                         AND i.name IS NOT NULL
+                        AND ic.is_included_column = 0
                 FOR XML PATH('')
             ), 1, 1, ''), '')
         + N']' AS all_indexes_json

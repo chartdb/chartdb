@@ -1,15 +1,20 @@
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
-import type { DatabaseType } from '@/lib/domain/database-type';
+import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
+import { exportMSSQL } from './export-per-type/mssql';
 
 export const exportBaseSQL = (diagram: Diagram): string => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
         return '';
+    }
+
+    if (diagram.databaseType === DatabaseType.SQL_SERVER) {
+        return exportMSSQL(diagram);
     }
 
     // Filter out the tables that are views
@@ -226,6 +231,13 @@ export const exportSQL = async (
     }
 ): Promise<string> => {
     const sqlScript = exportBaseSQL(diagram);
+    if (
+        databaseType === DatabaseType.SQL_SERVER &&
+        diagram.databaseType === DatabaseType.SQL_SERVER
+    ) {
+        return sqlScript;
+    }
+
     const cacheKey = await generateCacheKey(databaseType, sqlScript);
 
     const cachedResult = getFromCache(cacheKey);
