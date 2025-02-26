@@ -15,11 +15,10 @@ import { SelectBox } from '@/components/select-box/select-box';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { diagramToJSONOutput } from '@/lib/export-import-utils';
 import { Spinner } from '@/components/spinner/spinner';
-import { waitFor } from '@/lib/utils';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
+import { useExportDiagram } from '@/hooks/use-export-diagram';
 
 export interface ExportDiagramDialogProps extends BaseDialogProps {}
 
@@ -27,44 +26,27 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
     dialog,
 }) => {
     const { t } = useTranslation();
-    const { diagramName, currentDiagram } = useChartDB();
-    const [isLoading, setIsLoading] = useState(false);
+    const { currentDiagram } = useChartDB();
     const { closeExportDiagramDialog } = useDialog();
     const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!dialog.open) return;
-        setIsLoading(false);
         setError(false);
     }, [dialog.open]);
 
-    const downloadOutput = useCallback(
-        (dataUrl: string) => {
-            const a = document.createElement('a');
-            a.setAttribute('download', `ChartDB(${diagramName}).json`);
-            a.setAttribute('href', dataUrl);
-            a.click();
-        },
-        [diagramName]
-    );
+    const { exportDiagram, isExporting: isLoading } = useExportDiagram();
 
     const handleExport = useCallback(async () => {
-        setIsLoading(true);
-        await waitFor(1000);
         try {
-            const json = diagramToJSONOutput(currentDiagram);
-            const blob = new Blob([json], { type: 'application/json' });
-            const dataUrl = URL.createObjectURL(blob);
-            downloadOutput(dataUrl);
-            setIsLoading(false);
+            await exportDiagram({ diagram: currentDiagram });
             closeExportDiagramDialog();
         } catch (e) {
             setError(true);
-            setIsLoading(false);
 
             throw e;
         }
-    }, [downloadOutput, currentDiagram, closeExportDiagramDialog]);
+    }, [exportDiagram, currentDiagram, closeExportDiagramDialog]);
 
     const outputTypeOptions: SelectBoxOption[] = useMemo(
         () =>
