@@ -231,10 +231,7 @@ export const exportSQL = async (
     }
 ): Promise<string> => {
     const sqlScript = exportBaseSQL(diagram);
-    if (
-        databaseType === DatabaseType.SQL_SERVER &&
-        diagram.databaseType === DatabaseType.SQL_SERVER
-    ) {
+    if (databaseType === DatabaseType.SQL_SERVER) {
         return sqlScript;
     }
 
