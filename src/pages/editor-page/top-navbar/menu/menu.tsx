@@ -470,8 +470,16 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarSub>
                     <MenubarSeparator />
                     <MenubarSub>
-                        <MenubarSubTrigger>
-                            {t('menu.view.theme')}
+                        <MenubarSubTrigger className="flex items-center gap-1">
+                            <span>{t('menu.view.theme')}</span>
+                            <div className="flex-1" />
+                            <MenubarShortcut>
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.TOGGLE_THEME
+                                    ].keyCombinationLabel
+                                }
+                            </MenubarShortcut>
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             <MenubarCheckboxItem
