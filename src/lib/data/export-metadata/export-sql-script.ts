@@ -271,7 +271,6 @@ export const exportSQL = async (
     }
 
     const openai = createOpenAI(config);
-    console.dir(openai);
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
