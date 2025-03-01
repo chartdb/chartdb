@@ -252,13 +252,16 @@ export const exportSQL = async (
 
     const apiKey = window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY;
     const baseUrl = window?.env?.OPENAI_API_ENDPOINT ?? OPENAI_API_ENDPOINT;
-    const modelName = window?.env?.LLM_MODEL_NAME || 'gpt-4o-mini-2024-07-18';
+    const modelName =
+        window?.env?.LLM_MODEL_NAME ??
+        LLM_MODEL_NAME ??
+        'gpt-4o-mini-2024-07-18';
 
     let config: { apiKey: string; baseUrl?: string };
 
     if (useCustomEndpoint) {
         config = {
-            apiKey: 'sk-xxx', // minimal valid API key format
+            apiKey: apiKey,
             baseUrl: baseUrl,
         };
     } else {
@@ -268,6 +271,7 @@ export const exportSQL = async (
     }
 
     const openai = createOpenAI(config);
+    console.dir(openai);
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
