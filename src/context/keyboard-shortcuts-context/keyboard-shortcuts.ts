@@ -7,6 +7,7 @@ export enum KeyboardShortcutAction {
     SAVE_DIAGRAM = 'save_diagram',
     TOGGLE_SIDE_PANEL = 'toggle_side_panel',
     SHOW_ALL = 'show_all',
+    TOGGLE_THEME = 'toggle_theme',
 }
 
 export interface KeyboardShortcut {
@@ -62,6 +63,13 @@ export const keyboardShortcuts: Record<
         keyCombinationLabelWin: 'Ctrl+0',
         keyCombinationMac: 'meta+0',
         keyCombinationWin: 'ctrl+0',
+    },
+    [KeyboardShortcutAction.TOGGLE_THEME]: {
+        action: KeyboardShortcutAction.TOGGLE_THEME,
+        keyCombinationLabelMac: '⌘M',
+        keyCombinationLabelWin: 'Ctrl+M',
+        keyCombinationMac: 'meta+m',
+        keyCombinationWin: 'ctrl+m',
     },
 };
 
