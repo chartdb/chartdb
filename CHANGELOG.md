@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.2](https://github.com/chartdb/chartdb/compare/v1.8.1...v1.8.2) (2025-03-05)
+
+
+### Bug Fixes
+
+* **cardinality:** set true as default ([#583](https://github.com/chartdb/chartdb/issues/583)) ([2939320](https://github.com/chartdb/chartdb/commit/2939320a15a9ccd9eccfe46c26e04ca1edca2420))
+* **performance:** Optimize performance of field comments editing ([#610](https://github.com/chartdb/chartdb/issues/610)) ([5dd7fe7](https://github.com/chartdb/chartdb/commit/5dd7fe75d1b0378ba406c75183c5e2356730c3b4))
+* **shorcuts:** add shortcut to toggle the theme ([#602](https://github.com/chartdb/chartdb/issues/602)) ([a643852](https://github.com/chartdb/chartdb/commit/a6438528375ab54d3ec7d80ac6b6ddd65ea8cf1e))
+
 ## [1.8.1](https://github.com/chartdb/chartdb/compare/v1.8.0...v1.8.1) (2025-03-02)
 
 
