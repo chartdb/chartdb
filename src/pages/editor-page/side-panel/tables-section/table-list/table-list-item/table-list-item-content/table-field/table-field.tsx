@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Ellipsis, GripVertical, Trash2, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
@@ -25,6 +25,7 @@ import { TableFieldToggle } from './table-field-toggle';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
+import { debounce } from '@/lib/utils';
 
 export interface TableFieldProps {
     field: DBField;
@@ -39,6 +40,7 @@ export const TableField: React.FC<TableFieldProps> = ({
 }) => {
     const { databaseType } = useChartDB();
     const { t } = useTranslation();
+    const [comments, setComments] = React.useState(field.comments);
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
@@ -51,6 +53,28 @@ export const TableField: React.FC<TableFieldProps> = ({
         transform: CSS.Translate.toString(transform),
         transition,
     };
+
+    const debouncedUpdateCommentRef = useRef<((value?: string) => void) | null>(
+        null
+    );
+
+    useEffect(() => {
+        debouncedUpdateCommentRef.current = debounce((value?: string) => {
+            updateField({
+                comments: value,
+            });
+        }, 500);
+
+        return () => {
+            debouncedUpdateCommentRef.current = null;
+        };
+    }, [updateField]);
+
+    useEffect(() => {
+        if (debouncedUpdateCommentRef.current) {
+            debouncedUpdateCommentRef.current(comments);
+        }
+    }, [comments]);
 
     return (
         <div
@@ -199,11 +223,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         )}
                                     </Label>
                                     <Textarea
-                                        value={field.comments}
+                                        value={comments}
                                         onChange={(e) =>
-                                            updateField({
-                                                comments: e.target.value,
-                                            })
+                                            setComments(e.target.value)
                                         }
                                         placeholder={t(
                                             'side_panel.tables_section.table.field_actions.no_comments'
