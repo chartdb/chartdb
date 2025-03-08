@@ -30,6 +30,8 @@ export const en = {
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
+                hide_toolbar: 'Hide Toolbar',
+                show_toolbar: 'Show Toolbar',
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
