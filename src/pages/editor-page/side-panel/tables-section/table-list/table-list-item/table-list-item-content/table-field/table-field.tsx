@@ -1,31 +1,23 @@
-import React, { useEffect, useRef } from 'react';
-import { Ellipsis, GripVertical, Trash2, KeyRound } from 'lucide-react';
+import React from 'react';
+import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
-import { Button } from '@/components/button/button';
-import { Separator } from '@/components/separator/separator';
-
 import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { dataTypeMap } from '@/lib/data/data-types/data-types';
+import {
+    dataTypeDataToDataType,
+    dataTypeMap,
+} from '@/lib/data/data-types/data-types';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/popover/popover';
-import { Label } from '@/components/label/label';
-import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
-import { Textarea } from '@/components/textarea/textarea';
 import { TableFieldToggle } from './table-field-toggle';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
-import { debounce } from '@/lib/utils';
+import { TableFieldPopover } from './table-field-modal/table-field-modal';
 
 export interface TableFieldProps {
     field: DBField;
@@ -40,7 +32,7 @@ export const TableField: React.FC<TableFieldProps> = ({
 }) => {
     const { databaseType } = useChartDB();
     const { t } = useTranslation();
-    const [comments, setComments] = React.useState(field.comments);
+
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
@@ -53,28 +45,6 @@ export const TableField: React.FC<TableFieldProps> = ({
         transform: CSS.Translate.toString(transform),
         transition,
     };
-
-    const debouncedUpdateCommentRef = useRef<((value?: string) => void) | null>(
-        null
-    );
-
-    useEffect(() => {
-        debouncedUpdateCommentRef.current = debounce((value?: string) => {
-            updateField({
-                comments: value,
-            });
-        }, 500);
-
-        return () => {
-            debouncedUpdateCommentRef.current = null;
-        };
-    }, [updateField]);
-
-    useEffect(() => {
-        if (debouncedUpdateCommentRef.current) {
-            debouncedUpdateCommentRef.current(comments);
-        }
-    }, [comments]);
 
     return (
         <div
@@ -122,8 +92,14 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 value={field.type.id}
                                 onChange={(value) =>
                                     updateField({
-                                        type: dataTypeMap[databaseType].find(
-                                            (v) => v.id === value
+                                        characterMaximumLength: undefined,
+                                        type: dataTypeDataToDataType(
+                                            dataTypeMap[databaseType].find(
+                                                (v) => v.id === value
+                                            ) ?? {
+                                                id: value as string,
+                                                name: value as string,
+                                            }
                                         ),
                                     })
                                 }
@@ -176,78 +152,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                         {t('side_panel.tables_section.table.primary_key')}
                     </TooltipContent>
                 </Tooltip>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                        >
-                            <Ellipsis className="size-3.5" />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-52">
-                        <div className="flex flex-col gap-2">
-                            <div className="text-sm font-semibold">
-                                {t(
-                                    'side_panel.tables_section.table.field_actions.title'
-                                )}
-                            </div>
-                            <Separator orientation="horizontal" />
-                            <div className="flex flex-col gap-3">
-                                <div className="flex items-center justify-between">
-                                    <Label
-                                        htmlFor="width"
-                                        className="text-subtitle"
-                                    >
-                                        {t(
-                                            'side_panel.tables_section.table.field_actions.unique'
-                                        )}
-                                    </Label>
-                                    <Checkbox
-                                        checked={field.unique}
-                                        disabled={field.primaryKey}
-                                        onCheckedChange={(value) =>
-                                            updateField({
-                                                unique: !!value,
-                                            })
-                                        }
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label
-                                        htmlFor="width"
-                                        className="text-subtitle"
-                                    >
-                                        {t(
-                                            'side_panel.tables_section.table.field_actions.comments'
-                                        )}
-                                    </Label>
-                                    <Textarea
-                                        value={comments}
-                                        onChange={(e) =>
-                                            setComments(e.target.value)
-                                        }
-                                        placeholder={t(
-                                            'side_panel.tables_section.table.field_actions.no_comments'
-                                        )}
-                                        className="w-full rounded-md bg-muted text-sm"
-                                    />
-                                </div>
-                            </div>
-                            <Separator orientation="horizontal" />
-                            <Button
-                                variant="outline"
-                                className="flex gap-2 !text-red-700"
-                                onClick={removeField}
-                            >
-                                <Trash2 className="size-3.5 text-red-700" />
-                                {t(
-                                    'side_panel.tables_section.table.field_actions.delete_field'
-                                )}
-                            </Button>
-                        </div>
-                    </PopoverContent>
-                </Popover>
+                <TableFieldPopover
+                    field={field}
+                    updateField={updateField}
+                    removeField={removeField}
+                />
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const postgresDataTypes: readonly DataType[] = [
+export const postgresDataTypes: readonly DataTypeData[] = [
     // Numeric Types
     { name: 'smallint', id: 'smallint' },
     { name: 'integer', id: 'integer' },
@@ -15,9 +15,13 @@ export const postgresDataTypes: readonly DataType[] = [
     { name: 'money', id: 'money' },
 
     // Character Types
-    { name: 'char', id: 'char' },
-    { name: 'varchar', id: 'varchar' },
-    { name: 'character varying', id: 'character_varying' },
+    { name: 'char', id: 'char', hasCharMaxLength: true },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
+    {
+        name: 'character varying',
+        id: 'character_varying',
+        hasCharMaxLength: true,
+    },
     { name: 'text', id: 'text' },
 
     // Binary Data Types

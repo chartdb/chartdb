@@ -148,6 +148,8 @@ export const zh_TW: LanguageTranslation = {
                         comments: '註解',
                         no_comments: '無註解',
                         delete_field: '刪除欄位',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: '索引屬性',

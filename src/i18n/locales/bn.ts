@@ -152,6 +152,8 @@ export const bn: LanguageTranslation = {
                         comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'ইনডেক্স কর্ম',

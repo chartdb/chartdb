@@ -151,6 +151,8 @@ export const tr: LanguageTranslation = {
                         comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'İndeks Özellikleri',

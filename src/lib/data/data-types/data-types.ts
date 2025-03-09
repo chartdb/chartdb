@@ -13,12 +13,16 @@ export interface DataType {
     name: string;
 }
 
+export interface DataTypeData extends DataType {
+    hasCharMaxLength?: boolean;
+}
+
 export const dataTypeSchema: z.ZodType<DataType> = z.object({
     id: z.string(),
     name: z.string(),
 });
 
-export const dataTypeMap: Record<DatabaseType, readonly DataType[]> = {
+export const dataTypeMap: Record<DatabaseType, readonly DataTypeData[]> = {
     [DatabaseType.GENERIC]: genericDataTypes,
     [DatabaseType.POSTGRESQL]: postgresDataTypes,
     [DatabaseType.MYSQL]: mysqlDataTypes,
@@ -64,3 +68,21 @@ export function areFieldTypesCompatible(
 }
 
 export const dataTypes = Object.values(dataTypeMap).flat();
+
+export const dataTypeDataToDataType = (
+    dataTypeData: DataTypeData
+): DataType => ({
+    id: dataTypeData.id,
+    name: dataTypeData.name,
+});
+
+export const findDataTypeDataById = (
+    id: string,
+    databaseType?: DatabaseType
+): DataTypeData | undefined => {
+    const dataTypesOptions = databaseType
+        ? dataTypeMap[databaseType]
+        : dataTypes;
+
+    return dataTypesOptions.find((dataType) => dataType.id === id);
+};

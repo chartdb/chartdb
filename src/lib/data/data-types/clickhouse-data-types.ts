@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const clickhouseDataTypes: readonly DataType[] = [
+export const clickhouseDataTypes: readonly DataTypeData[] = [
     // Numeric Types
     { name: 'uint8', id: 'uint8' },
     { name: 'uint16', id: 'uint16' },

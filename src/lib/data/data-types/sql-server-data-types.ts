@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const sqlServerDataTypes: readonly DataType[] = [
+export const sqlServerDataTypes: readonly DataTypeData[] = [
     // Exact Numerics
     { name: 'bigint', id: 'bigint' },
     { name: 'bit', id: 'bit' },

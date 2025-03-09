@@ -152,6 +152,8 @@ export const pt_BR: LanguageTranslation = {
                         comments: 'Comentários',
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Atributos do Índice',
