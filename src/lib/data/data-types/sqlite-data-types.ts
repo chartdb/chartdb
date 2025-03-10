@@ -22,6 +22,6 @@ export const sqliteDataTypes: readonly DataTypeData[] = [
     { name: 'int', id: 'int' },
     { name: 'float', id: 'float' },
     { name: 'boolean', id: 'boolean' },
-    { name: 'varchar', id: 'varchar' },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
     { name: 'decimal', id: 'decimal' },
 ] as const;

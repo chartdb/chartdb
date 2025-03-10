@@ -2,7 +2,7 @@ import type { DataTypeData } from './data-types';
 
 export const genericDataTypes: readonly DataTypeData[] = [
     { name: 'bigint', id: 'bigint' },
-    { name: 'binary', id: 'binary' },
+    { name: 'binary', id: 'binary', hasCharMaxLength: true },
     { name: 'blob', id: 'blob' },
     { name: 'boolean', id: 'boolean' },
     { name: 'char', id: 'char', hasCharMaxLength: true },
@@ -22,6 +22,6 @@ export const genericDataTypes: readonly DataTypeData[] = [
     { name: 'time', id: 'time' },
     { name: 'timestamp', id: 'timestamp' },
     { name: 'uuid', id: 'uuid' },
-    { name: 'varbinary', id: 'varbinary' },
+    { name: 'varbinary', id: 'varbinary', hasCharMaxLength: true },
     { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
 ] as const;
