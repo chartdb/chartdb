@@ -95,7 +95,7 @@ export const createFieldsFromMetadata = ({
             nullable: col.nullable,
             ...(col.character_maximum_length &&
             col.character_maximum_length !== 'null'
-                ? { character_maximum_length: col.character_maximum_length }
+                ? { characterMaximumLength: col.character_maximum_length }
                 : {}),
             ...(col.precision?.precision
                 ? { precision: col.precision.precision }
