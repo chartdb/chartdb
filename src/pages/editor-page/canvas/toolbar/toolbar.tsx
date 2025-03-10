@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
+import { useIsLostInCanvas } from '../hooks/use-is-lost-in-canvas';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -28,6 +29,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
+    const { isLostInCanvas } = useIsLostInCanvas();
+
     useOnViewportChange({
         onChange: ({ zoom }) => {
             setZoom(convertToPercentage(zoom));
@@ -93,7 +96,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>
-                                <ToolbarButton onClick={showAll}>
+                                <ToolbarButton
+                                    onClick={showAll}
+                                    className={
+                                        isLostInCanvas
+                                            ? 'bg-pink-500 text-white hover:bg-pink-600 hover:text-white'
+                                            : ''
+                                    }
+                                >
                                     <Scan />
                                 </ToolbarButton>
                             </span>
