@@ -153,6 +153,8 @@ export const gu: LanguageTranslation = {
                         comments: 'ટિપ્પણીઓ',
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'ઇન્ડેક્સ લક્ષણો',

@@ -152,6 +152,8 @@ export const te: LanguageTranslation = {
                         comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'ఇండెక్స్ గుణాలు',

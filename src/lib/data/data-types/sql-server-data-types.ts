@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const sqlServerDataTypes: readonly DataType[] = [
+export const sqlServerDataTypes: readonly DataTypeData[] = [
     // Exact Numerics
     { name: 'bigint', id: 'bigint' },
     { name: 'bit', id: 'bit' },
@@ -25,18 +25,18 @@ export const sqlServerDataTypes: readonly DataType[] = [
     { name: 'time', id: 'time' },
 
     // Character Strings
-    { name: 'char', id: 'char' },
-    { name: 'varchar', id: 'varchar' },
+    { name: 'char', id: 'char', hasCharMaxLength: true },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
     { name: 'text', id: 'text' },
 
     // Unicode Character Strings
-    { name: 'nchar', id: 'nchar' },
-    { name: 'nvarchar', id: 'nvarchar' },
+    { name: 'nchar', id: 'nchar', hasCharMaxLength: true },
+    { name: 'nvarchar', id: 'nvarchar', hasCharMaxLength: true },
     { name: 'ntext', id: 'ntext' },
 
     // Binary Strings
-    { name: 'binary', id: 'binary' },
-    { name: 'varbinary', id: 'varbinary' },
+    { name: 'binary', id: 'binary', hasCharMaxLength: true },
+    { name: 'varbinary', id: 'varbinary', hasCharMaxLength: true },
     { name: 'image', id: 'image' },
 
     // Other Data Types

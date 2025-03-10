@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const sqliteDataTypes: readonly DataType[] = [
+export const sqliteDataTypes: readonly DataTypeData[] = [
     // Numeric Types
     { name: 'integer', id: 'integer' },
     { name: 'real', id: 'real' },
@@ -22,6 +22,6 @@ export const sqliteDataTypes: readonly DataType[] = [
     { name: 'int', id: 'int' },
     { name: 'float', id: 'float' },
     { name: 'boolean', id: 'boolean' },
-    { name: 'varchar', id: 'varchar' },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
     { name: 'decimal', id: 'decimal' },
 ] as const;

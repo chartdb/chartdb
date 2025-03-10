@@ -151,6 +151,8 @@ export const ar: LanguageTranslation = {
                         comments: 'تعليقات',
                         no_comments: 'لا يوجد تعليقات',
                         delete_field: 'حذف الحقل',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'خصائص الفهرس',

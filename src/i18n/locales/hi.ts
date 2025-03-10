@@ -152,6 +152,8 @@ export const hi: LanguageTranslation = {
                         comments: 'टिप्पणियाँ',
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'सूचकांक विशेषताएँ',

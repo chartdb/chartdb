@@ -151,6 +151,8 @@ export const ko_KR: LanguageTranslation = {
                         comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: '인덱스 속성',

@@ -1,6 +1,6 @@
-import type { DataType } from './data-types';
+import type { DataTypeData } from './data-types';
 
-export const mysqlDataTypes: readonly DataType[] = [
+export const mysqlDataTypes: readonly DataTypeData[] = [
     // Numeric Types
     { name: 'tinyint', id: 'tinyint' },
     { name: 'smallint', id: 'smallint' },
@@ -23,10 +23,10 @@ export const mysqlDataTypes: readonly DataType[] = [
     { name: 'year', id: 'year' },
 
     // String Types
-    { name: 'char', id: 'char' },
-    { name: 'varchar', id: 'varchar' },
-    { name: 'binary', id: 'binary' },
-    { name: 'varbinary', id: 'varbinary' },
+    { name: 'char', id: 'char', hasCharMaxLength: true },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
+    { name: 'binary', id: 'binary', hasCharMaxLength: true },
+    { name: 'varbinary', id: 'varbinary', hasCharMaxLength: true },
     { name: 'tinyblob', id: 'tinyblob' },
     { name: 'blob', id: 'blob' },
     { name: 'mediumblob', id: 'mediumblob' },

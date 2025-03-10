@@ -153,6 +153,8 @@ export const de: LanguageTranslation = {
                         comments: 'Kommentare',
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Indexattribute',

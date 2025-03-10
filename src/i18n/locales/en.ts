@@ -145,6 +145,7 @@ export const en = {
                     field_actions: {
                         title: 'Field Attributes',
                         unique: 'Unique',
+                        character_length: 'Max Length',
                         comments: 'Comments',
                         no_comments: 'No comments',
                         delete_field: 'Delete Field',

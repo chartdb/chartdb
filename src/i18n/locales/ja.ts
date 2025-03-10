@@ -155,6 +155,8 @@ export const ja: LanguageTranslation = {
                         comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'インデックス属性',

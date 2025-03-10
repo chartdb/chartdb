@@ -151,6 +151,8 @@ export const vi: LanguageTranslation = {
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Thuộc tính chỉ mục',

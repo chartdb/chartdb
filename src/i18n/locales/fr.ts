@@ -140,6 +140,8 @@ export const fr: LanguageTranslation = {
                         comments: 'Commentaires',
                         no_comments: 'Pas de commentaires',
                         delete_field: 'Supprimer le Champ',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: "Attributs de l'Index",

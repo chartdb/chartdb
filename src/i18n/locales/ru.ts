@@ -151,6 +151,8 @@ export const ru: LanguageTranslation = {
                         comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Атрибуты индекса',
