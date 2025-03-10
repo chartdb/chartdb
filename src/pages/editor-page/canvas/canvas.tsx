@@ -682,7 +682,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
 
     return (
         <CanvasContextMenu>
-            <div className="relative flex h-full">
+            <div className="relative flex h-full" id="canvas">
                 <ReactFlow
                     colorMode={effectiveTheme}
                     className="canvas-cursor-default nodes-animated"

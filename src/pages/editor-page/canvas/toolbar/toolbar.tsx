@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
 import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
+import { useIsLostInCanvas } from '../hooks/use-is-lost-in-canvas';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -26,72 +27,15 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { updateDiagramUpdatedAt } = useChartDB();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
-    const { getZoom, zoomIn, zoomOut, fitView, getNodes, getViewport } =
-        useReactFlow();
+    const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
-    const [noTablesVisible, setNoTablesVisible] = useState<boolean>(false);
+    const { isLostInCanvas } = useIsLostInCanvas();
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
             setZoom(convertToPercentage(zoom));
-            checkVisibleTables();
         },
     });
-
-    // Check if any tables are visible in the current viewport
-    const checkVisibleTables = useCallback(() => {
-        const nodes = getNodes();
-        const viewport = getViewport();
-
-        // If there are no nodes at all, don't highlight the button
-        if (nodes.length === 0) {
-            setNoTablesVisible(false);
-            return;
-        }
-
-        // Count visible (not hidden) nodes
-        const visibleNodes = nodes.filter((node) => !node.hidden);
-
-        // If there are no visible nodes at all, don't highlight the button
-        if (visibleNodes.length === 0) {
-            setNoTablesVisible(false);
-            return;
-        }
-
-        // Calculate viewport boundaries
-        const viewportLeft = -viewport.x / viewport.zoom;
-        const viewportTop = -viewport.y / viewport.zoom;
-        const viewportRight = viewportLeft + window.innerWidth / viewport.zoom;
-        const viewportBottom = viewportTop + window.innerHeight / viewport.zoom;
-
-        // Check if any node is visible in the viewport
-        const anyNodeVisible = visibleNodes.some((node) => {
-            // Node boundaries
-            const nodeLeft = node.position.x;
-            const nodeTop = node.position.y;
-            const nodeRight = nodeLeft + (node.width || 0);
-            const nodeBottom = nodeTop + (node.height || 0);
-
-            // Check if node intersects with viewport
-            return (
-                nodeRight >= viewportLeft &&
-                nodeLeft <= viewportRight &&
-                nodeBottom >= viewportTop &&
-                nodeTop <= viewportBottom
-            );
-        });
-
-        // Only set to true if there are tables but none are visible
-        setNoTablesVisible(!anyNodeVisible);
-    }, [getNodes, getViewport]);
-
-    // Check visible tables on mount and when nodes change
-    useEffect(() => {
-        checkVisibleTables();
-        // Add event listener for node changes
-        const interval = setInterval(checkVisibleTables, 1000);
-        return () => clearInterval(interval);
-    }, [checkVisibleTables]);
 
     const zoomDuration = 200;
     const zoomInHandler = () => {
@@ -116,8 +60,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
             padding: 0.1,
             maxZoom: 0.8,
         });
-        // After showing all, tables should be visible
-        setTimeout(() => setNoTablesVisible(false), 600);
     }, [fitView]);
 
     return (
@@ -157,8 +99,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                 <ToolbarButton
                                     onClick={showAll}
                                     className={
-                                        noTablesVisible
-                                            ? 'bg-pink-500 text-white hover:bg-pink-600'
+                                        isLostInCanvas
+                                            ? 'bg-pink-500 text-white hover:bg-pink-600 hover:text-white'
                                             : ''
                                     }
                                 >
