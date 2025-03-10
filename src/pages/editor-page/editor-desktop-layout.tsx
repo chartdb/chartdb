@@ -12,9 +12,11 @@ import { cn } from '@/lib/utils';
 
 export interface EditorDesktopLayoutProps {
     initialDiagram?: Diagram;
+    readonly?: boolean;
 }
 export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
     initialDiagram,
+    readonly,
 }) => {
     const { isSidePanelShowed } = useLayout();
 
@@ -32,7 +34,10 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
             </ResizablePanel>
             <ResizableHandle disabled={!isSidePanelShowed} />
             <ResizablePanel defaultSize={75}>
-                <Canvas initialTables={initialDiagram?.tables ?? []} />
+                <Canvas
+                    initialTables={initialDiagram?.tables ?? []}
+                    readonly={readonly}
+                />
             </ResizablePanel>
         </ResizablePanelGroup>
     );

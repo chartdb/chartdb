@@ -30,6 +30,8 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useDiff } from '@/context/diff-context/use-diff';
+import { getDiffMapKey } from '@/context/diff-context/diff-check/diff-check';
 
 export type TableNodeType = Node<
     {
@@ -60,6 +62,26 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [editMode, setEditMode] = useState(false);
         const [tableName, setTableName] = useState(table.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
+
+        const { diffMap, tablesChanged } = useDiff();
+
+        const tableChangedName = useMemo(() => {
+            const tableNameKey = getDiffMapKey({
+                diffObject: 'table',
+                objectId: table.id,
+                attribute: 'name',
+            });
+
+            if (diffMap.has(tableNameKey)) {
+                const diff = diffMap.get(tableNameKey);
+
+                if (diff?.type === 'changed') {
+                    return diff.newValue as string;
+                }
+            }
+
+            return null;
+        }, [diffMap, table.id]);
 
         const selectedRelEdges = edges.filter(
             (edge) =>
@@ -174,7 +196,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             : '',
                         highlightOverlappingTables && isOverlapping
                             ? 'animate-scale-2'
-                            : ''
+                            : '',
+                        tablesChanged.has(table.id) ? 'border-blue-500' : ''
                     )}
                     onClick={(e) => {
                         if (e.detail === 2) {
@@ -201,7 +224,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                         <div className="flex min-w-0 flex-1 items-center gap-2">
                             <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
-                            {editMode ? (
+                            {tableChangedName ? (
+                                <Label className="h-5 truncate rounded-sm bg-blue-200 px-2 py-0.5 text-sm font-bold">
+                                    {table.name} → {tableChangedName}
+                                </Label>
+                            ) : editMode ? (
                                 <>
                                     <Input
                                         ref={inputRef}

@@ -29,6 +29,8 @@ import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
+import { DiffProvider } from '@/context/diff-context/diff-provider';
+import { useDiff } from '@/context/diff-context/use-diff';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -65,6 +67,21 @@ const EditorPageComponent: React.FC = () => {
     const { toast } = useToast();
     const { t } = useTranslation();
     const { initialDiagram } = useDiagramLoader();
+
+    const { /*calculateDiff,*/ hasDiff } = useDiff();
+
+    // useEffect(() => {
+    //     //test
+    //     const newDiagram: Diagram = {
+    //         ...currentDiagram,
+    //         tables: [
+    //             ...(currentDiagram.tables?.map((t, index) =>
+    //                 index === 0 ? { ...t, name: 'as' } : { ...t }
+    //             ) ?? []),
+    //         ],
+    //     };
+    //     calculateDiff({ diagram: currentDiagram, newDiagram });
+    // }, [currentDiagram, calculateDiff]);
 
     useEffect(() => {
         if (HIDE_BUCKLE_DOT_DEV) {
@@ -214,10 +231,12 @@ const EditorPageComponent: React.FC = () => {
                     {isDesktop ? (
                         <EditorDesktopLayoutLazy
                             initialDiagram={initialDiagram}
+                            readonly={hasDiff}
                         />
                     ) : (
                         <EditorMobileLayoutLazy
                             initialDiagram={initialDiagram}
+                            readonly={hasDiff}
                         />
                     )}
                 </Suspense>
@@ -235,23 +254,25 @@ export const EditorPage: React.FC = () => (
                     <StorageProvider>
                         <ConfigProvider>
                             <RedoUndoStackProvider>
-                                <ChartDBProvider>
-                                    <HistoryProvider>
-                                        <ReactFlowProvider>
-                                            <CanvasProvider>
-                                                <ExportImageProvider>
-                                                    <AlertProvider>
-                                                        <DialogProvider>
-                                                            <KeyboardShortcutsProvider>
-                                                                <EditorPageComponent />
-                                                            </KeyboardShortcutsProvider>
-                                                        </DialogProvider>
-                                                    </AlertProvider>
-                                                </ExportImageProvider>
-                                            </CanvasProvider>
-                                        </ReactFlowProvider>
-                                    </HistoryProvider>
-                                </ChartDBProvider>
+                                <DiffProvider>
+                                    <ChartDBProvider>
+                                        <HistoryProvider>
+                                            <ReactFlowProvider>
+                                                <CanvasProvider>
+                                                    <ExportImageProvider>
+                                                        <AlertProvider>
+                                                            <DialogProvider>
+                                                                <KeyboardShortcutsProvider>
+                                                                    <EditorPageComponent />
+                                                                </KeyboardShortcutsProvider>
+                                                            </DialogProvider>
+                                                        </AlertProvider>
+                                                    </ExportImageProvider>
+                                                </CanvasProvider>
+                                            </ReactFlowProvider>
+                                        </HistoryProvider>
+                                    </ChartDBProvider>
+                                </DiffProvider>
                             </RedoUndoStackProvider>
                         </ConfigProvider>
                     </StorageProvider>
