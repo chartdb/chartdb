@@ -39,6 +39,10 @@ export const TableField: React.FC<TableFieldProps> = ({
     const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
         label: type.name,
         value: type.id,
+        hasCharMaxLength: type.hasCharMaxLength,
+        characterMaximumLength: type.hasCharMaxLength
+            ? field.characterMaximumLength
+            : undefined,
     }));
 
     const style = {

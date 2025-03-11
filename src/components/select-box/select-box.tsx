@@ -24,6 +24,8 @@ export interface SelectBoxOption {
     value: string;
     label: string;
     description?: string;
+    hasCharMaxLength?: boolean;
+    characterMaximumLength?: number;
 }
 
 export interface SelectBoxProps {
@@ -302,6 +304,12 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                             const isSelected =
                                                 Array.isArray(value) &&
                                                 value.includes(option.value);
+
+                                            const displayLabel =
+                                                option.hasCharMaxLength
+                                                    ? `${option.label}(${option.characterMaximumLength || 'n'})`
+                                                    : option.label;
+
                                             return (
                                                 <CommandItem
                                                     className="flex items-center"
@@ -327,7 +335,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                     )}
                                                     <div className="flex items-center truncate">
                                                         <span>
-                                                            {option.label}
+                                                            {displayLabel}
                                                         </span>
                                                         {option.description && (
                                                             <span className="ml-1 text-xs text-muted-foreground">
