@@ -62,22 +62,19 @@ export const TableField: React.FC<TableFieldProps> = ({
                 name: value as string,
             };
 
-            if (regexMatches?.length && dataType?.hasCharMaxLength) {
-                updateField({
-                    characterMaximumLength: regexMatches[1],
-                    type: dataTypeDataToDataType(
-                        dataType ?? {
-                            id: value as string,
-                            name: value as string,
-                        }
-                    ),
-                });
+            let characterMaximumLength: string | undefined = undefined;
 
-                return;
+            if (regexMatches?.length && dataType?.hasCharMaxLength) {
+                characterMaximumLength = regexMatches[1];
+            } else if (
+                field.characterMaximumLength &&
+                dataType?.hasCharMaxLength
+            ) {
+                characterMaximumLength = field.characterMaximumLength;
             }
 
             updateField({
-                characterMaximumLength: undefined,
+                characterMaximumLength,
                 type: dataTypeDataToDataType(
                     dataType ?? {
                         id: value as string,
@@ -86,7 +83,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 ),
             });
         },
-        [updateField, databaseType]
+        [updateField, databaseType, field.characterMaximumLength]
     );
 
     const style = {
@@ -143,6 +140,21 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         ? `(${field.characterMaximumLength})`
                                         : ''
                                 }
+                                optionSuffix={(option) => {
+                                    const type = dataTypeMap[databaseType].find(
+                                        (v) => v.id === option.value
+                                    );
+
+                                    if (!type) {
+                                        return '';
+                                    }
+
+                                    if (type.hasCharMaxLength) {
+                                        return `(${!field.characterMaximumLength ? 'n' : field.characterMaximumLength})`;
+                                    }
+
+                                    return '';
+                                }}
                                 onChange={onChangeDataType}
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'

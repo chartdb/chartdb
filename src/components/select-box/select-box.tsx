@@ -32,6 +32,7 @@ export interface SelectBoxProps {
     options: SelectBoxOption[];
     value?: string[] | string;
     valueSuffix?: string;
+    optionSuffix?: (option: SelectBoxOption) => string;
     onChange?: (
         values: string[] | string,
         regexMatches?: string[] | string
@@ -66,6 +67,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             multiple,
             oneLine,
             selectAll,
+            optionSuffix,
             deselectAll,
             clearText,
             showClear,
@@ -371,6 +373,12 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                             {isRegexMatch
                                                                 ? searchTerm
                                                                 : option.label}
+                                                            {!isRegexMatch &&
+                                                            optionSuffix
+                                                                ? optionSuffix(
+                                                                      option
+                                                                  )
+                                                                : ''}
                                                         </span>
                                                         {option.description && (
                                                             <span className="ml-1 text-xs text-muted-foreground">
