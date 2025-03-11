@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBField } from '@/lib/domain/db-field';
@@ -16,6 +16,10 @@ import { useTranslation } from 'react-i18next';
 import { TableFieldToggle } from './table-field-toggle';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import type {
+    SelectBoxOption,
+    SelectBoxProps,
+} from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
 
@@ -36,10 +40,54 @@ export const TableField: React.FC<TableFieldProps> = ({
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
-    const dataFieldOptions = dataTypeMap[databaseType].map((type) => ({
-        label: type.name,
-        value: type.id,
-    }));
+    const dataFieldOptions: SelectBoxOption[] = dataTypeMap[databaseType].map(
+        (type) => ({
+            label: type.name,
+            value: type.id,
+            regex: type.hasCharMaxLength
+                ? `^${type.name}\\(\\d+\\)$`
+                : undefined,
+            extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+        })
+    );
+
+    const onChangeDataType = useCallback<
+        NonNullable<SelectBoxProps['onChange']>
+    >(
+        (value, regexMatches) => {
+            const dataType = dataTypeMap[databaseType].find(
+                (v) => v.id === value
+            ) ?? {
+                id: value as string,
+                name: value as string,
+            };
+
+            if (regexMatches?.length && dataType?.hasCharMaxLength) {
+                updateField({
+                    characterMaximumLength: regexMatches[1],
+                    type: dataTypeDataToDataType(
+                        dataType ?? {
+                            id: value as string,
+                            name: value as string,
+                        }
+                    ),
+                });
+
+                return;
+            }
+
+            updateField({
+                characterMaximumLength: undefined,
+                type: dataTypeDataToDataType(
+                    dataType ?? {
+                        id: value as string,
+                        name: value as string,
+                    }
+                ),
+            });
+        },
+        [updateField, databaseType]
+    );
 
     const style = {
         transform: CSS.Translate.toString(transform),
@@ -90,26 +138,24 @@ export const TableField: React.FC<TableFieldProps> = ({
                                     'side_panel.tables_section.table.field_type'
                                 )}
                                 value={field.type.id}
-                                onChange={(value) =>
-                                    updateField({
-                                        characterMaximumLength: undefined,
-                                        type: dataTypeDataToDataType(
-                                            dataTypeMap[databaseType].find(
-                                                (v) => v.id === value
-                                            ) ?? {
-                                                id: value as string,
-                                                name: value as string,
-                                            }
-                                        ),
-                                    })
+                                valueSuffix={
+                                    field.characterMaximumLength
+                                        ? `(${field.characterMaximumLength})`
+                                        : ''
                                 }
+                                onChange={onChangeDataType}
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'
                                 )}
                             />
                         </span>
                     </TooltipTrigger>
-                    <TooltipContent>{field.type.name}</TooltipContent>
+                    <TooltipContent>
+                        {field.type.name}
+                        {field.characterMaximumLength
+                            ? `(${field.characterMaximumLength})`
+                            : ''}
+                    </TooltipContent>
                 </Tooltip>
             </div>
             <div className="flex w-4/12 justify-end gap-1 overflow-hidden">

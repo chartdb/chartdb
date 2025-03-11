@@ -24,12 +24,18 @@ export interface SelectBoxOption {
     value: string;
     label: string;
     description?: string;
+    regex?: string;
+    extractRegex?: RegExp;
 }
 
 export interface SelectBoxProps {
     options: SelectBoxOption[];
     value?: string[] | string;
-    onChange?: (values: string[] | string) => void;
+    valueSuffix?: string;
+    onChange?: (
+        values: string[] | string,
+        regexMatches?: string[] | string
+    ) => void;
     placeholder?: string;
     inputPlaceholder?: string;
     emptyPlaceholder?: string;
@@ -55,6 +61,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             className,
             options,
             value,
+            valueSuffix,
             onChange,
             multiple,
             oneLine,
@@ -86,7 +93,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         const handleSelect = React.useCallback(
-            (selectedValue: string) => {
+            (selectedValue: string, regexMatches?: string[]) => {
                 if (multiple) {
                     const newValue =
                         value?.includes(selectedValue) && Array.isArray(value)
@@ -94,7 +101,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             : [...(value ?? []), selectedValue];
                     onChange?.(newValue);
                 } else {
-                    onChange?.(selectedValue);
+                    onChange?.(selectedValue, regexMatches);
                     setIsOpen(false);
                 }
             },
@@ -199,6 +206,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                 (opt) => opt.value === value
                                             )?.label
                                         }
+                                        {valueSuffix ? valueSuffix : ''}
                                     </div>
                                 )
                             ) : (
@@ -239,11 +247,22 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     align="center"
                 >
                     <Command
-                        filter={(value, search) =>
-                            value.toLowerCase().includes(search.toLowerCase())
+                        filter={(value, search, keywords) => {
+                            if (
+                                keywords?.length &&
+                                keywords.some((keyword) =>
+                                    new RegExp(keyword).test(search)
+                                )
+                            ) {
+                                return 1;
+                            }
+
+                            return value
+                                .toLowerCase()
+                                .includes(search.toLowerCase())
                                 ? 1
-                                : 0
-                        }
+                                : 0;
+                        }}
                     >
                         <div className="relative">
                             <CommandInput
@@ -302,14 +321,36 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                             const isSelected =
                                                 Array.isArray(value) &&
                                                 value.includes(option.value);
+
+                                            const isRegexMatch =
+                                                option.regex &&
+                                                new RegExp(option.regex)?.test(
+                                                    searchTerm
+                                                );
+
+                                            const matches = option.extractRegex
+                                                ? searchTerm.match(
+                                                      option.extractRegex
+                                                  )
+                                                : undefined;
+
                                             return (
                                                 <CommandItem
                                                     className="flex items-center"
                                                     key={option.value}
+                                                    keywords={
+                                                        option.regex
+                                                            ? [option.regex]
+                                                            : undefined
+                                                    }
                                                     // value={option.value}
                                                     onSelect={() =>
                                                         handleSelect(
-                                                            option.value
+                                                            option.value,
+                                                            matches?.map(
+                                                                (match) =>
+                                                                    match.toString()
+                                                            )
                                                         )
                                                     }
                                                 >
@@ -327,7 +368,9 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                     )}
                                                     <div className="flex items-center truncate">
                                                         <span>
-                                                            {option.label}
+                                                            {isRegexMatch
+                                                                ? searchTerm
+                                                                : option.label}
                                                         </span>
                                                         {option.description && (
                                                             <span className="ml-1 text-xs text-muted-foreground">
@@ -337,19 +380,20 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                             </span>
                                                         )}
                                                     </div>
-                                                    {!multiple &&
+                                                    {((!multiple &&
                                                         option.value ===
-                                                            value && (
-                                                            <CheckIcon
-                                                                className={cn(
-                                                                    'ml-auto',
-                                                                    option.value ===
-                                                                        value
-                                                                        ? 'opacity-100'
-                                                                        : 'opacity-0'
-                                                                )}
-                                                            />
-                                                        )}
+                                                            value) ||
+                                                        isRegexMatch) && (
+                                                        <CheckIcon
+                                                            className={cn(
+                                                                'ml-auto',
+                                                                option.value ===
+                                                                    value
+                                                                    ? 'opacity-100'
+                                                                    : 'opacity-0'
+                                                            )}
+                                                        />
+                                                    )}
                                                 </CommandItem>
                                             );
                                         })}
