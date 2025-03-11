@@ -55,7 +55,13 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     }, [localField]);
 
     return (
-        <Popover onOpenChange={(isOpen) => !isOpen && setLocalField(field)}>
+        <Popover
+            onOpenChange={(isOpen) => {
+                if (isOpen) {
+                    setLocalField(field);
+                }
+            }}
+        >
             <PopoverTrigger asChild>
                 <Button
                     variant="ghost"

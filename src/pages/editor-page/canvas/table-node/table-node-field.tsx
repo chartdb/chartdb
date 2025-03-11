@@ -227,7 +227,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 !readonly ? 'group-hover:hidden' : ''
                             )}
                         >
-                            {field.type.name}
+                            {field.type.name.split(' ')[0]}
                             {field.nullable ? '?' : ''}
                         </div>
                         {readonly ? null : (
