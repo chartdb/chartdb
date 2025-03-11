@@ -95,19 +95,29 @@ export const TableField: React.FC<TableFieldProps> = ({
                                     'side_panel.tables_section.table.field_type'
                                 )}
                                 value={field.type.id}
-                                onChange={(value) =>
+                                onChange={(value, characterLength?: string) => {
+                                    const selectedType = dataTypeMap[
+                                        databaseType
+                                    ].find((v) => v.id === value);
+
+                                    // Only reset characterMaximumLength if the new type doesn't support it
+                                    const newType = dataTypeDataToDataType(
+                                        selectedType ?? {
+                                            id: value as string,
+                                            name: value as string,
+                                        }
+                                    );
+
                                     updateField({
-                                        characterMaximumLength: undefined,
-                                        type: dataTypeDataToDataType(
-                                            dataTypeMap[databaseType].find(
-                                                (v) => v.id === value
-                                            ) ?? {
-                                                id: value as string,
-                                                name: value as string,
-                                            }
-                                        ),
-                                    })
-                                }
+                                        // Keep existing length if new type supports it and no new length provided
+                                        characterMaximumLength:
+                                            characterLength ||
+                                            (selectedType?.hasCharMaxLength
+                                                ? field.characterMaximumLength
+                                                : undefined),
+                                        type: newType,
+                                    });
+                                }}
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'
                                 )}
