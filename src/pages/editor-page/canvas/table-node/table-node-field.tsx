@@ -23,6 +23,7 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import { Input } from '@/components/input/input';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -41,6 +42,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
         const { removeField, relationships, readonly, updateField } =
             useChartDB();
+        const { showTypeLength } = useLocalConfig();
         const [editMode, setEditMode] = useState(false);
         const [fieldName, setFieldName] = useState(field.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
@@ -227,7 +229,10 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 !readonly ? 'group-hover:hidden' : ''
                             )}
                         >
-                            {field.type.name}
+                            {field.type.name.split(' ')[0]}
+                            {showTypeLength && field.characterMaximumLength
+                                ? `(${field.characterMaximumLength})`
+                                : ''}
                             {field.nullable ? '?' : ''}
                         </div>
                         {readonly ? null : (

@@ -32,6 +32,8 @@ export const en = {
                 hide_dependencies: 'Hide Dependencies',
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                hide_type_length: 'Hide Type Length',
+                show_type_length: 'Show Type Length',
             },
             backup: {
                 backup: 'Backup',

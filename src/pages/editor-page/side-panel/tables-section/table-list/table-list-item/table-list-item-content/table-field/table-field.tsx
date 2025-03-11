@@ -40,9 +40,10 @@ export const TableField: React.FC<TableFieldProps> = ({
         label: type.name,
         value: type.id,
         hasCharMaxLength: type.hasCharMaxLength,
-        characterMaximumLength: type.hasCharMaxLength
-            ? field.characterMaximumLength
-            : undefined,
+        characterMaximumLength:
+            type.hasCharMaxLength && field.characterMaximumLength
+                ? Number(field.characterMaximumLength)
+                : undefined,
     }));
 
     const style = {

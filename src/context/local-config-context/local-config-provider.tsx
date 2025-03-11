@@ -14,6 +14,7 @@ const buckleWaitlistOpenedKey = 'buckle_waitlist_opened';
 const buckleDialogLastOpenKey = 'buckle_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
+const showTypeLengthKey = 'show_type_length';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -72,6 +73,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<boolean>(
             (localStorage.getItem(showMiniMapOnCanvasKey) || 'true') === 'true'
         );
+
+    const [showTypeLength, setShowTypeLength] = React.useState<boolean>(
+        (localStorage.getItem(showTypeLengthKey) || 'true') === 'true'
+    );
 
     useEffect(() => {
         localStorage.setItem(
@@ -135,6 +140,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         );
     }, [showMiniMapOnCanvas]);
 
+    useEffect(() => {
+        localStorage.setItem(showTypeLengthKey, showTypeLength.toString());
+    }, [showTypeLength]);
+
     return (
         <LocalConfigContext.Provider
             value={{
@@ -160,6 +169,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setBuckleWaitlistOpened,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
+                showTypeLength,
+                setShowTypeLength,
             }}
         >
             {children}
