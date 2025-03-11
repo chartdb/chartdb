@@ -23,6 +23,7 @@ import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
+import type { DiffCalculatedEvent } from '../diff-context/diff-context';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -55,6 +56,13 @@ export const ChartDBProvider: React.FC<
     const [dependencies, setDependencies] = useState<DBDependency[]>(
         diagram?.dependencies ?? []
     );
+    const { events: diffEvents } = useDiff();
+
+    const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
+        setTables((tables) => [...tables, ...(event.data.tablesAdded ?? [])]);
+    }, []);
+
+    diffEvents.useSubscription(diffCalculatedHandler);
 
     const defaultSchemaName = defaultSchemas[databaseType];
 

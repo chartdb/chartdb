@@ -10,6 +10,7 @@ import {
     ChevronUp,
     Check,
     CircleDotDashed,
+    SquareDot,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -31,7 +32,6 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDiff } from '@/context/diff-context/use-diff';
-import { getDiffMapKey } from '@/context/diff-context/diff-check/diff-check';
 
 export type TableNodeType = Node<
     {
@@ -63,25 +63,17 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [tableName, setTableName] = useState(table.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
 
-        const { diffMap, tablesChanged } = useDiff();
+        const { getTableNewName, checkIfTableHasChange } = useDiff();
 
-        const tableChangedName = useMemo(() => {
-            const tableNameKey = getDiffMapKey({
-                diffObject: 'table',
-                objectId: table.id,
-                attribute: 'name',
-            });
+        const tableChangedName = useMemo(
+            () => getTableNewName({ tableId: table.id }),
+            [getTableNewName, table.id]
+        );
 
-            if (diffMap.has(tableNameKey)) {
-                const diff = diffMap.get(tableNameKey);
-
-                if (diff?.type === 'changed') {
-                    return diff.newValue as string;
-                }
-            }
-
-            return null;
-        }, [diffMap, table.id]);
+        const isTableChanged = useMemo(
+            () => checkIfTableHasChange({ tableId: table.id }),
+            [checkIfTableHasChange, table.id]
+        );
 
         const selectedRelEdges = edges.filter(
             (edge) =>
@@ -197,7 +189,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         highlightOverlappingTables && isOverlapping
                             ? 'animate-scale-2'
                             : '',
-                        tablesChanged.has(table.id) ? 'border-blue-500' : ''
+                        isTableChanged ? 'border-blue-500 border-dashed' : ''
                     )}
                     onClick={(e) => {
                         if (e.detail === 2) {
@@ -221,11 +213,23 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         className="h-2 rounded-t-[6px]"
                         style={{ backgroundColor: table.color }}
                     ></div>
-                    <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
+                    <div
+                        className={cn(
+                            'group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900',
+                            {
+                                'bg-blue-200 dark:bg-blue-900': isTableChanged,
+                            }
+                        )}
+                    >
                         <div className="flex min-w-0 flex-1 items-center gap-2">
-                            <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             {tableChangedName ? (
-                                <Label className="h-5 truncate rounded-sm bg-blue-200 px-2 py-0.5 text-sm font-bold">
+                                <SquareDot className="size-3.5 shrink-0 text-blue-600" />
+                            ) : (
+                                <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
+                            )}
+
+                            {tableChangedName ? (
+                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-blue-200 px-2 py-0.5 text-sm font-medium text-blue-900 dark:bg-blue-800 dark:text-blue-200">
                                     {table.name} → {tableChangedName}
                                 </Label>
                             ) : editMode ? (

@@ -68,20 +68,7 @@ const EditorPageComponent: React.FC = () => {
     const { t } = useTranslation();
     const { initialDiagram } = useDiagramLoader();
 
-    const { /*calculateDiff,*/ hasDiff } = useDiff();
-
-    // useEffect(() => {
-    //     //test
-    //     const newDiagram: Diagram = {
-    //         ...currentDiagram,
-    //         tables: [
-    //             ...(currentDiagram.tables?.map((t, index) =>
-    //                 index === 0 ? { ...t, name: 'as' } : { ...t }
-    //             ) ?? []),
-    //         ],
-    //     };
-    //     calculateDiff({ diagram: currentDiagram, newDiagram });
-    // }, [currentDiagram, calculateDiff]);
+    const { hasDiff } = useDiff();
 
     useEffect(() => {
         if (HIDE_BUCKLE_DOT_DEV) {
