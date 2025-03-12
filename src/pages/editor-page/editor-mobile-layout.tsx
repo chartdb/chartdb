@@ -14,11 +14,9 @@ import type { Diagram } from '@/lib/domain/diagram';
 
 export interface EditorMobileLayoutProps {
     initialDiagram?: Diagram;
-    readonly?: boolean;
 }
 export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
     initialDiagram,
-    readonly,
 }) => {
     const { isSidePanelShowed, hideSidePanel } = useLayout();
     return (
@@ -35,10 +33,7 @@ export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
                     <SidePanel data-vaul-no-drag />
                 </DrawerContent>
             </Drawer>
-            <Canvas
-                initialTables={initialDiagram?.tables ?? []}
-                readonly={readonly}
-            />
+            <Canvas initialTables={initialDiagram?.tables ?? []} />
         </>
     );
 };

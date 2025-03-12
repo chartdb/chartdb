@@ -8,20 +8,12 @@ import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
-import { Button } from '@/components/button/button';
-import { randomColor } from '@/lib/colors';
-import { generateId } from '@/lib/utils';
-import { type Diagram } from '@/lib/domain/diagram';
-import { useChartDB } from '@/hooks/use-chartdb';
-import { useDiff } from '@/context/diff-context/use-diff';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { effectiveTheme } = useTheme();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { currentDiagram } = useChartDB();
-    const { calculateDiff } = useDiff();
 
     const renderStars = useCallback(() => {
         return (
@@ -92,60 +84,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         <LastSaved />
                         {renderStars()}
                         <LanguageNav />
-                        <Button
-                            className="text-xs"
-                            onClick={() => {
-                                const newDiagram: Diagram = {
-                                    ...currentDiagram,
-                                    tables: [
-                                        ...(currentDiagram.tables?.map(
-                                            (t, index) =>
-                                                index === 0
-                                                    ? { ...t, name: 'as' }
-                                                    : index === 1
-                                                      ? {
-                                                            ...t,
-                                                            fields: t.fields.filter(
-                                                                (f, i) => i == 1
-                                                            ),
-                                                        }
-                                                      : { ...t }
-                                        ) ?? []),
-                                        {
-                                            id: generateId(),
-                                            name: `table_${1293102}`,
-                                            x: 0,
-                                            y: 0,
-                                            fields: [
-                                                {
-                                                    id: generateId(),
-                                                    name: 'id',
-                                                    type: {
-                                                        id: 'bigint',
-                                                        name: 'bigint',
-                                                    },
-                                                    unique: true,
-                                                    nullable: false,
-                                                    primaryKey: true,
-                                                    createdAt: Date.now(),
-                                                },
-                                            ],
-                                            indexes: [],
-                                            color: randomColor(),
-                                            createdAt: Date.now(),
-                                            isView: false,
-                                        },
-                                    ],
-                                };
-
-                                calculateDiff({
-                                    diagram: currentDiagram,
-                                    newDiagram,
-                                });
-                            }}
-                        >
-                            test
-                        </Button>
                     </div>
                 </>
             ) : (

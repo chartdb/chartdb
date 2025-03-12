@@ -11,6 +11,8 @@ import {
     Check,
     CircleDotDashed,
     SquareDot,
+    SquarePlus,
+    SquareMinus,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -32,6 +34,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { TableNodeStatus } from './table-node-status/table-node-status';
 
 export type TableNodeType = Node<
     {
@@ -63,16 +66,33 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [tableName, setTableName] = useState(table.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
 
-        const { getTableNewName, checkIfTableHasChange } = useDiff();
+        const {
+            getTableNewName,
+            checkIfTableHasChange,
+            checkIfNewTable,
+            checkIfTableRemoved,
+        } = useDiff();
+
+        const fields = useMemo(() => table.fields, [table.fields]);
 
         const tableChangedName = useMemo(
             () => getTableNewName({ tableId: table.id }),
             [getTableNewName, table.id]
         );
 
-        const isTableChanged = useMemo(
+        const isDiffTableChanged = useMemo(
             () => checkIfTableHasChange({ tableId: table.id }),
             [checkIfTableHasChange, table.id]
+        );
+
+        const isDiffNewTable = useMemo(
+            () => checkIfNewTable({ tableId: table.id }),
+            [checkIfNewTable, table.id]
+        );
+
+        const isDiffTableRemoved = useMemo(
+            () => checkIfTableRemoved({ tableId: table.id }),
+            [checkIfTableRemoved, table.id]
         );
 
         const selectedRelEdges = edges.filter(
@@ -123,13 +143,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         const visibleFields = useMemo(() => {
             if (expanded) {
-                return table.fields;
+                return fields;
             }
 
-            const mustDisplayedFields = table.fields.filter((field: DBField) =>
+            const mustDisplayedFields = fields.filter((field: DBField) =>
                 isMustDisplayedField(field)
             );
-            const nonMustDisplayedFields = table.fields.filter(
+            const nonMustDisplayedFields = fields.filter(
                 (field: DBField) => !isMustDisplayedField(field)
             );
 
@@ -147,8 +167,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             return [
                 ...visibleMustDisplayedFields,
                 ...visibleNonMustDisplayedFields,
-            ].sort((a, b) => table.fields.indexOf(a) - table.fields.indexOf(b));
-        }, [expanded, table.fields, isMustDisplayedField]);
+            ].sort((a, b) => fields.indexOf(a) - fields.indexOf(b));
+        }, [expanded, fields, isMustDisplayedField]);
 
         const editTableName = useCallback(() => {
             if (!editMode) return;
@@ -189,7 +209,17 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         highlightOverlappingTables && isOverlapping
                             ? 'animate-scale-2'
                             : '',
-                        isTableChanged ? 'border-blue-500 border-dashed' : ''
+                        isDiffTableChanged &&
+                            !isDiffNewTable &&
+                            !isDiffTableRemoved
+                            ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
+                            : '',
+                        isDiffNewTable
+                            ? 'outline outline-[3px] outline-green-500 dark:outline-green-900 outline-offset-[5px]'
+                            : '',
+                        isDiffTableRemoved
+                            ? 'outline outline-[3px] outline-red-500 dark:outline-red-900 outline-offset-[5px]'
+                            : ''
                     )}
                     onClick={(e) => {
                         if (e.detail === 2) {
@@ -209,30 +239,87 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         table={table}
                         focused={focused}
                     />
+                    {/* Badge added here */}
+                    <TableNodeStatus
+                        status={
+                            isDiffNewTable
+                                ? 'new'
+                                : isDiffTableRemoved
+                                  ? 'removed'
+                                  : isDiffTableChanged
+                                    ? 'changed'
+                                    : 'none'
+                        }
+                    />
                     <div
                         className="h-2 rounded-t-[6px]"
                         style={{ backgroundColor: table.color }}
                     ></div>
-                    <div
-                        className={cn(
-                            'group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900',
-                            {
-                                'bg-blue-200 dark:bg-blue-900': isTableChanged,
-                            }
-                        )}
-                    >
+                    <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                         <div className="flex min-w-0 flex-1 items-center gap-2">
-                            {tableChangedName ? (
-                                <SquareDot className="size-3.5 shrink-0 text-blue-600" />
+                            {isDiffNewTable ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <SquarePlus
+                                            className="size-3.5 shrink-0 text-green-600"
+                                            strokeWidth={2.5}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent>New Table</TooltipContent>
+                                </Tooltip>
+                            ) : isDiffTableRemoved ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <SquareMinus
+                                            className="size-3.5 shrink-0 text-red-600"
+                                            strokeWidth={2.5}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Table Removed
+                                    </TooltipContent>
+                                </Tooltip>
+                            ) : isDiffTableChanged ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <SquareDot
+                                            className="size-3.5 shrink-0 text-sky-600"
+                                            strokeWidth={2.5}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Table Changed
+                                    </TooltipContent>
+                                </Tooltip>
                             ) : (
                                 <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             )}
 
                             {tableChangedName ? (
-                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-blue-200 px-2 py-0.5 text-sm font-medium text-blue-900 dark:bg-blue-800 dark:text-blue-200">
-                                    {table.name} → {tableChangedName}
+                                <Label className="flex h-5 items-center justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
+                                    <span className="truncate">
+                                        {table.name}
+                                    </span>
+                                    <span className="mx-1 font-semibold">
+                                        →
+                                    </span>
+                                    <span className="truncate">
+                                        {tableChangedName}
+                                    </span>
                                 </Label>
-                            ) : editMode ? (
+                            ) : isDiffNewTable ? (
+                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-green-200 px-2 py-0.5 text-sm font-normal text-green-900 dark:bg-green-800 dark:text-green-200">
+                                    {table.name}
+                                </Label>
+                            ) : isDiffTableRemoved ? (
+                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-red-200 px-2 py-0.5 text-sm font-normal text-red-900 dark:bg-red-800 dark:text-red-200">
+                                    {table.name}
+                                </Label>
+                            ) : isDiffTableChanged ? (
+                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
+                                    {table.name}
+                                </Label>
+                            ) : editMode && !readonly ? (
                                 <>
                                     <Input
                                         ref={inputRef}
@@ -304,11 +391,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         className="transition-[max-height] duration-200 ease-in-out"
                         style={{
                             maxHeight: expanded
-                                ? `${table.fields.length * 2}rem` // h-8 per field
+                                ? `${fields.length * 2}rem` // h-8 per field
                                 : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                         }}
                     >
-                        {table.fields.map((field: DBField) => (
+                        {fields.map((field: DBField) => (
                             <TableNodeField
                                 key={field.id}
                                 focused={focused}
@@ -326,7 +413,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             />
                         ))}
                     </div>
-                    {table.fields.length > TABLE_MINIMIZED_FIELDS && (
+                    {fields.length > TABLE_MINIMIZED_FIELDS && (
                         <div
                             className="z-10 flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                             onClick={toggleExpand}

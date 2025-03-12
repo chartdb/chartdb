@@ -28,9 +28,14 @@ export function generateDiff({
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
-}): { diffMap: DiffMap; changedTables: Map<string, boolean> } {
+}): {
+    diffMap: DiffMap;
+    changedTables: Map<string, boolean>;
+    changedFields: Map<string, boolean>;
+} {
     const newDiffs = new Map<string, ChartDBDiff>();
     const changedTables = new Map<string, boolean>();
+    const changedFields = new Map<string, boolean>();
 
     // Compare tables
     compareTables({ diagram, newDiagram, diffMap: newDiffs, changedTables });
@@ -41,12 +46,13 @@ export function generateDiff({
         newDiagram,
         diffMap: newDiffs,
         changedTables,
+        changedFields,
     });
 
     // Compare relationships
     compareRelationships({ diagram, newDiagram, diffMap: newDiffs });
 
-    return { diffMap: newDiffs, changedTables };
+    return { diffMap: newDiffs, changedTables, changedFields };
 }
 
 // Compare tables between diagrams
@@ -148,11 +154,13 @@ function compareTableContents({
     newDiagram,
     diffMap,
     changedTables,
+    changedFields,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
+    changedFields: Map<string, boolean>;
 }) {
     const oldTables = diagram.tables || [];
     const newTables = newDiagram.tables || [];
@@ -169,6 +177,7 @@ function compareTableContents({
             newFields: newTable.fields,
             diffMap,
             changedTables,
+            changedFields,
         });
 
         // Compare indexes
@@ -189,12 +198,14 @@ function compareFields({
     newFields,
     diffMap,
     changedTables,
+    changedFields,
 }: {
     tableId: string;
     oldFields: DBField[];
     newFields: DBField[];
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
+    changedFields: Map<string, boolean>;
 }) {
     // Check for added fields
     for (const newField of newFields) {
@@ -212,6 +223,7 @@ function compareFields({
                 }
             );
             changedTables.set(tableId, true);
+            changedFields.set(newField.id, true);
         }
     }
 
@@ -232,6 +244,7 @@ function compareFields({
             );
 
             changedTables.set(tableId, true);
+            changedFields.set(oldField.id, true);
         }
     }
 
@@ -247,6 +260,7 @@ function compareFields({
             newField,
             diffMap,
             changedTables,
+            changedFields,
         });
     }
 }
@@ -258,12 +272,14 @@ function compareFieldProperties({
     newField,
     diffMap,
     changedTables,
+    changedFields,
 }: {
     tableId: string;
     oldField: DBField;
     newField: DBField;
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
+    changedFields: Map<string, boolean>;
 }) {
     const changedAttributes: FieldDiffAttribute[] = [];
 
@@ -311,6 +327,7 @@ function compareFieldProperties({
             );
         }
         changedTables.set(tableId, true);
+        changedFields.set(oldField.id, true);
     }
 }
 
