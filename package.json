@@ -10,7 +10,7 @@
         "lint:fix": "npm run lint -- --fix",
         "preview": "vite preview",
         "prepare": "husky",
-        "start": "serve -s build -l 8081"
+        "start": "serve -s dist -l 8081"
     },
     "dependencies": {
         "@ai-sdk/openai": "^0.0.51",
