@@ -19,7 +19,6 @@ import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/expor
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
-import { BuckleDialog } from '@/dialogs/buckle-dialog/buckle-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
@@ -54,7 +53,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
-    const [openBuckleDialog, setOpenBuckleDialog] = useState(false);
 
     // Export image dialog
     const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
@@ -147,8 +145,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
-                closeBuckleDialog: () => setOpenBuckleDialog(false),
-                openBuckleDialog: () => setOpenBuckleDialog(true),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -193,7 +189,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-            <BuckleDialog dialog={{ open: openBuckleDialog }} />
             <ImportDBMLDialog
                 dialog={{ open: openImportDBMLDialog }}
                 {...importDBMLDialogParams}

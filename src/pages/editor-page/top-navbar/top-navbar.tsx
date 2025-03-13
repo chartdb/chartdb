@@ -7,7 +7,6 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
-import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 
 export interface TopNavbarProps {}
 
@@ -25,27 +24,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             ></iframe>
         );
     }, [isDesktop]);
-
-    const openBuckleWaitlist = useCallback(() => {
-        window.open('https://waitlist.buckle.dev', '_blank');
-    }, []);
-
-    const renderGetBuckleButton = useCallback(() => {
-        if (HIDE_BUCKLE_DOT_DEV) {
-            return null;
-        }
-
-        return (
-            <button
-                className="gradient-background relative inline-flex items-center justify-center overflow-hidden rounded-lg p-0.5 text-base text-gray-700 focus:outline-none focus:ring-0"
-                onClick={openBuckleWaitlist}
-            >
-                <span className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md bg-background px-2 py-0.5 font-primary text-xs font-semibold text-foreground md:text-sm">
-                    ChartDB v2.0 🔥
-                </span>
-            </button>
-        );
-    }, [openBuckleWaitlist]);
 
     return (
         <nav className="flex flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
@@ -68,7 +46,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                     </a>
                     {!isDesktop ? (
                         <div className="flex items-center gap-2">
-                            {renderGetBuckleButton()}
                             {renderStars()}
                             <LanguageNav />
                         </div>
@@ -80,7 +57,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 <>
                     <DiagramName />
                     <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
-                        {renderGetBuckleButton()}
                         <LastSaved />
                         {renderStars()}
                         <LanguageNav />

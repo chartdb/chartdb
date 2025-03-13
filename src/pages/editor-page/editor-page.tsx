@@ -34,10 +34,6 @@ import { DiffProvider } from '@/context/diff-context/diff-provider';
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
 
-const OPEN_BUCKLE_AFTER_SECONDS = 60;
-const SHOW_BUCKLE_AGAIN_AFTER_DAYS = 1;
-const SHOW_BUCKLE_AGAIN_OPENED_AFTER_DAYS = 7;
-
 export const EditorDesktopLayoutLazy = React.lazy(
     () => import('./editor-desktop-layout')
 );
@@ -50,7 +46,7 @@ const EditorPageComponent: React.FC = () => {
     const { diagramName, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
     const { openSelectSchema, showSidePanel } = useLayout();
-    const { openStarUsDialog, openBuckleDialog } = useDialog();
+    const { openStarUsDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { isMd: isDesktop } = useBreakpoint('md');
     const {
@@ -59,9 +55,6 @@ const EditorPageComponent: React.FC = () => {
         starUsDialogLastOpen,
         setStarUsDialogLastOpen,
         githubRepoOpened,
-        setBuckleDialogLastOpen,
-        buckleDialogLastOpen,
-        buckleWaitlistOpened,
     } = useLocalConfig();
     const { toast } = useToast();
     const { t } = useTranslation();
@@ -90,37 +83,6 @@ const EditorPageComponent: React.FC = () => {
         openStarUsDialog,
         setStarUsDialogLastOpen,
         starUsDialogLastOpen,
-    ]);
-
-    useEffect(() => {
-        if (HIDE_BUCKLE_DOT_DEV) {
-            return;
-        }
-
-        if (!currentDiagram?.id) {
-            return;
-        }
-
-        if (
-            new Date().getTime() - buckleDialogLastOpen >
-            1000 *
-                60 *
-                60 *
-                24 *
-                (buckleWaitlistOpened
-                    ? SHOW_BUCKLE_AGAIN_OPENED_AFTER_DAYS
-                    : SHOW_BUCKLE_AGAIN_AFTER_DAYS)
-        ) {
-            const lastOpen = new Date().getTime();
-            setBuckleDialogLastOpen(lastOpen);
-            setTimeout(openBuckleDialog, OPEN_BUCKLE_AFTER_SECONDS * 1000);
-        }
-    }, [
-        currentDiagram?.id,
-        buckleWaitlistOpened,
-        openBuckleDialog,
-        setBuckleDialogLastOpen,
-        buckleDialogLastOpen,
     ]);
 
     const lastDiagramId = useRef<string>('');
