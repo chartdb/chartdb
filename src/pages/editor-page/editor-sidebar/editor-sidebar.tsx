@@ -34,13 +34,13 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'tables',
             },
             {
-                title: t('side_panel.tables_section.relationships'),
+                title: t('side_panel.relationships_section.relationships'),
                 icon: Workflow,
                 onClick: () => selectSidebarSection('relationships'),
                 active: selectedSidebarSection === 'relationships',
             },
             {
-                title: t('side_panel.tables_section.dependencies'),
+                title: t('side_panel.dependencies_section.dependencies'),
                 icon: SquareStack,
                 onClick: () => selectSidebarSection('dependencies'),
                 active: selectedSidebarSection === 'dependencies',
