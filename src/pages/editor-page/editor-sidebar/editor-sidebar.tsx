@@ -23,30 +23,40 @@ export interface SidebarItem {
 export interface EditorSidebarProps {}
 
 export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
-    const { selectSidebarSection, selectedSidebarSection } = useLayout();
+    const { selectSidebarSection, selectedSidebarSection, showSidePanel } =
+        useLayout();
     const { t } = useTranslation();
     const items: SidebarItem[] = useMemo(
         () => [
             {
                 title: t('side_panel.tables_section.tables'),
                 icon: Table,
-                onClick: () => selectSidebarSection('tables'),
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('tables');
+                },
                 active: selectedSidebarSection === 'tables',
             },
             {
                 title: t('side_panel.relationships_section.relationships'),
                 icon: Workflow,
-                onClick: () => selectSidebarSection('relationships'),
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('relationships');
+                },
                 active: selectedSidebarSection === 'relationships',
             },
             {
                 title: t('side_panel.dependencies_section.dependencies'),
                 icon: SquareStack,
-                onClick: () => selectSidebarSection('dependencies'),
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('dependencies');
+                },
                 active: selectedSidebarSection === 'dependencies',
             },
         ],
-        [selectSidebarSection, selectedSidebarSection, t]
+        [selectSidebarSection, selectedSidebarSection, t, showSidePanel]
     );
     return (
         <Sidebar
