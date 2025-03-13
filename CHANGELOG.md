@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.1](https://github.com/chartdb/chartdb/compare/v1.9.0...v1.9.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* **sidebar:** add sidebar for diagram objects ([#618](https://github.com/chartdb/chartdb/issues/618)) ([63b5ba0](https://github.com/chartdb/chartdb/commit/63b5ba0bb9934c4e5c5d0d1b6f995afbbd3acf36))
+* **sidebar:** opens sidepanel in case its closed and click on sidebar ([#620](https://github.com/chartdb/chartdb/issues/620)) ([3faa39e](https://github.com/chartdb/chartdb/commit/3faa39e7875d836dfe526d94a10f8aed070ac1c1))
+
 ## [1.9.0](https://github.com/chartdb/chartdb/compare/v1.8.1...v1.9.0) (2025-03-13)
 
 
