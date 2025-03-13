@@ -289,7 +289,6 @@ const TemplatePageComponent: React.FC = () => {
                                         readonly
                                     >
                                         <Canvas
-                                            readonly
                                             initialTables={
                                                 template.diagram.tables ?? []
                                             }

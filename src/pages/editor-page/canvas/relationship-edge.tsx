@@ -7,6 +7,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from './canvas-utils';
+import { useDiff } from '@/context/diff-context/use-diff';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -29,6 +30,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
 }) => {
     const { getInternalNode, getEdge } = useReactFlow();
     const { openRelationshipFromSidebar, selectSidebarSection } = useLayout();
+    const { checkIfRelationshipRemoved, checkIfNewRelationship } = useDiff();
 
     const { relationships } = useChartDB();
 
@@ -149,6 +151,25 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
             }),
         [relationship?.targetCardinality, selected, targetSide]
     );
+
+    const isDiffNewRelationship = useMemo(
+        () =>
+            relationship?.id
+                ? checkIfNewRelationship({ relationshipId: relationship.id })
+                : false,
+        [checkIfNewRelationship, relationship?.id]
+    );
+
+    const isDiffRelationshipRemoved = useMemo(
+        () =>
+            relationship?.id
+                ? checkIfRelationshipRemoved({
+                      relationshipId: relationship.id,
+                  })
+                : false,
+        [checkIfRelationshipRemoved, relationship?.id]
+    );
+
     return (
         <>
             <path
@@ -160,6 +181,10 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                 className={cn([
                     'react-flow__edge-path',
                     `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                    {
+                        '!stroke-green-500': isDiffNewRelationship,
+                        '!stroke-red-500': isDiffRelationshipRemoved,
+                    },
                 ])}
                 onClick={(e) => {
                     if (e.detail === 2) {

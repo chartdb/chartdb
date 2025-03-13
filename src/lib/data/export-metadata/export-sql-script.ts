@@ -115,8 +115,22 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
                 // Remove the type cast part after :: if it exists
                 if (fieldDefault.includes('::')) {
+                    const endedWithParentheses = fieldDefault.endsWith(')');
                     fieldDefault = fieldDefault.split('::')[0];
+
+                    if (
+                        (fieldDefault.startsWith('(') &&
+                            !fieldDefault.endsWith(')')) ||
+                        endedWithParentheses
+                    ) {
+                        fieldDefault += ')';
+                    }
                 }
+
+                if (fieldDefault === `('now')`) {
+                    fieldDefault = `now()`;
+                }
+
                 sqlScript += ` DEFAULT ${fieldDefault}`;
             }
 

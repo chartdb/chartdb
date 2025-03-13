@@ -29,6 +29,7 @@ import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
+import { DiffProvider } from '@/context/diff-context/diff-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -235,23 +236,25 @@ export const EditorPage: React.FC = () => (
                     <StorageProvider>
                         <ConfigProvider>
                             <RedoUndoStackProvider>
-                                <ChartDBProvider>
-                                    <HistoryProvider>
-                                        <ReactFlowProvider>
-                                            <CanvasProvider>
-                                                <ExportImageProvider>
-                                                    <AlertProvider>
-                                                        <DialogProvider>
-                                                            <KeyboardShortcutsProvider>
-                                                                <EditorPageComponent />
-                                                            </KeyboardShortcutsProvider>
-                                                        </DialogProvider>
-                                                    </AlertProvider>
-                                                </ExportImageProvider>
-                                            </CanvasProvider>
-                                        </ReactFlowProvider>
-                                    </HistoryProvider>
-                                </ChartDBProvider>
+                                <DiffProvider>
+                                    <ChartDBProvider>
+                                        <HistoryProvider>
+                                            <ReactFlowProvider>
+                                                <CanvasProvider>
+                                                    <ExportImageProvider>
+                                                        <AlertProvider>
+                                                            <DialogProvider>
+                                                                <KeyboardShortcutsProvider>
+                                                                    <EditorPageComponent />
+                                                                </KeyboardShortcutsProvider>
+                                                            </DialogProvider>
+                                                        </AlertProvider>
+                                                    </ExportImageProvider>
+                                                </CanvasProvider>
+                                            </ReactFlowProvider>
+                                        </HistoryProvider>
+                                    </ChartDBProvider>
+                                </DiffProvider>
                             </RedoUndoStackProvider>
                         </ConfigProvider>
                     </StorageProvider>

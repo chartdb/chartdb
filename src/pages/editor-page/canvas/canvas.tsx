@@ -103,10 +103,9 @@ const tableToTableNode = (
 
 export interface CanvasProps {
     initialTables: DBTable[];
-    readonly?: boolean;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
+export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { getEdge, getInternalNode, getEdges, getNode } = useReactFlow();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
     const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
@@ -127,6 +126,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables, readonly }) => {
         filteredSchemas,
         events,
         dependencies,
+        readonly,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
