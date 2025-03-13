@@ -9,7 +9,8 @@
         "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npm run lint -- --fix",
         "preview": "vite preview",
-        "prepare": "husky"
+        "prepare": "husky",
+        "start": "node_modules/serve/bin/serve.js -s build -l 8081"
     },
     "dependencies": {
         "@ai-sdk/openai": "^0.0.51",
@@ -63,6 +64,7 @@
         "react-responsive": "^10.0.0",
         "react-router-dom": "^7.1.1",
         "react-use": "^17.5.1",
+        "serve": "^14.2.4",
         "tailwind-merge": "^2.4.0",
         "tailwindcss-animate": "^1.0.7",
         "timeago-react": "^3.0.6",
