@@ -98,20 +98,12 @@ export const Menu: React.FC<MenuProps> = () => {
         });
     }, [openExportImageDialog]);
 
-    const openChartDBIO = useCallback(() => {
-        window.location.href = 'https://chartdb.io';
-    }, []);
-
     const openChartDBDocs = useCallback(() => {
         window.open('https://docs.chartdb.io', '_blank');
     }, []);
 
     const openJoinDiscord = useCallback(() => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
-    }, []);
-
-    const openCalendly = useCallback(() => {
-        window.open('https://calendly.com/fishner/15min', '_blank');
     }, []);
 
     const exportSQL = useCallback(
@@ -533,14 +525,8 @@ export const Menu: React.FC<MenuProps> = () => {
                     <MenubarItem onClick={openChartDBDocs}>
                         {t('menu.help.docs_website')}
                     </MenubarItem>
-                    <MenubarItem onClick={openChartDBIO}>
-                        {t('menu.help.visit_website')}
-                    </MenubarItem>
                     <MenubarItem onClick={openJoinDiscord}>
                         {t('menu.help.join_discord')}
-                    </MenubarItem>
-                    <MenubarItem onClick={openCalendly}>
-                        {t('menu.help.schedule_a_call')}
                     </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>

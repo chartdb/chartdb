@@ -41,10 +41,8 @@ export const id_ID: LanguageTranslation = {
             },
             help: {
                 help: 'Bantuan',
-                docs_website: 'દસ્તાવેજીકરણ',
-                visit_website: 'Kunjungi ChartDB',
+                docs_website: 'Dokumentasi',
                 join_discord: 'Bergabunglah di Discord kami',
-                schedule_a_call: 'Berbicara dengan kami!',
             },
         },
 
