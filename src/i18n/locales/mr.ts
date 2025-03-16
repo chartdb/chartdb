@@ -43,9 +43,7 @@ export const mr: LanguageTranslation = {
             help: {
                 help: 'मदत',
                 docs_website: 'दस्तऐवजीकरण',
-                visit_website: 'ChartDB ला भेट द्या',
                 join_discord: 'आमच्या डिस्कॉर्डमध्ये सामील व्हा',
-                schedule_a_call: 'आमच्याशी बोला!',
             },
         },
 

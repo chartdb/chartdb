@@ -43,9 +43,7 @@ export const bn: LanguageTranslation = {
             help: {
                 help: 'সাহায্য',
                 docs_website: 'ডকুমেন্টেশন',
-                visit_website: 'ChartDB ওয়েবসাইটে যান',
                 join_discord: 'আমাদের Discord-এ যোগ দিন',
-                schedule_a_call: 'আমাদের সাথে কথা বলুন!',
             },
         },
 

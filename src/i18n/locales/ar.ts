@@ -42,9 +42,7 @@ export const ar: LanguageTranslation = {
             help: {
                 help: 'مساعدة',
                 docs_website: 'الوثائق',
-                visit_website: 'ChartDB قم بزيارة',
-                join_discord: 'Discord انضم إلينا على',
-                schedule_a_call: '!تحدث معنا',
+                join_discord: 'انضم إلينا على Discord',
             },
         },
 
