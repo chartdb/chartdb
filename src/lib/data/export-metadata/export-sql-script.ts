@@ -6,14 +6,17 @@ import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 
-export const exportBaseSQL = (diagram: Diagram): string => {
+export const exportBaseSQL = (
+    diagram: Diagram,
+    isDBML: boolean = false
+): string => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
         return '';
     }
 
-    if (diagram.databaseType === DatabaseType.SQL_SERVER) {
+    if (!isDBML && diagram.databaseType === DatabaseType.SQL_SERVER) {
         return exportMSSQL(diagram);
     }
 

@@ -9,6 +9,7 @@ import { exportBaseSQL } from '@/lib/data/export-metadata/export-sql-script';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useToast } from '@/components/toast/use-toast';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -16,6 +17,24 @@ export interface TableDBMLProps {
 
 const getEditorTheme = (theme: EffectiveTheme) => {
     return theme === 'dark' ? 'dbml-dark' : 'dbml-light';
+};
+
+const databaseTypeToImportFormat = (
+    type: DatabaseType
+): 'mysql' | 'postgres' | 'mssql' | 'postgresLegacy' => {
+    switch (type) {
+        case DatabaseType.SQL_SERVER:
+            return 'mssql';
+        case DatabaseType.MYSQL:
+        case DatabaseType.MARIADB:
+            return 'mysql';
+        case DatabaseType.POSTGRESQL:
+        case DatabaseType.COCKROACHDB:
+            return 'postgres';
+        case DatabaseType.SQLITE:
+        default:
+            return 'postgres';
+    }
 };
 
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
@@ -57,10 +76,14 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 })) ?? [],
         } satisfies Diagram;
 
-        const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces);
+        const isDBML = true;
+        const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces, isDBML);
 
         try {
-            return importer.import(baseScript, 'postgres');
+            const importFormat = databaseTypeToImportFormat(
+                currentDiagram.databaseType
+            );
+            return importer.import(baseScript, importFormat);
         } catch (e) {
             console.error(e);
 
