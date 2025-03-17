@@ -21,7 +21,7 @@ const getEditorTheme = (theme: EffectiveTheme) => {
 
 const databaseTypeToImportFormat = (
     type: DatabaseType
-): 'mysql' | 'postgres' | 'mssql' | 'postgresLegacy' => {
+): 'mysql' | 'postgres' | 'mssql' => {
     switch (type) {
         case DatabaseType.SQL_SERVER:
             return 'mssql';
@@ -30,8 +30,8 @@ const databaseTypeToImportFormat = (
             return 'mysql';
         case DatabaseType.POSTGRESQL:
         case DatabaseType.COCKROACHDB:
-            return 'postgres';
         case DatabaseType.SQLITE:
+            return 'postgres';
         default:
             return 'postgres';
     }
@@ -76,8 +76,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 })) ?? [],
         } satisfies Diagram;
 
-        const isDBML = true;
-        const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces, isDBML);
+        const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces, true);
 
         try {
             const importFormat = databaseTypeToImportFormat(

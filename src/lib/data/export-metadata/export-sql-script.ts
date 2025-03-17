@@ -8,7 +8,7 @@ import { exportMSSQL } from './export-per-type/mssql';
 
 export const exportBaseSQL = (
     diagram: Diagram,
-    isDBML: boolean = false
+    isDBMLFlow: boolean = false
 ): string => {
     const { tables, relationships } = diagram;
 
@@ -16,7 +16,7 @@ export const exportBaseSQL = (
         return '';
     }
 
-    if (!isDBML && diagram.databaseType === DatabaseType.SQL_SERVER) {
+    if (!isDBMLFlow && diagram.databaseType === DatabaseType.SQL_SERVER) {
         return exportMSSQL(diagram);
     }
 
