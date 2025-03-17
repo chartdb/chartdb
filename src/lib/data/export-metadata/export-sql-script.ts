@@ -6,14 +6,17 @@ import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 
-export const exportBaseSQL = (diagram: Diagram): string => {
+export const exportBaseSQL = (
+    diagram: Diagram,
+    isDBMLFlow: boolean = false
+): string => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
         return '';
     }
 
-    if (diagram.databaseType === DatabaseType.SQL_SERVER) {
+    if (!isDBMLFlow && diagram.databaseType === DatabaseType.SQL_SERVER) {
         return exportMSSQL(diagram);
     }
 
@@ -71,6 +74,11 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
         table.fields.forEach((field, index) => {
             let typeName = field.type.name;
+
+            // Handle ENUM type
+            if (typeName.toLowerCase() === 'enum') {
+                typeName = 'varchar';
+            }
 
             // Temp fix for 'array' to be text[]
             if (typeName.toLowerCase() === 'array') {
