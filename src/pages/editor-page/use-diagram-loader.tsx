@@ -7,6 +7,9 @@ import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { diagramFromJSONInput } from '@/lib/export-import-utils';
+import zanderApiDbJson from './zanderApiDb.json';
+import zanderWebDnbJson from './zanderWebDb.json';
 
 export const useDiagramLoader = () => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
@@ -17,7 +20,7 @@ export const useDiagramLoader = () => {
     const { showLoader, hideLoader } = useFullScreenLoader();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const navigate = useNavigate();
-    const { listDiagrams } = useStorage();
+    const { listDiagrams, addDiagram } = useStorage();
 
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
 
@@ -36,11 +39,29 @@ export const useDiagramLoader = () => {
                 showLoader();
                 resetRedoStack();
                 resetUndoStack();
-                const diagram = await loadDiagram(diagramId);
+
+                let diagram = await loadDiagram(diagramId);
                 if (!diagram) {
-                    openOpenDiagramDialog({ canClose: false });
-                    hideLoader();
-                    return;
+                    // ZANDER CHANGES - START
+                    // openOpenDiagramDialog({ canClose: false });
+                    // hideLoader();
+                    // return;
+                    switch (diagramId) {
+                        case 'zanderApiDb':
+                            diagram = diagramFromJSONInput(
+                                JSON.stringify(zanderApiDbJson)
+                            );
+                            break;
+                        case 'zanderWebDb':
+                            diagram = diagramFromJSONInput(
+                                JSON.stringify(zanderWebDnbJson)
+                            );
+                    }
+                    //@ts-ignore
+                    await addDiagram({ diagram });
+                    //@ts-ignore
+                    navigate(`/diagrams/${diagram.id}`);
+                    // ZANDER CHANGES - END
                 }
 
                 setInitialDiagram(diagram);
@@ -55,13 +76,16 @@ export const useDiagramLoader = () => {
                     return;
                 }
             }
-            const diagrams = await listDiagrams();
 
-            if (diagrams.length > 0) {
-                openOpenDiagramDialog({ canClose: false });
-            } else {
-                openCreateDiagramDialog();
-            }
+            // ZANDER CHANGES - START
+            // const diagrams = await listDiagrams();
+
+            // if (diagrams.length > 0) {
+            //     openOpenDiagramDialog({ canClose: false });
+            // } else {
+            //     openCreateDiagramDialog();
+            // }
+            // ZANDER CHANGES - END
         };
 
         if (
