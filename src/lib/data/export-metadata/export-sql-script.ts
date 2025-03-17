@@ -75,6 +75,11 @@ export const exportBaseSQL = (
         table.fields.forEach((field, index) => {
             let typeName = field.type.name;
 
+            // Handle ENUM type
+            if (typeName.toLowerCase() === 'enum') {
+                typeName = 'varchar';
+            }
+
             // Temp fix for 'array' to be text[]
             if (typeName.toLowerCase() === 'array') {
                 typeName = 'text[]';
