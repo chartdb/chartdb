@@ -41,7 +41,7 @@ export const shouldShowDependencyBySchemaFilter = (
 
 const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.POSTGRESQL]: 'postgresql',
-    [DatabaseType.MYSQL]: 'postgresql',
+    [DatabaseType.MYSQL]: 'mysql', // ZANDER_CHANGES
     [DatabaseType.MARIADB]: 'postgresql',
     [DatabaseType.GENERIC]: 'postgresql',
     [DatabaseType.SQLITE]: 'postgresql',

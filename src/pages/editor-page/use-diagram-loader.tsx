@@ -7,9 +7,14 @@ import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { diagramFromJSONInput } from '@/lib/export-import-utils';
+// ZANDER CHANGES - START
 import zanderApiDbJson from './zanderApiDb.json';
 import zanderWebDnbJson from './zanderWebDb.json';
+import { loadFromDatabaseMetadata } from '@/lib/domain/diagram';
+import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
+import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
+import { DatabaseType } from '@/lib/domain/database-type';
+// ZANDER CHANGES - END
 
 export const useDiagramLoader = () => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
@@ -46,20 +51,29 @@ export const useDiagramLoader = () => {
                     // openOpenDiagramDialog({ canClose: false });
                     // hideLoader();
                     // return;
+                    let databaseMetadata: DatabaseMetadata =
+                        {} as DatabaseMetadata; // Initialize to an empty object to avoid TypeScript errors
+                    let databaseType = DatabaseType.GENERIC;
                     switch (diagramId) {
                         case 'zanderApiDb':
-                            diagram = diagramFromJSONInput(
+                            databaseType = DatabaseType.MYSQL;
+                            databaseMetadata = loadDatabaseMetadata(
                                 JSON.stringify(zanderApiDbJson)
                             );
                             break;
                         case 'zanderWebDb':
-                            diagram = diagramFromJSONInput(
+                            databaseType = DatabaseType.MYSQL;
+                            databaseMetadata = loadDatabaseMetadata(
                                 JSON.stringify(zanderWebDnbJson)
                             );
+                            break;
                     }
-                    //@ts-ignore
+                    diagram = await loadFromDatabaseMetadata({
+                        databaseType,
+                        databaseMetadata,
+                        diagramNumber: 1,
+                    });
                     await addDiagram({ diagram });
-                    //@ts-ignore
                     navigate(`/diagrams/${diagram.id}`);
                     // ZANDER CHANGES - END
                 }
@@ -83,7 +97,7 @@ export const useDiagramLoader = () => {
             // if (diagrams.length > 0) {
             //     openOpenDiagramDialog({ canClose: false });
             // } else {
-            //     openCreateDiagramDialog();
+            // openCreateDiagramDialog();
             // }
             // ZANDER CHANGES - END
         };
