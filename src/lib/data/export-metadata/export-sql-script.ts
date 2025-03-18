@@ -7,21 +7,34 @@ import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 
-export const exportBaseSQL = (
-    diagram: Diagram,
-    isDBMLFlow: boolean = false
-): string => {
+export const exportBaseSQL = ({
+    diagram,
+    targetDatabaseType,
+    isDBMLFlow,
+}: {
+    diagram: Diagram;
+    targetDatabaseType: DatabaseType;
+    isDBMLFlow: boolean;
+}): string => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
         return '';
     }
 
-    if (!isDBMLFlow && diagram.databaseType === DatabaseType.SQL_SERVER) {
+    if (
+        !isDBMLFlow &&
+        diagram.databaseType === DatabaseType.SQL_SERVER &&
+        targetDatabaseType === DatabaseType.SQL_SERVER
+    ) {
         return exportMSSQL(diagram);
     }
 
-    if (!isDBMLFlow && diagram.databaseType === DatabaseType.POSTGRESQL) {
+    if (
+        !isDBMLFlow &&
+        diagram.databaseType === DatabaseType.POSTGRESQL &&
+        targetDatabaseType === DatabaseType.POSTGRESQL
+    ) {
         return exportPostgreSQL(diagram);
     }
 
@@ -257,12 +270,22 @@ export const exportSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
-    const sqlScript = exportBaseSQL(diagram);
-    if (databaseType === DatabaseType.SQL_SERVER) {
+    const sqlScript = exportBaseSQL({
+        diagram,
+        targetDatabaseType: databaseType,
+        isDBMLFlow: false,
+    });
+    if (
+        databaseType === DatabaseType.SQL_SERVER &&
+        diagram.databaseType === DatabaseType.SQL_SERVER
+    ) {
         return sqlScript;
     }
 
-    if (databaseType === DatabaseType.POSTGRESQL) {
+    if (
+        databaseType === DatabaseType.POSTGRESQL &&
+        diagram.databaseType === DatabaseType.POSTGRESQL
+    ) {
         return sqlScript;
     }
 

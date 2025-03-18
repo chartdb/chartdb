@@ -87,7 +87,13 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
         };
 
         if (targetDatabaseType === DatabaseType.GENERIC) {
-            return Promise.resolve(exportBaseSQL(filteredDiagram));
+            return Promise.resolve(
+                exportBaseSQL({
+                    diagram: filteredDiagram,
+                    targetDatabaseType,
+                    isDBMLFlow: false,
+                })
+            );
         } else {
             return exportSQL(filteredDiagram, targetDatabaseType, {
                 stream: true,

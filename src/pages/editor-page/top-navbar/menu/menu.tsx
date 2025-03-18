@@ -300,17 +300,21 @@ export const Menu: React.FC<MenuProps> = () => {
                                 }
                             >
                                 {databaseTypeToLabelMap['postgresql']}
-                                <MenubarShortcut className="text-base">
-                                    {emojiAI}
-                                </MenubarShortcut>
+                                {databaseType !== DatabaseType.POSTGRESQL && (
+                                    <MenubarShortcut className="text-base">
+                                        {emojiAI}
+                                    </MenubarShortcut>
+                                )}
                             </MenubarItem>
                             <MenubarItem
                                 onClick={() => exportSQL(DatabaseType.MYSQL)}
                             >
                                 {databaseTypeToLabelMap['mysql']}
-                                <MenubarShortcut className="text-base">
-                                    {emojiAI}
-                                </MenubarShortcut>
+                                {databaseType !== DatabaseType.MYSQL && (
+                                    <MenubarShortcut className="text-base">
+                                        {emojiAI}
+                                    </MenubarShortcut>
+                                )}
                             </MenubarItem>
                             <MenubarItem
                                 onClick={() =>
@@ -318,25 +322,31 @@ export const Menu: React.FC<MenuProps> = () => {
                                 }
                             >
                                 {databaseTypeToLabelMap['sql_server']}
-                                <MenubarShortcut className="text-base">
-                                    {emojiAI}
-                                </MenubarShortcut>
+                                {databaseType !== DatabaseType.SQL_SERVER && (
+                                    <MenubarShortcut className="text-base">
+                                        {emojiAI}
+                                    </MenubarShortcut>
+                                )}
                             </MenubarItem>
                             <MenubarItem
                                 onClick={() => exportSQL(DatabaseType.MARIADB)}
                             >
                                 {databaseTypeToLabelMap['mariadb']}
-                                <MenubarShortcut className="text-base">
-                                    {emojiAI}
-                                </MenubarShortcut>
+                                {databaseType !== DatabaseType.MARIADB && (
+                                    <MenubarShortcut className="text-base">
+                                        {emojiAI}
+                                    </MenubarShortcut>
+                                )}
                             </MenubarItem>
                             <MenubarItem
                                 onClick={() => exportSQL(DatabaseType.SQLITE)}
                             >
                                 {databaseTypeToLabelMap['sqlite']}
-                                <MenubarShortcut className="text-base">
-                                    {emojiAI}
-                                </MenubarShortcut>
+                                {databaseType !== DatabaseType.SQLITE && (
+                                    <MenubarShortcut className="text-base">
+                                        {emojiAI}
+                                    </MenubarShortcut>
+                                )}
                             </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>
