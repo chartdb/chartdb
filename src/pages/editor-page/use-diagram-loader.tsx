@@ -8,12 +8,13 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // ZANDER CHANGES - START
-import zanderApiDbJson from './zanderApiDb.json';
-import zanderWebDnbJson from './zanderWebDb.json';
+// import zanderApiDbJson from './zanderApiDb.json';
+// import zanderWebDnbJson from './zanderWebDb.json';
 import { loadFromDatabaseMetadata } from '@/lib/domain/diagram';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { DatabaseType } from '@/lib/domain/database-type';
+import axios from 'axios';
 // ZANDER CHANGES - END
 
 export const useDiagramLoader = () => {
@@ -28,6 +29,21 @@ export const useDiagramLoader = () => {
     const { listDiagrams, addDiagram } = useStorage();
 
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
+
+    const apiUrl = import.meta.env.VITE_MAIN_API_URL;
+
+    const fetchDatabaseMetadata = async (diagramId: string) => {
+        try {
+            const response = await axios.post(
+                `${apiUrl}/database/schema?db=${diagramId.toLowerCase()}`
+            );
+
+            return response.data.data;
+        } catch (error) {
+            console.error(`Error fetching metadata for ${diagramId}:`, error);
+            return null;
+        }
+    };
 
     useEffect(() => {
         if (!config) {
@@ -51,23 +67,37 @@ export const useDiagramLoader = () => {
                     // openOpenDiagramDialog({ canClose: false });
                     // hideLoader();
                     // return;
+
                     let databaseMetadata: DatabaseMetadata =
                         {} as DatabaseMetadata; // Initialize to an empty object to avoid TypeScript errors
                     let databaseType = DatabaseType.GENERIC;
-                    switch (diagramId) {
-                        case 'zanderApiDb':
-                            databaseType = DatabaseType.MYSQL;
-                            databaseMetadata = loadDatabaseMetadata(
-                                JSON.stringify(zanderApiDbJson)
-                            );
-                            break;
-                        case 'zanderWebDb':
-                            databaseType = DatabaseType.MYSQL;
-                            databaseMetadata = loadDatabaseMetadata(
-                                JSON.stringify(zanderWebDnbJson)
-                            );
-                            break;
+
+                    databaseType = DatabaseType.MYSQL;
+
+                    const metadataResponse =
+                        await fetchDatabaseMetadata(diagramId);
+
+                    if (metadataResponse) {
+                        databaseMetadata = loadDatabaseMetadata(
+                            JSON.stringify(metadataResponse)
+                        );
                     }
+
+                    // switch (diagramId) {
+                    //     case 'zanderApiDb':
+                    //         databaseType = DatabaseType.MYSQL;
+                    //         databaseMetadata = loadDatabaseMetadata(
+                    //             JSON.stringify(zanderApiDbJson)
+                    //         );
+                    //         break;
+                    //     case 'zanderWebDb':
+                    //         databaseType = DatabaseType.MYSQL;
+                    //         databaseMetadata = loadDatabaseMetadata(
+                    //             JSON.stringify(zanderWebDnbJson)
+                    //         );
+                    //         break;
+                    // }
+
                     diagram = await loadFromDatabaseMetadata({
                         databaseType,
                         databaseMetadata,
