@@ -91,7 +91,6 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 exportBaseSQL({
                     diagram: filteredDiagram,
                     targetDatabaseType,
-                    isDBMLFlow: false,
                 })
             );
         } else {

@@ -10,11 +10,11 @@ import { exportPostgreSQL } from './export-per-type/postgresql';
 export const exportBaseSQL = ({
     diagram,
     targetDatabaseType,
-    isDBMLFlow,
+    isDBMLFlow = false,
 }: {
     diagram: Diagram;
     targetDatabaseType: DatabaseType;
-    isDBMLFlow: boolean;
+    isDBMLFlow?: boolean;
 }): string => {
     const { tables, relationships } = diagram;
 
@@ -273,7 +273,6 @@ export const exportSQL = async (
     const sqlScript = exportBaseSQL({
         diagram,
         targetDatabaseType: databaseType,
-        isDBMLFlow: false,
     });
     if (
         databaseType === DatabaseType.SQL_SERVER &&
