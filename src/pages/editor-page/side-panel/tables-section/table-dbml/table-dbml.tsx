@@ -76,7 +76,11 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 })) ?? [],
         } satisfies Diagram;
 
-        const baseScript = exportBaseSQL(filteredDiagramWithoutSpaces, true);
+        const baseScript = exportBaseSQL({
+            diagram: filteredDiagramWithoutSpaces,
+            targetDatabaseType: currentDiagram.databaseType,
+            isDBMLFlow: true,
+        });
 
         try {
             const importFormat = databaseTypeToImportFormat(
