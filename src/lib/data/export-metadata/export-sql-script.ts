@@ -6,6 +6,7 @@ import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
+import { exportSQLite } from './export-per-type/sqlite';
 
 export const exportBaseSQL = ({
     diagram,
@@ -36,6 +37,14 @@ export const exportBaseSQL = ({
         targetDatabaseType === DatabaseType.POSTGRESQL
     ) {
         return exportPostgreSQL(diagram);
+    }
+
+    if (
+        !isDBMLFlow &&
+        diagram.databaseType === DatabaseType.SQLITE &&
+        targetDatabaseType === DatabaseType.SQLITE
+    ) {
+        return exportSQLite(diagram);
     }
 
     // Filter out the tables that are views
@@ -284,6 +293,13 @@ export const exportSQL = async (
     if (
         databaseType === DatabaseType.POSTGRESQL &&
         diagram.databaseType === DatabaseType.POSTGRESQL
+    ) {
+        return sqlScript;
+    }
+
+    if (
+        databaseType === DatabaseType.SQLITE &&
+        diagram.databaseType === DatabaseType.SQLITE
     ) {
         return sqlScript;
     }
