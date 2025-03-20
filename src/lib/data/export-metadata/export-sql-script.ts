@@ -7,6 +7,7 @@ import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
+import { exportMySQL } from './export-per-type/mysql';
 
 export const exportBaseSQL = ({
     diagram,
@@ -23,28 +24,20 @@ export const exportBaseSQL = ({
         return '';
     }
 
-    if (
-        !isDBMLFlow &&
-        diagram.databaseType === DatabaseType.SQL_SERVER &&
-        targetDatabaseType === DatabaseType.SQL_SERVER
-    ) {
-        return exportMSSQL(diagram);
-    }
-
-    if (
-        !isDBMLFlow &&
-        diagram.databaseType === DatabaseType.POSTGRESQL &&
-        targetDatabaseType === DatabaseType.POSTGRESQL
-    ) {
-        return exportPostgreSQL(diagram);
-    }
-
-    if (
-        !isDBMLFlow &&
-        diagram.databaseType === DatabaseType.SQLITE &&
-        targetDatabaseType === DatabaseType.SQLITE
-    ) {
-        return exportSQLite(diagram);
+    if (!isDBMLFlow && diagram.databaseType === targetDatabaseType) {
+        switch (diagram.databaseType) {
+            case DatabaseType.SQL_SERVER:
+                return exportMSSQL(diagram);
+            case DatabaseType.POSTGRESQL:
+                return exportPostgreSQL(diagram);
+            case DatabaseType.SQLITE:
+                return exportSQLite(diagram);
+            case DatabaseType.MYSQL:
+            case DatabaseType.MARIADB:
+                return exportMySQL(diagram);
+            default:
+                return exportPostgreSQL(diagram);
+        }
     }
 
     // Filter out the tables that are views
@@ -283,24 +276,8 @@ export const exportSQL = async (
         diagram,
         targetDatabaseType: databaseType,
     });
-    if (
-        databaseType === DatabaseType.SQL_SERVER &&
-        diagram.databaseType === DatabaseType.SQL_SERVER
-    ) {
-        return sqlScript;
-    }
 
-    if (
-        databaseType === DatabaseType.POSTGRESQL &&
-        diagram.databaseType === DatabaseType.POSTGRESQL
-    ) {
-        return sqlScript;
-    }
-
-    if (
-        databaseType === DatabaseType.SQLITE &&
-        diagram.databaseType === DatabaseType.SQLITE
-    ) {
+    if (databaseType === diagram.databaseType) {
         return sqlScript;
     }
 
