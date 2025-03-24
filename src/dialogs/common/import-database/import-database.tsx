@@ -31,6 +31,7 @@ import type { DatabaseClient } from '@/lib/domain/database-clients';
 import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
+    databaseEditionToClientsMap,
 } from '@/lib/domain/database-clients';
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
@@ -71,7 +72,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     keepDialogAfterImport,
     title,
 }) => {
-    const databaseClients = databaseTypeToClientsMap[databaseType];
+    // Get database clients based on edition if selected, otherwise based on type
+    const databaseClients = databaseEdition
+        ? databaseEditionToClientsMap[databaseEdition]
+        : databaseTypeToClientsMap[databaseType];
     const [errorMessage, setErrorMessage] = useState('');
     const [databaseClient, setDatabaseClient] = useState<
         DatabaseClient | undefined
@@ -96,6 +100,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         };
         loadScripts();
     }, []);
+
+    // Reset database client when database edition changes
+    useEffect(() => {
+        setDatabaseClient(undefined);
+    }, [databaseEdition]);
 
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
@@ -189,6 +198,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                             ? undefined
                                             : (value as DatabaseEdition)
                                     );
+                                    setDatabaseClient(undefined);
                                 }}
                             >
                                 <ToggleGroupItem
@@ -258,7 +268,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 />
                             )}
                         </div>
-                        {databaseTypeToClientsMap[databaseType].length > 0 ? (
+                        {databaseClients && databaseClients.length > 0 ? (
                             <Tabs
                                 value={
                                     !databaseClient

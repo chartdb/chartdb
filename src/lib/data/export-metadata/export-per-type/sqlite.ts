@@ -8,6 +8,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
+import { DatabaseEdition } from '@/lib/domain/database-edition';
 
 function parseSQLiteDefault(field: DBField): string {
     if (!field.default) {
@@ -147,8 +148,14 @@ export function exportSQLite(diagram: Diagram): string {
     const tables = diagram.tables;
     const relationships = diagram.relationships;
 
+    // Check if this is a Cloudflare D1 diagram
+    const isCloudflareD1 =
+        diagram.databaseEdition === DatabaseEdition.SQLITE_CLOUDFLARE_D1;
+
     // Start SQL script - SQLite doesn't use schemas, so we skip schema creation
-    let sqlScript = '-- SQLite database export\n\n';
+    let sqlScript = isCloudflareD1
+        ? '-- Cloudflare D1 database export\n\n'
+        : '-- SQLite database export\n\n';
 
     // Begin transaction for faster import
     sqlScript += 'BEGIN TRANSACTION;\n\n';
@@ -168,144 +175,152 @@ export function exportSQLite(diagram: Diagram): string {
     // Generate table creation SQL
     sqlScript += tables
         .map((table: DBTable) => {
-            // Skip views
-            if (table.isView) {
+            // Skip system tables and views (views are handled separately)
+            if (
+                sqliteSystemTables.includes(table.name.toLowerCase()) ||
+                table.isView
+            ) {
                 return '';
             }
 
-            // Skip SQLite system tables
-            if (sqliteSystemTables.includes(table.name.toLowerCase())) {
-                return `-- Skipping SQLite system table: "${table.name}"\n`;
-            }
+            let createTableSQL = `CREATE TABLE IF NOT EXISTS "${table.name}" (\n`;
 
-            // SQLite doesn't use schema prefixes, so we use just the table name
-            // Include the schema in a comment if it exists
-            const schemaComment = table.schema
-                ? `-- Original schema: ${table.schema}\n`
-                : '';
-            const tableName = `"${table.name}"`;
+            // Generate column definitions
+            const columnDefinitions = table.fields.map((field: DBField) => {
+                let columnDef = `    "${field.name}" `;
 
-            // Get primary key fields
-            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
+                // Map field type to appropriate SQLite type
+                columnDef += mapSQLiteType(
+                    field.type.name,
+                    field.primaryKey,
+                    isCloudflareD1
+                );
 
-            // Check if this is a single-column INTEGER PRIMARY KEY (for AUTOINCREMENT)
-            const singleIntegerPrimaryKey =
-                primaryKeyFields.length === 1 &&
-                (primaryKeyFields[0].type.name.toLowerCase() === 'integer' ||
-                    primaryKeyFields[0].type.name.toLowerCase() === 'int');
+                // Add PRIMARY KEY constraint if needed
+                if (field.primaryKey) {
+                    columnDef += ' PRIMARY KEY';
+                    // For INTEGER PRIMARY KEY fields, add AUTOINCREMENT if it's an auto-incrementing field
+                    if (
+                        (field.type.name.toLowerCase() === 'integer' ||
+                            field.type.name.toLowerCase() === 'int') &&
+                        field.default &&
+                        (field.default.toLowerCase().includes('identity') ||
+                            field.default
+                                .toLowerCase()
+                                .includes('autoincrement') ||
+                            field.default.includes('nextval'))
+                    ) {
+                        columnDef += ' AUTOINCREMENT';
+                    }
+                }
 
-            return `${schemaComment}${
-                table.comments ? `-- ${table.comments}\n` : ''
-            }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
-                .map((field: DBField) => {
-                    const fieldName = `"${field.name}"`;
+                // Add NOT NULL constraint if not nullable
+                if (!field.nullable && !field.primaryKey) {
+                    // PRIMARY KEY implies NOT NULL
+                    columnDef += ' NOT NULL';
+                }
 
-                    // Handle type name - map to SQLite compatible types
-                    const typeName = mapSQLiteType(
-                        field.type.name,
-                        field.primaryKey
+                // Add UNIQUE constraint if marked as unique
+                if (field.unique && !field.primaryKey) {
+                    // PRIMARY KEY implies UNIQUE
+                    columnDef += ' UNIQUE';
+                }
+
+                // Add DEFAULT values if specified
+                if (
+                    field.default &&
+                    !field.default.toLowerCase().includes('autoincrement')
+                ) {
+                    const defaultValue = parseSQLiteDefault(field);
+                    if (defaultValue) {
+                        columnDef += ` DEFAULT ${defaultValue}`;
+                    }
+                }
+
+                // Add any field comments
+                if (field.comments) {
+                    columnDef += ` ${exportFieldComment(field.comments)}`;
+                }
+
+                return columnDef;
+            });
+
+            // Add all foreign key constraints in the CREATE TABLE statement
+            // SQLite requires foreign keys to be defined in the CREATE TABLE
+            const foreignKeyConstraints = relationships
+                .filter(
+                    (r: DBRelationship) =>
+                        r.sourceTableId === table.id && !table.isView
+                )
+                .map((r: DBRelationship) => {
+                    const targetTable = tables.find(
+                        (t) => t.id === r.targetTableId
+                    );
+                    const sourceField = table.fields.find(
+                        (f) => f.id === r.sourceFieldId
+                    );
+                    const targetField = targetTable?.fields.find(
+                        (f) => f.id === r.targetFieldId
                     );
 
-                    // SQLite ignores length specifiers, so we don't add them
-                    // We'll keep this simple without size info
-                    const typeWithoutSize = typeName;
-
-                    const notNull = field.nullable ? '' : ' NOT NULL';
-
-                    // Handle autoincrement - only works with INTEGER PRIMARY KEY
-                    let autoIncrement = '';
                     if (
-                        field.primaryKey &&
-                        singleIntegerPrimaryKey &&
-                        (field.default?.toLowerCase().includes('identity') ||
-                            field.default
-                                ?.toLowerCase()
-                                .includes('autoincrement') ||
-                            field.default?.includes('nextval'))
+                        !targetTable ||
+                        !sourceField ||
+                        !targetField ||
+                        targetTable.isView
                     ) {
-                        autoIncrement = ' AUTOINCREMENT';
+                        return '';
                     }
 
-                    // Only add UNIQUE constraint if the field is not part of the primary key
-                    const unique =
-                        !field.primaryKey && field.unique ? ' UNIQUE' : '';
-
-                    // Handle default value - Special handling for datetime() function
-                    let defaultValue = '';
-                    if (
-                        field.default &&
-                        !field.default.toLowerCase().includes('identity') &&
-                        !field.default
-                            .toLowerCase()
-                            .includes('autoincrement') &&
-                        !field.default.includes('nextval')
-                    ) {
-                        // Special handling for quoted functions like 'datetime(\'\'now\'\')' - remove extra quotes
-                        if (field.default.includes("datetime(''now'')")) {
-                            defaultValue = ' DEFAULT CURRENT_TIMESTAMP';
-                        } else {
-                            defaultValue = ` DEFAULT ${parseSQLiteDefault(field)}`;
-                        }
-                    }
-
-                    // Add PRIMARY KEY inline only for single INTEGER primary key
-                    const primaryKey =
-                        field.primaryKey && singleIntegerPrimaryKey
-                            ? ' PRIMARY KEY' + autoIncrement
-                            : '';
-
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithoutSize}${primaryKey}${notNull}${unique}${defaultValue}`;
+                    return `    FOREIGN KEY ("${sourceField.name}") REFERENCES "${targetTable.name}" ("${targetField.name}")`;
                 })
-                .join(',\n')}${
-                // Add PRIMARY KEY as table constraint for composite primary keys or non-INTEGER primary keys
-                primaryKeyFields.length > 0 && !singleIntegerPrimaryKey
-                    ? `,\n    PRIMARY KEY (${primaryKeyFields
-                          .map((f) => `"${f.name}"`)
-                          .join(', ')})`
-                    : ''
-            }\n);\n\n${
-                // Add indexes - SQLite doesn't support indexes in CREATE TABLE
-                table.indexes
+                .filter(Boolean); // Remove empty strings
+
+            // Combine column definitions with foreign key constraints
+            createTableSQL += [
+                ...columnDefinitions,
+                ...foreignKeyConstraints,
+            ].join(',\n');
+
+            createTableSQL += '\n);\n';
+
+            // Add any table comments
+            if (table.comments) {
+                createTableSQL += `-- Table comment: ${table.comments.replace(
+                    /\n/g,
+                    '\n-- '
+                )}\n`;
+            }
+
+            // Add CREATE INDEX statements for any indexes
+            if (table.indexes && table.indexes.length > 0) {
+                createTableSQL += '\n';
+                createTableSQL += table.indexes
                     .map((index) => {
-                        // Skip indexes that exactly match the primary key
-                        const indexFields = index.fieldIds
+                        const fieldNames = index.fieldIds
                             .map((fieldId) => {
                                 const field = table.fields.find(
                                     (f) => f.id === fieldId
                                 );
-                                return field ? field : null;
+                                return field ? `"${field.name}"` : null;
                             })
-                            .filter(Boolean);
+                            .filter(Boolean) // Remove nulls
+                            .join(', ');
 
-                        // Get the properly quoted field names
-                        const indexFieldNames = indexFields
-                            .map((field) => (field ? `"${field.name}"` : ''))
-                            .filter(Boolean);
-
-                        // Skip if this index exactly matches the primary key fields
-                        if (
-                            primaryKeyFields.length === indexFields.length &&
-                            primaryKeyFields.every((pk) =>
-                                indexFields.some(
-                                    (field) => field && field.id === pk.id
-                                )
-                            )
-                        ) {
+                        if (!fieldNames) {
                             return '';
                         }
 
-                        // Create safe index name
-                        const safeIndexName = `${table.name}_${index.name}`
-                            .replace(/[^a-zA-Z0-9_]/g, '_')
-                            .substring(0, 60);
-
-                        return indexFieldNames.length > 0
-                            ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});\n`
-                            : '';
+                        return `CREATE ${
+                            index.unique ? 'UNIQUE ' : ''
+                        }INDEX IF NOT EXISTS "${index.name}" ON "${
+                            table.name
+                        }" (${fieldNames});`;
                     })
-                    .filter(Boolean)
-                    .join('\n')
-            }`;
+                    .join('\n');
+            }
+
+            return createTableSQL;
         })
         .filter(Boolean) // Remove empty strings (views)
         .join('\n');
@@ -349,6 +364,19 @@ export function exportSQLite(diagram: Diagram): string {
             // Create commented out version of what would be ALTER TABLE statement
             sqlScript += `-- ALTER TABLE "${sourceTable.name}" ADD CONSTRAINT "fk_${sourceTable.name}_${sourceField.name}" FOREIGN KEY("${sourceField.name}") REFERENCES "${targetTable.name}"("${targetField.name}");\n`;
         });
+    }
+
+    // Add D1-specific notes
+    if (isCloudflareD1) {
+        sqlScript += `
+-- Cloudflare D1 specific notes:
+-- 1. Use 'wrangler d1 execute YOUR_DB_NAME --file=script.sql' to run this script
+-- 2. Cloudflare D1 has some limitations compared to standard SQLite:
+--    - No user-defined functions
+--    - Limited support for some SQL operations
+--    - Size limitations on database and transactions
+-- 3. For production systems, consider using prepared migrations instead of direct SQL scripts
+`;
     }
 
     // Commit transaction

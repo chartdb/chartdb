@@ -3,6 +3,7 @@ import SupabaseImage from '@/assets/supabase.png';
 import TimescaleImage from '@/assets/timescale.png';
 import MySql5_7Image from '@/assets/mysql_5_7.png';
 import SqlServerImage from '@/assets/sql_server_logo_2.png';
+import CloudflareD1Image from '@/assets/cloudflare_d1.png';
 
 export enum DatabaseEdition {
     // PostgreSQL
@@ -14,6 +15,9 @@ export enum DatabaseEdition {
 
     // SQL Server
     SQL_SERVER_2016_AND_BELOW = 'sql_server_2016_and_below',
+
+    // SQLite
+    SQLITE_CLOUDFLARE_D1 = 'cloudflare_d1',
 }
 
 export const databaseEditionToLabelMap: Record<DatabaseEdition, string> = {
@@ -26,6 +30,9 @@ export const databaseEditionToLabelMap: Record<DatabaseEdition, string> = {
 
     // SQL Server
     [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: '2016 and below',
+
+    // SQLite
+    [DatabaseEdition.SQLITE_CLOUDFLARE_D1]: 'Cloudflare D1',
 };
 
 export const databaseEditionToImageMap: Record<DatabaseEdition, string> = {
@@ -38,6 +45,9 @@ export const databaseEditionToImageMap: Record<DatabaseEdition, string> = {
 
     // SQL Server
     [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: SqlServerImage,
+
+    // SQLite
+    [DatabaseEdition.SQLITE_CLOUDFLARE_D1]: CloudflareD1Image,
 };
 
 export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
@@ -48,7 +58,7 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
         ],
         [DatabaseType.MYSQL]: [DatabaseEdition.MYSQL_5_7],
         [DatabaseType.SQL_SERVER]: [DatabaseEdition.SQL_SERVER_2016_AND_BELOW],
-        [DatabaseType.SQLITE]: [],
+        [DatabaseType.SQLITE]: [DatabaseEdition.SQLITE_CLOUDFLARE_D1],
         [DatabaseType.GENERIC]: [],
         [DatabaseType.MARIADB]: [],
         [DatabaseType.CLICKHOUSE]: [],
