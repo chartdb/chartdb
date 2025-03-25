@@ -267,7 +267,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 />
                             )}
                         </div>
-                        {databaseClients && databaseClients.length > 0 ? (
+                        {databaseClients.length > 0 ? (
                             <Tabs
                                 value={
                                     !databaseClient
