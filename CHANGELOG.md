@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.10.0](https://github.com/chartdb/chartdb/compare/v1.9.0...v1.10.0) (2025-03-25)
+
+
+### Features
+
+* **cloudflare-d1:** add support to cloudflare-d1 + wrangler cli ([#632](https://github.com/chartdb/chartdb/issues/632)) ([794f226](https://github.com/chartdb/chartdb/commit/794f2262092fbe36e27e92220221ed98cb51ae37))
+
+
+### Bug Fixes
+
+* **dbml-editor:** dealing with dbml editor for non-generic db-type ([#624](https://github.com/chartdb/chartdb/issues/624)) ([14de30b](https://github.com/chartdb/chartdb/commit/14de30b7aaa0ccaca8372f0213b692266d53f0de))
+* **export-sql:** move from AI sql-export for MySQL&MariaDB to deterministic script ([#628](https://github.com/chartdb/chartdb/issues/628)) ([2fbf347](https://github.com/chartdb/chartdb/commit/2fbf3476b87f1177af17de8242a74d195dae5f35))
+* **export-sql:** move from AI sql-export for postgres to deterministic script ([#626](https://github.com/chartdb/chartdb/issues/626)) ([18f228c](https://github.com/chartdb/chartdb/commit/18f228ca1d5a6c6056cb7c3bfc24d04ec470edf1))
+* **export-sql:** move from AI sql-export for sqlite to deterministic script ([#627](https://github.com/chartdb/chartdb/issues/627)) ([897ac60](https://github.com/chartdb/chartdb/commit/897ac60a829a00e9453d670cceeb2282e9e93f1c))
+* **sidebar:** add sidebar for diagram objects ([#618](https://github.com/chartdb/chartdb/issues/618)) ([63b5ba0](https://github.com/chartdb/chartdb/commit/63b5ba0bb9934c4e5c5d0d1b6f995afbbd3acf36))
+* **sidebar:** opens sidepanel in case its closed and click on sidebar ([#620](https://github.com/chartdb/chartdb/issues/620)) ([3faa39e](https://github.com/chartdb/chartdb/commit/3faa39e7875d836dfe526d94a10f8aed070ac1c1))
+
 ## [1.9.0](https://github.com/chartdb/chartdb/compare/v1.8.1...v1.9.0) (2025-03-13)
 
 
