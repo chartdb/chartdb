@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
@@ -31,6 +31,7 @@ import type { DatabaseClient } from '@/lib/domain/database-clients';
 import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
+    databaseEditionToClientsMap,
 } from '@/lib/domain/database-clients';
 import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
@@ -71,7 +72,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     keepDialogAfterImport,
     title,
 }) => {
-    const databaseClients = databaseTypeToClientsMap[databaseType];
+    const databaseClients = useMemo(
+        () => [
+            ...databaseTypeToClientsMap[databaseType],
+            ...(databaseEdition
+                ? databaseEditionToClientsMap[databaseEdition]
+                : []),
+        ],
+        [databaseType, databaseEdition]
+    );
     const [errorMessage, setErrorMessage] = useState('');
     const [databaseClient, setDatabaseClient] = useState<
         DatabaseClient | undefined
@@ -258,7 +267,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 />
                             )}
                         </div>
-                        {databaseTypeToClientsMap[databaseType].length > 0 ? (
+                        {databaseClients.length > 0 ? (
                             <Tabs
                                 value={
                                     !databaseClient
