@@ -29,7 +29,6 @@ export const databaseTypeToClientsMap: Record<DatabaseType, DatabaseClient[]> =
         [DatabaseType.COCKROACHDB]: [],
     };
 
-// New map to associate clients with specific database editions
 export const databaseEditionToClientsMap: Record<
     DatabaseEdition,
     DatabaseClient[]

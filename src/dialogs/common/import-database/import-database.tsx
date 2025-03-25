@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
@@ -72,10 +72,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     keepDialogAfterImport,
     title,
 }) => {
-    // Get database clients based on edition if selected, otherwise based on type
-    const databaseClients = databaseEdition
-        ? databaseEditionToClientsMap[databaseEdition]
-        : databaseTypeToClientsMap[databaseType];
+    const databaseClients = useMemo(
+        () => [
+            ...databaseTypeToClientsMap[databaseType],
+            ...(databaseEdition
+                ? databaseEditionToClientsMap[databaseEdition]
+                : []),
+        ],
+        [databaseType, databaseEdition]
+    );
     const [errorMessage, setErrorMessage] = useState('');
     const [databaseClient, setDatabaseClient] = useState<
         DatabaseClient | undefined
@@ -100,11 +105,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         };
         loadScripts();
     }, []);
-
-    // Reset database client when database edition changes
-    useEffect(() => {
-        setDatabaseClient(undefined);
-    }, [databaseEdition]);
 
     useEffect(() => {
         if (scriptResult.trim().length === 0) {
@@ -198,7 +198,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                             ? undefined
                                             : (value as DatabaseEdition)
                                     );
-                                    setDatabaseClient(undefined);
                                 }}
                             >
                                 <ToggleGroupItem

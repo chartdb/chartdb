@@ -44,6 +44,10 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     >();
 
     useEffect(() => {
+        setDatabaseEdition(undefined);
+    }, [databaseType]);
+
+    useEffect(() => {
         if (!dialog.open) return;
         setDatabaseEdition(undefined);
         setScriptResult('');

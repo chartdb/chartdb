@@ -42,6 +42,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
+        setDatabaseEdition(undefined);
+    }, [databaseType]);
+
+    useEffect(() => {
         const fetchDiagrams = async () => {
             const diagrams = await listDiagrams();
             setDiagramNumber(diagrams.length + 1);
