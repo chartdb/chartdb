@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
-import type { DiffContext, DiffEvent } from './diff-context';
+import type {
+    DiffCalculatedData,
+    DiffContext,
+    DiffEvent,
+} from './diff-context';
 import { diffContext } from './diff-context';
 import type { ChartDBDiff, DiffMap } from './types';
 import { generateDiff, getDiffMapKey } from './diff-check/diff-check';
@@ -13,6 +17,8 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [newDiagram, setNewDiagram] = React.useState<Diagram | null>(null);
+    const [originalDiagram, setOriginalDiagram] =
+        React.useState<Diagram | null>(null);
     const [diffMap, setDiffMap] = React.useState<DiffMap>(
         new Map<string, ChartDBDiff>()
     );
@@ -81,6 +87,41 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const generateDiffCalculatedData = useCallback(
+        ({
+            newDiagram,
+            diffMap,
+        }: {
+            newDiagram: Diagram;
+            diffMap: DiffMap;
+        }): DiffCalculatedData => {
+            return {
+                tablesAdded:
+                    newDiagram?.tables?.filter((table) => {
+                        const tableKey = getDiffMapKey({
+                            diffObject: 'table',
+                            objectId: table.id,
+                        });
+
+                        return (
+                            diffMap.has(tableKey) &&
+                            diffMap.get(tableKey)?.type === 'added'
+                        );
+                    }) ?? [],
+
+                fieldsAdded: generateNewFieldsMap({
+                    diffMap: diffMap,
+                    newDiagram: newDiagram,
+                }),
+                relationshipsAdded: findNewRelationships({
+                    diffMap: diffMap,
+                    newDiagram: newDiagram,
+                }),
+            };
+        },
+        [findNewRelationships, generateNewFieldsMap]
+    );
+
     const calculateDiff: DiffContext['calculateDiff'] = useCallback(
         ({ diagram, newDiagram: newDiagramArg }) => {
             const {
@@ -93,35 +134,17 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
             setTablesChanged(newChangedTables);
             setFieldsChanged(newChangedFields);
             setNewDiagram(newDiagramArg);
+            setOriginalDiagram(diagram);
 
             events.emit({
                 action: 'diff_calculated',
-                data: {
-                    tablesAdded:
-                        newDiagramArg?.tables?.filter((table) => {
-                            const tableKey = getDiffMapKey({
-                                diffObject: 'table',
-                                objectId: table.id,
-                            });
-
-                            return (
-                                newDiffs.has(tableKey) &&
-                                newDiffs.get(tableKey)?.type === 'added'
-                            );
-                        }) ?? [],
-
-                    fieldsAdded: generateNewFieldsMap({
-                        diffMap: newDiffs,
-                        newDiagram: newDiagramArg,
-                    }),
-                    relationshipsAdded: findNewRelationships({
-                        diffMap: newDiffs,
-                        newDiagram: newDiagramArg,
-                    }),
-                },
+                data: generateDiffCalculatedData({
+                    diffMap: newDiffs,
+                    newDiagram: newDiagramArg,
+                }),
             });
         },
-        [setDiffMap, events, generateNewFieldsMap, findNewRelationships]
+        [setDiffMap, events, generateDiffCalculatedData]
     );
 
     const getTableNewName = useCallback<DiffContext['getTableNewName']>(
@@ -296,6 +319,7 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         <diffContext.Provider
             value={{
                 newDiagram,
+                originalDiagram,
                 diffMap,
                 hasDiff: diffMap.size > 0,
 

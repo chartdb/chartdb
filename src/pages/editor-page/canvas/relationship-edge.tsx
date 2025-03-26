@@ -182,8 +182,10 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                     'react-flow__edge-path',
                     `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
                     {
-                        '!stroke-green-500': isDiffNewRelationship,
-                        '!stroke-red-500': isDiffRelationshipRemoved,
+                        '!stroke-green-500 !stroke-[3px]':
+                            isDiffNewRelationship,
+                        '!stroke-red-500 !stroke-[3px]':
+                            isDiffRelationshipRemoved,
                     },
                 ])}
                 onClick={(e) => {

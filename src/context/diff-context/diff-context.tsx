@@ -14,19 +14,22 @@ export type DiffEventBase<T extends DiffEventType, D> = {
     data: D;
 };
 
+export type DiffCalculatedData = {
+    tablesAdded: DBTable[];
+    fieldsAdded: Map<string, DBField[]>;
+    relationshipsAdded: DBRelationship[];
+};
+
 export type DiffCalculatedEvent = DiffEventBase<
     'diff_calculated',
-    {
-        tablesAdded: DBTable[];
-        fieldsAdded: Map<string, DBField[]>;
-        relationshipsAdded: DBRelationship[];
-    }
+    DiffCalculatedData
 >;
 
 export type DiffEvent = DiffCalculatedEvent;
 
 export interface DiffContext {
     newDiagram: Diagram | null;
+    originalDiagram: Diagram | null;
     diffMap: DiffMap;
     hasDiff: boolean;
 
