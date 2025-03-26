@@ -18,6 +18,12 @@ export const Editor = lazy(() =>
     }))
 );
 
+export const DiffEditor = lazy(() =>
+    import('./code-editor').then((module) => ({
+        default: module.DiffEditor,
+    }))
+);
+
 type EditorType = typeof Editor;
 
 export interface CodeSnippetProps {

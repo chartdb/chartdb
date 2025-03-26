@@ -6,7 +6,7 @@ export interface TableDiff {
     object: 'table';
     type: 'added' | 'removed' | 'changed';
     tableId: string;
-    attributes?: TableDiffAttribute;
+    attribute?: TableDiffAttribute;
     oldValue?: string;
     newValue?: string;
 }
@@ -30,7 +30,7 @@ export interface FieldDiff {
     type: 'added' | 'removed' | 'changed';
     fieldId: string;
     tableId: string;
-    attributes?: FieldDiffAttribute;
+    attribute?: FieldDiffAttribute;
     oldValue?: string | boolean | DataType;
     newValue?: string | boolean | DataType;
 }

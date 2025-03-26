@@ -117,7 +117,7 @@ function compareTables({
                     object: 'table',
                     type: 'changed',
                     tableId: oldTable.id,
-                    attributes: 'name',
+                    attribute: 'name',
                     newValue: newTable.name,
                     oldValue: oldTable.name,
                 }
@@ -126,7 +126,10 @@ function compareTables({
             changedTables.set(oldTable.id, true);
         }
 
-        if (oldTable.comments !== newTable.comments) {
+        if (
+            (oldTable.comments || newTable.comments) &&
+            oldTable.comments !== newTable.comments
+        ) {
             diffMap.set(
                 getDiffMapKey({
                     diffObject: 'table',
@@ -137,7 +140,7 @@ function compareTables({
                     object: 'table',
                     type: 'changed',
                     tableId: oldTable.id,
-                    attributes: 'comments',
+                    attribute: 'comments',
                     newValue: newTable.comments,
                     oldValue: oldTable.comments,
                 }
@@ -303,7 +306,10 @@ function compareFieldProperties({
         changedAttributes.push('nullable');
     }
 
-    if (oldField.comments !== newField.comments) {
+    if (
+        (newField.comments || oldField.comments) &&
+        oldField.comments !== newField.comments
+    ) {
         changedAttributes.push('comments');
     }
 
@@ -313,14 +319,14 @@ function compareFieldProperties({
                 getDiffMapKey({
                     diffObject: 'field',
                     objectId: oldField.id,
-                    attribute: attribute,
+                    attribute,
                 }),
                 {
                     object: 'field',
                     type: 'changed',
                     fieldId: oldField.id,
                     tableId,
-                    attributes: attribute,
+                    attribute,
                     oldValue: oldField[attribute],
                     newValue: newField[attribute],
                 }
