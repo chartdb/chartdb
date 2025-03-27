@@ -233,7 +233,7 @@ export const getMySQLQuery = (
         CONCAT('{"schema":"', cast(idx.table_schema as CHAR),
                '","table":"', idx.table_name,
                '","name":"', idx.index_name,
-               '","size":"', IFNULL(
+               '","size":', IFNULL(
                     (SELECT SUM(stat_value * @@innodb_page_size)
                      FROM mysql.innodb_index_stats
                      WHERE stat_name = 'size'
@@ -241,7 +241,7 @@ export const getMySQLQuery = (
                        AND index_name = idx.index_name
                        AND TABLE_NAME = idx.table_name
                        AND database_name = idx.table_schema), -1),
-               '","column":"', idx.column_name,
+               ',"column":"', idx.column_name,
                '","index_type":"', LOWER(idx.index_type),
                '","cardinality":', idx.cardinality,
                ',"direction":"', (CASE WHEN idx.collation = 'D' THEN 'desc' ELSE 'asc' END),
