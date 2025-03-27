@@ -6,7 +6,7 @@ export interface ColumnInfo {
     name: string;
     type: string;
     ordinal_position: number;
-    nullable: boolean;
+    nullable: boolean | number;
     character_maximum_length?: string | null; // The maximum length of the column (if applicable), nullable
     precision?: {
         precision: number | null; // The precision for numeric types
@@ -23,7 +23,7 @@ export const ColumnInfoSchema: z.ZodType<ColumnInfo> = z.object({
     name: z.string(),
     type: z.string(),
     ordinal_position: z.number(),
-    nullable: z.boolean(),
+    nullable: z.union([z.boolean(), z.number()]),
     character_maximum_length: z.string().nullable(),
     precision: z
         .object({

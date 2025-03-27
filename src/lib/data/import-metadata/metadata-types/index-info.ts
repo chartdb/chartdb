@@ -10,8 +10,7 @@ export interface IndexInfo {
     index_type: string;
     cardinality: number;
     size: number | null;
-    unique: boolean;
-    is_partial_index: boolean;
+    unique: boolean | number;
     direction: string;
     column_position: number;
 }
@@ -24,8 +23,7 @@ export const IndexInfoSchema: z.ZodType<IndexInfo> = z.object({
     index_type: z.string(),
     cardinality: z.number(),
     size: z.number().nullable(),
-    unique: z.boolean(),
-    is_partial_index: z.boolean(),
+    unique: z.union([z.boolean(), z.number()]),
     direction: z.string(),
     column_position: z.number(),
 });
