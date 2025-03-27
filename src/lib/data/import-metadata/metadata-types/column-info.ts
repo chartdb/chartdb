@@ -24,14 +24,15 @@ export const ColumnInfoSchema: z.ZodType<ColumnInfo> = z.object({
     type: z.string(),
     ordinal_position: z.number(),
     nullable: z.union([z.boolean(), z.number()]),
-    character_maximum_length: z.string().nullable(),
+    character_maximum_length: z.string().nullable().optional(),
     precision: z
         .object({
             precision: z.number().nullable(),
             scale: z.number().nullable(),
         })
-        .nullable(),
-    default: z.string().nullable(),
-    collation: z.string().nullable(),
-    comment: z.string().nullable(),
+        .nullable()
+        .optional(),
+    default: z.string().nullable().optional(),
+    collation: z.string().nullable().optional(),
+    comment: z.string().nullable().optional(),
 });
