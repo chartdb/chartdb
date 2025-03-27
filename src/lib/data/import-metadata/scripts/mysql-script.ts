@@ -98,7 +98,7 @@ export const getMySQLQuery = (
                      AND (0x00) IN  (@indexes:=CONCAT_WS(',', @indexes, CONCAT('{"schema":"',indexes.table_schema,
                                          '","table":"',indexes.table_name,
                                          '","name":"', indexes.index_name,
-                                         '","size":"',
+                                         '","size":',
                                                                       (SELECT IFNULL(SUM(stat_value * @@innodb_page_size), -1) AS size_in_bytes
                                                                        FROM mysql.innodb_index_stats
                                                                        WHERE stat_name = 'size'
@@ -106,7 +106,7 @@ export const getMySQLQuery = (
                                                                            AND index_name = indexes.index_name
                                                                            AND TABLE_NAME = indexes.table_name
                                                                            AND database_name = indexes.table_schema),
-                                                                  '","column":"', indexes.column_name,
+                                                                  ',"column":"', indexes.column_name,
                                                       '","index_type":"', LOWER(indexes.index_type),
                                                       '","cardinality":', indexes.cardinality,
                                                       ',"direction":"', (CASE WHEN indexes.collation = 'D' THEN 'desc' ELSE 'asc' END),
