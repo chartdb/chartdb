@@ -165,8 +165,8 @@ cols AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
                                             '","table":"', cols.table_name,
                                             '","name":"', cols.column_name,
-                                            '","ordinal_position":"', cols.ordinal_position,
-                                            '","type":"', LOWER(replace(cols.data_type, '"', '')),
+                                            '","ordinal_position":', cols.ordinal_position,
+                                            ',"type":"', LOWER(replace(cols.data_type, '"', '')),
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::text, 'null'),
                                             '","precision":',
                                                 CASE

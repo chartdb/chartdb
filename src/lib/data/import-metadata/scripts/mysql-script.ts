@@ -84,8 +84,8 @@ export const getMySQLQuery = (
                                     ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}')
                         ELSE 'null'
                     END,
-                ',"ordinal_position":"', cols.ordinal_position,
-                '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
+                ',"ordinal_position":', cols.ordinal_position,
+                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                 ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), ''),
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
@@ -209,8 +209,8 @@ export const getMySQLQuery = (
                IF(cols.data_type IN ('decimal', 'numeric'),
                   CONCAT('{"precision":', IFNULL(cols.numeric_precision, 'null'),
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
-               ',"ordinal_position":"', cols.ordinal_position,
-               '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
+               ',"ordinal_position":', cols.ordinal_position,
+               ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
                '","collation":"', IFNULL(cols.collation_name, ''), '"}')
     ) FROM (

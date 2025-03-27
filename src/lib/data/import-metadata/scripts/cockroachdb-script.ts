@@ -114,8 +114,8 @@ cols AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema::TEXT,
                                             '","table":"', cols.table_name::TEXT,
                                             '","name":"', cols.column_name::TEXT,
-                                            '","ordinal_position":"', cols.ordinal_position::TEXT,
-                                            '","type":"', LOWER(replace(cols.data_type::TEXT, '"', '')),
+                                            '","ordinal_position":', cols.ordinal_position::TEXT,
+                                            ',"type":"', LOWER(replace(cols.data_type::TEXT, '"', '')),
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::TEXT, 'null'),
                                             '","precision":',
                                                 CASE

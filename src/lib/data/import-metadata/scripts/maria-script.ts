@@ -74,8 +74,8 @@ export const mariaDBQuery = `WITH fk_info as (
                                     ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}')
                         ELSE 'null'
                     END,
-                ',"ordinal_position":"', cols.ordinal_position,
-                '","nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
+                ',"ordinal_position":', cols.ordinal_position,
+                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                 ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))

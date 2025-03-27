@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface ColumnInfo {
     schema: string;
     table: string;
@@ -14,3 +16,22 @@ export interface ColumnInfo {
     collation?: string | null;
     comment?: string | null;
 }
+
+export const ColumnInfoSchema: z.ZodType<ColumnInfo> = z.object({
+    schema: z.string(),
+    table: z.string(),
+    name: z.string(),
+    type: z.string(),
+    ordinal_position: z.number(),
+    nullable: z.boolean(),
+    character_maximum_length: z.string().nullable(),
+    precision: z
+        .object({
+            precision: z.number().nullable(),
+            scale: z.number().nullable(),
+        })
+        .nullable(),
+    default: z.string().nullable(),
+    collation: z.string().nullable(),
+    comment: z.string().nullable(),
+});
