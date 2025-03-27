@@ -9,7 +9,7 @@ export interface IndexInfo {
     column: string;
     index_type: string;
     cardinality: number;
-    size: number;
+    size: number | null;
     unique: boolean;
     is_partial_index: boolean;
     direction: string;
@@ -23,7 +23,7 @@ export const IndexInfoSchema: z.ZodType<IndexInfo> = z.object({
     column: z.string(),
     index_type: z.string(),
     cardinality: z.number(),
-    size: z.number(),
+    size: z.number().nullable(),
     unique: z.boolean(),
     is_partial_index: z.boolean(),
     direction: z.string(),

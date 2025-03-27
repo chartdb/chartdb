@@ -29,7 +29,14 @@ export const DatabaseMetadataSchema: z.ZodType<DatabaseMetadata> = z.object({
 });
 
 export const isDatabaseMetadata = (obj: unknown): boolean => {
-    return DatabaseMetadataSchema.safeParse(obj).success;
+    const parsedObject = DatabaseMetadataSchema.safeParse(obj);
+
+    if (!parsedObject.success) {
+        console.error(parsedObject.error);
+        return false;
+    }
+
+    return true;
 };
 
 export const loadDatabaseMetadata = (jsonString: string): DatabaseMetadata => {
