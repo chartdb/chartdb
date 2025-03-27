@@ -34,7 +34,7 @@ export const isDatabaseMetadata = (obj: unknown): boolean => {
 
 export const loadDatabaseMetadata = (jsonString: string): DatabaseMetadata => {
     try {
-        const parsedData = DatabaseMetadataSchema.parse(jsonString);
+        const parsedData: DatabaseMetadata = JSON.parse(jsonString);
         return parsedData;
     } catch (parseError) {
         throw new Error(`Error parsing JSON data: ${parseError}`);
