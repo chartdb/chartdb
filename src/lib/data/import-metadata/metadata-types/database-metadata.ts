@@ -1,9 +1,11 @@
-import type { ForeignKeyInfo } from './foreign-key-info';
-import type { PrimaryKeyInfo } from './primary-key-info';
-import type { ColumnInfo } from './column-info';
-import type { IndexInfo } from './index-info';
-import type { TableInfo } from './table-info';
-import type { ViewInfo } from './view-info';
+import { z } from 'zod';
+import { ForeignKeyInfoSchema, type ForeignKeyInfo } from './foreign-key-info';
+import { PrimaryKeyInfoSchema, type PrimaryKeyInfo } from './primary-key-info';
+import { ColumnInfoSchema, type ColumnInfo } from './column-info';
+import { IndexInfoSchema, type IndexInfo } from './index-info';
+import { TableInfoSchema, type TableInfo } from './table-info';
+import { ViewInfoSchema, type ViewInfo } from './view-info';
+
 export interface DatabaseMetadata {
     fk_info: ForeignKeyInfo[];
     pk_info: PrimaryKeyInfo[];
@@ -15,16 +17,26 @@ export interface DatabaseMetadata {
     version: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isDatabaseMetadata = (obj: any): boolean => {
-    return (
-        Array.isArray(obj.fk_info) &&
-        Array.isArray(obj.pk_info) &&
-        Array.isArray(obj.columns) &&
-        Array.isArray(obj.indexes) &&
-        Array.isArray(obj.tables) &&
-        Array.isArray(obj.views)
-    );
+export const DatabaseMetadataSchema: z.ZodType<DatabaseMetadata> = z.object({
+    fk_info: z.array(ForeignKeyInfoSchema),
+    pk_info: z.array(PrimaryKeyInfoSchema),
+    columns: z.array(ColumnInfoSchema),
+    indexes: z.array(IndexInfoSchema),
+    tables: z.array(TableInfoSchema),
+    views: z.array(ViewInfoSchema),
+    database_name: z.string(),
+    version: z.string(),
+});
+
+export const isDatabaseMetadata = (obj: unknown): boolean => {
+    const parsedObject = DatabaseMetadataSchema.safeParse(obj);
+
+    if (!parsedObject.success) {
+        console.error(parsedObject.error);
+        return false;
+    }
+
+    return true;
 };
 
 export const loadDatabaseMetadata = (jsonString: string): DatabaseMetadata => {

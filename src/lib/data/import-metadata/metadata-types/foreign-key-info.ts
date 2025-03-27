@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface ForeignKeyInfo {
     schema: string;
     table: string;
@@ -8,3 +10,14 @@ export interface ForeignKeyInfo {
     reference_column: string;
     fk_def: string;
 }
+
+export const ForeignKeyInfoSchema: z.ZodType<ForeignKeyInfo> = z.object({
+    schema: z.string(),
+    table: z.string(),
+    column: z.string(),
+    foreign_key_name: z.string(),
+    reference_schema: z.string().optional(),
+    reference_table: z.string(),
+    reference_column: z.string(),
+    fk_def: z.string(),
+});

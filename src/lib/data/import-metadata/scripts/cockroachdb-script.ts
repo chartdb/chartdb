@@ -96,8 +96,7 @@ indexes_cols AS (
             (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)               AS is_unique,
             irel.reltuples                                                              AS cardinality,
             1 + Array_position(i.indkey, a.attnum)                                      AS column_position,
-            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction,
-            CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END                  AS is_partial_index
+            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction
     FROM pg_index AS i
         JOIN pg_class AS trel ON trel.oid = i.indrelid
         JOIN pg_namespace AS tnsp ON trel.relnamespace = tnsp.oid
@@ -114,8 +113,8 @@ cols AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema::TEXT,
                                             '","table":"', cols.table_name::TEXT,
                                             '","name":"', cols.column_name::TEXT,
-                                            '","ordinal_position":"', cols.ordinal_position::TEXT,
-                                            '","type":"', LOWER(replace(cols.data_type::TEXT, '"', '')),
+                                            '","ordinal_position":', cols.ordinal_position::TEXT,
+                                            ',"type":"', LOWER(replace(cols.data_type::TEXT, '"', '')),
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::TEXT, 'null'),
                                             '","precision":',
                                                 CASE
@@ -124,7 +123,7 @@ cols AS (
                                                                 ',"scale":', COALESCE(cols.numeric_scale::TEXT, 'null'), '}')
                                                     ELSE 'null'
                                                 END,
-                                            ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END::TEXT,
+                                            ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN true ELSE false END::TEXT,
                                             ',"default":"', COALESCE(replace(replace(cols.column_default::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '","collation":"', COALESCE(cols.COLLATION_NAME::TEXT, ''),
                                             '","comment":"', COALESCE(replace(replace(dsc.description::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
@@ -146,7 +145,6 @@ cols AS (
                                             '","cardinality":', COALESCE(cardinality::TEXT, '0'),
                                             ',"size":', COALESCE(index_size::TEXT, 'null'),
                                             ',"unique":', is_unique::TEXT,
-                                            ',"is_partial_index":', is_partial_index::TEXT,
                                             ',"column_position":', column_position::TEXT,
                                             ',"direction":"', LOWER(direction::TEXT),
                                             '"}')), ',') AS indexes_metadata

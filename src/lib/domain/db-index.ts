@@ -30,7 +30,7 @@ export const createIndexesFromMetadata = ({
         (idx): DBIndex => ({
             id: generateId(),
             name: idx.name,
-            unique: idx.unique,
+            unique: Boolean(idx.unique),
             fieldIds: idx.columns
                 .sort((a, b) => a.position - b.position)
                 .map((c) => fields.find((f) => f.name === c.name)?.id)

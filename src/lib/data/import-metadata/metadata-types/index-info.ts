@@ -1,5 +1,6 @@
 import { schemaNameToDomainSchemaName } from '@/lib/domain/db-schema';
 import type { TableInfo } from './table-info';
+import { z } from 'zod';
 
 export interface IndexInfo {
     schema: string;
@@ -7,13 +8,25 @@ export interface IndexInfo {
     name: string;
     column: string;
     index_type: string;
-    cardinality: number;
-    size: number;
-    unique: boolean;
-    is_partial_index: boolean;
+    cardinality?: number | null;
+    size?: number | null;
+    unique: boolean | number;
     direction: string;
     column_position: number;
 }
+
+export const IndexInfoSchema: z.ZodType<IndexInfo> = z.object({
+    schema: z.string(),
+    table: z.string(),
+    name: z.string(),
+    column: z.string(),
+    index_type: z.string(),
+    cardinality: z.number().nullable().optional(),
+    size: z.number().nullable().optional(),
+    unique: z.union([z.boolean(), z.number()]),
+    direction: z.string(),
+    column_position: z.number(),
+});
 
 export type AggregatedIndexInfo = Omit<IndexInfo, 'column'> & {
     columns: { name: string; position: number }[];

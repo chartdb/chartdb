@@ -147,8 +147,7 @@ indexes_cols AS (
             (CASE WHEN i.indisunique = TRUE THEN 'true' ELSE 'false' END)               AS is_unique,
             irel.reltuples                                                              AS cardinality,
             1 + Array_position(i.indkey, a.attnum)                                      AS column_position,
-            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction,
-            CASE WHEN indpred IS NOT NULL THEN 'true' ELSE 'false' END                  AS is_partial_index
+            CASE o.OPTION & 1 WHEN 1 THEN 'DESC' ELSE 'ASC' END                         AS direction
     FROM pg_index AS i
         JOIN pg_class AS trel ON trel.oid = i.indrelid
         JOIN pg_namespace AS tnsp ON trel.relnamespace = tnsp.oid
@@ -165,8 +164,8 @@ cols AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', cols.table_schema,
                                             '","table":"', cols.table_name,
                                             '","name":"', cols.column_name,
-                                            '","ordinal_position":"', cols.ordinal_position,
-                                            '","type":"', LOWER(replace(cols.data_type, '"', '')),
+                                            '","ordinal_position":', cols.ordinal_position,
+                                            ',"type":"', LOWER(replace(cols.data_type, '"', '')),
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::text, 'null'),
                                             '","precision":',
                                                 CASE
@@ -203,7 +202,6 @@ cols AS (
                                             '","cardinality":', cardinality,
                                             ',"size":', index_size,
                                             ',"unique":', is_unique,
-                                            ',"is_partial_index":', is_partial_index,
                                             ',"column_position":', column_position,
                                             ',"direction":"', LOWER(direction),
                                             '"}')), ',') AS indexes_metadata
