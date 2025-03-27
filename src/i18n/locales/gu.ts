@@ -43,9 +43,7 @@ export const gu: LanguageTranslation = {
             help: {
                 help: 'મદદ',
                 docs_website: 'દસ્તાવેજીકરણ',
-                visit_website: 'ChartDB વેબસાઇટ પર જાઓ',
                 join_discord: 'અમારા Discordમાં જોડાઓ',
-                schedule_a_call: 'અમારી સાથે વાત કરો!',
             },
         },
 

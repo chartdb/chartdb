@@ -42,9 +42,7 @@ export const hi: LanguageTranslation = {
             help: {
                 help: 'मदद',
                 docs_website: 'દસ્તાવેજીકરણ',
-                visit_website: 'ChartDB वेबसाइट पर जाएँ',
                 join_discord: 'हमसे Discord पर जुड़ें',
-                schedule_a_call: 'हमसे बात करें!',
             },
         },
 
