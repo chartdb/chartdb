@@ -1,12 +1,8 @@
 import type { Diagram } from '@/lib/domain/diagram';
-import type {
-    ChartDBDiff,
-    DiffMap,
-    DiffObject,
-    FieldDiffAttribute,
-} from '../types';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
+import type { ChartDBDiff, DiffMap, DiffObject } from '@/lib/domain/diff/diff';
+import type { FieldDiffAttribute } from '@/lib/domain/diff/field-diff';
 
 export function getDiffMapKey({
     diffObject,
@@ -78,7 +74,7 @@ function compareTables({
                 {
                     object: 'table',
                     type: 'added',
-                    tableId: newTable.id,
+                    tableAdded: newTable,
                 }
             );
             changedTables.set(newTable.id, true);
@@ -221,7 +217,7 @@ function compareFields({
                 {
                     object: 'field',
                     type: 'added',
-                    fieldId: newField.id,
+                    newField,
                     tableId,
                 }
             );
@@ -327,8 +323,8 @@ function compareFieldProperties({
                     fieldId: oldField.id,
                     tableId,
                     attribute,
-                    oldValue: oldField[attribute],
-                    newValue: newField[attribute],
+                    oldValue: oldField[attribute] ?? '',
+                    newValue: newField[attribute] ?? '',
                 }
             );
         }
@@ -362,7 +358,7 @@ function compareIndexes({
                 {
                     object: 'index',
                     type: 'added',
-                    indexId: newIndex.id,
+                    newIndex,
                     tableId,
                 }
             );
@@ -414,7 +410,7 @@ function compareRelationships({
                 {
                     object: 'relationship',
                     type: 'added',
-                    relationshipId: newRelationship.id,
+                    newRelationship,
                 }
             );
         }
