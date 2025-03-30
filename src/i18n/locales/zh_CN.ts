@@ -42,9 +42,7 @@ export const zh_CN: LanguageTranslation = {
             help: {
                 help: '帮助',
                 docs_website: '文档',
-                visit_website: '访问 ChartDB',
                 join_discord: '在 Discord 上加入我们',
-                schedule_a_call: '和我们交流！',
             },
         },
 

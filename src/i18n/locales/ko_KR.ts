@@ -42,9 +42,7 @@ export const ko_KR: LanguageTranslation = {
             help: {
                 help: '도움말',
                 docs_website: '선적 서류 비치',
-                visit_website: 'ChartDB 사이트 방문',
                 join_discord: 'Discord 가입',
-                schedule_a_call: 'Talk with us!',
             },
         },
 

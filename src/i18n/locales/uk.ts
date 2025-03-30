@@ -41,9 +41,7 @@ export const uk: LanguageTranslation = {
             help: {
                 help: 'Довідка',
                 docs_website: 'Документація',
-                visit_website: 'Сайт ChartDB',
                 join_discord: 'Приєднуйтесь до нас в Діскорд',
-                schedule_a_call: 'Забронювати зустріч!',
             },
         },
 
