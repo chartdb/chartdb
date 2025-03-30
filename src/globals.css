@@ -129,6 +129,16 @@
     background-color: rgba(255, 0, 0, 0.2) !important;
 }
 
+.sql-error-line {
+    background-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.sql-error-glyph {
+    background-color: rgba(255, 0, 0, 0.5) !important;
+    margin-left: 5px;
+    width: 5px !important;
+}
+
 @keyframes rainbow-text-simple-animation-rev {
     0% {
         background-size: 650%;

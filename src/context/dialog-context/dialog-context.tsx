@@ -9,6 +9,7 @@ import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/i
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
+import type { ImportSQLDialogProps } from '@/dialogs/import-sql-dialog/import-sql-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -70,6 +71,12 @@ export interface DialogContext {
         params?: Omit<ImportDBMLDialogProps, 'dialog'>
     ) => void;
     closeImportDBMLDialog: () => void;
+
+    // Import SQL dialog
+    openImportSQLDialog: (
+        params?: Omit<ImportSQLDialogProps, 'dialog'>
+    ) => void;
+    closeImportSQLDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -95,4 +102,6 @@ export const dialogContext = createContext<DialogContext>({
     closeImportDiagramDialog: emptyFn,
     openImportDBMLDialog: emptyFn,
     closeImportDBMLDialog: emptyFn,
+    openImportSQLDialog: emptyFn,
+    closeImportSQLDialog: emptyFn,
 });

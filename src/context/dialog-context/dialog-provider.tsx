@@ -21,6 +21,8 @@ import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diag
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
+import type { ImportSQLDialogProps } from '@/dialogs/import-sql-dialog/import-sql-dialog';
+import { ImportSQLDialog } from '@/dialogs/import-sql-dialog/import-sql-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -125,6 +127,11 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [importDBMLDialogParams, setImportDBMLDialogParams] =
         useState<Omit<ImportDBMLDialogProps, 'dialog'>>();
 
+    // Import SQL dialog
+    const [openImportSQLDialog, setOpenImportSQLDialog] = useState(false);
+    const [importSQLDialogParams, setImportSQLDialogParams] =
+        useState<Omit<ImportSQLDialogProps, 'dialog'>>();
+
     return (
         <dialogContext.Provider
             value={{
@@ -158,6 +165,11 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenImportDBMLDialog(true);
                 },
                 closeImportDBMLDialog: () => setOpenImportDBMLDialog(false),
+                openImportSQLDialog: (params) => {
+                    setImportSQLDialogParams(params);
+                    setOpenImportSQLDialog(true);
+                },
+                closeImportSQLDialog: () => setOpenImportSQLDialog(false),
             }}
         >
             {children}
@@ -192,6 +204,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <ImportDBMLDialog
                 dialog={{ open: openImportDBMLDialog }}
                 {...importDBMLDialogParams}
+            />
+            <ImportSQLDialog
+                dialog={{ open: openImportSQLDialog }}
+                {...importSQLDialogParams}
             />
         </dialogContext.Provider>
     );

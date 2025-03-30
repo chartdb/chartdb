@@ -28,7 +28,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog, openImportDBMLDialog } = useDialog();
+    const {
+        closeCreateDiagramDialog,
+        openImportDBMLDialog,
+        openImportSQLDialog,
+    } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
     const [databaseEdition, setDatabaseEdition] = useState<
@@ -95,11 +99,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: `Diagram ${diagramNumber}`,
-            databaseType: databaseType ?? DatabaseType.GENERIC,
-            databaseEdition:
-                databaseEdition?.trim().length === 0
-                    ? undefined
-                    : databaseEdition,
+            databaseType,
+            databaseEdition,
+            tables: [],
+            relationships: [],
             createdAt: new Date(),
             updatedAt: new Date(),
         };
@@ -108,10 +111,19 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
-        setTimeout(
-            () => openImportDBMLDialog({ withCreateEmptyDiagram: true }),
-            700
+
+        // Show a prompt to choose between DBML or SQL import
+        const importChoice = window.confirm(
+            'Would you like to import a schema? Click OK for DBML, Cancel for SQL.'
         );
+
+        setTimeout(() => {
+            if (importChoice) {
+                openImportDBMLDialog({ withCreateEmptyDiagram: true });
+            } else {
+                openImportSQLDialog({ withCreateEmptyDiagram: true });
+            }
+        }, 700);
     }, [
         databaseType,
         addDiagram,
@@ -121,6 +133,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         updateConfig,
         diagramNumber,
         openImportDBMLDialog,
+        openImportSQLDialog,
     ]);
 
     return (

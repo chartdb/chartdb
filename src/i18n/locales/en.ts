@@ -388,6 +388,18 @@ export const en = {
                 description: 'Failed to parse DBML. Please check the syntax.',
             },
         },
+
+        import_sql_dialog: {
+            title: 'Import SQL DDL',
+            description: 'Import a database schema from SQL DDL statements.',
+            import: 'Import',
+            cancel: 'Cancel',
+            error: {
+                title: 'Error importing SQL',
+                description: 'Failed to parse SQL. Please check the syntax.',
+            },
+        },
+
         relationship_type: {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',
