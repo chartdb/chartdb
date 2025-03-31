@@ -60,6 +60,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
         setScriptResult('');
+        setImportMethod('query');
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;

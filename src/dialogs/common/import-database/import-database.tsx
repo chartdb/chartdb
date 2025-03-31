@@ -1,11 +1,4 @@
-import React, {
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
-import logo from '@/assets/logo-2.png';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
@@ -15,31 +8,10 @@ import {
     DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
-import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
-import { DatabaseType } from '@/lib/domain/database-type';
-import { databaseSecondaryLogoMap } from '@/lib/databases';
-import { CodeSnippet, Editor } from '@/components/code-snippet/code-snippet';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import { Editor } from '@/components/code-snippet/code-snippet';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
-import {
-    databaseEditionToImageMap,
-    databaseEditionToLabelMap,
-    databaseTypeToEditionMap,
-} from '@/lib/domain/database-edition';
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from '@/components/avatar/avatar';
-import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
-import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
-import type { DatabaseClient } from '@/lib/domain/database-clients';
-import {
-    databaseClientToLabelMap,
-    databaseTypeToClientsMap,
-    databaseEditionToClientsMap,
-} from '@/lib/domain/database-clients';
-import type { ImportMetadataScripts } from '@/lib/data/import-metadata/scripts/scripts';
 import { ZoomableImage } from '@/components/zoomable-image/zoomable-image';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { Spinner } from '@/components/spinner/spinner';
@@ -55,7 +27,8 @@ import {
 import { useTheme } from '@/hooks/use-theme';
 import type { OnChange } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
-import { Code } from 'lucide-react';
+import { InstructionsSection } from './instructions-section/instructions-section';
+import { parseSQLError } from '@/lib/data/sql-import';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -92,46 +65,44 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     setImportMethod,
 }) => {
     const { effectiveTheme } = useTheme();
-    const databaseClients = useMemo(
-        () => [
-            ...databaseTypeToClientsMap[databaseType],
-            ...(databaseEdition
-                ? databaseEditionToClientsMap[databaseEdition]
-                : []),
-        ],
-        [databaseType, databaseEdition]
-    );
     const [errorMessage, setErrorMessage] = useState('');
-    const [databaseClient, setDatabaseClient] = useState<
-        DatabaseClient | undefined
-    >();
-    const { t } = useTranslation();
-    const [importMetadataScripts, setImportMetadataScripts] =
-        useState<ImportMetadataScripts | null>(null);
 
+    const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
 
     const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
     const [isCheckingJson, setIsCheckingJson] = useState(false);
-
     const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
 
     useEffect(() => {
-        const loadScripts = async () => {
-            const { importMetadataScripts } = await import(
-                '@/lib/data/import-metadata/scripts/scripts'
-            );
-            setImportMetadataScripts(importMetadataScripts);
-        };
-        loadScripts();
-    }, []);
+        setScriptResult('');
+        setErrorMessage('');
+        setShowCheckJsonButton(false);
+    }, [importMethod, setScriptResult]);
+
+    // Check if the ddl is valid
+    useEffect(() => {
+        if (importMethod !== 'ddl') {
+            return;
+        }
+
+        if (!scriptResult.trim()) return;
+
+        const result = parseSQLError({
+            sqlContent: scriptResult,
+            sourceDatabaseType: databaseType,
+        });
+
+        if (result.success) {
+            setErrorMessage('');
+        } else if (!result.success && result.error) {
+            setErrorMessage(result.error);
+        }
+    }, [importMethod, scriptResult, databaseType]);
 
     // Check if the script result is a valid JSON
     useEffect(() => {
         if (importMethod !== 'query') {
-            setErrorMessage('');
-            setShowCheckJsonButton(false);
-
             return;
         }
 
@@ -213,248 +184,26 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         defaultSize={25}
                         minSize={25}
                         maxSize={99}
-                        className="min-h-fit rounded-l-md bg-gradient-to-b from-gray-50 to-gray-100 py-2 dark:from-gray-900 dark:to-gray-800 md:min-h-fit md:min-w-[350px] md:p-2"
+                        className="min-h-fit rounded-md bg-gradient-to-b from-slate-50 to-slate-100 p-2 dark:from-slate-900 dark:to-slate-800 md:min-h-fit md:min-w-[350px] md:rounded-l-md md:p-2"
                     >
-                        <div className="flex w-full flex-1 flex-col gap-4">
-                            {databaseTypeToEditionMap[databaseType].length >
-                            0 ? (
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-sm leading-6 text-primary">
-                                        {t(
-                                            'new_diagram_dialog.import_database.database_edition'
-                                        )}
-                                    </p>
-                                    <ToggleGroup
-                                        type="single"
-                                        className="ml-1 flex-wrap justify-start gap-2"
-                                        value={
-                                            !databaseEdition
-                                                ? 'regular'
-                                                : databaseEdition
-                                        }
-                                        onValueChange={(value) => {
-                                            setDatabaseEdition(
-                                                value === 'regular'
-                                                    ? undefined
-                                                    : (value as DatabaseEdition)
-                                            );
-                                        }}
-                                    >
-                                        <ToggleGroupItem
-                                            value="regular"
-                                            variant="outline"
-                                            className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-gray-200 dark:data-[state=on]:bg-gray-700"
-                                        >
-                                            <Avatar className="size-4 rounded-none">
-                                                <AvatarImage
-                                                    src={
-                                                        databaseSecondaryLogoMap[
-                                                            databaseType
-                                                        ]
-                                                    }
-                                                    alt="Regular"
-                                                />
-                                                <AvatarFallback>
-                                                    Regular
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            Regular
-                                        </ToggleGroupItem>
-                                        {databaseTypeToEditionMap[
-                                            databaseType
-                                        ].map((edition) => (
-                                            <ToggleGroupItem
-                                                value={edition}
-                                                key={edition}
-                                                variant="outline"
-                                                className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-gray-200 dark:data-[state=on]:bg-gray-700"
-                                            >
-                                                <Avatar className="size-4">
-                                                    <AvatarImage
-                                                        src={
-                                                            databaseEditionToImageMap[
-                                                                edition
-                                                            ]
-                                                        }
-                                                        alt={
-                                                            databaseEditionToLabelMap[
-                                                                edition
-                                                            ]
-                                                        }
-                                                    />
-                                                    <AvatarFallback>
-                                                        {
-                                                            databaseEditionToLabelMap[
-                                                                edition
-                                                            ]
-                                                        }
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                {
-                                                    databaseEditionToLabelMap[
-                                                        edition
-                                                    ]
-                                                }
-                                            </ToggleGroupItem>
-                                        ))}
-                                    </ToggleGroup>
-                                </div>
-                            ) : null}
-
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm leading-6 text-primary">
-                                    How would you like to import?
-                                </p>
-                                <ToggleGroup
-                                    type="single"
-                                    className="ml-1 flex-wrap justify-start gap-2"
-                                    value={importMethod}
-                                    onValueChange={(value) => {
-                                        let selectedImportMethod:
-                                            | 'query'
-                                            | 'ddl' = 'query';
-                                        if (value) {
-                                            selectedImportMethod = value as
-                                                | 'query'
-                                                | 'ddl';
-                                        }
-
-                                        setImportMethod(selectedImportMethod);
-                                    }}
-                                >
-                                    <ToggleGroupItem
-                                        value="query"
-                                        variant="outline"
-                                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-gray-200 dark:data-[state=on]:bg-gray-700"
-                                    >
-                                        <Avatar className="h-3 w-4 rounded-none">
-                                            <AvatarImage
-                                                src={logo}
-                                                alt="query"
-                                            />
-                                            <AvatarFallback>
-                                                Query
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        Smart Query
-                                    </ToggleGroupItem>
-                                    <ToggleGroupItem
-                                        value="ddl"
-                                        variant="outline"
-                                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-gray-200 dark:data-[state=on]:bg-gray-700"
-                                    >
-                                        <Avatar className="size-4 rounded-none">
-                                            <Code size={16} />
-                                        </Avatar>
-                                        DDL
-                                    </ToggleGroupItem>
-                                </ToggleGroup>
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <div className="text-sm font-semibold">
-                                    Instructions:
-                                </div>
-                                <div className="flex flex-col gap-1 text-sm text-primary">
-                                    <div>
-                                        1.{' '}
-                                        {t(
-                                            'new_diagram_dialog.import_database.step_1'
-                                        )}
-                                    </div>
-                                    {databaseType ===
-                                        DatabaseType.SQL_SERVER && (
-                                        <SSMSInfo
-                                            open={showSSMSInfoDialog}
-                                            setOpen={setShowSSMSInfoDialog}
-                                        />
-                                    )}
-                                </div>
-                                {databaseClients.length > 0 ? (
-                                    <Tabs
-                                        value={
-                                            !databaseClient
-                                                ? 'dbclient'
-                                                : databaseClient
-                                        }
-                                        onValueChange={(value) => {
-                                            setDatabaseClient(
-                                                value === 'dbclient'
-                                                    ? undefined
-                                                    : (value as DatabaseClient)
-                                            );
-                                        }}
-                                    >
-                                        <div className="flex flex-1">
-                                            <TabsList className="h-8 justify-start rounded-none rounded-t-sm ">
-                                                <TabsTrigger
-                                                    value="dbclient"
-                                                    className="h-6 w-20"
-                                                >
-                                                    DB Client
-                                                </TabsTrigger>
-
-                                                {databaseClients?.map(
-                                                    (client) => (
-                                                        <TabsTrigger
-                                                            key={client}
-                                                            value={client}
-                                                            className="h-6 !w-20"
-                                                        >
-                                                            {
-                                                                databaseClientToLabelMap[
-                                                                    client
-                                                                ]
-                                                            }
-                                                        </TabsTrigger>
-                                                    )
-                                                ) ?? []}
-                                            </TabsList>
-                                        </div>
-                                        <CodeSnippet
-                                            className="h-40 w-full md:h-[200px]"
-                                            loading={!importMetadataScripts}
-                                            code={
-                                                importMetadataScripts?.[
-                                                    databaseType
-                                                ]?.({
-                                                    databaseEdition,
-                                                    databaseClient,
-                                                }) ?? ''
-                                            }
-                                            language={
-                                                databaseClient ? 'shell' : 'sql'
-                                            }
-                                        />
-                                    </Tabs>
-                                ) : (
-                                    <CodeSnippet
-                                        className="h-40 w-full flex-auto md:h-[200px]"
-                                        loading={!importMetadataScripts}
-                                        code={
-                                            importMetadataScripts?.[
-                                                databaseType
-                                            ]?.({
-                                                databaseEdition,
-                                            }) ?? ''
-                                        }
-                                        language="sql"
-                                    />
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm text-primary">
-                                    2.{' '}
-                                    {t(
-                                        'new_diagram_dialog.import_database.step_2'
-                                    )}
-                                </p>
-                            </div>
-                        </div>
+                        <InstructionsSection
+                            databaseType={databaseType}
+                            importMethod={importMethod}
+                            setDatabaseEdition={setDatabaseEdition}
+                            setImportMethod={setImportMethod}
+                            databaseEdition={databaseEdition}
+                            setShowSSMSInfoDialog={setShowSSMSInfoDialog}
+                            showSSMSInfoDialog={showSSMSInfoDialog}
+                        />
                     </ResizablePanel>
                     {isDesktop ? <ResizableHandle withHandle /> : null}
                     <ResizablePanel className="min-h-40 py-2 md:px-2 md:py-0">
                         <div className="flex size-full flex-col gap-1 overflow-hidden rounded-md border p-1">
+                            <div className="w-full text-center text-xs text-muted-foreground">
+                                {importMethod === 'query'
+                                    ? 'Smart Query Output'
+                                    : 'SQL DDL'}
+                            </div>
                             <div className="flex-1 overflow-hidden">
                                 <Suspense fallback={<Spinner />}>
                                     <Editor
@@ -532,21 +281,17 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             </DialogInternalContent>
         );
     }, [
+        showSSMSInfoDialog,
         databaseEdition,
         databaseType,
         errorMessage,
         scriptResult,
         setDatabaseEdition,
-        databaseClients,
-        databaseClient,
-        importMetadataScripts,
         t,
         isDesktop,
         showCheckJsonButton,
         isCheckingJson,
         handleCheckJson,
-        showSSMSInfoDialog,
-        setShowSSMSInfoDialog,
         effectiveTheme,
         debouncedHandleInputChange,
         importMethod,
@@ -555,7 +300,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const renderFooter = useCallback(() => {
         return (
-            <DialogFooter className="mt-4 flex !justify-between gap-2">
+            <DialogFooter className="flex !justify-between gap-2">
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                     {goBack && (
                         <Button

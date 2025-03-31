@@ -232,7 +232,7 @@ export const en = {
                 title: 'Import your Database',
                 database_edition: 'Database Edition:',
                 step_1: 'Run this script in your database:',
-                step_2: 'Copy and paste the script result into this modal.',
+                step_2: 'Paste the script result into this modal.',
                 script_results_placeholder: 'Script results here...',
                 ssms_instructions: {
                     button_text: 'SSMS Instructions',
@@ -388,18 +388,6 @@ export const en = {
                 description: 'Failed to parse DBML. Please check the syntax.',
             },
         },
-
-        import_sql_dialog: {
-            title: 'Import SQL DDL',
-            description: 'Import a database schema from SQL DDL statements.',
-            import: 'Import',
-            cancel: 'Cancel',
-            error: {
-                title: 'Error importing SQL',
-                description: 'Failed to parse SQL. Please check the syntax.',
-            },
-        },
-
         relationship_type: {
             one_to_one: 'One to One',
             one_to_many: 'One to Many',

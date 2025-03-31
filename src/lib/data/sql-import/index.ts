@@ -122,10 +122,13 @@ export function sqlImportToDiagram({
  * @param sourceDatabaseType Source database type
  * @returns Object with success status and error information
  */
-export function parseSQLError(
-    sqlContent: string,
-    sourceDatabaseType: DatabaseType
-): { success: boolean; error?: string; line?: number; column?: number } {
+export function parseSQLError({
+    sqlContent,
+    sourceDatabaseType,
+}: {
+    sqlContent: string;
+    sourceDatabaseType: DatabaseType;
+}): { success: boolean; error?: string; line?: number; column?: number } {
     try {
         // Validate SQL based on the database type
         switch (sourceDatabaseType) {
