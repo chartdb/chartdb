@@ -232,7 +232,7 @@ export const en = {
                 title: 'Import your Database',
                 database_edition: 'Database Edition:',
                 step_1: 'Run this script in your database:',
-                step_2: 'Paste the script result here:',
+                step_2: 'Copy and paste the script result into this modal.',
                 script_results_placeholder: 'Script results here...',
                 ssms_instructions: {
                     button_text: 'SSMS Instructions',

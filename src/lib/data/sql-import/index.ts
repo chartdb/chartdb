@@ -51,11 +51,15 @@ function isPgDumpFormat(sqlContent: string): boolean {
  * @param targetDatabaseType Target database type for the diagram
  * @returns Diagram object
  */
-export function sqlImportToDiagram(
-    sqlContent: string,
-    sourceDatabaseType: DatabaseType,
-    targetDatabaseType: DatabaseType = DatabaseType.GENERIC
-): Diagram {
+export function sqlImportToDiagram({
+    sqlContent,
+    sourceDatabaseType,
+    targetDatabaseType = DatabaseType.GENERIC,
+}: {
+    sqlContent: string;
+    sourceDatabaseType: DatabaseType;
+    targetDatabaseType: DatabaseType;
+}): Diagram {
     console.log('SQL Import starting with:', {
         contentLength: sqlContent.length,
         sourceDatabaseType,
