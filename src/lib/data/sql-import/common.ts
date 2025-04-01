@@ -329,11 +329,16 @@ export function convertToChartDBDiagram(
         relationshipsCount: parserResult.relationships.length,
     });
 
+    // Create a mapping of old table IDs to new ones
+    const tableIdMapping = new Map<string, string>();
+
     // Convert SQL tables to ChartDB tables
     const tables: DBTable[] = parserResult.tables.map((table, index) => {
         const row = Math.floor(index / 4);
         const col = index % 4;
         const tableSpacing = 300;
+        const newId = generateId();
+        tableIdMapping.set(table.id, newId);
 
         // Log the table information for debugging
         console.log(
@@ -405,7 +410,7 @@ export function convertToChartDBDiagram(
         });
 
         return {
-            id: table.id,
+            id: newId,
             name: table.name,
             schema: table.schema || '',
             order: index,
@@ -461,6 +466,14 @@ export function convertToChartDBDiagram(
             return;
         }
 
+        const sourceTableId = tableIdMapping.get(rel.sourceTableId);
+        const targetTableId = tableIdMapping.get(rel.targetTableId);
+
+        if (!sourceTableId || !targetTableId) {
+            console.warn('Could not find mapped table IDs for relationship');
+            return;
+        }
+
         const sourceField = sourceTable.fields.find(
             (f) => f.name === rel.sourceColumn
         );
@@ -488,8 +501,8 @@ export function convertToChartDBDiagram(
             name: rel.name,
             sourceSchema: sourceTable.schema,
             targetSchema: targetTable.schema,
-            sourceTableId: sourceTable.id,
-            targetTableId: targetTable.id,
+            sourceTableId: sourceTableId,
+            targetTableId: targetTableId,
             sourceFieldId: sourceField.id,
             targetFieldId: targetField.id,
             sourceCardinality,

@@ -8,6 +8,7 @@ import {
     isMysqlDumpFormat,
 } from './dialect-importers/mysql/mysql-dump';
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
+import { fromSQLite } from './dialect-importers/sqlite/sqlite';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 
@@ -92,6 +93,34 @@ function isSQLServerFormat(sqlContent: string): boolean {
 }
 
 /**
+ * Detect if SQL content is from SQLite format
+ * @param sqlContent SQL content as string
+ * @returns boolean indicating if the SQL is likely from SQLite
+ */
+function isSQLiteFormat(sqlContent: string): boolean {
+    // SQLite output often contains specific markers
+    const sqliteMarkers = [
+        'PRAGMA',
+        'INTEGER PRIMARY KEY AUTOINCREMENT',
+        'DEFAULT (datetime(',
+        'sqlite_sequence',
+        'CREATE TRIGGER',
+        'BEGIN',
+        'END;',
+    ];
+
+    // Check for specific SQLite patterns
+    for (const marker of sqliteMarkers) {
+        if (sqlContent.includes(marker)) {
+            console.log(`Detected SQLite format (found marker: ${marker})`);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * Auto-detect database type from SQL content
  * @param sqlContent SQL content as string
  * @returns Detected database type or null if can't determine
@@ -113,6 +142,12 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
     if (isMysqlDumpFormat(sqlContent)) {
         console.log('Auto-detected MySQL dump format');
         return DatabaseType.MYSQL;
+    }
+
+    // Check for SQLite format
+    if (isSQLiteFormat(sqlContent)) {
+        console.log('Auto-detected SQLite format');
+        return DatabaseType.SQLITE;
     }
 
     // Look for database-specific keywords
@@ -209,6 +244,10 @@ export function sqlImportToDiagram({
             console.log('Using SQL Server parser');
             parserResult = fromSQLServer(sqlContent);
             break;
+        case DatabaseType.SQLITE:
+            console.log('Using SQLite parser');
+            parserResult = fromSQLite(sqlContent);
+            break;
         default:
             throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
     }
@@ -270,6 +309,10 @@ export function parseSQLError({
             case DatabaseType.SQL_SERVER:
                 // SQL Server validation
                 fromSQLServer(sqlContent);
+                break;
+            case DatabaseType.SQLITE:
+                // SQLite validation
+                fromSQLite(sqlContent);
                 break;
             // Add more database types here
             default:
