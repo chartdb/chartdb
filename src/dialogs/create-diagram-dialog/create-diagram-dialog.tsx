@@ -45,6 +45,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     useEffect(() => {
         setDatabaseEdition(undefined);
+        setImportMethod('query');
     }, [databaseType]);
 
     useEffect(() => {
