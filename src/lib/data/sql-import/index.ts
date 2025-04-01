@@ -7,6 +7,7 @@ import {
     fromMysqlDump,
     isMysqlDumpFormat,
 } from './dialect-importers/mysql/mysql-dump';
+import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 
@@ -50,6 +51,95 @@ function isPgDumpFormat(sqlContent: string): boolean {
 }
 
 /**
+ * Detect if SQL content is from SQL Server DDL format
+ * @param sqlContent SQL content as string
+ * @returns boolean indicating if the SQL is likely from SQL Server
+ */
+function isSQLServerFormat(sqlContent: string): boolean {
+    // SQL Server output often contains specific markers
+    const sqlServerMarkers = [
+        'SET ANSI_NULLS ON',
+        'SET QUOTED_IDENTIFIER ON',
+        'SET ANSI_PADDING ON',
+        'CREATE PROCEDURE',
+        'EXEC sys.sp_',
+        'EXECUTE sys.sp_',
+        '[dbo].',
+        'IDENTITY(',
+        'NVARCHAR',
+        'UNIQUEIDENTIFIER',
+        'ALTER TABLE [',
+        'CREATE TABLE [dbo]',
+        'CREATE INDEX [dbo_',
+        'datetime2',
+    ];
+
+    // Check for specific SQL Server patterns
+    for (const marker of sqlServerMarkers) {
+        if (sqlContent.includes(marker)) {
+            console.log(`Detected SQL Server format (found marker: ${marker})`);
+            return true;
+        }
+    }
+
+    // Also check for brackets used in SQL Server syntax - [dbo].[TableName]
+    if (sqlContent.match(/\[[^\]]+\]\.\[[^\]]+\]/)) {
+        console.log('Detected SQL Server format (bracket notation)');
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Auto-detect database type from SQL content
+ * @param sqlContent SQL content as string
+ * @returns Detected database type or null if can't determine
+ */
+export function detectDatabaseType(sqlContent: string): DatabaseType | null {
+    // First check for PostgreSQL dump format
+    if (isPgDumpFormat(sqlContent)) {
+        console.log('Auto-detected PostgreSQL dump format');
+        return DatabaseType.POSTGRESQL;
+    }
+
+    // Check for SQL Server format
+    if (isSQLServerFormat(sqlContent)) {
+        console.log('Auto-detected SQL Server format');
+        return DatabaseType.SQL_SERVER;
+    }
+
+    // Check for MySQL dump format
+    if (isMysqlDumpFormat(sqlContent)) {
+        console.log('Auto-detected MySQL dump format');
+        return DatabaseType.MYSQL;
+    }
+
+    // Look for database-specific keywords
+    if (
+        sqlContent.includes('SERIAL PRIMARY KEY') ||
+        sqlContent.includes('CREATE EXTENSION') ||
+        sqlContent.includes('WITH (OIDS') ||
+        sqlContent.includes('RETURNS SETOF')
+    ) {
+        console.log('Auto-detected PostgreSQL format based on syntax');
+        return DatabaseType.POSTGRESQL;
+    }
+
+    if (
+        sqlContent.includes('AUTO_INCREMENT') ||
+        sqlContent.includes('ENGINE=InnoDB') ||
+        sqlContent.includes('DEFINER=')
+    ) {
+        console.log('Auto-detected MySQL format based on syntax');
+        return DatabaseType.MYSQL;
+    }
+
+    // Could not determine the database type
+    return null;
+}
+
+/**
  * Parse SQL statements and convert to a Diagram object
  * @param sqlContent SQL content as string
  * @param sourceDatabaseType Source database type
@@ -70,6 +160,20 @@ export function sqlImportToDiagram({
         sourceDatabaseType,
         targetDatabaseType,
     });
+
+    // If source database type is GENERIC, try to auto-detect the type
+    if (sourceDatabaseType === DatabaseType.GENERIC) {
+        const detectedType = detectDatabaseType(sqlContent);
+        if (detectedType) {
+            console.log(`Auto-detected database type: ${detectedType}`);
+            sourceDatabaseType = detectedType;
+        } else {
+            console.log(
+                'Could not auto-detect database type, using PostgreSQL as fallback'
+            );
+            sourceDatabaseType = DatabaseType.POSTGRESQL;
+        }
+    }
 
     let parserResult: SQLParserResult;
 
@@ -101,9 +205,10 @@ export function sqlImportToDiagram({
                 parserResult = fromMySQL(sqlContent);
             }
             break;
-        // case DatabaseType.SQL_SERVER:
-        //   parserResult = fromSQLServer(sqlContent);
-        //   break;
+        case DatabaseType.SQL_SERVER:
+            console.log('Using SQL Server parser');
+            parserResult = fromSQLServer(sqlContent);
+            break;
         default:
             throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
     }
@@ -162,6 +267,10 @@ export function parseSQLError({
                     fromMySQL(sqlContent);
                 }
                 break;
+            case DatabaseType.SQL_SERVER:
+                // SQL Server validation
+                fromSQLServer(sqlContent);
+                break;
             // Add more database types here
             default:
                 throw new Error(
@@ -192,16 +301,12 @@ export function parseSQLError({
             }
 
             // Clean up error message if needed
-            if (error.message.includes('Error parsing PostgreSQL SQL:')) {
-                errorMessage = error.message
-                    .replace('Error parsing PostgreSQL SQL:', '')
-                    .trim();
-            } else if (
-                error.message.includes('Error parsing PostgreSQL dump:')
-            ) {
-                errorMessage = error.message
-                    .replace('Error parsing PostgreSQL dump:', '')
-                    .trim();
+            if (error.message.includes('Error parsing')) {
+                // Extract everything after the colon using regex
+                const match = error.message.match(/Error parsing[^:]*:(.*)/);
+                if (match && match[1]) {
+                    errorMessage = match[1].trim();
+                }
             }
         } else {
             // Fallback for non-Error objects
