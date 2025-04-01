@@ -2,6 +2,11 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import { fromPostgres } from './dialect-importers/postgresql/postgresql';
 import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
+import { fromMySQL } from './dialect-importers/mysql/mysql';
+import {
+    fromMysqlDump,
+    isMysqlDumpFormat,
+} from './dialect-importers/mysql/mysql-dump';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 
@@ -83,10 +88,19 @@ export function sqlImportToDiagram({
                 parserResult = fromPostgres(sqlContent);
             }
             break;
-        // Add more database types here as they're implemented
-        // case DatabaseType.MYSQL:
-        //   parserResult = fromMySQL(sqlContent);
-        //   break;
+        case DatabaseType.MYSQL:
+            console.log('Using MySQL parser');
+            // Check if the SQL is from MySQL dump and use the appropriate parser
+            if (isMysqlDumpFormat(sqlContent)) {
+                console.log(
+                    'Detected MySQL dump format, using specialized parser'
+                );
+                parserResult = fromMysqlDump(sqlContent);
+            } else {
+                console.log('Using standard MySQL parser');
+                parserResult = fromMySQL(sqlContent);
+            }
+            break;
         // case DatabaseType.SQL_SERVER:
         //   parserResult = fromSQLServer(sqlContent);
         //   break;
@@ -138,6 +152,14 @@ export function parseSQLError({
                     fromPostgresDump(sqlContent);
                 } else {
                     fromPostgres(sqlContent);
+                }
+                break;
+            case DatabaseType.MYSQL:
+                // MySQL validation - check format and use appropriate parser
+                if (isMysqlDumpFormat(sqlContent)) {
+                    fromMysqlDump(sqlContent);
+                } else {
+                    fromMySQL(sqlContent);
                 }
                 break;
             // Add more database types here
