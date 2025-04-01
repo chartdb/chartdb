@@ -175,21 +175,12 @@ export function getTypeArgs(
     if (!definition) return typeArgs;
 
     if (definition.length !== undefined) {
-        console.log(`Found length attribute: ${definition.length}`);
         typeArgs.length = definition.length;
     }
 
     if (definition.scale !== undefined && definition.precision !== undefined) {
-        console.log(
-            `Found precision/scale: ${definition.precision}/${definition.scale}`
-        );
         typeArgs.precision = definition.precision;
         typeArgs.scale = definition.scale;
-    }
-
-    // Debug log the extracted type arguments
-    if (Object.keys(typeArgs).length > 0) {
-        console.log(`Extracted type arguments:`, typeArgs);
     }
 
     return typeArgs;
@@ -219,11 +210,6 @@ export function findTableWithSchemaSupport(
     // If still not found with schema, try any match on the table name
     if (!table) {
         table = tables.find((t) => t.name === tableName);
-        if (table) {
-            console.log(
-                `Found table ${tableName} without schema match, source schema: ${effectiveSchema}, table schema: ${table.schema}`
-            );
-        }
     }
 
     return table;
@@ -251,15 +237,6 @@ export function getTableIdWithSchemaSupport(
     // If still not found with schema, try without schema
     if (!tableId) {
         tableId = tableMap[tableName];
-        if (tableId) {
-            console.log(
-                `Found table ID for ${tableName} without schema match, source schema: ${effectiveSchema}`
-            );
-        } else {
-            console.warn(
-                `No table ID found for ${tableName} with schema ${effectiveSchema}`
-            );
-        }
     }
 
     return tableId;

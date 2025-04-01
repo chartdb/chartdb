@@ -28,14 +28,13 @@ import {
  * SQLite-specific parsing logic
  */
 export function fromSQLite(sqlContent: string): SQLParserResult {
-    console.log('SQLite parser starting');
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
 
     try {
         // Parse the SQL DDL statements
-        console.log('Parsing SQL DDL with SQLite parser');
+
         const ast = sqlParser.astify(
             sqlContent,
             parserOpts
@@ -45,15 +44,8 @@ export function fromSQLite(sqlContent: string): SQLParserResult {
             throw new Error('Failed to parse SQL DDL - AST is not an array');
         }
 
-        console.log(`Parsed ${ast.length} SQL statements`);
-
         // Process each statement
         ast.forEach((stmt: SQLASTNode, idx: number) => {
-            console.log(`Processing statement ${idx + 1}:`, {
-                type: stmt.type,
-                keyword: stmt.keyword,
-            });
-
             // Process CREATE TABLE statements
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 processCreateTableStatement(
@@ -86,11 +78,6 @@ export function fromSQLite(sqlContent: string): SQLParserResult {
         const validRelationships = relationships.filter((rel) => {
             return isValidForeignKeyRelationship(rel, tables);
         });
-
-        // Log completion
-        console.log(
-            `SQLite parser finished with ${tables.length} tables and ${validRelationships.length} relationships`
-        );
 
         return { tables, relationships: validRelationships };
     } catch (error) {
@@ -134,10 +121,6 @@ function processCreateTableStatement(
         console.warn('Skipping CREATE TABLE statement with empty table name');
         return;
     }
-
-    console.log(
-        `Processing CREATE TABLE for ${schemaName ? schemaName + '.' : ''}${tableName}`
-    );
 
     // Generate a unique ID for the table
     const tableId = getTableIdWithSchemaSupport(tableName, schemaName);
@@ -305,10 +288,6 @@ function processCreateIndexStatement(
         }
     }
 
-    console.log(
-        `Processing CREATE INDEX for table: ${schemaName ? schemaName + '.' : ''}${tableName}`
-    );
-
     // Find the table in our collection
     const table = tables.find(
         (t) => t.name === tableName && (!schemaName || t.schema === schemaName)
@@ -349,10 +328,6 @@ function processAlterTableStatement(
 
     const tableName = alterTableStmt.table.table;
     const schemaName = alterTableStmt.table.schema || '';
-
-    console.log(
-        `Processing ALTER TABLE for ${schemaName ? schemaName + '.' : ''}${tableName}`
-    );
 
     // Find the target table
     const table = tables.find(
@@ -396,8 +371,6 @@ function findForeignKeysUsingRegex(
         (name) =>
             name !== 'CREATE' && !name.includes('.') && name.trim().length > 0
     );
-
-    console.log(`Available tables for FK validation: ${tableNames.join(', ')}`);
 
     // First pass: identify all tables
     const tableNamePattern =
@@ -463,10 +436,6 @@ function findForeignKeysUsingRegex(
             if (addedRelationships.has(relationshipKey)) continue;
             addedRelationships.add(relationshipKey);
 
-            console.log(
-                `Found FK via regex: ${sourceTable}.${sourceColumn} -> ${targetTable}.${targetColumn}`
-            );
-
             // Get table IDs
             const sourceTableId =
                 tableMap[sourceTable] ||
@@ -512,10 +481,6 @@ function findForeignKeysUsingRegex(
         if (addedRelationships.has(relationshipKey)) continue;
         addedRelationships.add(relationshipKey);
 
-        console.log(
-            `Found multi-line FK: ${sourceTable}.${sourceColumn} -> ${targetTable}.${targetColumn}`
-        );
-
         // Get table IDs
         const sourceTableId =
             tableMap[sourceTable] || getTableIdWithSchemaSupport(sourceTable);
@@ -540,18 +505,7 @@ function findForeignKeysUsingRegex(
     const validRelationships = relationships.filter((rel) => {
         // Ensure source table exists
         if (!tableMap[rel.sourceTable]) {
-            console.log(
-                `Filtering out FK with non-existent source table: ${rel.sourceTable}`
-            );
             return false;
-        }
-
-        // If target table doesn't exist in our map, mark the relationship but include it
-        // so the diagram shows it (the referenced table might be imported later)
-        if (!tableMap[rel.targetTable]) {
-            console.log(
-                `Warning: FK references non-existent target table: ${rel.targetTable}`
-            );
         }
 
         // Don't filter out if the column name is suspicious
@@ -560,9 +514,6 @@ function findForeignKeysUsingRegex(
             rel.sourceColumn.toUpperCase() === 'FOREIGN' ||
             rel.sourceColumn.toUpperCase() === 'KEY'
         ) {
-            console.log(
-                `Filtering out FK with invalid column name: ${rel.sourceColumn}`
-            );
             return false;
         }
 
@@ -572,10 +523,6 @@ function findForeignKeysUsingRegex(
     // Replace the relationships array with the filtered list
     relationships.length = 0;
     validRelationships.forEach((rel) => relationships.push(rel));
-
-    console.log(
-        `Found ${relationships.length} valid foreign key relationships`
-    );
 }
 
 /**
@@ -600,10 +547,6 @@ function addPlaceholderTablesForFKReferences(
 
     // Add placeholder tables for missing tables
     missingTableNames.forEach((tableName) => {
-        console.log(
-            `Adding placeholder table for foreign key reference: ${tableName}`
-        );
-
         // Generate a table ID
         const tableId = getTableIdWithSchemaSupport(tableName);
 

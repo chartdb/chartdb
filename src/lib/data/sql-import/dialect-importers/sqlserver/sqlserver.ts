@@ -277,7 +277,6 @@ function normalizeSQLServerDataType(dataType: string): string {
  * @returns Parsed structure including tables, columns, and relationships
  */
 export function fromSQLServer(sqlContent: string): SQLParserResult {
-    console.log('SQL Server parser starting');
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -285,12 +284,7 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
     try {
         // Preprocess the SQL content to handle T-SQL specific syntax
         const preprocessedSQL = preprocessSQLServerScript(sqlContent);
-        console.log('SQL content preprocessed');
 
-        // Handle ALTER TABLE statements directly using regex for reliability
-        console.log(
-            'Extracting foreign key constraints from ALTER TABLE statements'
-        );
         const statements = sqlContent
             .split(';')
             .filter((stmt) => stmt.trim().length > 0);
@@ -301,9 +295,6 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
         );
 
         if (alterTableStatements.length > 0) {
-            console.log(
-                `Found ${alterTableStatements.length} ALTER TABLE statements with FOREIGN KEY constraints`
-            );
             const { fkData, tableMap: fkTableMap } =
                 parseAlterTableAddConstraint(alterTableStatements);
 
@@ -314,16 +305,10 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
             relationships.push(...fkData);
         }
 
-        // Parse the SQL DDL statements
-        console.log('Parsing SQL DDL with SQL Server parser');
         let ast;
         try {
             ast = parser.astify(preprocessedSQL, parserOpts);
         } catch {
-            console.error(
-                'Error during SQL parsing, trying with statement-by-statement approach'
-            );
-
             // Fallback: Try to parse each statement individually
             const statements = preprocessedSQL
                 .split(';')
@@ -340,9 +325,6 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
                     }
                 } catch {
                     // Skip statements that can't be parsed
-                    console.warn(
-                        `Skipping statement that couldn't be parsed: ${stmt.substring(0, 50)}...`
-                    );
                 }
             }
         }
@@ -351,15 +333,8 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
             throw new Error('Failed to parse SQL DDL - Empty or invalid AST');
         }
 
-        console.log(`Parsed ${ast.length} SQL statements`);
-
         // Process each statement
-        (ast as unknown as SQLASTNode[]).forEach((stmt, idx: number) => {
-            console.log(`Processing statement ${idx + 1}:`, {
-                type: stmt.type,
-                keyword: stmt.keyword,
-            });
-
+        (ast as unknown as SQLASTNode[]).forEach((stmt) => {
             // Process CREATE TABLE statements
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 processCreateTable(
@@ -388,10 +363,6 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
             tables,
             relationships,
             tableMap
-        );
-
-        console.log(
-            `Final result: ${tables.length} tables and ${validRelationships.length} relationships`
         );
 
         // Sort tables by dependency (for better visualization)
@@ -434,13 +405,9 @@ function processCreateTable(
             tableName = tableObj.table || '';
             schemaName = tableObj.schema || tableObj.db || '';
         }
-        console.log(
-            `Found CREATE TABLE for: ${schemaName ? schemaName + '.' : ''}${tableName}`
-        );
     }
 
     if (!tableName) {
-        console.log('Skipping table with empty name');
         return;
     }
 
@@ -459,11 +426,6 @@ function processCreateTable(
     const indexes: SQLIndex[] = [];
 
     if (stmt.create_definitions && Array.isArray(stmt.create_definitions)) {
-        // Process each column and constraint definition
-        console.log(
-            `Processing ${stmt.create_definitions.length} column definitions for table ${tableName}`
-        );
-
         stmt.create_definitions.forEach(
             (def: ColumnDefinition | ConstraintDefinition) => {
                 if (def.resource === 'column') {
@@ -473,10 +435,6 @@ function processCreateTable(
                     const rawDataType = columnDef.definition?.dataType || '';
                     const normalizedDataType =
                         normalizeSQLServerDataType(rawDataType);
-
-                    console.log(
-                        `Column: ${columnName}, Raw type: ${rawDataType}, Normalized type: ${normalizedDataType}`
-                    );
 
                     if (columnName) {
                         // Check for SQL Server specific column properties
@@ -844,10 +802,6 @@ function linkRelationships(
     relationships: SQLForeignKey[],
     tableMap: Record<string, string>
 ): SQLForeignKey[] {
-    console.log(
-        `Linking ${relationships.length} relationships to ${tables.length} tables`
-    );
-
     // First, ensure all table keys are normalized
     const normalizedTableMap: Record<string, string> = {};
     for (const [key, id] of Object.entries(tableMap)) {
@@ -869,10 +823,6 @@ function linkRelationships(
         normalizedTableMap[tableKey.toLowerCase()] = table.id;
         normalizedTableMap[table.name.toLowerCase()] = table.id;
     }
-
-    console.log(
-        `Table map contains ${Object.keys(normalizedTableMap).length} entries`
-    );
 
     // Process all relationships
     const validRelationships = relationships.filter((rel) => {
@@ -915,8 +865,5 @@ function linkRelationships(
         return true;
     });
 
-    console.log(
-        `Successfully linked ${validRelationships.length} of ${relationships.length} relationships`
-    );
     return validRelationships;
 }

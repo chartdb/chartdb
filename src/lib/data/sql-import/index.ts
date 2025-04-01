@@ -32,7 +32,6 @@ function isPgDumpFormat(sqlContent: string): boolean {
     // Check for specific pg_dump patterns
     for (const marker of pgDumpMarkers) {
         if (sqlContent.includes(marker)) {
-            console.log(`Detected pg_dump format (found marker: ${marker})`);
             return true;
         }
     }
@@ -42,9 +41,6 @@ function isPgDumpFormat(sqlContent: string): boolean {
         (sqlContent.includes('COPY') && sqlContent.includes('FROM stdin')) ||
         sqlContent.match(/--\s+Name:.*Type:/i)
     ) {
-        console.log(
-            'Detected pg_dump format (COPY statements or specific comments)'
-        );
         return true;
     }
 
@@ -78,14 +74,12 @@ function isSQLServerFormat(sqlContent: string): boolean {
     // Check for specific SQL Server patterns
     for (const marker of sqlServerMarkers) {
         if (sqlContent.includes(marker)) {
-            console.log(`Detected SQL Server format (found marker: ${marker})`);
             return true;
         }
     }
 
     // Also check for brackets used in SQL Server syntax - [dbo].[TableName]
     if (sqlContent.match(/\[[^\]]+\]\.\[[^\]]+\]/)) {
-        console.log('Detected SQL Server format (bracket notation)');
         return true;
     }
 
@@ -112,7 +106,6 @@ function isSQLiteFormat(sqlContent: string): boolean {
     // Check for specific SQLite patterns
     for (const marker of sqliteMarkers) {
         if (sqlContent.includes(marker)) {
-            console.log(`Detected SQLite format (found marker: ${marker})`);
             return true;
         }
     }
@@ -128,25 +121,21 @@ function isSQLiteFormat(sqlContent: string): boolean {
 export function detectDatabaseType(sqlContent: string): DatabaseType | null {
     // First check for PostgreSQL dump format
     if (isPgDumpFormat(sqlContent)) {
-        console.log('Auto-detected PostgreSQL dump format');
         return DatabaseType.POSTGRESQL;
     }
 
     // Check for SQL Server format
     if (isSQLServerFormat(sqlContent)) {
-        console.log('Auto-detected SQL Server format');
         return DatabaseType.SQL_SERVER;
     }
 
     // Check for MySQL dump format
     if (isMysqlDumpFormat(sqlContent)) {
-        console.log('Auto-detected MySQL dump format');
         return DatabaseType.MYSQL;
     }
 
     // Check for SQLite format
     if (isSQLiteFormat(sqlContent)) {
-        console.log('Auto-detected SQLite format');
         return DatabaseType.SQLITE;
     }
 
@@ -157,7 +146,6 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
         sqlContent.includes('WITH (OIDS') ||
         sqlContent.includes('RETURNS SETOF')
     ) {
-        console.log('Auto-detected PostgreSQL format based on syntax');
         return DatabaseType.POSTGRESQL;
     }
 
@@ -166,7 +154,6 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
         sqlContent.includes('ENGINE=InnoDB') ||
         sqlContent.includes('DEFINER=')
     ) {
-        console.log('Auto-detected MySQL format based on syntax');
         return DatabaseType.MYSQL;
     }
 
@@ -190,22 +177,12 @@ export function sqlImportToDiagram({
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
 }): Diagram {
-    console.log('SQL Import starting with:', {
-        contentLength: sqlContent.length,
-        sourceDatabaseType,
-        targetDatabaseType,
-    });
-
     // If source database type is GENERIC, try to auto-detect the type
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
         if (detectedType) {
-            console.log(`Auto-detected database type: ${detectedType}`);
             sourceDatabaseType = detectedType;
         } else {
-            console.log(
-                'Could not auto-detect database type, using PostgreSQL as fallback'
-            );
             sourceDatabaseType = DatabaseType.POSTGRESQL;
         }
     }
@@ -215,48 +192,30 @@ export function sqlImportToDiagram({
     // Select the appropriate parser based on database type
     switch (sourceDatabaseType) {
         case DatabaseType.POSTGRESQL:
-            console.log('Using PostgreSQL parser');
             // Check if the SQL is from pg_dump and use the appropriate parser
             if (isPgDumpFormat(sqlContent)) {
-                console.log(
-                    'Detected PostgreSQL dump format, using specialized parser'
-                );
                 parserResult = fromPostgresDump(sqlContent);
             } else {
-                console.log('Using standard PostgreSQL parser');
                 parserResult = fromPostgres(sqlContent);
             }
             break;
         case DatabaseType.MYSQL:
-            console.log('Using MySQL parser');
             // Check if the SQL is from MySQL dump and use the appropriate parser
             if (isMysqlDumpFormat(sqlContent)) {
-                console.log(
-                    'Detected MySQL dump format, using specialized parser'
-                );
                 parserResult = fromMysqlDump(sqlContent);
             } else {
-                console.log('Using standard MySQL parser');
                 parserResult = fromMySQL(sqlContent);
             }
             break;
         case DatabaseType.SQL_SERVER:
-            console.log('Using SQL Server parser');
             parserResult = fromSQLServer(sqlContent);
             break;
         case DatabaseType.SQLITE:
-            console.log('Using SQLite parser');
             parserResult = fromSQLite(sqlContent);
             break;
         default:
             throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
     }
-
-    console.log('Parser result:', {
-        tablesCount: parserResult.tables.length,
-        relationshipsCount: parserResult.relationships.length,
-        tables: parserResult.tables.map((t) => t.name),
-    });
 
     // Convert the parsed SQL to a diagram
     const diagram = convertToChartDBDiagram(
@@ -264,12 +223,6 @@ export function sqlImportToDiagram({
         sourceDatabaseType,
         targetDatabaseType
     );
-
-    console.log('Generated diagram:', {
-        tables: diagram.tables?.length || 0,
-        relationships: diagram.relationships?.length || 0,
-        tableNames: diagram.tables?.map((t) => t.name) || [],
-    });
 
     return diagram;
 }

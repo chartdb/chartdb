@@ -70,8 +70,6 @@ function processForeignKeyConstraint(
     tableMap: Record<string, string>,
     relationships: SQLForeignKey[]
 ): void {
-    console.log('Processing FK constraint in statement:', statement);
-
     // Only process statements that look like foreign key constraints
     if (
         !statement.includes('ADD CONSTRAINT') ||
@@ -93,17 +91,12 @@ function processForeignKeyConstraint(
         const tableMatch = statement.match(tableRegex);
 
         if (!tableMatch) {
-            console.log('Unable to extract source table from statement');
             return;
         }
 
         // Extract source schema and table name
         const sourceSchema = tableMatch[1] || '';
         const sourceTable = tableMatch[2];
-
-        console.log(
-            `Extracted source table: ${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`
-        );
 
         // Find constraint name
         const constraintRegex = /ADD CONSTRAINT\s+"?([^"\s]+)"?\s+FOREIGN KEY/i;
@@ -116,7 +109,6 @@ function processForeignKeyConstraint(
         const sourceColMatch = statement.match(sourceColRegex);
 
         if (!sourceColMatch) {
-            console.log('Unable to extract source columns from statement');
             return;
         }
 
@@ -136,7 +128,6 @@ function processForeignKeyConstraint(
         const targetMatch = statement.match(targetRegex);
 
         if (!targetMatch) {
-            console.log('Unable to extract target info from statement');
             return;
         }
 
@@ -166,18 +157,6 @@ function processForeignKeyConstraint(
             ? updateActionMatch[1].trim()
             : undefined;
 
-        console.log('Extracted FK details:', {
-            sourceSchema,
-            sourceTable,
-            sourceColumns,
-            targetSchema,
-            targetTable,
-            targetColumns,
-            constraintName,
-            deleteAction,
-            updateAction,
-        });
-
         // Look up table IDs
         const sourceTableKey = `${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`;
         const sourceTableId = tableMap[sourceTableKey];
@@ -186,16 +165,10 @@ function processForeignKeyConstraint(
         const targetTableId = tableMap[targetTableKey];
 
         if (!sourceTableId) {
-            console.warn(
-                `Source table ${sourceTableKey} not found in tableMap. Available tables: ${Object.keys(tableMap).join(', ')}`
-            );
             return;
         }
 
         if (!targetTableId) {
-            console.warn(
-                `Target table ${targetTableKey} not found in tableMap. Available tables: ${Object.keys(tableMap).join(', ')}`
-            );
             return;
         }
 
@@ -220,30 +193,22 @@ function processForeignKeyConstraint(
                 deleteAction,
             };
 
-            console.log(
-                'Adding relationship from FK constraint:',
-                relationship
-            );
             relationships.push(relationship);
         }
     } catch (error) {
         console.error('Error processing foreign key constraint:', error);
-        console.log('Problematic statement:', statement);
+
+        // Error handling without logging
     }
 }
 
 // Function to extract columns from a CREATE TABLE statement using regex
 function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
-    console.log(
-        'Extracting columns via regex from:',
-        statement.substring(0, 100) + '...'
-    );
     const columns: SQLColumn[] = [];
 
     // Extract everything between the first opening and last closing parenthesis
     const columnMatch = statement.match(/CREATE\s+TABLE.*?\((.*)\)[^)]*;$/s);
     if (!columnMatch || !columnMatch[1]) {
-        console.log('Failed to extract column definitions');
         return columns;
     }
 
@@ -289,7 +254,6 @@ function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
         }
     }
 
-    console.log(`Extracted ${columns.length} columns via regex`);
     return columns;
 }
 
@@ -302,17 +266,11 @@ function extractForeignKeysFromCreateTable(
     relationships: SQLForeignKey[],
     pendingForeignKeys: PendingForeignKey[]
 ): void {
-    console.log(
-        'Extracting foreign keys via regex from:',
-        statement.substring(0, 100) + '...'
-    );
-
     // Extract everything between the parentheses
     const tableBodyMatch = statement.match(
         /CREATE\s+TABLE.*?\((.*)\)[^)]*;*$/s
     );
     if (!tableBodyMatch || !tableBodyMatch[1]) {
-        console.log('Failed to extract table body for FK detection');
         return;
     }
 
@@ -336,23 +294,10 @@ function extractForeignKeysFromCreateTable(
             const deleteAction = match[5]?.trim();
             const updateAction = match[6]?.trim();
 
-            console.log('Regex extracted FK:', {
-                constraintName,
-                sourceColumns,
-                targetTable,
-                targetColumns,
-                deleteAction,
-                updateAction,
-            });
-
             // Find target table ID
             const targetTableId = tableMap[targetTable];
 
             if (!targetTableId) {
-                console.log(
-                    `Target table ${targetTable} not found for regex-extracted FK in ${sourceTableName}. May be processed later.`
-                );
-
                 // Store for later processing
                 const pendingFk: PendingForeignKey = {
                     name:
@@ -389,15 +334,13 @@ function extractForeignKeysFromCreateTable(
                         deleteAction,
                     };
 
-                    console.log(
-                        'Adding relationship from regex-extracted FK:',
-                        fk
-                    );
                     relationships.push(fk);
                 }
             }
         } catch (error) {
             console.error('Error processing regex-extracted FK:', error);
+
+            // Error handling without logging
         }
     }
 }
@@ -411,11 +354,6 @@ function extractMySql8Constraints(
     relationships: SQLForeignKey[],
     pendingForeignKeys: PendingForeignKey[]
 ): void {
-    console.log(
-        'Trying to extract MySQL 8.0 style constraints from:',
-        sourceTableName
-    );
-
     // MySQL 8.0 uses backticked identifiers with CONSTRAINT definitions
     const constraintPattern =
         /CONSTRAINT\s+`([^`]+)`\s+FOREIGN KEY\s*\(`([^`]+)`\)\s*REFERENCES\s+`([^`]+)`\s*\(`([^`]+)`\)(?:\s+ON DELETE\s+([A-Z\s]+))?(?:\s+ON UPDATE\s+([A-Z\s]+))?/gi;
@@ -432,24 +370,10 @@ function extractMySql8Constraints(
         const deleteAction = match[5]?.trim();
         const updateAction = match[6]?.trim();
 
-        console.log('Found MySQL 8.0 style constraint:', {
-            name: constraintName,
-            sourceTable: sourceTableName,
-            sourceColumn,
-            targetTable,
-            targetColumn,
-            deleteAction,
-            updateAction,
-        });
-
         // Find target table ID
         const targetTableId = tableMap[targetTable];
 
         if (!targetTableId) {
-            console.log(
-                `Target table ${targetTable} not found yet for constraint ${constraintName}, storing for later processing`
-            );
-
             // Store for later processing
             pendingForeignKeys.push({
                 name: constraintName,
@@ -475,22 +399,8 @@ function extractMySql8Constraints(
                 deleteAction,
             };
 
-            console.log(
-                'Adding MySQL 8.0 style constraint as relationship:',
-                fk
-            );
             relationships.push(fk);
         }
-    }
-
-    if (foundConstraints) {
-        console.log(
-            `Found and processed MySQL 8.0 style constraints for ${sourceTableName}`
-        );
-    } else {
-        console.log(
-            `No MySQL 8.0 style constraints found for ${sourceTableName}`
-        );
     }
 }
 
@@ -500,8 +410,6 @@ function processPrimaryKeyConstraint(
     tableMap: Record<string, string>,
     tables: SQLTable[]
 ): void {
-    console.log('Processing PK constraint in statement:', statement);
-
     // Only process statements that look like primary key constraints
     if (
         !statement.includes('ADD CONSTRAINT') ||
@@ -517,7 +425,6 @@ function processPrimaryKeyConstraint(
         const tableMatch = statement.match(tableRegex);
 
         if (!tableMatch) {
-            console.log('Unable to extract source table from statement');
             return;
         }
 
@@ -525,16 +432,11 @@ function processPrimaryKeyConstraint(
         const sourceSchema = tableMatch[1] || '';
         const sourceTable = tableMatch[2];
 
-        console.log(
-            `Extracted PK table: ${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`
-        );
-
         // Extract primary key columns
         const pkColRegex = /PRIMARY KEY\s+\(\s*([^)]+)\)/i;
         const pkColMatch = statement.match(pkColRegex);
 
         if (!pkColMatch) {
-            console.log('Unable to extract PK columns from statement');
             return;
         }
 
@@ -547,23 +449,17 @@ function processPrimaryKeyConstraint(
                 .replace(/^\s*"?([^"\s]+)"?\s*$/, '$1')
         );
 
-        console.log('Extracted PK columns:', pkColumns);
-
         // Find the table in our collection
         const tableKey = `${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`;
         const tableId = tableMap[tableKey];
 
         if (!tableId) {
-            console.warn(
-                `Table ${tableKey} not found in tableMap for PK constraint. Available tables: ${Object.keys(tableMap).join(', ')}`
-            );
             return;
         }
 
         // Find the table in our tables array
         const table = tables.find((t) => t.id === tableId);
         if (!table) {
-            console.warn(`Table with ID ${tableId} not found in tables array`);
             return;
         }
 
@@ -571,12 +467,7 @@ function processPrimaryKeyConstraint(
         pkColumns.forEach((colName) => {
             const column = table.columns.find((c) => c.name === colName);
             if (column) {
-                console.log(`Marking column ${colName} as primary key`);
                 column.primaryKey = true;
-            } else {
-                console.warn(
-                    `Column ${colName} not found in table ${tableKey}`
-                );
             }
         });
 
@@ -595,9 +486,6 @@ function processPrimaryKeyConstraint(
                         /ADD CONSTRAINT\s+"?([^"\s]+)"?\s+PRIMARY KEY/i
                     )?.[1] || `pk_${sourceTable}`;
 
-                console.log(
-                    `Adding primary key index ${pkIndexName} with columns: ${pkColumns.join(', ')}`
-                );
                 table.indexes.push({
                     name: pkIndexName,
                     columns: pkColumns,
@@ -607,7 +495,8 @@ function processPrimaryKeyConstraint(
         }
     } catch (error) {
         console.error('Error processing primary key constraint:', error);
-        console.log('Problematic statement:', statement);
+
+        // Error handling without logging
     }
 }
 
@@ -617,8 +506,6 @@ function processUniqueConstraint(
     tableMap: Record<string, string>,
     tables: SQLTable[]
 ): void {
-    console.log('Processing UNIQUE constraint in statement:', statement);
-
     // Only process statements that look like unique constraints
     if (
         !statement.includes('ADD CONSTRAINT') ||
@@ -634,17 +521,12 @@ function processUniqueConstraint(
         const tableMatch = statement.match(tableRegex);
 
         if (!tableMatch) {
-            console.log('Unable to extract source table from statement');
             return;
         }
 
         // Extract source schema and table name
         const sourceSchema = tableMatch[1] || '';
         const sourceTable = tableMatch[2];
-
-        console.log(
-            `Extracted UNIQUE table: ${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`
-        );
 
         // Extract constraint name
         const constraintNameRegex = /ADD CONSTRAINT\s+"?([^"\s]+)"?\s+UNIQUE/i;
@@ -658,7 +540,6 @@ function processUniqueConstraint(
         const uniqueColMatch = statement.match(uniqueColRegex);
 
         if (!uniqueColMatch) {
-            console.log('Unable to extract UNIQUE columns from statement');
             return;
         }
 
@@ -671,23 +552,17 @@ function processUniqueConstraint(
                 .replace(/^\s*"?([^"\s]+)"?\s*$/, '$1')
         );
 
-        console.log('Extracted UNIQUE columns:', uniqueColumns);
-
         // Find the table in our collection
         const tableKey = `${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`;
         const tableId = tableMap[tableKey];
 
         if (!tableId) {
-            console.warn(
-                `Table ${tableKey} not found in tableMap for UNIQUE constraint. Available tables: ${Object.keys(tableMap).join(', ')}`
-            );
             return;
         }
 
         // Find the table in our tables array
         const table = tables.find((t) => t.id === tableId);
         if (!table) {
-            console.warn(`Table with ID ${tableId} not found in tables array`);
             return;
         }
 
@@ -697,7 +572,6 @@ function processUniqueConstraint(
                 (c) => c.name === uniqueColumns[0]
             );
             if (column) {
-                console.log(`Marking column ${uniqueColumns[0]} as unique`);
                 column.unique = true;
             }
         }
@@ -712,9 +586,6 @@ function processUniqueConstraint(
             );
 
             if (!existingUniqueIndex) {
-                console.log(
-                    `Adding unique index ${constraintName} with columns: ${uniqueColumns.join(', ')}`
-                );
                 table.indexes.push({
                     name: constraintName,
                     columns: uniqueColumns,
@@ -724,7 +595,8 @@ function processUniqueConstraint(
         }
     } catch (error) {
         console.error('Error processing unique constraint:', error);
-        console.log('Problematic statement:', statement);
+
+        // Error handling without logging
     }
 }
 
@@ -734,8 +606,6 @@ function processCreateIndexStatement(
     tableMap: Record<string, string>,
     tables: SQLTable[]
 ): void {
-    console.log('Processing CREATE INDEX statement:', statement);
-
     if (
         !statement.startsWith('CREATE INDEX') &&
         !statement.startsWith('CREATE UNIQUE INDEX')
@@ -753,7 +623,6 @@ function processCreateIndexStatement(
         const indexName = indexNameMatch ? indexNameMatch[1] : '';
 
         if (!indexName) {
-            console.log('Unable to extract index name');
             return;
         }
 
@@ -762,25 +631,17 @@ function processCreateIndexStatement(
         const tableMatch = statement.match(tableRegex);
 
         if (!tableMatch) {
-            console.log(
-                'Unable to extract table name from CREATE INDEX statement'
-            );
             return;
         }
 
         const tableSchema = tableMatch[1] || '';
         const tableName = tableMatch[2];
 
-        console.log(
-            `Extracted index table: ${tableSchema ? tableSchema + '.' : ''}${tableName}`
-        );
-
         // Extract index columns
         const columnsRegex = /\(\s*([^)]+)\)/i;
         const columnsMatch = statement.match(columnsRegex);
 
         if (!columnsMatch) {
-            console.log('Unable to extract index columns');
             return;
         }
 
@@ -797,26 +658,19 @@ function processCreateIndexStatement(
         });
 
         if (indexColumns.length === 0) {
-            console.log('No valid columns extracted from index definition');
             return;
         }
-
-        console.log(`Extracted index columns:`, indexColumns);
 
         // Find the table
         const tableKey = `${tableSchema ? tableSchema + '.' : ''}${tableName}`;
         const tableId = tableMap[tableKey];
 
         if (!tableId) {
-            console.warn(
-                `Table ${tableKey} not found in tableMap for CREATE INDEX. Available tables: ${Object.keys(tableMap).join(', ')}`
-            );
             return;
         }
 
         const table = tables.find((t) => t.id === tableId);
         if (!table) {
-            console.warn(`Table with ID ${tableId} not found in tables array`);
             return;
         }
 
@@ -829,26 +683,22 @@ function processCreateIndexStatement(
         );
 
         if (!existingIndex) {
-            console.log(`Adding index ${indexName} to table ${tableName}`);
             table.indexes.push({
                 name: indexName,
                 columns: indexColumns,
                 unique: isUnique,
             });
         } else {
-            console.log(
-                `Index similar to ${indexName} already exists on table ${tableName}`
-            );
         }
     } catch (error) {
         console.error('Error processing CREATE INDEX statement:', error);
-        console.log('Problematic statement:', statement);
+
+        // Error handling without logging
     }
 }
 
 // PostgreSQL dump-specific parsing logic - optimized for pg_dump output format
 export function fromPostgresDump(sqlContent: string): SQLParserResult {
-    console.log('PostgreSQL dump parser starting');
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -861,7 +711,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
 
     // Split SQL dump into statements
     const statements = extractStatements(sqlContent);
-    console.log('Extracted statements:', statements.length);
 
     for (const statement of statements) {
         if (statement.trim().startsWith('CREATE TABLE')) {
@@ -873,19 +722,9 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
         }
     }
 
-    console.log(
-        'Statement breakdown:',
-        createTableStatements.length,
-        'CREATE TABLE,',
-        createIndexStatements.length,
-        'CREATE INDEX,',
-        alterTableStatements.length,
-        'ALTER TABLE'
-    );
-
     try {
         // Phase 1: Process CREATE TABLE statements individually
-        console.log('Processing CREATE TABLE statements to populate tableMap');
+
         for (const statement of createTableStatements) {
             try {
                 // Parse just this statement with the SQL parser
@@ -926,11 +765,7 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         if (tableNameMatch) {
                             schemaName = tableNameMatch[1] || '';
                             tableName = tableNameMatch[2];
-                            console.log(
-                                `Extracted table name from regex: ${schemaName ? schemaName + '.' : ''}${tableName}`
-                            );
                         } else {
-                            console.log('Skipping table with empty name');
                             continue;
                         }
                     }
@@ -943,9 +778,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         );
                         if (schemaMatch && schemaMatch[1]) {
                             schemaName = schemaMatch[1];
-                            console.log(
-                                `Extracted schema from SQL: ${schemaName}`
-                            );
                         }
                     }
 
@@ -953,9 +785,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                     const tableId = generateId();
                     const tableKey = `${schemaName ? schemaName + '.' : ''}${tableName}`;
                     tableMap[tableKey] = tableId;
-                    console.log(
-                        `Added table to tableMap with key: ${tableKey}`
-                    );
 
                     // Process table columns
                     let columns: SQLColumn[] = [];
@@ -1014,9 +843,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
 
                     // If we couldn't extract columns from AST, try regex approach
                     if (!columnsFromAst || columns.length === 0) {
-                        console.log(
-                            'No columns extracted from AST, trying regex approach'
-                        );
                         columns = extractColumnsFromCreateTable(statement);
                     }
 
@@ -1038,12 +864,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         table.comment = createTableStmt.comment;
                     }
 
-                    console.log(`Adding table to results:`, {
-                        name: table.name,
-                        schema: table.schema,
-                        columns: table.columns.length,
-                        indexes: table.indexes.length,
-                    });
                     tables.push(table);
 
                     // Try regex-based extraction of foreign keys as a fallback
@@ -1051,9 +871,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         relationships.filter((r) => r.sourceTableId === tableId)
                             .length === 0
                     ) {
-                        console.log(
-                            `No foreign keys found by parser for ${tableName}, trying regex fallback`
-                        );
                         extractForeignKeysFromCreateTable(
                             statement,
                             tableName,
@@ -1075,9 +892,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                     );
                 }
             } catch (error) {
-                console.warn('Error parsing CREATE TABLE statement:', error);
-                console.log('Problematic statement:', statement);
-
                 // Fallback: extract table and columns using regex
                 try {
                     const tableNameMatch = statement.match(
@@ -1086,9 +900,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                     if (tableNameMatch) {
                         const schemaName = tableNameMatch[1] || '';
                         const tableName = tableNameMatch[2];
-                        console.log(
-                            `Fallback: extracted table name: ${schemaName ? schemaName + '.' : ''}${tableName}`
-                        );
 
                         // Generate a unique ID for the table
                         const tableId = generateId();
@@ -1109,11 +920,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                             order: tables.length,
                         };
 
-                        console.log(`Fallback: adding table to results:`, {
-                            name: table.name,
-                            schema: table.schema,
-                            columns: table.columns.length,
-                        });
                         tables.push(table);
                     }
                 } catch (fallbackError) {
@@ -1121,24 +927,20 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         'Fallback extraction also failed:',
                         fallbackError
                     );
+
+                    // Error handling without logging
                 }
             }
         }
 
-        // Log all table keys to help with debugging
-        console.log(
-            'Table map keys after CREATE TABLE processing:',
-            Object.keys(tableMap)
-        );
-
         // Phase 2: Process CREATE INDEX statements
-        console.log('Processing CREATE INDEX statements');
+
         for (const statement of createIndexStatements) {
             processCreateIndexStatement(statement, tableMap, tables);
         }
 
         // Phase 3: First process PRIMARY KEY constraints
-        console.log('Processing ALTER TABLE statements for primary keys');
+
         for (const statement of alterTableStatements) {
             if (statement.includes('PRIMARY KEY')) {
                 processPrimaryKeyConstraint(statement, tableMap, tables);
@@ -1146,7 +948,7 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
         }
 
         // Phase 3.5: Then process UNIQUE constraints
-        console.log('Processing ALTER TABLE statements for unique constraints');
+
         for (const statement of alterTableStatements) {
             if (
                 statement.includes('UNIQUE') &&
@@ -1157,9 +959,7 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
         }
 
         // Phase 4: Then process FOREIGN KEY constraints
-        console.log(
-            'Processing ALTER TABLE statements for foreign keys now that all tables are loaded'
-        );
+
         for (const statement of alterTableStatements) {
             if (statement.includes('FOREIGN KEY')) {
                 processForeignKeyConstraint(statement, tableMap, relationships);
@@ -1168,17 +968,10 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
 
         // After processing all foreign key constraints, also process any pending foreign keys
         if (pendingForeignKeys.length > 0) {
-            console.log(
-                `Processing ${pendingForeignKeys.length} pending foreign keys in PostgreSQL dump`
-            );
-
             for (const pendingFk of pendingForeignKeys) {
                 const targetTableId = tableMap[pendingFk.targetTable];
 
                 if (!targetTableId) {
-                    console.warn(
-                        `Target table ${pendingFk.targetTable} still not found after all tables are processed`
-                    );
                     continue;
                 }
 
@@ -1206,10 +999,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         deleteAction: pendingFk.deleteAction,
                     };
 
-                    console.log(
-                        'Adding relationship from pending FK in PostgreSQL dump:',
-                        fk
-                    );
                     relationships.push(fk);
                 }
             }
@@ -1220,16 +1009,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
             (rel) => rel.sourceTableId && rel.targetTableId
         );
 
-        // Log any invalid relationships that were filtered out
-        if (validRelationships.length !== relationships.length) {
-            console.warn(
-                `Filtered out ${relationships.length - validRelationships.length} invalid relationships`
-            );
-        }
-
-        console.log(
-            `PostgreSQL dump parser finished with ${tables.length} tables and ${validRelationships.length} relationships`
-        );
         return { tables, relationships: validRelationships };
     } catch (error: unknown) {
         console.error('Error in PostgreSQL dump parser:', error);
@@ -1240,7 +1019,6 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
 }
 
 export function fromMysqlDump(sqlContent: string): SQLParserResult {
-    console.log('MySQL dump parser starting');
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -1249,20 +1027,12 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
     try {
         // Extract SQL statements from the dump
         const statements = extractStatements(sqlContent);
-        console.log(
-            `Extracted ${statements.length} statements from MySQL dump`
-        );
 
         // First pass: process CREATE TABLE statements
         for (const statement of statements) {
             const trimmedStmt = statement.trim();
             // Process only CREATE TABLE statements
             if (trimmedStmt.toUpperCase().startsWith('CREATE TABLE')) {
-                console.log(
-                    'Processing CREATE TABLE statement:',
-                    trimmedStmt.substring(0, 100) + '...'
-                );
-
                 try {
                     // Parse with SQL parser
                     const ast = parser.astify(trimmedStmt, parserOpts);
@@ -1294,7 +1064,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
 
                         // Remove backticks from table name
                         tableName = tableName.replace(/`/g, '');
-                        console.log(`Found table: ${tableName}`);
 
                         if (tableName) {
                             // Generate table ID
@@ -1486,11 +1255,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                 constraintDef.constraint_type ===
                                                     'FOREIGN KEY'
                                             ) {
-                                                console.log(
-                                                    'Found inline FOREIGN KEY constraint:',
-                                                    constraintDef
-                                                );
-
                                                 // Extract source columns
                                                 let sourceColumns: string[] =
                                                     [];
@@ -1509,10 +1273,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                                         /`/g,
                                                                         ''
                                                                     );
-                                                                console.log(
-                                                                    'Inline FK source column:',
-                                                                    colName
-                                                                );
                                                                 return colName;
                                                             }
                                                         );
@@ -1591,10 +1351,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                                                   /`/g,
                                                                                   ''
                                                                               );
-                                                                    console.log(
-                                                                        'Inline FK target column:',
-                                                                        colName
-                                                                    );
                                                                     return colName;
                                                                 }
                                                             );
@@ -1614,25 +1370,10 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                                             /`/g,
                                                                             ''
                                                                         );
-                                                                    console.log(
-                                                                        'Inline FK target column from definition:',
-                                                                        colName
-                                                                    );
                                                                     return colName;
                                                                 }
                                                             );
                                                     }
-
-                                                    console.log(
-                                                        'Inline FK details:',
-                                                        {
-                                                            sourceTable:
-                                                                tableName,
-                                                            sourceColumns,
-                                                            targetTable,
-                                                            targetColumns,
-                                                        }
-                                                    );
 
                                                     // Add relationships for matching columns
                                                     if (
@@ -1645,10 +1386,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                             ];
 
                                                         if (!targetTableId) {
-                                                            console.log(
-                                                                `Target table ${targetTable} not found for inline FK in ${tableName}. This may be a forward reference that will be fixed later.`
-                                                            );
-
                                                             // Store for later processing (after all tables are created)
                                                             const pendingFk: PendingForeignKey =
                                                                 {
@@ -1712,10 +1449,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                                                                             reference.on_delete,
                                                                     };
 
-                                                                console.log(
-                                                                    'Adding relationship from inline FK:',
-                                                                    fk
-                                                                );
                                                                 relationships.push(
                                                                     fk
                                                                 );
@@ -1751,6 +1484,8 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                         'Error parsing CREATE TABLE statement:',
                         parseError
                     );
+
+                    // Error handling without logging
                 }
             }
         }
@@ -1762,8 +1497,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                 trimmedStmt.toUpperCase().startsWith('CREATE INDEX') ||
                 trimmedStmt.toUpperCase().startsWith('CREATE UNIQUE INDEX')
             ) {
-                console.log('Processing CREATE INDEX statement:', trimmedStmt);
-
                 processCreateIndexStatement(trimmedStmt, tableMap, tables);
             }
         }
@@ -1775,11 +1508,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                 trimmedStmt.toUpperCase().startsWith('ALTER TABLE') &&
                 trimmedStmt.toUpperCase().includes('FOREIGN KEY')
             ) {
-                console.log(
-                    'Processing ALTER TABLE with FOREIGN KEY:',
-                    trimmedStmt
-                );
-
                 try {
                     // Look for ALTER TABLE `table` ADD CONSTRAINT pattern
                     const tableMatch = trimmedStmt.match(
@@ -1791,9 +1519,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                     const sourceTableId = tableMap[sourceTable];
 
                     if (!sourceTableId) {
-                        console.warn(
-                            `Source table ${sourceTable} not found in tableMap`
-                        );
                         continue;
                     }
 
@@ -1830,9 +1555,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                     const targetTableId = tableMap[targetTable];
 
                     if (!targetTableId) {
-                        console.warn(
-                            `Target table ${targetTable} not found in tableMap`
-                        );
                         continue;
                     }
 
@@ -1875,10 +1597,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                             deleteAction,
                         };
 
-                        console.log(
-                            'Adding relationship from ALTER TABLE:',
-                            fk
-                        );
                         relationships.push(fk);
                     }
                 } catch (fkError) {
@@ -1886,23 +1604,18 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                         'Error processing foreign key in ALTER TABLE:',
                         fkError
                     );
+
+                    // Error handling without logging
                 }
             }
         }
 
         // After processing all tables, process pending foreign keys:
         if (pendingForeignKeys.length > 0) {
-            console.log(
-                `Processing ${pendingForeignKeys.length} pending foreign keys`
-            );
-
             for (const pendingFk of pendingForeignKeys) {
                 const targetTableId = tableMap[pendingFk.targetTable];
 
                 if (!targetTableId) {
-                    console.warn(
-                        `Target table ${pendingFk.targetTable} still not found after all tables are processed`
-                    );
                     continue;
                 }
 
@@ -1930,18 +1643,15 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
                         deleteAction: pendingFk.deleteAction,
                     };
 
-                    console.log('Adding relationship from pending FK:', fk);
                     relationships.push(fk);
                 }
             }
         }
 
-        console.log(
-            `MySQL dump parser finished with ${tables.length} tables and ${relationships.length} relationships`
-        );
         return { tables, relationships };
     } catch (error) {
         console.error('Error in MySQL dump parser:', error);
+
         throw new Error(
             `Error parsing MySQL dump: ${(error as Error).message}`
         );
@@ -1949,8 +1659,6 @@ export function fromMysqlDump(sqlContent: string): SQLParserResult {
 }
 
 export function isMysqlDumpFormat(sqlContent: string): boolean {
-    console.log('Checking if content is in MySQL dump format');
-
     // Common patterns in MySQL dumps
     const mysqlDumpPatterns = [
         /START TRANSACTION/i,
@@ -1974,7 +1682,6 @@ export function isMysqlDumpFormat(sqlContent: string): boolean {
 
     // If there are MySQL specific comments, it's likely a MySQL dump
     if (hasMysqlComments) {
-        console.log('Detected MySQL comments, likely a MySQL dump');
         return true;
     }
 
@@ -1988,10 +1695,6 @@ export function isMysqlDumpFormat(sqlContent: string): boolean {
 
     // If the SQL has backticks and at least a few MySQL patterns, it's likely MySQL
     const isLikelyMysql = hasBackticks && patternCount >= 2;
-
-    console.log(
-        `MySQL pattern detection: hasBackticks=${hasBackticks}, patternCount=${patternCount}, isLikelyMysql=${isLikelyMysql}`
-    );
 
     return isLikelyMysql;
 }

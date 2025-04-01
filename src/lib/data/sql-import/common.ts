@@ -324,11 +324,6 @@ export function convertToChartDBDiagram(
     sourceDatabaseType: DatabaseType,
     targetDatabaseType: DatabaseType
 ): Diagram {
-    console.log('convertToChartDBDiagram starting', {
-        tablesCount: parserResult.tables.length,
-        relationshipsCount: parserResult.relationships.length,
-    });
-
     // Create a mapping of old table IDs to new ones
     const tableIdMapping = new Map<string, string>();
 
@@ -339,11 +334,6 @@ export function convertToChartDBDiagram(
         const tableSpacing = 300;
         const newId = generateId();
         tableIdMapping.set(table.id, newId);
-
-        // Log the table information for debugging
-        console.log(
-            `Processing table: ${table.name}, schema: ${table.schema || 'none'}, id: ${table.id}`
-        );
 
         // Create fields from columns
         const fields: DBField[] = table.columns.map((column) => {
@@ -367,9 +357,6 @@ export function convertToChartDBDiagram(
                 ) {
                     field.characterMaximumLength =
                         column.typeArgs.length.toString();
-                    console.log(
-                        `Setting characterMaximumLength ${column.typeArgs.length} for field ${column.name}`
-                    );
                 }
 
                 // Transfer precision/scale for numeric types
@@ -379,9 +366,6 @@ export function convertToChartDBDiagram(
                 ) {
                     field.precision = column.typeArgs.precision;
                     field.scale = column.typeArgs.scale;
-                    console.log(
-                        `Setting precision/scale ${column.typeArgs.precision}/${column.typeArgs.scale} for field ${column.name}`
-                    );
                 }
             }
 
@@ -422,11 +406,6 @@ export function convertToChartDBDiagram(
             isView: false,
             createdAt: Date.now(),
         };
-    });
-
-    console.log('Converted SQL tables to ChartDB tables:', {
-        count: tables.length,
-        tableNames: tables.map((t) => t.name),
     });
 
     // Process relationships
@@ -511,10 +490,6 @@ export function convertToChartDBDiagram(
         });
     });
 
-    console.log('Converted SQL relationships to ChartDB relationships:', {
-        count: relationships.length,
-    });
-
     const diagram = {
         id: generateDiagramId(),
         name: `SQL Import (${sourceDatabaseType})`,
@@ -524,13 +499,6 @@ export function convertToChartDBDiagram(
         createdAt: new Date(),
         updatedAt: new Date(),
     };
-
-    console.log('Created diagram:', {
-        id: diagram.id,
-        name: diagram.name,
-        tables: tables.length,
-        relationships: relationships.length,
-    });
 
     return diagram;
 }

@@ -29,32 +29,20 @@ import {
 
 // PostgreSQL-specific parsing logic
 export function fromPostgres(sqlContent: string): SQLParserResult {
-    console.log('PostgreSQL parser starting');
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
 
     try {
         // Parse the SQL DDL statements
-        console.log('Parsing SQL DDL with PostgreSQL parser');
         const ast = parser.astify(sqlContent, parserOpts);
 
         if (!Array.isArray(ast)) {
             throw new Error('Failed to parse SQL DDL - AST is not an array');
         }
 
-        console.log(`Parsed ${ast.length} SQL statements`, ast);
-
-        // Debug the full AST structure
-        console.log('AST structure:', JSON.stringify(ast, null, 2));
-
         // Process each CREATE TABLE statement
         ast.forEach((stmt: SQLAstNode, idx: number) => {
-            console.log(`Processing statement ${idx + 1}:`, {
-                type: stmt.type,
-                keyword: stmt.keyword,
-            });
-
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 // Extract table name and schema
                 let tableName = '';
@@ -83,20 +71,9 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                         // Check for schema in both 'schema' and 'db' fields
                         schemaName = tableObj.schema || tableObj.db || '';
                     }
-                    console.log(
-                        `Found CREATE TABLE for: ${schemaName ? schemaName + '.' : ''}${tableName}`
-                    );
-
-                    // If schema is found, log it clearly for debugging
-                    if (schemaName) {
-                        console.log(
-                            `Found schema: ${schemaName} for table: ${tableName}`
-                        );
-                    }
                 }
 
                 if (!tableName) {
-                    console.log('Skipping table with empty name');
                     return;
                 }
 
@@ -105,26 +82,17 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                     const parts = tableName.split('.');
                     schemaName = parts[0].replace(/"/g, '');
                     tableName = parts[1].replace(/"/g, '');
-                    console.log(
-                        `Extracted schema from table name: schema=${schemaName}, table=${tableName}`
-                    );
                 }
 
                 // If still no schema, ensure default schema is set to public
                 if (!schemaName) {
                     schemaName = 'public';
-                    console.log(
-                        `Using default schema: ${schemaName} for table: ${tableName}`
-                    );
                 }
 
                 // Generate a unique ID for the table
                 const tableId = generateId();
                 const tableKey = `${schemaName ? schemaName + '.' : ''}${tableName}`;
                 tableMap[tableKey] = tableId;
-                console.log(
-                    `Added table to tableMap with key: "${tableKey}", id: ${tableId}`
-                );
 
                 // Process table columns
                 const columns: SQLColumn[] = [];
@@ -135,20 +103,11 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                     createTableStmt.create_definitions &&
                     Array.isArray(createTableStmt.create_definitions)
                 ) {
-                    console.log(
-                        `Table ${tableName} has ${createTableStmt.create_definitions.length} column/constraint definitions`
-                    );
-
                     createTableStmt.create_definitions.forEach(
                         (
                             def: ColumnDefinition | ConstraintDefinition,
                             colIdx: number
                         ) => {
-                            console.log(
-                                `Processing definition ${colIdx + 1}:`,
-                                def
-                            );
-
                             // Process column definition
                             if (def.resource === 'column') {
                                 const columnDef = def as ColumnDefinition;
@@ -157,11 +116,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                 );
                                 const dataType =
                                     columnDef.definition?.dataType || '';
-
-                                console.log(`Found column definition:`, {
-                                    column: columnName,
-                                    dataType: dataType,
-                                });
 
                                 // Handle the column definition and add to columns array
                                 if (columnName) {
@@ -201,19 +155,10 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                     constraintDef.constraint_type ===
                                     'primary key'
                                 ) {
-                                    console.log(
-                                        `Found PRIMARY KEY constraint with structure:`,
-                                        constraintDef
-                                    );
-
                                     // Check if definition is an array (standalone PRIMARY KEY constraint)
                                     if (
                                         Array.isArray(constraintDef.definition)
                                     ) {
-                                        console.log(
-                                            `Processing PK with definition as array`
-                                        );
-
                                         // Extract column names from the constraint definition
                                         for (const colDef of constraintDef.definition) {
                                             if (
@@ -225,9 +170,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                             ) {
                                                 const pkColumnName =
                                                     extractColumnName(colDef);
-                                                console.log(
-                                                    `Primary key column: ${pkColumnName}`
-                                                );
 
                                                 // Find and mark the column as primary key
                                                 const column = columns.find(
@@ -237,13 +179,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                 );
                                                 if (column) {
                                                     column.primaryKey = true;
-                                                    console.log(
-                                                        `Marked column ${pkColumnName} as primary key`
-                                                    );
-                                                } else {
-                                                    console.log(
-                                                        `Warning: Primary key column ${pkColumnName} not found in columns array`
-                                                    );
                                                 }
                                             }
                                         }
@@ -274,9 +209,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                 columns: pkColumnNames,
                                                 unique: true,
                                             });
-                                            console.log(
-                                                `Added primary key index for columns: ${pkColumnNames.join(', ')}`
-                                            );
                                         }
                                     } else if (
                                         constraintDef.definition &&
@@ -287,32 +219,17 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         ) &&
                                         'columns' in constraintDef.definition
                                     ) {
-                                        console.log(
-                                            `Processing PK with columns in definition.columns`
-                                        );
-
                                         // Handle different format where columns are in def.definition.columns
                                         const colDefs =
                                             constraintDef.definition.columns ||
                                             [];
                                         for (const colName of colDefs) {
-                                            console.log(
-                                                `Primary key column: ${colName}`
-                                            );
-
                                             // Find and mark the column as primary key
                                             const column = columns.find(
                                                 (col) => col.name === colName
                                             );
                                             if (column) {
                                                 column.primaryKey = true;
-                                                console.log(
-                                                    `Marked column ${colName} as primary key`
-                                                );
-                                            } else {
-                                                console.log(
-                                                    `Warning: Primary key column ${colName} not found in columns array`
-                                                );
                                             }
                                         }
 
@@ -323,9 +240,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                 columns: colDefs,
                                                 unique: true,
                                             });
-                                            console.log(
-                                                `Added primary key index for columns: ${colDefs.join(', ')}`
-                                            );
                                         }
                                     }
                                 } else if (
@@ -392,10 +306,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         'FOREIGN KEY'
                                 ) {
                                     // Handle foreign key directly at this level
-                                    console.log(
-                                        'Found foreign key at top level:',
-                                        JSON.stringify(constraintDef, null, 2)
-                                    );
 
                                     // Extra code for this specific format
                                     let sourceColumns: string[] = [];
@@ -408,10 +318,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                 (col: ColumnReference) => {
                                                     const colName =
                                                         extractColumnName(col);
-                                                    console.log(
-                                                        'Top level source column:',
-                                                        colName
-                                                    );
                                                     return colName;
                                                 }
                                             );
@@ -432,10 +338,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                             : extractColumnName(
                                                                   col
                                                               );
-                                                    console.log(
-                                                        'Top level source column from columns:',
-                                                        colName
-                                                    );
                                                     return colName;
                                                 }
                                             );
@@ -496,9 +398,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                             /"/g,
                                                             ''
                                                         );
-                                                    console.log(
-                                                        `Extracted schema from FK target table: schema=${targetSchema}, table=${targetTable}`
-                                                    );
                                                 }
                                             }
                                         }
@@ -506,9 +405,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         // If no target schema was found, use default public schema
                                         if (!targetSchema) {
                                             targetSchema = 'public';
-                                            console.log(
-                                                `Using default schema: ${targetSchema} for FK target table: ${targetTable}`
-                                            );
                                         }
 
                                         let targetColumns: string[] = [];
@@ -530,10 +426,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                                 : extractColumnName(
                                                                       col
                                                                   );
-                                                        console.log(
-                                                            'Top level target column:',
-                                                            colName
-                                                        );
                                                         return colName;
                                                     }
                                                 );
@@ -548,20 +440,10 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                             extractColumnName(
                                                                 col
                                                             );
-                                                        console.log(
-                                                            'Top level target column from definition:',
-                                                            colName
-                                                        );
                                                         return colName;
                                                     }
                                                 );
                                         }
-
-                                        console.log('Top level FK details:', {
-                                            sourceColumns,
-                                            targetTable,
-                                            targetColumns,
-                                        });
 
                                         // Create relationships
                                         if (
@@ -586,9 +468,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                     );
 
                                                 if (!targetTableId) {
-                                                    console.warn(
-                                                        `Target table ${targetTable} not found for FK in top level CREATE TABLE with schema ${targetSchema}`
-                                                    );
                                                     continue; // Skip this relationship if target table not found
                                                 }
 
@@ -612,10 +491,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                         reference.on_delete,
                                                 };
 
-                                                console.log(
-                                                    'Adding relationship from top level:',
-                                                    fk
-                                                );
                                                 relationships.push(fk);
                                             }
                                         }
@@ -624,8 +499,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                             }
                         }
                     );
-                } else {
-                    console.log(`Table ${tableName} has no columns defined`);
                 }
 
                 // Create the table object
@@ -646,19 +519,9 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                     table.comment = createTableStmt.comment;
                 }
 
-                console.log(`Adding table to results:`, {
-                    name: table.name,
-                    columns: table.columns.length,
-                    indexes: table.indexes.length,
-                });
                 tables.push(table);
             } else if (stmt.type === 'create' && stmt.keyword === 'index') {
                 // Handle CREATE INDEX statements
-                console.log(
-                    'Processing CREATE INDEX statement:',
-                    JSON.stringify(stmt, null, 2)
-                );
-
                 const createIndexStmt = stmt as CreateIndexStatement;
                 if (createIndexStmt.table) {
                     // Extract table name and schema
@@ -683,22 +546,12 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                         const parts = tableName.split('.');
                         schemaName = parts[0].replace(/"/g, '');
                         tableName = parts[1].replace(/"/g, '');
-                        console.log(
-                            `Extracted schema from index table name: schema=${schemaName}, table=${tableName}`
-                        );
                     }
 
                     // If still no schema, use public
                     if (!schemaName) {
                         schemaName = 'public';
-                        console.log(
-                            `Using default schema: ${schemaName} for indexed table: ${tableName}`
-                        );
                     }
-
-                    console.log(
-                        `Processing CREATE INDEX for table: ${schemaName ? schemaName + '.' : ''}${tableName}`
-                    );
 
                     // Find the table in our collection using the helper function
                     const table = findTableWithSchemaSupport(
@@ -739,20 +592,11 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         const colName = extractColumnName(
                                             colRef || col
                                         );
-                                        console.log(
-                                            'Extracted index column:',
-                                            colName
-                                        );
                                         return colName;
                                     }
                                 )
                                 .filter((col: string) => col !== '');
                         }
-
-                        console.log(
-                            `Found ${columns.length} columns for index:`,
-                            columns
-                        );
 
                         if (columns.length > 0) {
                             const indexName =
@@ -767,28 +611,11 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                     createIndexStmt.index_type === 'unique' ||
                                     createIndexStmt.unique === true,
                             });
-
-                            console.log(
-                                `Added index ${indexName} to table ${tableName}`
-                            );
-                        } else {
-                            console.log(
-                                'Could not extract column names for index'
-                            );
                         }
-                    } else {
-                        console.log(
-                            `Table ${tableName} not found for CREATE INDEX statement`
-                        );
                     }
                 }
             } else if (stmt.type === 'alter' && stmt.keyword === 'table') {
                 // Process ALTER TABLE statements for foreign keys
-                console.log(
-                    'Processing ALTER TABLE statement:',
-                    JSON.stringify(stmt, null, 2)
-                );
-
                 const alterTableStmt = stmt as AlterTableStatement;
                 if (
                     alterTableStmt.table &&
@@ -821,22 +648,12 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                         const parts = tableName.split('.');
                         schemaName = parts[0].replace(/"/g, '');
                         tableName = parts[1].replace(/"/g, '');
-                        console.log(
-                            `Extracted schema from ALTER TABLE name: schema=${schemaName}, table=${tableName}`
-                        );
                     }
 
                     // If still no schema, use default
                     if (!schemaName) {
                         schemaName = 'public';
-                        console.log(
-                            `Using default schema: ${schemaName} for ALTER TABLE: ${tableName}`
-                        );
                     }
-
-                    console.log(
-                        `Processing ALTER TABLE for: ${schemaName ? schemaName + '.' : ''}${tableName}`
-                    );
 
                     // Find this table in our collection using the helper function
                     const table = findTableWithSchemaSupport(
@@ -846,37 +663,13 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                     );
 
                     if (!table) {
-                        console.log(
-                            `Table ${schemaName ? schemaName + '.' : ''}${tableName} not found for ALTER TABLE statement`
-                        );
                         return;
                     }
 
                     // Process each expression in the ALTER TABLE
                     alterTableStmt.expr.forEach((expr: AlterTableExprItem) => {
-                        console.log(
-                            'ALTER TABLE expression:',
-                            JSON.stringify(expr, null, 2)
-                        );
-                        console.log(
-                            'ALTER TABLE expression action:',
-                            expr.action,
-                            'constraint_type:',
-                            expr.constraint?.constraint_type,
-                            'resource:',
-                            expr.resource,
-                            'expression type:',
-                            expr.type
-                        );
-
                         // Check multiple variations of constraint format
                         if (expr.action === 'add' && expr.create_definitions) {
-                            console.log('ALTER TABLE add action found');
-                            console.log(
-                                'expr.create_definitions:',
-                                JSON.stringify(expr.create_definitions, null, 2)
-                            );
-
                             // Check for foreign key constraint
                             if (
                                 expr.create_definitions.constraint_type ===
@@ -884,10 +677,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                 expr.create_definitions.constraint_type ===
                                     'foreign key'
                             ) {
-                                console.log(
-                                    'Found FOREIGN KEY constraint in ALTER TABLE'
-                                );
-
                                 const createDefs = expr.create_definitions;
 
                                 // Extract source columns
@@ -900,10 +689,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         (col: ColumnReference) => {
                                             const colName =
                                                 extractColumnName(col);
-                                            console.log(
-                                                'ALTER TABLE FK source column:',
-                                                colName
-                                            );
                                             return colName;
                                         }
                                     );
@@ -954,9 +739,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                                 /"/g,
                                                 ''
                                             );
-                                            console.log(
-                                                `Extracted schema from FK target table: schema=${targetSchema}, table=${targetTable}`
-                                            );
                                         }
                                     }
                                 }
@@ -964,9 +746,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                 // If no target schema was found, use default schema
                                 if (!targetSchema) {
                                     targetSchema = 'public';
-                                    console.log(
-                                        `Using default schema: ${targetSchema} for FK target table in ALTER TABLE: ${targetTable}`
-                                    );
                                 }
 
                                 // Extract target columns
@@ -979,21 +758,10 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                         (col: ColumnReference) => {
                                             const colName =
                                                 extractColumnName(col);
-                                            console.log(
-                                                'ALTER TABLE FK target column:',
-                                                colName
-                                            );
                                             return colName;
                                         }
                                     );
                                 }
-
-                                console.log('ALTER TABLE FK details:', {
-                                    sourceTable: tableName,
-                                    sourceColumns,
-                                    targetTable,
-                                    targetColumns,
-                                });
 
                                 // Create relationships
                                 if (
@@ -1025,16 +793,10 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                             );
 
                                         if (!sourceTableId) {
-                                            console.warn(
-                                                `Source table ${tableName} not found for FK in ALTER TABLE`
-                                            );
                                             continue;
                                         }
 
                                         if (!targetTableId) {
-                                            console.warn(
-                                                `Target table ${targetTable} not found for FK in ALTER TABLE with schema ${targetSchema}`
-                                            );
                                             continue;
                                         }
 
@@ -1062,10 +824,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                             deleteAction,
                                         };
 
-                                        console.log(
-                                            'Adding relationship from ALTER TABLE:',
-                                            fk
-                                        );
                                         relationships.push(fk);
                                     }
                                 }
@@ -1075,10 +833,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                                     'constraint'
                             ) {
                                 // For backward compatibility, keep the existing check
-                                console.log(
-                                    'Found constraint in expr.resource:',
-                                    expr.create_definitions.constraint_type
-                                );
                             }
                         }
                     });
@@ -1100,12 +854,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                         rel.sourceTable,
                         rel.sourceSchema
                     ) || '';
-
-                if (!rel.sourceTableId) {
-                    console.warn(
-                        `Source table ${rel.sourceTable} not found for relationship with schema ${rel.sourceSchema}`
-                    );
-                }
             }
 
             // Check/fix targetTableId if not already set
@@ -1116,12 +864,6 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                         rel.targetTable,
                         rel.targetSchema
                     ) || '';
-
-                if (!rel.targetTableId) {
-                    console.warn(
-                        `Target table ${rel.targetTable} not found for relationship with schema ${rel.targetSchema}`
-                    );
-                }
             }
         });
 
@@ -1130,37 +872,8 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
             (rel) => rel.sourceTableId && rel.targetTableId
         );
 
-        // Log any invalid relationships that were filtered out
-        if (validRelationships.length !== relationships.length) {
-            console.warn(
-                `Filtered out ${relationships.length - validRelationships.length} invalid relationships`
-            );
-        }
-
-        // At the end before returning
-        console.log(
-            `PostgreSQL parser finished with ${tables.length} tables and ${validRelationships.length} relationships`
-        );
-
-        // Debug log to show schema information for all tables
-        console.log('Tables with schema information:');
-        tables.forEach((table) => {
-            console.log(
-                `Table: ${table.name}, Schema: ${table.schema || 'none'}, ID: ${table.id}`
-            );
-        });
-
-        // Debug log to show schema information for all relationships
-        console.log('Relationships with schema information:');
-        validRelationships.forEach((rel) => {
-            console.log(
-                `Relationship: ${rel.name}, Source: ${rel.sourceSchema || 'none'}.${rel.sourceTable}, Target: ${rel.targetSchema || 'none'}.${rel.targetTable}`
-            );
-        });
-
         return { tables, relationships: validRelationships };
     } catch (error: unknown) {
-        console.error('Error in PostgreSQL parser:', error);
         throw new Error(
             `Error parsing PostgreSQL SQL: ${(error as Error).message}`
         );
