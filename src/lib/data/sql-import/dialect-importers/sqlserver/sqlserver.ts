@@ -264,9 +264,6 @@ function normalizeSQLServerDataType(dataType: string): string {
 
         // Default fallback
         default:
-            console.warn(
-                `Unknown SQL Server data type: ${dataType}, using as-is`
-            );
             return dataType;
     }
 }
@@ -839,9 +836,6 @@ function linkRelationships(
             if (sourceId) {
                 rel.sourceTableId = sourceId;
             } else {
-                console.warn(
-                    `Could not find source table for relationship: ${rel.name}, source: ${sourceTableKey}`
-                );
                 return false;
             }
         }
@@ -855,9 +849,6 @@ function linkRelationships(
             if (targetId) {
                 rel.targetTableId = targetId;
             } else {
-                console.warn(
-                    `Could not find target table for relationship: ${rel.name}, target: ${targetTableKey}`
-                );
                 return false;
             }
         }

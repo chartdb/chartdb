@@ -42,7 +42,7 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
         }
 
         // Process each CREATE TABLE statement
-        ast.forEach((stmt: SQLAstNode, idx: number) => {
+        ast.forEach((stmt: SQLAstNode) => {
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 // Extract table name and schema
                 let tableName = '';
@@ -104,10 +104,7 @@ export function fromPostgres(sqlContent: string): SQLParserResult {
                     Array.isArray(createTableStmt.create_definitions)
                 ) {
                     createTableStmt.create_definitions.forEach(
-                        (
-                            def: ColumnDefinition | ConstraintDefinition,
-                            colIdx: number
-                        ) => {
+                        (def: ColumnDefinition | ConstraintDefinition) => {
                             // Process column definition
                             if (def.resource === 'column') {
                                 const columnDef = def as ColumnDefinition;

@@ -45,7 +45,7 @@ export function fromSQLite(sqlContent: string): SQLParserResult {
         }
 
         // Process each statement
-        ast.forEach((stmt: SQLASTNode, idx: number) => {
+        ast.forEach((stmt: SQLASTNode) => {
             // Process CREATE TABLE statements
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 processCreateTableStatement(
@@ -118,7 +118,6 @@ function processCreateTableStatement(
 
     // Skip if table name is empty
     if (!tableName) {
-        console.warn('Skipping CREATE TABLE statement with empty table name');
         return;
     }
 
@@ -146,7 +145,6 @@ function processCreateTableStatement(
                 const columnName = extractColumnName(columnDef.column);
 
                 if (!columnName) {
-                    console.warn('Skipping column with empty name');
                     return;
                 }
 
@@ -265,7 +263,6 @@ function processCreateIndexStatement(
     tables: SQLTable[]
 ): void {
     if (!createIndexStmt.index || !createIndexStmt.table) {
-        console.warn('Skipping incomplete CREATE INDEX statement');
         return;
     }
 
@@ -322,7 +319,6 @@ function processAlterTableStatement(
     tables: SQLTable[]
 ): void {
     if (!alterTableStmt.table || !alterTableStmt.expr) {
-        console.warn('Skipping incomplete ALTER TABLE statement');
         return;
     }
 
@@ -335,11 +331,6 @@ function processAlterTableStatement(
     );
 
     if (!table) {
-        console.warn(
-            `Cannot process ALTER TABLE - table not found: ${
-                schemaName ? schemaName + '.' : ''
-            }${tableName}`
-        );
         return;
     }
 
@@ -365,12 +356,6 @@ function findForeignKeysUsingRegex(
         // Pattern for quoted column names with optional ON DELETE/UPDATE clauses
         /["'`](\w+)["'`]\s+\w+(?:\([^)]*\))?\s+(?:NOT\s+NULL\s+)?REFERENCES\s+["'`]?(\w+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)(?:\s+ON\s+(?:DELETE|UPDATE)\s+[^,)]+)?/gi,
     ];
-
-    // Extract list of actual table names to validate against
-    const tableNames = Object.keys(tableMap).filter(
-        (name) =>
-            name !== 'CREATE' && !name.includes('.') && name.trim().length > 0
-    );
 
     // First pass: identify all tables
     const tableNamePattern =

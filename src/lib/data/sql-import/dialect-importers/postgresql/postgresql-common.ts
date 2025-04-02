@@ -160,7 +160,6 @@ export function extractColumnName(
         if (columnObj.value) return columnObj.value;
     }
 
-    console.warn('Could not extract column name from:', columnObj);
     return '';
 }
 
@@ -173,21 +172,12 @@ export function getTypeArgs(
     if (!definition) return typeArgs;
 
     if (definition.length !== undefined) {
-        console.log(`Found length attribute: ${definition.length}`);
         typeArgs.length = definition.length;
     }
 
     if (definition.scale !== undefined && definition.precision !== undefined) {
-        console.log(
-            `Found precision/scale: ${definition.precision}/${definition.scale}`
-        );
         typeArgs.precision = definition.precision;
         typeArgs.scale = definition.scale;
-    }
-
-    // Debug log the extracted type arguments
-    if (Object.keys(typeArgs).length > 0) {
-        console.log(`Extracted type arguments:`, typeArgs);
     }
 
     return typeArgs;

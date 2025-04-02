@@ -359,10 +359,8 @@ function extractMySql8Constraints(
         /CONSTRAINT\s+`([^`]+)`\s+FOREIGN KEY\s*\(`([^`]+)`\)\s*REFERENCES\s+`([^`]+)`\s*\(`([^`]+)`\)(?:\s+ON DELETE\s+([A-Z\s]+))?(?:\s+ON UPDATE\s+([A-Z\s]+))?/gi;
 
     let match;
-    let foundConstraints = false;
 
     while ((match = constraintPattern.exec(statement)) !== null) {
-        foundConstraints = true;
         const constraintName = match[1];
         const sourceColumn = match[2];
         const targetTable = match[3];
@@ -688,12 +686,9 @@ function processCreateIndexStatement(
                 columns: indexColumns,
                 unique: isUnique,
             });
-        } else {
         }
     } catch (error) {
         console.error('Error processing CREATE INDEX statement:', error);
-
-        // Error handling without logging
     }
 }
 
@@ -891,7 +886,7 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
                         pendingForeignKeys
                     );
                 }
-            } catch (error) {
+            } catch {
                 // Fallback: extract table and columns using regex
                 try {
                     const tableNameMatch = statement.match(
