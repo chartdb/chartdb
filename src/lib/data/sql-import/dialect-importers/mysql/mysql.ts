@@ -8,15 +8,10 @@ import type {
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
 import type {
-    SQLAstNode,
-    TableReference,
-    ColumnReference,
     ColumnDefinition,
     ConstraintDefinition,
     CreateTableStatement,
-    CreateIndexStatement,
-    AlterTableExprItem,
-    AlterTableStatement,
+    TableReference,
 } from './mysql-common';
 import {
     parser,
@@ -25,935 +20,876 @@ import {
     getTypeArgs,
 } from './mysql-common';
 
+// Interface for pending foreign keys that need to be processed later
+interface PendingForeignKey {
+    name: string;
+    sourceTable: string;
+    sourceTableId: string;
+    sourceColumns: string[];
+    targetTable: string;
+    targetColumns: string[];
+    updateAction?: string;
+    deleteAction?: string;
+}
+
+// Helper to extract statements from PostgreSQL dump
+function extractStatements(sqlContent: string): string[] {
+    const statements: string[] = [];
+    let currentStatement = '';
+    const lines = sqlContent.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // Skip comments and empty lines
+        if (line.startsWith('--') || line === '') {
+            continue;
+        }
+
+        // Add line to current statement
+        currentStatement += line + ' ';
+
+        // If line ends with semicolon, consider statement complete
+        if (line.endsWith(';')) {
+            statements.push(currentStatement.trim());
+            currentStatement = '';
+        }
+    }
+
+    // Handle any remaining statement
+    if (currentStatement.trim()) {
+        statements.push(currentStatement.trim());
+    }
+
+    return statements;
+}
+
+// Function to extract columns from a CREATE TABLE statement using regex
+function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
+    const columns: SQLColumn[] = [];
+
+    // Extract everything between the first opening and last closing parenthesis
+    const columnMatch = statement.match(/CREATE\s+TABLE.*?\((.*)\)[^)]*;$/s);
+    if (!columnMatch || !columnMatch[1]) {
+        return columns;
+    }
+
+    const columnDefs = columnMatch[1].trim();
+    // Split by commas, but not those within parentheses (for nested type definitions)
+    const columnLines = columnDefs.split(/,(?![^(]*\))/);
+
+    for (const columnLine of columnLines) {
+        const line = columnLine.trim();
+        // Skip constraints at the table level
+        if (
+            line.toUpperCase().startsWith('CONSTRAINT') ||
+            line.toUpperCase().startsWith('PRIMARY KEY') ||
+            line.toUpperCase().startsWith('FOREIGN KEY') ||
+            line.toUpperCase().startsWith('UNIQUE')
+        ) {
+            continue;
+        }
+
+        // Extract column name and definition
+        const columnNameMatch = line.match(/^"?([^"\s]+)"?\s+(.+)$/);
+        if (columnNameMatch) {
+            const columnName = columnNameMatch[1];
+            const definition = columnNameMatch[2];
+
+            // Determine if column is nullable
+            const nullable = !definition.toUpperCase().includes('NOT NULL');
+
+            // Determine if column is primary key
+            const primaryKey = definition.toUpperCase().includes('PRIMARY KEY');
+
+            // Extract data type
+            const typeMatch = definition.match(/^([^\s(]+)(?:\(([^)]+)\))?/);
+            const dataType = typeMatch ? typeMatch[1] : '';
+
+            columns.push({
+                name: columnName,
+                type: dataType,
+                nullable,
+                primaryKey,
+                unique: definition.toUpperCase().includes('UNIQUE'),
+            });
+        }
+    }
+
+    return columns;
+}
+
+// Process PostgreSQL pg_dump CREATE INDEX statements
+function processCreateIndexStatement(
+    statement: string,
+    tableMap: Record<string, string>,
+    tables: SQLTable[]
+): void {
+    if (
+        !statement.startsWith('CREATE INDEX') &&
+        !statement.startsWith('CREATE UNIQUE INDEX')
+    ) {
+        return;
+    }
+
+    try {
+        // Determine if the index is unique
+        const isUnique = statement.startsWith('CREATE UNIQUE INDEX');
+
+        // Extract index name
+        const indexNameRegex = /CREATE (?:UNIQUE )?INDEX\s+"?([^"\s]+)"?/i;
+        const indexNameMatch = statement.match(indexNameRegex);
+        const indexName = indexNameMatch ? indexNameMatch[1] : '';
+
+        if (!indexName) {
+            return;
+        }
+
+        // Extract table name and schema
+        const tableRegex = /ON\s+(?:"?([^"\s.]+)"?\.)?(?:"?([^"\s.(]+)"?)/i;
+        const tableMatch = statement.match(tableRegex);
+
+        if (!tableMatch) {
+            return;
+        }
+
+        const tableSchema = tableMatch[1] || '';
+        const tableName = tableMatch[2];
+
+        // Extract index columns
+        const columnsRegex = /\(\s*([^)]+)\)/i;
+        const columnsMatch = statement.match(columnsRegex);
+
+        if (!columnsMatch) {
+            return;
+        }
+
+        // Parse columns (handle function-based indexes, etc.)
+        const columnsStr = columnsMatch[1];
+        // This is a simplified approach - advanced indexes may need more complex parsing
+        const indexColumns = columnsStr.split(',').map((col) => {
+            // Extract basic column name, handling possible expressions
+            const colName = col
+                .trim()
+                .replace(/^"(.*)"$/, '$1')
+                .replace(/^\s*"?([^"\s(]+)"?\s*.*$/, '$1'); // Get just the column name part
+            return colName;
+        });
+
+        if (indexColumns.length === 0) {
+            return;
+        }
+
+        // Find the table
+        const tableKey = `${tableSchema ? tableSchema + '.' : ''}${tableName}`;
+        const tableId = tableMap[tableKey];
+
+        if (!tableId) {
+            return;
+        }
+
+        const table = tables.find((t) => t.id === tableId);
+        if (!table) {
+            return;
+        }
+
+        // Check if a similar index already exists (to avoid duplicates)
+        const existingIndex = table.indexes.find(
+            (idx) =>
+                idx.name === indexName ||
+                (idx.columns.length === indexColumns.length &&
+                    idx.columns.every((col, i) => col === indexColumns[i]))
+        );
+
+        if (!existingIndex) {
+            table.indexes.push({
+                name: indexName,
+                columns: indexColumns,
+                unique: isUnique,
+            });
+        }
+    } catch (error) {
+        console.error('Error processing CREATE INDEX statement:', error);
+    }
+}
+
 export function fromMySQL(sqlContent: string): SQLParserResult {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
+    const pendingForeignKeys: PendingForeignKey[] = []; // Store FKs that reference tables not yet created
 
     try {
-        // Parse the SQL DDL statements
-        const ast = parser.astify(sqlContent, parserOpts);
+        // Extract SQL statements from the dump
+        const statements = extractStatements(sqlContent);
 
-        if (!Array.isArray(ast)) {
-            throw new Error('Failed to parse SQL DDL - AST is not an array');
-        }
-
-        // Process each CREATE TABLE statement
-        ast.forEach((stmt: SQLAstNode) => {
-            if (stmt.type === 'create' && stmt.keyword === 'table') {
-                // Extract table name
-                let tableName = '';
-
-                const createTableStmt = stmt as CreateTableStatement;
-
-                if (
-                    createTableStmt.table &&
-                    typeof createTableStmt.table === 'object'
-                ) {
-                    // Handle array of tables if needed
+        // First pass: process CREATE TABLE statements
+        for (const statement of statements) {
+            const trimmedStmt = statement.trim();
+            // Process only CREATE TABLE statements
+            if (trimmedStmt.toUpperCase().startsWith('CREATE TABLE')) {
+                try {
+                    // Parse with SQL parser
+                    const ast = parser.astify(trimmedStmt, parserOpts);
                     if (
-                        Array.isArray(createTableStmt.table) &&
-                        createTableStmt.table.length > 0
+                        Array.isArray(ast) &&
+                        ast.length > 0 &&
+                        ast[0].type === 'create' &&
+                        ast[0].keyword === 'table'
                     ) {
-                        const tableObj = createTableStmt.table[0];
-                        tableName = tableObj.table || '';
-                    } else {
-                        // Direct object reference
-                        const tableObj =
-                            createTableStmt.table as TableReference;
-                        tableName = tableObj.table || '';
-                    }
-                } else if (typeof createTableStmt.table === 'string') {
-                    // Handle string table names (MySQL often has this format)
-                    tableName = createTableStmt.table;
-                }
+                        const createTableStmt = ast[0] as CreateTableStatement;
 
-                // Remove backticks from table name if present
-                tableName = tableName.replace(/`/g, '');
+                        // Extract table name
+                        let tableName = '';
+                        if (typeof createTableStmt.table === 'object') {
+                            if (
+                                Array.isArray(createTableStmt.table) &&
+                                createTableStmt.table.length > 0
+                            ) {
+                                tableName =
+                                    createTableStmt.table[0].table || '';
+                            } else {
+                                const tableObj =
+                                    createTableStmt.table as TableReference;
+                                tableName = tableObj.table || '';
+                            }
+                        } else if (typeof createTableStmt.table === 'string') {
+                            tableName = createTableStmt.table;
+                        }
 
-                if (!tableName) {
-                    return;
-                }
+                        // Remove backticks from table name
+                        tableName = tableName.replace(/`/g, '');
 
-                // Generate a unique ID for the table
-                const tableId = generateId();
-                tableMap[tableName] = tableId;
+                        if (tableName) {
+                            // Generate table ID
+                            const tableId = generateId();
+                            tableMap[tableName] = tableId;
 
-                // Process table columns
-                const columns: SQLColumn[] = [];
-                const indexes: SQLIndex[] = [];
+                            // Process columns
+                            const columns: SQLColumn[] = [];
+                            const indexes: SQLIndex[] = [];
 
-                // Debugged from actual parse output - handle different structure formats
-                if (
-                    createTableStmt.create_definitions &&
-                    Array.isArray(createTableStmt.create_definitions)
-                ) {
-                    createTableStmt.create_definitions.forEach(
-                        (def: ColumnDefinition | ConstraintDefinition) => {
-                            // Process column definition
-                            if (def.resource === 'column') {
-                                const columnDef = def as ColumnDefinition;
-                                let columnName = extractColumnName(
-                                    columnDef.column
-                                );
-
-                                // Remove backticks if present
-                                columnName = columnName.replace(/`/g, '');
-
-                                const dataType =
-                                    columnDef.definition?.dataType || '';
-
-                                // Handle the column definition and add to columns array
-                                if (columnName) {
-                                    // Check if the column has a PRIMARY KEY constraint inline
-                                    const isPrimaryKey =
-                                        columnDef.primary_key ===
-                                            'primary key' ||
-                                        // Check inline constraint property on the definition
-                                        columnDef.definition?.constraint ===
-                                            'primary key';
-
-                                    // MySQL specific: Check for AUTO_INCREMENT using the dedicated property
-                                    const isIncrement =
-                                        columnDef.auto_increment ===
-                                        'auto_increment';
-
-                                    columns.push({
-                                        name: columnName,
-                                        type: dataType,
-                                        nullable:
-                                            columnDef.nullable?.type !==
-                                            'not null',
-                                        primaryKey: isPrimaryKey,
-                                        unique:
-                                            columnDef.unique === 'unique' ||
-                                            // Check inline constraint property for unique
-                                            columnDef.definition?.constraint ===
-                                                'unique',
-                                        typeArgs: getTypeArgs(
-                                            columnDef.definition
-                                        ),
-                                        default: columnDef.default_val
-                                            ? buildSQLFromAST(
-                                                  columnDef.default_val
-                                              )
-                                            : undefined,
-                                        increment: isIncrement,
-                                    });
-                                }
-                            } else if (def.resource === 'constraint') {
-                                // Handle constraint definitions
-                                const constraintDef =
-                                    def as ConstraintDefinition;
-                                if (
-                                    constraintDef.constraint_type ===
-                                    'primary key'
-                                ) {
-                                    // Check if definition is an array (standalone PRIMARY KEY constraint)
-                                    if (
-                                        Array.isArray(constraintDef.definition)
-                                    ) {
-                                        // Extract column names from the constraint definition
-                                        for (const colDef of constraintDef.definition) {
-                                            if (
-                                                typeof colDef === 'object' &&
-                                                'type' in colDef &&
-                                                colDef.type === 'column_ref' &&
-                                                'column' in colDef &&
-                                                colDef.column
-                                            ) {
-                                                let pkColumnName =
-                                                    extractColumnName(colDef);
-
-                                                // Remove backticks if present
-                                                pkColumnName =
-                                                    pkColumnName.replace(
-                                                        /`/g,
-                                                        ''
-                                                    );
-
-                                                // Find and mark the column as primary key
-                                                const column = columns.find(
-                                                    (col) =>
-                                                        col.name ===
-                                                        pkColumnName
-                                                );
-                                                if (column) {
-                                                    column.primaryKey = true;
-                                                }
-                                            }
-                                        }
-
-                                        // Add a primary key index
-                                        const pkColumnNames =
-                                            constraintDef.definition
-                                                .filter(
-                                                    (colDef: ColumnReference) =>
-                                                        typeof colDef ===
-                                                            'object' &&
-                                                        'type' in colDef &&
-                                                        colDef.type ===
-                                                            'column_ref' &&
-                                                        'column' in colDef &&
-                                                        colDef.column
-                                                )
-                                                .map(
-                                                    (
-                                                        colDef: ColumnReference
-                                                    ) => {
-                                                        const colName =
-                                                            extractColumnName(
-                                                                colDef
-                                                            );
-                                                        return colName.replace(
-                                                            /`/g,
-                                                            ''
-                                                        );
-                                                    }
-                                                );
-
-                                        if (pkColumnNames.length > 0) {
-                                            indexes.push({
-                                                name: `pk_${tableName}`,
-                                                columns: pkColumnNames,
-                                                unique: true,
-                                            });
-                                        }
-                                    } else if (
-                                        constraintDef.definition &&
-                                        typeof constraintDef.definition ===
-                                            'object' &&
-                                        !Array.isArray(
-                                            constraintDef.definition
-                                        ) &&
-                                        'columns' in constraintDef.definition
-                                    ) {
-                                        // Handle different format where columns are in def.definition.columns
-                                        const colDefs =
-                                            constraintDef.definition.columns ||
-                                            [];
-                                        for (const colName of colDefs) {
-                                            const cleanColName =
-                                                typeof colName === 'string'
-                                                    ? colName.replace(/`/g, '')
-                                                    : colName;
-
-                                            // Find and mark the column as primary key
-                                            const column = columns.find(
-                                                (col) =>
-                                                    col.name === cleanColName
-                                            );
-                                            if (column) {
-                                                column.primaryKey = true;
-                                            }
-                                        }
-
-                                        // Add a primary key index
-                                        if (colDefs.length > 0) {
-                                            const cleanColDefs = colDefs.map(
-                                                (col) =>
-                                                    typeof col === 'string'
-                                                        ? col.replace(/`/g, '')
-                                                        : col
+                            if (
+                                createTableStmt.create_definitions &&
+                                Array.isArray(
+                                    createTableStmt.create_definitions
+                                )
+                            ) {
+                                createTableStmt.create_definitions.forEach(
+                                    (
+                                        def:
+                                            | ColumnDefinition
+                                            | ConstraintDefinition
+                                    ) => {
+                                        if (def.resource === 'column') {
+                                            const columnDef =
+                                                def as ColumnDefinition;
+                                            let columnName = extractColumnName(
+                                                columnDef.column
                                             );
 
-                                            indexes.push({
-                                                name: `pk_${tableName}`,
-                                                columns: cleanColDefs,
-                                                unique: true,
-                                            });
-                                        }
-                                    }
-                                } else if (
-                                    constraintDef.constraint_type ===
-                                        'unique' &&
-                                    constraintDef.definition &&
-                                    typeof constraintDef.definition ===
-                                        'object' &&
-                                    !Array.isArray(constraintDef.definition) &&
-                                    'columns' in constraintDef.definition
-                                ) {
-                                    // Handle unique constraint
-                                    const columnDefs =
-                                        constraintDef.definition.columns || [];
-                                    columnDefs.forEach(
-                                        (
-                                            uniqueCol: string | ColumnReference
-                                        ) => {
-                                            const colName =
-                                                typeof uniqueCol === 'string'
-                                                    ? uniqueCol.replace(
-                                                          /`/g,
-                                                          ''
-                                                      )
-                                                    : extractColumnName(
-                                                          uniqueCol
-                                                      ).replace(/`/g, '');
-                                            const col = columns.find(
-                                                (c) => c.name === colName
-                                            );
-                                            if (col) {
-                                                col.unique = true;
-                                            }
-                                        }
-                                    );
-
-                                    // Add as a unique index
-                                    if (columnDefs.length > 0) {
-                                        const cleanColumnNames = columnDefs.map(
-                                            (col: string | ColumnReference) =>
-                                                typeof col === 'string'
-                                                    ? col.replace(/`/g, '')
-                                                    : extractColumnName(
-                                                          col as ColumnReference
-                                                      ).replace(/`/g, '')
-                                        );
-
-                                        indexes.push({
-                                            name: constraintDef.constraint_name
-                                                ? constraintDef.constraint_name.replace(
-                                                      /`/g,
-                                                      ''
-                                                  )
-                                                : `${tableName}_${cleanColumnNames[0]}_key`,
-                                            columns: cleanColumnNames,
-                                            unique: true,
-                                        });
-                                    }
-                                } else if (
-                                    constraintDef.constraint_type ===
-                                        'foreign key' ||
-                                    constraintDef.constraint_type ===
-                                        'FOREIGN KEY'
-                                ) {
-                                    // Handle foreign key directly at this level
-
-                                    // Extra code for this specific format
-                                    let sourceColumns: string[] = [];
-                                    if (
-                                        constraintDef.definition &&
-                                        Array.isArray(constraintDef.definition)
-                                    ) {
-                                        sourceColumns =
-                                            constraintDef.definition.map(
-                                                (col: ColumnReference) => {
-                                                    const colName =
-                                                        extractColumnName(
-                                                            col
-                                                        ).replace(/`/g, '');
-                                                    return colName;
-                                                }
-                                            );
-                                    } else if (
-                                        constraintDef.columns &&
-                                        Array.isArray(constraintDef.columns)
-                                    ) {
-                                        sourceColumns =
-                                            constraintDef.columns.map(
-                                                (
-                                                    col:
-                                                        | string
-                                                        | ColumnReference
-                                                ) => {
-                                                    const colName =
-                                                        typeof col === 'string'
-                                                            ? col.replace(
-                                                                  /`/g,
-                                                                  ''
-                                                              )
-                                                            : extractColumnName(
-                                                                  col
-                                                              ).replace(
-                                                                  /`/g,
-                                                                  ''
-                                                              );
-                                                    return colName;
-                                                }
-                                            );
-                                    }
-
-                                    const reference =
-                                        constraintDef.reference_definition ||
-                                        constraintDef.reference;
-                                    if (reference && sourceColumns.length > 0) {
-                                        // Process similar to the constraint resource case
-                                        let targetTable = '';
-
-                                        if (reference.table) {
-                                            if (
-                                                typeof reference.table ===
-                                                'object'
-                                            ) {
-                                                if (
-                                                    Array.isArray(
-                                                        reference.table
-                                                    ) &&
-                                                    reference.table.length > 0
-                                                ) {
-                                                    targetTable =
-                                                        reference.table[0]
-                                                            .table || '';
-                                                } else {
-                                                    const tableRef =
-                                                        reference.table as TableReference;
-                                                    targetTable =
-                                                        tableRef.table || '';
-                                                }
-                                            } else {
-                                                targetTable =
-                                                    reference.table as string;
-                                            }
-
-                                            // Remove backticks from target table
-                                            targetTable = targetTable.replace(
+                                            // Remove backticks
+                                            columnName = columnName.replace(
                                                 /`/g,
                                                 ''
                                             );
-                                        }
+                                            const dataType =
+                                                columnDef.definition
+                                                    ?.dataType || '';
 
-                                        let targetColumns: string[] = [];
-                                        if (
-                                            reference.columns &&
-                                            Array.isArray(reference.columns)
+                                            // Check column constraints
+                                            const isPrimaryKey =
+                                                columnDef.primary_key ===
+                                                    'primary key' ||
+                                                columnDef.definition
+                                                    ?.constraint ===
+                                                    'primary key';
+
+                                            const isAutoIncrement =
+                                                columnDef.auto_increment ===
+                                                'auto_increment';
+
+                                            columns.push({
+                                                name: columnName,
+                                                type: dataType,
+                                                nullable:
+                                                    columnDef.nullable?.type !==
+                                                    'not null',
+                                                primaryKey: isPrimaryKey,
+                                                unique:
+                                                    columnDef.unique ===
+                                                        'unique' ||
+                                                    columnDef.definition
+                                                        ?.constraint ===
+                                                        'unique',
+                                                typeArgs: getTypeArgs(
+                                                    columnDef.definition
+                                                ),
+                                                default: columnDef.default_val
+                                                    ? buildSQLFromAST(
+                                                          columnDef.default_val
+                                                      )
+                                                    : undefined,
+                                                increment: isAutoIncrement,
+                                            });
+                                        } else if (
+                                            def.resource === 'constraint'
                                         ) {
-                                            targetColumns =
-                                                reference.columns.map(
-                                                    (
-                                                        col:
-                                                            | string
-                                                            | ColumnReference
-                                                    ) => {
-                                                        const colName =
-                                                            typeof col ===
-                                                            'string'
-                                                                ? col.replace(
-                                                                      /`/g,
-                                                                      ''
-                                                                  )
-                                                                : extractColumnName(
-                                                                      col
+                                            const constraintDef =
+                                                def as ConstraintDefinition;
+
+                                            // Handle PRIMARY KEY constraint
+                                            if (
+                                                constraintDef.constraint_type ===
+                                                'primary key'
+                                            ) {
+                                                if (
+                                                    Array.isArray(
+                                                        constraintDef.definition
+                                                    )
+                                                ) {
+                                                    const pkColumns =
+                                                        constraintDef.definition
+                                                            .filter(
+                                                                (colDef) =>
+                                                                    typeof colDef ===
+                                                                        'object' &&
+                                                                    'type' in
+                                                                        colDef &&
+                                                                    colDef.type ===
+                                                                        'column_ref'
+                                                            )
+                                                            .map((colDef) =>
+                                                                extractColumnName(
+                                                                    colDef
+                                                                ).replace(
+                                                                    /`/g,
+                                                                    ''
+                                                                )
+                                                            );
+
+                                                    // Mark columns as PK
+                                                    for (const colName of pkColumns) {
+                                                        const col =
+                                                            columns.find(
+                                                                (c) =>
+                                                                    c.name ===
+                                                                    colName
+                                                            );
+                                                        if (col) {
+                                                            col.primaryKey =
+                                                                true;
+                                                        }
+                                                    }
+
+                                                    // Add PK index
+                                                    if (pkColumns.length > 0) {
+                                                        indexes.push({
+                                                            name: `pk_${tableName}`,
+                                                            columns: pkColumns,
+                                                            unique: true,
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                            // Handle UNIQUE constraint
+                                            else if (
+                                                constraintDef.constraint_type ===
+                                                'unique'
+                                            ) {
+                                                const uniqueColumns =
+                                                    Array.isArray(
+                                                        constraintDef.definition
+                                                    )
+                                                        ? constraintDef.definition.map(
+                                                              (colDef) =>
+                                                                  extractColumnName(
+                                                                      colDef
                                                                   ).replace(
                                                                       /`/g,
                                                                       ''
-                                                                  );
-                                                        return colName;
-                                                    }
-                                                );
-                                        } else if (
-                                            reference.definition &&
-                                            Array.isArray(reference.definition)
-                                        ) {
-                                            targetColumns =
-                                                reference.definition.map(
-                                                    (col: ColumnReference) => {
-                                                        const colName =
-                                                            extractColumnName(
-                                                                col
-                                                            ).replace(/`/g, '');
-                                                        return colName;
-                                                    }
-                                                );
-                                        }
+                                                                  )
+                                                          )
+                                                        : (
+                                                              constraintDef
+                                                                  .definition
+                                                                  ?.columns ||
+                                                              []
+                                                          ).map((col) =>
+                                                              typeof col ===
+                                                              'string'
+                                                                  ? col.replace(
+                                                                        /`/g,
+                                                                        ''
+                                                                    )
+                                                                  : extractColumnName(
+                                                                        col
+                                                                    ).replace(
+                                                                        /`/g,
+                                                                        ''
+                                                                    )
+                                                          );
 
-                                        // Create relationships
-                                        if (
-                                            targetColumns.length > 0 &&
-                                            targetTable
-                                        ) {
-                                            for (
-                                                let i = 0;
-                                                i <
-                                                Math.min(
-                                                    sourceColumns.length,
-                                                    targetColumns.length
-                                                );
-                                                i++
+                                                if (uniqueColumns.length > 0) {
+                                                    indexes.push({
+                                                        name: constraintDef.constraint_name
+                                                            ? constraintDef.constraint_name.replace(
+                                                                  /`/g,
+                                                                  ''
+                                                              )
+                                                            : `${tableName}_${uniqueColumns[0]}_key`,
+                                                        columns: uniqueColumns,
+                                                        unique: true,
+                                                    });
+                                                }
+                                            }
+                                            // Handle FOREIGN KEY constraints
+                                            else if (
+                                                constraintDef.constraint_type ===
+                                                    'foreign key' ||
+                                                constraintDef.constraint_type ===
+                                                    'FOREIGN KEY'
                                             ) {
-                                                const targetTableId =
-                                                    tableMap[targetTable];
-
-                                                if (!targetTableId) {
-                                                    continue; // Skip this relationship if target table not found
+                                                // Extract source columns
+                                                let sourceColumns: string[] =
+                                                    [];
+                                                if (
+                                                    Array.isArray(
+                                                        constraintDef.definition
+                                                    )
+                                                ) {
+                                                    sourceColumns =
+                                                        constraintDef.definition.map(
+                                                            (col) => {
+                                                                const colName =
+                                                                    extractColumnName(
+                                                                        col
+                                                                    ).replace(
+                                                                        /`/g,
+                                                                        ''
+                                                                    );
+                                                                return colName;
+                                                            }
+                                                        );
                                                 }
 
-                                                const fk: SQLForeignKey = {
-                                                    name: constraintDef.constraint_name
-                                                        ? constraintDef.constraint_name.replace(
-                                                              /`/g,
-                                                              ''
-                                                          )
-                                                        : `${tableName}_${sourceColumns[i]}_fkey`,
-                                                    sourceTable: tableName,
-                                                    sourceColumn:
-                                                        sourceColumns[i],
-                                                    targetTable,
-                                                    targetColumn:
-                                                        targetColumns[i],
-                                                    sourceTableId: tableId,
-                                                    targetTableId,
-                                                    updateAction:
-                                                        reference.on_update,
-                                                    deleteAction:
-                                                        reference.on_delete,
-                                                };
+                                                // Process reference info (target table/columns)
+                                                const reference =
+                                                    constraintDef.reference_definition ||
+                                                    constraintDef.reference;
 
-                                                relationships.push(fk);
+                                                if (
+                                                    reference &&
+                                                    sourceColumns.length > 0
+                                                ) {
+                                                    // Extract target table
+                                                    let targetTable = '';
+                                                    if (reference.table) {
+                                                        if (
+                                                            typeof reference.table ===
+                                                            'object'
+                                                        ) {
+                                                            if (
+                                                                Array.isArray(
+                                                                    reference.table
+                                                                ) &&
+                                                                reference.table
+                                                                    .length > 0
+                                                            ) {
+                                                                targetTable =
+                                                                    reference
+                                                                        .table[0]
+                                                                        .table ||
+                                                                    '';
+                                                            } else {
+                                                                const tableRef =
+                                                                    reference.table as TableReference;
+                                                                targetTable =
+                                                                    tableRef.table ||
+                                                                    '';
+                                                            }
+                                                        } else {
+                                                            targetTable =
+                                                                reference.table as string;
+                                                        }
+
+                                                        // Remove backticks
+                                                        targetTable =
+                                                            targetTable.replace(
+                                                                /`/g,
+                                                                ''
+                                                            );
+                                                    }
+
+                                                    // Extract target columns
+                                                    let targetColumns: string[] =
+                                                        [];
+                                                    if (
+                                                        reference.columns &&
+                                                        Array.isArray(
+                                                            reference.columns
+                                                        )
+                                                    ) {
+                                                        targetColumns =
+                                                            reference.columns.map(
+                                                                (col) => {
+                                                                    const colName =
+                                                                        typeof col ===
+                                                                        'string'
+                                                                            ? col.replace(
+                                                                                  /`/g,
+                                                                                  ''
+                                                                              )
+                                                                            : extractColumnName(
+                                                                                  col
+                                                                              ).replace(
+                                                                                  /`/g,
+                                                                                  ''
+                                                                              );
+                                                                    return colName;
+                                                                }
+                                                            );
+                                                    } else if (
+                                                        reference.definition &&
+                                                        Array.isArray(
+                                                            reference.definition
+                                                        )
+                                                    ) {
+                                                        targetColumns =
+                                                            reference.definition.map(
+                                                                (col) => {
+                                                                    const colName =
+                                                                        extractColumnName(
+                                                                            col
+                                                                        ).replace(
+                                                                            /`/g,
+                                                                            ''
+                                                                        );
+                                                                    return colName;
+                                                                }
+                                                            );
+                                                    }
+
+                                                    // Add relationships for matching columns
+                                                    if (
+                                                        targetTable &&
+                                                        targetColumns.length > 0
+                                                    ) {
+                                                        const targetTableId =
+                                                            tableMap[
+                                                                targetTable
+                                                            ];
+
+                                                        if (!targetTableId) {
+                                                            // Store for later processing (after all tables are created)
+                                                            const pendingFk: PendingForeignKey =
+                                                                {
+                                                                    name: constraintDef.constraint_name
+                                                                        ? constraintDef.constraint_name.replace(
+                                                                              /`/g,
+                                                                              ''
+                                                                          )
+                                                                        : `${tableName}_${sourceColumns[0]}_fkey`,
+                                                                    sourceTable:
+                                                                        tableName,
+                                                                    sourceTableId:
+                                                                        tableId,
+                                                                    sourceColumns,
+                                                                    targetTable,
+                                                                    targetColumns,
+                                                                    updateAction:
+                                                                        reference.on_update,
+                                                                    deleteAction:
+                                                                        reference.on_delete,
+                                                                };
+                                                            pendingForeignKeys.push(
+                                                                pendingFk
+                                                            );
+                                                        } else {
+                                                            // Create foreign key relationships
+                                                            for (
+                                                                let i = 0;
+                                                                i <
+                                                                Math.min(
+                                                                    sourceColumns.length,
+                                                                    targetColumns.length
+                                                                );
+                                                                i++
+                                                            ) {
+                                                                const fk: SQLForeignKey =
+                                                                    {
+                                                                        name: constraintDef.constraint_name
+                                                                            ? constraintDef.constraint_name.replace(
+                                                                                  /`/g,
+                                                                                  ''
+                                                                              )
+                                                                            : `${tableName}_${sourceColumns[i]}_fkey`,
+                                                                        sourceTable:
+                                                                            tableName,
+                                                                        sourceColumn:
+                                                                            sourceColumns[
+                                                                                i
+                                                                            ],
+                                                                        targetTable,
+                                                                        targetColumn:
+                                                                            targetColumns[
+                                                                                i
+                                                                            ],
+                                                                        sourceTableId:
+                                                                            tableId,
+                                                                        targetTableId,
+                                                                        updateAction:
+                                                                            reference.on_update,
+                                                                        deleteAction:
+                                                                            reference.on_delete,
+                                                                    };
+
+                                                                relationships.push(
+                                                                    fk
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
+                                );
+                            } else {
+                                // If parser fails, try regex-based extraction as fallback
+                                const extractedColumns =
+                                    extractColumnsFromCreateTable(trimmedStmt);
+                                if (extractedColumns.length > 0) {
+                                    columns.push(...extractedColumns);
                                 }
                             }
-                        }
-                    );
-                }
 
-                // Create the table object
-                const table: SQLTable = {
-                    id: tableId,
-                    name: tableName,
-                    columns,
-                    indexes,
-                    order: tables.length,
-                };
-
-                // Set comment if available (if exists in the parser's output)
-                if (
-                    'comment' in createTableStmt &&
-                    typeof createTableStmt.comment === 'string'
-                ) {
-                    table.comment = createTableStmt.comment;
-                }
-
-                tables.push(table);
-            } else if (stmt.type === 'create' && stmt.keyword === 'index') {
-                // Handle CREATE INDEX statements
-
-                const createIndexStmt = stmt as CreateIndexStatement;
-                if (createIndexStmt.table) {
-                    // Extract table name
-                    let tableName = '';
-
-                    if (typeof createIndexStmt.table === 'string') {
-                        tableName = createIndexStmt.table.replace(/`/g, '');
-                    } else if (Array.isArray(createIndexStmt.table)) {
-                        if (createIndexStmt.table.length > 0) {
-                            tableName =
-                                createIndexStmt.table[0].table?.replace(
-                                    /`/g,
-                                    ''
-                                ) || '';
-                        }
-                    } else {
-                        // Direct object reference
-                        tableName =
-                            createIndexStmt.table.table?.replace(/`/g, '') ||
-                            '';
-                    }
-
-                    // Find the table in our collection
-                    const table = tables.find((t) => t.name === tableName);
-
-                    if (table) {
-                        // Extract column names from index columns
-                        let columns: string[] = [];
-
-                        // Check different possible structures for index columns
-                        if (
-                            createIndexStmt.columns &&
-                            Array.isArray(createIndexStmt.columns)
-                        ) {
-                            // Some parsers use 'columns'
-                            columns = createIndexStmt.columns
-                                .map((col: ColumnReference) =>
-                                    extractColumnName(col).replace(/`/g, '')
-                                )
-                                .filter((col: string) => col !== '');
-                        } else if (
-                            createIndexStmt.index_columns &&
-                            Array.isArray(createIndexStmt.index_columns)
-                        ) {
-                            // Other parsers use 'index_columns'
-                            columns = createIndexStmt.index_columns
-                                .map(
-                                    (
-                                        col:
-                                            | { column?: ColumnReference }
-                                            | ColumnReference
-                                    ) => {
-                                        const colRef =
-                                            'column' in col ? col.column : col;
-                                        const colName = extractColumnName(
-                                            colRef || col
-                                        ).replace(/`/g, '');
-                                        return colName;
-                                    }
-                                )
-                                .filter((col: string) => col !== '');
-                        }
-
-                        if (columns.length > 0) {
-                            const indexName = (
-                                createIndexStmt.index ||
-                                createIndexStmt.index_name ||
-                                `idx_${tableName}_${columns.join('_')}`
-                            ).replace(/`/g, '');
-
-                            table.indexes.push({
-                                name: indexName,
+                            // Create and store the table
+                            tables.push({
+                                id: tableId,
+                                name: tableName,
                                 columns,
-                                unique:
-                                    createIndexStmt.index_type === 'unique' ||
-                                    createIndexStmt.unique === true,
+                                indexes,
+                                order: tables.length,
                             });
                         }
                     }
-                }
-            } else if (stmt.type === 'alter' && stmt.keyword === 'table') {
-                // Process ALTER TABLE statements for foreign keys
+                } catch (parseError) {
+                    console.error(
+                        'Error parsing CREATE TABLE statement:',
+                        parseError
+                    );
 
-                const alterTableStmt = stmt as AlterTableStatement;
-                if (
-                    alterTableStmt.table &&
-                    alterTableStmt.expr &&
-                    alterTableStmt.expr.length > 0
-                ) {
-                    // Fix the table name extraction - table is an array in ALTER TABLE statements
-                    let tableName = '';
-
-                    if (
-                        Array.isArray(alterTableStmt.table) &&
-                        alterTableStmt.table.length > 0
-                    ) {
-                        const tableObj = alterTableStmt.table[0];
-                        tableName = tableObj.table || '';
-                    } else if (typeof alterTableStmt.table === 'object') {
-                        const tableRef = alterTableStmt.table as TableReference;
-                        tableName = tableRef.table || '';
-                    } else {
-                        tableName = alterTableStmt.table;
-                    }
-
-                    // Remove backticks from table name
-                    tableName = tableName.replace(/`/g, '');
-
-                    // Find this table in our collection
-                    const table = tables.find((t) => t.name === tableName);
-
-                    if (!table) {
-                        return;
-                    }
-
-                    // Process each expression in the ALTER TABLE
-                    alterTableStmt.expr.forEach((expr: AlterTableExprItem) => {
-                        // Check multiple variations of constraint format
-                        if (
-                            expr.action === 'add' &&
-                            expr.constraint_type === 'foreign key'
-                        ) {
-                            // Extract source columns
-                            let sourceColumns: string[] = [];
-                            if (
-                                expr.definition &&
-                                Array.isArray(expr.definition)
-                            ) {
-                                sourceColumns = expr.definition.map(
-                                    (col: ColumnReference) => {
-                                        const colName = extractColumnName(
-                                            col
-                                        ).replace(/`/g, '');
-                                        return colName;
-                                    }
-                                );
-                            } else if (
-                                expr.columns &&
-                                Array.isArray(expr.columns)
-                            ) {
-                                sourceColumns = expr.columns.map(
-                                    (col: string | ColumnReference) => {
-                                        const colName =
-                                            typeof col === 'string'
-                                                ? col.replace(/`/g, '')
-                                                : extractColumnName(
-                                                      col
-                                                  ).replace(/`/g, '');
-                                        return colName;
-                                    }
-                                );
-                            }
-
-                            // Extract target table and columns
-                            const reference =
-                                expr.reference || expr.reference_definition;
-
-                            // Declare target variables
-                            let targetTable = '';
-                            let targetColumns: string[] = [];
-
-                            if (reference && reference.table) {
-                                if (typeof reference.table === 'object') {
-                                    if (
-                                        Array.isArray(reference.table) &&
-                                        reference.table.length > 0
-                                    ) {
-                                        targetTable =
-                                            reference.table[0].table || '';
-                                    } else {
-                                        const tableRef =
-                                            reference.table as TableReference;
-                                        targetTable = tableRef.table || '';
-                                    }
-                                } else {
-                                    targetTable = reference.table as string;
-                                }
-
-                                // Remove backticks from target table name
-                                targetTable = targetTable.replace(/`/g, '');
-                            }
-
-                            // Extract target columns
-                            if (
-                                reference &&
-                                reference.definition &&
-                                Array.isArray(reference.definition)
-                            ) {
-                                targetColumns = reference.definition.map(
-                                    (col: ColumnReference) => {
-                                        const colName = extractColumnName(
-                                            col
-                                        ).replace(/`/g, '');
-                                        return colName;
-                                    }
-                                );
-                            } else if (
-                                reference &&
-                                reference.columns &&
-                                Array.isArray(reference.columns)
-                            ) {
-                                targetColumns = reference.columns.map(
-                                    (col: string | ColumnReference) => {
-                                        const colName =
-                                            typeof col === 'string'
-                                                ? col.replace(/`/g, '')
-                                                : extractColumnName(
-                                                      col
-                                                  ).replace(/`/g, '');
-                                        return colName;
-                                    }
-                                );
-                            }
-
-                            // Create relationships
-                            if (
-                                sourceColumns.length > 0 &&
-                                targetTable &&
-                                targetColumns.length > 0
-                            ) {
-                                for (
-                                    let i = 0;
-                                    i <
-                                    Math.min(
-                                        sourceColumns.length,
-                                        targetColumns.length
-                                    );
-                                    i++
-                                ) {
-                                    // Look up source and target table IDs
-                                    const sourceTableId = tableMap[tableName];
-                                    const targetTableId = tableMap[targetTable];
-
-                                    if (!sourceTableId) {
-                                        continue;
-                                    }
-
-                                    if (!targetTableId) {
-                                        continue;
-                                    }
-
-                                    // Access FK actions directly from the reference object
-                                    const updateAction = reference?.on_update;
-                                    const deleteAction = reference?.on_delete;
-
-                                    const fk: SQLForeignKey = {
-                                        name: expr.constraint_name
-                                            ? expr.constraint_name.replace(
-                                                  /`/g,
-                                                  ''
-                                              )
-                                            : `${tableName}_${sourceColumns[i]}_fkey`,
-                                        sourceTable: tableName,
-                                        sourceColumn: sourceColumns[i],
-                                        targetTable,
-                                        targetColumn: targetColumns[i],
-                                        sourceTableId,
-                                        targetTableId,
-                                        updateAction,
-                                        deleteAction,
-                                    };
-
-                                    relationships.push(fk);
-                                }
-                            }
-                        } else if (
-                            expr.action === 'add' &&
-                            expr.create_definitions
-                        ) {
-                            // Alternative syntax for constraints in ALTER TABLE
-
-                            const createDefs = expr.create_definitions;
-
-                            if (
-                                createDefs.constraint_type === 'FOREIGN KEY' ||
-                                createDefs.constraint_type === 'foreign key'
-                            ) {
-                                // Extract source columns
-                                let sourceColumns: string[] = [];
-                                if (
-                                    createDefs.definition &&
-                                    Array.isArray(createDefs.definition)
-                                ) {
-                                    sourceColumns = createDefs.definition.map(
-                                        (col: ColumnReference) => {
-                                            const colName = extractColumnName(
-                                                col
-                                            ).replace(/`/g, '');
-                                            return colName;
-                                        }
-                                    );
-                                } else if (
-                                    createDefs.columns &&
-                                    Array.isArray(createDefs.columns)
-                                ) {
-                                    sourceColumns = createDefs.columns.map(
-                                        (col: string | ColumnReference) => {
-                                            const colName =
-                                                typeof col === 'string'
-                                                    ? col.replace(/`/g, '')
-                                                    : extractColumnName(
-                                                          col
-                                                      ).replace(/`/g, '');
-                                            return colName;
-                                        }
-                                    );
-                                }
-
-                                // Extract target table and columns
-                                const reference =
-                                    createDefs.reference_definition;
-
-                                let targetTable = '';
-                                let targetColumns: string[] = [];
-
-                                if (reference && reference.table) {
-                                    if (typeof reference.table === 'object') {
-                                        if (
-                                            Array.isArray(reference.table) &&
-                                            reference.table.length > 0
-                                        ) {
-                                            targetTable =
-                                                reference.table[0].table || '';
-                                        } else {
-                                            const tableRef =
-                                                reference.table as TableReference;
-                                            targetTable = tableRef.table || '';
-                                        }
-                                    } else {
-                                        targetTable = reference.table as string;
-                                    }
-
-                                    // Remove backticks from target table name
-                                    targetTable = targetTable.replace(/`/g, '');
-                                }
-
-                                // Extract target columns
-                                if (
-                                    reference &&
-                                    reference.definition &&
-                                    Array.isArray(reference.definition)
-                                ) {
-                                    targetColumns = reference.definition.map(
-                                        (col: ColumnReference) => {
-                                            const colName = extractColumnName(
-                                                col
-                                            ).replace(/`/g, '');
-                                            return colName;
-                                        }
-                                    );
-                                } else if (
-                                    reference &&
-                                    reference.columns &&
-                                    Array.isArray(reference.columns)
-                                ) {
-                                    targetColumns = reference.columns.map(
-                                        (col: string | ColumnReference) => {
-                                            const colName =
-                                                typeof col === 'string'
-                                                    ? col.replace(/`/g, '')
-                                                    : extractColumnName(
-                                                          col
-                                                      ).replace(/`/g, '');
-                                            return colName;
-                                        }
-                                    );
-                                }
-
-                                // Create relationships
-                                if (
-                                    sourceColumns.length > 0 &&
-                                    targetTable &&
-                                    targetColumns.length > 0
-                                ) {
-                                    for (
-                                        let i = 0;
-                                        i <
-                                        Math.min(
-                                            sourceColumns.length,
-                                            targetColumns.length
-                                        );
-                                        i++
-                                    ) {
-                                        const sourceTableId =
-                                            tableMap[tableName];
-                                        const targetTableId =
-                                            tableMap[targetTable];
-
-                                        if (!sourceTableId || !targetTableId) {
-                                            continue;
-                                        }
-
-                                        const fk: SQLForeignKey = {
-                                            name: createDefs.constraint_name
-                                                ? createDefs.constraint_name.replace(
-                                                      /`/g,
-                                                      ''
-                                                  )
-                                                : `${tableName}_${sourceColumns[i]}_fkey`,
-                                            sourceTable: tableName,
-                                            sourceColumn: sourceColumns[i],
-                                            targetTable,
-                                            targetColumn: targetColumns[i],
-                                            sourceTableId,
-                                            targetTableId,
-                                            updateAction: reference?.on_update,
-                                            deleteAction: reference?.on_delete,
-                                        };
-
-                                        relationships.push(fk);
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    // Error handling without logging
                 }
             }
-        });
+        }
 
-        // Filter out relationships with missing source table IDs or target table IDs
-        const validRelationships = relationships.filter(
-            (rel) => rel.sourceTableId && rel.targetTableId
+        // Second pass: process CREATE INDEX statements
+        for (const statement of statements) {
+            const trimmedStmt = statement.trim();
+            if (
+                trimmedStmt.toUpperCase().startsWith('CREATE INDEX') ||
+                trimmedStmt.toUpperCase().startsWith('CREATE UNIQUE INDEX')
+            ) {
+                processCreateIndexStatement(trimmedStmt, tableMap, tables);
+            }
+        }
+
+        // Third pass: process ALTER TABLE statements for foreign keys
+        for (const statement of statements) {
+            const trimmedStmt = statement.trim();
+            if (
+                trimmedStmt.toUpperCase().startsWith('ALTER TABLE') &&
+                trimmedStmt.toUpperCase().includes('FOREIGN KEY')
+            ) {
+                try {
+                    // Look for ALTER TABLE `table` ADD CONSTRAINT pattern
+                    const tableMatch = trimmedStmt.match(
+                        /ALTER TABLE\s+`?([^`\s(]+)`?\s+/i
+                    );
+                    if (!tableMatch) continue;
+
+                    const sourceTable = tableMatch[1].replace(/`/g, '');
+                    const sourceTableId = tableMap[sourceTable];
+
+                    if (!sourceTableId) {
+                        continue;
+                    }
+
+                    // Extract constraint name if it exists
+                    let constraintName = '';
+                    const constraintMatch = trimmedStmt.match(
+                        /ADD CONSTRAINT\s+`?([^`\s(]+)`?\s+/i
+                    );
+                    if (constraintMatch) {
+                        constraintName = constraintMatch[1].replace(/`/g, '');
+                    }
+
+                    // Extract source columns
+                    const sourceColMatch = trimmedStmt.match(
+                        /FOREIGN KEY\s*\(([^)]+)\)/i
+                    );
+                    if (!sourceColMatch) continue;
+
+                    const sourceColumns = sourceColMatch[1]
+                        .split(',')
+                        .map((col) => col.trim().replace(/`/g, ''));
+
+                    // Extract target table and columns
+                    const targetMatch = trimmedStmt.match(
+                        /REFERENCES\s+`?([^`\s(]+)`?\s*\(([^)]+)\)/i
+                    );
+                    if (!targetMatch) continue;
+
+                    const targetTable = targetMatch[1].replace(/`/g, '');
+                    const targetColumns = targetMatch[2]
+                        .split(',')
+                        .map((col) => col.trim().replace(/`/g, ''));
+
+                    const targetTableId = tableMap[targetTable];
+
+                    if (!targetTableId) {
+                        continue;
+                    }
+
+                    // Extract ON DELETE and ON UPDATE actions
+                    let updateAction: string | undefined;
+                    let deleteAction: string | undefined;
+
+                    const onDeleteMatch = trimmedStmt.match(
+                        /ON DELETE\s+([A-Z\s]+?)(?=\s+ON|\s*$)/i
+                    );
+                    if (onDeleteMatch) {
+                        deleteAction = onDeleteMatch[1].trim();
+                    }
+
+                    const onUpdateMatch = trimmedStmt.match(
+                        /ON UPDATE\s+([A-Z\s]+?)(?=\s+ON|\s*$)/i
+                    );
+                    if (onUpdateMatch) {
+                        updateAction = onUpdateMatch[1].trim();
+                    }
+
+                    // Create the foreign key relationships
+                    for (
+                        let i = 0;
+                        i <
+                        Math.min(sourceColumns.length, targetColumns.length);
+                        i++
+                    ) {
+                        const fk: SQLForeignKey = {
+                            name:
+                                constraintName ||
+                                `${sourceTable}_${sourceColumns[i]}_fkey`,
+                            sourceTable,
+                            sourceColumn: sourceColumns[i],
+                            targetTable,
+                            targetColumn: targetColumns[i],
+                            sourceTableId,
+                            targetTableId,
+                            updateAction,
+                            deleteAction,
+                        };
+
+                        relationships.push(fk);
+                    }
+                } catch (fkError) {
+                    console.error(
+                        'Error processing foreign key in ALTER TABLE:',
+                        fkError
+                    );
+
+                    // Error handling without logging
+                }
+            }
+        }
+
+        // After processing all tables, process pending foreign keys:
+        if (pendingForeignKeys.length > 0) {
+            for (const pendingFk of pendingForeignKeys) {
+                const targetTableId = tableMap[pendingFk.targetTable];
+
+                if (!targetTableId) {
+                    continue;
+                }
+
+                // Create foreign key relationships
+                for (
+                    let i = 0;
+                    i <
+                    Math.min(
+                        pendingFk.sourceColumns.length,
+                        pendingFk.targetColumns.length
+                    );
+                    i++
+                ) {
+                    const fk: SQLForeignKey = {
+                        name:
+                            pendingFk.name ||
+                            `${pendingFk.sourceTable}_${pendingFk.sourceColumns[i]}_fkey`,
+                        sourceTable: pendingFk.sourceTable,
+                        sourceColumn: pendingFk.sourceColumns[i],
+                        targetTable: pendingFk.targetTable,
+                        targetColumn: pendingFk.targetColumns[i],
+                        sourceTableId: pendingFk.sourceTableId,
+                        targetTableId,
+                        updateAction: pendingFk.updateAction,
+                        deleteAction: pendingFk.deleteAction,
+                    };
+
+                    relationships.push(fk);
+                }
+            }
+        }
+
+        return { tables, relationships };
+    } catch (error) {
+        console.error('Error in MySQL dump parser:', error);
+
+        throw new Error(
+            `Error parsing MySQL dump: ${(error as Error).message}`
+        );
+    }
+}
+
+export function isMySQLFormat(sqlContent: string): boolean {
+    // Common patterns in MySQL dumps
+    const mysqlDumpPatterns = [
+        /START TRANSACTION/i,
+        /CREATE TABLE.*IF NOT EXISTS/i,
+        /ENGINE\s*=\s*(?:InnoDB|MyISAM|MEMORY|ARCHIVE)/i,
+        /DEFAULT CHARSET\s*=\s*(?:utf8|latin1)/i,
+        /COLLATE\s*=\s*(?:utf8_general_ci|latin1_swedish_ci)/i,
+        /AUTO_INCREMENT\s*=\s*\d+/i,
+        /ALTER TABLE.*ADD CONSTRAINT.*FOREIGN KEY/i,
+        /-- (MySQL|MariaDB) dump/i,
+    ];
+
+    // Look for backticks around identifiers (common in MySQL)
+    const hasBackticks = /`[^`]+`/.test(sqlContent);
+
+    // Check for MySQL specific comments
+    const hasMysqlComments =
+        /-- MySQL dump|-- Host:|-- Server version:|-- Dump completed on/.test(
+            sqlContent
         );
 
-        return { tables, relationships: validRelationships };
-    } catch (error: unknown) {
-        throw new Error(`Error parsing MySQL SQL: ${(error as Error).message}`);
+    // If there are MySQL specific comments, it's likely a MySQL dump
+    if (hasMysqlComments) {
+        return true;
     }
+
+    // Count how many MySQL patterns are found
+    let patternCount = 0;
+    for (const pattern of mysqlDumpPatterns) {
+        if (pattern.test(sqlContent)) {
+            patternCount++;
+        }
+    }
+
+    // If the SQL has backticks and at least a few MySQL patterns, it's likely MySQL
+    const isLikelyMysql = hasBackticks && patternCount >= 2;
+
+    return isLikelyMysql;
 }

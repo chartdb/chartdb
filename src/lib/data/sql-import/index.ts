@@ -2,16 +2,13 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import { fromPostgres } from './dialect-importers/postgresql/postgresql';
 import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
-import { fromMySQL } from './dialect-importers/mysql/mysql';
-import {
-    fromMysqlDump,
-    isMysqlDumpFormat,
-} from './dialect-importers/mysql/mysql-dump';
+
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import { fromSQLite } from './dialect-importers/sqlite/sqlite';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
+import { fromMySQL, isMySQLFormat } from './dialect-importers/mysql/mysql';
 
 /**
  * Detect if SQL content is from pg_dump format
@@ -131,7 +128,7 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
     }
 
     // Check for MySQL dump format
-    if (isMysqlDumpFormat(sqlContent)) {
+    if (isMySQLFormat(sqlContent)) {
         return DatabaseType.MYSQL;
     }
 
@@ -202,11 +199,8 @@ export function sqlImportToDiagram({
             break;
         case DatabaseType.MYSQL:
             // Check if the SQL is from MySQL dump and use the appropriate parser
-            if (isMysqlDumpFormat(sqlContent)) {
-                parserResult = fromMysqlDump(sqlContent);
-            } else {
-                parserResult = fromMySQL(sqlContent);
-            }
+            parserResult = fromMySQL(sqlContent);
+
             break;
         case DatabaseType.SQL_SERVER:
             parserResult = fromSQLServer(sqlContent);
@@ -271,12 +265,8 @@ export function parseSQLError({
                 }
                 break;
             case DatabaseType.MYSQL:
-                // MySQL validation - check format and use appropriate parser
-                if (isMysqlDumpFormat(sqlContent)) {
-                    fromMysqlDump(sqlContent);
-                } else {
-                    fromMySQL(sqlContent);
-                }
+                fromMySQL(sqlContent);
+
                 break;
             case DatabaseType.SQL_SERVER:
                 // SQL Server validation
