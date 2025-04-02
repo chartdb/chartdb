@@ -75,7 +75,7 @@ function preprocessSQLServerScript(sqlContent: string): string {
 
     sqlContent = sqlContent.replace(
         createTablePattern,
-        (match, schema, tableName, columnDefs) => {
+        (_, schema, tableName, columnDefs) => {
             // Process column definitions to rename problematic columns
             let processedColumnDefs = columnDefs;
 

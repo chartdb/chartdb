@@ -92,7 +92,7 @@ export function fromSQLite(sqlContent: string): SQLParserResult {
 function processCreateTableStatement(
     createTableStmt: CreateTableStatement,
     tables: SQLTable[],
-    relationships: SQLForeignKey[],
+    _: SQLForeignKey[],
     tableMap: Record<string, string>
 ): void {
     // Extract table name and schema
