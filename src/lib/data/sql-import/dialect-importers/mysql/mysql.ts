@@ -263,7 +263,22 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                         if (tableName) {
                             // Generate table ID
                             const tableId = generateId();
-                            tableMap[tableName] = tableId;
+
+                            // Handle database-qualified table names
+                            const tableNameParts = tableName.split('.');
+                            let database = '';
+                            let simpleTableName = tableName;
+
+                            if (tableNameParts.length > 1) {
+                                database = tableNameParts[0];
+                                simpleTableName = tableNameParts[1];
+                                // Store with fully qualified name (for ALTER TABLE references)
+                                tableMap[tableName] = tableId;
+                                // Also store with just table name (for simpler lookups)
+                                tableMap[simpleTableName] = tableId;
+                            } else {
+                                tableMap[tableName] = tableId;
+                            }
 
                             // Process columns
                             const columns: SQLColumn[] = [];
@@ -667,7 +682,8 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                             // Create and store the table
                             tables.push({
                                 id: tableId,
-                                name: tableName,
+                                name: simpleTableName || tableName,
+                                schema: database || undefined,
                                 columns,
                                 indexes,
                                 order: tables.length,
@@ -704,22 +720,29 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                 trimmedStmt.toUpperCase().includes('FOREIGN KEY')
             ) {
                 try {
-                    // Look for ALTER TABLE `table` ADD CONSTRAINT pattern
-                    const tableMatch = trimmedStmt.match(
-                        /ALTER TABLE\s+`?([^`\s(]+)`?\s+/i
-                    );
+                    // Extract table name and schema
+                    const tableRegex =
+                        /ALTER TABLE\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s.(]+)`?\s+/i;
+                    const tableMatch = statement.match(tableRegex);
+
                     if (!tableMatch) continue;
 
-                    const sourceTable = tableMatch[1].replace(/`/g, '');
-                    const sourceTableId = tableMap[sourceTable];
+                    const databaseName = tableMatch[1] || '';
+                    const sourceTable = tableMatch[2];
 
+                    // Look for source table in tableMap - try with and without database prefix
+                    let sourceTableId = tableMap[sourceTable];
+                    if (!sourceTableId && databaseName) {
+                        sourceTableId =
+                            tableMap[`${databaseName}.${sourceTable}`];
+                    }
                     if (!sourceTableId) {
                         continue;
                     }
 
                     // Extract constraint name if it exists
                     let constraintName = '';
-                    const constraintMatch = trimmedStmt.match(
+                    const constraintMatch = statement.match(
                         /ADD CONSTRAINT\s+`?([^`\s(]+)`?\s+/i
                     );
                     if (constraintMatch) {
@@ -727,7 +750,7 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                     }
 
                     // Extract source columns
-                    const sourceColMatch = trimmedStmt.match(
+                    const sourceColMatch = statement.match(
                         /FOREIGN KEY\s*\(([^)]+)\)/i
                     );
                     if (!sourceColMatch) continue;
@@ -737,17 +760,23 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                         .map((col) => col.trim().replace(/`/g, ''));
 
                     // Extract target table and columns
-                    const targetMatch = trimmedStmt.match(
-                        /REFERENCES\s+`?([^`\s(]+)`?\s*\(([^)]+)\)/i
+                    const targetMatch = statement.match(
+                        /REFERENCES\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s(]+)`?\s*\(([^)]+)\)/i
                     );
                     if (!targetMatch) continue;
 
-                    const targetTable = targetMatch[1].replace(/`/g, '');
-                    const targetColumns = targetMatch[2]
+                    const targetDatabase = targetMatch[1] || '';
+                    const targetTable = targetMatch[2];
+                    const targetColumns = targetMatch[3]
                         .split(',')
                         .map((col) => col.trim().replace(/`/g, ''));
 
-                    const targetTableId = tableMap[targetTable];
+                    // Try to find target table with and without database prefix
+                    let targetTableId = tableMap[targetTable];
+                    if (!targetTableId && targetDatabase) {
+                        targetTableId =
+                            tableMap[`${targetDatabase}.${targetTable}`];
+                    }
 
                     if (!targetTableId) {
                         continue;
@@ -757,14 +786,14 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
                     let updateAction: string | undefined;
                     let deleteAction: string | undefined;
 
-                    const onDeleteMatch = trimmedStmt.match(
+                    const onDeleteMatch = statement.match(
                         /ON DELETE\s+([A-Z\s]+?)(?=\s+ON|\s*$)/i
                     );
                     if (onDeleteMatch) {
                         deleteAction = onDeleteMatch[1].trim();
                     }
 
-                    const onUpdateMatch = trimmedStmt.match(
+                    const onUpdateMatch = statement.match(
                         /ON UPDATE\s+([A-Z\s]+?)(?=\s+ON|\s*$)/i
                     );
                     if (onUpdateMatch) {
@@ -808,7 +837,15 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
         // After processing all tables, process pending foreign keys:
         if (pendingForeignKeys.length > 0) {
             for (const pendingFk of pendingForeignKeys) {
-                const targetTableId = tableMap[pendingFk.targetTable];
+                // Try with and without database prefix
+                let targetTableId = tableMap[pendingFk.targetTable];
+
+                // Try to extract database if the target table has a database prefix
+                const targetTableParts = pendingFk.targetTable.split('.');
+                if (!targetTableId && targetTableParts.length > 1) {
+                    const tableName = targetTableParts[1];
+                    targetTableId = tableMap[tableName];
+                }
 
                 if (!targetTableId) {
                     continue;
