@@ -221,6 +221,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                                 : 'dbml-light'
                                         }
                                         options={{
+                                            formatOnPaste: true,
                                             minimap: { enabled: false },
                                             scrollBeyondLastLine: false,
                                             automaticLayout: true,
