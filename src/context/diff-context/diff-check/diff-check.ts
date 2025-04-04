@@ -144,6 +144,26 @@ function compareTables({
 
             changedTables.set(oldTable.id, true);
         }
+
+        if (oldTable.color !== newTable.color) {
+            diffMap.set(
+                getDiffMapKey({
+                    diffObject: 'table',
+                    objectId: oldTable.id,
+                    attribute: 'color',
+                }),
+                {
+                    object: 'table',
+                    type: 'changed',
+                    tableId: oldTable.id,
+                    attribute: 'color',
+                    newValue: newTable.color,
+                    oldValue: oldTable.color,
+                }
+            );
+
+            changedTables.set(oldTable.id, true);
+        }
     }
 }
 

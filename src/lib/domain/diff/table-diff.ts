@@ -2,7 +2,10 @@ import { z } from 'zod';
 import type { DBTable } from '../db-table';
 import { dbTableSchema } from '../db-table';
 
-export type TableDiffAttribute = 'name' | 'comments';
+export type TableDiffAttribute = keyof Pick<
+    DBTable,
+    'name' | 'comments' | 'color'
+>;
 
 const tableDiffAttributeSchema: z.ZodType<TableDiffAttribute> = z.union([
     z.literal('name'),
