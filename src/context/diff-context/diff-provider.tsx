@@ -169,6 +169,26 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const getTableNewColor = useCallback<DiffContext['getTableNewColor']>(
+        ({ tableId }) => {
+            const tableColorKey = getDiffMapKey({
+                diffObject: 'table',
+                objectId: tableId,
+                attribute: 'color',
+            });
+
+            if (diffMap.has(tableColorKey)) {
+                const diff = diffMap.get(tableColorKey);
+
+                if (diff?.type === 'changed') {
+                    return diff.newValue as string;
+                }
+            }
+            return null;
+        },
+        [diffMap]
+    );
+
     const checkIfTableHasChange = useCallback<
         DiffContext['checkIfTableHasChange']
     >(({ tableId }) => tablesChanged.get(tableId) ?? false, [tablesChanged]);
@@ -331,6 +351,7 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 checkIfNewTable,
                 checkIfTableRemoved,
                 checkIfTableHasChange,
+                getTableNewColor,
 
                 // field diff
                 checkIfFieldHasChange,

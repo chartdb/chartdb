@@ -46,6 +46,7 @@ export interface DiffContext {
     checkIfNewTable: ({ tableId }: { tableId: string }) => boolean;
     checkIfTableRemoved: ({ tableId }: { tableId: string }) => boolean;
     getTableNewName: ({ tableId }: { tableId: string }) => string | null;
+    getTableNewColor: ({ tableId }: { tableId: string }) => string | null;
 
     // field diff
     checkIfFieldHasChange: ({

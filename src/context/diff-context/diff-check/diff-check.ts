@@ -96,7 +96,7 @@ function compareTables({
         }
     }
 
-    // Check for table name and comments changes
+    // Check for table name, comments and color changes
     for (const oldTable of oldTables) {
         const newTable = newTables.find((t) => t.id === oldTable.id);
 
@@ -139,6 +139,26 @@ function compareTables({
                     attribute: 'comments',
                     newValue: newTable.comments,
                     oldValue: oldTable.comments,
+                }
+            );
+
+            changedTables.set(oldTable.id, true);
+        }
+
+        if (oldTable.color !== newTable.color) {
+            diffMap.set(
+                getDiffMapKey({
+                    diffObject: 'table',
+                    objectId: oldTable.id,
+                    attribute: 'color',
+                }),
+                {
+                    object: 'table',
+                    type: 'changed',
+                    tableId: oldTable.id,
+                    attribute: 'color',
+                    newValue: newTable.color,
+                    oldValue: oldTable.color,
                 }
             );
 
