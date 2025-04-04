@@ -10,6 +10,7 @@ export type TableDiffAttribute = keyof Pick<
 const tableDiffAttributeSchema: z.ZodType<TableDiffAttribute> = z.union([
     z.literal('name'),
     z.literal('comments'),
+    z.literal('color'),
 ]);
 
 export interface TableDiffChanged {
