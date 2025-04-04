@@ -96,7 +96,7 @@ function compareTables({
         }
     }
 
-    // Check for table name and comments changes
+    // Check for table name, comments and color changes
     for (const oldTable of oldTables) {
         const newTable = newTables.find((t) => t.id === oldTable.id);
 

@@ -68,6 +68,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         const {
             getTableNewName,
+            getTableNewColor,
             checkIfTableHasChange,
             checkIfNewTable,
             checkIfTableRemoved,
@@ -79,6 +80,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () => getTableNewName({ tableId: table.id }),
             [getTableNewName, table.id]
         );
+
+        const tableChangedColor = useMemo(
+            () => getTableNewColor({ tableId: table.id }),
+            [getTableNewColor, table.id]
+        );
+        const tableColor = useMemo(() => {
+            if (tableChangedColor) {
+                return tableChangedColor;
+            }
+
+            return table.color;
+        }, [tableChangedColor, table.color]);
 
         const isDiffTableChanged = useMemo(
             () => checkIfTableHasChange({ tableId: table.id }),
@@ -253,7 +266,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     />
                     <div
                         className="h-2 rounded-t-[6px]"
-                        style={{ backgroundColor: table.color }}
+                        style={{ backgroundColor: tableColor }}
                     ></div>
                     <div className="group flex h-9 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                         <div className="flex min-w-0 flex-1 items-center gap-2">
