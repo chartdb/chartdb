@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.11.0](https://github.com/chartdb/chartdb/compare/v1.10.0...v1.11.0) (2025-04-04)
+
+
+### Features
+
+* **import-sql:** import postgresql via SQL (DDL script) ([#639](https://github.com/chartdb/chartdb/issues/639)) ([f7a6e0c](https://github.com/chartdb/chartdb/commit/f7a6e0cb5e4921dd9540739f9da269858e7ca7be))
+
+
+### Bug Fixes
+
+* **import:** strict parse of database metadata ([#635](https://github.com/chartdb/chartdb/issues/635)) ([0940d72](https://github.com/chartdb/chartdb/commit/0940d72d5d3726650213257639f24ba47e729854))
+* **mobile:** fix create diagram modal on mobile ([#646](https://github.com/chartdb/chartdb/issues/646)) ([25c4b42](https://github.com/chartdb/chartdb/commit/25c4b4253849575d7a781ed197281e2a35e7184a))
+* **mysql-ddl:** update the script to import - for create fks ([#642](https://github.com/chartdb/chartdb/issues/642)) ([cf81253](https://github.com/chartdb/chartdb/commit/cf81253535ca5a3b8a65add78287c1bdb283a1c7))
+* remove unused links from help menu ([#623](https://github.com/chartdb/chartdb/issues/623)) ([85275e5](https://github.com/chartdb/chartdb/commit/85275e5dd6e7845f06f682eeceda7932fc87e875))
+
 ## [1.10.0](https://github.com/chartdb/chartdb/compare/v1.9.0...v1.10.0) (2025-03-25)
 
 
