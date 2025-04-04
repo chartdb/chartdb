@@ -173,130 +173,149 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         );
     }, [title]);
 
+    const renderInstructions = useCallback(
+        () => (
+            <InstructionsSection
+                databaseType={databaseType}
+                importMethod={importMethod}
+                setDatabaseEdition={setDatabaseEdition}
+                setImportMethod={setImportMethod}
+                databaseEdition={databaseEdition}
+                setShowSSMSInfoDialog={setShowSSMSInfoDialog}
+                showSSMSInfoDialog={showSSMSInfoDialog}
+            />
+        ),
+        [
+            databaseType,
+            importMethod,
+            setDatabaseEdition,
+            setImportMethod,
+            databaseEdition,
+            setShowSSMSInfoDialog,
+            showSSMSInfoDialog,
+        ]
+    );
+
+    const renderOutputTextArea = useCallback(
+        () => (
+            <div className="flex size-full flex-col gap-1 overflow-hidden rounded-md border p-1">
+                <div className="w-full text-center text-xs text-muted-foreground">
+                    {importMethod === 'query'
+                        ? 'Smart Query Output'
+                        : 'SQL DDL'}
+                </div>
+                <div className="flex-1 overflow-hidden">
+                    <Suspense fallback={<Spinner />}>
+                        <Editor
+                            value={scriptResult}
+                            onChange={debouncedHandleInputChange}
+                            language={importMethod === 'query' ? 'json' : 'sql'}
+                            loading={<Spinner />}
+                            theme={
+                                effectiveTheme === 'dark'
+                                    ? 'dbml-dark'
+                                    : 'dbml-light'
+                            }
+                            options={{
+                                minimap: { enabled: false },
+                                scrollBeyondLastLine: false,
+                                automaticLayout: true,
+                                glyphMargin: false,
+                                lineNumbers: 'on',
+                                guides: {
+                                    indentation: false,
+                                },
+                                folding: true,
+                                lineNumbersMinChars: 3,
+                                renderValidationDecorations: 'off',
+                                lineDecorationsWidth: 0,
+                                overviewRulerBorder: false,
+                                overviewRulerLanes: 0,
+                                hideCursorInOverviewRuler: true,
+                                contextmenu: false,
+
+                                scrollbar: {
+                                    vertical: 'hidden',
+                                    horizontal: 'hidden',
+                                    alwaysConsumeMouseWheel: false,
+                                },
+                            }}
+                            className="size-full min-h-40"
+                        />
+                    </Suspense>
+                </div>
+
+                {showCheckJsonButton || errorMessage ? (
+                    <div className="mt-2 flex shrink-0 items-center gap-2">
+                        {showCheckJsonButton ? (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleCheckJson}
+                                disabled={isCheckingJson}
+                                className="h-7"
+                            >
+                                {isCheckingJson ? (
+                                    <Spinner size="small" />
+                                ) : (
+                                    t(
+                                        'new_diagram_dialog.import_database.check_script_result'
+                                    )
+                                )}
+                            </Button>
+                        ) : (
+                            <p className="text-xs text-red-700">
+                                {errorMessage}
+                            </p>
+                        )}
+                    </div>
+                ) : null}
+            </div>
+        ),
+        [
+            errorMessage,
+            scriptResult,
+            importMethod,
+            effectiveTheme,
+            debouncedHandleInputChange,
+            showCheckJsonButton,
+            isCheckingJson,
+            handleCheckJson,
+            t,
+        ]
+    );
+
     const renderContent = useCallback(() => {
         return (
             <DialogInternalContent>
-                <ResizablePanelGroup
-                    direction={isDesktop ? 'horizontal' : 'vertical'}
-                    className="min-h-[500px] md:min-h-fit"
-                >
-                    <ResizablePanel
-                        defaultSize={25}
-                        minSize={25}
-                        maxSize={99}
-                        className="min-h-fit rounded-md bg-gradient-to-b from-slate-50 to-slate-100 p-2 dark:from-slate-900 dark:to-slate-800 md:min-h-fit md:min-w-[350px] md:rounded-l-md md:p-2"
+                {isDesktop ? (
+                    <ResizablePanelGroup
+                        direction={isDesktop ? 'horizontal' : 'vertical'}
+                        className="min-h-[500px] md:min-h-fit"
                     >
-                        <InstructionsSection
-                            databaseType={databaseType}
-                            importMethod={importMethod}
-                            setDatabaseEdition={setDatabaseEdition}
-                            setImportMethod={setImportMethod}
-                            databaseEdition={databaseEdition}
-                            setShowSSMSInfoDialog={setShowSSMSInfoDialog}
-                            showSSMSInfoDialog={showSSMSInfoDialog}
-                        />
-                    </ResizablePanel>
-                    {isDesktop ? <ResizableHandle withHandle /> : null}
-                    <ResizablePanel className="min-h-40 py-2 md:px-2 md:py-0">
-                        <div className="flex size-full flex-col gap-1 overflow-hidden rounded-md border p-1">
-                            <div className="w-full text-center text-xs text-muted-foreground">
-                                {importMethod === 'query'
-                                    ? 'Smart Query Output'
-                                    : 'SQL DDL'}
-                            </div>
-                            <div className="flex-1 overflow-hidden">
-                                <Suspense fallback={<Spinner />}>
-                                    <Editor
-                                        value={scriptResult}
-                                        onChange={debouncedHandleInputChange}
-                                        language={
-                                            importMethod === 'query'
-                                                ? 'json'
-                                                : 'sql'
-                                        }
-                                        loading={<Spinner />}
-                                        theme={
-                                            effectiveTheme === 'dark'
-                                                ? 'dbml-dark'
-                                                : 'dbml-light'
-                                        }
-                                        options={{
-                                            minimap: { enabled: false },
-                                            scrollBeyondLastLine: false,
-                                            automaticLayout: true,
-                                            glyphMargin: false,
-                                            lineNumbers: 'on',
-                                            guides: {
-                                                indentation: false,
-                                            },
-                                            folding: true,
-                                            lineNumbersMinChars: 3,
-                                            renderValidationDecorations: 'off',
-                                            lineDecorationsWidth: 0,
-                                            overviewRulerBorder: false,
-                                            overviewRulerLanes: 0,
-                                            hideCursorInOverviewRuler: true,
-                                            contextmenu: false,
-
-                                            scrollbar: {
-                                                vertical: 'hidden',
-                                                horizontal: 'hidden',
-                                                alwaysConsumeMouseWheel: false,
-                                            },
-                                        }}
-                                        className="size-full"
-                                    />
-                                </Suspense>
-                            </div>
-
-                            {showCheckJsonButton || errorMessage ? (
-                                <div className="mt-2 flex shrink-0 items-center gap-2">
-                                    {showCheckJsonButton ? (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleCheckJson}
-                                            disabled={isCheckingJson}
-                                            className="h-7"
-                                        >
-                                            {isCheckingJson ? (
-                                                <Spinner size="small" />
-                                            ) : (
-                                                t(
-                                                    'new_diagram_dialog.import_database.check_script_result'
-                                                )
-                                            )}
-                                        </Button>
-                                    ) : (
-                                        <p className="text-xs text-red-700">
-                                            {errorMessage}
-                                        </p>
-                                    )}
-                                </div>
-                            ) : null}
-                        </div>
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+                        <ResizablePanel
+                            defaultSize={25}
+                            minSize={25}
+                            maxSize={99}
+                            className="min-h-fit rounded-md bg-gradient-to-b from-slate-50 to-slate-100 p-2 dark:from-slate-900 dark:to-slate-800 md:min-h-fit md:min-w-[350px] md:rounded-l-md md:p-2"
+                        >
+                            {renderInstructions()}
+                        </ResizablePanel>
+                        <ResizableHandle withHandle />
+                        <ResizablePanel className="min-h-40 py-2 md:px-2 md:py-0">
+                            {renderOutputTextArea()}
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
+                ) : (
+                    <div className="flex flex-col gap-2">
+                        {renderInstructions()}
+                        {renderOutputTextArea()}
+                    </div>
+                )}
             </DialogInternalContent>
         );
-    }, [
-        showSSMSInfoDialog,
-        databaseEdition,
-        databaseType,
-        errorMessage,
-        scriptResult,
-        setDatabaseEdition,
-        t,
-        isDesktop,
-        showCheckJsonButton,
-        isCheckingJson,
-        handleCheckJson,
-        effectiveTheme,
-        debouncedHandleInputChange,
-        importMethod,
-        setImportMethod,
-    ]);
+    }, [renderOutputTextArea, renderInstructions, isDesktop]);
 
     const renderFooter = useCallback(() => {
         return (
