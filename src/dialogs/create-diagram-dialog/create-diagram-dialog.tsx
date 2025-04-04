@@ -152,7 +152,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-screen w-full flex-col md:max-w-[900px]"
+                className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
                 showClose={hasExistingDiagram}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
