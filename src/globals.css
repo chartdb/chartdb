@@ -129,6 +129,20 @@
     background-color: rgba(255, 0, 0, 0.2) !important;
 }
 
+/* Styling for DBML error message box */
+.monaco-editor .dbml-error-box {
+    border: 1px solid rgba(255, 50, 50, 0.5);
+    background-color: rgba(255, 0, 0, 0.05);
+    border-radius: 4px;
+    margin: 6px 0;
+    padding: 8px;
+}
+
+.dark .monaco-editor .dbml-error-box {
+    border-color: rgba(255, 80, 80, 0.6);
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
 @keyframes rainbow-text-simple-animation-rev {
     0% {
         background-size: 650%;

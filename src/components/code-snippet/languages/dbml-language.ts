@@ -15,6 +15,8 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
             { token: 'delimiter', foreground: 'D4D4D4' }, // Braces {}
             { token: 'operator', foreground: 'D4D4D4' }, // Operators
             { token: 'datatype', foreground: '4EC9B0' }, // Data types
+            { token: 'error', foreground: 'F14C4C', fontStyle: 'bold' }, // Error messages
+            { token: 'error-title', foreground: 'FF5050', fontStyle: 'bold' }, // Error titles
         ],
         colors: {},
     });
@@ -29,6 +31,8 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
             { token: 'delimiter', foreground: '000000' }, // Braces {}
             { token: 'operator', foreground: '000000' }, // Operators
             { token: 'type', foreground: '267F99' }, // Data types
+            { token: 'error', foreground: 'D32F2F', fontStyle: 'bold' }, // Error messages
+            { token: 'error-title', foreground: 'C62828', fontStyle: 'bold' }, // Error titles
         ],
         colors: {},
     });
@@ -41,6 +45,15 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
         datatypes: dataTypesNames,
         tokenizer: {
             root: [
+                // Error highlighting patterns
+                [/\/\/ ={2,} DBML GENERATION ERROR ={2,}/, 'error-title'],
+                [/\/\/ ==+.*?==+/, 'error-title'],
+                [/\/\/ Error:.*$/, 'error'],
+                [/\/\/ Field:.*$/, 'error'],
+                [/\/\/ Table:.*$/, 'error'],
+                [/\/\/ Fix:.*$/, 'error'],
+                [/\/\/ Check.*$/, 'error'],
+                // Regular DBML patterns
                 [/\b(Table|Ref|Indexes)\b/, 'keyword'],
                 [/\[.*?\]/, 'annotation'],
                 [/".*?"/, 'string'],
