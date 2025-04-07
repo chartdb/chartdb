@@ -26,6 +26,7 @@ export interface SelectBoxOption {
     description?: string;
     regex?: string;
     extractRegex?: RegExp;
+    className?: string;
 }
 
 export interface SelectBoxProps {
@@ -338,14 +339,16 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
 
                                             return (
                                                 <CommandItem
-                                                    className="flex items-center"
+                                                    className={cn(
+                                                        'flex items-center',
+                                                        option.className
+                                                    )}
                                                     key={option.value}
                                                     keywords={
                                                         option.regex
                                                             ? [option.regex]
                                                             : undefined
                                                     }
-                                                    // value={option.value}
                                                     onSelect={() =>
                                                         handleSelect(
                                                             option.value,
