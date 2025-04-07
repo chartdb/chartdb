@@ -15,6 +15,7 @@ import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
+
 export interface SidebarItem {
     title: string;
     icon: React.FC;
