@@ -14,7 +14,6 @@ import type {
     TableReference,
 } from './postgresql-common';
 import {
-    parser,
     parserOpts,
     extractColumnName,
     getTypeArgs,
@@ -526,7 +525,9 @@ function processCreateIndexStatement(
 }
 
 // PostgreSQL dump-specific parsing logic - optimized for pg_dump output format
-export function fromPostgresDump(sqlContent: string): SQLParserResult {
+export async function fromPostgresDump(
+    sqlContent: string
+): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -553,6 +554,8 @@ export function fromPostgresDump(sqlContent: string): SQLParserResult {
         // Phase 1: Process CREATE TABLE statements individually
         for (const statement of createTableStatements) {
             try {
+                const { Parser } = await import('node-sql-parser');
+                const parser = new Parser();
                 // Parse just this statement with the SQL parser
                 const ast = parser.astify(statement, parserOpts);
                 if (Array.isArray(ast) && ast.length > 0) {

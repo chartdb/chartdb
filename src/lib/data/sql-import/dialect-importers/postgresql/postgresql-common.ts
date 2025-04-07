@@ -1,7 +1,3 @@
-import { Parser } from 'node-sql-parser';
-
-// Common PostgreSQL parser instance
-export const parser = new Parser();
 export const parserOpts = { database: 'postgresql' };
 
 // Define interfaces for AST nodes - Fixed no-explicit-any issues

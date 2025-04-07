@@ -13,12 +13,7 @@ import type {
     CreateTableStatement,
     TableReference,
 } from './mysql-common';
-import {
-    parser,
-    parserOpts,
-    extractColumnName,
-    getTypeArgs,
-} from './mysql-common';
+import { parserOpts, extractColumnName, getTypeArgs } from './mysql-common';
 
 // Interface for pending foreign keys that need to be processed later
 interface PendingForeignKey {
@@ -213,7 +208,7 @@ function processCreateIndexStatement(
     }
 }
 
-export function fromMySQL(sqlContent: string): SQLParserResult {
+export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -229,6 +224,8 @@ export function fromMySQL(sqlContent: string): SQLParserResult {
             // Process only CREATE TABLE statements
             if (trimmedStmt.toUpperCase().startsWith('CREATE TABLE')) {
                 try {
+                    const { Parser } = await import('node-sql-parser');
+                    const parser = new Parser();
                     // Parse with SQL parser
                     const ast = parser.astify(trimmedStmt, parserOpts);
                     if (
