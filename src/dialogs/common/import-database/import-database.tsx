@@ -88,16 +88,16 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
         if (!scriptResult.trim()) return;
 
-        const result = parseSQLError({
+        parseSQLError({
             sqlContent: scriptResult,
             sourceDatabaseType: databaseType,
+        }).then((result) => {
+            if (result.success) {
+                setErrorMessage('');
+            } else if (!result.success && result.error) {
+                setErrorMessage(result.error);
+            }
         });
-
-        if (result.success) {
-            setErrorMessage('');
-        } else if (!result.success && result.error) {
-            setErrorMessage(result.error);
-        }
     }, [importMethod, scriptResult, databaseType]);
 
     // Check if the script result is a valid JSON

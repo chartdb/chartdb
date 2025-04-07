@@ -1,9 +1,7 @@
-import { Parser } from 'node-sql-parser';
 import { generateId } from '@/lib/utils';
 import type { SQLASTNode } from '../../common';
 
 // Set up the SQL parser with SQL Server dialect
-export const parser = new Parser();
 export const parserOpts = {
     database: 'transactsql',
 };

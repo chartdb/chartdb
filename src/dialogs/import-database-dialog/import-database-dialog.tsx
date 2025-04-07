@@ -60,7 +60,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         let diagram: Diagram | undefined;
 
         if (importMethod === 'ddl') {
-            diagram = sqlImportToDiagram({
+            diagram = await sqlImportToDiagram({
                 sqlContent: scriptResult,
                 sourceDatabaseType: databaseType,
                 targetDatabaseType: databaseType,

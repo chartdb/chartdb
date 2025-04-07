@@ -16,7 +16,6 @@ import type {
     AlterTableStatement,
 } from './sqlite-common';
 import {
-    parser as sqlParser,
     parserOpts,
     extractColumnName,
     getTypeArgs,
@@ -27,15 +26,17 @@ import {
 /**
  * SQLite-specific parsing logic
  */
-export function fromSQLite(sqlContent: string): SQLParserResult {
+export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
 
     try {
         // Parse the SQL DDL statements
+        const { Parser } = await import('node-sql-parser');
+        const parser = new Parser();
 
-        const ast = sqlParser.astify(
+        const ast = parser.astify(
             sqlContent,
             parserOpts
         ) as unknown as SQLASTNode[];

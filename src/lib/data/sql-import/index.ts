@@ -166,7 +166,7 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
  * @param targetDatabaseType Target database type for the diagram
  * @returns Diagram object
  */
-export function sqlImportToDiagram({
+export async function sqlImportToDiagram({
     sqlContent,
     sourceDatabaseType,
     targetDatabaseType = DatabaseType.GENERIC,
@@ -174,7 +174,7 @@ export function sqlImportToDiagram({
     sqlContent: string;
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
-}): Diagram {
+}): Promise<Diagram> {
     // If source database type is GENERIC, try to auto-detect the type
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
@@ -192,21 +192,21 @@ export function sqlImportToDiagram({
         case DatabaseType.POSTGRESQL:
             // Check if the SQL is from pg_dump and use the appropriate parser
             if (isPgDumpFormat(sqlContent)) {
-                parserResult = fromPostgresDump(sqlContent);
+                parserResult = await fromPostgresDump(sqlContent);
             } else {
-                parserResult = fromPostgres(sqlContent);
+                parserResult = await fromPostgres(sqlContent);
             }
             break;
         case DatabaseType.MYSQL:
             // Check if the SQL is from MySQL dump and use the appropriate parser
-            parserResult = fromMySQL(sqlContent);
+            parserResult = await fromMySQL(sqlContent);
 
             break;
         case DatabaseType.SQL_SERVER:
-            parserResult = fromSQLServer(sqlContent);
+            parserResult = await fromSQLServer(sqlContent);
             break;
         case DatabaseType.SQLITE:
-            parserResult = fromSQLite(sqlContent);
+            parserResult = await fromSQLite(sqlContent);
             break;
         default:
             throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
@@ -246,35 +246,40 @@ export function sqlImportToDiagram({
  * @param sourceDatabaseType Source database type
  * @returns Object with success status and error information
  */
-export function parseSQLError({
+export async function parseSQLError({
     sqlContent,
     sourceDatabaseType,
 }: {
     sqlContent: string;
     sourceDatabaseType: DatabaseType;
-}): { success: boolean; error?: string; line?: number; column?: number } {
+}): Promise<{
+    success: boolean;
+    error?: string;
+    line?: number;
+    column?: number;
+}> {
     try {
         // Validate SQL based on the database type
         switch (sourceDatabaseType) {
             case DatabaseType.POSTGRESQL:
                 // PostgreSQL validation - check format and use appropriate parser
                 if (isPgDumpFormat(sqlContent)) {
-                    fromPostgresDump(sqlContent);
+                    await fromPostgresDump(sqlContent);
                 } else {
-                    fromPostgres(sqlContent);
+                    await fromPostgres(sqlContent);
                 }
                 break;
             case DatabaseType.MYSQL:
-                fromMySQL(sqlContent);
+                await fromMySQL(sqlContent);
 
                 break;
             case DatabaseType.SQL_SERVER:
                 // SQL Server validation
-                fromSQLServer(sqlContent);
+                await fromSQLServer(sqlContent);
                 break;
             case DatabaseType.SQLITE:
                 // SQLite validation
-                fromSQLite(sqlContent);
+                await fromSQLite(sqlContent);
                 break;
             // Add more database types here
             default:

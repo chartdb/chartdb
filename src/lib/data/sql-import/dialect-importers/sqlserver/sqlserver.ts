@@ -19,7 +19,6 @@ import type {
     AlterTableStatement,
 } from './sqlserver-common';
 import {
-    parser,
     parserOpts,
     extractColumnName,
     getTypeArgs,
@@ -273,7 +272,9 @@ function normalizeSQLServerDataType(dataType: string): string {
  * @param sqlContent SQL Server DDL content as string
  * @returns Parsed structure including tables, columns, and relationships
  */
-export function fromSQLServer(sqlContent: string): SQLParserResult {
+export async function fromSQLServer(
+    sqlContent: string
+): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
@@ -302,6 +303,8 @@ export function fromSQLServer(sqlContent: string): SQLParserResult {
             relationships.push(...fkData);
         }
 
+        const { Parser } = await import('node-sql-parser');
+        const parser = new Parser();
         let ast;
         try {
             ast = parser.astify(preprocessedSQL, parserOpts);

@@ -1,8 +1,6 @@
-import { Parser } from 'node-sql-parser';
 import type { SQLASTNode } from '../../common';
 
 // Set up the SQL parser with SQLite dialect
-export const parser = new Parser();
 export const parserOpts = {
     database: 'sqlite',
 };

@@ -19,7 +19,6 @@ import type {
     AlterTableStatement,
 } from './postgresql-common';
 import {
-    parser,
     parserOpts,
     extractColumnName,
     getTypeArgs,
@@ -28,12 +27,16 @@ import {
 } from './postgresql-common';
 
 // PostgreSQL-specific parsing logic
-export function fromPostgres(sqlContent: string): SQLParserResult {
+export async function fromPostgres(
+    sqlContent: string
+): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
 
     try {
+        const { Parser } = await import('node-sql-parser');
+        const parser = new Parser();
         // Parse the SQL DDL statements
         const ast = parser.astify(sqlContent, parserOpts);
 
