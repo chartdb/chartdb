@@ -29,6 +29,7 @@ type EditorType = typeof Editor;
 export interface CodeSnippetProps {
     className?: string;
     code: string;
+    codeToCopy?: string;
     language?: 'sql' | 'shell';
     loading?: boolean;
     autoScroll?: boolean;
@@ -40,6 +41,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
     ({
         className,
         code,
+        codeToCopy,
         loading,
         language = 'sql',
         autoScroll = false,
@@ -91,7 +93,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
             }
 
             try {
-                await navigator.clipboard.writeText(code);
+                await navigator.clipboard.writeText(codeToCopy ?? code);
                 setIsCopied(true);
             } catch {
                 setIsCopied(false);
@@ -103,7 +105,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                     ),
                 });
             }
-        }, [code, t, toast]);
+        }, [code, codeToCopy, t, toast]);
 
         return (
             <div

@@ -6,6 +6,7 @@ import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
+import { minimizeQuery } from '@/lib/data/import-metadata/scripts/minimize-script';
 import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
@@ -41,6 +42,25 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
     const { t } = useTranslation();
     const [importMetadataScripts, setImportMetadataScripts] =
         useState<ImportMetadataScripts | null>(null);
+
+    const code = useMemo(
+        () =>
+            (databaseClients.length > 0
+                ? importMetadataScripts?.[databaseType]?.({
+                      databaseEdition,
+                      databaseClient,
+                  })
+                : importMetadataScripts?.[databaseType]?.({
+                      databaseEdition,
+                  })) ?? '',
+        [
+            databaseType,
+            databaseEdition,
+            databaseClients,
+            importMetadataScripts,
+            databaseClient,
+        ]
+    );
 
     useEffect(() => {
         const loadScripts = async () => {
@@ -101,12 +121,8 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                         <CodeSnippet
                             className="h-40 w-full md:h-[200px]"
                             loading={!importMetadataScripts}
-                            code={
-                                importMetadataScripts?.[databaseType]?.({
-                                    databaseEdition,
-                                    databaseClient,
-                                }) ?? ''
-                            }
+                            code={minimizeQuery(code)}
+                            codeToCopy={code}
                             language={databaseClient ? 'shell' : 'sql'}
                         />
                     </Tabs>
@@ -114,11 +130,8 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                     <CodeSnippet
                         className="h-40 w-full flex-auto md:h-[200px]"
                         loading={!importMetadataScripts}
-                        code={
-                            importMetadataScripts?.[databaseType]?.({
-                                databaseEdition,
-                            }) ?? ''
-                        }
+                        code={minimizeQuery(code)}
+                        codeToCopy={code}
                         language="sql"
                     />
                 )}
