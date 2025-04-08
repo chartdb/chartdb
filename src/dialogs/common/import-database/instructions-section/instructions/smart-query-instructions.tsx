@@ -6,6 +6,7 @@ import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
+import { minimizeQuery } from '@/lib/data/import-metadata/scripts/minimize-script';
 import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,
@@ -101,7 +102,13 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                         <CodeSnippet
                             className="h-40 w-full md:h-[200px]"
                             loading={!importMetadataScripts}
-                            code={
+                            code={minimizeQuery(
+                                importMetadataScripts?.[databaseType]?.({
+                                    databaseEdition,
+                                    databaseClient,
+                                }) ?? ''
+                            )}
+                            originalCode={
                                 importMetadataScripts?.[databaseType]?.({
                                     databaseEdition,
                                     databaseClient,
@@ -114,7 +121,12 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                     <CodeSnippet
                         className="h-40 w-full flex-auto md:h-[200px]"
                         loading={!importMetadataScripts}
-                        code={
+                        code={minimizeQuery(
+                            importMetadataScripts?.[databaseType]?.({
+                                databaseEdition,
+                            }) ?? ''
+                        )}
+                        originalCode={
                             importMetadataScripts?.[databaseType]?.({
                                 databaseEdition,
                             }) ?? ''

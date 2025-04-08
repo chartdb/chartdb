@@ -29,6 +29,7 @@ import type { OnChange } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
+import type { editor } from 'monaco-editor';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
@@ -164,6 +165,18 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setIsCheckingJson(false);
     }, [scriptResult, setScriptResult]);
 
+    const handleEditorDidMount = useCallback(
+        (editor: editor.IStandaloneCodeEditor) => {
+            // Add paste event listener
+            editor.onDidPaste(() => {
+                setTimeout(() => {
+                    editor.getAction('editor.action.formatDocument')?.run();
+                }, 0);
+            });
+        },
+        []
+    );
+
     const renderHeader = useCallback(() => {
         return (
             <DialogHeader>
@@ -211,12 +224,14 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             onChange={debouncedHandleInputChange}
                             language={importMethod === 'query' ? 'json' : 'sql'}
                             loading={<Spinner />}
+                            onMount={handleEditorDidMount}
                             theme={
                                 effectiveTheme === 'dark'
                                     ? 'dbml-dark'
                                     : 'dbml-light'
                             }
                             options={{
+                                formatOnPaste: true,
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,
@@ -279,6 +294,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             importMethod,
             effectiveTheme,
             debouncedHandleInputChange,
+            handleEditorDidMount,
             showCheckJsonButton,
             isCheckingJson,
             handleCheckJson,
