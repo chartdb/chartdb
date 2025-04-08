@@ -167,7 +167,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
-            // Add paste event listener
             editor.onDidPaste(() => {
                 setTimeout(() => {
                     editor.getAction('editor.action.formatDocument')?.run();

@@ -43,6 +43,25 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
     const [importMetadataScripts, setImportMetadataScripts] =
         useState<ImportMetadataScripts | null>(null);
 
+    const code = useMemo(
+        () =>
+            (databaseClients.length > 0
+                ? importMetadataScripts?.[databaseType]?.({
+                      databaseEdition,
+                      databaseClient,
+                  })
+                : importMetadataScripts?.[databaseType]?.({
+                      databaseEdition,
+                  })) ?? '',
+        [
+            databaseType,
+            databaseEdition,
+            databaseClients,
+            importMetadataScripts,
+            databaseClient,
+        ]
+    );
+
     useEffect(() => {
         const loadScripts = async () => {
             const { importMetadataScripts } = await import(
@@ -102,18 +121,8 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                         <CodeSnippet
                             className="h-40 w-full md:h-[200px]"
                             loading={!importMetadataScripts}
-                            code={minimizeQuery(
-                                importMetadataScripts?.[databaseType]?.({
-                                    databaseEdition,
-                                    databaseClient,
-                                }) ?? ''
-                            )}
-                            originalCode={
-                                importMetadataScripts?.[databaseType]?.({
-                                    databaseEdition,
-                                    databaseClient,
-                                }) ?? ''
-                            }
+                            code={minimizeQuery(code)}
+                            codeToCopy={code}
                             language={databaseClient ? 'shell' : 'sql'}
                         />
                     </Tabs>
@@ -121,16 +130,8 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
                     <CodeSnippet
                         className="h-40 w-full flex-auto md:h-[200px]"
                         loading={!importMetadataScripts}
-                        code={minimizeQuery(
-                            importMetadataScripts?.[databaseType]?.({
-                                databaseEdition,
-                            }) ?? ''
-                        )}
-                        originalCode={
-                            importMetadataScripts?.[databaseType]?.({
-                                databaseEdition,
-                            }) ?? ''
-                        }
+                        code={minimizeQuery(code)}
+                        codeToCopy={code}
                         language="sql"
                     />
                 )}
