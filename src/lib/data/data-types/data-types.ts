@@ -15,6 +15,7 @@ export interface DataType {
 
 export interface DataTypeData extends DataType {
     hasCharMaxLength?: boolean;
+    usageLevel?: 1 | 2; // Level 1 is most common, Level 2 is second most common
 }
 
 export const dataTypeSchema: z.ZodType<DataType> = z.object({
@@ -85,4 +86,17 @@ export const findDataTypeDataById = (
         : dataTypes;
 
     return dataTypesOptions.find((dataType) => dataType.id === id);
+};
+
+export const getSortedDataTypes = (
+    databaseType: DatabaseType
+): DataTypeData[] => {
+    const types = [...dataTypeMap[databaseType]];
+    return types.sort((a, b) => {
+        // First sort by usage level (lower numbers first)
+        if ((a.usageLevel || 3) < (b.usageLevel || 3)) return -1;
+        if ((a.usageLevel || 3) > (b.usageLevel || 3)) return 1;
+        // Then sort alphabetically by name
+        return a.name.localeCompare(b.name);
+    });
 };

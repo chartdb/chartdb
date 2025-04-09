@@ -2,29 +2,35 @@ import type { DataTypeData } from './data-types';
 
 export const mariadbDataTypes: readonly DataTypeData[] = [
     // Numeric Types
+    { name: 'int', id: 'int', frequentlyUsed: true },
+    { name: 'bigint', id: 'bigint', frequentlyUsed: true },
+    { name: 'decimal', id: 'decimal', frequentlyUsed: true },
     { name: 'tinyint', id: 'tinyint' },
     { name: 'smallint', id: 'smallint' },
     { name: 'mediumint', id: 'mediumint' },
-    { name: 'int', id: 'int' },
-    { name: 'bigint', id: 'bigint' },
-    { name: 'decimal', id: 'decimal' },
     { name: 'numeric', id: 'numeric' },
     { name: 'float', id: 'float' },
     { name: 'double', id: 'double' },
     { name: 'bit', id: 'bit' },
     { name: 'bool', id: 'bool' },
-    { name: 'boolean', id: 'boolean' },
+    { name: 'boolean', id: 'boolean', frequentlyUsed: true },
 
     // Date and Time Types
-    { name: 'date', id: 'date' },
-    { name: 'datetime', id: 'datetime' },
-    { name: 'timestamp', id: 'timestamp' },
+    { name: 'datetime', id: 'datetime', frequentlyUsed: true },
+    { name: 'date', id: 'date', frequentlyUsed: true },
+    { name: 'timestamp', id: 'timestamp', frequentlyUsed: true },
     { name: 'time', id: 'time' },
     { name: 'year', id: 'year' },
 
     // String Types
+    {
+        name: 'varchar',
+        id: 'varchar',
+        hasCharMaxLength: true,
+        frequentlyUsed: true,
+    },
+    { name: 'text', id: 'text', frequentlyUsed: true },
     { name: 'char', id: 'char', hasCharMaxLength: true },
-    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
     { name: 'binary', id: 'binary', hasCharMaxLength: true },
     { name: 'varbinary', id: 'varbinary', hasCharMaxLength: true },
     { name: 'tinyblob', id: 'tinyblob' },
@@ -32,7 +38,6 @@ export const mariadbDataTypes: readonly DataTypeData[] = [
     { name: 'mediumblob', id: 'mediumblob' },
     { name: 'longblob', id: 'longblob' },
     { name: 'tinytext', id: 'tinytext' },
-    { name: 'text', id: 'text' },
     { name: 'mediumtext', id: 'mediumtext' },
     { name: 'longtext', id: 'longtext' },
     { name: 'enum', id: 'enum' },
@@ -49,6 +54,6 @@ export const mariadbDataTypes: readonly DataTypeData[] = [
     { name: 'geometrycollection', id: 'geometrycollection' },
 
     // JSON Type
-    { name: 'json', id: 'json' },
-    { name: 'uuid', id: 'uuid' },
+    { name: 'json', id: 'json', frequentlyUsed: true },
+    { name: 'uuid', id: 'uuid', frequentlyUsed: true },
 ] as const;
