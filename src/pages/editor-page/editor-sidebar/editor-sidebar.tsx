@@ -5,7 +5,7 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -15,6 +15,10 @@ import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import ChartDBLogo from '@/assets/logo-light.png';
+import ChartDBDarkLogo from '@/assets/logo-dark.png';
+import { useTheme } from '@/hooks/use-theme';
 
 export interface SidebarItem {
     title: string;
@@ -30,6 +34,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { selectSidebarSection, selectedSidebarSection, showSidePanel } =
         useLayout();
     const { t } = useTranslation();
+    const { isMd: isDesktop } = useBreakpoint('md');
+    const { effectiveTheme } = useTheme();
     const items: SidebarItem[] = useMemo(
         () => [
             {
@@ -96,9 +102,28 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             variant="sidebar"
             className="relative h-full"
         >
+            {!isDesktop ? (
+                <SidebarHeader>
+                    <a
+                        href="https://chartdb.io"
+                        className="cursor-pointer"
+                        rel="noreferrer"
+                    >
+                        <img
+                            src={
+                                effectiveTheme === 'light'
+                                    ? ChartDBLogo
+                                    : ChartDBDarkLogo
+                            }
+                            alt="chartDB"
+                            className="h-4 max-w-fit"
+                        />
+                    </a>
+                </SidebarHeader>
+            ) : null}
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel />
+                    {/* <SidebarGroupLabel /> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (

@@ -11,6 +11,9 @@ import {
 } from '@/components/drawer/drawer';
 import { Separator } from '@/components/separator/separator';
 import type { Diagram } from '@/lib/domain/diagram';
+import { TopNavbarMobile } from './top-navbar/top-navbar-mobile';
+import { SidebarProvider } from '@/components/sidebar/sidebar';
+import { EditorSidebar } from './editor-sidebar/editor-sidebar';
 
 export interface EditorMobileLayoutProps {
     initialDiagram?: Diagram;
@@ -21,19 +24,30 @@ export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
     const { isSidePanelShowed, hideSidePanel } = useLayout();
     return (
         <>
-            <Drawer open={isSidePanelShowed} onClose={() => hideSidePanel()}>
-                <DrawerContent className="h-full" fullScreen>
-                    <DrawerHeader>
-                        <DrawerTitle>Manage Diagram</DrawerTitle>
-                        <DrawerDescription>
-                            Manage your diagram objects
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <Separator orientation="horizontal" />
-                    <SidePanel data-vaul-no-drag />
-                </DrawerContent>
-            </Drawer>
-            <Canvas initialTables={initialDiagram?.tables ?? []} />
+            <SidebarProvider
+                defaultOpen={false}
+                open={false}
+                className="flex-col"
+            >
+                <EditorSidebar />
+                <TopNavbarMobile />
+                <Drawer
+                    open={isSidePanelShowed}
+                    onClose={() => hideSidePanel()}
+                >
+                    <DrawerContent className="h-full" fullScreen>
+                        <DrawerHeader>
+                            <DrawerTitle>Manage Diagram</DrawerTitle>
+                            <DrawerDescription>
+                                Manage your diagram objects
+                            </DrawerDescription>
+                        </DrawerHeader>
+                        <Separator orientation="horizontal" />
+                        <SidePanel data-vaul-no-drag />
+                    </DrawerContent>
+                </Drawer>
+                <Canvas initialTables={initialDiagram?.tables ?? []} />
+            </SidebarProvider>
         </>
     );
 };
