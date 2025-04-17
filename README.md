@@ -30,7 +30,7 @@
   <a href="https://discord.gg/QeFwyWSKwC">
     <img src="https://img.shields.io/discord/1277047413705670678?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord community channel" />
   </a>
-  <a href="https://x.com/jonathanfishner">
+  <a href="https://x.com/intent/follow?screen_name=jonathanfishner">
     <img src="https://img.shields.io/twitter/follow/jonathanfishner?style=social"/>
   </a>
 
@@ -149,7 +149,7 @@ VITE_LLM_MODEL_NAME=Qwen/Qwen2.5-32B-Instruct-AWQ
 
 - [Discord](https://discord.gg/QeFwyWSKwC) (For live discussion with the community and the ChartDB team)
 - [GitHub Issues](https://github.com/chartdb/chartdb/issues) (For any bugs and errors you encounter using ChartDB)
-- [Twitter](https://x.com/jonathanfishner) (Get news fast)
+- [Twitter](https://x.com/intent/follow?screen_name=jonathanfishner) (Get news fast)
 
 ## Contributing
 
