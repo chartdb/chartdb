@@ -82,7 +82,10 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 title: 'Twitter',
                 icon: Twitter,
                 onClick: () =>
-                    window.open('https://x.com/jonathanfishner', '_blank'),
+                    window.open(
+                        'https://x.com/intent/follow?screen_name=jonathanfishner',
+                        '_blank'
+                    ),
                 active: false,
             },
             {
