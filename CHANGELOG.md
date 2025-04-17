@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.11.0](https://github.com/chartdb/chartdb/compare/v1.10.0...v1.11.0) (2025-04-17)
+
+
+### Features
+
+* add sidebar footer help buttons ([#650](https://github.com/chartdb/chartdb/issues/650)) ([fc46cbb](https://github.com/chartdb/chartdb/commit/fc46cbb8933761c7bac3604664f7de812f6f5b6b))
+* **import-sql:** import postgresql via SQL (DDL script) ([#639](https://github.com/chartdb/chartdb/issues/639)) ([f7a6e0c](https://github.com/chartdb/chartdb/commit/f7a6e0cb5e4921dd9540739f9da269858e7ca7be))
+
+
+### Bug Fixes
+
+* **import:** display query result formatted ([#644](https://github.com/chartdb/chartdb/issues/644)) ([caa81c2](https://github.com/chartdb/chartdb/commit/caa81c24a6535bc87129c38622aac5a62a6d479d))
+* **import:** strict parse of database metadata ([#635](https://github.com/chartdb/chartdb/issues/635)) ([0940d72](https://github.com/chartdb/chartdb/commit/0940d72d5d3726650213257639f24ba47e729854))
+* **mobile:** fix create diagram modal on mobile ([#646](https://github.com/chartdb/chartdb/issues/646)) ([25c4b42](https://github.com/chartdb/chartdb/commit/25c4b4253849575d7a781ed197281e2a35e7184a))
+* **mysql-ddl:** update the script to import - for create fks ([#642](https://github.com/chartdb/chartdb/issues/642)) ([cf81253](https://github.com/chartdb/chartdb/commit/cf81253535ca5a3b8a65add78287c1bdb283a1c7))
+* **performance:** Import deps dynamically ([#652](https://github.com/chartdb/chartdb/issues/652)) ([e3cb627](https://github.com/chartdb/chartdb/commit/e3cb62788c13f149e35e1a5020191bd43d14b52f))
+* remove unused links from help menu ([#623](https://github.com/chartdb/chartdb/issues/623)) ([85275e5](https://github.com/chartdb/chartdb/commit/85275e5dd6e7845f06f682eeceda7932fc87e875))
+* **sidebar:** turn sidebar to responsive for mobile ([#658](https://github.com/chartdb/chartdb/issues/658)) ([ce2389f](https://github.com/chartdb/chartdb/commit/ce2389f135d399d82c9848335d31174bac8a3791))
+
 ## [1.10.0](https://github.com/chartdb/chartdb/compare/v1.9.0...v1.10.0) (2025-03-25)
 
 
