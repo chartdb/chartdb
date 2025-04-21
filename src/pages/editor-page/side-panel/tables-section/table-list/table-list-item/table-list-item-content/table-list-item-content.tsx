@@ -29,7 +29,7 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { ColorPicker } from './color-picker/color-picker';
+import { ColorPicker } from '@/components/color-picker/color-picker';
 
 type AccordionItemValue = 'fields' | 'indexes';
 

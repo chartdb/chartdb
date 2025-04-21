@@ -77,6 +77,8 @@ import { useCanvas } from '@/hooks/use-canvas';
 
 export type EdgeType = RelationshipEdgeType | DependencyEdgeType;
 
+export type NodeType = TableNodeType;
+
 type AddEdgeParams = Parameters<typeof addEdge<EdgeType>>[0];
 
 const edgeTypes = {
@@ -142,7 +144,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
-    const [nodes, setNodes, onNodesChange] = useNodesState<TableNodeType>(
+    const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) => tableToTableNode(table, filteredSchemas))
     );
     const [edges, setEdges, onEdgesChange] =

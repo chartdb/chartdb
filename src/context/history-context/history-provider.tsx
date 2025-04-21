@@ -33,6 +33,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         removeIndex,
         updateIndex,
         removeRelationships,
+        addAreas,
+        removeAreas,
+        updateArea,
     } = useChartDB();
 
     const redoActionHandlers = useMemo(
@@ -107,6 +110,15 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addAreas: ({ redoData: { areas } }) => {
+                return addAreas(areas, { updateHistory: false });
+            },
+            removeAreas: ({ redoData: { areaIds } }) => {
+                return removeAreas(areaIds, { updateHistory: false });
+            },
+            updateArea: ({ redoData: { areaId, area } }) => {
+                return updateArea(areaId, area, { updateHistory: false });
+            },
         }),
         [
             addTables,
@@ -126,6 +138,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addDependencies,
             removeDependencies,
             updateDependency,
+            addAreas,
+            removeAreas,
+            updateArea,
         ]
     );
 
@@ -215,6 +230,15 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addAreas: ({ undoData: { areaIds } }) => {
+                return removeAreas(areaIds, { updateHistory: false });
+            },
+            removeAreas: ({ undoData: { areas } }) => {
+                return addAreas(areas, { updateHistory: false });
+            },
+            updateArea: ({ undoData: { areaId, area } }) => {
+                return updateArea(areaId, area, { updateHistory: false });
+            },
         }),
         [
             addTables,
@@ -234,6 +258,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addDependencies,
             removeDependencies,
             updateDependency,
+            addAreas,
+            removeAreas,
+            updateArea,
         ]
     );
 

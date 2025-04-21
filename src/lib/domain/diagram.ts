@@ -19,6 +19,7 @@ import {
     dbTableSchema,
 } from './db-table';
 import { generateDiagramId } from '@/lib/utils';
+import type { Area } from './area';
 export interface Diagram {
     id: string;
     name: string;
@@ -27,6 +28,7 @@ export interface Diagram {
     tables?: DBTable[];
     relationships?: DBRelationship[];
     dependencies?: DBDependency[];
+    areas?: Area[];
     createdAt: Date;
     updatedAt: Date;
 }
