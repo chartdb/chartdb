@@ -12,8 +12,9 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { Check, Pencil, GripVertical } from 'lucide-react';
+import { Check, GripVertical } from 'lucide-react';
 import { Button } from '@/components/button/button';
+import { useLayout } from '@/hooks/use-layout';
 
 export type AreaNodeType = Node<
     {
@@ -29,6 +30,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         const [editMode, setEditMode] = useState(false);
         const [areaName, setAreaName] = useState(area.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
+        const { openAreaFromSidebar, selectSidebarSection } = useLayout();
 
         const focused = !!selected && !dragging;
 
@@ -45,6 +47,11 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
             setAreaName(area.name);
         }, [area.name]);
 
+        const openAreaInEditor = useCallback(() => {
+            selectSidebarSection('areas');
+            openAreaFromSidebar(area.id);
+        }, [selectSidebarSection, openAreaFromSidebar, area.id]);
+
         useClickAway(inputRef, editAreaName);
         useKeyPressEvent('Enter', editAreaName);
         useKeyPressEvent('Escape', abortEdit);
@@ -57,32 +64,30 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         return (
             <div
                 className={cn(
-                    'flex h-full flex-col rounded-md border-2 shadow-sm transition-transform duration-300',
+                    'flex h-full flex-col rounded-md border-2 shadow-sm',
                     selected ? 'border-pink-600' : 'border-transparent'
                 )}
                 style={{
-                    backgroundColor: `${area.color}15`, // Low opacity background
+                    backgroundColor: `${area.color}15`,
                     borderColor: selected ? undefined : area.color,
-                    zIndex: -10, // Ensure it stays below other elements
+                }}
+                onClick={(e) => {
+                    if (e.detail === 2) {
+                        openAreaInEditor();
+                    }
                 }}
             >
                 <NodeResizer
                     isVisible={focused}
-                    lineClassName="!border-none !w-2"
-                    minWidth={200}
-                    minHeight={150}
+                    lineClassName="!border-4 !border-transparent"
+                    handleClassName="!h-3 !w-3 !rounded-full !bg-pink-600"
                 />
-                <div
-                    className="group flex h-8 items-center justify-between rounded-t-md px-2"
-                    // style={{
-                    //     backgroundColor: `${area.color}30`, // Slightly more opaque for the header
-                    // }}
-                >
-                    <div className="flex items-center gap-1">
-                        <GripVertical className="size-3.5 text-slate-700 opacity-60 dark:text-slate-300" />
+                <div className="group flex h-8 items-center justify-between rounded-t-md px-2">
+                    <div className="flex w-full items-center gap-1">
+                        <GripVertical className="size-4 text-slate-700 opacity-60 dark:text-slate-300" />
 
                         {editMode && !readonly ? (
-                            <div className="flex items-center">
+                            <div className="flex w-full items-center">
                                 <Input
                                     ref={inputRef}
                                     autoFocus
@@ -107,7 +112,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <div
-                                        className="text-editable max-w-[200px] cursor-text truncate px-1 py-0.5 text-sm font-medium text-slate-700 dark:text-slate-300"
+                                        className="text-editable max-w-[200px] cursor-text truncate px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300"
                                         onDoubleClick={enterEditMode}
                                     >
                                         {area.name}
@@ -119,20 +124,8 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                             </Tooltip>
                         )}
                     </div>
-
-                    {!editMode && !readonly && (
-                        <div className="hidden group-hover:flex">
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 hover:bg-white/20"
-                                onClick={enterEditMode}
-                            >
-                                <Pencil className="size-3.5 text-slate-700 opacity-60 dark:text-slate-300" />
-                            </Button>
-                        </div>
-                    )}
                 </div>
-                <div className="flex-1" /> {/* Spacer to fill the area */}
+                <div className="flex-1" />
             </div>
         );
     }

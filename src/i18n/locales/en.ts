@@ -418,6 +418,7 @@ export const en = {
         canvas_context_menu: {
             new_table: 'New Table',
             new_relationship: 'New Relationship',
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

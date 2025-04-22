@@ -121,6 +121,7 @@ const areaToAreaNode = (area: Area): AreaNodeType => ({
     data: { area },
     width: area.width,
     height: area.height,
+    zIndex: -10,
 });
 
 export interface CanvasProps {
