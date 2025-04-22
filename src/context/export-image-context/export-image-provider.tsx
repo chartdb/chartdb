@@ -57,8 +57,22 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const getBackgroundColor = (
+        theme: 'light' | 'dark',
+        isTransparent: boolean
+    ): string => {
+        if (isTransparent) return 'transparent';
+        return theme === 'light' ? '#ffffff' : '#141414';
+    };
+
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (type, scale = 1) => {
+        async (
+            type,
+            useBackground = false,
+            isTransparent = true,
+            hasWatermark = true,
+            scale = 1
+        ) => {
             showLoader({
                 animated: false,
             });
@@ -121,28 +135,30 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 pattern.setAttribute('id', 'background-pattern');
                 pattern.setAttribute('width', String(16 * viewport.zoom));
                 pattern.setAttribute('height', String(16 * viewport.zoom));
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                pattern.setAttribute(
-                    'patternTransform',
-                    `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
-                );
+                if (useBackground) {
+                    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                    pattern.setAttribute(
+                        'patternTransform',
+                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
+                    );
 
-                const dot = document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'circle'
-                );
+                    const dot = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'circle'
+                    );
 
-                const dotSize = viewport.zoom * 0.5;
-                dot.setAttribute('cx', String(viewport.zoom));
-                dot.setAttribute('cy', String(viewport.zoom));
-                dot.setAttribute('r', String(dotSize));
-                const dotColor =
-                    effectiveTheme === 'light' ? '#92939C' : '#777777';
-                dot.setAttribute('fill', dotColor);
+                    const dotSize = viewport.zoom * 0.5;
+                    dot.setAttribute('cx', String(viewport.zoom));
+                    dot.setAttribute('cy', String(viewport.zoom));
+                    dot.setAttribute('r', String(dotSize));
+                    const dotColor =
+                        effectiveTheme === 'light' ? '#92939C' : '#777777';
+                    dot.setAttribute('fill', dotColor);
 
-                pattern.appendChild(dot);
-                defs.appendChild(pattern);
-                tempSvg.appendChild(defs);
+                    pattern.appendChild(dot);
+                    defs.appendChild(pattern);
+                    tempSvg.appendChild(defs);
+                }
 
                 const backgroundRect = document.createElementNS(
                     'http://www.w3.org/2000/svg',
@@ -196,10 +212,10 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
-                            backgroundColor:
-                                effectiveTheme === 'light'
-                                    ? '#ffffff'
-                                    : '#141414',
+                            backgroundColor: getBackgroundColor(
+                                effectiveTheme,
+                                isTransparent
+                            ),
                             width: reactFlowBounds.width,
                             height: reactFlowBounds.height,
                             style: {
@@ -235,40 +251,45 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             // Draw the diagram
                             ctx.drawImage(diagramImage, 0, 0);
 
-                            // Calculate logo size
-                            const logoHeight = Math.max(
-                                24,
-                                Math.floor(canvas.width * 0.024)
-                            );
-                            const padding = Math.max(
-                                12,
-                                Math.floor(logoHeight * 0.5)
-                            );
+                            if (hasWatermark) {
+                                // Calculate logo size
+                                const logoHeight = Math.max(
+                                    24,
+                                    Math.floor(canvas.width * 0.024)
+                                );
+                                const padding = Math.max(
+                                    12,
+                                    Math.floor(logoHeight * 0.5)
+                                );
 
-                            // Load and draw the logo
-                            const logoImage = new Image();
-                            logoImage.src = logoBase64;
+                                // Load and draw the logo
+                                const logoImage = new Image();
+                                logoImage.src = logoBase64;
 
-                            await new Promise((resolve) => {
-                                logoImage.onload = () => {
-                                    // Calculate logo width while maintaining aspect ratio
-                                    const logoWidth =
-                                        (logoImage.width / logoImage.height) *
-                                        logoHeight;
+                                await new Promise((resolve) => {
+                                    logoImage.onload = () => {
+                                        // Calculate logo width while maintaining aspect ratio
+                                        const logoWidth =
+                                            (logoImage.width /
+                                                logoImage.height) *
+                                            logoHeight;
 
-                                    // Draw logo in bottom-left corner
-                                    ctx.globalAlpha = 0.9;
-                                    ctx.drawImage(
-                                        logoImage,
-                                        padding,
-                                        canvas.height - logoHeight - padding,
-                                        logoWidth,
-                                        logoHeight
-                                    );
-                                    ctx.globalAlpha = 1;
-                                    resolve(null);
-                                };
-                            });
+                                        // Draw logo in bottom-left corner
+                                        ctx.globalAlpha = 0.9;
+                                        ctx.drawImage(
+                                            logoImage,
+                                            padding,
+                                            canvas.height -
+                                                logoHeight -
+                                                padding,
+                                            logoWidth,
+                                            logoHeight
+                                        );
+                                        ctx.globalAlpha = 1;
+                                        resolve(null);
+                                    };
+                                });
+                            }
 
                             // Convert canvas to data URL
                             const finalDataUrl = canvas.toDataURL(
