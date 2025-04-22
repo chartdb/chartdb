@@ -417,6 +417,8 @@ export const zh_TW: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '新建表格',
             new_relationship: '新建關聯',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {
