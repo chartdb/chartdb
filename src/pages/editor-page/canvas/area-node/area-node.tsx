@@ -108,7 +108,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                                     <Check className="size-3.5 text-slate-700 dark:text-slate-300" />
                                 </Button>
                             </div>
-                        ) : (
+                        ) : !readonly ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <div
@@ -122,6 +122,10 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                                     {t('tool_tips.double_click_to_edit')}
                                 </TooltipContent>
                             </Tooltip>
+                        ) : (
+                            <div className="truncate px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300">
+                                {area.name}
+                            </div>
                         )}
                     </div>
                 </div>
