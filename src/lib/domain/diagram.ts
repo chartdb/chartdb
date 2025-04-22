@@ -19,7 +19,7 @@ import {
     dbTableSchema,
 } from './db-table';
 import { generateDiagramId } from '@/lib/utils';
-import type { Area } from './area';
+import { areaSchema, type Area } from './area';
 export interface Diagram {
     id: string;
     name: string;
@@ -41,6 +41,7 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     tables: z.array(dbTableSchema).optional(),
     relationships: z.array(dbRelationshipSchema).optional(),
     dependencies: z.array(dbDependencySchema).optional(),
+    areas: z.array(areaSchema).optional(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });
