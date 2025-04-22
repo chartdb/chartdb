@@ -160,7 +160,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         useLocalConfig();
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
-    // const nodeTypes = useMemo(() => ({ table: TableNode }), []);
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
     const { reorderTables, fitView, setOverlapGraph, overlapGraph } =
@@ -598,6 +597,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onNodesChangeHandler: OnNodesChange<NodeType> = useCallback(
         (changes) => {
+            // Handle table changes
             const { positionChanges, removeChanges, sizeChanges } =
                 findRelevantNodesChanges(changes, 'table');
 
@@ -650,19 +650,18 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 sizeChanges,
             });
 
+            // Handle area changes
             const {
                 positionChanges: areaPositionChanges,
                 removeChanges: areaRemoveChanges,
                 sizeChanges: areaSizeChanges,
             } = findRelevantNodesChanges(changes, 'area');
 
-            // Handle area changes
             if (
                 areaPositionChanges.length > 0 ||
                 areaRemoveChanges.length > 0 ||
                 areaSizeChanges.length > 0
             ) {
-                // Process position and size changes for areas
                 [...areaPositionChanges, ...areaSizeChanges].forEach(
                     (change) => {
                         const updateData: Partial<Area> = {};
@@ -683,7 +682,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     }
                 );
 
-                // Process area removals
                 areaRemoveChanges.forEach((change) => {
                     removeArea(change.id);
                 });

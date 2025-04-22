@@ -58,7 +58,6 @@ export const AreaList: React.FC<AreaListProps> = ({ areas }) => {
 
             const newAreasOrder = arrayMove<Area>(areas, oldIndex, newIndex);
 
-            // Update each area's order individually
             newAreasOrder.forEach((area, index) => {
                 updateArea(area.id, { order: index });
             });
@@ -92,7 +91,6 @@ export const AreaList: React.FC<AreaListProps> = ({ areas }) => {
                 >
                     {areas
                         .sort((area1: Area, area2: Area) => {
-                            // if one area has order and the other doesn't, the one with order should come first
                             if (area1.order && area2.order === undefined) {
                                 return -1;
                             }
@@ -101,7 +99,6 @@ export const AreaList: React.FC<AreaListProps> = ({ areas }) => {
                                 return 1;
                             }
 
-                            // if both areas have order, sort by order
                             if (
                                 area1.order !== undefined &&
                                 area2.order !== undefined
