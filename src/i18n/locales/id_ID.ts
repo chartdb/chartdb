@@ -424,6 +424,8 @@ export const id_ID: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Tabel Baru',
             new_relationship: 'Hubungan Baru',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

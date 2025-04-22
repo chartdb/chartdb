@@ -430,6 +430,8 @@ export const te: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'కొత్త పట్టిక',
             new_relationship: 'కొత్త సంబంధం',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

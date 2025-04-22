@@ -428,6 +428,8 @@ export const ne: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'नयाँ तालिका',
             new_relationship: 'नयाँ सम्बन्ध',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

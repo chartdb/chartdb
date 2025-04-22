@@ -426,6 +426,8 @@ export const pt_BR: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Nova Tabela',
             new_relationship: 'Novo Relacionamento',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

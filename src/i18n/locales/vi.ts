@@ -422,6 +422,8 @@ export const vi: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Tạo bảng mới',
             new_relationship: 'Tạo quan hệ mới',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

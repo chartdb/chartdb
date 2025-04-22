@@ -423,6 +423,8 @@ export const ru: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Создать таблицу',
             new_relationship: 'Создать отношение',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

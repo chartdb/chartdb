@@ -432,6 +432,8 @@ export const ja: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '新しいテーブル',
             new_relationship: '新しいリレーションシップ',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

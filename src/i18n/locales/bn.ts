@@ -425,6 +425,8 @@ export const bn: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'নতুন টেবিল',
             new_relationship: 'নতুন সম্পর্ক',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

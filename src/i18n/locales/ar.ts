@@ -421,6 +421,8 @@ export const ar: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'جدول جديد',
             new_relationship: 'علاقة جديدة',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

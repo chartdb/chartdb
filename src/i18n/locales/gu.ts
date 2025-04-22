@@ -425,6 +425,8 @@ export const gu: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'નવું ટેબલ',
             new_relationship: 'નવો સંબંધ',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {
