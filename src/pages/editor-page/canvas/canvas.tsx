@@ -544,16 +544,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const findRelevantNodesChanges = useCallback(
         (changes: NodeChange<NodeType>[], type: NodeType['type']) => {
-            let changesToApply = changes;
-
-            if (readonly) {
-                changesToApply = changesToApply.filter(
-                    (change) => change.type !== 'remove'
-                );
-            }
-
-            // keeps only the changes that are on tables nodes
-            changesToApply = changesToApply.filter((change) => {
+            const relevantChanges = changes.filter((change) => {
                 if (
                     change.type === 'position' ||
                     change.type === 'dimensions' ||
@@ -574,15 +565,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 return false;
             });
 
-            const positionChanges: NodePositionChange[] = changesToApply.filter(
-                (change) => change.type === 'position' && !change.dragging
-            ) as NodePositionChange[];
+            const positionChanges: NodePositionChange[] =
+                relevantChanges.filter(
+                    (change) => change.type === 'position' && !change.dragging
+                ) as NodePositionChange[];
 
-            const removeChanges: NodeRemoveChange[] = changesToApply.filter(
+            const removeChanges: NodeRemoveChange[] = relevantChanges.filter(
                 (change) => change.type === 'remove'
             ) as NodeRemoveChange[];
 
-            const sizeChanges: NodeDimensionChange[] = changesToApply.filter(
+            const sizeChanges: NodeDimensionChange[] = relevantChanges.filter(
                 (change) => change.type === 'dimensions' && change.resizing
             ) as NodeDimensionChange[];
 
@@ -592,14 +584,22 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 sizeChanges,
             };
         },
-        [getNode, readonly]
+        [getNode]
     );
 
     const onNodesChangeHandler: OnNodesChange<NodeType> = useCallback(
         (changes) => {
+            let changesToApply = changes;
+
+            if (readonly) {
+                changesToApply = changesToApply.filter(
+                    (change) => change.type !== 'remove'
+                );
+            }
+
             // Handle table changes
             const { positionChanges, removeChanges, sizeChanges } =
-                findRelevantNodesChanges(changes, 'table');
+                findRelevantNodesChanges(changesToApply, 'table');
 
             if (
                 positionChanges.length > 0 ||
@@ -655,7 +655,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 positionChanges: areaPositionChanges,
                 removeChanges: areaRemoveChanges,
                 sizeChanges: areaSizeChanges,
-            } = findRelevantNodesChanges(changes, 'area');
+            } = findRelevantNodesChanges(changesToApply, 'area');
 
             if (
                 areaPositionChanges.length > 0 ||
@@ -687,7 +687,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 });
             }
 
-            return onNodesChange(changes);
+            return onNodesChange(changesToApply);
         },
         [
             onNodesChange,
@@ -696,6 +696,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             findRelevantNodesChanges,
             updateArea,
             removeArea,
+            readonly,
         ]
     );
 
