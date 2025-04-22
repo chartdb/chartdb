@@ -209,6 +209,27 @@ export const uk: LanguageTranslation = {
                     description: 'Створіть подання, щоб почати',
                 },
             },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
+                },
+            },
         },
 
         toolbar: {
@@ -400,6 +421,8 @@ export const uk: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Нова таблиця',
             new_relationship: 'Новий звʼязок',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

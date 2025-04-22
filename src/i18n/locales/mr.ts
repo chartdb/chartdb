@@ -215,6 +215,27 @@ export const mr: LanguageTranslation = {
                     description: 'सुरू करण्यासाठी एक दृश्य तयार करा',
                 },
             },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
+                },
+            },
         },
 
         toolbar: {
@@ -413,6 +434,8 @@ export const mr: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'नवीन टेबल',
             new_relationship: 'नवीन रिलेशनशिप',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

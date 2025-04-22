@@ -10,11 +10,13 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useReactFlow } from '@xyflow/react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Table, Workflow, Group } from 'lucide-react';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, filteredSchemas, schemas, readonly } = useChartDB();
+    const { createTable, filteredSchemas, schemas, readonly, createArea } =
+        useChartDB();
     const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
@@ -61,6 +63,21 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         ]
     );
 
+    const createAreaHandler = useCallback(
+        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const position = screenToFlowPosition({
+                x: event.clientX,
+                y: event.clientY,
+            });
+
+            createArea({
+                x: position.x,
+                y: position.y,
+            });
+        },
+        [createArea, screenToFlowPosition]
+    );
+
     const createRelationshipHandler = useCallback(() => {
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
@@ -73,11 +90,26 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         <ContextMenu>
             <ContextMenuTrigger>{children}</ContextMenuTrigger>
             <ContextMenuContent>
-                <ContextMenuItem onClick={createTableHandler}>
+                <ContextMenuItem
+                    onClick={createTableHandler}
+                    className="flex justify-between gap-4"
+                >
                     {t('canvas_context_menu.new_table')}
+                    <Table className="size-3.5" />
                 </ContextMenuItem>
-                <ContextMenuItem onClick={createRelationshipHandler}>
+                <ContextMenuItem
+                    onClick={createRelationshipHandler}
+                    className="flex justify-between gap-4"
+                >
                     {t('canvas_context_menu.new_relationship')}
+                    <Workflow className="size-3.5" />
+                </ContextMenuItem>
+                <ContextMenuItem
+                    onClick={createAreaHandler}
+                    className="flex justify-between gap-4"
+                >
+                    {t('canvas_context_menu.new_area')}
+                    <Group className="size-3.5" />
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

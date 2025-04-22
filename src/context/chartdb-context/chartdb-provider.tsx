@@ -21,6 +21,7 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import type { Area } from '@/lib/domain/area';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
@@ -56,6 +57,7 @@ export const ChartDBProvider: React.FC<
     const [dependencies, setDependencies] = useState<DBDependency[]>(
         diagram?.dependencies ?? []
     );
+    const [areas, setAreas] = useState<Area[]>(diagram?.areas ?? []);
     const { events: diffEvents } = useDiff();
 
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
@@ -152,6 +154,7 @@ export const ChartDBProvider: React.FC<
             tables,
             relationships,
             dependencies,
+            areas,
         }),
         [
             diagramId,
@@ -161,6 +164,7 @@ export const ChartDBProvider: React.FC<
             tables,
             relationships,
             dependencies,
+            areas,
             diagramCreatedAt,
             diagramUpdatedAt,
         ]
@@ -172,6 +176,7 @@ export const ChartDBProvider: React.FC<
             setTables([]);
             setRelationships([]);
             setDependencies([]);
+            setAreas([]);
             setDiagramUpdatedAt(updatedAt);
 
             resetRedoStack();
@@ -182,6 +187,7 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagramTables(diagramId),
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagramDependencies(diagramId),
+                db.deleteDiagramAreas(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -194,6 +200,7 @@ export const ChartDBProvider: React.FC<
             setTables([]);
             setRelationships([]);
             setDependencies([]);
+            setAreas([]);
             resetRedoStack();
             resetUndoStack();
 
@@ -202,6 +209,7 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagram(diagramId),
                 db.deleteDiagramDependencies(diagramId),
+                db.deleteDiagramAreas(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -1363,6 +1371,130 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    // Area operations
+    const addAreas: ChartDBContext['addAreas'] = useCallback(
+        async (areas: Area[], options = { updateHistory: true }) => {
+            setAreas((currentAreas) => [...currentAreas, ...areas]);
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+
+            await Promise.all([
+                ...areas.map((area) => db.addArea({ diagramId, area })),
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'addAreas',
+                    redoData: { areas },
+                    undoData: { areaIds: areas.map((a) => a.id) },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setAreas, addUndoAction, resetRedoStack]
+    );
+
+    const addArea: ChartDBContext['addArea'] = useCallback(
+        async (area: Area, options = { updateHistory: true }) => {
+            return addAreas([area], options);
+        },
+        [addAreas]
+    );
+
+    const createArea: ChartDBContext['createArea'] = useCallback(
+        async (attributes) => {
+            const area: Area = {
+                id: generateId(),
+                name: `Area ${areas.length + 1}`,
+                x: 0,
+                y: 0,
+                width: 300,
+                height: 200,
+                color: randomColor(),
+                ...attributes,
+            };
+
+            await addArea(area);
+
+            return area;
+        },
+        [areas, addArea]
+    );
+
+    const getArea: ChartDBContext['getArea'] = useCallback(
+        (id: string) => areas.find((area) => area.id === id) ?? null,
+        [areas]
+    );
+
+    const removeAreas: ChartDBContext['removeAreas'] = useCallback(
+        async (ids: string[], options = { updateHistory: true }) => {
+            const prevAreas = [
+                ...areas.filter((area) => ids.includes(area.id)),
+            ];
+
+            setAreas((areas) => areas.filter((area) => !ids.includes(area.id)));
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+
+            await Promise.all([
+                ...ids.map((id) => db.deleteArea({ diagramId, id })),
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+            ]);
+
+            if (prevAreas.length > 0 && options.updateHistory) {
+                addUndoAction({
+                    action: 'removeAreas',
+                    redoData: { areaIds: ids },
+                    undoData: { areas: prevAreas },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setAreas, areas, addUndoAction, resetRedoStack]
+    );
+
+    const removeArea: ChartDBContext['removeArea'] = useCallback(
+        async (id: string, options = { updateHistory: true }) => {
+            return removeAreas([id], options);
+        },
+        [removeAreas]
+    );
+
+    const updateArea: ChartDBContext['updateArea'] = useCallback(
+        async (
+            id: string,
+            area: Partial<Area>,
+            options = { updateHistory: true }
+        ) => {
+            const prevArea = getArea(id);
+
+            setAreas((areas) =>
+                areas.map((a) => (a.id === id ? { ...a, ...area } : a))
+            );
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateArea({ id, attributes: area }),
+            ]);
+
+            if (!!prevArea && options.updateHistory) {
+                addUndoAction({
+                    action: 'updateArea',
+                    redoData: { areaId: id, area },
+                    undoData: { areaId: id, area: prevArea },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setAreas, getArea, addUndoAction, resetRedoStack]
+    );
+
     const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
         useCallback(
             async (diagram) => {
@@ -1373,6 +1505,7 @@ export const ChartDBProvider: React.FC<
                 setTables(diagram?.tables ?? []);
                 setRelationships(diagram?.relationships ?? []);
                 setDependencies(diagram?.dependencies ?? []);
+                setAreas(diagram?.areas ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
 
@@ -1386,6 +1519,7 @@ export const ChartDBProvider: React.FC<
                 setTables,
                 setRelationships,
                 setDependencies,
+                setAreas,
                 setDiagramCreatedAt,
                 setDiagramUpdatedAt,
                 events,
@@ -1398,6 +1532,7 @@ export const ChartDBProvider: React.FC<
                 includeRelationships: true,
                 includeTables: true,
                 includeDependencies: true,
+                includeAreas: true,
             });
 
             if (diagram) {
@@ -1418,6 +1553,7 @@ export const ChartDBProvider: React.FC<
                 tables,
                 relationships,
                 dependencies,
+                areas,
                 currentDiagram,
                 schemas,
                 filteredSchemas,
@@ -1465,6 +1601,13 @@ export const ChartDBProvider: React.FC<
                 removeDependency,
                 removeDependencies,
                 updateDependency,
+                createArea,
+                addArea,
+                addAreas,
+                getArea,
+                removeArea,
+                removeAreas,
+                updateArea,
             }}
         >
             {children}

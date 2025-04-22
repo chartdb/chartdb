@@ -5,6 +5,7 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import type { Area } from '@/lib/domain/area';
 
 export interface StorageContext {
     // Config operations
@@ -17,6 +18,7 @@ export interface StorageContext {
         includeTables?: boolean;
         includeRelationships?: boolean;
         includeDependencies?: boolean;
+        includeAreas?: boolean;
     }) => Promise<Diagram[]>;
     getDiagram: (
         id: string,
@@ -24,6 +26,7 @@ export interface StorageContext {
             includeTables?: boolean;
             includeRelationships?: boolean;
             includeDependencies?: boolean;
+            includeAreas?: boolean;
         }
     ) => Promise<Diagram | undefined>;
     updateDiagram: (params: {
@@ -86,6 +89,20 @@ export interface StorageContext {
     }) => Promise<void>;
     listDependencies: (diagramId: string) => Promise<DBDependency[]>;
     deleteDiagramDependencies: (diagramId: string) => Promise<void>;
+
+    // Area operations
+    addArea: (params: { diagramId: string; area: Area }) => Promise<void>;
+    getArea: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<Area | undefined>;
+    updateArea: (params: {
+        id: string;
+        attributes: Partial<Area>;
+    }) => Promise<void>;
+    deleteArea: (params: { diagramId: string; id: string }) => Promise<void>;
+    listAreas: (diagramId: string) => Promise<Area[]>;
+    deleteDiagramAreas: (diagramId: string) => Promise<void>;
 }
 
 export const storageInitialValue: StorageContext = {
@@ -119,6 +136,13 @@ export const storageInitialValue: StorageContext = {
     deleteDependency: emptyFn,
     listDependencies: emptyFn,
     deleteDiagramDependencies: emptyFn,
+
+    addArea: emptyFn,
+    getArea: emptyFn,
+    updateArea: emptyFn,
+    deleteArea: emptyFn,
+    listAreas: emptyFn,
+    deleteDiagramAreas: emptyFn,
 };
 
 export const storageContext =

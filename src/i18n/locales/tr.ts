@@ -211,6 +211,27 @@ export const tr: LanguageTranslation = {
                     description: 'Başlamak için bir görünüm oluşturun',
                 },
             },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
+                },
+            },
         },
         toolbar: {
             zoom_in: 'Yakınlaştır',
@@ -394,6 +415,8 @@ export const tr: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Yeni Tablo',
             new_relationship: 'Yeni İlişki',
+            // TODO: Translate
+            new_area: 'New Area',
         },
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',

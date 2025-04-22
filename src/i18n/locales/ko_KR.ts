@@ -210,6 +210,27 @@ export const ko_KR: LanguageTranslation = {
                     description: '뷰 테이블을 만들어 시작하세요.',
                 },
             },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
+                },
+            },
         },
 
         toolbar: {
@@ -400,6 +421,8 @@ export const ko_KR: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '새 테이블',
             new_relationship: '새 연관관계',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {
