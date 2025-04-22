@@ -9,7 +9,7 @@
 </h1>
 
 <p align="center">
-  <b>Open-source database diagrams editor</b> <br />
+  <b>Open-source database diagrams editor</b> <br /> אקדא
   <b>No installations • No Database password required.</b> <br />
 </p>
 
