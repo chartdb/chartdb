@@ -2,11 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
-import { RIGHT_HANDLE_ID_PREFIX } from './table-node/table-node-field';
+import { RIGHT_HANDLE_ID_PREFIX } from '../table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
-import { getCardinalityMarkerId } from './canvas-utils';
+import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
 
 export type RelationshipEdgeType = Edge<

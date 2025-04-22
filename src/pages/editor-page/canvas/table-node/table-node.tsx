@@ -19,7 +19,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
-import type { RelationshipEdgeType } from '../relationship-edge';
+import type { RelationshipEdgeType } from '../relationship-edge/relationship-edge';
 import type { DBField } from '@/lib/domain/db-field';
 import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
