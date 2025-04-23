@@ -65,6 +65,39 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         return theme === 'light' ? '#ffffff' : '#141414';
     };
 
+    function getDiagramBoundingBox(): DOMRect | null {
+        const viewportElement = window.document.querySelector(
+            '.react-flow__viewport'
+        ) as HTMLElement;
+        const viewportBoundingRect = viewportElement.getBoundingClientRect();
+        const elements = document.querySelectorAll(
+            '.react-flow__node, .react-flow__edge-path'
+        );
+
+        if (elements.length === 0) return null;
+
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+
+        elements.forEach((el) => {
+            const box = el.getBoundingClientRect();
+
+            minX = Math.min(minX, box.left);
+            minY = Math.min(minY, box.top);
+            maxX = Math.max(maxX, box.right);
+            maxY = Math.max(maxY, box.bottom);
+        });
+
+        return new DOMRect(
+            viewportBoundingRect.left - minX,
+            viewportBoundingRect.top - minY,
+            maxX - minX,
+            maxY - minY
+        );
+    }
+
     const exportImage: ExportImageContext['exportImage'] = useCallback(
         async (
             type,
@@ -82,9 +115,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             );
 
             const viewport = getViewport();
-            const reactFlowBounds = document
-                .querySelector('.react-flow')
-                ?.getBoundingClientRect();
+            const reactFlowBounds = getDiagramBoundingBox()!;
 
             if (!reactFlowBounds) {
                 console.error('Could not find React Flow container');
@@ -191,6 +222,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 );
 
                 try {
+                    const padding = Math.max(
+                        12,
+                        Math.floor(reactFlowBounds.width * 0.024)
+                    );
+                    const paddingY = padding * (hasWatermark ? 2.5 : 1);
+
                     // Handle SVG export differently
                     if (type === 'svg') {
                         const dataUrl = await imageCreateFn(viewportElement, {
@@ -199,7 +236,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             style: {
                                 width: `${reactFlowBounds.width}px`,
                                 height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                                transform: `translate(${0}px, ${0}px) scale(${1})`,
                             },
                             quality: 1,
                             pixelRatio: scale,
@@ -217,12 +254,10 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                                 effectiveTheme,
                                 isTransparent
                             ),
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
+                            width: reactFlowBounds.width + padding,
+                            height: reactFlowBounds.height + paddingY,
                             style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                                transform: `translate(${reactFlowBounds.x + padding / 2}px, ${reactFlowBounds.y + padding / 2}px) scale(${viewport.zoom})`,
                             },
                             quality: 1,
                             pixelRatio: scale,
@@ -240,8 +275,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     }
 
                     // Set canvas size to match the export size
-                    canvas.width = reactFlowBounds.width * scale;
-                    canvas.height = reactFlowBounds.height * scale;
+                    canvas.width = (reactFlowBounds.width + padding) * scale;
+                    canvas.height = (reactFlowBounds.height + paddingY) * scale;
 
                     // Load the exported diagram
                     const diagramImage = new Image();
