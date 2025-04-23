@@ -228,25 +228,6 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     );
                     const paddingY = padding * (hasWatermark ? 2.5 : 1);
 
-                    // Handle SVG export differently
-                    if (type === 'svg') {
-                        const dataUrl = await imageCreateFn(viewportElement, {
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
-                            style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${0}px, ${0}px) scale(${1})`,
-                            },
-                            quality: 1,
-                            pixelRatio: scale,
-                            skipFonts: true,
-                        });
-                        downloadImage(dataUrl, type);
-                        return;
-                    }
-
-                    // For PNG and JPEG, continue with the watermark process
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
@@ -264,6 +245,11 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             skipFonts: true,
                         }
                     );
+
+                    if (type === 'svg') {
+                        downloadImage(initialDataUrl, type);
+                        return;
+                    }
 
                     // Create a canvas to combine the diagram and watermark
                     const canvas = document.createElement('canvas');
