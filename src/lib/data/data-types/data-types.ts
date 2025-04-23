@@ -15,6 +15,7 @@ export interface DataType {
 
 export interface DataTypeData extends DataType {
     hasCharMaxLength?: boolean;
+    usageLevel?: 1 | 2; // Level 1 is most common, Level 2 is second most common
 }
 
 export const dataTypeSchema: z.ZodType<DataType> = z.object({
@@ -32,6 +33,45 @@ export const dataTypeMap: Record<DatabaseType, readonly DataTypeData[]> = {
     [DatabaseType.CLICKHOUSE]: clickhouseDataTypes,
     [DatabaseType.COCKROACHDB]: postgresDataTypes,
 } as const;
+
+export const sortDataTypes = (dataTypes: DataTypeData[]): DataTypeData[] => {
+    const types = [...dataTypes];
+    return types.sort((a, b) => {
+        // First sort by usage level (lower numbers first)
+        if ((a.usageLevel || 3) < (b.usageLevel || 3)) return -1;
+        if ((a.usageLevel || 3) > (b.usageLevel || 3)) return 1;
+        // Then sort alphabetically by name
+        return a.name.localeCompare(b.name);
+    });
+};
+
+export const sortedDataTypeMap: Record<DatabaseType, readonly DataTypeData[]> =
+    {
+        [DatabaseType.GENERIC]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.GENERIC],
+        ]),
+        [DatabaseType.POSTGRESQL]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.POSTGRESQL],
+        ]),
+        [DatabaseType.MYSQL]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.MYSQL],
+        ]),
+        [DatabaseType.SQL_SERVER]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.SQL_SERVER],
+        ]),
+        [DatabaseType.MARIADB]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.MARIADB],
+        ]),
+        [DatabaseType.SQLITE]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.SQLITE],
+        ]),
+        [DatabaseType.CLICKHOUSE]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.CLICKHOUSE],
+        ]),
+        [DatabaseType.COCKROACHDB]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.COCKROACHDB],
+        ]),
+    } as const;
 
 const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.POSTGRESQL]: {

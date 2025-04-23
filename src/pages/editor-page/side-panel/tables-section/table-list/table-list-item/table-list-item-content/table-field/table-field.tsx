@@ -5,7 +5,7 @@ import type { DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import {
     dataTypeDataToDataType,
-    dataTypeMap,
+    sortedDataTypeMap,
 } from '@/lib/data/data-types/data-types';
 import {
     Tooltip,
@@ -40,22 +40,20 @@ export const TableField: React.FC<TableFieldProps> = ({
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
-    const dataFieldOptions: SelectBoxOption[] = dataTypeMap[databaseType].map(
-        (type) => ({
-            label: type.name,
-            value: type.id,
-            regex: type.hasCharMaxLength
-                ? `^${type.name}\\(\\d+\\)$`
-                : undefined,
-            extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
-        })
-    );
+    const dataFieldOptions: SelectBoxOption[] = sortedDataTypeMap[
+        databaseType
+    ].map((type) => ({
+        label: type.name,
+        value: type.id,
+        regex: type.hasCharMaxLength ? `^${type.name}\\(\\d+\\)$` : undefined,
+        extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+    }));
 
     const onChangeDataType = useCallback<
         NonNullable<SelectBoxProps['onChange']>
     >(
         (value, regexMatches) => {
-            const dataType = dataTypeMap[databaseType].find(
+            const dataType = sortedDataTypeMap[databaseType].find(
                 (v) => v.id === value
             ) ?? {
                 id: value as string,
@@ -141,9 +139,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         : ''
                                 }
                                 optionSuffix={(option) => {
-                                    const type = dataTypeMap[databaseType].find(
-                                        (v) => v.id === option.value
-                                    );
+                                    const type = sortedDataTypeMap[
+                                        databaseType
+                                    ].find((v) => v.id === option.value);
 
                                     if (!type) {
                                         return '';

@@ -345,7 +345,6 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                                             ? [option.regex]
                                                             : undefined
                                                     }
-                                                    // value={option.value}
                                                     onSelect={() =>
                                                         handleSelect(
                                                             option.value,

@@ -1,49 +1,48 @@
 import type { DataTypeData } from './data-types';
 
 export const postgresDataTypes: readonly DataTypeData[] = [
-    // Numeric Types
-    { name: 'smallint', id: 'smallint' },
-    { name: 'integer', id: 'integer' },
-    { name: 'bigint', id: 'bigint' },
-    { name: 'decimal', id: 'decimal' },
+    // Level 1 - Most commonly used types
+    { name: 'integer', id: 'integer', usageLevel: 1 },
+    { name: 'varchar', id: 'varchar', hasCharMaxLength: true, usageLevel: 1 },
+    { name: 'text', id: 'text', usageLevel: 1 },
+    { name: 'boolean', id: 'boolean', usageLevel: 1 },
+    { name: 'timestamp', id: 'timestamp', usageLevel: 1 },
+    { name: 'date', id: 'date', usageLevel: 1 },
+
+    // Level 2 - Second most common types
+    { name: 'bigint', id: 'bigint', usageLevel: 2 },
+    { name: 'decimal', id: 'decimal', usageLevel: 2 },
+    { name: 'serial', id: 'serial', usageLevel: 2 },
+    { name: 'json', id: 'json', usageLevel: 2 },
+    { name: 'jsonb', id: 'jsonb', usageLevel: 2 },
+    { name: 'uuid', id: 'uuid', usageLevel: 2 },
+    {
+        name: 'timestamp with time zone',
+        id: 'timestamp_with_time_zone',
+        usageLevel: 2,
+    },
+
+    // Less common types
     { name: 'numeric', id: 'numeric' },
     { name: 'real', id: 'real' },
     { name: 'double precision', id: 'double_precision' },
     { name: 'smallserial', id: 'smallserial' },
-    { name: 'serial', id: 'serial' },
     { name: 'bigserial', id: 'bigserial' },
     { name: 'money', id: 'money' },
-
-    // Character Types
+    { name: 'smallint', id: 'smallint' },
     { name: 'char', id: 'char', hasCharMaxLength: true },
-    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
     {
         name: 'character varying',
         id: 'character_varying',
         hasCharMaxLength: true,
     },
-    { name: 'text', id: 'text' },
-
-    // Binary Data Types
-    { name: 'bytea', id: 'bytea' },
-
-    // Date/Time Types
-    { name: 'date', id: 'date' },
-    { name: 'timestamp', id: 'timestamp' },
-    { name: 'timestamp with time zone', id: 'timestamp_with_time_zone' },
-    { name: 'timestamp without time zone', id: 'timestamp_without_time_zone' },
     { name: 'time', id: 'time' },
+    { name: 'timestamp without time zone', id: 'timestamp_without_time_zone' },
     { name: 'time with time zone', id: 'time_with_time_zone' },
     { name: 'time without time zone', id: 'time_without_time_zone' },
     { name: 'interval', id: 'interval' },
-
-    // Boolean Type
-    { name: 'boolean', id: 'boolean' },
-
-    // Enumerated Types
+    { name: 'bytea', id: 'bytea' },
     { name: 'enum', id: 'enum' },
-
-    // Geometric Types
     { name: 'point', id: 'point' },
     { name: 'line', id: 'line' },
     { name: 'lseg', id: 'lseg' },
@@ -51,43 +50,22 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'path', id: 'path' },
     { name: 'polygon', id: 'polygon' },
     { name: 'circle', id: 'circle' },
-
-    // Network Address Types
     { name: 'cidr', id: 'cidr' },
     { name: 'inet', id: 'inet' },
     { name: 'macaddr', id: 'macaddr' },
     { name: 'macaddr8', id: 'macaddr8' },
-
-    // Bit String Types
     { name: 'bit', id: 'bit' },
     { name: 'bit varying', id: 'bit_varying' },
-
-    // Text Search Types
     { name: 'tsvector', id: 'tsvector' },
     { name: 'tsquery', id: 'tsquery' },
-
-    // UUID Type
-    { name: 'uuid', id: 'uuid' },
-
-    // XML Type
     { name: 'xml', id: 'xml' },
-
-    // JSON Types
-    { name: 'json', id: 'json' },
-    { name: 'jsonb', id: 'jsonb' },
-
-    // Array Types
     { name: 'array', id: 'array' },
-
-    // Range Types
     { name: 'int4range', id: 'int4range' },
     { name: 'int8range', id: 'int8range' },
     { name: 'numrange', id: 'numrange' },
     { name: 'tsrange', id: 'tsrange' },
     { name: 'tstzrange', id: 'tstzrange' },
     { name: 'daterange', id: 'daterange' },
-
-    // Object Identifier Types
     { name: 'oid', id: 'oid' },
     { name: 'regproc', id: 'regproc' },
     { name: 'regprocedure', id: 'regprocedure' },
@@ -99,7 +77,5 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'regnamespace', id: 'regnamespace' },
     { name: 'regconfig', id: 'regconfig' },
     { name: 'regdictionary', id: 'regdictionary' },
-
-    // User Defined types
     { name: 'user-defined', id: 'user-defined' },
 ] as const;
