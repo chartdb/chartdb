@@ -822,6 +822,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
+    const remToPixels = (rem: number): number =>
+        rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full" id="canvas">
@@ -848,7 +851,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     }}
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={shiftPressed || snapToGridEnabled}
-                    snapGrid={[20, 20]}
+                    snapGrid={[remToPixels(2), remToPixels(2)]}
                 >
                     <Controls
                         position="top-left"
