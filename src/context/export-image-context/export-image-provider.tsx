@@ -135,30 +135,31 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 pattern.setAttribute('id', 'background-pattern');
                 pattern.setAttribute('width', String(16 * viewport.zoom));
                 pattern.setAttribute('height', String(16 * viewport.zoom));
+                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                pattern.setAttribute(
+                    'patternTransform',
+                    `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
+                );
+
+                const dot = document.createElementNS(
+                    'http://www.w3.org/2000/svg',
+                    'circle'
+                );
+
+                const dotSize = viewport.zoom * 0.5;
+                dot.setAttribute('cx', String(viewport.zoom));
+                dot.setAttribute('cy', String(viewport.zoom));
+                dot.setAttribute('r', String(dotSize));
+                const dotColor =
+                    effectiveTheme === 'light' ? '#92939C' : '#777777';
+                dot.setAttribute('fill', dotColor);
+
                 if (useBackground) {
-                    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                    pattern.setAttribute(
-                        'patternTransform',
-                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
-                    );
-
-                    const dot = document.createElementNS(
-                        'http://www.w3.org/2000/svg',
-                        'circle'
-                    );
-
-                    const dotSize = viewport.zoom * 0.5;
-                    dot.setAttribute('cx', String(viewport.zoom));
-                    dot.setAttribute('cy', String(viewport.zoom));
-                    dot.setAttribute('r', String(dotSize));
-                    const dotColor =
-                        effectiveTheme === 'light' ? '#92939C' : '#777777';
-                    dot.setAttribute('fill', dotColor);
-
                     pattern.appendChild(dot);
                     defs.appendChild(pattern);
-                    tempSvg.appendChild(defs);
                 }
+
+                tempSvg.appendChild(defs);
 
                 const backgroundRect = document.createElementNS(
                     'http://www.w3.org/2000/svg',
