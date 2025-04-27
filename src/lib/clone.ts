@@ -44,6 +44,10 @@ const generateIdsMapFromDiagram = (
         idsMap.set(dependency.id, generateId());
     });
 
+    diagram.areas?.forEach((area) => {
+        idsMap.set(area.id, generateId());
+    });
+
     return idsMap;
 };
 
