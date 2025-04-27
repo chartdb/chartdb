@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
+import type { Example } from './examples-data/examples-data';
 import { examples } from './examples-data/examples-data';
 import { ExampleCard } from './example-card';
 import { useTheme } from '@/hooks/use-theme';
@@ -8,9 +9,44 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { StorageProvider } from '@/context/storage-context/storage-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import { useStorage } from '@/hooks/use-storage';
+import type { Diagram } from '@/lib/domain/diagram';
 
 const ExamplesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
+    const navigate = useNavigate();
+    const { addDiagram, deleteDiagram } = useStorage();
+    const [loadingExampleId, setLoadingExampleId] = React.useState<string>();
+    const utilizeExample = useCallback(
+        async ({ example }: { example: Example }) => {
+            if (loadingExampleId) {
+                return;
+            }
+            setLoadingExampleId(example.id);
+            const { diagram } = example;
+            const { id } = diagram;
+
+            await deleteDiagram(id);
+
+            const now = new Date();
+            const diagramToAdd: Diagram = {
+                ...diagram,
+                createdAt: now,
+                updatedAt: now,
+            };
+
+            await addDiagram({ diagram: diagramToAdd });
+            navigate(`/diagrams/${id}`);
+        },
+        [
+            addDiagram,
+            navigate,
+            deleteDiagram,
+            loadingExampleId,
+            setLoadingExampleId,
+        ]
+    );
 
     return (
         <>
@@ -54,7 +90,14 @@ const ExamplesPageComponent: React.FC = () => {
                     </h2>
                     <div className="mt-6 grid grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {examples.map((example) => (
-                            <ExampleCard key={example.id} example={example} />
+                            <ExampleCard
+                                key={example.id}
+                                example={example}
+                                utilizeExample={() =>
+                                    utilizeExample({ example })
+                                }
+                                loading={loadingExampleId === example.id}
+                            />
                         ))}
                     </div>
                 </div>
