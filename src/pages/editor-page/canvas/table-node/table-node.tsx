@@ -65,6 +65,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [editMode, setEditMode] = useState(false);
         const [tableName, setTableName] = useState(table.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
+        const [isHovering, setIsHovering] = useState(false);
 
         const {
             getTableNewName,
@@ -115,7 +116,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 edge.type === 'relationship-edge'
         ) as RelationshipEdgeType[];
 
-        const focused = !!selected && !dragging;
+        const focused = (!!selected && !dragging) || isHovering;
 
         const openTableInEditor = () => {
             selectSidebarSection('tables');
@@ -239,6 +240,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             openTableInEditor();
                         }
                     }}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                 >
                     <NodeResizer
                         isVisible={focused}
@@ -252,7 +255,6 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         table={table}
                         focused={focused}
                     />
-                    {/* Badge added here */}
                     <TableNodeStatus
                         status={
                             isDiffNewTable
