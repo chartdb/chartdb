@@ -259,30 +259,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     </Suspense>
                 </div>
 
-                {showCheckJsonButton || errorMessage ? (
+                {errorMessage ? (
                     <div className="mt-2 flex shrink-0 items-center gap-2">
-                        {showCheckJsonButton ? (
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={handleCheckJson}
-                                disabled={isCheckingJson}
-                                className="h-7"
-                            >
-                                {isCheckingJson ? (
-                                    <Spinner size="small" />
-                                ) : (
-                                    t(
-                                        'new_diagram_dialog.import_database.check_script_result'
-                                    )
-                                )}
-                            </Button>
-                        ) : (
-                            <p className="text-xs text-red-700">
-                                {errorMessage}
-                            </p>
-                        )}
+                        <p className="text-xs text-red-700">{errorMessage}</p>
                     </div>
                 ) : null}
             </div>
@@ -294,10 +273,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             effectiveTheme,
             debouncedHandleInputChange,
             handleEditorDidMount,
-            showCheckJsonButton,
-            isCheckingJson,
-            handleCheckJson,
-            t,
         ]
     );
 
@@ -368,7 +343,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         </DialogClose>
                     )}
 
-                    {keepDialogAfterImport ? (
+                    {showCheckJsonButton ? (
+                        <Button
+                            type="button"
+                            variant="default"
+                            onClick={handleCheckJson}
+                            disabled={isCheckingJson}
+                        >
+                            {isCheckingJson ? (
+                                <Spinner size="small" />
+                            ) : (
+                                t(
+                                    'new_diagram_dialog.import_database.check_script_result'
+                                )
+                            )}
+                        </Button>
+                    ) : keepDialogAfterImport ? (
                         <Button
                             type="button"
                             variant="default"
@@ -386,7 +376,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 type="button"
                                 variant="default"
                                 disabled={
-                                    showCheckJsonButton ||
                                     scriptResult.trim().length === 0 ||
                                     errorMessage.length > 0
                                 }
@@ -417,6 +406,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         errorMessage.length,
         scriptResult,
         showCheckJsonButton,
+        isCheckingJson,
+        handleCheckJson,
         goBack,
         t,
     ]);
