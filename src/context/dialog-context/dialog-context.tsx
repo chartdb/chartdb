@@ -9,10 +9,13 @@ import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/i
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
+import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
-    openCreateDiagramDialog: () => void;
+    openCreateDiagramDialog: (
+        params?: Omit<CreateDiagramDialogProps, 'dialog'>
+    ) => void;
     closeCreateDiagramDialog: () => void;
 
     // Open diagram dialog
