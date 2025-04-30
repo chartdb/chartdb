@@ -15,6 +15,7 @@ import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { debounce } from '@/lib/utils';
+import equal from 'fast-deep-equal';
 
 export interface TableFieldPopoverProps {
     field: DBField;
@@ -49,10 +50,10 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     }, [updateField]);
 
     useEffect(() => {
-        if (debouncedUpdateFieldRef.current) {
+        if (debouncedUpdateFieldRef.current && !equal(field, localField)) {
             debouncedUpdateFieldRef.current(localField);
         }
-    }, [localField]);
+    }, [localField, field]);
 
     return (
         <Popover
