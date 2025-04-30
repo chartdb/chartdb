@@ -43,19 +43,60 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { toast } = useToast();
 
     const generateDBML = useMemo(() => {
+        // Filter out fields with empty names and track if any were found
+        let foundInvalidFields = false;
+        const invalidTableNames = new Set<string>(); // Use a Set to store unique table names
+
+        const sanitizedTables = filteredTables.map((table) => {
+            const validFields = table.fields.filter((field) => {
+                if (field.name === '') {
+                    foundInvalidFields = true;
+                    invalidTableNames.add(table.name); // Add table name to the set
+                    return false; // Exclude this field
+                }
+                return true; // Keep this field
+            });
+            return {
+                ...table,
+                fields: validFields,
+            };
+        });
+
+        if (foundInvalidFields) {
+            const tableNamesString = Array.from(invalidTableNames).join(', ');
+            toast({
+                title: 'Warning',
+                description: `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`,
+                variant: 'default',
+            });
+        }
+
         const filteredDiagram: Diagram = {
             ...currentDiagram,
-            tables: filteredTables,
+            tables: sanitizedTables, // Use sanitized tables
             relationships:
                 currentDiagram.relationships?.filter((rel) => {
-                    const sourceTable = filteredTables.find(
+                    // Update relationship filtering to use sanitizedTables
+                    const sourceTable = sanitizedTables.find(
                         (t) => t.id === rel.sourceTableId
                     );
-                    const targetTable = filteredTables.find(
+                    const targetTable = sanitizedTables.find(
                         (t) => t.id === rel.targetTableId
                     );
+                    // Also check if the related fields still exist after sanitization
+                    const sourceFieldExists = sourceTable?.fields.some(
+                        (f) => f.id === rel.sourceFieldId
+                    );
+                    const targetFieldExists = targetTable?.fields.some(
+                        (f) => f.id === rel.targetFieldId
+                    );
 
-                    return sourceTable && targetTable;
+                    return (
+                        sourceTable &&
+                        targetTable &&
+                        sourceFieldExists &&
+                        targetFieldExists
+                    );
                 }) ?? [],
         } satisfies Diagram;
 
