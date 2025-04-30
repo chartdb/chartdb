@@ -97,7 +97,8 @@ export const exportBaseSQL = ({
 
             // Handle ENUM type
             if (typeName.toLowerCase() === 'enum') {
-                typeName = 'varchar';
+                // Map enum to TEXT for broader compatibility, especially with DBML importer
+                typeName = 'text';
             }
 
             // Temp fix for 'array' to be text[]
@@ -116,6 +117,7 @@ export const exportBaseSQL = ({
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
             } else if (field.type.name.toLowerCase().includes('varchar')) {
+                // Keep varchar sizing, but don't apply to TEXT (previously enum)
                 sqlScript += `(500)`;
             }
 
