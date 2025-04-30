@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
@@ -10,6 +10,14 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { useToast } from '@/components/toast/use-toast';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { Button } from '@/components/button/button';
+import { ArrowLeftRight, Copy, CopyCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -144,12 +152,154 @@ const sanitizeSQLforDBML = (sql: string): string => {
     return sanitized;
 };
 
+// Post-process DBML to convert separate Ref statements to inline refs
+const convertToInlineRefs = (dbml: string): string => {
+    console.log('Original DBML to convert:', dbml);
+
+    // Extract all Ref statements - Corrected pattern
+    const refPattern =
+        /Ref\s+"([^"]+)"\s*:\s*"([^"]+)"\."([^"]+)"\s*([<>*])\s*"([^"]+)"\."([^"]+)"/g;
+    const refs: Array<{
+        refName: string;
+        sourceTable: string;
+        sourceField: string;
+        direction: string;
+        targetTable: string;
+        targetField: string;
+    }> = [];
+
+    let match;
+    while ((match = refPattern.exec(dbml)) !== null) {
+        console.log('Matched reference:', match[0]);
+        refs.push({
+            refName: match[1], // Reference name
+            sourceTable: match[2], // Source table
+            sourceField: match[3], // Source field
+            direction: match[4], // Direction (<, >)
+            targetTable: match[5], // Target table
+            targetField: match[6], // Target field
+        });
+    }
+    console.log('Found references:', refs);
+
+    // Extract all table definitions - Corrected pattern and handling
+    const tables: {
+        [key: string]: { start: number; end: number; content: string };
+    } = {};
+    const tablePattern = /Table\s+"([^"]+)"\s*{([^}]*)}/g; // Simpler pattern, assuming content doesn't have {}
+
+    let tableMatch;
+    while ((tableMatch = tablePattern.exec(dbml)) !== null) {
+        const tableName = tableMatch[1];
+        tables[tableName] = {
+            start: tableMatch.index,
+            end: tableMatch.index + tableMatch[0].length,
+            content: tableMatch[2],
+        };
+    }
+    console.log('Found tables:', Object.keys(tables));
+
+    if (refs.length === 0 || Object.keys(tables).length === 0) {
+        console.log(
+            'No valid references or tables found for conversion, returning original DBML.'
+        );
+        return dbml; // Return original if parsing failed
+    }
+
+    // Create a map for faster table lookup
+    const tableMap = new Map(Object.entries(tables));
+
+    // 1. Add inline refs to table contents
+    refs.forEach((ref) => {
+        let targetTableName, fieldNameToModify, inlineRefSyntax;
+
+        if (ref.direction === '<') {
+            targetTableName = ref.targetTable;
+            fieldNameToModify = ref.targetField;
+            inlineRefSyntax = `[ref: < "${ref.sourceTable}"."${ref.sourceField}"]`;
+        } else {
+            targetTableName = ref.sourceTable;
+            fieldNameToModify = ref.sourceField;
+            inlineRefSyntax = `[ref: > "${ref.targetTable}"."${ref.targetField}"]`;
+        }
+
+        const tableData = tableMap.get(targetTableName);
+        if (tableData) {
+            const fieldPattern = new RegExp(
+                `("(${fieldNameToModify})"[^\n]*?)([ \t]*[[].*?[]])?([ \t]*//.*)?$`,
+                'm'
+            );
+            let newContent = tableData.content;
+
+            newContent = newContent.replace(
+                fieldPattern,
+                (
+                    lineMatch,
+                    fieldPart,
+                    fieldName,
+                    existingAttributes,
+                    commentPart
+                ) => {
+                    // Avoid adding duplicate refs
+                    if (lineMatch.includes('[ref:')) {
+                        return lineMatch;
+                    }
+                    console.log(
+                        `Adding inline ref to ${targetTableName}.${fieldName}`
+                    );
+                    return `${fieldPart.trim()} ${inlineRefSyntax}${existingAttributes || ''}${commentPart || ''}`;
+                }
+            );
+
+            // Update the table content if modified
+            if (newContent !== tableData.content) {
+                tableData.content = newContent;
+                tableMap.set(targetTableName, tableData);
+            }
+        } else {
+            console.log(
+                `Target table "${targetTableName}" not found for ref: ${ref.refName}`
+            );
+        }
+    });
+
+    // 2. Reconstruct DBML with modified tables
+    let reconstructedDbml = '';
+    let lastIndex = 0;
+    const sortedTables = Object.entries(tables).sort(
+        ([, a], [, b]) => a.start - b.start
+    );
+
+    for (const [tableName, tableData] of sortedTables) {
+        reconstructedDbml += dbml.substring(lastIndex, tableData.start);
+        reconstructedDbml += `Table "${tableName}" {${tableData.content}}`;
+        lastIndex = tableData.end;
+    }
+    reconstructedDbml += dbml.substring(lastIndex);
+
+    // 3. Remove original Ref lines
+    const finalLines = reconstructedDbml
+        .split('\n')
+        .filter((line) => !line.trim().startsWith('Ref '));
+    const finalDbml = finalLines.join('\n').trim();
+
+    console.log('Converted DBML:', finalDbml);
+    return finalDbml;
+};
+
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { currentDiagram } = useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
+    const { t } = useTranslation();
+    const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
+        'standard'
+    );
+    const [isCopied, setIsCopied] = useState(false);
+    const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
-    const generateDBML = useMemo(() => {
+    // Generate both standard and inline DBML formats
+    const { standardDbml, inlineDbml } = useMemo(() => {
         // Filter out fields with empty names and track if any were found
         let foundInvalidFields = false;
         const invalidTableNames = new Set<string>(); // Use a Set to store unique table names
@@ -183,14 +333,12 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             tables: sanitizedTables, // Use sanitized tables
             relationships:
                 currentDiagram.relationships?.filter((rel) => {
-                    // Update relationship filtering to use sanitizedTables
                     const sourceTable = sanitizedTables.find(
                         (t) => t.id === rel.sourceTableId
                     );
                     const targetTable = sanitizedTables.find(
                         (t) => t.id === rel.targetTableId
                     );
-                    // Also check if the related fields still exist after sanitization
                     const sourceFieldExists = sourceTable?.fields.some(
                         (f) => f.id === rel.sourceFieldId
                     );
@@ -236,6 +384,9 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 })) ?? [],
         } as Diagram;
 
+        let standard = '';
+        let inline = '';
+
         try {
             // Generate SQL script
             let baseScript = exportBaseSQL({
@@ -248,14 +399,20 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             baseScript = sanitizeSQLforDBML(baseScript);
 
             // Import the sanitized SQL to DBML
-            return importer.import(
+            standard = importer.import(
                 baseScript,
                 databaseTypeToImportFormat(currentDiagram.databaseType)
             );
+
+            // Post-process to convert separate refs to inline refs
+            inline = convertToInlineRefs(standard);
         } catch (error: unknown) {
             console.error('DBML Import Error:', error);
+            const errorMessage = `// Error generating DBML: ${error instanceof Error ? error.message : 'Unknown error'}`;
+            standard = errorMessage;
+            inline = errorMessage;
 
-            // Handle different error types
+            // Handle different error types for toast
             if (error instanceof Error) {
                 toast({
                     title: 'DBML Export Error',
@@ -270,34 +427,113 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                     variant: 'destructive',
                 });
             }
-
-            // Return an informative error message as DBML
-            return `// Error generating DBML from the diagram
-// Please check for the following potential issues:
-// - Tables with problematic column names (with special characters)
-// - Reserved keywords used as column names
-// - Relationships with invalid configurations
-//
-// You can view more details in the browser console.`;
         }
+        return { standardDbml: standard, inlineDbml: inline };
     }, [currentDiagram, filteredTables, toast]);
 
+    // Determine which DBML string to display
+    const dbmlToDisplay = dbmlFormat === 'inline' ? inlineDbml : standardDbml;
+
+    // Toggle function
+    const toggleFormat = () => {
+        setDbmlFormat((prev) => (prev === 'inline' ? 'standard' : 'inline'));
+    };
+
+    // Copy function (extracted from CodeSnippet for reuse)
+    const copyToClipboard = React.useCallback(async () => {
+        if (!navigator?.clipboard) {
+            toast({
+                title: t('copy_to_clipboard_toast.unsupported.title'),
+                variant: 'destructive',
+                description: t(
+                    'copy_to_clipboard_toast.unsupported.description'
+                ),
+            });
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(dbmlToDisplay);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 1500);
+        } catch {
+            setIsCopied(false);
+            toast({
+                title: t('copy_to_clipboard_toast.failed.title'),
+                variant: 'destructive',
+                description: t('copy_to_clipboard_toast.failed.description'),
+            });
+        }
+    }, [dbmlToDisplay, t, toast]);
+
     return (
-        <CodeSnippet
-            code={generateDBML}
-            className="my-0.5"
-            editorProps={{
-                height: '100%',
-                defaultLanguage: 'dbml',
-                beforeMount: setupDBMLLanguage,
-                loading: false,
-                theme: getEditorTheme(effectiveTheme),
-                options: {
-                    wordWrap: 'off',
-                    mouseWheelZoom: false,
-                    domReadOnly: true,
-                },
-            }}
-        />
+        <div className="relative h-full flex-1">
+            {/* Buttons Container - Absolutely positioned top-right, column layout */}
+            <div className="absolute right-1 top-1 z-10 flex flex-col gap-1">
+                {/* Copy Button (Top) */}
+                <Tooltip
+                    onOpenChange={setTooltipOpen}
+                    open={isCopied || tooltipOpen}
+                >
+                    <TooltipTrigger asChild>
+                        <Button
+                            className="h-fit p-1.5"
+                            variant="outline"
+                            size="sm"
+                            onClick={copyToClipboard}
+                        >
+                            {isCopied ? (
+                                <CopyCheck size={16} />
+                            ) : (
+                                <Copy size={16} />
+                            )}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {t(isCopied ? 'copied' : 'copy_to_clipboard')}
+                    </TooltipContent>
+                </Tooltip>
+
+                {/* Toggle Button (Bottom) */}
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-fit p-1.5"
+                            onClick={toggleFormat}
+                        >
+                            <ArrowLeftRight size={16} />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="left" sideOffset={4}>
+                        {dbmlFormat === 'inline'
+                            ? 'Show Standard Refs'
+                            : 'Show Inline Refs'}
+                    </TooltipContent>
+                </Tooltip>
+            </div>
+
+            {/* CodeSnippet fills the container */}
+            <CodeSnippet
+                code={dbmlToDisplay}
+                className="absolute inset-0 my-0.5"
+                editorProps={{
+                    height: '100%',
+                    defaultLanguage: 'dbml',
+                    beforeMount: setupDBMLLanguage,
+                    loading: false,
+                    theme: getEditorTheme(effectiveTheme),
+                    options: {
+                        wordWrap: 'off',
+                        mouseWheelZoom: false,
+                        domReadOnly: true,
+                    },
+                }}
+                // Set isComplete to true to hide the blinking dot
+                // (this will also show the default copy button)
+                isComplete={true}
+            />
+        </div>
     );
 };
