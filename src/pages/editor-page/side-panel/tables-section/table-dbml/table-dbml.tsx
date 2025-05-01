@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
@@ -18,6 +18,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { type DBField } from '@/lib/domain/db-field';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -287,6 +288,12 @@ const convertToInlineRefs = (dbml: string): string => {
     return finalDbml;
 };
 
+// Function to check for SQL keywords (add more if needed)
+const isSQLKeyword = (name: string): boolean => {
+    const keywords = new Set(['CASE', 'ORDER', 'GROUP', 'FROM', 'TO', 'USER']); // Add common keywords
+    return keywords.has(name.toUpperCase());
+};
+
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { currentDiagram } = useChartDB();
     const { effectiveTheme } = useTheme();
@@ -298,25 +305,18 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [isCopied, setIsCopied] = useState(false);
     const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
-    // Generate both standard and inline DBML formats
-    const { standardDbml, inlineDbml } = useMemo(() => {
-        // Filter out fields with empty names and track if any were found
+    // --- Effect for handling empty field name warnings ---
+    useEffect(() => {
         let foundInvalidFields = false;
-        const invalidTableNames = new Set<string>(); // Use a Set to store unique table names
+        const invalidTableNames = new Set<string>();
 
-        const sanitizedTables = filteredTables.map((table) => {
-            const validFields = table.fields.filter((field) => {
+        filteredTables.forEach((table) => {
+            table.fields.forEach((field) => {
                 if (field.name === '') {
                     foundInvalidFields = true;
-                    invalidTableNames.add(table.name); // Add table name to the set
-                    return false; // Exclude this field
+                    invalidTableNames.add(table.name);
                 }
-                return true; // Keep this field
             });
-            return {
-                ...table,
-                fields: validFields,
-            };
         });
 
         if (foundInvalidFields) {
@@ -327,10 +327,25 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 variant: 'default',
             });
         }
+    }, [filteredTables, toast]); // Depend on filteredTables and toast
 
+    // Generate both standard and inline DBML formats
+    const { standardDbml, inlineDbml } = useMemo(() => {
+        // Filter out fields with empty names
+        const sanitizedTables = filteredTables.map((table) => {
+            const validFields = table.fields.filter(
+                (field) => field.name !== ''
+            );
+            return {
+                ...table,
+                fields: validFields,
+            };
+        });
+
+        // Create the base filtered diagram structure
         const filteredDiagram: Diagram = {
             ...currentDiagram,
-            tables: sanitizedTables, // Use sanitized tables
+            tables: sanitizedTables,
             relationships:
                 currentDiagram.relationships?.filter((rel) => {
                     const sourceTable = sanitizedTables.find(
@@ -355,59 +370,124 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 }) ?? [],
         };
 
-        // Sanitize field names to avoid SQL/DBML parser issues
+        // Sanitize field names ('from'/'to' in 'relation' table)
         const cleanDiagram = fixProblematicFieldNames(filteredDiagram);
 
-        // Ensure unique, sanitized names for all identifiers
-        const filteredDiagramWithoutSpaces: Diagram = {
+        // --- Final sanitization and renaming pass ---
+        // Track tables renamed due to SQL keyword conflicts
+        const sqlRenamedTables = new Map<string, string>();
+        // Track fields renamed due to SQL keyword conflicts
+        const fieldRenames: Array<{
+            table: string;
+            originalName: string;
+            newName: string;
+        }> = [];
+        const finalDiagramForExport: Diagram = {
             ...cleanDiagram,
             tables:
-                cleanDiagram.tables?.map((table) => ({
-                    ...table,
-                    name: table.name.replace(/[^\w]/g, '_'),
-                    fields: table.fields.map((field) => ({
-                        ...field,
-                        name: field.name.replace(/[^\w]/g, '_'),
-                    })),
-                    indexes: (table.indexes || []).map((index) => ({
-                        ...index,
-                        name: index.name
-                            ? index.name.replace(/[^\w]/g, '_')
-                            : `idx_${Math.random().toString(36).substring(2, 8)}`,
-                    })),
-                })) ?? [],
+                cleanDiagram.tables?.map((table) => {
+                    const originalName = table.name;
+                    // Sanitize table name
+                    let safeTableName = originalName.replace(/[^\w]/g, '_');
+                    // Rename if SQL keyword
+                    if (isSQLKeyword(safeTableName)) {
+                        const newName = `${safeTableName}_table`;
+                        sqlRenamedTables.set(newName, originalName);
+                        safeTableName = newName;
+                    }
+
+                    const fieldNameCounts = new Map<string, number>();
+                    const processedFields = table.fields.map((field) => {
+                        const originalSafeName = field.name.replace(
+                            /[^\w]/g,
+                            '_'
+                        );
+                        let finalSafeName = originalSafeName;
+                        const count =
+                            fieldNameCounts.get(originalSafeName) || 0;
+
+                        if (count > 0) {
+                            finalSafeName = `${originalSafeName}_${count + 1}`; // Rename duplicate
+                        }
+                        fieldNameCounts.set(originalSafeName, count + 1);
+
+                        // Create a copy and remove comments
+                        const sanitizedField: DBField = {
+                            ...field,
+                            name: finalSafeName,
+                        };
+                        delete sanitizedField.comments;
+
+                        // Rename if SQL keyword
+                        if (isSQLKeyword(finalSafeName)) {
+                            const newFieldName = `${finalSafeName}_field`;
+                            fieldRenames.push({
+                                table: safeTableName,
+                                originalName: finalSafeName,
+                                newName: newFieldName,
+                            });
+                            sanitizedField.name = newFieldName;
+                        }
+                        return sanitizedField;
+                    });
+
+                    return {
+                        ...table,
+                        name: safeTableName,
+                        fields: processedFields, // Use fields with renamed duplicates
+                        indexes: (table.indexes || []).map((index) => ({
+                            ...index,
+                            name: index.name
+                                ? index.name.replace(/[^\w]/g, '_')
+                                : `idx_${Math.random().toString(36).substring(2, 8)}`,
+                        })),
+                    };
+                }) ?? [],
             relationships:
                 cleanDiagram.relationships?.map((rel, index) => ({
                     ...rel,
-                    // Ensure each relationship has a unique name
                     name: `fk_${index}_${rel.name ? rel.name.replace(/[^\w]/g, '_') : Math.random().toString(36).substring(2, 8)}`,
                 })) ?? [],
         } as Diagram;
 
         let standard = '';
         let inline = '';
+        let baseScript = ''; // Define baseScript outside try
 
         try {
-            // Generate SQL script
-            let baseScript = exportBaseSQL({
-                diagram: filteredDiagramWithoutSpaces,
+            baseScript = exportBaseSQL({
+                diagram: finalDiagramForExport, // Use final diagram
                 targetDatabaseType: currentDiagram.databaseType,
                 isDBMLFlow: true,
             });
 
-            // Apply sanitization to the SQL script
             baseScript = sanitizeSQLforDBML(baseScript);
 
-            // Import the sanitized SQL to DBML
+            // Append COMMENTS for tables renamed due to SQL keywords
+            sqlRenamedTables.forEach((originalName, newName) => {
+                const escapedOriginal = originalName.replace(/'/g, "\\'");
+                baseScript += `\nCOMMENT ON TABLE "${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+            });
+
+            // Append COMMENTS for fields renamed due to SQL keyword conflicts
+            fieldRenames.forEach(({ table, originalName, newName }) => {
+                const escapedOriginal = originalName.replace(/'/g, "\\'");
+                baseScript += `\nCOMMENT ON COLUMN "${table}"."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+            });
+
             standard = importer.import(
                 baseScript,
                 databaseTypeToImportFormat(currentDiagram.databaseType)
             );
 
-            // Post-process to convert separate refs to inline refs
             inline = convertToInlineRefs(standard);
         } catch (error: unknown) {
-            console.error('DBML Import Error:', error);
+            console.error(
+                'Error during DBML generation process:',
+                error,
+                'Input SQL was:',
+                baseScript // Log the SQL that caused the error
+            );
             const errorMessage = `// Error generating DBML: ${error instanceof Error ? error.message : 'Unknown error'}`;
             standard = errorMessage;
             inline = errorMessage;
@@ -429,7 +509,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             }
         }
         return { standardDbml: standard, inlineDbml: inline };
-    }, [currentDiagram, filteredTables, toast]);
+    }, [currentDiagram, filteredTables, toast]); // Keep toast dependency for now, although direct call is removed
 
     // Determine which DBML string to display
     const dbmlToDisplay = dbmlFormat === 'inline' ? inlineDbml : standardDbml;
