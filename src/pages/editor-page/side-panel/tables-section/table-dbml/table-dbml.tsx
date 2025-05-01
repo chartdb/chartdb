@@ -294,6 +294,15 @@ const isSQLKeyword = (name: string): boolean => {
     return keywords.has(name.toUpperCase());
 };
 
+// Fix DBML formatting to ensure consistent display of char and varchar types
+const normalizeCharTypeFormat = (dbml: string): string => {
+    // Replace "char (N)" with "char(N)" to match varchar's formatting
+    return dbml
+        .replace(/"char "/g, 'char')
+        .replace(/"char \(([0-9]+)\)"/g, 'char($1)')
+        .replace(/"character \(([0-9]+)\)"/g, 'character($1)');
+};
+
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { currentDiagram } = useChartDB();
     const { effectiveTheme } = useTheme();
@@ -475,12 +484,14 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 baseScript += `\nCOMMENT ON COLUMN "${table}"."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
             });
 
-            standard = importer.import(
-                baseScript,
-                databaseTypeToImportFormat(currentDiagram.databaseType)
+            standard = normalizeCharTypeFormat(
+                importer.import(
+                    baseScript,
+                    databaseTypeToImportFormat(currentDiagram.databaseType)
+                )
             );
 
-            inline = convertToInlineRefs(standard);
+            inline = normalizeCharTypeFormat(convertToInlineRefs(standard));
         } catch (error: unknown) {
             console.error(
                 'Error during DBML generation process:',
@@ -488,6 +499,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 'Input SQL was:',
                 baseScript // Log the SQL that caused the error
             );
+
             const errorMessage = `// Error generating DBML: ${error instanceof Error ? error.message : 'Unknown error'}`;
             standard = errorMessage;
             inline = errorMessage;
