@@ -26,6 +26,8 @@ export const zh_CN: LanguageTranslation = {
                 hide_sidebar: '隐藏侧边栏',
                 hide_cardinality: '隐藏基数',
                 show_cardinality: '展示基数',
+                show_field_attributes: '展示字段属性',
+                hide_field_attributes: '隐藏字段属性',
                 zoom_on_scroll: '滚动缩放',
                 theme: '主题',
                 show_dependencies: '展示依赖',

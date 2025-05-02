@@ -26,6 +26,8 @@ export const mr: LanguageTranslation = {
                 hide_sidebar: 'साइडबार लपवा',
                 hide_cardinality: 'कार्डिनॅलिटी लपवा',
                 show_cardinality: 'कार्डिनॅलिटी दाखवा',
+                hide_field_attributes: 'फील्ड गुणधर्म लपवा',
+                show_field_attributes: 'फील्ड गुणधर्म दाखवा',
                 zoom_on_scroll: 'स्क्रोलवर झूम करा',
                 theme: 'थीम',
                 show_dependencies: 'डिपेंडेन्सि दाखवा',

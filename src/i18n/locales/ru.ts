@@ -26,6 +26,8 @@ export const ru: LanguageTranslation = {
                 hide_sidebar: 'Скрыть боковую панель',
                 hide_cardinality: 'Скрыть множественность связи',
                 show_cardinality: 'Показать множественность связи',
+                show_field_attributes: 'Показать атрибуты поля',
+                hide_field_attributes: 'Скрыть атрибуты поля',
                 zoom_on_scroll: 'Увеличение при прокрутке',
                 theme: 'Тема',
                 show_dependencies: 'Показать зависимости',
