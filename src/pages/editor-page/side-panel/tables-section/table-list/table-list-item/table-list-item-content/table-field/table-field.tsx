@@ -134,7 +134,10 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.type.id}
                                 valueSuffix={
-                                    field.precision && field.scale
+                                    field.precision &&
+                                    ((typeof field.scale == 'number' &&
+                                        !Number.isNaN(field.scale)) ||
+                                        field.scale === 0)
                                         ? `(${field.precision}, ${field.scale})`
                                         : field.characterMaximumLength
                                           ? `(${field.characterMaximumLength})`
