@@ -26,6 +26,8 @@ export const gu: LanguageTranslation = {
                 hide_sidebar: 'સાઇડબાર છુપાવો',
                 hide_cardinality: 'કાર્ડિનાલિટી છુપાવો',
                 show_cardinality: 'કાર્ડિનાલિટી બતાવો',
+                hide_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ છુપાવો',
+                show_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ બતાવો',
                 zoom_on_scroll: 'સ્ક્રોલ પર ઝૂમ કરો',
                 theme: 'થિમ',
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',

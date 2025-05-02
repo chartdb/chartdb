@@ -26,6 +26,8 @@ export const pt_BR: LanguageTranslation = {
                 hide_sidebar: 'Ocultar Barra Lateral',
                 hide_cardinality: 'Ocultar Cardinalidade',
                 show_cardinality: 'Mostrar Cardinalidade',
+                hide_field_attributes: 'Ocultar Atributos de Campo',
+                show_field_attributes: 'Mostrar Atributos de Campo',
                 zoom_on_scroll: 'Zoom ao Rolar',
                 theme: 'Tema',
                 show_dependencies: 'Mostrar Dependências',

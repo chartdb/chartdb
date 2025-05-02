@@ -26,6 +26,8 @@ export const id_ID: LanguageTranslation = {
                 hide_sidebar: 'Sembunyikan Sidebar',
                 hide_cardinality: 'Sembunyikan Kardinalitas',
                 show_cardinality: 'Tampilkan Kardinalitas',
+                hide_field_attributes: 'Sembunyikan Atribut Kolom',
+                show_field_attributes: 'Tampilkan Atribut Kolom',
                 zoom_on_scroll: 'Perbesar saat Scroll',
                 theme: 'Tema',
                 show_dependencies: 'Tampilkan Dependensi',
@@ -151,6 +153,8 @@ export const id_ID: LanguageTranslation = {
                         delete_field: 'Hapus Kolom',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Presisi',
+                        scale: 'Skala',
                     },
                     index_actions: {
                         title: 'Atribut Indeks',

@@ -26,6 +26,8 @@ export const te: LanguageTranslation = {
                 hide_sidebar: 'సైడ్‌బార్ దాచండి',
                 hide_cardinality: 'కార్డినాలిటీని దాచండి',
                 show_cardinality: 'కార్డినాలిటీని చూపించండి',
+                show_field_attributes: 'ఫీల్డ్ గుణాలను చూపించు',
+                hide_field_attributes: 'ఫీల్డ్ గుణాలను దాచండి',
                 zoom_on_scroll: 'స్క్రోల్‌పై జూమ్',
                 theme: 'థీమ్',
                 show_dependencies: 'ఆధారాలు చూపించండి',

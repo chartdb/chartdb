@@ -26,6 +26,8 @@ export const ar: LanguageTranslation = {
                 hide_sidebar: 'إخفاء الشريط الجانبي',
                 hide_cardinality: 'إخفاء الكاردينالية',
                 show_cardinality: 'إظهار الكاردينالية',
+                hide_field_attributes: 'إخفاء خصائص الحقل',
+                show_field_attributes: 'إظهار خصائص الحقل',
                 zoom_on_scroll: 'تكبير/تصغير عند التمرير',
                 theme: 'المظهر',
                 show_dependencies: 'إظهار الاعتمادات',

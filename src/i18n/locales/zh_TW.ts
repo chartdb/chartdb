@@ -26,6 +26,8 @@ export const zh_TW: LanguageTranslation = {
                 hide_sidebar: '隱藏側邊欄',
                 hide_cardinality: '隱藏基數',
                 show_cardinality: '顯示基數',
+                hide_field_attributes: '隱藏欄位屬性',
+                show_field_attributes: '顯示欄位屬性',
                 zoom_on_scroll: '滾動縮放',
                 theme: '主題',
                 show_dependencies: '顯示相依性',

@@ -26,6 +26,8 @@ export const uk: LanguageTranslation = {
                 hide_sidebar: 'Приховати бічну панель',
                 hide_cardinality: 'Приховати потужність',
                 show_cardinality: 'Показати кардинальність',
+                show_field_attributes: 'Показати атрибути полів',
+                hide_field_attributes: 'Приховати атрибути полів',
                 zoom_on_scroll: 'Масштабувати прокручуванням',
                 theme: 'Тема',
                 show_dependencies: 'Показати залежності',
