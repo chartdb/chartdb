@@ -248,7 +248,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         }));
                                     }}
                                 >
-                                    Clear
+                                    {t('menu.edit.clear')}
                                 </Button>
                             </>
                         ) : null}
