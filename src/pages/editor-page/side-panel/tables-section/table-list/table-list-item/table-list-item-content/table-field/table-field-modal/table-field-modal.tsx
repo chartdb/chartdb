@@ -167,6 +167,17 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                                 precision: parseInt(
                                                     e.target.value
                                                 ),
+                                                scale:
+                                                    typeof current.scale ===
+                                                        'number' &&
+                                                    !Number.isNaN(current.scale)
+                                                        ? current.scale
+                                                        : (
+                                                              findDataTypeDataById(
+                                                                  field.type.id
+                                                              )?.fieldAttributes
+                                                                  ?.scale as FieldAttributeRange
+                                                          ).min,
                                             }))
                                         }
                                         className="w-full rounded-md bg-muted text-sm"
@@ -205,11 +216,40 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                             setLocalField((current) => ({
                                                 ...current,
                                                 scale: parseInt(e.target.value),
+                                                precision:
+                                                    typeof current.precision ===
+                                                        'number' &&
+                                                    !Number.isNaN(
+                                                        current.precision
+                                                    )
+                                                        ? current.precision
+                                                        : (
+                                                              findDataTypeDataById(
+                                                                  field.type.id
+                                                              )?.fieldAttributes
+                                                                  ?.precision as FieldAttributeRange
+                                                          ).min,
                                             }))
                                         }
                                         className="w-full rounded-md bg-muted text-sm"
                                     />
                                 </div>
+                                <Button
+                                    disabled={
+                                        localField.scale === undefined &&
+                                        localField.precision === undefined
+                                    }
+                                    variant="destructive"
+                                    onClick={() => {
+                                        setLocalField((current) => ({
+                                            ...current,
+                                            precision: undefined,
+                                            scale: undefined,
+                                        }));
+                                    }}
+                                >
+                                    Clear
+                                </Button>
                             </>
                         ) : null}
                         <div className="flex flex-col gap-2">
