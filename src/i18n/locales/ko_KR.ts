@@ -151,6 +151,8 @@ export const ko_KR: LanguageTranslation = {
                         delete_field: '필드 삭제',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '정밀도',
+                        scale: '소수점 자릿수',
                     },
                     index_actions: {
                         title: '인덱스 속성',

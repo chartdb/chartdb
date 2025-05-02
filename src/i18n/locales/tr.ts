@@ -151,6 +151,8 @@ export const tr: LanguageTranslation = {
                         delete_field: 'Alanı Sil',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Hassasiyet',
+                        scale: 'Ölçek',
                     },
                     index_actions: {
                         title: 'İndeks Özellikleri',

@@ -154,6 +154,8 @@ export const mr: LanguageTranslation = {
                         delete_field: 'फील्ड हटवा',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'अचूकता',
+                        scale: 'प्रमाण',
                     },
                     index_actions: {
                         title: 'इंडेक्स गुणधर्म',

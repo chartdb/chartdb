@@ -148,6 +148,8 @@ export const zh_CN: LanguageTranslation = {
                         delete_field: '删除字段',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小数位',
                     },
                     index_actions: {
                         title: '索引属性',

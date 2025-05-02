@@ -58,6 +58,8 @@ export const Menu: React.FC<MenuProps> = () => {
         setScrollAction,
         setShowCardinality,
         showCardinality,
+        setShowFieldAttributes,
+        showFieldAttributes,
         setShowDependenciesOnCanvas,
         showDependenciesOnCanvas,
         setShowMiniMapOnCanvas,
@@ -176,6 +178,10 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideCardinality = useCallback(() => {
         setShowCardinality(!showCardinality);
     }, [showCardinality, setShowCardinality]);
+
+    const showOrHideFieldAttributes = useCallback(() => {
+        setShowFieldAttributes(!showFieldAttributes);
+    }, [showFieldAttributes, setShowFieldAttributes]);
 
     const showOrHideDependencies = useCallback(() => {
         setShowDependenciesOnCanvas(!showDependenciesOnCanvas);
@@ -437,6 +443,11 @@ export const Menu: React.FC<MenuProps> = () => {
                         {showCardinality
                             ? t('menu.view.hide_cardinality')
                             : t('menu.view.show_cardinality')}
+                    </MenubarItem>
+                    <MenubarItem onClick={showOrHideFieldAttributes}>
+                        {showFieldAttributes
+                            ? t('menu.view.hide_field_attributes')
+                            : t('menu.view.show_field_attributes')}
                     </MenubarItem>
                     {databaseType !== DatabaseType.CLICKHOUSE ? (
                         <MenubarItem onClick={showOrHideDependencies}>

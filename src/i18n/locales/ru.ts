@@ -151,6 +151,8 @@ export const ru: LanguageTranslation = {
                         delete_field: 'Удалить поле',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Точность',
+                        scale: 'Масштаб',
                     },
                     index_actions: {
                         title: 'Атрибуты индекса',

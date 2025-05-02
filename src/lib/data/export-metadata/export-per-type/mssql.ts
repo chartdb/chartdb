@@ -125,7 +125,8 @@ export function exportMSSQL(diagram: Diagram): string {
                         ) {
                             typeWithSize = `${typeName}(${field.characterMaximumLength})`;
                         }
-                    } else if (field.precision && field.scale) {
+                    }
+                    if (field.precision && field.scale) {
                         if (
                             typeName.toLowerCase() === 'decimal' ||
                             typeName.toLowerCase() === 'numeric'

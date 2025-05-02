@@ -152,6 +152,8 @@ export const ne: LanguageTranslation = {
                         delete_field: 'क्षेत्र हटाउनुहोस्',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'परिशुद्धता',
+                        scale: 'स्केल',
                     },
                     index_actions: {
                         title: 'सूचक विशेषताहरू',

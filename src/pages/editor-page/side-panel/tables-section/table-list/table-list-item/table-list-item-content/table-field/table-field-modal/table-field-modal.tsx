@@ -4,6 +4,7 @@ import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
 import type { DBField } from '@/lib/domain/db-field';
+import type { FieldAttributeRange } from '@/lib/data/data-types/data-types';
 import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import {
     Popover,
@@ -40,6 +41,8 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
             updateField({
                 comments: value?.comments,
                 characterMaximumLength: value?.characterMaximumLength,
+                precision: value?.precision,
+                scale: value?.scale,
                 unique: value?.unique,
             });
         }, 200);
@@ -97,7 +100,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 }
                             />
                         </div>
-                        {findDataTypeDataById(field.type.id)
+                        {findDataTypeDataById(field.type.id)?.fieldAttributes
                             ?.hasCharMaxLength ? (
                             <div className="flex flex-col gap-2">
                                 <Label
@@ -123,6 +126,91 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     className="w-full rounded-md bg-muted text-sm"
                                 />
                             </div>
+                        ) : null}
+                        {findDataTypeDataById(field.type.id)?.fieldAttributes
+                            ?.precision &&
+                        findDataTypeDataById(field.type.id)?.fieldAttributes
+                            ?.scale ? (
+                            <>
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.precision'
+                                        )}
+                                    </Label>
+                                    <Input
+                                        value={localField.precision ?? ''}
+                                        type="number"
+                                        max={
+                                            (
+                                                findDataTypeDataById(
+                                                    field.type.id
+                                                )?.fieldAttributes
+                                                    ?.precision as FieldAttributeRange
+                                            ).max
+                                        }
+                                        min={
+                                            (
+                                                findDataTypeDataById(
+                                                    field.type.id
+                                                )?.fieldAttributes
+                                                    ?.precision as FieldAttributeRange
+                                            ).min
+                                        }
+                                        placeholder={`${(findDataTypeDataById(field.type.id)?.fieldAttributes?.precision as FieldAttributeRange).default}`}
+                                        onChange={(e) =>
+                                            setLocalField((current) => ({
+                                                ...current,
+                                                precision: parseInt(
+                                                    e.target.value
+                                                ),
+                                            }))
+                                        }
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.scale'
+                                        )}
+                                    </Label>
+                                    <Input
+                                        value={localField.scale ?? ''}
+                                        max={
+                                            (
+                                                findDataTypeDataById(
+                                                    field.type.id
+                                                )?.fieldAttributes
+                                                    ?.scale as FieldAttributeRange
+                                            ).max
+                                        }
+                                        min={
+                                            (
+                                                findDataTypeDataById(
+                                                    field.type.id
+                                                )?.fieldAttributes
+                                                    ?.scale as FieldAttributeRange
+                                            ).min
+                                        }
+                                        placeholder={`${(findDataTypeDataById(field.type.id)?.fieldAttributes?.scale as FieldAttributeRange).default}`}
+                                        type="number"
+                                        onChange={(e) =>
+                                            setLocalField((current) => ({
+                                                ...current,
+                                                scale: parseInt(e.target.value),
+                                            }))
+                                        }
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                </div>
+                            </>
                         ) : null}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="width" className="text-subtitle">

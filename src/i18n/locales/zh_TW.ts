@@ -148,6 +148,8 @@ export const zh_TW: LanguageTranslation = {
                         delete_field: '刪除欄位',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小數位',
                     },
                     index_actions: {
                         title: '索引屬性',

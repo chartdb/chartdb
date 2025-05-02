@@ -152,6 +152,8 @@ export const te: LanguageTranslation = {
                         delete_field: 'ఫీల్డ్ తొలగించు',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'సూక్ష్మత',
+                        scale: 'స్కేల్',
                     },
                     index_actions: {
                         title: 'ఇండెక్స్ గుణాలు',

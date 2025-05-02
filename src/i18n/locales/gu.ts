@@ -153,6 +153,8 @@ export const gu: LanguageTranslation = {
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'ચોકસાઈ',
+                        scale: 'માપ',
                     },
                     index_actions: {
                         title: 'ઇન્ડેક્સ લક્ષણો',
