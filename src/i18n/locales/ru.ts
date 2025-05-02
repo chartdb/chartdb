@@ -148,6 +148,8 @@ export const ru: LanguageTranslation = {
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
                         character_length: 'Макс. длина',
+                        precision: 'Точность',
+                        scale: 'Масштаб',
                     },
                     index_actions: {
                         title: 'Атрибуты индекса',

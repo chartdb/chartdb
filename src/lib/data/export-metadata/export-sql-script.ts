@@ -219,7 +219,8 @@ export const exportBaseSQL = ({
             // Add size for character types
             if (
                 field.characterMaximumLength &&
-                parseInt(field.characterMaximumLength) > 0
+                parseInt(field.characterMaximumLength) > 0 &&
+                field.type.name.toLowerCase() !== 'decimal'
             ) {
                 sqlScript += `(${field.characterMaximumLength})`;
             } else if (field.type.name.toLowerCase().includes('varchar')) {

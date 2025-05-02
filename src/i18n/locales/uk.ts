@@ -150,6 +150,8 @@ export const uk: LanguageTranslation = {
                         delete_field: 'Видалити поле',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Точність',
+                        scale: 'Масштаб',
                     },
                     index_actions: {
                         title: 'Атрибути індексу',

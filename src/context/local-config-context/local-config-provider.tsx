@@ -7,6 +7,7 @@ const themeKey = 'theme';
 const scrollActionKey = 'scroll_action';
 const schemasFilterKey = 'schemas_filter';
 const showCardinalityKey = 'show_cardinality';
+const showFieldAttributesKey = 'show_field_attributes';
 const hideMultiSchemaNotificationKey = 'hide_multi_schema_notification';
 const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
@@ -33,6 +34,11 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     const [showCardinality, setShowCardinality] = React.useState<boolean>(
         (localStorage.getItem(showCardinalityKey) || 'true') === 'true'
     );
+
+    const [showFieldAttributes, setShowFieldAttributes] =
+        React.useState<boolean>(
+            (localStorage.getItem(showFieldAttributesKey) || 'true') === 'true'
+        );
 
     const [hideMultiSchemaNotification, setHideMultiSchemaNotification] =
         React.useState<boolean>(
@@ -119,6 +125,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setSchemasFilter,
                 showCardinality,
                 setShowCardinality,
+                showFieldAttributes,
+                setShowFieldAttributes,
                 hideMultiSchemaNotification,
                 setHideMultiSchemaNotification,
                 setGithubRepoOpened,

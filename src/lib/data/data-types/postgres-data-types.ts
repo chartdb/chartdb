@@ -3,7 +3,12 @@ import type { DataTypeData } from './data-types';
 export const postgresDataTypes: readonly DataTypeData[] = [
     // Level 1 - Most commonly used types
     { name: 'integer', id: 'integer', usageLevel: 1 },
-    { name: 'varchar', id: 'varchar', hasCharMaxLength: true, usageLevel: 1 },
+    {
+        name: 'varchar',
+        id: 'varchar',
+        fieldAttributes: { hasCharMaxLength: true },
+        usageLevel: 1,
+    },
     { name: 'text', id: 'text', usageLevel: 1 },
     { name: 'boolean', id: 'boolean', usageLevel: 1 },
     { name: 'timestamp', id: 'timestamp', usageLevel: 1 },
@@ -11,7 +16,23 @@ export const postgresDataTypes: readonly DataTypeData[] = [
 
     // Level 2 - Second most common types
     { name: 'bigint', id: 'bigint', usageLevel: 2 },
-    { name: 'decimal', id: 'decimal', usageLevel: 2 },
+    {
+        name: 'decimal',
+        id: 'decimal',
+        usageLevel: 2,
+        fieldAttributes: {
+            precision: {
+                max: 131072,
+                min: 0,
+                default: 10,
+            },
+            scale: {
+                max: 16383,
+                min: 0,
+                default: 0,
+            },
+        },
+    },
     { name: 'serial', id: 'serial', usageLevel: 2 },
     { name: 'json', id: 'json', usageLevel: 2 },
     { name: 'jsonb', id: 'jsonb', usageLevel: 2 },
@@ -30,11 +51,11 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'bigserial', id: 'bigserial' },
     { name: 'money', id: 'money' },
     { name: 'smallint', id: 'smallint' },
-    { name: 'char', id: 'char', hasCharMaxLength: true },
+    { name: 'char', id: 'char', fieldAttributes: { hasCharMaxLength: true } },
     {
         name: 'character varying',
         id: 'character_varying',
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
     { name: 'time', id: 'time' },
     { name: 'timestamp without time zone', id: 'timestamp_without_time_zone' },

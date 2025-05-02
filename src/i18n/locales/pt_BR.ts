@@ -152,6 +152,8 @@ export const pt_BR: LanguageTranslation = {
                         delete_field: 'Excluir Campo',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Precisão',
+                        scale: 'Escala',
                     },
                     index_actions: {
                         title: 'Atributos do Índice',

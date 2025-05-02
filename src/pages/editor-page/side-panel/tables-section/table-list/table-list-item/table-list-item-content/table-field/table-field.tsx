@@ -157,9 +157,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.type.id}
                                 valueSuffix={
-                                    field.characterMaximumLength
-                                        ? `(${field.characterMaximumLength})`
-                                        : ''
+                                    field.precision && field.scale
+                                        ? `(${field.precision}, ${field.scale})`
+                                        : field.characterMaximumLength
+                                          ? `(${field.characterMaximumLength})`
+                                          : ''
                                 }
                                 optionSuffix={(option) => {
                                     const type = sortedDataTypeMap[

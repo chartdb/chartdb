@@ -20,6 +20,15 @@ export const sqliteDataTypes: readonly DataTypeData[] = [
     { name: 'numeric', id: 'numeric', usageLevel: 2 },
     { name: 'decimal', id: 'decimal', usageLevel: 2 },
     { name: 'float', id: 'float', usageLevel: 2 },
+    {
+        name: 'decimal',
+        id: 'decimal',
+        usageLevel: 2,
+        fieldAttributes: {
+            hasPrecision: true,
+            hasScale: true,
+        },
+    },
     { name: 'double', id: 'double', usageLevel: 2 },
     { name: 'json', id: 'json', usageLevel: 2 },
 

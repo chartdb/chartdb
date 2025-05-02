@@ -32,6 +32,7 @@ import {
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import { Input } from '@/components/input/input';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -202,6 +203,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             e.stopPropagation();
             setEditMode(true);
         }, []);
+
+        const { showFieldAttributes } = useLocalConfig();
 
         return (
             <div
@@ -393,6 +396,16 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     </span>{' '}
                                     {fieldDiffChangedType.name.split(' ')[0]}
                                 </>
+                            ) : showFieldAttributes ? (
+                                field.precision && field.scale ? (
+                                    field.type.name.split(' ')[0] +
+                                    `(${field.precision}, ${field.scale})`
+                                ) : field.characterMaximumLength ? (
+                                    field.type.name.split(' ')[0] +
+                                    `(${field.characterMaximumLength})`
+                                ) : (
+                                    field.type.name.split(' ')[0]
+                                )
                             ) : (
                                 field.type.name.split(' ')[0]
                             )}
