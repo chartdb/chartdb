@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useMonaco } from '@monaco-editor/react';
 import { useToast } from '@/components/toast/use-toast';
 import { Button } from '../button/button';
+import type { LucideIcon } from 'lucide-react';
 import { Copy, CopyCheck } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +27,12 @@ export const DiffEditor = lazy(() =>
 
 type EditorType = typeof Editor;
 
+export interface CodeSnippetAction {
+    label: string;
+    icon: LucideIcon;
+    onClick: () => void;
+}
+
 export interface CodeSnippetProps {
     className?: string;
     code: string;
@@ -35,6 +42,7 @@ export interface CodeSnippetProps {
     autoScroll?: boolean;
     isComplete?: boolean;
     editorProps?: React.ComponentProps<EditorType>;
+    actions?: CodeSnippetAction[];
 }
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
@@ -47,6 +55,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         autoScroll = false,
         isComplete = true,
         editorProps,
+        actions,
     }) => {
         const { t } = useTranslation();
         const monaco = useMonaco();
@@ -119,36 +128,58 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                 ) : (
                     <Suspense fallback={<Spinner />}>
                         {isComplete ? (
-                            <Tooltip
-                                onOpenChange={setTooltipOpen}
-                                open={isCopied || tooltipOpen}
-                            >
-                                <TooltipTrigger
-                                    asChild
-                                    className="absolute right-1 top-1 z-10"
+                            <div className="absolute right-1 top-1 z-10 flex flex-col gap-1">
+                                <Tooltip
+                                    onOpenChange={setTooltipOpen}
+                                    open={isCopied || tooltipOpen}
                                 >
-                                    <span>
-                                        <Button
-                                            className=" h-fit p-1.5"
-                                            variant="outline"
-                                            onClick={copyToClipboard}
-                                        >
-                                            {isCopied ? (
-                                                <CopyCheck size={16} />
-                                            ) : (
-                                                <Copy size={16} />
-                                            )}
-                                        </Button>
-                                    </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {t(
-                                        isCopied
-                                            ? 'copied'
-                                            : 'copy_to_clipboard'
-                                    )}
-                                </TooltipContent>
-                            </Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <Button
+                                                className="h-fit p-1.5"
+                                                variant="outline"
+                                                onClick={copyToClipboard}
+                                            >
+                                                {isCopied ? (
+                                                    <CopyCheck size={16} />
+                                                ) : (
+                                                    <Copy size={16} />
+                                                )}
+                                            </Button>
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {t(
+                                            isCopied
+                                                ? 'copied'
+                                                : 'copy_to_clipboard'
+                                        )}
+                                    </TooltipContent>
+                                </Tooltip>
+
+                                {actions &&
+                                    actions.length > 0 &&
+                                    actions.map((action, index) => (
+                                        <Tooltip key={index}>
+                                            <TooltipTrigger asChild>
+                                                <span>
+                                                    <Button
+                                                        className="h-fit p-1.5"
+                                                        variant="outline"
+                                                        onClick={action.onClick}
+                                                    >
+                                                        <action.icon
+                                                            size={16}
+                                                        />
+                                                    </Button>
+                                                </span>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                {action.label}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    ))}
+                            </div>
                         ) : null}
 
                         <Editor

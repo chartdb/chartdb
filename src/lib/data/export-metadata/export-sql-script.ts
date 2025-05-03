@@ -9,6 +9,29 @@ import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
 
+// Function to simplify verbose data type names
+const simplifyDataType = (typeName: string): string => {
+    const typeMap: Record<string, string> = {
+        'character varying': 'varchar',
+        'char varying': 'varchar',
+        integer: 'int',
+        int4: 'int',
+        int8: 'bigint',
+        serial4: 'serial',
+        serial8: 'bigserial',
+        float8: 'double precision',
+        float4: 'real',
+        bool: 'boolean',
+        character: 'char',
+        'timestamp without time zone': 'timestamp',
+        'timestamp with time zone': 'timestamptz',
+        'time without time zone': 'time',
+        'time with time zone': 'timetz',
+    };
+
+    return typeMap[typeName.toLowerCase()] || typeName;
+};
+
 export const exportBaseSQL = ({
     diagram,
     targetDatabaseType,
@@ -93,11 +116,12 @@ export const exportBaseSQL = ({
         sqlScript += `CREATE TABLE ${tableName} (\n`;
 
         table.fields.forEach((field, index) => {
-            let typeName = field.type.name;
+            let typeName = simplifyDataType(field.type.name);
 
             // Handle ENUM type
             if (typeName.toLowerCase() === 'enum') {
-                typeName = 'varchar';
+                // Map enum to TEXT for broader compatibility, especially with DBML importer
+                typeName = 'text';
             }
 
             // Temp fix for 'array' to be text[]
@@ -116,6 +140,7 @@ export const exportBaseSQL = ({
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
             } else if (field.type.name.toLowerCase().includes('varchar')) {
+                // Keep varchar sizing, but don't apply to TEXT (previously enum)
                 sqlScript += `(500)`;
             }
 
