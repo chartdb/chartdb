@@ -10,14 +10,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { useToast } from '@/components/toast/use-toast';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { Button } from '@/components/button/button';
-import { ArrowLeftRight, Copy, CopyCheck } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/tooltip/tooltip';
+import { ArrowLeftRight } from 'lucide-react';
 import { type DBField } from '@/lib/domain/db-field';
 
 export interface TableDBMLProps {
@@ -155,8 +148,6 @@ const sanitizeSQLforDBML = (sql: string): string => {
 
 // Post-process DBML to convert separate Ref statements to inline refs
 const convertToInlineRefs = (dbml: string): string => {
-    console.log('Original DBML to convert:', dbml);
-
     // Extract all Ref statements - Corrected pattern
     const refPattern =
         /Ref\s+"([^"]+)"\s*:\s*"([^"]+)"\."([^"]+)"\s*([<>*])\s*"([^"]+)"\."([^"]+)"/g;
@@ -171,7 +162,6 @@ const convertToInlineRefs = (dbml: string): string => {
 
     let match;
     while ((match = refPattern.exec(dbml)) !== null) {
-        console.log('Matched reference:', match[0]);
         refs.push({
             refName: match[1], // Reference name
             sourceTable: match[2], // Source table
@@ -181,7 +171,6 @@ const convertToInlineRefs = (dbml: string): string => {
             targetField: match[6], // Target field
         });
     }
-    console.log('Found references:', refs);
 
     // Extract all table definitions - Corrected pattern and handling
     const tables: {
@@ -198,12 +187,8 @@ const convertToInlineRefs = (dbml: string): string => {
             content: tableMatch[2],
         };
     }
-    console.log('Found tables:', Object.keys(tables));
 
     if (refs.length === 0 || Object.keys(tables).length === 0) {
-        console.log(
-            'No valid references or tables found for conversion, returning original DBML.'
-        );
         return dbml; // Return original if parsing failed
     }
 
@@ -245,9 +230,7 @@ const convertToInlineRefs = (dbml: string): string => {
                     if (lineMatch.includes('[ref:')) {
                         return lineMatch;
                     }
-                    console.log(
-                        `Adding inline ref to ${targetTableName}.${fieldName}`
-                    );
+
                     return `${fieldPart.trim()} ${inlineRefSyntax}${existingAttributes || ''}${commentPart || ''}`;
                 }
             );
@@ -257,10 +240,6 @@ const convertToInlineRefs = (dbml: string): string => {
                 tableData.content = newContent;
                 tableMap.set(targetTableName, tableData);
             }
-        } else {
-            console.log(
-                `Target table "${targetTableName}" not found for ref: ${ref.refName}`
-            );
         }
     });
 
@@ -284,7 +263,6 @@ const convertToInlineRefs = (dbml: string): string => {
         .filter((line) => !line.trim().startsWith('Ref '));
     const finalDbml = finalLines.join('\n').trim();
 
-    console.log('Converted DBML:', finalDbml);
     return finalDbml;
 };
 
@@ -307,12 +285,9 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { currentDiagram } = useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
-    const { t } = useTranslation();
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
         'standard'
     );
-    const [isCopied, setIsCopied] = useState(false);
-    const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
     // --- Effect for handling empty field name warnings ---
     useEffect(() => {
@@ -531,101 +506,29 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         setDbmlFormat((prev) => (prev === 'inline' ? 'standard' : 'inline'));
     };
 
-    // Copy function (extracted from CodeSnippet for reuse)
-    const copyToClipboard = React.useCallback(async () => {
-        if (!navigator?.clipboard) {
-            toast({
-                title: t('copy_to_clipboard_toast.unsupported.title'),
-                variant: 'destructive',
-                description: t(
-                    'copy_to_clipboard_toast.unsupported.description'
-                ),
-            });
-            return;
-        }
-
-        try {
-            await navigator.clipboard.writeText(dbmlToDisplay);
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 1500);
-        } catch {
-            setIsCopied(false);
-            toast({
-                title: t('copy_to_clipboard_toast.failed.title'),
-                variant: 'destructive',
-                description: t('copy_to_clipboard_toast.failed.description'),
-            });
-        }
-    }, [dbmlToDisplay, t, toast]);
-
     return (
-        <div className="relative h-full flex-1">
-            {/* Buttons Container - Absolutely positioned top-right, column layout */}
-            <div className="absolute right-1 top-1 z-10 flex flex-col gap-1">
-                {/* Copy Button (Top) */}
-                <Tooltip
-                    onOpenChange={setTooltipOpen}
-                    open={isCopied || tooltipOpen}
-                >
-                    <TooltipTrigger asChild>
-                        <Button
-                            className="h-fit p-1.5"
-                            variant="outline"
-                            size="sm"
-                            onClick={copyToClipboard}
-                        >
-                            {isCopied ? (
-                                <CopyCheck size={16} />
-                            ) : (
-                                <Copy size={16} />
-                            )}
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {t(isCopied ? 'copied' : 'copy_to_clipboard')}
-                    </TooltipContent>
-                </Tooltip>
-
-                {/* Toggle Button (Bottom) */}
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-fit p-1.5"
-                            onClick={toggleFormat}
-                        >
-                            <ArrowLeftRight size={16} />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="left" sideOffset={4}>
-                        {dbmlFormat === 'inline'
-                            ? 'Show Standard Refs'
-                            : 'Show Inline Refs'}
-                    </TooltipContent>
-                </Tooltip>
-            </div>
-
-            {/* CodeSnippet fills the container */}
-            <CodeSnippet
-                code={dbmlToDisplay}
-                className="absolute inset-0 my-0.5"
-                editorProps={{
-                    height: '100%',
-                    defaultLanguage: 'dbml',
-                    beforeMount: setupDBMLLanguage,
-                    loading: false,
-                    theme: getEditorTheme(effectiveTheme),
-                    options: {
-                        wordWrap: 'off',
-                        mouseWheelZoom: false,
-                        domReadOnly: true,
-                    },
-                }}
-                // Set isComplete to true to hide the blinking dot
-                // (this will also show the default copy button)
-                isComplete={true}
-            />
-        </div>
+        <CodeSnippet
+            code={dbmlToDisplay}
+            className="my-0.5"
+            actions={[
+                {
+                    label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
+                    icon: ArrowLeftRight,
+                    onClick: toggleFormat,
+                },
+            ]}
+            editorProps={{
+                height: '100%',
+                defaultLanguage: 'dbml',
+                beforeMount: setupDBMLLanguage,
+                loading: false,
+                theme: getEditorTheme(effectiveTheme),
+                options: {
+                    wordWrap: 'off',
+                    mouseWheelZoom: false,
+                    domReadOnly: true,
+                },
+            }}
+        />
     );
 };
