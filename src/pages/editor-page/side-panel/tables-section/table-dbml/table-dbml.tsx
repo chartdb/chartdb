@@ -222,7 +222,7 @@ const convertToInlineRefs = (dbml: string): string => {
                 (
                     lineMatch,
                     fieldPart,
-                    fieldName,
+                    _fieldName,
                     existingAttributes,
                     commentPart
                 ) => {
