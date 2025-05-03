@@ -330,7 +330,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             }}
         >
             <DialogContent
-                className="flex h-[80vh] max-h-screen flex-col"
+                className="flex h-[80vh] max-h-screen w-full flex-col md:max-w-[900px]"
                 showClose
             >
                 <DialogHeader>
