@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/doorkeeper-db.png';
 import imageDark from '@/assets/templates/doorkeeper-db-dark.png';
 
+const now = Date.now();
+
 export const doorkeeperDb: Template = {
     slug: 'doorkeeper-database',
     name: 'Doorkeeper',
@@ -37,7 +39,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8w3g80lo0tw7p3t06b5r9lg2o',
@@ -50,7 +52,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uf3kgxkstwmiuezmvcnj847uj',
@@ -63,7 +65,7 @@ export const doorkeeperDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5n63c3tsqzdvftkjnkq6i7k39',
@@ -76,7 +78,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cau4z0n2m8mcli9hx6ed64hyu',
@@ -89,7 +91,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fbagrcvuk25uzwq5unm991881',
@@ -102,7 +104,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'urzv1fn66dprx7tww1s0dsef8',
@@ -114,7 +116,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mi7liyvghjixoawtdkic7ooot',
@@ -126,7 +128,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bpuk51a0g725c9m6s6aedabfp',
@@ -138,7 +140,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -147,20 +149,20 @@ export const doorkeeperDb: Template = {
                         name: 'oauth_applications_uid_unique',
                         unique: true,
                         fieldIds: ['uf3kgxkstwmiuezmvcnj847uj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ddbuj2dtx28emv9g9jv2inh7c',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['9w3uwcorjanaccb1tljxcris9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'niw9mkgqx819etmpvu63dslic',
@@ -179,7 +181,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'svcycxxruofrbl7ih2f27tl6s',
@@ -191,7 +193,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ue57b6hukq4u6k2jggpdp4j40',
@@ -203,7 +205,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gftvctnnukb8hab10vvd4sqz1',
@@ -216,7 +218,7 @@ export const doorkeeperDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'stus1int8xzwz31tdpamnrf3j',
@@ -229,7 +231,7 @@ export const doorkeeperDb: Template = {
                         unique: true,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gc4a8icklv4k715kjo1nfgdqh',
@@ -241,7 +243,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bt6g2e2es9autp4s4lsf6o7mw',
@@ -253,7 +255,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm74coxh0sval57vl85xfhldyx',
@@ -265,7 +267,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hs91n9coj97l1agtcvjz3s5g0',
@@ -278,7 +280,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mggpvfqw8zig20mh1ozjjkvoo',
@@ -291,7 +293,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -300,41 +302,41 @@ export const doorkeeperDb: Template = {
                         name: 'oauth_access_tokens_application_id_index',
                         unique: false,
                         fieldIds: ['ue57b6hukq4u6k2jggpdp4j40'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2l2mh5fi238cp5ec2kqks3mlq',
                         name: 'oauth_access_tokens_refresh_token_unique',
                         unique: true,
                         fieldIds: ['stus1int8xzwz31tdpamnrf3j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n9yxzigeawx10z6tc5b1v2qjw',
                         name: 'oauth_access_tokens_resource_owner_id_index',
                         unique: false,
                         fieldIds: ['svcycxxruofrbl7ih2f27tl6s'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y2al3g85a3nm8dfpjvoyy6ub1',
                         name: 'oauth_access_tokens_token_unique',
                         unique: true,
                         fieldIds: ['gftvctnnukb8hab10vvd4sqz1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q9j0ei3gd01c0agykvrpa9si5',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['rzwnbomoljnap72wvxaht5rjj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'y45hybx72gu835y6me5xkxf3l',
@@ -353,7 +355,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -362,13 +364,13 @@ export const doorkeeperDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['zwnnses125v9idekkxtvbsh1k'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zl0f5zdujwq39p02yiun3swnx',
@@ -387,7 +389,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n0dx2nbwesk4f4eayc5fow4rf',
@@ -399,7 +401,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3usgqxo8mc0vzf2d59j4c52mq',
@@ -411,7 +413,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n9hn8jduqs3fy0iqtirgmsc0u',
@@ -424,7 +426,7 @@ export const doorkeeperDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v5k2owfedw5bkx2myi5l3n5eh',
@@ -436,7 +438,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f9rji11u4corji12t0cn0tz9z',
@@ -449,7 +451,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3dfb97ysllt65qd9azbfeh4ob',
@@ -461,7 +463,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zols5jkofvt77wgd18tolgidv',
@@ -473,7 +475,7 @@ export const doorkeeperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3nhab9g21hhnslze7pkbaojh8',
@@ -486,7 +488,7 @@ export const doorkeeperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -495,34 +497,34 @@ export const doorkeeperDb: Template = {
                         name: 'oauth_access_grants_application_id_index',
                         unique: false,
                         fieldIds: ['3usgqxo8mc0vzf2d59j4c52mq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4qglx7v8h6pye1qh4e5ibqvyi',
                         name: 'oauth_access_grants_resource_owner_id_index',
                         unique: false,
                         fieldIds: ['n0dx2nbwesk4f4eayc5fow4rf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'krd01ebul7w0z1us7irdcjyry',
                         name: 'oauth_access_grants_token_unique',
                         unique: true,
                         fieldIds: ['n9hn8jduqs3fy0iqtirgmsc0u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6s2ssgczw5qfa0cnh5nk2t6h9',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['0dc4bf0xklltcexsnudn87858'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -537,7 +539,7 @@ export const doorkeeperDb: Template = {
                 targetFieldId: 'zwnnses125v9idekkxtvbsh1k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'eod8ieflqxcyeoi8xp1rkc6nm',
@@ -550,7 +552,7 @@ export const doorkeeperDb: Template = {
                 targetFieldId: 'zwnnses125v9idekkxtvbsh1k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nr99xikuvarwxnw5oxh1ahlzk',
@@ -563,7 +565,7 @@ export const doorkeeperDb: Template = {
                 targetFieldId: '9w3uwcorjanaccb1tljxcris9',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rv73p4hzcmpochd0gij75v4c9',
@@ -576,7 +578,7 @@ export const doorkeeperDb: Template = {
                 targetFieldId: '9w3uwcorjanaccb1tljxcris9',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

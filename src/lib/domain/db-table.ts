@@ -57,7 +57,6 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     createdAt: z.number(),
     width: z.number().optional(),
     comments: z.string().optional(),
-    hidden: z.boolean().optional(),
     order: z.number().optional(),
 });
 

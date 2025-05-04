@@ -17,6 +17,7 @@ import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { ImportDatabase } from '../common/import-database/import-database';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { sqlImportToDiagram } from '@/lib/data/sql-import';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -25,6 +26,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
+    const [importMethod, setImportMethod] = useState<'query' | 'ddl'>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -42,6 +44,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
+        setDatabaseEdition(undefined);
+        setImportMethod('query');
+    }, [databaseType]);
+
+    useEffect(() => {
         const fetchDiagrams = async () => {
             const diagrams = await listDiagrams();
             setDiagramNumber(diagrams.length + 1);
@@ -54,29 +61,41 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
         setScriptResult('');
+        setImportMethod('query');
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
     const importNewDiagram = useCallback(async () => {
-        const databaseMetadata: DatabaseMetadata =
-            loadDatabaseMetadata(scriptResult);
+        let diagram: Diagram | undefined;
 
-        const diagram = await loadFromDatabaseMetadata({
-            databaseType,
-            databaseMetadata,
-            diagramNumber,
-            databaseEdition:
-                databaseEdition?.trim().length === 0
-                    ? undefined
-                    : databaseEdition,
-        });
+        if (importMethod === 'ddl') {
+            diagram = await sqlImportToDiagram({
+                sqlContent: scriptResult,
+                sourceDatabaseType: databaseType,
+                targetDatabaseType: databaseType,
+            });
+        } else {
+            const databaseMetadata: DatabaseMetadata =
+                loadDatabaseMetadata(scriptResult);
+
+            diagram = await loadFromDatabaseMetadata({
+                databaseType,
+                databaseMetadata,
+                diagramNumber,
+                databaseEdition:
+                    databaseEdition?.trim().length === 0
+                        ? undefined
+                        : databaseEdition,
+            });
+        }
 
         await addDiagram({ diagram });
         await updateConfig({ defaultDiagramId: diagram.id });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [
+        importMethod,
         databaseType,
         addDiagram,
         databaseEdition,
@@ -133,7 +152,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-screen w-[90vw] max-w-[90vw] flex-col overflow-y-auto md:overflow-visible lg:max-w-[60vw] xl:lg:max-w-lg xl:min-w-[45vw]"
+                className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
                 showClose={hasExistingDiagram}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
@@ -159,6 +178,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         }
                         setScriptResult={setScriptResult}
                         title={t('new_diagram_dialog.import_database.title')}
+                        importMethod={importMethod}
+                        setImportMethod={setImportMethod}
                     />
                 )}
             </DialogContent>

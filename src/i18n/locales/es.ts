@@ -42,9 +42,7 @@ export const es: LanguageTranslation = {
             help: {
                 help: 'Ayuda',
                 docs_website: 'Documentación',
-                visit_website: 'Visitar ChartDB',
                 join_discord: 'Únete a nosotros en Discord',
-                schedule_a_call: '¡Habla con nosotros!',
             },
         },
 
@@ -142,6 +140,8 @@ export const es: LanguageTranslation = {
                         comments: 'Comentarios',
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Atributos del Índice',
@@ -199,6 +199,27 @@ export const es: LanguageTranslation = {
                 empty_state: {
                     title: 'Sin dependencias',
                     description: 'Crea una vista para comenzar',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -405,6 +426,8 @@ export const es: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Nueva Tabla',
             new_relationship: 'Nueva Relación',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

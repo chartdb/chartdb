@@ -41,9 +41,7 @@ export const uk: LanguageTranslation = {
             help: {
                 help: 'Довідка',
                 docs_website: 'Документація',
-                visit_website: 'Сайт ChartDB',
                 join_discord: 'Приєднуйтесь до нас в Діскорд',
-                schedule_a_call: 'Забронювати зустріч!',
             },
         },
 
@@ -150,6 +148,8 @@ export const uk: LanguageTranslation = {
                         comments: 'Коментарі',
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Атрибути індексу',
@@ -207,6 +207,27 @@ export const uk: LanguageTranslation = {
                 empty_state: {
                     title: 'Жодних залежностей',
                     description: 'Створіть подання, щоб почати',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -400,6 +421,8 @@ export const uk: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Нова таблиця',
             new_relationship: 'Новий звʼязок',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

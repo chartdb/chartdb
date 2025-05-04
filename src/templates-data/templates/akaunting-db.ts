@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/akaunting.png';
 import imageDark from '@/assets/templates/akaunting-dark.png';
 
+const now = Date.now();
+
 export const akauntingDb: Template = {
     slug: 'akaunting-database',
     name: 'Akaunting',
@@ -38,7 +40,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('order_items_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8kg1r7v71fwebyobnb13d1olw',
@@ -50,7 +52,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fs0yfmtemll2heqy2s50yw5c7',
@@ -62,7 +64,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '03h16qxipz1aiuc2oiprgxs0n',
@@ -74,7 +76,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kim267xkk5d9a0lodcb6c40yq',
@@ -88,7 +90,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'utsau6dicpr9v7c753g9r49vt',
@@ -101,7 +103,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '19v9seo2kw336kyq9oimjucki',
@@ -114,7 +116,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -123,27 +125,27 @@ export const akauntingDb: Template = {
                         name: 'order_items_pkey',
                         unique: true,
                         fieldIds: ['o38pf6tg52otihdco5cd9xrnu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a3ohjizc0umgrdjokq0tdt1o6',
                         name: 'idx_order_items_order_id',
                         unique: false,
                         fieldIds: ['8kg1r7v71fwebyobnb13d1olw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ceed7fa6dqaledgj3aahoq6zq',
                         name: 'idx_order_items_product_id',
                         unique: false,
                         fieldIds: ['fs0yfmtemll2heqy2s50yw5c7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4jcdbncbbpz090s1oouwgyqda',
@@ -163,7 +165,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('categories_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bofk3p6jzjq3v2tfahoxjgc3c',
@@ -175,7 +177,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1kqkw9d8c92j4tl7677wid1a4',
@@ -187,7 +189,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm7rpny7luun8150rbe58348qt',
@@ -200,7 +202,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tn92uipekuwv6bw35f95j5tlc',
@@ -213,7 +215,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -222,20 +224,20 @@ export const akauntingDb: Template = {
                         name: 'categories_pkey',
                         unique: true,
                         fieldIds: ['nk4db1593fq4n0b120c785fgg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'at2q4mestgsfs2hddm7rkrws5',
                         name: 'categories_name_key',
                         unique: true,
                         fieldIds: ['bofk3p6jzjq3v2tfahoxjgc3c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'agyk2idhaoy8dyg45at147euc',
@@ -255,7 +257,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('orders_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pmowwl90lbuae0bufosnlsifl',
@@ -267,7 +269,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jeqqaipvch4kopaxxcbyn0vz9',
@@ -281,7 +283,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z2bw31qz64tbl8jp4fy7jfp2d',
@@ -293,7 +295,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '21mtp9ubbl1odglthlhrjvck8',
@@ -306,7 +308,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mss4szx2nsyspr27hx44udvva',
@@ -319,7 +321,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -328,20 +330,20 @@ export const akauntingDb: Template = {
                         name: 'idx_orders_user_id',
                         unique: false,
                         fieldIds: ['pmowwl90lbuae0bufosnlsifl'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7sq4oypoqdteczy4lvxmkwt85',
                         name: 'orders_pkey',
                         unique: true,
                         fieldIds: ['ywq596jpuf4vcpyk1s57y6d6r'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bhfwuo9udzmuj3l74vd7m48tk',
@@ -361,7 +363,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('invoices_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uqnondfvf6ikoert875xfap6p',
@@ -373,7 +375,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eaxbl36o17xasghun3lusak0y',
@@ -387,7 +389,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8b0fqcel4xoh1mbj0em5zoizg',
@@ -399,7 +401,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '298hs14ies3lithvwn40z8u9e',
@@ -411,7 +413,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z93laiw56gvsk2jzmivhbsx05',
@@ -423,7 +425,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cx342rciyisx06km4t67k34wt',
@@ -436,7 +438,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '80pj4kxd9omqz47ickrde73oq',
@@ -449,7 +451,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -458,20 +460,20 @@ export const akauntingDb: Template = {
                         name: 'idx_invoices_order_id',
                         unique: false,
                         fieldIds: ['uqnondfvf6ikoert875xfap6p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vtlwe879w98labyryar4wgpdd',
                         name: 'invoices_pkey',
                         unique: true,
                         fieldIds: ['7fnrsvt25b0djgyz4axjdd0e5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e9fk12z5cth0v67ihyvvh2wqs',
@@ -491,7 +493,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('payments_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i744z40qaezt8fv1gzoqd2xjm',
@@ -503,7 +505,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xwpukemqfihwgx5uaazgkoder',
@@ -517,7 +519,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1wl8swsulvc2a4jhb6aj40v18',
@@ -529,7 +531,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'htgt2633t57rtcszu9rxqeagd',
@@ -541,7 +543,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zt93qzotnm8jjozqyh65sjvnv',
@@ -554,7 +556,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7wq3crxkhi7u113ui9fm6tpbb',
@@ -567,7 +569,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -576,20 +578,20 @@ export const akauntingDb: Template = {
                         name: 'payments_pkey',
                         unique: true,
                         fieldIds: ['abetxhfsaoskfijrjocieh2bg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'joagou3q0ra664cxolhag4xf3',
                         name: 'idx_payments_invoice_id',
                         unique: false,
                         fieldIds: ['i744z40qaezt8fv1gzoqd2xjm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o8d3pjo7mi4eppx1nix7pux7b',
@@ -609,7 +611,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mpmyjiwbadwphudrxslkd17eb',
@@ -621,7 +623,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6bgqbzkp5znfecp5u0iqd95jr',
@@ -633,7 +635,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fogwzwh6z29y9zq7atgxogukm',
@@ -645,7 +647,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'malw8h55il8x1gvp4gntbrb8a',
@@ -657,7 +659,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4odfdpl8dsjhvz07x66b5n5gy',
@@ -669,7 +671,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dvo53maaygny7w21fi8i1sl2n',
@@ -682,7 +684,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wp6z39ekai4bwxl5yxb9wyirc',
@@ -695,7 +697,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -704,27 +706,27 @@ export const akauntingDb: Template = {
                         name: 'idx_users_email',
                         unique: false,
                         fieldIds: ['6bgqbzkp5znfecp5u0iqd95jr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qnd3dzvv6dokstrh7gwhct58c',
                         name: 'users_email_key',
                         unique: true,
                         fieldIds: ['6bgqbzkp5znfecp5u0iqd95jr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'solko3dmns6iwuj0qpgurf99l',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['y9070o0w4k7d8uyfin3qqsmmh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'riz89ntbrrsngx4tebkwoyh7v',
@@ -744,7 +746,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('refunds_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1b6qpw84to8kvxpbnzv1xzrrs',
@@ -756,7 +758,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r51o1tf819isxh92wxul6hthp',
@@ -770,7 +772,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xqidmfazmb7ldl2eq6kpgg06n',
@@ -782,7 +784,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yrga5clfuf9cktm5giw0iyqoa',
@@ -794,7 +796,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qnylx3n1kt9k5qr1syighhkgn',
@@ -807,7 +809,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'szh4g6n5i15rgcen3d52htm6m',
@@ -820,7 +822,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -829,20 +831,20 @@ export const akauntingDb: Template = {
                         name: 'refunds_pkey',
                         unique: true,
                         fieldIds: ['e76k774ho2glk15laqyp0ifch'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k3wzw9hpm4mo9afbjxoysqhzy',
                         name: 'idx_refunds_order_id',
                         unique: false,
                         fieldIds: ['1b6qpw84to8kvxpbnzv1xzrrs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xobwd57cisx6xue5n2t9qxaag',
@@ -862,7 +864,7 @@ export const akauntingDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('products_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xjh49a2j4niaqkekxtjcqdlfq',
@@ -874,7 +876,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yoiz08coyfa49vjsy38p8gz7d',
@@ -886,7 +888,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qu7xqfnhvio54tuwvluh4nt30',
@@ -900,7 +902,7 @@ export const akauntingDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '64pu5svvaakmyworks0phh3v6',
@@ -912,7 +914,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2lt1junq1sby4y06k9ua6svs7',
@@ -924,7 +926,7 @@ export const akauntingDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dudwkye6ngayrcbh1224psuxe',
@@ -937,7 +939,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l3s92sign79l7otcl6evl9o34',
@@ -950,7 +952,7 @@ export const akauntingDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -959,20 +961,20 @@ export const akauntingDb: Template = {
                         name: 'idx_products_category_id',
                         unique: false,
                         fieldIds: ['yoiz08coyfa49vjsy38p8gz7d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ui0cjuzxvv96ienwpc50dgbe',
                         name: 'products_pkey',
                         unique: true,
                         fieldIds: ['u5qmau0su05fljgddx618kkby'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -987,7 +989,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'y9070o0w4k7d8uyfin3qqsmmh',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3jtipx5b1ak436bitwl218nbv',
@@ -1000,7 +1002,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'nk4db1593fq4n0b120c785fgg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6j9eqt3vpntr5hkk55cys2q14',
@@ -1013,7 +1015,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'y9070o0w4k7d8uyfin3qqsmmh',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b7xbee90lql2o1j1zpcmsnkj4',
@@ -1026,7 +1028,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'u5qmau0su05fljgddx618kkby',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bcswrpnqwx1r8kqni2jl8jf9w',
@@ -1039,7 +1041,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'ywq596jpuf4vcpyk1s57y6d6r',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dbhlhxouselw2a22uliy4ec6f',
@@ -1052,7 +1054,7 @@ export const akauntingDb: Template = {
                 targetFieldId: '7fnrsvt25b0djgyz4axjdd0e5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fpwyru7vhq0pwqrzxfv2mtgu8',
@@ -1065,7 +1067,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'ywq596jpuf4vcpyk1s57y6d6r',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'javg96z55bahagvlx48bjsgx5',
@@ -1078,7 +1080,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'ywq596jpuf4vcpyk1s57y6d6r',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'oqzaizrpnfpa1z2oeb9yr0nnl',
@@ -1091,7 +1093,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'ywq596jpuf4vcpyk1s57y6d6r',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uqkhnjuulivpuqkjqummon6uu',
@@ -1104,7 +1106,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'nk4db1593fq4n0b120c785fgg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vqx6pil2jh35b8upswno1lkwr',
@@ -1117,7 +1119,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'u5qmau0su05fljgddx618kkby',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zmmc607y3m6i69u6jqxct2a22',
@@ -1130,7 +1132,7 @@ export const akauntingDb: Template = {
                 targetFieldId: 'ywq596jpuf4vcpyk1s57y6d6r',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

@@ -44,9 +44,7 @@ export const ja: LanguageTranslation = {
             help: {
                 help: 'ヘルプ',
                 docs_website: 'ドキュメント',
-                visit_website: 'ChartDBにアクセス',
                 join_discord: 'Discordに参加',
-                schedule_a_call: '話しかけてください！',
             },
         },
 
@@ -155,6 +153,8 @@ export const ja: LanguageTranslation = {
                         comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'インデックス属性',
@@ -214,6 +214,27 @@ export const ja: LanguageTranslation = {
                 empty_state: {
                     title: 'No dependencies',
                     description: 'Create a view to get started',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -411,6 +432,8 @@ export const ja: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '新しいテーブル',
             new_relationship: '新しいリレーションシップ',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

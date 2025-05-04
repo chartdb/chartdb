@@ -1,3 +1,4 @@
+import type { Area } from './domain/area';
 import type { DBDependency } from './domain/db-dependency';
 import type { DBField } from './domain/db-field';
 import type { DBIndex } from './domain/db-index';
@@ -41,6 +42,10 @@ const generateIdsMapFromDiagram = (
 
     diagram.dependencies?.forEach((dependency) => {
         idsMap.set(dependency.id, generateId());
+    });
+
+    diagram.areas?.forEach((area) => {
+        idsMap.set(area.id, generateId());
     });
 
     return idsMap;
@@ -193,12 +198,28 @@ export const cloneDiagram = (
                 (dependency): dependency is DBDependency => dependency !== null
             ) ?? [];
 
+    const areas: Area[] =
+        diagram.areas
+            ?.map((area) => {
+                const id = getNewId(area.id);
+                if (!id) {
+                    return null;
+                }
+
+                return {
+                    ...area,
+                    id,
+                } satisfies Area;
+            })
+            .filter((area): area is Area => area !== null) ?? [];
+
     return {
         ...diagram,
         id: diagramId,
         dependencies,
         relationships,
         tables,
+        areas,
         createdAt: new Date(),
         updatedAt: new Date(),
     };

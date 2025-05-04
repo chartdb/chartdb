@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/bookstack-db.png';
 import imageDark from '@/assets/templates/bookstack-db-dark.png';
 
+const now = Date.now();
+
 export const bookstackDb: Template = {
     slug: 'bookstack-database',
     name: 'BookStack',
@@ -37,7 +39,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cehxui3i1jrch2zslrhmruyuo',
@@ -49,7 +51,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l9egq2h60hmol4zqbdjdskno5',
@@ -61,7 +63,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'np5905uuxwkafzscd9gj4ee44',
@@ -73,7 +75,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r2pukmq9aaj2fea651phfd811',
@@ -85,7 +87,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ee2t4xwenyk7xsn04mai4u7tf',
@@ -97,7 +99,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u4wy6fctu2lk9tsechph4j25l',
@@ -109,7 +111,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wjqqxu9wcx99hdwygermpj3sp',
@@ -121,7 +123,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5t7cpbuc57uq4elca4mk29eru',
@@ -133,7 +135,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tdt0eyspyxx03cxd3p1faz9if',
@@ -145,7 +147,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wzdyvqd6zjpbgk4dn5xwhzl37',
@@ -157,7 +159,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u2ot1ren3z448rifj455ipp49',
@@ -169,7 +171,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd55acx42h9fxr3lytypgp75vn',
@@ -181,7 +183,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pxmy3of7g6bveoujlv3d0gp72',
@@ -193,7 +195,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u97zi149zbqnlrcf4ifv86ou5',
@@ -205,7 +207,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '439bds5kimnme5em930f2vn59',
@@ -217,7 +219,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sgmyyq1bj43bhe9n99289bgbr',
@@ -229,7 +231,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -238,13 +240,13 @@ export const bookstackDb: Template = {
                         name: 'pages_pkey',
                         unique: true,
                         fieldIds: ['z0imxl03p43zqxl2gx9s0b0u3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '13q3i9mxzint9oxkpc2rk1naz',
@@ -263,7 +265,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j1hzitou8lhpgtrohr7xdhk6e',
@@ -275,7 +277,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tv631el2jq5nc6du0iadhcoih',
@@ -287,7 +289,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dtlapdwcxhahxiuubxf3bfgis',
@@ -299,7 +301,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p05cssp7koup92v3y1wabcrvf',
@@ -311,7 +313,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -320,13 +322,13 @@ export const bookstackDb: Template = {
                         name: 'email_confirmations_pkey',
                         unique: true,
                         fieldIds: ['q2hvlprlxdw1jz2lbw2988vlw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1hehu41gs7argst56cm9qzcs0',
@@ -345,7 +347,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nzm7gqfzhn0uspzmhu21eks9q',
@@ -357,7 +359,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0gqigjj9q34tyciq2htrtyzax',
@@ -369,7 +371,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ybx0acbq6o949t5ku3489yymb',
@@ -381,7 +383,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mauqsjcqlaky03nc7zei3845r',
@@ -393,7 +395,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '56h4bhcb66z6e2ghqvpc1ikf8',
@@ -405,7 +407,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zmxl7n276k05qbjr8xt8f00g8',
@@ -417,7 +419,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -426,13 +428,13 @@ export const bookstackDb: Template = {
                         name: 'views_pkey',
                         unique: true,
                         fieldIds: ['64sg53yy66mc3j0n6etrbktzi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1j8cyq48mykt7rpljyyjt3b0f',
@@ -451,7 +453,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wr01rfvcaj52euk95ypl402k8',
@@ -463,7 +465,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dxwkgfsfkmflsbnwobvzva44h',
@@ -475,7 +477,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yqtnr5z2gieoqyrfb8ywa9rsq',
@@ -487,7 +489,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lgi2bh9760vdbvglng4ghkht0',
@@ -499,7 +501,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pr6mbtltq26lobsyac7c92i2h',
@@ -511,7 +513,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '90t22baxgc06cqfe8tfnqng0h',
@@ -523,7 +525,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2cgrve961dkq256myt2kizivm',
@@ -535,7 +537,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -544,13 +546,13 @@ export const bookstackDb: Template = {
                         name: 'roles_pkey',
                         unique: true,
                         fieldIds: ['lcv8tj6o1oawcle07ldl32wv0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '212gqanw3vfxwefa5btr3d20y',
@@ -569,7 +571,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '99dupuff5kfyef32njb8zitlt',
@@ -581,7 +583,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ejxjxu05hqvjq3s36bs9bxqm9',
@@ -593,7 +595,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -605,13 +607,13 @@ export const bookstackDb: Template = {
                             'qu0ul1fhb7m5tbpb34qka9p67',
                             '99dupuff5kfyef32njb8zitlt',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '258cijzf0pvtkggesc4x16j2q',
@@ -630,7 +632,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bxbphzx536svr6mi1jw61di7v',
@@ -642,7 +644,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '53q8lnrxzf650jmmde19f1po6',
@@ -654,7 +656,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vzz11dn19b1ai1xtilcu5tk5v',
@@ -666,7 +668,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jyyd85txtmnvsor4p92w38tkv',
@@ -678,7 +680,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lho7fmr6cuo5wcrtob4yx03sy',
@@ -690,7 +692,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tlu1m21cgv5dyxf5hvrqnch2s',
@@ -702,7 +704,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x78zbbopdw5j9ikt4y2sc6kpf',
@@ -714,7 +716,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zqa5eq41cjoewofu5ghxri6pi',
@@ -726,7 +728,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jhanokt4rg1zpeawj86mgug2j',
@@ -738,7 +740,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0k71vssf9lrxkthwk993uis6d',
@@ -750,7 +752,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cjdy4vux3sr11smiodbp78her',
@@ -762,7 +764,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oi1atsnbj4gym9o47iyo8miy2',
@@ -774,7 +776,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tkz2hbuo4ejevju9yvq5wxp3c',
@@ -786,7 +788,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -795,13 +797,13 @@ export const bookstackDb: Template = {
                         name: 'page_revisions_pkey',
                         unique: true,
                         fieldIds: ['75cod88zu64fg5fb2mxjdhyn3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '25azrc7q6ehhzxeky9wy2ym77',
@@ -820,7 +822,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k21wp8nwphy6wjlxkxogtsxk9',
@@ -832,7 +834,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -844,13 +846,13 @@ export const bookstackDb: Template = {
                             'esjif1koqgijsdylxmvkzcwow',
                             'k21wp8nwphy6wjlxkxogtsxk9',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '29vcs6ejy32epmzx3y4vqh5c2',
@@ -869,7 +871,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ex7dl4fvc8b7cuhfs1zhs8vda',
@@ -881,7 +883,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uh7aw873owq9mpq2j0l6dvnw0',
@@ -893,7 +895,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '95zd6580y73d2ryqo8zwbcs86',
@@ -905,7 +907,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aw0yps1ndnijx9cjmies04aif',
@@ -917,7 +919,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x9k5w5ytbjqop78gi6urb7uoq',
@@ -929,7 +931,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ciwbgz14s9ujlq8h8gpth2k0y',
@@ -941,7 +943,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'edb5koj2lzkommgc78fhtuo8m',
@@ -953,7 +955,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z2tqx6rxeks7p3lfpm682pps0',
@@ -965,7 +967,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9sgfshn8t9rrq48jy8g2tjjmb',
@@ -977,7 +979,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -986,13 +988,13 @@ export const bookstackDb: Template = {
                         name: 'bookshelves_pkey',
                         unique: true,
                         fieldIds: ['7j2apu026w6feau3x81p72xm2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4dfq98pwycdzwsrc65uxg3911',
@@ -1011,7 +1013,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i3wratnje3wjvfgcd0dogktnq',
@@ -1023,7 +1025,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1035,13 +1037,13 @@ export const bookstackDb: Template = {
                             'nlrftwf9afekq1gjmy1vpp2h8',
                             'i3wratnje3wjvfgcd0dogktnq',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4mpa6gwunaa9my7pcsxc91na5',
@@ -1060,7 +1062,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iartqit3b5n2o2sp8epdboi6x',
@@ -1072,7 +1074,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w121ppfw9v7nsyeprfmbz84wk',
@@ -1084,7 +1086,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nnpls3zx6976fvuqd7g4mngaf',
@@ -1096,7 +1098,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'drp82lh8pro4vt5toq099h3at',
@@ -1108,7 +1110,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ugyae99a6vtr7jsh8fv16vydv',
@@ -1120,7 +1122,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'da98f95zd4futgvgculjpcgh6',
@@ -1132,7 +1134,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4clchrfggycp8w5id7bjk1iim',
@@ -1144,7 +1146,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1w9hbdjw79i1ywup37h2pnunr',
@@ -1156,7 +1158,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1165,13 +1167,13 @@ export const bookstackDb: Template = {
                         name: 'activities_pkey',
                         unique: true,
                         fieldIds: ['uo1a4jah6mjmrkfi8m10f5f91'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5hlisywtzax02ttqm13osjnzy',
@@ -1190,7 +1192,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's8wrhc0nybzodf9b28jb2bw7m',
@@ -1202,7 +1204,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'msqahlolemk1kcdykxe1dh1m0',
@@ -1214,7 +1216,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a8vm6x49z2702brkqxdtllkl5',
@@ -1226,7 +1228,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'irya6q91kacnbhsid1vqutny3',
@@ -1238,7 +1240,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '18thxfvpq1suzhlkg4rnas08u',
@@ -1250,7 +1252,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ss4i8g3q72erqb9kj5jpg26s0',
@@ -1262,7 +1264,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yc0etv5mb6qhc5jnvsyr7t94z',
@@ -1274,7 +1276,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1283,13 +1285,13 @@ export const bookstackDb: Template = {
                         name: 'tags_pkey',
                         unique: true,
                         fieldIds: ['2yyt9k64fs54yjxwrlge1lstx'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6co2lcrmtrmx5xwd8y8mp2nxi',
@@ -1308,7 +1310,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '47uah95eji6a5ucebt43z8w14',
@@ -1320,7 +1322,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zebfachtpgp7ywqd9m9i2lm38',
@@ -1332,7 +1334,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1341,13 +1343,13 @@ export const bookstackDb: Template = {
                         name: 'migrations_pkey',
                         unique: true,
                         fieldIds: ['a6qds4wbx3p2f66obd3qo3g82'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6uujngm59pvlvj1tyckthhs20',
@@ -1366,7 +1368,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jep6zsmgqghw1otgqi2cxukz2',
@@ -1378,7 +1380,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zjwam36hetevqjyr1uzew6sho',
@@ -1390,7 +1392,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lov2tezyi98kc43lv2r2pjwas',
@@ -1402,7 +1404,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ozbccnwu9gugrz6oi8jii2f1j',
@@ -1414,7 +1416,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7qr3e7ft54t5g8mpn06wq2oxp',
@@ -1426,14 +1428,14 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7d1nou9ocvxpys1x70dy5pl7q',
@@ -1452,7 +1454,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tr18mawe8hogbc2kkbnigc4lg',
@@ -1464,7 +1466,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nfxehffkzbn4ejraz64labajx',
@@ -1476,7 +1478,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ybg8gwgopmmhqef5fhphyc4vt',
@@ -1488,7 +1490,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yay7nbzscxet7o9fqp24xfjk7',
@@ -1500,7 +1502,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1509,13 +1511,13 @@ export const bookstackDb: Template = {
                         name: 'user_invites_pkey',
                         unique: true,
                         fieldIds: ['y2fh302if7s5y0ck3of07bdgs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8an71asyvry6nh48cv6r1qv87',
@@ -1534,7 +1536,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0qbesv0d0v0wo897v77bwsc7l',
@@ -1546,7 +1548,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1z71okm9qqejaix0zs23s4hfb',
@@ -1558,7 +1560,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dhemeuftk7vw6df2jznear3ih',
@@ -1570,7 +1572,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9lwn6je2asitdsh69yg6wgw4r',
@@ -1582,7 +1584,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5kxz56fryp3i5il11ifwss7vy',
@@ -1594,7 +1596,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's69xwmvstmhbpbjoeexox9aqz',
@@ -1606,7 +1608,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eqyxvi8ivekiefvsad2vfd3ei',
@@ -1618,7 +1620,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jwww9jgkvcamvaz9fzubr5qoi',
@@ -1630,7 +1632,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'okkd93gyevd7d8f2m6roj4tpf',
@@ -1642,7 +1644,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gac07eweoil8c60oi6ay3xehs',
@@ -1654,7 +1656,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1663,13 +1665,13 @@ export const bookstackDb: Template = {
                         name: 'chapters_pkey',
                         unique: true,
                         fieldIds: ['m300itd5img9630sh9g3zpwph'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aaovrmpl0i2m79gn0df117sef',
@@ -1688,7 +1690,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fvt3e3yb9n2ez0z1o9r5vvhmr',
@@ -1700,7 +1702,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jajc295h5ggwuxj2q5sj7xh2n',
@@ -1712,14 +1714,14 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c27blwjel9on63xgjf0wtds79',
@@ -1738,7 +1740,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'em4yiv8q7d4fgkp8rzgtcfm23',
@@ -1750,7 +1752,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'plxmsfduwtxz3wdex4rxxpd1h',
@@ -1762,7 +1764,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rirwrdcqnuw4t0a2qrt96bdx7',
@@ -1774,7 +1776,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8wnbdj7pe98yadh0xfs8naazc',
@@ -1786,7 +1788,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ntg7eyiozjkt31nuija2cf7gf',
@@ -1798,7 +1800,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v7hqukl0de1by63qpllndcch9',
@@ -1810,7 +1812,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ss9n929r1k6mvdfb5ksv8gzwt',
@@ -1822,7 +1824,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1831,13 +1833,13 @@ export const bookstackDb: Template = {
                         name: 'api_tokens_pkey',
                         unique: true,
                         fieldIds: ['swojnhr2kw7qlfrpnkkw33il0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fqdykkgqtklmwaoqomnrp8whu',
@@ -1856,7 +1858,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lehqzh7fm3w3wtrcypy8cgky3',
@@ -1868,7 +1870,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kofir8tdiw7qevuuu0wslxpv0',
@@ -1880,7 +1882,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0lv3bjbf8kybhwre471pof4w5',
@@ -1892,7 +1894,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bk2ny864sjcffumagdvigiuwe',
@@ -1904,7 +1906,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1913,13 +1915,13 @@ export const bookstackDb: Template = {
                         name: 'search_terms_pkey',
                         unique: true,
                         fieldIds: ['6rhfogu2qhqt18voshoe22ifk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'in6lk9b0j608xq5leqhf46930',
@@ -1938,7 +1940,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ait9g10ub0ew9syswmelzdfrf',
@@ -1950,7 +1952,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7wuyquhtv1664bzvriyszg6oo',
@@ -1962,14 +1964,14 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'j2ap2x9myjzuzsg5x3mni4hza',
@@ -1988,7 +1990,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i74q244tqwwbpmm8pelttv0cp',
@@ -2000,7 +2002,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '81w5ic6xrbkpp6mxk0hgcrlw0',
@@ -2012,7 +2014,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ypl7w4h0a17e3fnuyogv7xvc8',
@@ -2024,7 +2026,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dqsmdfxgklmavug3zst9jn2nx',
@@ -2036,7 +2038,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2045,13 +2047,13 @@ export const bookstackDb: Template = {
                         name: 'entity_permissions_pkey',
                         unique: true,
                         fieldIds: ['1i0v6q0tvv9xj2dustjvsbjgf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'j930si2u0ei1eus0aulfutmav',
@@ -2070,7 +2072,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ferjawhfangpi1rfm0c96rh28',
@@ -2082,7 +2084,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sgv89qsjagbd4836kizyb6ehe',
@@ -2094,7 +2096,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ab1ybg8u5rtnfvuzs4a8bhrr4',
@@ -2106,7 +2108,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4j2lgbxno7dv9imgguj7433wa',
@@ -2118,7 +2120,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a7cl5p9lif0b7u34mzd4fas8h',
@@ -2130,7 +2132,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j9yg1bn1y9qmgbstvtuxyso3b',
@@ -2142,7 +2144,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's1ixhglhedm8xegibrcqenofw',
@@ -2154,7 +2156,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5yt6emarazew599412uhbncg6',
@@ -2166,7 +2168,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fur9arfr26m51pk9ki8i1vsf0',
@@ -2178,7 +2180,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lymt4dfg7x7hti9i0wu1phaea',
@@ -2190,7 +2192,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2199,13 +2201,13 @@ export const bookstackDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['4z39qte1ylydsrs8ceuonrz5d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jb7dzqgd2693v7azj2u2zv0xv',
@@ -2224,7 +2226,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5i78dyukeoubdvxwcg8a2dsp8',
@@ -2236,7 +2238,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't18wgx3k6b6hxv9abwsb7ooth',
@@ -2248,7 +2250,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3hvu3iu55gqxju38gy1zgvxv8',
@@ -2260,7 +2262,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a3fy4dj7xhfmi1578qta20y98',
@@ -2272,7 +2274,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3j1c2dxreo4j955gzye1sfrlg',
@@ -2284,7 +2286,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uavt4tpmfuj01s19wum27comj',
@@ -2296,7 +2298,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vrzfcsrgrf1kxucus5bkxm9te',
@@ -2308,7 +2310,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cx2nuk8k4nena2n5uza098zrg',
@@ -2320,7 +2322,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pmd8wavf1454t37hh5ikvgsud',
@@ -2332,7 +2334,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5214lke5ei7achifor1csuxi5',
@@ -2344,7 +2346,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2353,13 +2355,13 @@ export const bookstackDb: Template = {
                         name: 'comments_pkey',
                         unique: true,
                         fieldIds: ['2k4rwaq5vve6qk43uei3vx7fx'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k5r0mdreclzriaehomveagh6n',
@@ -2378,7 +2380,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qud1389a7e5xru6ob53wj2joh',
@@ -2390,7 +2392,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b4tk3w9zzbfanghqrjo38x1ju',
@@ -2402,7 +2404,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ylai7c8uxgcebwqk4wwn6gpyb',
@@ -2414,7 +2416,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2423,13 +2425,13 @@ export const bookstackDb: Template = {
                         name: 'settings_pkey',
                         unique: true,
                         fieldIds: ['67i7z293j479xqvo8cau34w5d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lyg6lpdaj6gp47vfkuljuo8d3',
@@ -2448,7 +2450,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3ndjieu3tmzzt6p3egv43vmsa',
@@ -2460,7 +2462,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c8ijuhvm5xyw5zq9wc9exj20r',
@@ -2472,7 +2474,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v3bn07j6inoin9njlochokvov',
@@ -2484,7 +2486,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rnc6ytdtb3s3trpsuzyw42yiu',
@@ -2496,7 +2498,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'epqzotngxcqzknxt8hz97hdi3',
@@ -2508,7 +2510,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ucplmhyleqqa5tf6zq3cuo4w',
@@ -2520,7 +2522,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2g3qyc35h5rqzk4m2657b2i5z',
@@ -2532,7 +2534,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2og6hcqqn1v90mzwe3ks36d10',
@@ -2544,7 +2546,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4qz6m1dwrns7ldwk8ysblekid',
@@ -2556,7 +2558,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2565,13 +2567,13 @@ export const bookstackDb: Template = {
                         name: 'books_pkey',
                         unique: true,
                         fieldIds: ['5s4tcowk3ea9urnklgj4rj0kv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mrcbxmeh3dokmkfoqkcnmsv1x',
@@ -2590,7 +2592,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'brf4wxlacgpru1k7dtl7v79jd',
@@ -2602,7 +2604,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6evfoo83eb9cijkbe381xi9u8',
@@ -2614,7 +2616,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pddjnspuye0c8yyykltoq0246',
@@ -2626,7 +2628,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'exzujism505lrf8b34u3uvmvm',
@@ -2638,7 +2640,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ev68wm8miig3wytqcfvvn7ew9',
@@ -2650,7 +2652,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd6fmspeborkg6pchtin07a1yf',
@@ -2662,7 +2664,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bbajx7b31juw07fhhl44svmt1',
@@ -2674,7 +2676,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zyafmy81a1xe3etd4znwtq721',
@@ -2686,7 +2688,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q6470h8jikj1ywlo60x0c3j8z',
@@ -2698,7 +2700,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2egobyq5h6p7paaoxmu8be3hj',
@@ -2710,7 +2712,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2719,13 +2721,13 @@ export const bookstackDb: Template = {
                         name: 'attachments_pkey',
                         unique: true,
                         fieldIds: ['ndu15xj3z93qphxqxs5hdprwi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p5eqdhwf8svmqppfyeb6b9xux',
@@ -2744,7 +2746,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jxhpggc3dd4u8i1mo8hszuorp',
@@ -2756,7 +2758,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6qj5x6ydfucbzstlcnjpyr5ey',
@@ -2768,7 +2770,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qj9o7ywxbjjrrsquzej0ygg4w',
@@ -2780,7 +2782,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9m0wplvpxfj5ovnwgt9acn2tu',
@@ -2792,7 +2794,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aqipqxz3ylj3sfwknn6cphqsl',
@@ -2804,7 +2806,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2813,13 +2815,13 @@ export const bookstackDb: Template = {
                         name: 'role_permissions_pkey',
                         unique: true,
                         fieldIds: ['auo1tqbjqoz90yry1rujb6avu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pyvup3axsznl4q9wglheoim3s',
@@ -2838,7 +2840,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1tk6n4hwyuwqh6s6b59k1rnmh',
@@ -2850,7 +2852,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4bvafdnsd7vd95y6bgpbsbqr3',
@@ -2862,7 +2864,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j8kas5ykr7z4v0xbabqnd9ccv',
@@ -2874,7 +2876,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1t1ka9mp7pg2tr0d5y4psfn1j',
@@ -2886,7 +2888,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'po0m5c592p7uqio9vm3gbnyeq',
@@ -2898,7 +2900,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ys3zudl75xj9k9713joq5sehj',
@@ -2910,7 +2912,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2919,13 +2921,13 @@ export const bookstackDb: Template = {
                         name: 'social_accounts_pkey',
                         unique: true,
                         fieldIds: ['paobnzrdd1nre2e91beqzzc3c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xi9hdg2g5t7z4dy0tbjrehq4u',
@@ -2944,7 +2946,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tyos257fifhj74tex5debmpya',
@@ -2956,7 +2958,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2mz65ec0bqdip7fv130ue8fa1',
@@ -2968,7 +2970,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w7k5j39ccdjt3nkm8zpe3ivsb',
@@ -2980,7 +2982,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pzj0jke0aa169u5aenww6yc8e',
@@ -2992,7 +2994,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b4l4p7ihx1vcs5lf2blmbkbsl',
@@ -3004,7 +3006,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4dbdyva6jeurc1f9rjqtblf7g',
@@ -3016,7 +3018,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c31txqpxbgfidw2ai5nijqeyz',
@@ -3028,7 +3030,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3037,13 +3039,13 @@ export const bookstackDb: Template = {
                         name: 'joint_permissions_pkey',
                         unique: true,
                         fieldIds: ['fdwbg1ndod01wcftodzcrroyh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yvgc12bwmuqrgzn9bs41tooqa',
@@ -3062,7 +3064,7 @@ export const bookstackDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'csd9t7sk9m53ejszgzrc98ovw',
@@ -3074,7 +3076,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1cjn5faof1f4jo6xl9k8sil61',
@@ -3086,7 +3088,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mscew6gxzfl6xu4a4zlrj0rkl',
@@ -3098,7 +3100,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'otszmsb4dx2szr4bjonykqi3f',
@@ -3110,7 +3112,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9bfq16ga8cjce03lky16bc9pl',
@@ -3122,7 +3124,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1cpazrvjcbxs7b61vx1f9sz83',
@@ -3134,7 +3136,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iiyddryzqx6w9rfdv2inoa134',
@@ -3146,7 +3148,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hqceckliitmql1kykev5q1265',
@@ -3158,7 +3160,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zw1mbxj0nf1zfffcljb4g1tp7',
@@ -3170,7 +3172,7 @@ export const bookstackDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3179,13 +3181,13 @@ export const bookstackDb: Template = {
                         name: 'images_pkey',
                         unique: true,
                         fieldIds: ['e9y1k2q7wf0u0zlke7j50ae8s'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -3200,7 +3202,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '5s4tcowk3ea9urnklgj4rj0kv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '0j4lbrhd8whcl6vk6xqarx2cv',
@@ -3213,7 +3215,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '0zz1bdcqbe3y6uvbnv1ittpfw',
@@ -3226,7 +3228,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '5s4tcowk3ea9urnklgj4rj0kv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2cziiqfzxhhv8qm0apb2b3ttl',
@@ -3239,7 +3241,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '7j2apu026w6feau3x81p72xm2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2nm5ana1iagjlou587yihdob2',
@@ -3252,7 +3254,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'lcv8tj6o1oawcle07ldl32wv0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '60uopdvnqct32svkq4igggleg',
@@ -3265,7 +3267,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '5s4tcowk3ea9urnklgj4rj0kv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '85kox874ooq32anqyiq80lm3t',
@@ -3278,7 +3280,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'z0imxl03p43zqxl2gx9s0b0u3',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8mgbz16jorwx21ablil4w7mn7',
@@ -3291,7 +3293,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'm300itd5img9630sh9g3zpwph',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8nxllyzqumkxo9z12j1131yy4',
@@ -3304,7 +3306,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'lcv8tj6o1oawcle07ldl32wv0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9mxf7aa6iip1heum5509k5ek9',
@@ -3317,7 +3319,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '7j2apu026w6feau3x81p72xm2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dmg5znhinm1qnsqkdc34q7ypr',
@@ -3330,7 +3332,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '7j2apu026w6feau3x81p72xm2',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e217buv2qnmaoigkxvdcfzgjd',
@@ -3343,7 +3345,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'e9y1k2q7wf0u0zlke7j50ae8s',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'efsf8lhzafvhfrgvyjhhqoosh',
@@ -3356,7 +3358,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'eplibgez880j5p1gb59xkzvlm',
@@ -3369,7 +3371,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'glmt7zw5qnjcgmfhwne89w2dw',
@@ -3382,7 +3384,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'e9y1k2q7wf0u0zlke7j50ae8s',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ikefah8t6tidf1xiuaqo4gtwt',
@@ -3395,7 +3397,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'imtmhxxjl6b913am3752vnaku',
@@ -3408,7 +3410,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '7j2apu026w6feau3x81p72xm2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jgujs682retrc2ku95oym0krj',
@@ -3421,7 +3423,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pbuhn3hdau5214lf44y8mrd4q',
@@ -3434,7 +3436,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '5s4tcowk3ea9urnklgj4rj0kv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qpof51nf55owgcpiafxdykgqm',
@@ -3447,7 +3449,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '5s4tcowk3ea9urnklgj4rj0kv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qw85tta3lvtg1ytte4ljcqja2',
@@ -3460,7 +3462,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'e9y1k2q7wf0u0zlke7j50ae8s',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uqqn92zos8uv5fjk5ajzqrg4d',
@@ -3473,7 +3475,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'lcv8tj6o1oawcle07ldl32wv0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xwpw5k26hjxz9cvtrgp41m49h',
@@ -3486,7 +3488,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yeedksphqxe5e5jzhxby6jqq5',
@@ -3499,7 +3501,7 @@ export const bookstackDb: Template = {
                 targetFieldId: 'lcv8tj6o1oawcle07ldl32wv0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yfeww29uhfrsikgnqcsg50go4',
@@ -3512,7 +3514,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yflgnsnvijmsn0ehhnoq7y547',
@@ -3525,7 +3527,7 @@ export const bookstackDb: Template = {
                 targetFieldId: '4z39qte1ylydsrs8ceuonrz5d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

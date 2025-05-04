@@ -1,5 +1,4 @@
 import React, { Suspense, useCallback, useEffect, useRef } from 'react';
-import { TopNavbar } from './top-navbar/top-navbar';
 import { useParams } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
@@ -29,13 +28,11 @@ import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_BUCKLE_DOT_DEV } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
+import { DiffProvider } from '@/context/diff-context/diff-provider';
+import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
-
-const OPEN_BUCKLE_AFTER_SECONDS = 60;
-const SHOW_BUCKLE_AGAIN_AFTER_DAYS = 1;
-const SHOW_BUCKLE_AGAIN_OPENED_AFTER_DAYS = 7;
 
 export const EditorDesktopLayoutLazy = React.lazy(
     () => import('./editor-desktop-layout')
@@ -49,7 +46,7 @@ const EditorPageComponent: React.FC = () => {
     const { diagramName, currentDiagram, schemas, filteredSchemas } =
         useChartDB();
     const { openSelectSchema, showSidePanel } = useLayout();
-    const { openStarUsDialog, openBuckleDialog } = useDialog();
+    const { openStarUsDialog } = useDialog();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { isMd: isDesktop } = useBreakpoint('md');
     const {
@@ -58,9 +55,6 @@ const EditorPageComponent: React.FC = () => {
         starUsDialogLastOpen,
         setStarUsDialogLastOpen,
         githubRepoOpened,
-        setBuckleDialogLastOpen,
-        buckleDialogLastOpen,
-        buckleWaitlistOpened,
     } = useLocalConfig();
     const { toast } = useToast();
     const { t } = useTranslation();
@@ -89,37 +83,6 @@ const EditorPageComponent: React.FC = () => {
         openStarUsDialog,
         setStarUsDialogLastOpen,
         starUsDialogLastOpen,
-    ]);
-
-    useEffect(() => {
-        if (HIDE_BUCKLE_DOT_DEV) {
-            return;
-        }
-
-        if (!currentDiagram?.id) {
-            return;
-        }
-
-        if (
-            new Date().getTime() - buckleDialogLastOpen >
-            1000 *
-                60 *
-                60 *
-                24 *
-                (buckleWaitlistOpened
-                    ? SHOW_BUCKLE_AGAIN_OPENED_AFTER_DAYS
-                    : SHOW_BUCKLE_AGAIN_AFTER_DAYS)
-        ) {
-            const lastOpen = new Date().getTime();
-            setBuckleDialogLastOpen(lastOpen);
-            setTimeout(openBuckleDialog, OPEN_BUCKLE_AFTER_SECONDS * 1000);
-        }
-    }, [
-        currentDiagram?.id,
-        buckleWaitlistOpened,
-        openBuckleDialog,
-        setBuckleDialogLastOpen,
-        buckleDialogLastOpen,
     ]);
 
     const lastDiagramId = useRef<string>('');
@@ -203,12 +166,16 @@ const EditorPageComponent: React.FC = () => {
             <section
                 className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
             >
-                <TopNavbar />
                 <Suspense
                     fallback={
-                        <div className="flex flex-1 items-center justify-center">
-                            <Spinner size={isDesktop ? 'large' : 'medium'} />
-                        </div>
+                        <>
+                            <TopNavbarMock />
+                            <div className="flex flex-1 items-center justify-center">
+                                <Spinner
+                                    size={isDesktop ? 'large' : 'medium'}
+                                />
+                            </div>
+                        </>
                     }
                 >
                     {isDesktop ? (
@@ -235,23 +202,25 @@ export const EditorPage: React.FC = () => (
                     <StorageProvider>
                         <ConfigProvider>
                             <RedoUndoStackProvider>
-                                <ChartDBProvider>
-                                    <HistoryProvider>
-                                        <ReactFlowProvider>
-                                            <CanvasProvider>
-                                                <ExportImageProvider>
-                                                    <AlertProvider>
-                                                        <DialogProvider>
-                                                            <KeyboardShortcutsProvider>
-                                                                <EditorPageComponent />
-                                                            </KeyboardShortcutsProvider>
-                                                        </DialogProvider>
-                                                    </AlertProvider>
-                                                </ExportImageProvider>
-                                            </CanvasProvider>
-                                        </ReactFlowProvider>
-                                    </HistoryProvider>
-                                </ChartDBProvider>
+                                <DiffProvider>
+                                    <ChartDBProvider>
+                                        <HistoryProvider>
+                                            <ReactFlowProvider>
+                                                <CanvasProvider>
+                                                    <ExportImageProvider>
+                                                        <AlertProvider>
+                                                            <DialogProvider>
+                                                                <KeyboardShortcutsProvider>
+                                                                    <EditorPageComponent />
+                                                                </KeyboardShortcutsProvider>
+                                                            </DialogProvider>
+                                                        </AlertProvider>
+                                                    </ExportImageProvider>
+                                                </CanvasProvider>
+                                            </ReactFlowProvider>
+                                        </HistoryProvider>
+                                    </ChartDBProvider>
+                                </DiffProvider>
                             </RedoUndoStackProvider>
                         </ConfigProvider>
                     </StorageProvider>

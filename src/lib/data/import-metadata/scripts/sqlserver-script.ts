@@ -68,12 +68,12 @@ cols AS (
                         '", "name": "' + STRING_ESCAPE(COALESCE(REPLACE(cols.COLUMN_NAME, '"', ''), ''), 'json') +
                         '", "ordinal_position": ' + CAST(cols.ORDINAL_POSITION AS NVARCHAR(MAX)) +
                         ', "type": "' + STRING_ESCAPE(LOWER(cols.DATA_TYPE), 'json') +
-                        '", "character_maximum_length": ' +
+                        '", "character_maximum_length": "' +
                             CASE
                                 WHEN cols.CHARACTER_MAXIMUM_LENGTH IS NULL THEN 'null'
                                 ELSE CAST(cols.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(MAX))
                             END +
-                        ', "precision": ' +
+                        '", "precision": ' +
                             CASE
                                 WHEN cols.DATA_TYPE IN ('numeric', 'decimal')
                                 THEN '{"precision":' + COALESCE(CAST(cols.NUMERIC_PRECISION AS NVARCHAR(MAX)), 'null') +
@@ -270,12 +270,12 @@ cols AS (
                                 '", "name": "' + STRING_ESCAPE(COALESCE(REPLACE(cols.COLUMN_NAME, '"', ''), ''), 'json') +
                                 '", "ordinal_position": ' + CAST(cols.ORDINAL_POSITION AS NVARCHAR(MAX)) +
                                 ', "type": "' + STRING_ESCAPE(LOWER(cols.DATA_TYPE), 'json') +
-                                '", "character_maximum_length": ' +
+                                '", "character_maximum_length": "' +
                                     CASE
                                         WHEN cols.CHARACTER_MAXIMUM_LENGTH IS NULL THEN 'null'
                                         ELSE CAST(cols.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(MAX))
                                     END +
-                                ', "precision": ' +
+                                '", "precision": ' +
                                     CASE
                                         WHEN cols.DATA_TYPE IN ('numeric', 'decimal')
                                         THEN '{"precision":' + COALESCE(CAST(cols.NUMERIC_PRECISION AS NVARCHAR(MAX)), 'null') +

@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/orchid-db.png';
 import imageDark from '@/assets/templates/orchid-db-dark.png';
 
+const now = Date.now();
+
 export const orchidDb: Template = {
     slug: 'orchid-database',
     name: 'Orchid',
@@ -38,7 +40,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rrbw2jsbum3w6wug0b6hklmwo',
@@ -51,7 +53,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g48tjszq4p6el5rhwvyap3tkh',
@@ -64,7 +66,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8okobzkdj9tb5flnm0sfjy3a5',
@@ -77,7 +79,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mzzwbs0cvccejkdx2k3bxsvdv',
@@ -90,7 +92,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ln2eh4bgj75a8wxm8tknc7krm',
@@ -102,7 +104,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2blffmjau84s7lnnezad60638',
@@ -114,7 +116,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wdlk5dhteq4h0tpt4sg2cwx7l',
@@ -127,7 +129,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vmibvvuhrzhzsdim04py8vt4i',
@@ -140,7 +142,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j2yt3hgfb5m5s25edc5g5p5dg',
@@ -153,7 +155,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'te2zpzw69y1hhvfeuj2mtm5z5',
@@ -166,7 +168,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's4zt7i83jodx4sndx3tzxh3fx',
@@ -179,7 +181,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8zlf2ojsc5d7rboguwayfh5ha',
@@ -191,7 +193,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5kbdynhu49e7luliyivevxnq6',
@@ -204,7 +206,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't2u1d50oxcil6chubqztufibn',
@@ -216,7 +218,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'neh7szkld37h2uphiq5f7uyus',
@@ -228,7 +230,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -237,13 +239,13 @@ export const orchidDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['lgqpeo3tbu1ct5pqhaxx55b89'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9e8wgcnlgadlwq88ab7x42nfw',
@@ -262,7 +264,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fv8i1bjy7y9ohds8uo6r9cvjk',
@@ -275,7 +277,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0bga9idieaely6byav6lg86vj',
@@ -287,7 +289,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '08vow7auknmbt4vd35dw5sr64',
@@ -299,7 +301,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -308,7 +310,7 @@ export const orchidDb: Template = {
                         name: 'attachmentable_attachment_id_index',
                         unique: false,
                         fieldIds: ['08vow7auknmbt4vd35dw5sr64'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mx4r0qb2v3hc1n71pbb0lwebh',
@@ -318,20 +320,20 @@ export const orchidDb: Template = {
                             'fv8i1bjy7y9ohds8uo6r9cvjk',
                             '0bga9idieaely6byav6lg86vj',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'drk9jmopuds3h36hx6sxhdklx',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['lze7awwqh7cmfges7j9gss7ld'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'i4ieeqk4511ri623n7vtmjxkg',
@@ -351,7 +353,7 @@ export const orchidDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9hd4t4x8qdorb0zgh5zy7ks45',
@@ -363,7 +365,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -372,13 +374,13 @@ export const orchidDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['whig3jtfp4hszl69aeshnz5e4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k027uir0ao6l8fpw7d1ay3qft',
@@ -398,7 +400,7 @@ export const orchidDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l1253c6f5nyaajfignk776qnv',
@@ -411,7 +413,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e357s9a7q59z4lj4563k0ov70',
@@ -424,7 +426,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hmro9cstbl7pvzyb0ueej38b7',
@@ -436,7 +438,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r8jlzknygzkspqwyekdofonjq',
@@ -449,7 +451,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'slwb1sbiid5xuxs8zwtrhgw1c',
@@ -461,7 +463,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o4rmhz6ze2p1fwzvvmsn0ey4a',
@@ -473,7 +475,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '97zmk1w819jwuyvs2sthe1mew',
@@ -485,7 +487,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -494,7 +496,7 @@ export const orchidDb: Template = {
                         name: 'notifications_notifiable_id_foreign',
                         unique: false,
                         fieldIds: ['hmro9cstbl7pvzyb0ueej38b7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ng4t2jdsmi3lpmkzg6nw7odzk',
@@ -504,20 +506,20 @@ export const orchidDb: Template = {
                             'e357s9a7q59z4lj4563k0ov70',
                             'hmro9cstbl7pvzyb0ueej38b7',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'krsfpt88k3qjdhn6uq778yu0g',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['01cotfakdw7iunarpuc1eqwnr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p3j1u8r3xxv3p3wsqexn7rovb',
@@ -536,7 +538,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ukanv6p7mwd4rupjwl3d8hku',
@@ -549,7 +551,7 @@ export const orchidDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vm2tdqrqzce99h90umbh05pi1',
@@ -562,7 +564,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w0m3b817zkfsp7las0peu5y2r',
@@ -574,7 +576,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'trnigyvttxywsqy1cqenqyaw6',
@@ -586,7 +588,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gpx1i0t8e6hwqf3nnlgl7rtw6',
@@ -598,7 +600,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -607,20 +609,20 @@ export const orchidDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['o4hh7mgjf9ee94is4ynwyo5zj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qcr373xl5gjq2rothmvoajo2a',
                         name: 'roles_slug_unique',
                         unique: true,
                         fieldIds: ['9ukanv6p7mwd4rupjwl3d8hku'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wwy772ru0zkg4ljct6pjwl91s',
@@ -639,7 +641,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vyqpj645b1dc0txxmhyc5ie23',
@@ -651,7 +653,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -663,20 +665,20 @@ export const orchidDb: Template = {
                             'iuwqr7fw84fgxarlqkmq2bnh3',
                             'vyqpj645b1dc0txxmhyc5ie23',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't344ymg5cjfiny4p39i9vwh3x',
                         name: 'role_users_role_id_index',
                         unique: false,
                         fieldIds: ['vyqpj645b1dc0txxmhyc5ie23'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ydbfacxlwhodoy9nnzbkdkf0g',
@@ -695,7 +697,7 @@ export const orchidDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kmea6u19ghgwduvtgkh05tgoq',
@@ -708,7 +710,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ozi31o0p9ow8epliom949x01e',
@@ -721,7 +723,7 @@ export const orchidDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o24szb7w4t8ngzzwzgmito21m',
@@ -733,7 +735,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6kdn1ktgx3wv8tv5nnmeapypg',
@@ -746,7 +748,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u16gkd45jpwec0cc9uiky7622',
@@ -759,7 +761,7 @@ export const orchidDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u36wia3c8hjb1yww5dv86rn21',
@@ -771,7 +773,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e18csiyrk41qa9xlninw797re',
@@ -783,7 +785,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9k4lt1xa7dps1sajhcncr4j5k',
@@ -795,7 +797,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i00i6og4e1xk0bb1s005ovg3r',
@@ -807,7 +809,7 @@ export const orchidDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -816,20 +818,20 @@ export const orchidDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['o1n4ty6ymyi41gbfhcqwppa3p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qwygfkmk6e8fz6emzeyk4bmay',
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['ozi31o0p9ow8epliom949x01e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -844,7 +846,7 @@ export const orchidDb: Template = {
                 targetFieldId: 'lgqpeo3tbu1ct5pqhaxx55b89',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ehglrbddna888qzcrhz0u9zxm',
@@ -857,7 +859,7 @@ export const orchidDb: Template = {
                 targetFieldId: 'o1n4ty6ymyi41gbfhcqwppa3p',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qynjlszbi8qiflgjvbvd6pkjc',
@@ -870,7 +872,7 @@ export const orchidDb: Template = {
                 targetFieldId: 'o1n4ty6ymyi41gbfhcqwppa3p',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'x3inmacyjmf8y1mvq2j1w6phd',
@@ -883,7 +885,7 @@ export const orchidDb: Template = {
                 targetFieldId: 'o4hh7mgjf9ee94is4ynwyo5zj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

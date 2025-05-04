@@ -43,9 +43,7 @@ export const ne: LanguageTranslation = {
             help: {
                 help: 'मद्दत',
                 docs_website: 'कागजात',
-                visit_website: 'वेबसाइटमा जानुहोस्',
                 join_discord: 'डिस्कोर्डमा सामिल हुनुहोस्',
-                schedule_a_call: 'कल अनुसूची गर्नुहोस्',
             },
         },
 
@@ -152,6 +150,8 @@ export const ne: LanguageTranslation = {
                         comments: 'टिप्पणीहरू',
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'सूचक विशेषताहरू',
@@ -210,6 +210,27 @@ export const ne: LanguageTranslation = {
                     title: 'कुनै डिपेन्डेन्सीहरू छैनन्',
                     description:
                         'डिपेन्डेन्सीहरू देखाउनका लागि एक व्यू बनाउनुहोस्',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -407,6 +428,8 @@ export const ne: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'नयाँ तालिका',
             new_relationship: 'नयाँ सम्बन्ध',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

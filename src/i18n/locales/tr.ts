@@ -43,9 +43,7 @@ export const tr: LanguageTranslation = {
             help: {
                 help: 'Yardım',
                 docs_website: 'Belgeleme',
-                visit_website: "ChartDB'yi Ziyaret Et",
                 join_discord: "Discord'a Katıl",
-                schedule_a_call: 'Bize Ulaş!',
             },
         },
 
@@ -151,6 +149,8 @@ export const tr: LanguageTranslation = {
                         comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'İndeks Özellikleri',
@@ -209,6 +209,27 @@ export const tr: LanguageTranslation = {
                 empty_state: {
                     title: 'Bağımlılık yok',
                     description: 'Başlamak için bir görünüm oluşturun',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -394,6 +415,8 @@ export const tr: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Yeni Tablo',
             new_relationship: 'Yeni İlişki',
+            // TODO: Translate
+            new_area: 'New Area',
         },
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',

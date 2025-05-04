@@ -43,9 +43,7 @@ export const pt_BR: LanguageTranslation = {
             help: {
                 help: 'Ajuda',
                 docs_website: 'Documentação',
-                visit_website: 'Visitar ChartDB',
                 join_discord: 'Junte-se a nós no Discord',
-                schedule_a_call: 'Fale Conosco!',
             },
         },
 
@@ -152,6 +150,8 @@ export const pt_BR: LanguageTranslation = {
                         comments: 'Comentários',
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Atributos do Índice',
@@ -209,6 +209,27 @@ export const pt_BR: LanguageTranslation = {
                 empty_state: {
                     title: 'Sem dependências',
                     description: 'Crie uma visualização para começar',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -405,6 +426,8 @@ export const pt_BR: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Nova Tabela',
             new_relationship: 'Novo Relacionamento',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

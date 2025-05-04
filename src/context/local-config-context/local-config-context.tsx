@@ -30,12 +30,6 @@ export interface LocalConfigContext {
     starUsDialogLastOpen: number;
     setStarUsDialogLastOpen: (lastOpen: number) => void;
 
-    buckleWaitlistOpened: boolean;
-    setBuckleWaitlistOpened: (githubRepoOpened: boolean) => void;
-
-    buckleDialogLastOpen: number;
-    setBuckleDialogLastOpen: (lastOpen: number) => void;
-
     showDependenciesOnCanvas: boolean;
     setShowDependenciesOnCanvas: (showDependenciesOnCanvas: boolean) => void;
 
@@ -53,7 +47,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     schemasFilter: {},
     setSchemasFilter: emptyFn,
 
-    showCardinality: false,
+    showCardinality: true,
     setShowCardinality: emptyFn,
 
     hideMultiSchemaNotification: false,
@@ -64,12 +58,6 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     starUsDialogLastOpen: 0,
     setStarUsDialogLastOpen: emptyFn,
-
-    buckleWaitlistOpened: false,
-    setBuckleWaitlistOpened: emptyFn,
-
-    buckleDialogLastOpen: 0,
-    setBuckleDialogLastOpen: emptyFn,
 
     showDependenciesOnCanvas: false,
     setShowDependenciesOnCanvas: emptyFn,

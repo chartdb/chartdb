@@ -41,10 +41,8 @@ export const id_ID: LanguageTranslation = {
             },
             help: {
                 help: 'Bantuan',
-                docs_website: 'દસ્તાવેજીકરણ',
-                visit_website: 'Kunjungi ChartDB',
+                docs_website: 'Dokumentasi',
                 join_discord: 'Bergabunglah di Discord kami',
-                schedule_a_call: 'Berbicara dengan kami!',
             },
         },
 
@@ -151,6 +149,8 @@ export const id_ID: LanguageTranslation = {
                         comments: 'Komentar',
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Atribut Indeks',
@@ -208,6 +208,27 @@ export const id_ID: LanguageTranslation = {
                 empty_state: {
                     title: 'Tidak ada dependensi',
                     description: 'Buat tampilan untuk memulai',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -403,6 +424,8 @@ export const id_ID: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Tabel Baru',
             new_relationship: 'Hubungan Baru',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useRef } from 'react';
 import type { Example } from './examples-data/examples-data';
 import { randomColor } from '@/lib/colors';
 import { Import } from 'lucide-react';
@@ -13,35 +13,23 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
-import { useStorage } from '@/hooks/use-storage';
-import type { Diagram } from '@/lib/domain/diagram';
-import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/hooks/use-theme';
+import { Spinner } from '@/components/spinner/spinner';
 
 export interface ExampleCardProps {
     example: Example;
+    utilizeExample: () => void;
+    loading: boolean;
 }
 
-export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
-    const navigate = useNavigate();
+export const ExampleCard: React.FC<ExampleCardProps> = ({
+    example,
+    utilizeExample,
+    loading,
+}) => {
     const { effectiveTheme } = useTheme();
-    const { addDiagram, deleteDiagram } = useStorage();
-    const { diagram } = example;
-    const utilizeExample = useCallback(async () => {
-        const { id } = diagram;
+    const color = useRef(randomColor());
 
-        await deleteDiagram(id);
-
-        const now = new Date();
-        const diagramToAdd: Diagram = {
-            ...diagram,
-            createdAt: now,
-            updatedAt: now,
-        };
-
-        await addDiagram({ diagram: diagramToAdd });
-        navigate(`/diagrams/${id}`);
-    }, [addDiagram, diagram, navigate, deleteDiagram]);
     return (
         <div
             onClick={utilizeExample}
@@ -49,7 +37,7 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
         >
             <div
                 className="h-4 rounded-t-[10px]"
-                style={{ backgroundColor: randomColor() }}
+                style={{ backgroundColor: color.current }}
             ></div>
             <div className="flex h-12 items-center justify-between bg-slate-200 px-2 dark:bg-slate-900">
                 <div className="flex items-center gap-2">
@@ -78,12 +66,16 @@ export const ExampleCard: React.FC<ExampleCardProps> = ({ example }) => {
                     </Label>
                 </div>
                 <div className="flex flex-row">
-                    <Button
-                        variant="ghost"
-                        className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                    >
-                        <Import className="size-5" />
-                    </Button>
+                    {loading ? (
+                        <Spinner className="size-5" />
+                    ) : (
+                        <Button
+                            variant="ghost"
+                            className="size-9 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                        >
+                            <Import className="size-5" />
+                        </Button>
+                    )}
                 </div>
             </div>
             <div className="grow overflow-hidden">

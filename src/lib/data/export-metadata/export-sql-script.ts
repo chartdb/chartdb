@@ -5,16 +5,62 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
+import { exportPostgreSQL } from './export-per-type/postgresql';
+import { exportSQLite } from './export-per-type/sqlite';
+import { exportMySQL } from './export-per-type/mysql';
 
-export const exportBaseSQL = (diagram: Diagram): string => {
+// Function to simplify verbose data type names
+const simplifyDataType = (typeName: string): string => {
+    const typeMap: Record<string, string> = {
+        'character varying': 'varchar',
+        'char varying': 'varchar',
+        integer: 'int',
+        int4: 'int',
+        int8: 'bigint',
+        serial4: 'serial',
+        serial8: 'bigserial',
+        float8: 'double precision',
+        float4: 'real',
+        bool: 'boolean',
+        character: 'char',
+        'timestamp without time zone': 'timestamp',
+        'timestamp with time zone': 'timestamptz',
+        'time without time zone': 'time',
+        'time with time zone': 'timetz',
+    };
+
+    return typeMap[typeName.toLowerCase()] || typeName;
+};
+
+export const exportBaseSQL = ({
+    diagram,
+    targetDatabaseType,
+    isDBMLFlow = false,
+}: {
+    diagram: Diagram;
+    targetDatabaseType: DatabaseType;
+    isDBMLFlow?: boolean;
+}): string => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
         return '';
     }
 
-    if (diagram.databaseType === DatabaseType.SQL_SERVER) {
-        return exportMSSQL(diagram);
+    if (!isDBMLFlow && diagram.databaseType === targetDatabaseType) {
+        switch (diagram.databaseType) {
+            case DatabaseType.SQL_SERVER:
+                return exportMSSQL(diagram);
+            case DatabaseType.POSTGRESQL:
+                return exportPostgreSQL(diagram);
+            case DatabaseType.SQLITE:
+                return exportSQLite(diagram);
+            case DatabaseType.MYSQL:
+            case DatabaseType.MARIADB:
+                return exportMySQL(diagram);
+            default:
+                return exportPostgreSQL(diagram);
+        }
     }
 
     // Filter out the tables that are views
@@ -70,7 +116,13 @@ export const exportBaseSQL = (diagram: Diagram): string => {
         sqlScript += `CREATE TABLE ${tableName} (\n`;
 
         table.fields.forEach((field, index) => {
-            let typeName = field.type.name;
+            let typeName = simplifyDataType(field.type.name);
+
+            // Handle ENUM type
+            if (typeName.toLowerCase() === 'enum') {
+                // Map enum to TEXT for broader compatibility, especially with DBML importer
+                typeName = 'text';
+            }
 
             // Temp fix for 'array' to be text[]
             if (typeName.toLowerCase() === 'array') {
@@ -88,6 +140,7 @@ export const exportBaseSQL = (diagram: Diagram): string => {
             if (field.characterMaximumLength) {
                 sqlScript += `(${field.characterMaximumLength})`;
             } else if (field.type.name.toLowerCase().includes('varchar')) {
+                // Keep varchar sizing, but don't apply to TEXT (previously enum)
                 sqlScript += `(500)`;
             }
 
@@ -115,8 +168,22 @@ export const exportBaseSQL = (diagram: Diagram): string => {
 
                 // Remove the type cast part after :: if it exists
                 if (fieldDefault.includes('::')) {
+                    const endedWithParentheses = fieldDefault.endsWith(')');
                     fieldDefault = fieldDefault.split('::')[0];
+
+                    if (
+                        (fieldDefault.startsWith('(') &&
+                            !fieldDefault.endsWith(')')) ||
+                        endedWithParentheses
+                    ) {
+                        fieldDefault += ')';
+                    }
                 }
+
+                if (fieldDefault === `('now')`) {
+                    fieldDefault = `now()`;
+                }
+
                 sqlScript += ` DEFAULT ${fieldDefault}`;
             }
 
@@ -230,8 +297,12 @@ export const exportSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
-    const sqlScript = exportBaseSQL(diagram);
-    if (databaseType === DatabaseType.SQL_SERVER) {
+    const sqlScript = exportBaseSQL({
+        diagram,
+        targetDatabaseType: databaseType,
+    });
+
+    if (databaseType === diagram.databaseType) {
         return sqlScript;
     }
 
@@ -395,7 +466,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **Sequence Creation**: Use \`CREATE SEQUENCE IF NOT EXISTS\` for sequence creation.
         - **Table and Index Creation**: Use \`CREATE TABLE IF NOT EXISTS\` and \`CREATE INDEX IF NOT EXISTS\` to avoid errors if the object already exists.
         - **Serial and Identity Columns**: For auto-increment columns, use \`SERIAL\` or \`GENERATED BY DEFAULT AS IDENTITY\`.
-        - **Conditional Statements**: Utilize PostgreSQL’s support for \`IF NOT EXISTS\` in relevant \`CREATE\` statements.
+        - **Conditional Statements**: Utilize PostgreSQL's support for \`IF NOT EXISTS\` in relevant \`CREATE\` statements.
     `,
         mysql: `
         - **Table Creation**: Use \`CREATE TABLE IF NOT EXISTS\` for creating tables. While creating the table structure, ensure that all foreign key columns use the correct data types as determined in the foreign key review.
@@ -415,7 +486,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         sql_server: `
         - **Sequence Creation**: Use \`CREATE SEQUENCE\` without \`IF NOT EXISTS\`, and employ conditional logic (\`IF NOT EXISTS\`) to check for sequence existence before creation.
         - **Identity Columns**: Always prefer using the \`IDENTITY\` keyword (e.g., \`INT IDENTITY(1,1)\`) for auto-incrementing primary key columns when possible.
-        - **Conditional Logic**: Use a conditional block like \`IF NOT EXISTS (SELECT * FROM sys.objects WHERE ...)\` since SQL Server doesn’t support \`IF NOT EXISTS\` directly in \`CREATE\` statements.
+        - **Conditional Logic**: Use a conditional block like \`IF NOT EXISTS (SELECT * FROM sys.objects WHERE ...)\` since SQL Server doesn't support \`IF NOT EXISTS\` directly in \`CREATE\` statements.
         - **Avoid Unsupported Syntax**: Ensure the script does not include unsupported statements like \`CREATE TABLE IF NOT EXISTS\`.
 
         **Reminder**: Ensure all column names that conflict with reserved keywords or data types (e.g., key, primary, column, table), escape the column name by enclosing it.
@@ -449,7 +520,7 @@ const generateSQLPrompt = (databaseType: DatabaseType, sqlScript: string) => {
         - **Sequence Creation**: Use \`CREATE SEQUENCE IF NOT EXISTS\` for sequence creation.
         - **Table and Index Creation**: Use \`CREATE TABLE IF NOT EXISTS\` and \`CREATE INDEX IF NOT EXISTS\` to avoid errors if the object already exists.
         - **Serial and Identity Columns**: For auto-increment columns, use \`SERIAL\` or \`GENERATED BY DEFAULT AS IDENTITY\`.
-        - **Conditional Statements**: Utilize PostgreSQL’s support for \`IF NOT EXISTS\` in relevant \`CREATE\` statements.
+        - **Conditional Statements**: Utilize PostgreSQL's support for \`IF NOT EXISTS\` in relevant \`CREATE\` statements.
     `,
     };
 

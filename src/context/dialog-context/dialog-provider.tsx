@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import type { DialogContext } from './dialog-context';
 import { dialogContext } from './dialog-context';
+import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import { CreateDiagramDialog } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
@@ -19,7 +20,6 @@ import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/expor
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
-import { BuckleDialog } from '@/dialogs/buckle-dialog/buckle-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 
@@ -27,6 +27,17 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
+    const [newDiagramDialogParams, setNewDiagramDialogParams] =
+        useState<Omit<CreateDiagramDialogProps, 'dialog'>>();
+    const openNewDiagramDialogHandler: DialogContext['openCreateDiagramDialog'] =
+        useCallback(
+            (props) => {
+                setNewDiagramDialogParams(props);
+                setOpenNewDiagramDialog(true);
+            },
+            [setOpenNewDiagramDialog]
+        );
+
     const [openOpenDiagramDialog, setOpenOpenDiagramDialog] = useState(false);
     const [openDiagramDialogParams, setOpenDiagramDialogParams] =
         useState<Omit<OpenDiagramDialogProps, 'dialog'>>();
@@ -54,7 +65,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
-    const [openBuckleDialog, setOpenBuckleDialog] = useState(false);
 
     // Export image dialog
     const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
@@ -130,7 +140,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     return (
         <dialogContext.Provider
             value={{
-                openCreateDiagramDialog: () => setOpenNewDiagramDialog(true),
+                openCreateDiagramDialog: openNewDiagramDialogHandler,
                 closeCreateDiagramDialog: () => setOpenNewDiagramDialog(false),
                 openOpenDiagramDialog: openOpenDiagramDialogHandler,
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
@@ -147,8 +157,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
-                closeBuckleDialog: () => setOpenBuckleDialog(false),
-                openBuckleDialog: () => setOpenBuckleDialog(true),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -165,7 +173,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             }}
         >
             {children}
-            <CreateDiagramDialog dialog={{ open: openNewDiagramDialog }} />
+            <CreateDiagramDialog
+                dialog={{ open: openNewDiagramDialog }}
+                {...newDiagramDialogParams}
+            />
             <OpenDiagramDialog
                 dialog={{ open: openOpenDiagramDialog }}
                 {...openDiagramDialogParams}
@@ -193,7 +204,6 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-            <BuckleDialog dialog={{ open: openBuckleDialog }} />
             <ImportDBMLDialog
                 dialog={{ open: openImportDBMLDialog }}
                 {...importDBMLDialogParams}

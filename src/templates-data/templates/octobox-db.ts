@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/octobox-db.png';
 import imageDark from '@/assets/templates/octobox-db-dark.png';
 
+const now = Date.now();
+
 export const octoboxDb: Template = {
     slug: 'octobox-database',
     name: 'Octobox',
@@ -38,7 +40,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p4baw2bc3hpt7px5qwf7v8cm8',
@@ -50,7 +52,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q8pfwtofmh1ztez7uxakgzd8g',
@@ -62,7 +64,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lpcbm9mdwfg9vwopyi3aj15op',
@@ -74,7 +76,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l2yn50oesv1r4ews99n5hcz79',
@@ -86,7 +88,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'svb1wb0ypg97qhbei1p9y23z2',
@@ -98,7 +100,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'udaga2r9cqxubcaprjwwmtqba',
@@ -110,7 +112,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kgqffmx5mgczgkas7mal6o5f9',
@@ -122,7 +124,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y9p03xk7jp9rqvrmvghc5em30',
@@ -134,7 +136,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'amlkpvbpb2kg0lrbov7dqka40',
@@ -146,7 +148,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gj5w5n78utgk2u9l887xgb4ao',
@@ -158,7 +160,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1afk8adyebbi97ael86ksiys2',
@@ -170,7 +172,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aody93at5irbv0spetf1dz92y',
@@ -182,7 +184,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xj4z08juky73pze9e54kw0cx1',
@@ -194,7 +196,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't6s5jdw2lbnmb23d29xlq2ptk',
@@ -206,7 +208,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jademvmj5bqdaxka30xg73ljr',
@@ -218,7 +220,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '73mig1zevf6ksb2cfbfmz029x',
@@ -230,7 +232,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -239,27 +241,27 @@ export const octoboxDb: Template = {
                         name: 'users_github_id_unique',
                         unique: true,
                         fieldIds: ['p4baw2bc3hpt7px5qwf7v8cm8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j8fpv7ek7wnguqucasnak3yn8',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['zp2xsp1vy5v7hvg33xmjgoio2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tipumn37rqx90t20ua53ur9pm',
                         name: 'users_api_token_unique',
                         unique: true,
                         fieldIds: ['kgqffmx5mgczgkas7mal6o5f9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5az7tvlsq0h06z0u44eljxvat',
@@ -278,7 +280,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vhf76uw2vbyxe31h1g5fbwtcu',
@@ -290,7 +292,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ffiuvd0ho72iq0sl3fm3wafsk',
@@ -302,7 +304,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hgb2xijbp1xd9cyahvgnug16h',
@@ -314,7 +316,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1mjpxo4aw51bcirxt3oc0wlv5',
@@ -326,7 +328,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3x7b6mfnsf2vd4vhzb6c85vtm',
@@ -338,7 +340,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wrr7uxbba3rymy1s1m3h8gbhr',
@@ -350,7 +352,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f2723chewvy2meyi7gtnlw9bs',
@@ -362,7 +364,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wmf1fv16xs6jzsv9tv2kprou5',
@@ -374,7 +376,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ds9snjgz5osde9ekyp3vez7zg',
@@ -386,7 +388,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xc01d8d5zks278mz92momtl19',
@@ -398,7 +400,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sm37qq714idyqja873xvs0t52',
@@ -410,7 +412,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j7lzie22rwtkzdc1cbeksi1lz',
@@ -422,7 +424,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1nb3urlsbsw78i6ks4mv7x2fs',
@@ -434,7 +436,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zkk8jrwq8lzuvajn4k5iabe68',
@@ -446,7 +448,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '51uu0775w7nv1bu2kzjdzmpcx',
@@ -458,7 +460,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q35d8p8n7nnz993lur3qdwptz',
@@ -470,7 +472,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'el0xkn5eq5ech3g00swfsc0uv',
@@ -482,7 +484,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't7zohdm6eqb3i7d7cwtn7w2mj',
@@ -494,7 +496,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -507,14 +509,14 @@ export const octoboxDb: Template = {
                             'j7lzie22rwtkzdc1cbeksi1lz',
                             'zkk8jrwq8lzuvajn4k5iabe68',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sa5v1imisfqhruhl2f371ybug',
                         name: 'notifications_subject_url_index',
                         unique: false,
                         fieldIds: ['wrr7uxbba3rymy1s1m3h8gbhr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p8wqgz88g1u35vwtbvdumz5n7',
@@ -524,34 +526,34 @@ export const octoboxDb: Template = {
                             'vhf76uw2vbyxe31h1g5fbwtcu',
                             'ffiuvd0ho72iq0sl3fm3wafsk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3qqa6ymeuvgszrdhyxnm1nyw5',
                         name: 'notifications_pkey',
                         unique: true,
                         fieldIds: ['0cjyot7ss345hirj0b0ptr63w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0pfxupcv8kazc5j0e6lqeaaiv',
                         name: 'notifications_muted_at_index',
                         unique: false,
                         fieldIds: ['t7zohdm6eqb3i7d7cwtn7w2mj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6q0lpdyq1cdvq8s8f1tt4tc1l',
                         name: 'notifications_repository_full_name_index',
                         unique: false,
                         fieldIds: ['1mjpxo4aw51bcirxt3oc0wlv5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c0bbaby788cbi5gllfx8y5kvy',
@@ -570,7 +572,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9l4532f1cgcmt5hizgq6ycqmd',
@@ -582,7 +584,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3zkk69s9f6f0o398mnev8sorx',
@@ -594,7 +596,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '32boc01nkjh798msgroxdht6a',
@@ -606,7 +608,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x4v4tknbbqmhufh8ejgf322e5',
@@ -618,7 +620,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1v67ykz9ovly04jfjvn8m1wuz',
@@ -630,7 +632,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a4u5ilqa8zsxr2aarn810v936',
@@ -642,7 +644,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'erud34rsun7pl7bg8a2qogu3j',
@@ -654,7 +656,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'liz4rgeho5elqk7hka4cr1hk4',
@@ -666,7 +668,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -675,27 +677,27 @@ export const octoboxDb: Template = {
                         name: 'repositories_pkey',
                         unique: true,
                         fieldIds: ['hllsvvzdsa1ti5mbwjce5eb0m'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e0biwkqvbn85k1199585r4dmv',
                         name: 'repositories_github_id_index',
                         unique: false,
                         fieldIds: ['3zkk69s9f6f0o398mnev8sorx'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2h4osgx506nni8takxgp31fis',
                         name: 'repositories_full_name_unique',
                         unique: true,
                         fieldIds: ['9l4532f1cgcmt5hizgq6ycqmd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fjvn8b9no6bwsamjxpz0ybtwv',
@@ -714,7 +716,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vwixchhemb056y4t6gwtif9gm',
@@ -726,7 +728,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pz3fasji7x4i2qsvimb8dyu4z',
@@ -738,7 +740,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7hfi9p81n975attk9j9njl97v',
@@ -750,7 +752,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm51w7ua3aiprmzfwzf76onlpq',
@@ -762,7 +764,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2t8yaiy82kcz5r4siqtdfoa1w',
@@ -774,7 +776,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8x6ushq205320l3x09y0d1hqe',
@@ -786,7 +788,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2s2p9basc497qwij3p3c2kkrp',
@@ -798,7 +800,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5uoihxylnx3n8jjyo4aixqpkd',
@@ -810,7 +812,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vpnwelfqudgc1axh5ersd5bz6',
@@ -822,7 +824,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u2rjvm2eo4jm3xdi8kem4rf6j',
@@ -834,7 +836,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tdlglnof4ml53b4vw5wrmhju1',
@@ -846,7 +848,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dbrjhctpy8ejthykq73cnc1lg',
@@ -858,7 +860,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -867,13 +869,13 @@ export const octoboxDb: Template = {
                         name: 'app_installations_pkey',
                         unique: true,
                         fieldIds: ['ngod02y4j6f7cm10nvccq94p7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o74arv476fr0n9xuzsv0atulh',
@@ -892,7 +894,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2t3pwzqhm8kil7sntyfsh0yd7',
@@ -904,7 +906,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't62wpjjlniz8727737x78qbf0',
@@ -916,7 +918,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tvptc3bz4i5hixe158trg9er8',
@@ -928,7 +930,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tode6je7j77x4lzyj2fecif26',
@@ -940,7 +942,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -949,13 +951,13 @@ export const octoboxDb: Template = {
                         name: 'app_installation_permissions_pkey',
                         unique: true,
                         fieldIds: ['887npfguizau91vpxqv00fabh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ocpsd70dkrp5sy3pshyn0t2td',
@@ -974,7 +976,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ylkjtzhgieg860njjpfbhmgpv',
@@ -986,7 +988,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2zyr3l94bw5sfzafvl9aad4px',
@@ -998,7 +1000,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kv04xqd7ympyfhcxlyhs9neiv',
@@ -1010,7 +1012,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9aiwyirprxplznnjdlvtpjagc',
@@ -1022,7 +1024,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ogt62vsabaa69hd48h8a6mpa7',
@@ -1034,7 +1036,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zithlm49swhv1mdbqiq79mjg3',
@@ -1046,7 +1048,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2wa79q0xxrwbokg5fki6o6mcw',
@@ -1058,7 +1060,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1h728nxnom8nyb1k7ydonsg18',
@@ -1070,7 +1072,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1cmfmjco4kd6w8c6r6lfc4zto',
@@ -1082,7 +1084,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '47gl5qpph42m4rqxrgk46m25d',
@@ -1094,7 +1096,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3enfnsfq4dh430th2y1256ai9',
@@ -1106,7 +1108,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1115,13 +1117,13 @@ export const octoboxDb: Template = {
                         name: 'subscription_plans_pkey',
                         unique: true,
                         fieldIds: ['y4ft5c1c2g357l8iqg1tvmhqo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ovgsryw25j95li3tg9up0c2ih',
@@ -1140,7 +1142,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j7l6llgfhjvlc4pq6yhb1s2de',
@@ -1152,7 +1154,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xc3fl39b5zpp5ngobca3k8ng6',
@@ -1164,7 +1166,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '25j3i64k41uauc3ygr3tmyoyk',
@@ -1176,7 +1178,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tnwdd84xoeidzqa7h9f8x42qc',
@@ -1188,7 +1190,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wxeg9rmwbdiqppnk641s739qz',
@@ -1200,7 +1202,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yumx70hs0dtivwyroi8wimmt0',
@@ -1212,7 +1214,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bri8jugf3idw4v3o6jm6q7u38',
@@ -1224,7 +1226,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zllcvsk4ks685cor0d3r91zg5',
@@ -1236,7 +1238,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xdjtug1eut1re5bc3ayh3rvwi',
@@ -1248,7 +1250,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1257,20 +1259,20 @@ export const octoboxDb: Template = {
                         name: 'comments_subject_id_index',
                         unique: false,
                         fieldIds: ['j7l6llgfhjvlc4pq6yhb1s2de'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'od8frlwv7n734fq95mxbmzjq0',
                         name: 'comments_pkey',
                         unique: true,
                         fieldIds: ['aunzw3n1w1kukpijygyb32tz7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pgv2qrv0zltf7bahswjn85rvj',
@@ -1289,7 +1291,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't4xqm3qlowlofgh8ox4ygg0sm',
@@ -1301,7 +1303,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5j9h427q8bgiax0wcdsw32jew',
@@ -1313,7 +1315,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3gq8iysrfng2biujq3qh7e8on',
@@ -1325,7 +1327,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9m5vold4x76hzm6caw3tr33jo',
@@ -1337,7 +1339,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o9n75sgdb2utucizzdvjj48hr',
@@ -1349,7 +1351,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1358,20 +1360,20 @@ export const octoboxDb: Template = {
                         name: 'pinned_searches_user_id_index',
                         unique: false,
                         fieldIds: ['t4xqm3qlowlofgh8ox4ygg0sm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sth5lham4yptgb3x2lg6fjzou',
                         name: 'pinned_searches_pkey',
                         unique: true,
                         fieldIds: ['c2opr5r12hxqzf1xb8jvob0my'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wfsf2mk6hsdo34lb4d3vstnup',
@@ -1390,7 +1392,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g6vbh7sce5n3z4pjr0a181c9i',
@@ -1402,7 +1404,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mifo6hjcut13mlcsv6292f0qn',
@@ -1414,7 +1416,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q1tt1827md17mhi9qj9yrv4n9',
@@ -1426,7 +1428,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aq4oojacdn552requ32fo98g9',
@@ -1438,7 +1440,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'itknc4ntvsx4igrs6deb4wlle',
@@ -1450,7 +1452,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xp6wd0r9hfhtrnfxjh6nivcxs',
@@ -1462,7 +1464,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '534mir0orksn8su60rgcod656',
@@ -1474,7 +1476,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '813kavmcr5eed9vs3p0nn05jz',
@@ -1486,7 +1488,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hy417mvyo3dwcbffqg7agir0h',
@@ -1498,7 +1500,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zwn8z8p9g9xp4svkur1mxaoow',
@@ -1510,7 +1512,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q9dojlyyovg2xwjizguyfw9pu',
@@ -1522,7 +1524,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7qsgw492vx9rn6yhuqizvfzfm',
@@ -1534,7 +1536,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v34638whp5myyiytzmnpgqv06',
@@ -1546,7 +1548,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'khr12v2g2jcjs1h0ttg3pajqq',
@@ -1558,7 +1560,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a9wiof1ypblclnzxjkgiqg08v',
@@ -1570,7 +1572,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1579,27 +1581,27 @@ export const octoboxDb: Template = {
                         name: 'subjects_pkey',
                         unique: true,
                         fieldIds: ['x4ihmgw06f2hktcy1gwcydoqn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iopuijdji16fgy1ay032yrgge',
                         name: 'subjects_repository_full_name_index',
                         unique: false,
                         fieldIds: ['hy417mvyo3dwcbffqg7agir0h'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jycapdcmrz9bk4oe20x59g4f7',
                         name: 'subjects_url_index',
                         unique: false,
                         fieldIds: ['g6vbh7sce5n3z4pjr0a181c9i'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xwpaod0scheluskbj4u0gic5p',
@@ -1618,7 +1620,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4c5e1payeq9ml0dpc7u99a99w',
@@ -1630,7 +1632,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nlfmrtgugyjuvlg59vyn8xp1j',
@@ -1642,7 +1644,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd81p3uprsyj6geuqubcq08yzh',
@@ -1654,7 +1656,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ohl27nbzkhrmggnqollls5lrb',
@@ -1666,7 +1668,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nlwg1rtbl0tfmfz6rd7os4vdi',
@@ -1678,7 +1680,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ts2vqf4egiie477cn8shehnb',
@@ -1690,7 +1692,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1699,27 +1701,27 @@ export const octoboxDb: Template = {
                         name: 'labels_subject_id_index',
                         unique: false,
                         fieldIds: ['d81p3uprsyj6geuqubcq08yzh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pru3aka4n1cfxcaxk6t6x1jnw',
                         name: 'labels_name_index',
                         unique: false,
                         fieldIds: ['4c5e1payeq9ml0dpc7u99a99w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ay14h83a4l0d2p1tlpdavqn1d',
                         name: 'labels_pkey',
                         unique: true,
                         fieldIds: ['h44dv1pgz290bqqi5urymq078'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yv0yx7t8oxxr8icwcevqiu3b3',
@@ -1738,7 +1740,7 @@ export const octoboxDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oxw842dhhgfkco6eib0zx75q8',
@@ -1750,7 +1752,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3q1pwuu5a9fbzgmu2za4wmgya',
@@ -1762,7 +1764,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rn72zdppm2dmsyv8bzf8yemwr',
@@ -1774,7 +1776,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hzzxtzil0v8imb9ida60b3y8t',
@@ -1786,7 +1788,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y51s8vn69pe4uqw03vbw2gy7d',
@@ -1798,7 +1800,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zc6puudmrv7l96dg5yn1g6vob',
@@ -1810,7 +1812,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g0dfthiy8nkzwun0xlgewu4fa',
@@ -1822,7 +1824,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vdz625w0y8xhop1v8gl6n02bd',
@@ -1834,7 +1836,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dazp4ps1dqdl4nctltl2uykcb',
@@ -1846,7 +1848,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cqi5ylbfj4fl0zssm5lsryv53',
@@ -1858,7 +1860,7 @@ export const octoboxDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1867,13 +1869,13 @@ export const octoboxDb: Template = {
                         name: 'subscription_purchases_pkey',
                         unique: true,
                         fieldIds: ['0qrly6mnoy5353f31oyxi4ayo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1888,7 +1890,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'hllsvvzdsa1ti5mbwjce5eb0m',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2yjx9j6e4dde95gsdyxz29dg0',
@@ -1901,7 +1903,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'x4ihmgw06f2hktcy1gwcydoqn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd2r50b73rjdobn6svz4pgdrfj',
@@ -1914,7 +1916,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'zp2xsp1vy5v7hvg33xmjgoio2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dj9lzbowq6h09sfj1z335bdoo',
@@ -1927,7 +1929,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'ngod02y4j6f7cm10nvccq94p7',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'h5pk88xog4mje1v8n95500cia',
@@ -1940,7 +1942,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'x4ihmgw06f2hktcy1gwcydoqn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tylbof2t3jiycv7gb4ef9nr4w',
@@ -1953,7 +1955,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'y4ft5c1c2g357l8iqg1tvmhqo',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vbiugdwzcbbv946r2ntsourzg',
@@ -1966,7 +1968,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'zp2xsp1vy5v7hvg33xmjgoio2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ysqwoyi0ef6nvd06l8swg0qm7',
@@ -1979,7 +1981,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'ngod02y4j6f7cm10nvccq94p7',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zw1ccdac9rqjbc8sdrudek0qn',
@@ -1992,7 +1994,7 @@ export const octoboxDb: Template = {
                 targetFieldId: 'zp2xsp1vy5v7hvg33xmjgoio2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

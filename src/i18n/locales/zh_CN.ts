@@ -42,9 +42,7 @@ export const zh_CN: LanguageTranslation = {
             help: {
                 help: '帮助',
                 docs_website: '文档',
-                visit_website: '访问 ChartDB',
                 join_discord: '在 Discord 上加入我们',
-                schedule_a_call: '和我们交流！',
             },
         },
 
@@ -148,6 +146,8 @@ export const zh_CN: LanguageTranslation = {
                         comments: '注释',
                         no_comments: '空',
                         delete_field: '删除字段',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: '索引属性',
@@ -205,6 +205,27 @@ export const zh_CN: LanguageTranslation = {
                 empty_state: {
                     title: '无依赖',
                     description: '创建视图以开始',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -397,6 +418,8 @@ export const zh_CN: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '新建表',
             new_relationship: '新建关系',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

@@ -42,9 +42,7 @@ export const ko_KR: LanguageTranslation = {
             help: {
                 help: '도움말',
                 docs_website: '선적 서류 비치',
-                visit_website: 'ChartDB 사이트 방문',
                 join_discord: 'Discord 가입',
-                schedule_a_call: 'Talk with us!',
             },
         },
 
@@ -151,6 +149,8 @@ export const ko_KR: LanguageTranslation = {
                         comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: '인덱스 속성',
@@ -208,6 +208,27 @@ export const ko_KR: LanguageTranslation = {
                 empty_state: {
                     title: '뷰 테이블 없음',
                     description: '뷰 테이블을 만들어 시작하세요.',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -400,6 +421,8 @@ export const ko_KR: LanguageTranslation = {
         canvas_context_menu: {
             new_table: '새 테이블',
             new_relationship: '새 연관관계',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

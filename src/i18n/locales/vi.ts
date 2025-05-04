@@ -42,9 +42,7 @@ export const vi: LanguageTranslation = {
             help: {
                 help: 'Trợ giúp',
                 docs_website: 'Tài liệu',
-                visit_website: 'Truy cập ChartDB',
                 join_discord: 'Tham gia Discord',
-                schedule_a_call: 'Trò chuyện cùng chúng tôi!',
             },
         },
 
@@ -151,6 +149,8 @@ export const vi: LanguageTranslation = {
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'Thuộc tính chỉ mục',
@@ -208,6 +208,27 @@ export const vi: LanguageTranslation = {
                 empty_state: {
                     title: 'Không có phụ thuộc',
                     description: 'Tạo bảng xem phụ thuộc để bắt đầu',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -401,6 +422,8 @@ export const vi: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'Tạo bảng mới',
             new_relationship: 'Tạo quan hệ mới',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

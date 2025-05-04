@@ -8,6 +8,7 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { determineCardinalities } from '@/lib/domain/db-relationship';
 import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
+import type { Area } from '@/lib/domain/area';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -27,6 +28,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         >;
         db_dependencies: EntityTable<
             DBDependency & { diagramId: string },
+            'id' // primary key "id" (for the typings only)
+        >;
+        areas: EntityTable<
+            Area & { diagramId: string },
             'id' // primary key "id" (for the typings only)
         >;
         config: EntityTable<
@@ -148,6 +153,19 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             })
     );
 
+    db.version(10).stores({
+        diagrams:
+            '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+        db_tables:
+            '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
+        db_relationships:
+            '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+        db_dependencies:
+            '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
+        areas: '++id, diagramId, name, x, y, width, height, color',
+        config: '++id, defaultDiagramId',
+    });
+
     db.on('ready', async () => {
         const config = await getConfig();
 
@@ -209,6 +227,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             )
         );
 
+        const areas = diagram.areas ?? [];
+        promises.push(
+            ...areas.map((area) => addArea({ diagramId: diagram.id, area }))
+        );
+
         await Promise.all(promises);
     };
 
@@ -217,10 +240,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             includeTables?: boolean;
             includeRelationships?: boolean;
             includeDependencies?: boolean;
+            includeAreas?: boolean;
         } = {
             includeRelationships: false,
             includeTables: false,
             includeDependencies: false,
+            includeAreas: false,
         }
     ): Promise<Diagram[]> => {
         let diagrams = await db.diagrams.toArray();
@@ -252,6 +277,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             );
         }
 
+        if (options.includeAreas) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.areas = await listAreas(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
         return diagrams;
     };
 
@@ -261,10 +295,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             includeTables?: boolean;
             includeRelationships?: boolean;
             includeDependencies?: boolean;
+            includeAreas?: boolean;
         } = {
             includeRelationships: false,
             includeTables: false,
             includeDependencies: false,
+            includeAreas: false,
         }
     ): Promise<Diagram | undefined> => {
         const diagram = await db.diagrams.get(id);
@@ -283,6 +319,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
 
         if (options.includeDependencies) {
             diagram.dependencies = await listDependencies(id);
+        }
+
+        if (options.includeAreas) {
+            diagram.areas = await listAreas(id);
         }
 
         return diagram;
@@ -323,6 +363,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             db.db_tables.where('diagramId').equals(id).delete(),
             db.db_relationships.where('diagramId').equals(id).delete(),
             db.db_dependencies.where('diagramId').equals(id).delete(),
+            db.areas.where('diagramId').equals(id).delete(),
         ]);
     };
 
@@ -504,6 +545,41 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 .delete();
         };
 
+    const addArea: StorageContext['addArea'] = async ({ area, diagramId }) => {
+        await db.areas.add({
+            ...area,
+            diagramId,
+        });
+    };
+
+    const getArea: StorageContext['getArea'] = async ({ diagramId, id }) => {
+        return await db.areas.get({ id, diagramId });
+    };
+
+    const updateArea: StorageContext['updateArea'] = async ({
+        id,
+        attributes,
+    }) => {
+        await db.areas.update(id, attributes);
+    };
+
+    const deleteArea: StorageContext['deleteArea'] = async ({
+        diagramId,
+        id,
+    }) => {
+        await db.areas.where({ id, diagramId }).delete();
+    };
+
+    const listAreas: StorageContext['listAreas'] = async (diagramId) => {
+        return await db.areas.where('diagramId').equals(diagramId).toArray();
+    };
+
+    const deleteDiagramAreas: StorageContext['deleteDiagramAreas'] = async (
+        diagramId
+    ) => {
+        await db.areas.where('diagramId').equals(diagramId).delete();
+    };
+
     return (
         <storageContext.Provider
             value={{
@@ -533,6 +609,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 deleteDependency,
                 listDependencies,
                 deleteDiagramDependencies,
+                addArea,
+                getArea,
+                updateArea,
+                deleteArea,
+                listAreas,
+                deleteDiagramAreas,
             }}
         >
             {children}

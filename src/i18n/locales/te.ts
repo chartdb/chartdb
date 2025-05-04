@@ -43,9 +43,7 @@ export const te: LanguageTranslation = {
             help: {
                 help: 'సహాయం',
                 docs_website: 'డాక్యుమెంటేషన్',
-                visit_website: 'ChartDB సందర్శించండి',
                 join_discord: 'డిస్కార్డ్‌లో మా నుంచి చేరండి',
-                schedule_a_call: 'మాతో మాట్లాడండి!',
             },
         },
 
@@ -152,6 +150,8 @@ export const te: LanguageTranslation = {
                         comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'ఇండెక్స్ గుణాలు',
@@ -210,6 +210,27 @@ export const te: LanguageTranslation = {
                 empty_state: {
                     title: 'ఆధారాలు లేవు',
                     description: 'ప్రారంభించడానికి ఒక వీక్షణ సృష్టించండి',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -409,6 +430,8 @@ export const te: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'కొత్త పట్టిక',
             new_relationship: 'కొత్త సంబంధం',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {

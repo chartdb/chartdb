@@ -42,9 +42,7 @@ export const hi: LanguageTranslation = {
             help: {
                 help: 'मदद',
                 docs_website: 'દસ્તાવેજીકરણ',
-                visit_website: 'ChartDB वेबसाइट पर जाएँ',
                 join_discord: 'हमसे Discord पर जुड़ें',
-                schedule_a_call: 'हमसे बात करें!',
             },
         },
 
@@ -152,6 +150,8 @@ export const hi: LanguageTranslation = {
                         comments: 'टिप्पणियाँ',
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',
+                        // TODO: Translate
+                        character_length: 'Max Length',
                     },
                     index_actions: {
                         title: 'सूचकांक विशेषताएँ',
@@ -210,6 +210,27 @@ export const hi: LanguageTranslation = {
                 empty_state: {
                     title: 'कोई निर्भरता नहीं',
                     description: 'इस अनुभाग में कोई निर्भरता उपलब्ध नहीं है।',
+                },
+            },
+
+            // TODO: Translate
+            areas_section: {
+                areas: 'Areas',
+                add_area: 'Add Area',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No areas found matching your filter.',
+
+                area: {
+                    area_actions: {
+                        title: 'Area Actions',
+                        edit_name: 'Edit Name',
+                        delete_area: 'Delete Area',
+                    },
+                },
+                empty_state: {
+                    title: 'No areas',
+                    description: 'Create an area to get started',
                 },
             },
         },
@@ -407,6 +428,8 @@ export const hi: LanguageTranslation = {
         canvas_context_menu: {
             new_table: 'नई तालिका',
             new_relationship: 'नया संबंध',
+            // TODO: Translate
+            new_area: 'New Area',
         },
 
         table_node_context_menu: {
