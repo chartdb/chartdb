@@ -61,6 +61,8 @@ export const Menu: React.FC<MenuProps> = () => {
         showDependenciesOnCanvas,
         setShowMiniMapOnCanvas,
         showMiniMapOnCanvas,
+        setShowRelationships,
+        showRelationships,
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -145,8 +147,14 @@ export const Menu: React.FC<MenuProps> = () => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
 
-    const emojiAI = '✨';
+    const showOrHideRelationships = useCallback(() => {
+        setShowRelationships(!showRelationships);
+    }, [showRelationships, setShowRelationships]);
 
+    const emojiAI = '✨';
+    console.log(typeof setShowRelationships);
+    console.log(setShowRelationships);
+    console.log("LocalConfig Output:", useLocalConfig);
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
@@ -402,6 +410,12 @@ export const Menu: React.FC<MenuProps> = () => {
                         </MenubarShortcut>
                     </MenubarItem>
                     <MenubarSeparator />
+                    <MenubarItem onClick={showOrHideRelationships}>
+                        {showRelationships
+                            ? t('menu.view.hide_relationships')
+                            : t('menu.view.show_relationships')}
+                    </MenubarItem>
+
                     <MenubarItem onClick={showOrHideCardinality}>
                         {showCardinality
                             ? t('menu.view.hide_cardinality')
