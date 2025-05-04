@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/talk-db.png';
 import imageDark from '@/assets/templates/talk-db-dark.png';
 
+const now = Date.now();
+
 export const talkDb: Template = {
     slug: 'talk-database',
     name: 'Talk',
@@ -38,7 +40,7 @@ export const talkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's7i8ns3s2s90qnwq0f5bhh3os',
@@ -50,7 +52,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ksw3hnnqf8qcbydiyj8mzr62m',
@@ -62,7 +64,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zlv1x0tkmteanxzkr3257c7wc',
@@ -74,7 +76,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nbdsdsizrfnwonyfxitlv9h6a',
@@ -86,7 +88,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f154qz15wvtnf5be9y5di0gt5',
@@ -98,7 +100,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -107,27 +109,27 @@ export const talkDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['gjppm3s63owtj652n7pg98ge1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3ki3fnfhjcacver3wxpk82wyo',
                         name: 'conversations_user_one_foreign',
                         unique: false,
                         fieldIds: ['s7i8ns3s2s90qnwq0f5bhh3os'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '24bjsc5mnqcqx01vidy1hvl3o',
                         name: 'conversations_user_two_foreign',
                         unique: false,
                         fieldIds: ['ksw3hnnqf8qcbydiyj8mzr62m'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hhzhqg75ww5z6hpcclgt744gp',
@@ -146,7 +148,7 @@ export const talkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -155,13 +157,13 @@ export const talkDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['4zee1a93txjpymyykzffgn0yv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p93y0ksa4riotg9brtg3us955',
@@ -180,7 +182,7 @@ export const talkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nm5w9qy0mhqnei6yc1025hwgl',
@@ -193,7 +195,7 @@ export const talkDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lu21oxdkkmgmhcfmitar7t3cn',
@@ -205,7 +207,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y2jmvh0bst26ambmvbs8g3jbt',
@@ -217,7 +219,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e85i74sgx3shtvtew2eavotpa',
@@ -229,7 +231,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1xga79r962mnpd944tugdl4op',
@@ -241,7 +243,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'chqdcj89fyutwbd3e3t2hsnvf',
@@ -253,7 +255,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tk1zdv6msjpuxdo5is0yp66l1',
@@ -265,7 +267,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qhto8ms1z0lz4o9hztfe1v548',
@@ -277,7 +279,7 @@ export const talkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -286,27 +288,27 @@ export const talkDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['ettweqmom2n5fo0uutyffgnq0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0m73imn1n3n3xcnu8qsm8ibdg',
                         name: 'messages_user_id_foreign',
                         unique: false,
                         fieldIds: ['1xga79r962mnpd944tugdl4op'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l1rt2wppy72ihb694ogwz01ep',
                         name: 'messages_conversation_id_foreign',
                         unique: false,
                         fieldIds: ['chqdcj89fyutwbd3e3t2hsnvf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -321,7 +323,7 @@ export const talkDb: Template = {
                 targetFieldId: '4zee1a93txjpymyykzffgn0yv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4uof65m5ev39c3dy016tyhguu',
@@ -334,7 +336,7 @@ export const talkDb: Template = {
                 targetFieldId: 'gjppm3s63owtj652n7pg98ge1',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'de4p0tsu4gs07m76534tomu9k',
@@ -347,7 +349,7 @@ export const talkDb: Template = {
                 targetFieldId: '4zee1a93txjpymyykzffgn0yv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ro7uwskdw8b1mj833n9m82yn9',
@@ -360,7 +362,7 @@ export const talkDb: Template = {
                 targetFieldId: '4zee1a93txjpymyykzffgn0yv',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

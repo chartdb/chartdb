@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/reversion-db.png';
 import imageDark from '@/assets/templates/reversion-db-dark.png';
 
+const now = Date.now();
+
 export const reversionDb: Template = {
     slug: 'reversion-database',
     name: 'Reversion',
@@ -38,7 +40,7 @@ export const reversionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -47,13 +49,13 @@ export const reversionDb: Template = {
                         name: 'django_content_type_pkey',
                         unique: true,
                         fieldIds: ['fz4jkfpns4wgyfdyhw51smsk0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '97rot1dndzf83yt3armaynm66',
@@ -72,7 +74,7 @@ export const reversionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5rcck5wqsezl9mr8y6vwbj9nu',
@@ -84,7 +86,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v3ek62rrsh8gdtr7jpnuremi3',
@@ -96,7 +98,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qs80fnu5l0my70mqr8wrxhxpi',
@@ -108,7 +110,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1tl6ctq3orl37as2egw6as7l2',
@@ -120,7 +122,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '754680oc0l4vnc1cltlg2u6j5',
@@ -132,7 +134,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4zgrxtfln1vbn11g1fksoi71n',
@@ -144,7 +146,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'poog75wj64fgrb3q1llpb5iua',
@@ -156,7 +158,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -170,20 +172,20 @@ export const reversionDb: Template = {
                             '5rcck5wqsezl9mr8y6vwbj9nu',
                             '4zgrxtfln1vbn11g1fksoi71n',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zt2sezsi9e79znlazfd321ld3',
                         name: 'reversion_version_pkey',
                         unique: true,
                         fieldIds: ['oekrmcccwzb4m7yr14sve140y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hlsk0icz2mso3czxx45g7dcbj',
@@ -202,7 +204,7 @@ export const reversionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -211,13 +213,13 @@ export const reversionDb: Template = {
                         name: 'auth_user_pkey',
                         unique: true,
                         fieldIds: ['yrh05ijpg4e0g0catmqipbs0b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'm2bz2erjdddq1gkllitzz85lf',
@@ -236,7 +238,7 @@ export const reversionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ktyja9ud79wjeyow1e6oqtf9y',
@@ -248,7 +250,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'slkveui0isgbxsm0ovktp7p4o',
@@ -260,7 +262,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l27mx98db22pvpl9wx6a6aptx',
@@ -272,7 +274,7 @@ export const reversionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -281,20 +283,20 @@ export const reversionDb: Template = {
                         name: 'reversion_revision_date_created_index',
                         unique: false,
                         fieldIds: ['ktyja9ud79wjeyow1e6oqtf9y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w7eva3mrl7taqschfapaf85sh',
                         name: 'reversion_revision_pkey',
                         unique: true,
                         fieldIds: ['n4ck81ah0i122hwo1temykxov'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -309,7 +311,7 @@ export const reversionDb: Template = {
                 targetFieldId: 'n4ck81ah0i122hwo1temykxov',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bl05eigbvn8h4rsey6ugs949n',
@@ -322,7 +324,7 @@ export const reversionDb: Template = {
                 targetFieldId: 'fz4jkfpns4wgyfdyhw51smsk0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uneee946ch7dq8e6djh40sigv',
@@ -335,7 +337,7 @@ export const reversionDb: Template = {
                 targetFieldId: 'yrh05ijpg4e0g0catmqipbs0b',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

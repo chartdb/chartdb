@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/deployer-db.png';
 import imageDark from '@/assets/templates/deployer-db-dark.png';
 
+const now = Date.now();
+
 export const deployerDb: Template = {
     slug: 'deployer-database',
     name: 'Deployer',
@@ -37,7 +39,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w0ujjkrbxeoyt4psu3h6zvh9z',
@@ -49,7 +51,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '20f03j1ilhb5c48devhclwgbv',
@@ -61,7 +63,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4bbk90orgefkx6h4jii2ww2qc',
@@ -73,7 +75,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zzeso9fxf4uggc7wdgiips5dz',
@@ -85,7 +87,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vyfijbvou7el89bw1hkh0q7vn',
@@ -97,7 +99,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ovqo2c24s50914zukt1s027xx',
@@ -109,7 +111,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'la62q4okxmvlynrz0a1w8w1qz',
@@ -121,7 +123,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eju69l18qxjlltk9ep3wio3u3',
@@ -133,7 +135,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1u3y1vnuarxteq2of21abccjv',
@@ -145,7 +147,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eldjrnuzm613h55fwl0xalve6',
@@ -157,7 +159,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ezvhjzambxbo77qijn3blhyv8',
@@ -169,7 +171,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xewhfw32n77giqz0y7331e7ls',
@@ -181,7 +183,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd2sej8leigfuk9qz3kz3u9luf',
@@ -193,7 +195,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wejwvkib226czg4xa9dwwyukb',
@@ -205,7 +207,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bu3bnfxnn5bvhy4vzmzpu1o92',
@@ -217,7 +219,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -226,20 +228,20 @@ export const deployerDb: Template = {
                         name: 'channels_pkey',
                         unique: true,
                         fieldIds: ['f9ohc9qid17dyg4fk4gm4qakr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'emxl4y5if7fyavysocz73qy8q',
                         name: 'channels_project_id_index',
                         unique: false,
                         fieldIds: ['xewhfw32n77giqz0y7331e7ls'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4sckpwe6zumhst9t7h8i1pskp',
@@ -258,7 +260,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'erhnshvxqdwiyhqiciqgp378i',
@@ -270,7 +272,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'czrmlgydjadiy6qvuel3j0vc5',
@@ -282,7 +284,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o7r6e29mxhx8zp9nqrpsyk43l',
@@ -294,7 +296,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5jmqorw01d0gtl7hkm2uah53k',
@@ -306,7 +308,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b1n4bx3elscdg2iy1zw3jrd3c',
@@ -318,7 +320,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -327,13 +329,13 @@ export const deployerDb: Template = {
                         name: 'failed_jobs_pkey',
                         unique: true,
                         fieldIds: ['60ksc3wytc35otv61a9odm15n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '668m05ywooy1d3jvd3ykle06m',
@@ -352,7 +354,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nu8nxrayqvzy8gn02gjedifvi',
@@ -364,7 +366,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bwn6vcupve5dqprw9uutiumx5',
@@ -376,7 +378,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd691gosews2s22kqnhpj5uawe',
@@ -388,7 +390,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'up03wyi4fftgy4dfj09wintkb',
@@ -400,7 +402,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hpr64r4a546h0vt3cp3e2whew',
@@ -412,7 +414,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3tut5numf9cpf5vz89two05dg',
@@ -424,7 +426,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qq461115etnocsxjfx129txhu',
@@ -436,7 +438,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -445,13 +447,13 @@ export const deployerDb: Template = {
                         name: 'variables_pkey',
                         unique: true,
                         fieldIds: ['xhwlb3b6385opzdsf83q1r3sy'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '83f6ta7tno3xl4m8s2bjp5ke3',
@@ -470,7 +472,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ot6t6rrsb9uw4ehx5il4y4yra',
@@ -482,7 +484,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sy3sx62w71urgdii4rw5y45g6',
@@ -494,7 +496,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pdojjhpzkykx3jhbui2m346y4',
@@ -506,7 +508,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5t3huzzoezlrqk41fjwdz6kst',
@@ -518,7 +520,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5drjb5wh7an7jtr4dr3te06c3',
@@ -530,7 +532,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -539,13 +541,13 @@ export const deployerDb: Template = {
                         name: 'groups_pkey',
                         unique: true,
                         fieldIds: ['hyahsmgodjbbdvwjbjbcm3xp8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8ekqpasxd43b67bwbchapufv6',
@@ -564,7 +566,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'me0q2tjgd7pf0q9mnt8qs63mr',
@@ -576,7 +578,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x5158o1i6j9v5dgmyvs51g7fn',
@@ -588,7 +590,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f6cbm8ih1bqhxm2m3mp804lar',
@@ -600,7 +602,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ei2edtakgygn01psh5mjpt2sf',
@@ -612,7 +614,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ghmagc4sz49vza07hw35nuen6',
@@ -624,7 +626,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -633,20 +635,20 @@ export const deployerDb: Template = {
                         name: 'refs_pkey',
                         unique: true,
                         fieldIds: ['kul7rlewjq4slyti1vo4oolph'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'el5o4omy6kar0oa1ql357t75n',
                         name: 'refs_project_id_index',
                         unique: false,
                         fieldIds: ['f6cbm8ih1bqhxm2m3mp804lar'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '90v9edq3zd7rq8phnkjw4ocwd',
@@ -665,7 +667,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dkvfh3do6fumn7lz22boj4y85',
@@ -677,7 +679,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5v2fbrkkqzh4wz2s8uv9qm3mh',
@@ -689,7 +691,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -698,27 +700,27 @@ export const deployerDb: Template = {
                         name: 'command_server_pkey',
                         unique: true,
                         fieldIds: ['2qddf7umetiwnhkrdyxih0wnh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c0wjm8pivlpa16nxxhyq90ar6',
                         name: 'command_server_command_id_index',
                         unique: false,
                         fieldIds: ['dkvfh3do6fumn7lz22boj4y85'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1gzdbjl4yl6p34nhficno4lp8',
                         name: 'command_server_server_id_index',
                         unique: false,
                         fieldIds: ['5v2fbrkkqzh4wz2s8uv9qm3mh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'by1dj4sn6h8a6wsmk0c79pbpj',
@@ -737,7 +739,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a9yh0petpzba1wyzp8tfr2c0t',
@@ -749,7 +751,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eoi8m5wh7z1i9b6j7rgdfy279',
@@ -761,7 +763,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -770,20 +772,20 @@ export const deployerDb: Template = {
                         name: 'password_resets_email_index',
                         unique: false,
                         fieldIds: ['kkkeybrhauoobprch0lsezfnn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dcl3jfu3jvouj78ys18ggnxe8',
                         name: 'password_resets_token_index',
                         unique: false,
                         fieldIds: ['a9yh0petpzba1wyzp8tfr2c0t'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'desr6l3or0z0c23d1ansyqx2g',
@@ -802,7 +804,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3nzzfdv4jlta4833jitnl7e5r',
@@ -814,7 +816,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u3yfpawdasvpi987r2n531nmb',
@@ -826,7 +828,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tob50lhfpku3jhu4tixxi8v6g',
@@ -838,7 +840,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ri26abjufzczkwsxq9a38ya4k',
@@ -850,7 +852,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hdybkjnde6w7m5jgj783djqh8',
@@ -862,7 +864,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x4z9vbcso7930p0iynmzfw7qy',
@@ -874,7 +876,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ef36657p8f0wfg37ktk5y0tae',
@@ -886,7 +888,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cwqxzt027t3qae3vae75wzfrh',
@@ -898,7 +900,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dhui8vu1bu16xwdviydje9f5h',
@@ -910,7 +912,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c7gs9240vp3zqe6pjhk5ahsy4',
@@ -922,7 +924,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'atcc08gro2f2mzow96m9ny9gw',
@@ -934,7 +936,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kkqu466mac920xctbbyev3ar5',
@@ -946,7 +948,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o9nso9siq5b5tcudu0advqof2',
@@ -958,7 +960,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -967,20 +969,20 @@ export const deployerDb: Template = {
                         name: 'servers_project_id_index',
                         unique: false,
                         fieldIds: ['hdybkjnde6w7m5jgj783djqh8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a530ansy60i6zx42dsfagcmd2',
                         name: 'servers_pkey',
                         unique: true,
                         fieldIds: ['qq2rhrpwjvhhklv3s4o2kbgr2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ief2h0y7swg8st594je9124fw',
@@ -999,7 +1001,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kgfzy8uwrwwadmebqo72m5lr3',
@@ -1011,7 +1013,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5z4aasnbcsbgoqdh2p57ln7cz',
@@ -1023,7 +1025,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ipu1gtrw0y2kjn8paqysr72tg',
@@ -1035,7 +1037,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pypbq33v4r496r3kgxz7bfjip',
@@ -1047,7 +1049,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eo0s6yync2gf3qkpwm6wkhqxl',
@@ -1059,7 +1061,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lofl0hvkrrtvt0ykqsyxmgkrf',
@@ -1071,7 +1073,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ry5tw7b9k32nbq7ped8t7e54u',
@@ -1083,7 +1085,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rxq81opnb400476ponqkr6778',
@@ -1095,7 +1097,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j6b2ykkfoc9rrq2xdbg7wtcme',
@@ -1107,7 +1109,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'foslfndynm8330guzxtk2tj39',
@@ -1119,7 +1121,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1128,27 +1130,27 @@ export const deployerDb: Template = {
                         name: 'heartbeats_project_id_index',
                         unique: false,
                         fieldIds: ['pypbq33v4r496r3kgxz7bfjip'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gsz76qqozjqhtrch9dj0ez7k3',
                         name: 'heartbeats_hash_unique',
                         unique: true,
                         fieldIds: ['5z4aasnbcsbgoqdh2p57ln7cz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdd9rw3n0dv3amtzvxe292sd7',
                         name: 'heartbeats_pkey',
                         unique: true,
                         fieldIds: ['b8ke1pyvlizh4ku7p2i9kc08y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ki5aps07cdlght6ys91p9x2d1',
@@ -1167,7 +1169,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qoelfwxi0lkzmlbmrscet58ow',
@@ -1179,7 +1181,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kj1e6wz46614rn7jj4hyphikt',
@@ -1191,7 +1193,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1200,13 +1202,13 @@ export const deployerDb: Template = {
                         name: 'migrations_pkey',
                         unique: true,
                         fieldIds: ['67c823vl6lizfag4v4toyd0n3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lp5s8bi7ni72guc0vwh8o6gs0',
@@ -1225,7 +1227,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mq0dg9476sdcxepsp2yirjoxw',
@@ -1237,7 +1239,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7g4u3aw3vjh3oma5hia0qsmz7',
@@ -1249,7 +1251,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hfxwlng31qpce6a4mprfqj0fz',
@@ -1261,7 +1263,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1270,13 +1272,13 @@ export const deployerDb: Template = {
                         name: 'templates_pkey',
                         unique: true,
                         fieldIds: ['2t7owqo4fsto4r26pxjwjjb7c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p6nk5ljrh7p1xttixpggfpdx3',
@@ -1295,7 +1297,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pex5yoppzwshpxv076rlfnamq',
@@ -1307,7 +1309,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gvxd18xwhs0vwwale540q2gl4',
@@ -1319,7 +1321,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8dtmbf3qkekv4aiixmd3d7z6a',
@@ -1331,7 +1333,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rc9706f0rx0zlde7bhxhbsugq',
@@ -1343,7 +1345,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3nffw7zcm0kp4dm6d0yjt2kgh',
@@ -1355,7 +1357,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'txxr53re5d5nwg2glfx2ll7yb',
@@ -1367,7 +1369,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u23mzo1yzlophci0s3xt3is7p',
@@ -1379,7 +1381,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1388,13 +1390,13 @@ export const deployerDb: Template = {
                         name: 'shared_files_pkey',
                         unique: true,
                         fieldIds: ['70nl315pusofdktxzhlubkghs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pqd5s6rgzx6cu3ywlw39kq0v6',
@@ -1413,7 +1415,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9c6qnuff64asw24rp8fnc5mlq',
@@ -1425,7 +1427,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xpyptecfk6ygv3i38jt0y9m9y',
@@ -1437,7 +1439,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5pdwt81k2chxzyggt7rm5g4ql',
@@ -1449,7 +1451,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lb0bd56ey88looe8wbeixs9pj',
@@ -1461,7 +1463,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wg8oe5szaknpt8m6qcyrkk1h7',
@@ -1473,7 +1475,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jky8p8v2m2n3tklyqdhspbzeq',
@@ -1485,7 +1487,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rwrs6skwazavg8fx1sl3ikt2c',
@@ -1497,7 +1499,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'duy9ja33pzjge3vhq5p3oetin',
@@ -1509,7 +1511,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'li0vthextg0v7btajecyow2r9',
@@ -1521,7 +1523,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9kx4l30g8cvqp6fdmiklgzs9c',
@@ -1533,7 +1535,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sinhi7ku7trenkpjbmtzurlpd',
@@ -1545,7 +1547,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4l21nrrxomksd95nhvid6xmhi',
@@ -1557,7 +1559,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jegfha3j0c3em366jxwbevdqi',
@@ -1569,7 +1571,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'byoc0ydw6mait47xt0rw6m43c',
@@ -1581,7 +1583,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1590,27 +1592,27 @@ export const deployerDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['jsndkkz9rla8koso6lol9nbce'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xaz0s54tti7fvr9ftzyp7vr47',
                         name: 'users_email_token_index',
                         unique: false,
                         fieldIds: ['li0vthextg0v7btajecyow2r9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ptf01f1hw8f6ihp8o9c9zx0a7',
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['xpyptecfk6ygv3i38jt0y9m9y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ps22x2kkk4oxnmr390u0z4e2u',
@@ -1629,7 +1631,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fyi0sstd6ldeckdv8pqeudh5h',
@@ -1641,7 +1643,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iplg3da87qoq23zapp6r276gf',
@@ -1653,7 +1655,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pqfcuc8p6pq7jaz0j5fudbo70',
@@ -1665,7 +1667,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ghwhk4rz10kokepr6ylbswac',
@@ -1677,7 +1679,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h4fql3x0giql538l8zsep4b1v',
@@ -1689,7 +1691,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eq4sptjq9fs6m34xqvkwfhpa8',
@@ -1701,7 +1703,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1vv1d2jtgyl3121sedrn5bvnv',
@@ -1713,7 +1715,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7rbkt46kvmx74g6nrngdhmw4j',
@@ -1725,7 +1727,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zhei4u1qmzw4se56fgnj4hmzb',
@@ -1737,7 +1739,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mdsduzx9a938tc6k0rull48li',
@@ -1749,7 +1751,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j9qmv4nugajga6ywl6smajuk3',
@@ -1761,7 +1763,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lehdg7hhsfd08lnyzue7dm73d',
@@ -1773,7 +1775,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ageh7uq1cs7h53n4mtmzr7jp8',
@@ -1785,7 +1787,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'guuqk8jcvwmxs763byw1jpy7r',
@@ -1797,7 +1799,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y9uyilnkl29a8dcogbx04rr3w',
@@ -1809,7 +1811,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qoiaw73ua4vrp5rnvdku003fp',
@@ -1821,7 +1823,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't7yrihunfv323t7o4939bspjr',
@@ -1833,7 +1835,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6kv0xuhna29a5aihbqfpxjrde',
@@ -1845,7 +1847,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wixtri3jqs87c1pyt3qm9ef16',
@@ -1857,7 +1859,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1866,20 +1868,20 @@ export const deployerDb: Template = {
                         name: 'projects_pkey',
                         unique: true,
                         fieldIds: ['qvai36lavgafbnt9fk6uoc33z'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '11w4uo4tr5s7va6ghtithc3hk',
                         name: 'projects_group_id_index',
                         unique: false,
                         fieldIds: ['1vv1d2jtgyl3121sedrn5bvnv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pwzd87oqecg4l4rq2tp56x0hr',
@@ -1898,7 +1900,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mrh66tb8k25f6tzprpt300fp5',
@@ -1910,7 +1912,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f7xwt7znbzpq3pokoilxw16a0',
@@ -1922,7 +1924,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yg3dwigysv7te3n32nr14ei0y',
@@ -1934,7 +1936,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mu8tundia5l03b6v67ensw7iy',
@@ -1946,7 +1948,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'klwfkpyxxf9k80o607dxmae3m',
@@ -1958,7 +1960,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1967,27 +1969,27 @@ export const deployerDb: Template = {
                         name: 'deploy_steps_deployment_id_index',
                         unique: false,
                         fieldIds: ['mrh66tb8k25f6tzprpt300fp5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cdj3aw73ylnpkr80dbfkrf6yx',
                         name: 'deploy_steps_command_id_index',
                         unique: false,
                         fieldIds: ['yg3dwigysv7te3n32nr14ei0y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h0p0qsiuyrxebv573d0t7587d',
                         name: 'deploy_steps_pkey',
                         unique: true,
                         fieldIds: ['qrd4301pg0ii4c90xkps23fft'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sfdme1amyqw7ai072wfubwb3o',
@@ -2006,7 +2008,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '712jblkxc6jeim1e0yn3sg8dz',
@@ -2018,7 +2020,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6l9g5wshz8xlhhg7wjhdb8oap',
@@ -2030,7 +2032,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wqflnhfeyesdspe09ru2p3873',
@@ -2042,7 +2044,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kd9dgwwui6uyt49rahaq65qdk',
@@ -2054,7 +2056,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5djhn10k3jntrkl1pk570ymsp',
@@ -2066,7 +2068,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vr83em6zzku098axns8nzjms8',
@@ -2078,7 +2080,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3uml7owrvyev155o70qkhbmos',
@@ -2090,7 +2092,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yn58bta9wpgoiq1mpy140r8cz',
@@ -2102,7 +2104,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2111,13 +2113,13 @@ export const deployerDb: Template = {
                         name: 'config_files_pkey',
                         unique: true,
                         fieldIds: ['7n3i54fc5n80bn3y9tlcxs2mp'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uvy6shi1n0rij8kig2cz7nia9',
@@ -2136,7 +2138,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3if0zpa3bthvrkn4utw7ir5jy',
@@ -2148,7 +2150,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ly2lzq9f2oeu705635fqkcom3',
@@ -2160,7 +2162,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3onfmj2f6s4li4quh6f1cbxlt',
@@ -2172,7 +2174,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ufigmmqcj48o4wmnrllz8ck6',
@@ -2184,7 +2186,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ra3f0eehakj73h1922lfba6o7',
@@ -2196,7 +2198,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rsequf8fu0d1cdxk2jfguu61h',
@@ -2208,7 +2210,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '28mepxebgcuetdnt6yk3dw797',
@@ -2220,7 +2222,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rntyodgj67izun2vb64g2z0nz',
@@ -2232,7 +2234,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mhp3209pemo4jlvoc7vhutbzp',
@@ -2244,7 +2246,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wpbg5uc2evxzsfhgxdhgzi4nz',
@@ -2256,7 +2258,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tizg515puiq7fq3ztz0pn4ugd',
@@ -2268,7 +2270,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lvlx8qc8akqvp2y5rwan4siuw',
@@ -2280,7 +2282,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2289,27 +2291,27 @@ export const deployerDb: Template = {
                         name: 'check_urls_period_index',
                         unique: false,
                         fieldIds: ['9ufigmmqcj48o4wmnrllz8ck6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2f7xl209otl2fjnqwc3aojgiw',
                         name: 'check_urls_pkey',
                         unique: true,
                         fieldIds: ['bdt7blpncponaskuo0q13jglt'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mxbnm8hnucxlgmj8h4h6hlffk',
                         name: 'check_urls_project_id_index',
                         unique: false,
                         fieldIds: ['3onfmj2f6s4li4quh6f1cbxlt'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'x2uxvr8yca09478tcktky2kyq',
@@ -2328,7 +2330,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o6sw3khm9nutebzshexx7zmn4',
@@ -2340,7 +2342,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i6fm7331mm447n6l8tsehzdgb',
@@ -2352,7 +2354,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'srlp98i4pn43z9tuuvg42rged',
@@ -2364,7 +2366,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lyjm94wk3xqyzxw9mqc4oy1vp',
@@ -2376,7 +2378,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0lrf89e48bco9t01trcjtvosd',
@@ -2388,7 +2390,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qy4iii9af770ec67k620cqu99',
@@ -2400,7 +2402,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mlvpesvboktf0zg62yrrgly39',
@@ -2412,7 +2414,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e0sm63fzqrl7epm59mq33apy8',
@@ -2424,7 +2426,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '77y5z5klgy0e1n9pqarogoew0',
@@ -2436,7 +2438,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0nriccox43woyibdtq06f3s50',
@@ -2448,7 +2450,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wnns9xqlqhhqpjl4kl9dvauoh',
@@ -2460,7 +2462,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7nvjaqvr46iartu1uuy4x2h7e',
@@ -2472,7 +2474,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5ygfpknig1fu31l5xu5ylkcqa',
@@ -2484,7 +2486,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8f67xayjk7v2th3bw8dpnvepr',
@@ -2496,7 +2498,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zmicimtk45kk50ylsbxgb9g2h',
@@ -2508,7 +2510,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r2aniic4oxdd502pq6ycm8i6y',
@@ -2520,7 +2522,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2529,27 +2531,27 @@ export const deployerDb: Template = {
                         name: 'deployments_project_id_index',
                         unique: false,
                         fieldIds: ['lyjm94wk3xqyzxw9mqc4oy1vp'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iafcd5ujxgo4sgbfi49zo034u',
                         name: 'deployments_pkey',
                         unique: true,
                         fieldIds: ['g1bmdm0zj362yf440fx0xjfax'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pjyqagcyv4mzf2ry4j32jbi3z',
                         name: 'deployments_user_id_index',
                         unique: false,
                         fieldIds: ['0lrf89e48bco9t01trcjtvosd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yab4uw2i08cmij353j1j4vwgd',
@@ -2568,7 +2570,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '87b3h3d325mq5sr6g0y8yzut6',
@@ -2580,7 +2582,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '85ity9d4lfxix96k1vzulawyd',
@@ -2592,7 +2594,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxcnc9ewosk00ps1clkxshdo3',
@@ -2604,7 +2606,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2616,27 +2618,27 @@ export const deployerDb: Template = {
                             '87b3h3d325mq5sr6g0y8yzut6',
                             '85ity9d4lfxix96k1vzulawyd',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qbzzr0n08iz1gek92pwefut59',
                         name: 'project_user_pkey',
                         unique: true,
                         fieldIds: ['0762omzp19axxn9e8ed7c0f9f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ju21214cjx77vm55esu2dtm7o',
                         name: 'project_user_user_id_index',
                         unique: false,
                         fieldIds: ['85ity9d4lfxix96k1vzulawyd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ycd3l8y48o5dw8ptudqixsozu',
@@ -2655,7 +2657,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fq6f7p5nbh4veumso7uc91gn5',
@@ -2667,7 +2669,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fhsap82lbmi5dq3s9qlw0n87g',
@@ -2679,7 +2681,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vl0tvryhcbivh6890uby261hi',
@@ -2691,7 +2693,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qi7abzlr5sd3g22gcah93nn9p',
@@ -2703,7 +2705,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vj627sxyqqn701tgfx3c8pe4k',
@@ -2715,7 +2717,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '98w2qow9fh9qjxmrb2gtxowqu',
@@ -2727,7 +2729,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gog33ddfjrstom4t2b0qetqnd',
@@ -2739,7 +2741,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r9ny3tw6x32cf3l9c8zvoqm3a',
@@ -2751,7 +2753,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ujoapqoa9scjwm9dzjz900909',
@@ -2763,7 +2765,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'efe5xkh1lsi0509d7oi62c1xc',
@@ -2775,7 +2777,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yb65nzxrrtavx2htbcw1l6p01',
@@ -2787,7 +2789,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '09evlwri3ba5tvbif00q6w3zc',
@@ -2799,7 +2801,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2808,13 +2810,13 @@ export const deployerDb: Template = {
                         name: 'commands_pkey',
                         unique: true,
                         fieldIds: ['5o77yqf9hen4eueflmok3z79d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ydav72qjt9ndoe5hqno3jprgt',
@@ -2833,7 +2835,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'is038tee2vwd0u27msarjju1v',
@@ -2845,7 +2847,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ggcf7he7zbleuribiwmhv99m6',
@@ -2857,7 +2859,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tnmls585s0qqm43074q1ddp0w',
@@ -2869,7 +2871,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '19qh7fzeizh0r184v15bgabpn',
@@ -2881,7 +2883,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2hdphd5x62k52w4guddtmq095',
@@ -2893,7 +2895,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5oj1o5two1c94o2i113ytzcwg',
@@ -2905,7 +2907,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4rwspbncyv0tkfnwm17hkvbcs',
@@ -2917,7 +2919,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qmjqprr8nac8gcdz830u956ex',
@@ -2929,7 +2931,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2938,27 +2940,27 @@ export const deployerDb: Template = {
                         name: 'server_logs_pkey',
                         unique: true,
                         fieldIds: ['aj7lnisalmjnknei25dmlzsfg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '37xxjushwiy9xhgar66xwqki3',
                         name: 'server_logs_server_id_index',
                         unique: false,
                         fieldIds: ['is038tee2vwd0u27msarjju1v'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fanae0vvuuee7swqzqah6j5jv',
                         name: 'server_logs_deploy_step_id_index',
                         unique: false,
                         fieldIds: ['ggcf7he7zbleuribiwmhv99m6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yirpknmae7jnm84eo013exaif',
@@ -2977,7 +2979,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yy1dhg1zb48i98es8kd6iaovw',
@@ -2989,7 +2991,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uhs7x9p3d1qlzikavna0nd5wm',
@@ -3001,7 +3003,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm8di5mmtwvq733fekpamufkqm',
@@ -3013,7 +3015,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qcvjhnyunwqxwd4o8kkpbpcdk',
@@ -3025,7 +3027,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l6zcipexgo4cj4kbusedc0kn5',
@@ -3037,7 +3039,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cs6l6sucrayaw049kxwssaepf',
@@ -3049,7 +3051,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qqj7ra6gi8mbwbzmzr23noy4z',
@@ -3061,7 +3063,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3073,20 +3075,20 @@ export const deployerDb: Template = {
                             'uhs7x9p3d1qlzikavna0nd5wm',
                             'm8di5mmtwvq733fekpamufkqm',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '375kwjon21h8hsk73n2cww6sf',
                         name: 'notifications_pkey',
                         unique: true,
                         fieldIds: ['m6nrbwl2gceh2h9mu9p4nz4f3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zc7z9fom9bs9c1ur5f4ylgaf0',
@@ -3105,7 +3107,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uw9r748bo10c5e09n2jp5k6lp',
@@ -3117,7 +3119,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3yjs0rddyanlf1v8zg9ozb9oe',
@@ -3129,7 +3131,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3138,13 +3140,13 @@ export const deployerDb: Template = {
                         name: 'cache_key_unique',
                         unique: true,
                         fieldIds: ['wnrji10edbmdi9yvt4w3lralr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zmbyu6cupincxfbs1lu2fqb56',
@@ -3163,7 +3165,7 @@ export const deployerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'enxt90se3b8g33sxeshro57jr',
@@ -3175,7 +3177,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0hxeyyuov1eypxv99ki80d61c',
@@ -3187,7 +3189,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zis2srmwokao5sl9ht2nljf41',
@@ -3199,7 +3201,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rczyq4tttg4e1ddcp8gneubiv',
@@ -3211,7 +3213,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pk0s1rq4ga1trephri6u272ux',
@@ -3223,7 +3225,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ak09xoubshesounbcxo2mzp4y',
@@ -3235,7 +3237,7 @@ export const deployerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3247,20 +3249,20 @@ export const deployerDb: Template = {
                             'enxt90se3b8g33sxeshro57jr',
                             'rczyq4tttg4e1ddcp8gneubiv',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vf458rgcridoywfmywucjapfx',
                         name: 'jobs_pkey',
                         unique: true,
                         fieldIds: ['l0fr1fb5ijzd00cywry4ew0aj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -3275,7 +3277,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qrd4301pg0ii4c90xkps23fft',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3xi6f67trl1ki19rm9243zpoj',
@@ -3288,7 +3290,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'jsndkkz9rla8koso6lol9nbce',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a54lzvfnblnxes6y08a2u4wgi',
@@ -3301,7 +3303,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aa500rfclfpr59txu2fvwhjg1',
@@ -3314,7 +3316,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'jsndkkz9rla8koso6lol9nbce',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aejfi8qx1odrkls1kqjqgfgl5',
@@ -3327,7 +3329,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'az04sfoyj5qys7jrni35wiyzw',
@@ -3340,7 +3342,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'cpn7pgr9iwqtbrokvc8h7j0v2',
@@ -3353,7 +3355,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qq2rhrpwjvhhklv3s4o2kbgr2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dw763app1boh95v170tzxkosr',
@@ -3366,7 +3368,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'g1bmdm0zj362yf440fx0xjfax',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e03ox9k94dgbcbs6tyspyx3w0',
@@ -3379,7 +3381,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gquymz5738gr6fa5vv3bl7on5',
@@ -3392,7 +3394,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'hyahsmgodjbbdvwjbjbcm3xp8',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lbua0flzhj1yoa8t2c934c3fm',
@@ -3405,7 +3407,7 @@ export const deployerDb: Template = {
                 targetFieldId: '5o77yqf9hen4eueflmok3z79d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nfdo6njol6p7p3wiykywqj7px',
@@ -3418,7 +3420,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qq2rhrpwjvhhklv3s4o2kbgr2',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ofu6jsw4qyb0py1xjb0ksgcw2',
@@ -3431,7 +3433,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qwqsu3xplxoa9kfzzcul3ljm0',
@@ -3444,7 +3446,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wxakvcy0yqvkf325vs70t2axm',
@@ -3457,7 +3459,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'qvai36lavgafbnt9fk6uoc33z',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ze4ids0m4ruudsupntxdxpfvw',
@@ -3470,7 +3472,7 @@ export const deployerDb: Template = {
                 targetFieldId: 'jsndkkz9rla8koso6lol9nbce',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zngpfczhkh7p2tm8sctydqddx',
@@ -3483,7 +3485,7 @@ export const deployerDb: Template = {
                 targetFieldId: '5o77yqf9hen4eueflmok3z79d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

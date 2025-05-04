@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/gravity-db.png';
 import imageDark from '@/assets/templates/gravity-db-dark.png';
 
+const now = Date.now();
+
 export const gravityDb: Template = {
     slug: 'gravity-database',
     name: 'Gravity',
@@ -39,7 +41,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('invite_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't71dsanwn58iith8b8tp53im7',
@@ -51,7 +53,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7cv6cti6a3xxc4pas8v6icohj',
@@ -63,7 +65,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f42zkm1kgar1udzc03wklzooj',
@@ -75,7 +77,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1koz4znool0h7xpa7icyb7fjk',
@@ -87,7 +89,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cprnsaaipf1u8fl98ikvkouq5',
@@ -99,7 +101,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -108,20 +110,20 @@ export const gravityDb: Template = {
                         name: 'idx_invite_account_id',
                         unique: false,
                         fieldIds: ['f42zkm1kgar1udzc03wklzooj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ki6nfumlxlzujm3696n1sa73t',
                         name: 'invite_pkey',
                         unique: true,
                         fieldIds: ['rqtz6u3w5i3p74ah8m8z4tj35'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gk9doekmajow316hbyavivwwv',
@@ -141,7 +143,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('session_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zg48u21perjt6zjnjlc4xunb3',
@@ -153,7 +155,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zmvylu4kf5c7uupilw0w021k4',
@@ -165,7 +167,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ir70q0c7y02o1v1fd3kugsjvo',
@@ -178,7 +180,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a0ddsvfclpvk7imbied4r1cu2',
@@ -190,7 +192,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -199,27 +201,27 @@ export const gravityDb: Template = {
                         name: 'idx_session_user_id',
                         unique: false,
                         fieldIds: ['zg48u21perjt6zjnjlc4xunb3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kxya0tzg7bxsxcnvainxmwe7o',
                         name: 'session_session_token_key',
                         unique: true,
                         fieldIds: ['zmvylu4kf5c7uupilw0w021k4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2whapij8jgd62ltnjz3kpa8ws',
                         name: 'session_pkey',
                         unique: true,
                         fieldIds: ['u31837ao8oqfnxgzsxtyxxzgo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jsb9c0x12insbcbyrzs23g35k',
@@ -239,7 +241,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('payment_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qn1drhserivlx9s1tpf8y5cio',
@@ -251,7 +253,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mrpfpbrhqow7gs48yzp0r7ewn',
@@ -265,7 +267,7 @@ export const gravityDb: Template = {
                         nullable: false,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i4clo4al2rvt04y5mpja7l54b',
@@ -278,7 +280,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'USD'::character varying",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxbdivmos31159w4hopqs4ssx',
@@ -291,7 +293,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wvkakgqbe1e7kuxt0x5ijhlqd',
@@ -303,7 +305,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '446vs82r1fnpqha150g9vljps',
@@ -315,7 +317,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -324,27 +326,27 @@ export const gravityDb: Template = {
                         name: 'payment_stripe_payment_id_key',
                         unique: true,
                         fieldIds: ['446vs82r1fnpqha150g9vljps'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ljajrsblf5ftmacd3qknu6raj',
                         name: 'payment_pkey',
                         unique: true,
                         fieldIds: ['xwh27vs9i1c2gnpvgxq0bj9l4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7roio8wf5qyd9f7g3ejn3nc45',
                         name: 'idx_payment_account_id',
                         unique: false,
                         fieldIds: ['qn1drhserivlx9s1tpf8y5cio'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'm4uslifnlqy7gi9lz3fi0jipg',
@@ -363,7 +365,7 @@ export const gravityDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'godyosoc7ltnv5pv1nr9qizzk',
@@ -375,7 +377,7 @@ export const gravityDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -387,13 +389,13 @@ export const gravityDb: Template = {
                             'jqbbj4ydwvkmqh1vmchrj0bph',
                             'godyosoc7ltnv5pv1nr9qizzk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o3msgohjwlp3kaho95n1qiq27',
@@ -413,7 +415,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('audit_log_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j86ws1b2vk3vg7bgrwaldimh4',
@@ -425,7 +427,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '71esx919iijcouhgci1e800qb',
@@ -437,7 +439,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2gfltip5xjuth7h6b4q341l9q',
@@ -449,7 +451,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4zxh1jrwzib6sjxvsuxcjigkg',
@@ -461,7 +463,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5q3l9p7b0qmkfvnaxy9ishsos',
@@ -474,7 +476,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -483,27 +485,27 @@ export const gravityDb: Template = {
                         name: 'idx_audit_log_user_id',
                         unique: false,
                         fieldIds: ['j86ws1b2vk3vg7bgrwaldimh4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gvo36aousfdldwi5h9p1720mh',
                         name: 'idx_audit_log_account_id',
                         unique: false,
                         fieldIds: ['71esx919iijcouhgci1e800qb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'daaswvtb2d0zw870tlqrco15s',
                         name: 'audit_log_pkey',
                         unique: true,
                         fieldIds: ['tbkkmuvximi61njydlirw472b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q331uck6xuljg8eud6580zkgk',
@@ -523,7 +525,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('subscription_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vxjx3y7fs8bcaziobvbsamk5a',
@@ -535,7 +537,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uehfwrisn598i89uy0du3xxan',
@@ -547,7 +549,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eg0kwio9mv4hq4sxaso3h2fuv',
@@ -559,7 +561,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hmlalaf4sn3e8vru0u7tne83w',
@@ -572,7 +574,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vfrewl49mc7o53wsqhgw3ixqe',
@@ -584,7 +586,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a4gesvjkg8tzv8vvf0px23dbb',
@@ -596,7 +598,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rh7ks6u1obkt0u98auf4hktra',
@@ -609,7 +611,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sukshs8q95thov4gy2130i5vy',
@@ -622,7 +624,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -631,27 +633,27 @@ export const gravityDb: Template = {
                         name: 'subscription_stripe_subscription_id_key',
                         unique: true,
                         fieldIds: ['a4gesvjkg8tzv8vvf0px23dbb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hldm2oge35zkmk8w7dxoal90n',
                         name: 'subscription_pkey',
                         unique: true,
                         fieldIds: ['ixg46t4ivg30894s7kjpe7zr4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '64irwxp0pxtj423zupblxxf7e',
                         name: 'idx_subscription_account_id',
                         unique: false,
                         fieldIds: ['vxjx3y7fs8bcaziobvbsamk5a'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 't4by2ztfwylasi8nmet2x3n9t',
@@ -670,7 +672,7 @@ export const gravityDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '980pf6mq23c6f9gps4ehq7744',
@@ -682,7 +684,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wpjsjkqk6o6w1kq6o7gxz1m4n',
@@ -694,7 +696,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'muuvx8vrot72zs6yps457jf6r',
@@ -706,7 +708,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7tfqvswgmm1xk3x5d57omgh05',
@@ -719,7 +721,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm2n1gm4q6wbl2c6xuad1x2gr7',
@@ -731,7 +733,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rmsrm9w9qe6yxdmbpnj7d1q98',
@@ -743,7 +745,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wc7ew5zdcllqhahjmnxw92tn4',
@@ -755,7 +757,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j3ljzeav70g5xsu580ggjjfgu',
@@ -767,7 +769,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -776,20 +778,20 @@ export const gravityDb: Template = {
                         name: 'user_pkey',
                         unique: true,
                         fieldIds: ['l1x4mv4x6s9rk80yu10l3t2ex'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'geat7zfrxyzj6kn3z1ss4cxl2',
                         name: 'idx_user_account_id',
                         unique: false,
                         fieldIds: ['j3ljzeav70g5xsu580ggjjfgu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zoj6z1arck84k10h5d6jqaqwk',
@@ -808,7 +810,7 @@ export const gravityDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6uvbmv6ramqj4xzdutx6p65dr',
@@ -820,7 +822,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0m1o9ufnos3thn3s30he72xpp',
@@ -833,7 +835,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pllk2x0btm7ziyyq6uhw0wbh2',
@@ -845,7 +847,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zraia51z4my5c1jbkyp0pt5z6',
@@ -857,7 +859,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '323xuu8dnt4m4xdlm3s4h49xc',
@@ -869,7 +871,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k2yggy3ceu8yzopd79kiq0xw8',
@@ -881,7 +883,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6c88ji50aq3pphoe3q351mhd3',
@@ -894,7 +896,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'true',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -903,13 +905,13 @@ export const gravityDb: Template = {
                         name: 'account_pkey',
                         unique: true,
                         fieldIds: ['kc2gu14qor8iqmmu8who72gak'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zowb74guu354061ruc9y1s2fi',
@@ -929,7 +931,7 @@ export const gravityDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('feature_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8vr1rhrhn8q36qr425rfqncco',
@@ -941,7 +943,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wgiphu9h73k69isoqohu3h56r',
@@ -953,7 +955,7 @@ export const gravityDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mht1g1hqtsfmpe68frmlkenvc',
@@ -966,7 +968,7 @@ export const gravityDb: Template = {
                         unique: false,
                         nullable: false,
                         default: 'now()',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -975,20 +977,20 @@ export const gravityDb: Template = {
                         name: 'feature_name_key',
                         unique: true,
                         fieldIds: ['8vr1rhrhn8q36qr425rfqncco'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cnj5jqbuc51kle06va6fzsv9l',
                         name: 'feature_pkey',
                         unique: true,
                         fieldIds: ['wxrb33d4gjj2876ofa1c74z63'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1003,7 +1005,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'l1x4mv4x6s9rk80yu10l3t2ex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6dko72revj1g6gt126nm6fz1i',
@@ -1016,7 +1018,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'kc2gu14qor8iqmmu8who72gak',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9p3spt9qogvh16fydi375kyvo',
@@ -1029,7 +1031,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'kc2gu14qor8iqmmu8who72gak',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a014dk93xbn9xnkpnx3a4szfu',
@@ -1042,7 +1044,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'kc2gu14qor8iqmmu8who72gak',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c7lp1pi7qlcq7v4p23uwzqb90',
@@ -1055,7 +1057,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'kc2gu14qor8iqmmu8who72gak',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'corebtkudmyruld6t2pxrlo8z',
@@ -1068,7 +1070,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'l1x4mv4x6s9rk80yu10l3t2ex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'g6b82id659sw10k0lgqjfuab9',
@@ -1081,7 +1083,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'kc2gu14qor8iqmmu8who72gak',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zem1jb3t8xvq0z95cyldkfj94',
@@ -1094,7 +1096,7 @@ export const gravityDb: Template = {
                 targetFieldId: 'wxrb33d4gjj2876ofa1c74z63',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

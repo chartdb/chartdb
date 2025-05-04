@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/voyager-db.png';
 import imageDark from '@/assets/templates/voyager-db-dark.png';
 
+const now = Date.now();
+
 export const voyagerDb: Template = {
     slug: 'voyager-database',
     name: 'Voyager',
@@ -38,7 +40,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gp7pd9oxz8h28u5w79w08t7n6',
@@ -50,7 +52,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -62,7 +64,7 @@ export const voyagerDb: Template = {
                             'tlq836h9hxivb3yq5i77j69ef',
                             'gp7pd9oxz8h28u5w79w08t7n6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iqlz39u8dwkvohbi5u1eerx0c',
@@ -72,13 +74,13 @@ export const voyagerDb: Template = {
                             'tlq836h9hxivb3yq5i77j69ef',
                             'gp7pd9oxz8h28u5w79w08t7n6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2sif2077lvh8lr2uo77yzyeii',
@@ -97,7 +99,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '866cjoij6khkeii69jirrj2sr',
@@ -109,7 +111,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -121,7 +123,7 @@ export const voyagerDb: Template = {
                             'thwx0iva7h3hgem71p6vtqyn6',
                             '866cjoij6khkeii69jirrj2sr',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ittdv0rieqz7k1rrf3twv9ldr',
@@ -131,13 +133,13 @@ export const voyagerDb: Template = {
                             'thwx0iva7h3hgem71p6vtqyn6',
                             '866cjoij6khkeii69jirrj2sr',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3pw4sdxkql90vi5u7mvdoktob',
@@ -156,7 +158,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '224bjovak9514xxq5pbrbprzk',
@@ -168,7 +170,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ozex0ne1zzrlbawqfh21c8hvw',
@@ -180,7 +182,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wu5zwyquywdd67kc7r6flj32s',
@@ -192,7 +194,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -201,27 +203,27 @@ export const voyagerDb: Template = {
                         name: 'menus_pkey',
                         unique: true,
                         fieldIds: ['c0bczfmzqu9k4cpzgov0lng6f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zm97cevce5l5rwxgwnmeicsry',
                         name: 'idx_menus_name',
                         unique: true,
                         fieldIds: ['224bjovak9514xxq5pbrbprzk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p3dvnqarvjfylo8nq2qiqm0zh',
                         name: 'menus_name_key',
                         unique: true,
                         fieldIds: ['224bjovak9514xxq5pbrbprzk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9xny68y3a4omranwgmxtjvgwa',
@@ -240,7 +242,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n4o1y6fpnwd61oig4ixth9p93',
@@ -252,7 +254,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yth3oftq6c6uqias880kvr496',
@@ -264,7 +266,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a7e1cdjgp9bmhuig2pgg6wrpi',
@@ -276,7 +278,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eessnq8jusbhibk5odbgzbtqx',
@@ -288,7 +290,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '46uwt65a5w0gqvln2keeb7kot',
@@ -300,7 +302,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xm8189qeooq2zz4df73919p4s',
@@ -312,7 +314,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ontam4xkza1l1yyqiz294igi8',
@@ -324,7 +326,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -333,27 +335,27 @@ export const voyagerDb: Template = {
                         name: 'settings_key_key',
                         unique: true,
                         fieldIds: ['n4o1y6fpnwd61oig4ixth9p93'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ev2om5dzgux2sypq8xsmb30yo',
                         name: 'idx_settings_key',
                         unique: true,
                         fieldIds: ['n4o1y6fpnwd61oig4ixth9p93'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p1tbuvqjvm2xw8vmn8sxmbqaj',
                         name: 'settings_pkey',
                         unique: true,
                         fieldIds: ['xuwdfm8rye2fbzvoqqtc5icd2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bq1341mwagcb890tf14p7wino',
@@ -372,7 +374,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sh3cmr6v9jaz2pm7ukpcx4iak',
@@ -384,7 +386,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '27aojfkpy6wd9pllbea7ewwzh',
@@ -396,7 +398,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'shelnoaw576hdtn861tq1nqv7',
@@ -408,7 +410,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5aecap6tom0131r1szyzmv9hn',
@@ -420,7 +422,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -429,20 +431,20 @@ export const voyagerDb: Template = {
                         name: 'permissions_pkey',
                         unique: true,
                         fieldIds: ['l3l81z01opxlx1vrbw66n3ukr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '93wmh6h1aopfjocf2s8kkl9iq',
                         name: 'idx_permissions_key',
                         unique: false,
                         fieldIds: ['sh3cmr6v9jaz2pm7ukpcx4iak'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c62p7n83ompn9ymxdh0ut37mi',
@@ -461,7 +463,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gsglpwpcyevzl3vcnvmcho8jc',
@@ -473,7 +475,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lb4uh4418dlcpd3on7dmbj3zj',
@@ -485,7 +487,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lzc548ndcxf7n3act5pah4jon',
@@ -497,7 +499,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g7yzle7d88x8kqgi5f2nivx22',
@@ -509,7 +511,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p7i8qw0spw5ggpymcxb3etwt3',
@@ -521,7 +523,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iw1kjqplhig3th5dv72qmorq7',
@@ -533,7 +535,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'luyjxkkpfj1eb8nrc5ieo50x9',
@@ -545,7 +547,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eavsijaizz5hm2akhzsy4xoh9',
@@ -557,7 +559,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's4p8359a244olmbv8dmqrn9xr',
@@ -569,7 +571,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kvot7ci3cqgo7qwz3g859l5ji',
@@ -581,7 +583,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pvz42trdbrei5537gd27z6psu',
@@ -593,7 +595,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cbss6t90171xuo2xfh49ddvm9',
@@ -605,7 +607,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -614,20 +616,20 @@ export const voyagerDb: Template = {
                         name: 'idx_menu_items_menu_id',
                         unique: false,
                         fieldIds: ['gsglpwpcyevzl3vcnvmcho8jc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ae7emzghpk7whst5w3jktff1j',
                         name: 'menu_items_pkey',
                         unique: true,
                         fieldIds: ['x1gzyzjvmrlw2gmh558h6hxhm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'exu5d731v8jmor74nasx6dpni',
@@ -646,7 +648,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'by4c86d10zgqguez74gzo7sw3',
@@ -658,7 +660,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '675we344y0vxmhpyomzndcox7',
@@ -670,7 +672,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0w91b60zwg1kk9kj5mjgvwagi',
@@ -682,7 +684,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '15soydn7izssn6ho1v5hkip4z',
@@ -694,7 +696,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0y0or7u890xjylqug0tb9m1nh',
@@ -706,7 +708,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6eo7rpaen63me6mezohfqvvxn',
@@ -718,7 +720,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uhou516pdoed62obfxsdhg3bv',
@@ -730,7 +732,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ne3gx0mfm00rk48e3629ek3yc',
@@ -742,7 +744,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i99cywl60whlvo0zsac2dczbk',
@@ -754,7 +756,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7nwqa6hh2rq29c6h7zvh2ul88',
@@ -766,7 +768,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bcmcus1ljz3grp4jnro9ffh59',
@@ -778,7 +780,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'toamksw0ekr1wl4vd1cmgcjet',
@@ -790,7 +792,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qaz8jxcd5t5n9otfal6a48328',
@@ -802,7 +804,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ruj36cnwovme0eojyb6m05xkc',
@@ -814,7 +816,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -823,41 +825,41 @@ export const voyagerDb: Template = {
                         name: 'data_types_slug_key',
                         unique: true,
                         fieldIds: ['675we344y0vxmhpyomzndcox7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '04s4lxz2n2y2np8w6stafylja',
                         name: 'idx_data_types_name',
                         unique: true,
                         fieldIds: ['by4c86d10zgqguez74gzo7sw3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2y0i81gkfwbneouaxp48c57iv',
                         name: 'data_types_name_key',
                         unique: true,
                         fieldIds: ['by4c86d10zgqguez74gzo7sw3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's5p0ftwy3g3dvxnq6w18p8l22',
                         name: 'idx_data_types_slug',
                         unique: true,
                         fieldIds: ['675we344y0vxmhpyomzndcox7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a0a4b5gyqdop9c3cuyi1eplot',
                         name: 'data_types_pkey',
                         unique: true,
                         fieldIds: ['zr3susjaamb56ay6low3eka93'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fbbao0vu5gn930dgjq5ebiz41',
@@ -876,7 +878,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l061cbgzdgi0iavknokc2uann',
@@ -888,7 +890,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mnhar9293jk7irk8x8xsdh7ly',
@@ -900,7 +902,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h0q07lo2qychbcnn5c046v6ni',
@@ -912,7 +914,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -921,20 +923,20 @@ export const voyagerDb: Template = {
                         name: 'idx_users_role_id',
                         unique: false,
                         fieldIds: ['mnhar9293jk7irk8x8xsdh7ly'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l902fmigs8760r4rydgzroevt',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['ly4plfmzl9fwrjo252de2uc7k'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nxflaeej0mdn9tze4pl8iy8ko',
@@ -953,7 +955,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kapwgrqerutf97j15kvjaxl8v',
@@ -965,7 +967,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '72t3tligr6g6mwl8zajuzqn3p',
@@ -977,7 +979,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qqrnhig6qaepbfgd90pgm6vcy',
@@ -989,7 +991,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9p5r337v6p7bgf89g8pep807h',
@@ -1001,7 +1003,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's92sgoxbr45t6mjmko05lwjh6',
@@ -1013,7 +1015,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j5s2fbduf0x9p65gncbkcocop',
@@ -1025,7 +1027,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't1cjqs9dgahgbqjzftgeoot89',
@@ -1037,7 +1039,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5eipgftbxz4bbau60u1pt9n06',
@@ -1049,7 +1051,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xr4k425k4jh8cto6as1qnkfks',
@@ -1061,7 +1063,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uewbtb15t3yuy0lbp3umm1lym',
@@ -1073,7 +1075,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qru8xx86q7b26nchrka4rvg0u',
@@ -1085,7 +1087,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e6g49vjqwagbitpf0by0pdbel',
@@ -1097,7 +1099,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1106,20 +1108,20 @@ export const voyagerDb: Template = {
                         name: 'idx_data_rows_data_type_id',
                         unique: false,
                         fieldIds: ['kapwgrqerutf97j15kvjaxl8v'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wgkld0i1vjfdl2rh3399epjww',
                         name: 'data_rows_pkey',
                         unique: true,
                         fieldIds: ['kj9r7d07e1ze1f8dlqmjdnfv6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vazin4dvcl07gkgurawm4xnc5',
@@ -1138,7 +1140,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wt7kxvcosdruydjnj16r8628p',
@@ -1150,7 +1152,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iqghlf4c3prpxxf8tpw64xxfe',
@@ -1162,7 +1164,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0awmbio5zo3ud4lxvyrqld11m',
@@ -1174,7 +1176,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r64ukxh7bq47lm9ob5m6aslr5',
@@ -1186,7 +1188,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1195,13 +1197,13 @@ export const voyagerDb: Template = {
                         name: 'roles_pkey',
                         unique: true,
                         fieldIds: ['xku5gyx3lkv1u9vlbd3ci7u67'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vwu5ku8a490dysv9v1vsy12cy',
@@ -1220,7 +1222,7 @@ export const voyagerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ilxltnf8rq7ro3iw4j19u4bso',
@@ -1232,7 +1234,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bjl0pqfhofuwejs156yy462xw',
@@ -1244,7 +1246,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ey68xrpdm408ov3jpidygwl4q',
@@ -1256,7 +1258,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hkr9wdk18qvjbvvqe1h57u7el',
@@ -1268,7 +1270,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lma9ku3pafx70jtrc440glifv',
@@ -1280,7 +1282,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's3g8tia1iphxrp2iocunkwyy5',
@@ -1292,7 +1294,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5gahw9ck5hdcn5wq0jx49fu8a',
@@ -1304,7 +1306,7 @@ export const voyagerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1316,20 +1318,20 @@ export const voyagerDb: Template = {
                             'ilxltnf8rq7ro3iw4j19u4bso',
                             'bjl0pqfhofuwejs156yy462xw',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6sq9dyw9cglkkseh0a1ksfnu2',
                         name: 'translations_pkey',
                         unique: true,
                         fieldIds: ['o0zxq6p741sgcpdrzws5c35vy'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1344,7 +1346,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'ly4plfmzl9fwrjo252de2uc7k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lk6nm0cwsslxjrebylfor6auk',
@@ -1357,7 +1359,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'l3l81z01opxlx1vrbw66n3ukr',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ml4s6i1ogu6ntqu3midcvk9ms',
@@ -1370,7 +1372,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'xku5gyx3lkv1u9vlbd3ci7u67',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tnyqlok1z1cyi1mqun1pt4frg',
@@ -1383,7 +1385,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'zr3susjaamb56ay6low3eka93',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vzh8yhr8hkgcox0be4f62rkeu',
@@ -1396,7 +1398,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'c0bczfmzqu9k4cpzgov0lng6f',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wlyxfd9i22aff0h5kl70ghubk',
@@ -1409,7 +1411,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'xku5gyx3lkv1u9vlbd3ci7u67',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xfnihczkwlr73a4xli7q14w7h',
@@ -1422,7 +1424,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'luyjxkkpfj1eb8nrc5ieo50x9',
                 sourceCardinality: 'one',
                 targetCardinality: 'many',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ytlc8os0kpjttaqo6wciiax4f',
@@ -1435,7 +1437,7 @@ export const voyagerDb: Template = {
                 targetFieldId: 'xku5gyx3lkv1u9vlbd3ci7u67',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

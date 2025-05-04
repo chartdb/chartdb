@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/freescout-db.png';
 import imageDark from '@/assets/templates/freescout-db-dark.png';
 
+const now = Date.now();
+
 export const freescoutDb: Template = {
     slug: 'freescout-database',
     name: 'Freescout',
@@ -38,7 +40,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gjjurwlyelsbpzd9716ouew71',
@@ -50,7 +52,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fvb4jn6nryd3xcecki3f0adem',
@@ -62,7 +64,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -71,20 +73,20 @@ export const freescoutDb: Template = {
                         name: 'options_pkey',
                         unique: true,
                         fieldIds: ['wvjxiir18rzb12tpywxq8u2ms'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fioogcfks0uwnvy0ejn60rxg4',
                         name: 'options_name_unique',
                         unique: true,
                         fieldIds: ['gjjurwlyelsbpzd9716ouew71'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '49c77bem6qy1p6uh9k4b1wjm7',
@@ -103,7 +105,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2wn5o1j0pn83j4ju7ak88b40i',
@@ -116,7 +118,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0i8c5b03p0lu3prn4mhzngxmh',
@@ -128,7 +130,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xglvo41nmuelh7mktjh2vm207',
@@ -140,7 +142,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5nb5xjsyrhye3oe5z5bjdaq0c',
@@ -152,7 +154,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dw2ynf0y5sof2c6p3z2m78iq4',
@@ -164,7 +166,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u4311lhl90qgy0c1bzgi72mrh',
@@ -176,7 +178,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xv170zj8hcq5t5hslkfuxctmh',
@@ -188,7 +190,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7q1ob0h2kl4dnfmub3b0yz5jv',
@@ -200,7 +202,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -209,20 +211,20 @@ export const freescoutDb: Template = {
                         name: 'ltm_translations_pkey',
                         unique: true,
                         fieldIds: ['88iaspkp9gj6ug6tetlnshz7t'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6tu0bt3lcoxx7zmzseor3oiy6',
                         name: 'ltm_translations_hash_unique',
                         unique: true,
                         fieldIds: ['7q1ob0h2kl4dnfmub3b0yz5jv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5doc1uac1hbcviuulb56ludlu',
@@ -241,7 +243,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bvndnzm3ork5nhjz5nx56ddle',
@@ -253,7 +255,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j9n32i9crqr7yff0boqkzmskd',
@@ -265,7 +267,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0loxug76fip17oxshft21w2tj',
@@ -277,7 +279,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jeeudln0tq4qyhzgyvz8bls5p',
@@ -289,7 +291,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'urffrtumu8qkki7mm8ovkjkdg',
@@ -302,7 +304,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gpsp87mt86vt745jl039o3fmi',
@@ -315,7 +317,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sn2inq4g6fiw8iu6ojy9ine22',
@@ -327,7 +329,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dtt6b96bd36h32hx7ty9cv4vu',
@@ -339,7 +341,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ohpo2f3bw9psqji3w29gja7fl',
@@ -351,7 +353,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ndcicdm3rk158hnd46goyheh4',
@@ -363,7 +365,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't4xmggqoa7ns7qvgs0qlvav6a',
@@ -375,7 +377,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uafj3vr2awbay1k80nj9tfojk',
@@ -387,7 +389,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c9jx8p2rd9wp9ne8d0rulq5y5',
@@ -399,7 +401,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7p2sqa88omzlsy7wd3cxiatpe',
@@ -411,7 +413,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hiee299kuw1x3qbfjlzl59j6w',
@@ -424,7 +426,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zp9pu470z5wtyiz3snczdp5mn',
@@ -436,7 +438,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j5vz3dlkls1sus4fb3bbakzae',
@@ -448,7 +450,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'upy07324hgp5cvrw77l01lqn7',
@@ -460,7 +462,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vuzadiafag7118wtn6rhdfaov',
@@ -472,7 +474,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7gnchreukmdo2twec7vzdml53',
@@ -484,7 +486,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7qw1ebbxua7k7ng9p4kr1zeqw',
@@ -496,7 +498,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '68vr9c7gfzs9lt4jd3goeiq96',
@@ -508,7 +510,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9iec8a3miijh8meq3hpu7ehqf',
@@ -520,7 +522,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e78e1ppr44ane9tmj81ih121d',
@@ -532,7 +534,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'swx0z5rwkh4byv6bybw7hxhvm',
@@ -545,7 +547,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zg5vc37wdzfn7lb7bckfmbao4',
@@ -557,7 +559,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4t976ayxkecsksdu2tv6x3548',
@@ -569,7 +571,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'garm4xj6repcaylsl6v3pznoe',
@@ -581,7 +583,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bnpucmo2kur7qdb4rpplqrbbb',
@@ -593,7 +595,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kw9ytr3avx5fh11e92bwwtkc0',
@@ -605,7 +607,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g13sooh41pynb6847lxeiukfe',
@@ -617,7 +619,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4s2jt0ms6al6ih61pwpktkxfl',
@@ -629,7 +631,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'enqfw025xzjdkwqiilqofafm2',
@@ -642,7 +644,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -656,7 +658,7 @@ export const freescoutDb: Template = {
                             't4xmggqoa7ns7qvgs0qlvav6a',
                             'vuzadiafag7118wtn6rhdfaov',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lhqsdqpvdz5fmxj3aoipfongc',
@@ -666,27 +668,27 @@ export const freescoutDb: Template = {
                             'bvndnzm3ork5nhjz5nx56ddle',
                             'kw9ytr3avx5fh11e92bwwtkc0',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vemck4rmt6tc0u3mpwjnpaupu',
                         name: 'threads_message_id_unique',
                         unique: true,
                         fieldIds: ['zp9pu470z5wtyiz3snczdp5mn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '07tmei69grvcow9a0atpqdk5e',
                         name: 'threads_pkey',
                         unique: true,
                         fieldIds: ['eoqmotrohwt42eiyb0abfuzig'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5nrs72vl175b0dg4jzxqmz7p0',
@@ -705,7 +707,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fq4d4ri3bzzo585s99usp2ri4',
@@ -717,7 +719,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fothihiudtsiow5ke2inyadwj',
@@ -729,7 +731,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5q0koo68awtvd3aw9iqxbibud',
@@ -742,7 +744,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -751,27 +753,27 @@ export const freescoutDb: Template = {
                         name: 'emails_email_unique',
                         unique: true,
                         fieldIds: ['fothihiudtsiow5ke2inyadwj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dwajlbmhsa6nllt05ga9cr0ba',
                         name: 'emails_pkey',
                         unique: true,
                         fieldIds: ['64fk9mr5jo0sr2nbg0ubfy7zp'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's8ty46pwun6obuazpiiy4dphf',
                         name: 'emails_customer_id_index',
                         unique: false,
                         fieldIds: ['fq4d4ri3bzzo585s99usp2ri4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '999ul2ofslgmlcop8x2ulrbbo',
@@ -790,7 +792,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '23epynsuxgfw014z9ntrf0oui',
@@ -802,7 +804,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ehm4pmc96jzab65yqyc3b4nkt',
@@ -814,7 +816,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hpjql782ldwc697lbbc9z4ona',
@@ -826,7 +828,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lfxn2089s0tq32mrbse69dgi1',
@@ -838,7 +840,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8jvm950eu1k1cgd4plsezgzkr',
@@ -850,7 +852,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dgkrdtf2acf5u1cxu3cvlrmc5',
@@ -862,7 +864,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a5sghxgau1z613h83eqzhhg9h',
@@ -874,7 +876,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7y5bqg54i0gcubheqtiuo3ghm',
@@ -886,7 +888,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wqwnf4tp9nim5qui9mehcguhu',
@@ -898,7 +900,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 've81ydho239e63pjclmmqcfqt',
@@ -910,7 +912,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -923,34 +925,34 @@ export const freescoutDb: Template = {
                             'dgkrdtf2acf5u1cxu3cvlrmc5',
                             'wqwnf4tp9nim5qui9mehcguhu',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c6qqhdopf9pwufd9wgpy82za7',
                         name: 'send_logs_pkey',
                         unique: true,
                         fieldIds: ['f7nwunfsnky1ste9siom9ipfu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eins8dsfh9jk89rsrpqshp0y6',
                         name: 'send_logs_message_id_index',
                         unique: false,
                         fieldIds: ['lfxn2089s0tq32mrbse69dgi1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdg3of0ggy5qje9ih4pkjy98y',
                         name: 'send_logs_thread_id_index',
                         unique: false,
                         fieldIds: ['23epynsuxgfw014z9ntrf0oui'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ck9rlrh7d0q0kz2g8sasnam1e',
@@ -969,7 +971,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wr0axmzpid0k1a6ljrk35047d',
@@ -981,7 +983,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hbxej6v8ndlukld9zo4l1vxif',
@@ -993,7 +995,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jazrqbd3vuj11g8y1i5523bd4',
@@ -1006,7 +1008,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'2'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'taj1v619juf7ctffsu2ofngg9',
@@ -1019,7 +1021,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w34fzeowkkolvmgqt12zjcqnl',
@@ -1032,7 +1034,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l9u2f24gbkym2jay5f8x7q5x5',
@@ -1044,7 +1046,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1056,27 +1058,27 @@ export const freescoutDb: Template = {
                             'wr0axmzpid0k1a6ljrk35047d',
                             'hbxej6v8ndlukld9zo4l1vxif',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aq2oponv57e7mmzka9kxhcq1j',
                         name: 'mailbox_user_mailbox_id_index',
                         unique: false,
                         fieldIds: ['wr0axmzpid0k1a6ljrk35047d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bnslbd0s2148irawyerz73viy',
                         name: 'mailbox_user_pkey',
                         unique: true,
                         fieldIds: ['kgkrwtfl00uiv8179oq78tsyr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fwaq7q6re40ggsle69fdcwptd',
@@ -1095,7 +1097,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sma8aa81xpzy8hr94hb6iy8nd',
@@ -1107,7 +1109,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'udjjp3lets8h8rh2mbhfbkj1j',
@@ -1119,7 +1121,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ui5kbuwf76jvccdbwuk5ze5ad',
@@ -1131,7 +1133,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1144,7 +1146,7 @@ export const freescoutDb: Template = {
                             'udjjp3lets8h8rh2mbhfbkj1j',
                             'ui5kbuwf76jvccdbwuk5ze5ad',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0is71abg1j6qlq0w0evv236pc',
@@ -1154,20 +1156,20 @@ export const freescoutDb: Template = {
                             'sma8aa81xpzy8hr94hb6iy8nd',
                             'ui5kbuwf76jvccdbwuk5ze5ad',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yfcw5iytucvylvbf42fxcc6cu',
                         name: 'subscriptions_pkey',
                         unique: true,
                         fieldIds: ['6tgo4yfp3mcldziji2fvq508b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hs1ncg38vva8iyx78uu00ebrk',
@@ -1186,7 +1188,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e9eod13kjb39tr2u4tm7hpbyp',
@@ -1198,7 +1200,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7scmzwm3l8ctn3lqmw5jdms4w',
@@ -1210,7 +1212,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'io2lellevemmqv10pqd1vl3d4',
@@ -1222,7 +1224,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ujqf6r1zt9a0nh2801o9vgdng',
@@ -1234,7 +1236,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'otsgdu1ylolj3pkhj1m3mw2vh',
@@ -1247,7 +1249,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w0c44b2x7nsqzi6gvjq7dooyc',
@@ -1260,7 +1262,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'UTC'::character varying",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p58sdf5dmd994i3echuvey86k',
@@ -1272,7 +1274,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2wpv1d5gjdjdetuyg5kjx53a5',
@@ -1285,7 +1287,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zjfw9pdll2c8lo4b249yrg580',
@@ -1298,7 +1300,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o6wrv33d94oac1gjuqguar5rv',
@@ -1311,7 +1313,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'3'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9mt98nmwr48xg6wrnyrbapajn',
@@ -1323,7 +1325,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wm131n5q09po24eelz0xrqpaq',
@@ -1335,7 +1337,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bhoweqhhii6v7sd13izytwx88',
@@ -1347,7 +1349,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q7kor0yntyj8sin74obgbma8u',
@@ -1359,7 +1361,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kutdi8wqqg7i0lroy9raih6bq',
@@ -1372,7 +1374,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'2'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eavtv35boo1awt1xiwl2e0d32',
@@ -1385,7 +1387,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4ul4b3izw7qs83hg7i3peh71m',
@@ -1398,7 +1400,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f0q58tzju4o0bc3alrtvteok6',
@@ -1410,7 +1412,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jojf42k5kw9s3vz9ovvgiri08',
@@ -1422,7 +1424,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o68pc1bzz1jgn1ueahyymc46o',
@@ -1434,7 +1436,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gub13t4dl6gri6t98j48rxq8l',
@@ -1446,7 +1448,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wbz03xdgx0nx0f76kzhia1wse',
@@ -1458,7 +1460,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1467,34 +1469,34 @@ export const freescoutDb: Template = {
                         name: 'users_status_index',
                         unique: false,
                         fieldIds: ['zjfw9pdll2c8lo4b249yrg580'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f5amec8uu9y0zx08vu9jgc12j',
                         name: 'users_role_index',
                         unique: false,
                         fieldIds: ['otsgdu1ylolj3pkhj1m3mw2vh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gmuzjjxizkrqxr5e61qf6xd9k',
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['io2lellevemmqv10pqd1vl3d4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f9u5n0g4dd24zufncr6kmcvke',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['hu76etb842ke9xnz6lefj9tbj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k35q5gbvcss9hpnoplg3y15z8',
@@ -1513,7 +1515,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vqotkci560hyhggmfu93sa834',
@@ -1525,7 +1527,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o0cx3gl58asxom5lu1p0yczzo',
@@ -1537,7 +1539,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9fl7w5beej8cjwednhgbkfnlr',
@@ -1549,7 +1551,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ftv0bagrgfbqmi6la0g877fb',
@@ -1561,7 +1563,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rk7ol1avjdtqsfhbkr43fham',
@@ -1573,7 +1575,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4xg3snc9qjprwc3qxrb3snmfp',
@@ -1585,7 +1587,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dm3dhlk00rgnt562i0kdj1osy',
@@ -1597,7 +1599,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1609,20 +1611,20 @@ export const freescoutDb: Template = {
                             'o0cx3gl58asxom5lu1p0yczzo',
                             '9fl7w5beej8cjwednhgbkfnlr',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sdwmk10husdnwybx61qqv8ev0',
                         name: 'notifications_pkey',
                         unique: true,
                         fieldIds: ['9ja23zbrvob9x9or8cuc71fyb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k9mp6fjs6syeem2a3ycbzympu',
@@ -1641,7 +1643,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vuaxj0lo3plruguwx35aiuxnr',
@@ -1653,7 +1655,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ppm239fwj3uqfekhdi6imlyzk',
@@ -1665,7 +1667,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1677,20 +1679,20 @@ export const freescoutDb: Template = {
                             'vuaxj0lo3plruguwx35aiuxnr',
                             'ppm239fwj3uqfekhdi6imlyzk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'axtukkaydok024n0fq0080g77',
                         name: 'conversation_folder_pkey',
                         unique: true,
                         fieldIds: ['1xmzqc3jchcfg967bl4zxiejf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lwze3mybnsjl1xeirvk8hqidx',
@@ -1709,7 +1711,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qid5ucko21sg0s3fnny1pnxir',
@@ -1721,7 +1723,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6166tzowpmzawv6yax20u8pxn',
@@ -1733,7 +1735,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ojr5mow9riume822crulq1jjs',
@@ -1745,7 +1747,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bzego18n6wol6lrj44mcelzv1',
@@ -1758,7 +1760,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p0df0gu5jmj91g8sq8oaqm2ti',
@@ -1770,7 +1772,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '92r3ju9d3fbokt61eod6sqaxt',
@@ -1783,7 +1785,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'2'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'njibjsxiygwnh2wj84ptji6b8',
@@ -1796,7 +1798,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'2'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'll6eow20w4d5uj013y3d92dq3',
@@ -1809,7 +1811,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dt4lxu64i36dfg33bjn0je83c',
@@ -1821,7 +1823,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8xg2j6ox3yddha2vz0qpo3mo7',
@@ -1834,7 +1836,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rc3kabjl8drvf138nbum1vzoo',
@@ -1846,7 +1848,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bi2u8candzk3a994xpc99ph4u',
@@ -1858,7 +1860,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'npi783nsza6eby5ho8mfp8zz4',
@@ -1870,7 +1872,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ca4f376nj10exblu7zv6bqga',
@@ -1882,7 +1884,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5uh2k3vfn7entsyag751r2r5e',
@@ -1895,7 +1897,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mivys5pmjfl4cxv7q9bblz3p5',
@@ -1907,7 +1909,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2j0nvhf8neld0tfmed9mpbgw0',
@@ -1920,7 +1922,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '143',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3jdu5y6hcwstx97f6w1tuoat7',
@@ -1932,7 +1934,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bxplo3u19d1vy585zije88hrl',
@@ -1944,7 +1946,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'il0hgfckaoiutw47jqo9uh46s',
@@ -1957,7 +1959,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ybt5nivk2jmjqysn8icnr0rnd',
@@ -1970,7 +1972,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c9p3ydhmu4duvovuca0jwqzpd',
@@ -1983,7 +1985,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nk5tow6nh4hm9me741g3m28uv',
@@ -1995,7 +1997,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yl3afxb1jcxce4osfo1xzns2y',
@@ -2007,7 +2009,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rozwquor95y0fi2mm6syzv51',
@@ -2020,7 +2022,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f9hcxyld8d4izdmg0hqabxarv',
@@ -2033,7 +2035,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '03reu09i44rfsybclip1tgfn6',
@@ -2046,7 +2048,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm9jidpkbwj377fez4o5n8fl8l',
@@ -2058,7 +2060,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9qmbagvrsezsyywhs9h6bk85z',
@@ -2070,7 +2072,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nf7pcwqji5oyouw30hqiq7ktu',
@@ -2082,7 +2084,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pyozbpteexnbow14e49a7hedu',
@@ -2095,7 +2097,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aamwg2ugyrarx1dzfhzspbriu',
@@ -2107,7 +2109,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h1km32j0xkgf3e0jcvwqas5zf',
@@ -2119,7 +2121,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wc2bj6egk8459d300hu1846tq',
@@ -2131,7 +2133,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1fp2ta6e0culxzej7yx55vwkm',
@@ -2143,7 +2145,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pvouz3rckq7h9t00hvzf1pm10',
@@ -2155,7 +2157,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2164,20 +2166,20 @@ export const freescoutDb: Template = {
                         name: 'mailboxes_email_unique',
                         unique: true,
                         fieldIds: ['6166tzowpmzawv6yax20u8pxn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2bikzgeuzlm7ci46wujtn3cfz',
                         name: 'mailboxes_pkey',
                         unique: true,
                         fieldIds: ['84dvf8cmm6mkojeko61t357ba'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nr765aq8164z3ear2qgvftf3z',
@@ -2196,7 +2198,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7bt9q1nl68pj5yurefezv3tez',
@@ -2208,7 +2210,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n1xxf6m4yg0fnwjy9jj5uvujw',
@@ -2221,7 +2223,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3qobeq1v0fb7jvl1f0z0lln64',
@@ -2233,7 +2235,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aumvxyqmyqw54ug7iufqlno6u',
@@ -2245,7 +2247,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pxcn0rmxoey8u8ryngx43gilc',
@@ -2258,7 +2260,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1rqehm98664p9t50m3xi7c4t4',
@@ -2271,7 +2273,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'1'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1vf56n649iui64j4cdplz2ljs',
@@ -2283,7 +2285,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ffvumzmo0wlygqvgn5bl53kbn',
@@ -2295,7 +2297,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '35mrdn2u6a5lbgsv7rnfyw158',
@@ -2307,7 +2309,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ikh75pbksoizqm3p8mg1txcfc',
@@ -2319,7 +2321,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pkh9u70a9grvp4sqyz3tu9tel',
@@ -2331,7 +2333,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5bgphg2d0k17hqkydlzogk3bk',
@@ -2344,7 +2346,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '46kv7f9c4x1r5ecy9huycjkj4',
@@ -2357,7 +2359,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u3grol8sh60auqhmb46il31qt',
@@ -2369,7 +2371,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tzhurk0rph6q6hejh9s1d6lvk',
@@ -2381,7 +2383,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4xhjnw5z8fumbmnhvm5hbik97',
@@ -2393,7 +2395,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4q366uvk8dwm6lpvukcux4vtv',
@@ -2405,7 +2407,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yb2225td88wizr7afzpabbjp8',
@@ -2417,7 +2419,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yzdtfyi7tkndpc9e3h6xa2y3u',
@@ -2429,7 +2431,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1edrmchm5pfcwx0s4ud1oza0z',
@@ -2441,7 +2443,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3pwkzenhe4h1j8l8atndtufn4',
@@ -2453,7 +2455,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a4wanvsqzdvnvce9piy3k7tbc',
@@ -2465,7 +2467,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c9p2kszw4daqdtuhwf2xz09zj',
@@ -2477,7 +2479,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1lrv2tfap1vg8qwm7l990xjfg',
@@ -2489,7 +2491,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4lzvz1joayso8iwnmulwn1ljb',
@@ -2501,7 +2503,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cij21vpcxi2lexyvwkxc8kunm',
@@ -2514,7 +2516,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p7trzn2m7gmv93mfa7jw10k9f',
@@ -2526,7 +2528,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rg3zyfgnmusc9jndupv92ki1w',
@@ -2538,7 +2540,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zcylbd4157xcdlhkgjlend8wu',
@@ -2550,7 +2552,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2559,7 +2561,7 @@ export const freescoutDb: Template = {
                         name: 'conversations_pkey',
                         unique: true,
                         fieldIds: ['1c3g2chxycqcxitfnuvecju9c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qk2qvmjmzbylhh1xi718ijmce',
@@ -2571,7 +2573,7 @@ export const freescoutDb: Template = {
                             'u3grol8sh60auqhmb46il31qt',
                             'tzhurk0rph6q6hejh9s1d6lvk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3qnalruteodf3lh9qwrcu63cc',
@@ -2581,7 +2583,7 @@ export const freescoutDb: Template = {
                             'aumvxyqmyqw54ug7iufqlno6u',
                             'pxcn0rmxoey8u8ryngx43gilc',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nfcg2qvxd61ysikaphtzqq5u3',
@@ -2591,7 +2593,7 @@ export const freescoutDb: Template = {
                             'u3grol8sh60auqhmb46il31qt',
                             '4xhjnw5z8fumbmnhvm5hbik97',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '20esfkwq9lwj6n2sbqo96lmw8',
@@ -2601,13 +2603,13 @@ export const freescoutDb: Template = {
                             'aumvxyqmyqw54ug7iufqlno6u',
                             '1rqehm98664p9t50m3xi7c4t4',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pstuez95unibuz9m432ttiaq8',
@@ -2626,7 +2628,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '05tpurqvc8jub6pzcurtzm206',
@@ -2638,7 +2640,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rzoimc5y1jj9pay6rpd740fhb',
@@ -2650,7 +2652,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uwegfahvabbw2x0kk061e49o0',
@@ -2662,7 +2664,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '75l5au1ale1e2qxmompi4vw6a',
@@ -2675,7 +2677,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'twfvvm1oussu57o6fi9l65hqo',
@@ -2688,7 +2690,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k07pp6jhj3my2zljt135og95m',
@@ -2700,7 +2702,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2713,20 +2715,20 @@ export const freescoutDb: Template = {
                             'rzoimc5y1jj9pay6rpd740fhb',
                             'uwegfahvabbw2x0kk061e49o0',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7j2gzrwsrp5v26jgz3lbzacnd',
                         name: 'folders_pkey',
                         unique: true,
                         fieldIds: ['k99gqhg7bsa198yp9028t67e4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qyo9r01gsrv6snr9xdu3adjce',
@@ -2745,7 +2747,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd8ldgx6jfz5z77tnrb1avjhad',
@@ -2757,7 +2759,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ro0i9aglttom9c58s2vpfygwm',
@@ -2770,7 +2772,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qdu1n54hblp2t69kmyz4iku4d',
@@ -2783,7 +2785,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f8tj1y4elgz8c63p6eqpiq6s0',
@@ -2795,7 +2797,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2804,20 +2806,20 @@ export const freescoutDb: Template = {
                         name: 'modules_pkey',
                         unique: true,
                         fieldIds: ['18hyyonqy50islcv19kcwt862'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e7787gs85efzboqved9kq8jjo',
                         name: 'modules_alias_unique',
                         unique: true,
                         fieldIds: ['d8ldgx6jfz5z77tnrb1avjhad'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'td5w6pn2ug5a57myjs84w01dl',
@@ -2836,7 +2838,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b380a7z8b40ezdi1j6npjeahg',
@@ -2848,7 +2850,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '753k4jnrocvjdv54y583gez9j',
@@ -2860,7 +2862,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2u4epep4q7h2krpt1xtjx09iv',
@@ -2872,7 +2874,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0dz3rzwcqrbup2diz506616je',
@@ -2884,7 +2886,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2893,20 +2895,20 @@ export const freescoutDb: Template = {
                         name: 'polycast_events_created_at_index',
                         unique: false,
                         fieldIds: ['0dz3rzwcqrbup2diz506616je'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm3i89z8aztxswwy331bx1mcr7',
                         name: 'polycast_events_pkey',
                         unique: true,
                         fieldIds: ['e2lp6tusug085wg1acs7w55r9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tvrr6hp9u20zyq3g2snfz9p3s',
@@ -2925,7 +2927,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c69y79id2lwquj5cq0mq7f8i7',
@@ -2937,7 +2939,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '874o91f3v01cbyxvf66rt6hvg',
@@ -2949,7 +2951,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1xjc0sjwavdpb6w8qsb2stu08',
@@ -2961,7 +2963,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2970,7 +2972,7 @@ export const freescoutDb: Template = {
                         name: 'followers_pkey',
                         unique: true,
                         fieldIds: ['34j7ppxntrzak3akfzkgto7pd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x2shxunxkv7x7bc9ts9p6yam3',
@@ -2980,13 +2982,13 @@ export const freescoutDb: Template = {
                             'c69y79id2lwquj5cq0mq7f8i7',
                             '874o91f3v01cbyxvf66rt6hvg',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uqtl4b2c4d6faxn2y5pcsiv9s',
@@ -3005,7 +3007,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'okreroq5gh9kiebykn4x001ca',
@@ -3017,7 +3019,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lp06c5s7c43qngr2kdr62wkhm',
@@ -3029,7 +3031,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '49t2extlae4ke7d2qjaxpdhu7',
@@ -3041,7 +3043,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k3po3jv2gfixd443wgtyq8mqg',
@@ -3053,7 +3055,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'utepj3501xmpmka1tlmgy8mi5',
@@ -3065,7 +3067,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '62mug1bmnhiq8c1j94b0ufagq',
@@ -3077,7 +3079,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9wedla2am4iucpu8m8mgfjqe1',
@@ -3089,7 +3091,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rw4h4n25cbahsputjgplvegxo',
@@ -3101,7 +3103,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uwjmvcu5jr5j4hn60oh4g9vju',
@@ -3113,7 +3115,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3122,20 +3124,20 @@ export const freescoutDb: Template = {
                         name: 'activity_logs_pkey',
                         unique: true,
                         fieldIds: ['x22cjj0vpxh5w650xnxfl4krw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5c6tkfpg1sv0kov3d0cjsn74y',
                         name: 'activity_logs_log_name_index',
                         unique: false,
                         fieldIds: ['okreroq5gh9kiebykn4x001ca'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vukxmild0u6edqfu7mn583tm2',
@@ -3154,7 +3156,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l5pku40a2ej38dqimhalv27u6',
@@ -3166,7 +3168,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gcode5fu8bstohoz8lyb8in51',
@@ -3178,7 +3180,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ncp7qvkk7a0l340f091mxa3ad',
@@ -3190,7 +3192,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '072ghm1l94w05n488h9jonmv9',
@@ -3202,7 +3204,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2tp6ywsli3fm6ce7aks0bp0yw',
@@ -3214,7 +3216,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0tmc3axd5t9aa44eciou97o19',
@@ -3226,7 +3228,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5778shpm2eff1ytowb9upfppz',
@@ -3238,7 +3240,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c7v5vnof9a70zneeym91gxjtk',
@@ -3250,7 +3252,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pu5uc0kk54uzbs24wlylf9eg2',
@@ -3262,7 +3264,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd8zxejqnewhqi6l4khg900d2z',
@@ -3274,7 +3276,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ofqdoqpokxvncigp9q04h0z5s',
@@ -3286,7 +3288,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4pwuubpdhpub39wh0w6zetmam',
@@ -3298,7 +3300,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4hmuod8f07ehnp0tdre6vffov',
@@ -3310,7 +3312,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '437xmeex7pljt3l9ckb53vchn',
@@ -3322,7 +3324,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4zj6y5007m1i108u1pm91oa80',
@@ -3334,7 +3336,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i67a6rg0v7kk6e6510j0b9wot',
@@ -3346,7 +3348,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r92bl4890lazgch07rcdncfa6',
@@ -3358,7 +3360,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6m9kmufzpptwhu4n6jgek3jko',
@@ -3370,7 +3372,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ozuv0sxu2hpdo5dkkn0n7gjfc',
@@ -3382,7 +3384,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xpfza2t9bfbx0rfp9w4h4cz6k',
@@ -3394,7 +3396,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3406,20 +3408,20 @@ export const freescoutDb: Template = {
                             'l5pku40a2ej38dqimhalv27u6',
                             'gcode5fu8bstohoz8lyb8in51',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'om4pbob46f2wmx5ppqo41njcj',
                         name: 'customers_pkey',
                         unique: true,
                         fieldIds: ['sdqj45csi5jx9s5c3puk93ff5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yeat02slxfum25j3xl4476ws9',
@@ -3438,7 +3440,7 @@ export const freescoutDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oklc1xzn486skbhey08khyjib',
@@ -3450,7 +3452,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1n0zjemyudn5u6qq1uw4q97la',
@@ -3462,7 +3464,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hi4r49ggsb6lwzq58werf2m4z',
@@ -3474,7 +3476,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qi94uko7f4z84bn44mt7n4q8i',
@@ -3486,7 +3488,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '154o9mk1m6vymqelb3cnaaz0s',
@@ -3498,7 +3500,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qnmlohtzlkdb0i6gavcunfjqu',
@@ -3510,7 +3512,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'frpcaize0jh4p50kmqf8vo9to',
@@ -3522,7 +3524,7 @@ export const freescoutDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a9132bv83bc1swdoqbyj0bqke',
@@ -3535,7 +3537,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uecj06p85t5cpzywmycurbucn',
@@ -3548,7 +3550,7 @@ export const freescoutDb: Template = {
                         unique: false,
                         nullable: false,
                         default: "'0'::smallint",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3560,20 +3562,20 @@ export const freescoutDb: Template = {
                             'oklc1xzn486skbhey08khyjib',
                             'a9132bv83bc1swdoqbyj0bqke',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pr5oflsbs4h8t7p0gqcecflef',
                         name: 'attachments_pkey',
                         unique: true,
                         fieldIds: ['t2llx2e10neozcknty4mxph8a'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -3588,7 +3590,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'k99gqhg7bsa198yp9028t67e4',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3pv51e2idsxjc6n1rns2zftso',
@@ -3601,7 +3603,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'sdqj45csi5jx9s5c3puk93ff5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4tmqt6e3qsi2fw3f9pu7huvev',
@@ -3614,7 +3616,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'alow3hzw79nt17najsxf9oi9f',
@@ -3627,7 +3629,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'k99gqhg7bsa198yp9028t67e4',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'axr0f3i9vg7hkaf7j68e6xek5',
@@ -3640,7 +3642,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b49iu18vpgq2cfo4509fe2xgl',
@@ -3653,7 +3655,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '1c3g2chxycqcxitfnuvecju9c',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bqw7xws8ybijn46gun5nongot',
@@ -3666,7 +3668,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '84dvf8cmm6mkojeko61t357ba',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'juvy3ibjmjbv1d45usrxy5k7w',
@@ -3679,7 +3681,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'eoqmotrohwt42eiyb0abfuzig',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k0rx46rhs5b65yafs02v218i2',
@@ -3692,7 +3694,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pv7o59t1np1ol1nt4hw3um9n4',
@@ -3705,7 +3707,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '84dvf8cmm6mkojeko61t357ba',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qds6szdl6kzln0k9vy24rpnrj',
@@ -3718,7 +3720,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'sdqj45csi5jx9s5c3puk93ff5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ri2rorvgbga3t8aukzkz44bms',
@@ -3731,7 +3733,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '1c3g2chxycqcxitfnuvecju9c',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rw140tgmcq5don2djypdmma4g',
@@ -3744,7 +3746,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rwbqneeob6z0869g048ds9a5p',
@@ -3757,7 +3759,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '1c3g2chxycqcxitfnuvecju9c',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's1ykexr9gpl1nrz4e8b6jxft9',
@@ -3770,7 +3772,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'sdqj45csi5jx9s5c3puk93ff5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tc5gks8j3c7ew7gqjrj9fqdpo',
@@ -3783,7 +3785,7 @@ export const freescoutDb: Template = {
                 targetFieldId: '84dvf8cmm6mkojeko61t357ba',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'v9dvus9yruh9sz3d6s6txta8s',
@@ -3796,7 +3798,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vb5unhxedgetf958uyfekm35v',
@@ -3809,7 +3811,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vcr0nrk47ldp7by1qoxpwwzpc',
@@ -3822,7 +3824,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xyp92dy9gvuqzq74obdba09k4',
@@ -3835,7 +3837,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'hu76etb842ke9xnz6lefj9tbj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'z3lde2qwwonkk1rtsy62dc2op',
@@ -3848,7 +3850,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'eoqmotrohwt42eiyb0abfuzig',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zr9pevbwgri8lj8m4x8ynohcl',
@@ -3861,7 +3863,7 @@ export const freescoutDb: Template = {
                 targetFieldId: 'sdqj45csi5jx9s5c3puk93ff5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],
