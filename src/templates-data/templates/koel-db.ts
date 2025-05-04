@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/koel-db.png';
 import imageDark from '@/assets/templates/koel-db-dark.png';
 
+const now = Date.now();
+
 export const koelDb: Template = {
     slug: 'koel-database',
     name: 'Koel | koel.dev',
@@ -37,7 +39,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3abesa8irp6uvt1x4sfmihjzj',
@@ -49,7 +51,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eicvvczqhxcu8qvk78i9849mb',
@@ -61,7 +63,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e1ns99weti8sprn5gp2bdbul6',
@@ -73,7 +75,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ur7bpwpch958dqj9j2bs7uhb6',
@@ -85,7 +87,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gtqceud0jsipodny36jxfnrew',
@@ -97,7 +99,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0m31hmm0u9casjsn3cs33flz4',
@@ -109,7 +111,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uf2dr9j761tpjlvwn2uwec5pz',
@@ -121,7 +123,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '20ykyg1qzqxxgxwb60mpox4jg',
@@ -133,7 +135,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -142,27 +144,27 @@ export const koelDb: Template = {
                         name: 'users_email_key',
                         unique: true,
                         fieldIds: ['eicvvczqhxcu8qvk78i9849mb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wwks490rjdhpfvg2il92qq2cs',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['dsfw2sbft9slcl5uvwoagzb10'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kyx1x39649qdy38nm69totuy3',
                         name: 'idx_users_email',
                         unique: true,
                         fieldIds: ['eicvvczqhxcu8qvk78i9849mb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6wwb5b3z1yhbqjudyd2ozmgxl',
@@ -181,7 +183,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u7w5k1el47l8egyxc86gd6jc7',
@@ -193,7 +195,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3cn1tmjt5pvelsmjfz3abukdv',
@@ -205,7 +207,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -214,20 +216,20 @@ export const koelDb: Template = {
                         name: 'password_resets_pkey',
                         unique: true,
                         fieldIds: ['drysxyola6lz0lnp684ko3pjk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hh2s78ps7e1a23fifj996fyr3',
                         name: 'idx_password_resets_token',
                         unique: false,
                         fieldIds: ['u7w5k1el47l8egyxc86gd6jc7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'blosecajwasyvqjym6i9w9qpu',
@@ -246,7 +248,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3z6yf3bikh7nz7ntdyhspgfzc',
@@ -258,7 +260,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'byd351vas0hiweidg32wtuifx',
@@ -270,7 +272,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i0f9eo819w5gao3gp3d4wea5l',
@@ -282,7 +284,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gev1ewcz1vfkuzfbeuypu2fvq',
@@ -294,7 +296,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h34fmivxjajhzv9pmkeh4g1sx',
@@ -306,7 +308,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r2bwk69a7rc02guzmkimyt9up',
@@ -318,7 +320,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -327,27 +329,27 @@ export const koelDb: Template = {
                         name: 'idx_interactions_user_id',
                         unique: false,
                         fieldIds: ['3z6yf3bikh7nz7ntdyhspgfzc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o6tcpz3dy4qc010kt8feuav0r',
                         name: 'idx_interactions_song_id',
                         unique: false,
                         fieldIds: ['byd351vas0hiweidg32wtuifx'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iocl25ciua2tck0r6wb9iwues',
                         name: 'interactions_pkey',
                         unique: true,
                         fieldIds: ['974h8bnm4otod49y616fh2ala'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lo0qu9vhj7p4ivtmh75ianitt',
@@ -366,7 +368,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '77y6dxcb2cde1psxpd61ap76k',
@@ -378,7 +380,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '94kdt7yzrf3k75maep4myfo5i',
@@ -390,7 +392,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxnj4wg1lzndsbm0llsqvpqdc',
@@ -402,7 +404,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kfcpj5hcuv56emsbzok563nqn',
@@ -414,7 +416,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -423,13 +425,13 @@ export const koelDb: Template = {
                         name: 'artists_pkey',
                         unique: true,
                         fieldIds: ['ti4sfv1s5irkk0smwyeqghnwu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nu0rl3kwie8fdyksen9197hj6',
@@ -448,7 +450,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hta8e699svku3h4n53ivaj4g3',
@@ -460,7 +462,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -469,13 +471,13 @@ export const koelDb: Template = {
                         name: 'settings_pkey',
                         unique: true,
                         fieldIds: ['o5wrzxdkjufdd2vkyigqg63a9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'omv1l5zyi5min10iiew33qirs',
@@ -494,7 +496,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '61a72o357ug9sy3aet0bwshuk',
@@ -506,7 +508,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dptnuqmbmkvag5xm9x2196m02',
@@ -518,7 +520,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u2iantg6xnxh51ix063oc1770',
@@ -530,7 +532,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1sflvykljwzee9plha0mjj26x',
@@ -542,7 +544,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rcezbd00izo9ccs9i545ghckw',
@@ -554,7 +556,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -563,27 +565,27 @@ export const koelDb: Template = {
                         name: 'albums_pkey',
                         unique: true,
                         fieldIds: ['ljeeuqyeymidghrhx3ehe4ti8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e81lqj13sborcqsw5ft06bx8q',
                         name: 'idx_albums_artist_id',
                         unique: false,
                         fieldIds: ['61a72o357ug9sy3aet0bwshuk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qensm7inbwdcl3ygjmfr8759g',
                         name: 'idx_albums_name',
                         unique: false,
                         fieldIds: ['dptnuqmbmkvag5xm9x2196m02'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'paxmza7oe241fr0h2hnd1xm09',
@@ -602,7 +604,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z4s5q33u5a6rloboajmppx56c',
@@ -614,7 +616,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i2u2vlrmhvlhn784edu4gtt7s',
@@ -626,7 +628,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '33y6q9dme2jd50bg83uqp0q3m',
@@ -638,7 +640,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q310bhlz6c9xzub8mkrm29hqx',
@@ -650,7 +652,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's565m6ikpm2uazuqa7nzponr5',
@@ -662,7 +664,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qigp8rhr2ricakvwu34t117bg',
@@ -674,7 +676,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ekt5sbi2o5svximhvxfblb33o',
@@ -686,7 +688,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xolimy8jr9nr592hg221eotq2',
@@ -698,7 +700,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -707,13 +709,13 @@ export const koelDb: Template = {
                         name: 'personal_access_tokens_pkey',
                         unique: true,
                         fieldIds: ['aq9twy83aoqaul4heuaaa8f7v'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'w5gjpa758vhjygti5ciu97ri0',
@@ -732,7 +734,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ttehfu91qsa1zt3ykewg76e1l',
@@ -744,7 +746,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'grzqydghd11b9x4pjmxax3npv',
@@ -756,7 +758,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'djv785sm2nrz4mdyjx0xlttck',
@@ -768,7 +770,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fyb7h2qy9puc07k7di0fktqpu',
@@ -780,7 +782,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ns7garupvsu2d21mwrtfurka3',
@@ -792,7 +794,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -801,13 +803,13 @@ export const koelDb: Template = {
                         name: 'playlists_pkey',
                         unique: true,
                         fieldIds: ['cmpkn7oc4tnqfbr5jdmr5afpc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wey7nxcmp4i5t0lgdgb2t4bz8',
@@ -826,7 +828,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2xdwpb6f4k92vdvfufnfq6501',
@@ -838,7 +840,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6n9sm4zkioh6umrwcp4q53edl',
@@ -850,7 +852,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm2d7lyuj0jhf56v25o2evbb74',
@@ -862,7 +864,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm1tjxhkl7sytoy52gur7ju2l8',
@@ -874,7 +876,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ke3vqdtesh2n99vm9xhhhj36i',
@@ -886,7 +888,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'brxi1kk957vt1gs7p119q4ua5',
@@ -898,7 +900,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4xvqdttz0jg7rr28h04em27t0',
@@ -910,7 +912,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hpwn8nsv9bujobedafkkji9d0',
@@ -922,7 +924,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1k3f7rakospztma47o266688p',
@@ -934,7 +936,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd20l6vp0hzmqe1jisoxlexld5',
@@ -946,7 +948,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rxra5l5wmc2veejsl2s766bb4',
@@ -958,7 +960,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -967,14 +969,14 @@ export const koelDb: Template = {
                         name: 'songs_pkey',
                         unique: true,
                         fieldIds: ['3zwecxjaci6fczjfpmh22q6wh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xn7q1yixlkbd88zkt2jqd3agj',
                         name: 'idx_songs_title',
                         unique: false,
                         fieldIds: ['m2d7lyuj0jhf56v25o2evbb74'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e6txu6v4n24zy2n3oxzuk683x',
@@ -984,14 +986,14 @@ export const koelDb: Template = {
                             'ke3vqdtesh2n99vm9xhhhj36i',
                             'brxi1kk957vt1gs7p119q4ua5',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ks55ojbbg4a3w7h46azbgidy',
                         name: 'idx_songs_artist_id',
                         unique: false,
                         fieldIds: ['6n9sm4zkioh6umrwcp4q53edl'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nihozcellgl5qw8cw7n5kr9aw',
@@ -1001,20 +1003,20 @@ export const koelDb: Template = {
                             'ke3vqdtesh2n99vm9xhhhj36i',
                             'brxi1kk957vt1gs7p119q4ua5',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '60mhs0dxqhrp5pi2ehmsqgkht',
                         name: 'idx_songs_album_id',
                         unique: false,
                         fieldIds: ['2xdwpb6f4k92vdvfufnfq6501'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wwvgva66b5wxe3gmu3jthz3kd',
@@ -1033,7 +1035,7 @@ export const koelDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qcz9l2vw7d28kangjrcf1857l',
@@ -1045,7 +1047,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5ktgtio3chmwbraiyjkyf6wvn',
@@ -1057,7 +1059,7 @@ export const koelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1066,20 +1068,20 @@ export const koelDb: Template = {
                         name: 'idx_playlist_song_playlist_id',
                         unique: false,
                         fieldIds: ['qcz9l2vw7d28kangjrcf1857l'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qvz9kxu2xbvk5pprj13syrpj0',
                         name: 'playlist_song_pkey',
                         unique: true,
                         fieldIds: ['xgmoikmpcqy428acquoni733u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1094,7 +1096,7 @@ export const koelDb: Template = {
                 targetFieldId: 'ljeeuqyeymidghrhx3ehe4ti8',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8xjzzb5qvbhsc0an6krl543ps',
@@ -1107,7 +1109,7 @@ export const koelDb: Template = {
                 targetFieldId: 'dsfw2sbft9slcl5uvwoagzb10',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9tdfvffhqqbgtk1yogt7zy7k2',
@@ -1120,7 +1122,7 @@ export const koelDb: Template = {
                 targetFieldId: 'ti4sfv1s5irkk0smwyeqghnwu',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd1oa9279d9xji8b5tr1igfa9f',
@@ -1133,7 +1135,7 @@ export const koelDb: Template = {
                 targetFieldId: 'cmpkn7oc4tnqfbr5jdmr5afpc',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ei8makn2vhtzlr51yvpilqncx',
@@ -1146,7 +1148,7 @@ export const koelDb: Template = {
                 targetFieldId: '3zwecxjaci6fczjfpmh22q6wh',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ff5gcorrrowpaovxb5ggg1eby',
@@ -1159,7 +1161,7 @@ export const koelDb: Template = {
                 targetFieldId: 'dsfw2sbft9slcl5uvwoagzb10',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rcobiwp1wuqk2v7tvcfzy91qs',
@@ -1172,7 +1174,7 @@ export const koelDb: Template = {
                 targetFieldId: 'ti4sfv1s5irkk0smwyeqghnwu',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

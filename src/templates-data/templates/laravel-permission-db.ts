@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/laravel-permission-db.png';
 import imageDark from '@/assets/templates/laravel-permission-db-dark.png';
 
+const now = Date.now();
+
 export const laravelPermissionDb: Template = {
     slug: 'laravel-permission-database',
     name: 'Laravel Permission',
@@ -38,7 +40,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zmecmt42pnfcvm60fymzzvb4a',
@@ -50,7 +52,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qaq3tbo01ijru1x03f3kg1evr',
@@ -62,7 +64,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y9d6p7p7easu8soxbu6t3eydc',
@@ -74,7 +76,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qoci8vbx8jvoqmdtnmpany9gb',
@@ -86,7 +88,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -95,7 +97,7 @@ export const laravelPermissionDb: Template = {
                         name: 'roles_pkey',
                         unique: true,
                         fieldIds: ['poke4psscnh9kcnjhksaaujnf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'spqunz0hxv2bg874w0m1y36r4',
@@ -105,13 +107,13 @@ export const laravelPermissionDb: Template = {
                             'zmecmt42pnfcvm60fymzzvb4a',
                             'qaq3tbo01ijru1x03f3kg1evr',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4bfk337wvmggh25gtuv9xu2l2',
@@ -130,7 +132,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zxtynvat7f4oxf2c1zpqal1fk',
@@ -142,7 +144,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r5bioxa56ghm7mlk4r9x9a5o6',
@@ -154,7 +156,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -166,7 +168,7 @@ export const laravelPermissionDb: Template = {
                             'o6hhvn4ygrxnqnrzt3078st9i',
                             'zxtynvat7f4oxf2c1zpqal1fk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8vdxiolssrpakzuv7twx3yk5o',
@@ -177,7 +179,7 @@ export const laravelPermissionDb: Template = {
                             'r5bioxa56ghm7mlk4r9x9a5o6',
                             'zxtynvat7f4oxf2c1zpqal1fk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l00lk7nit3rr3rja4jzwpbg9z',
@@ -187,13 +189,13 @@ export const laravelPermissionDb: Template = {
                             'r5bioxa56ghm7mlk4r9x9a5o6',
                             'zxtynvat7f4oxf2c1zpqal1fk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd1ehpum03i9bnnfawx9rq3zq7',
@@ -212,7 +214,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hghqz8b4rcwkmp90xzxgcvtnq',
@@ -224,7 +226,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xmqnxspc9au3kr8ii4a58xm9y',
@@ -236,7 +238,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -248,7 +250,7 @@ export const laravelPermissionDb: Template = {
                             'xmqnxspc9au3kr8ii4a58xm9y',
                             'hghqz8b4rcwkmp90xzxgcvtnq',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9h1sf1k29qbz3sv2itdfrk4dk',
@@ -259,7 +261,7 @@ export const laravelPermissionDb: Template = {
                             'xmqnxspc9au3kr8ii4a58xm9y',
                             'hghqz8b4rcwkmp90xzxgcvtnq',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c86wjo6kj2ovehsxxa2enllp9',
@@ -269,13 +271,13 @@ export const laravelPermissionDb: Template = {
                             '6jgasj9vo69w60b5237un1zx3',
                             'hghqz8b4rcwkmp90xzxgcvtnq',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'n1ybvm5upr14p0628603p30f7',
@@ -294,7 +296,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ax62xq5y074x11xlo5fgilbxw',
@@ -306,7 +308,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -318,7 +320,7 @@ export const laravelPermissionDb: Template = {
                             '5gweun1ja59v4j0iwew7qtmug',
                             'ax62xq5y074x11xlo5fgilbxw',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'upkdmo20fjun4mliamza4hddh',
@@ -328,13 +330,13 @@ export const laravelPermissionDb: Template = {
                             '5gweun1ja59v4j0iwew7qtmug',
                             'ax62xq5y074x11xlo5fgilbxw',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's6ocy1b7i68o367j8f3jpp0x9',
@@ -353,7 +355,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p6w2uqym56yh11li8j7ie80y6',
@@ -365,7 +367,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdg8mlkz9xv23yigbev3548o1',
@@ -377,7 +379,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lnuejviuvqhbe5xis5lx6g88u',
@@ -389,7 +391,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6e7k9krkbuw3mu50j1l2j1a5p',
@@ -401,7 +403,7 @@ export const laravelPermissionDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -413,20 +415,20 @@ export const laravelPermissionDb: Template = {
                             'p6w2uqym56yh11li8j7ie80y6',
                             'kdg8mlkz9xv23yigbev3548o1',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6kwd6xdwm5ffff0e6nc0pth9d',
                         name: 'permissions_pkey',
                         unique: true,
                         fieldIds: ['xbh22rbm01xf67vlb4iob7s2m'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -441,7 +443,7 @@ export const laravelPermissionDb: Template = {
                 targetFieldId: 'xbh22rbm01xf67vlb4iob7s2m',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pqohktmdce5leh9xy89an1dvu',
@@ -454,7 +456,7 @@ export const laravelPermissionDb: Template = {
                 targetFieldId: 'poke4psscnh9kcnjhksaaujnf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qyuoq0fn7j2ldvt9952o5quom',
@@ -467,7 +469,7 @@ export const laravelPermissionDb: Template = {
                 targetFieldId: 'poke4psscnh9kcnjhksaaujnf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'td5vwiqogewiwky7uexog5hj1',
@@ -480,7 +482,7 @@ export const laravelPermissionDb: Template = {
                 targetFieldId: 'xbh22rbm01xf67vlb4iob7s2m',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

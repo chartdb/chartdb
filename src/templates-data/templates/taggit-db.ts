@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/taggit-db.png';
 import imageDark from '@/assets/templates/taggit-db-dark.png';
 
+const now = Date.now();
+
 export const taggitDb: Template = {
     slug: 'taggit-database',
     name: 'Taggit',
@@ -38,7 +40,7 @@ export const taggitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pup36l9w97keiae4vfw56igsb',
@@ -50,7 +52,7 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '19dp43bm6ux6lus333j9sny6x',
@@ -62,7 +64,7 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w9yfpzpeupxjgzw65o4zf04qf',
@@ -74,7 +76,7 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -83,27 +85,27 @@ export const taggitDb: Template = {
                         name: 'taggit_taggeditem_object_id_index',
                         unique: false,
                         fieldIds: ['w9yfpzpeupxjgzw65o4zf04qf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0jvg6v0k20rgw3mbonj70mine',
                         name: 'taggit_taggeditem_tag_id_index',
                         unique: false,
                         fieldIds: ['pup36l9w97keiae4vfw56igsb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l0zz5xoktlxbyeit6jlne9ao2',
                         name: 'taggit_taggeditem_pkey',
                         unique: true,
                         fieldIds: ['ltcc5pkb4ooq63foi63gdtb3c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'y07r6qa7swxs31geu6evcyaor',
@@ -122,7 +124,7 @@ export const taggitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z3ybcuhf577pxfxprhbio3376',
@@ -134,7 +136,7 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bqigt5quu06yv8m8ocb6acp81',
@@ -146,7 +148,7 @@ export const taggitDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -155,27 +157,27 @@ export const taggitDb: Template = {
                         name: 'taggit_tag_slug_unique',
                         unique: true,
                         fieldIds: ['bqigt5quu06yv8m8ocb6acp81'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cta41zix0hvmckn4opnr3f960',
                         name: 'taggit_tag_name_unique',
                         unique: true,
                         fieldIds: ['z3ybcuhf577pxfxprhbio3376'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '32fplxrl5adx6fj9m8e718fvm',
                         name: 'taggit_tag_pkey',
                         unique: true,
                         fieldIds: ['yqa1ei8zqjiere7ism4x161by'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -190,7 +192,7 @@ export const taggitDb: Template = {
                 targetFieldId: 'yqa1ei8zqjiere7ism4x161by',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

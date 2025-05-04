@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/pay-rails-db.png';
 import imageDark from '@/assets/templates/pay-rails-db-dark.png';
 
+const now = Date.now();
+
 export const payRailsDb: Template = {
     slug: 'pay-rails-database',
     name: 'Pay-Rails',
@@ -39,7 +41,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('pay_merchants_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cjs9abnqnmgs2q52b5xrwryxb',
@@ -51,7 +53,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jwnnw10whuupmv38cq7awhdzi',
@@ -63,7 +65,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'boar043p9e616uj978eg3vxhm',
@@ -75,7 +77,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ryynbt8i3i98t53jbaz5nalw',
@@ -87,7 +89,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '22xrohu0rajq9gpw1ancpwcsw',
@@ -99,7 +101,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2u1pmcizr6fvuad4q1lrfh97s',
@@ -111,7 +113,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wzhrq6f5x0wnr4y88pdcunons',
@@ -123,7 +125,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bzpzc67r80gpd8lqck3d0lbup',
@@ -135,7 +137,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zhfpqp513y4p0qufy0texbmv8',
@@ -147,7 +149,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -160,20 +162,20 @@ export const payRailsDb: Template = {
                             'jwnnw10whuupmv38cq7awhdzi',
                             'boar043p9e616uj978eg3vxhm',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ti2lj97oy2trnkmimh84el31f',
                         name: 'pay_merchants_pkey',
                         unique: true,
                         fieldIds: ['8ekvepjc55cftsj1h45hl558z'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aliqiks5f2gm4du9io27jf1vy',
@@ -193,7 +195,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('pay_charges_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pv5smlh4qam1xwyxoq49ncuy8',
@@ -205,7 +207,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'akm13624gviyp0hv9c2avabm5',
@@ -217,7 +219,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fyfgp04eccrc26sqoe2wnazwj',
@@ -229,7 +231,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8gdaxumxkc4oi2h5zndx07x5g',
@@ -241,7 +243,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rlbora1bq97wtbvzguftgld6v',
@@ -253,7 +255,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vg6xo8x1dyyqd7e252lyle9ue',
@@ -265,7 +267,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ahzsr28rkbovn9nfyeb76stq',
@@ -277,7 +279,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6duiemcip5mc11jv3oueln5vz',
@@ -289,7 +291,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'umgjft3z8y0nis2d1efk3r2ht',
@@ -301,7 +303,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hq18d1r3u4xpvwc9ois4zsd8c',
@@ -313,7 +315,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ryr4lfylm1d9shrj5l33ujnb',
@@ -325,7 +327,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hg5evq1b23xa1c25t7gmty8eu',
@@ -337,7 +339,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1kdt1o72szxzqknuakkfnyddk',
@@ -349,7 +351,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -361,7 +363,7 @@ export const payRailsDb: Template = {
                             'pv5smlh4qam1xwyxoq49ncuy8',
                             'fyfgp04eccrc26sqoe2wnazwj',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tjmemqg6g1341anehom2fos0j',
@@ -371,27 +373,27 @@ export const payRailsDb: Template = {
                             'pv5smlh4qam1xwyxoq49ncuy8',
                             'fyfgp04eccrc26sqoe2wnazwj',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3xb43ra3n772qv8sjnq39e79c',
                         name: 'pay_charges_pkey',
                         unique: true,
                         fieldIds: ['rxmlheh0hosh2ihr1em9q65nc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ba87tb4w5u47p3zltm4zbdpfw',
                         name: 'index_pay_charges_on_subscription_id',
                         unique: false,
                         fieldIds: ['akm13624gviyp0hv9c2avabm5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'eqjebesocq7ajoo07rk40drl9',
@@ -412,7 +414,7 @@ export const payRailsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('pay_subscriptions_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1jb9hyb9oqqtxaxkci7f7j2gn',
@@ -424,7 +426,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tdp0gw6xuwlkohullyuf39jw9',
@@ -436,7 +438,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'btl3xxlsojtgcz9hed8nxjzid',
@@ -448,7 +450,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bpkhtqlfyt549dm20c6yuldj6',
@@ -460,7 +462,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7bgunf95c1zbx37ymp6hc5voi',
@@ -473,7 +475,7 @@ export const payRailsDb: Template = {
                         unique: false,
                         nullable: false,
                         default: '1',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x3jzoi19ooept3hrbgvpzsqd9',
@@ -485,7 +487,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'izdfry8zzyd92rcjp9pa44uuh',
@@ -497,7 +499,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't8beygrt1xdz3lcy2qddgi62d',
@@ -509,7 +511,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ilfyn597rhz19cp2bwsl0elyj',
@@ -521,7 +523,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '28219rfe5dwc8vq05crv22gsh',
@@ -533,7 +535,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5jl6bm37miboi2zrum4q0udog',
@@ -547,7 +549,7 @@ export const payRailsDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tn6oei4cbgxaf23lt18s3pref',
@@ -559,7 +561,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uutgo3u8yl81r2f6z24ymywz1',
@@ -571,7 +573,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '664ukbrqumkp2b5c46s2tpnou',
@@ -583,7 +585,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'irtbqq8bgbzhg8issn0a2wlcp',
@@ -595,7 +597,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wtlwv3bpujx3tm98u9dzqisxk',
@@ -607,7 +609,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dm5j0n0brqdr7zzkqa0zc4qrq',
@@ -619,7 +621,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rjmmp8ndbxl6wl1bfa1l8kpjg',
@@ -631,7 +633,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xqfqazh40b2vjyl2u315h106f',
@@ -643,7 +645,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'coywqs1rmcmnobax10wk6l8yu',
@@ -655,7 +657,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ax6y9oqhaxgfh4u7g1rvxcl61',
@@ -667,7 +669,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'shi1z7x8fyrwqr459mm85k7zp',
@@ -679,7 +681,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -688,7 +690,7 @@ export const payRailsDb: Template = {
                         name: 'index_pay_subscriptions_on_pause_starts_at',
                         unique: false,
                         fieldIds: ['xqfqazh40b2vjyl2u315h106f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd4w0jeafmd2vj8ntg5qaz4aoq',
@@ -698,14 +700,14 @@ export const payRailsDb: Template = {
                             '1jb9hyb9oqqtxaxkci7f7j2gn',
                             'btl3xxlsojtgcz9hed8nxjzid',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5vjz981yl884oy8u2yfnkqh1x',
                         name: 'index_pay_subscriptions_on_metered',
                         unique: false,
                         fieldIds: ['dm5j0n0brqdr7zzkqa0zc4qrq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'khfjtlrxw75mbjf8nsw6ges1d',
@@ -715,20 +717,20 @@ export const payRailsDb: Template = {
                             '1jb9hyb9oqqtxaxkci7f7j2gn',
                             'btl3xxlsojtgcz9hed8nxjzid',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wrdxny5t8acdny2jjykl75wes',
                         name: 'pay_subscriptions_pkey',
                         unique: true,
                         fieldIds: ['olqm3l2frfckpj8twtjj51bs1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'iqh50zqu2rtdub6coyhpl8y93',
@@ -748,7 +750,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('accounts_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k3xsgerkvkw2m8329o7ztgqng',
@@ -760,7 +762,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lvy55fatssrxjgogewjegbzzn',
@@ -772,7 +774,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hp9khlfu13rvsds8wgp7qrj9g',
@@ -784,7 +786,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -793,13 +795,13 @@ export const payRailsDb: Template = {
                         name: 'accounts_pkey',
                         unique: true,
                         fieldIds: ['lpf912z0q91glk9e63eis1cbz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'l3x89lp7szr6ycmkac7a5gjut',
@@ -819,7 +821,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hpoxd919ra7hv1cw9mzkl7lp1',
@@ -831,7 +833,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y9u8iasvxmwodltj743co8n7c',
@@ -843,7 +845,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ckfoudg0zfvi2c1f8rfe5sev8',
@@ -855,7 +857,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'svptfacpd86if34cf0yyrd2ws',
@@ -867,7 +869,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -876,13 +878,13 @@ export const payRailsDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['08069jga2me6uemt53tkzg6cw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mpqg2uz3opvhby9wjy8oxi3td',
@@ -902,7 +904,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('pay_customers_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5t3xq5rno3gimbfzi869ukocl',
@@ -914,7 +916,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iabfxzhpojdtxtnw8ogstm22m',
@@ -926,7 +928,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kmbeskibr3nl3vhhar86u9fym',
@@ -938,7 +940,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y12tz7p1tyntw3ew7zv0i522x',
@@ -950,7 +952,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'th7bl19u0l6y0bykj3uw836he',
@@ -962,7 +964,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x1onh995pvq5gvv78rh132itc',
@@ -974,7 +976,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uqtu07rtfikiskf6pbuim78hx',
@@ -986,7 +988,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yfvvhal5klj38xatp7df7uncc',
@@ -998,7 +1000,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'umgmqry8u6xvtb0edwog27gdy',
@@ -1010,7 +1012,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '604t0fpqmh1wrwt6oyg66wbnn',
@@ -1022,7 +1024,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '76dqpguhxowzr3s8cbmcugzdx',
@@ -1034,7 +1036,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1046,7 +1048,7 @@ export const payRailsDb: Template = {
                             'kmbeskibr3nl3vhhar86u9fym',
                             'y12tz7p1tyntw3ew7zv0i522x',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0sm33i3qhqeh3d25cmb3mpw41',
@@ -1058,20 +1060,20 @@ export const payRailsDb: Template = {
                             'yfvvhal5klj38xatp7df7uncc',
                             'th7bl19u0l6y0bykj3uw836he',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6g161vxyiagbc4h8nhj5yn4ss',
                         name: 'pay_customers_pkey',
                         unique: true,
                         fieldIds: ['3iufciqo18ce5i4mntwrvt5me'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'n747l8btp9j8008l5u4zk8tlu',
@@ -1091,7 +1093,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('pay_webhooks_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'twn56a7rh02oyf2klyuougmox',
@@ -1103,7 +1105,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '23quf4a4598a6jci3n64a0462',
@@ -1115,7 +1117,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z9flwsci25g0wxfolnytr23ea',
@@ -1127,7 +1129,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5nyrnndh5ezistd2dvfclrkw7',
@@ -1139,7 +1141,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8vgo1up2ftdq9os4exl4it8az',
@@ -1151,7 +1153,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1160,13 +1162,13 @@ export const payRailsDb: Template = {
                         name: 'pay_webhooks_pkey',
                         unique: true,
                         fieldIds: ['5ln8jh533mvpdh04g1g3oszq2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q05jbeaorkr669cjoy45gxjsq',
@@ -1186,7 +1188,7 @@ export const payRailsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('teams_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vpjrs6irvjcn3t65qezor7pzv',
@@ -1198,7 +1200,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xu6zaouypt358jh9g08a129gn',
@@ -1210,7 +1212,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p4n7yyrgsyimi1meven4zuum7',
@@ -1222,7 +1224,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8lbzwgxgiafktwfncvw8swvep',
@@ -1234,7 +1236,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1246,20 +1248,20 @@ export const payRailsDb: Template = {
                             'p4n7yyrgsyimi1meven4zuum7',
                             '8lbzwgxgiafktwfncvw8swvep',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cwsg3oytszcmyl586t4zpripe',
                         name: 'teams_pkey',
                         unique: true,
                         fieldIds: ['yi4bszaf90nzux8kxxnkjgrbn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sytadc777iuwh3qv6y87dpjod',
@@ -1280,7 +1282,7 @@ export const payRailsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('pay_payment_methods_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kijd5u5gitonxq5s34slmwilz',
@@ -1292,7 +1294,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wb32rpwgup3fgyatmukpkmx69',
@@ -1304,7 +1306,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't374z90f10wvoi2pz4p6bx6dh',
@@ -1316,7 +1318,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rr9n89apr62db8oa0490qvxzq',
@@ -1328,7 +1330,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4b13bqjkhlyto6oqaftwmmnz1',
@@ -1340,7 +1342,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'baqeq7dlxzmi7s63gpvtwpepw',
@@ -1352,7 +1354,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kjhau4523eujrp02tf1eufo3x',
@@ -1364,7 +1366,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hk9w613rvmy0kamhc9pb7p0mt',
@@ -1376,7 +1378,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5hk5apqscixnz0qtmbm5er0yb',
@@ -1388,7 +1390,7 @@ export const payRailsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1400,7 +1402,7 @@ export const payRailsDb: Template = {
                             'kijd5u5gitonxq5s34slmwilz',
                             'wb32rpwgup3fgyatmukpkmx69',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7uumpmlal3pw47e9t76crjnvw',
@@ -1410,20 +1412,20 @@ export const payRailsDb: Template = {
                             'kijd5u5gitonxq5s34slmwilz',
                             'wb32rpwgup3fgyatmukpkmx69',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vswug2o9e1ndd7ncuw8p3x0lt',
                         name: 'pay_payment_methods_pkey',
                         unique: true,
                         fieldIds: ['wp1odzu9fzygrtv76xk2mssc0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1438,7 +1440,7 @@ export const payRailsDb: Template = {
                 targetFieldId: '3iufciqo18ce5i4mntwrvt5me',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o4h2eo4k1bczmn6ouuanw5ps1',
@@ -1451,7 +1453,7 @@ export const payRailsDb: Template = {
                 targetFieldId: '3iufciqo18ce5i4mntwrvt5me',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pam0jo57dlzhck2o8m6e9kjg5',
@@ -1464,7 +1466,7 @@ export const payRailsDb: Template = {
                 targetFieldId: '3iufciqo18ce5i4mntwrvt5me',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tncdm0i076z029fkjpqpg7af5',
@@ -1477,7 +1479,7 @@ export const payRailsDb: Template = {
                 targetFieldId: 'olqm3l2frfckpj8twtjj51bs1',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

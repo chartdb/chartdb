@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/polr-db.png';
 import imageDark from '@/assets/templates/polr-db-dark.png';
 
+const now = Date.now();
+
 export const polrDb: Template = {
     slug: 'polr-database',
     name: 'Polr',
@@ -38,7 +40,7 @@ export const polrDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wh79vs5is2p71qgwfm2q1xjd6',
@@ -51,7 +53,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gquejga8shuepyrmt7tg9ybx9',
@@ -64,7 +66,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'da9s0f5bt328v4p62ohs4nodh',
@@ -77,7 +79,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5nkav4n7aj3235dx85c8boh66',
@@ -90,7 +92,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'psglfcj4h46haqwp0ig9bg3gw',
@@ -103,7 +105,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'keznm2av4y80x44f7txhecacu',
@@ -115,7 +117,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '361nfo7h72n1os022uddktax9',
@@ -127,7 +129,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nuzr6cqsdhc3wkp1z7ss8oely',
@@ -139,7 +141,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -148,34 +150,34 @@ export const polrDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['kgtm6jaq58t2jkijb00algpc5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4s1inmwhxoeckrcvpei7010tv',
                         name: 'clicks_ip_index',
                         unique: false,
                         fieldIds: ['wh79vs5is2p71qgwfm2q1xjd6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8hkgarsd8t0swl1decny3iocb',
                         name: 'clicks_referer_host_index',
                         unique: false,
                         fieldIds: ['5nkav4n7aj3235dx85c8boh66'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5lajf33tjvpkth4e3x50qjxu9',
                         name: 'clicks_link_id_index',
                         unique: false,
                         fieldIds: ['keznm2av4y80x44f7txhecacu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bdray3djsnbwxgo4cias5df53',
@@ -194,7 +196,7 @@ export const polrDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oqakkn270xj3ous3s78ah3k2r',
@@ -207,7 +209,7 @@ export const polrDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ehpqeqrcgf3lg3iyq9wkqr9ra',
@@ -220,7 +222,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '32a9b1mna5kp2d4f4mekw630y',
@@ -233,7 +235,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '94a91jb901wuon0vj1qpi5x3j',
@@ -246,7 +248,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7fv223y9ir0pxkzot925ody5u',
@@ -259,7 +261,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ezkw1dmmwrza1r9kwymzralln',
@@ -272,7 +274,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nq8o8fhdensbp0khdiyby0dht',
@@ -285,7 +287,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ax306dc8wfnisyz8idb1roafk',
@@ -298,7 +300,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '36urcvljl56r2waz0l25zee40',
@@ -310,7 +312,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9bogobkgyc2zx7dnfu7hojotq',
@@ -323,7 +325,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tlw0deqyvgz6iqk5j7oeux573',
@@ -335,7 +337,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jrr624v76oh62ipfuo4pzckzf',
@@ -347,7 +349,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2rpset68mf77ydzr7pcpztadm',
@@ -359,7 +361,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -368,20 +370,20 @@ export const polrDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['rhzuv3cnea9bgbc21p6q77sa1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oz2yv75k3gdg5jj0abijrmnzt',
                         name: 'users_username_unique',
                         unique: true,
                         fieldIds: ['oqakkn270xj3ous3s78ah3k2r'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bwgql9vythfflx4mhj2og1cwe',
@@ -400,7 +402,7 @@ export const polrDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lxbxvyd8eav2whky7nl1tjk4l',
@@ -413,7 +415,7 @@ export const polrDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e15aklssal71awtclnll0vfw6',
@@ -426,7 +428,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vo9iouon6qb05j9bf3qob6fq0',
@@ -439,7 +441,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uvgsfa638u0onkfw6gidg6awl',
@@ -451,7 +453,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qrbvgyp68h7snowl51i3d93az',
@@ -463,7 +465,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uxuvbw98fuet2ipq77rye955v',
@@ -476,7 +478,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'onqgu3esoe9nzi2d3j59lqu3q',
@@ -488,7 +490,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ap7g6l9h6l68airaaf084dgd',
@@ -500,7 +502,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vthxy5bw4loh6gq8j85cmtglj',
@@ -512,7 +514,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '26n43hbv8cuvfrhrtlkmiqnoy',
@@ -524,7 +526,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1ovgh9c7jh2odcg4w1058jrmp',
@@ -536,7 +538,7 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9betkha18wdkmnv74u7sxdddt',
@@ -549,7 +551,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -558,14 +560,14 @@ export const polrDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['xfjt5ngd1mvl6ybacn9fgvz3d'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cx6mwimm49769z1x3i1y4va0v',
                         name: 'links_short_url_unique',
                         unique: true,
                         fieldIds: ['lxbxvyd8eav2whky7nl1tjk4l'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vcmbt3bmihkqwj02m9wnyduju',
@@ -576,20 +578,20 @@ export const polrDb: Template = {
                             'vthxy5bw4loh6gq8j85cmtglj',
                             '26n43hbv8cuvfrhrtlkmiqnoy',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'adp7jzvlcc6oqf5cl8pqoy5he',
                         name: 'links_long_url_hash_index',
                         unique: false,
                         fieldIds: ['9betkha18wdkmnv74u7sxdddt'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e4puc5depog884eji5fi2jux7',
@@ -609,7 +611,7 @@ export const polrDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eeq962lch0ycptc6h647rtdd4',
@@ -621,14 +623,14 @@ export const polrDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -643,7 +645,7 @@ export const polrDb: Template = {
                 targetFieldId: 'rhzuv3cnea9bgbc21p6q77sa1',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'm6tzl115376nbia481mnzsuym',
@@ -656,7 +658,7 @@ export const polrDb: Template = {
                 targetFieldId: 'xfjt5ngd1mvl6ybacn9fgvz3d',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

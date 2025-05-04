@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/screeenly-db.png';
 import imageDark from '@/assets/templates/screeenly-db-dark.png';
 
+const now = Date.now();
+
 export const screeenlyDb: Template = {
     slug: 'screeenly-database',
     name: 'Screeenly',
@@ -38,7 +40,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ik6kosdk4rqdmos2rcixmb9zb',
@@ -50,7 +52,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uuecnzt95psc38ogftbic40kq',
@@ -62,7 +64,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -71,20 +73,20 @@ export const screeenlyDb: Template = {
                         name: 'password_resets_email_index',
                         unique: false,
                         fieldIds: ['qfl022lduv48ud0fwo6r4cq4w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rhw4qs22pd3xiiyspzfe60nr0',
                         name: 'password_resets_token_index',
                         unique: false,
                         fieldIds: ['ik6kosdk4rqdmos2rcixmb9zb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b5ry73fbil6z7ijb00kd9a49d',
@@ -103,7 +105,7 @@ export const screeenlyDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hp74f9yh75felios6qtwrmand',
@@ -115,7 +117,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ek6hdltem6s742jzwy9lhjcw',
@@ -127,7 +129,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'upy2tuvw9egm4n9jwx4u8vpt4',
@@ -139,7 +141,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '63fkdp9s6xgen1oer643g1qwq',
@@ -151,7 +153,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u3rkz6nq9ckxlbxsbizyh5fkh',
@@ -163,7 +165,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -172,27 +174,27 @@ export const screeenlyDb: Template = {
                         name: 'api_keys_key_unique',
                         unique: true,
                         fieldIds: ['9ek6hdltem6s742jzwy9lhjcw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cavfokep5f3eb7lpj6408da57',
                         name: 'api_keys_pkey',
                         unique: true,
                         fieldIds: ['42oq2j16gxgwupuktzgk60bju'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mcjywmwjipakf5zsw2mclqpol',
                         name: 'api_keys_user_id_index',
                         unique: false,
                         fieldIds: ['upy2tuvw9egm4n9jwx4u8vpt4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'eq3rinbmyqkvn4pp3ai7crdiq',
@@ -211,7 +213,7 @@ export const screeenlyDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jpawkhjll1flccir6ihv0pm6y',
@@ -223,7 +225,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ci1ytk3qjdnh590eokr8owlv6',
@@ -235,7 +237,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iz7bu0ywvw2315vkb4zkxw41v',
@@ -247,7 +249,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a2tw1rk4m5w1lomb0riil560c',
@@ -259,7 +261,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '88nfh4wbfkpe4nrcumsygpub0',
@@ -271,7 +273,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k01wh0624jb25z17dcl2q1ejl',
@@ -283,7 +285,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5g5bkwo0480o9sps9j0l6z2l4',
@@ -295,7 +297,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h2b28wbenke9xw4neelrr2ux7',
@@ -307,7 +309,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '745vls6ns8u1h5vm0a9g0qg4z',
@@ -319,7 +321,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -328,20 +330,20 @@ export const screeenlyDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['c9v3h1y3dwkhithk1j0vzr0u6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2h880rrh20ji529gln769go96',
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['jpawkhjll1flccir6ihv0pm6y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'kvrc9elo1eruj57f8wbx4f2bu',
@@ -360,7 +362,7 @@ export const screeenlyDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gy3tdo2xnei2glvf684uvpx95',
@@ -372,7 +374,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gvl7q0o671v4inhnotbbwdsn1',
@@ -384,7 +386,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9504kb5mta5gdvneyvbyb2f86',
@@ -396,7 +398,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '80y0556noakmgidg3c1m0ly3h',
@@ -408,7 +410,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7q7s2ni6wvgci5v6e2krbvynv',
@@ -420,7 +422,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -429,20 +431,20 @@ export const screeenlyDb: Template = {
                         name: 'api_log_user_id_index',
                         unique: false,
                         fieldIds: ['gy3tdo2xnei2glvf684uvpx95'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7a9amdkmreqnw06iytcahi85o',
                         name: 'api_log_pkey',
                         unique: true,
                         fieldIds: ['hkznvnetpfhfk4x6wvvscj451'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lj0wibk34sqr1zz9e0kuuvqji',
@@ -461,7 +463,7 @@ export const screeenlyDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lesnsizfcigcf2l73ksg93v0s',
@@ -473,7 +475,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rq31fdh4r9c0ko0e35f2b261u',
@@ -485,7 +487,7 @@ export const screeenlyDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -494,13 +496,13 @@ export const screeenlyDb: Template = {
                         name: 'migrations_pkey',
                         unique: true,
                         fieldIds: ['ynxooqs5lm3oonb59stpgrzlj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -515,7 +517,7 @@ export const screeenlyDb: Template = {
                 targetFieldId: 'c9v3h1y3dwkhithk1j0vzr0u6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nqopnr1bc8dlavpfr735mzjsr',
@@ -528,7 +530,7 @@ export const screeenlyDb: Template = {
                 targetFieldId: 'c9v3h1y3dwkhithk1j0vzr0u6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

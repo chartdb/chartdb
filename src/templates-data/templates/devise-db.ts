@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/devise-db.png';
 import imageDark from '@/assets/templates/devise-db-dark.png';
 
+const now = Date.now();
+
 export const deviseDb: Template = {
     slug: 'devise-database',
     name: 'Devise',
@@ -38,7 +40,7 @@ export const deviseDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vkhvag7othohyjh6828ybk3ca',
@@ -50,7 +52,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wd49z62mufty2emt4ga95vtes',
@@ -62,7 +64,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1vz318dy43ajqkltguj4cgu8b',
@@ -74,7 +76,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ydqdfy4rhuiediufdhirc160',
@@ -86,7 +88,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eukr07x2egs3477q5bi11df0g',
@@ -98,7 +100,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'raxxzuz5nqbuf63628jmdx5ii',
@@ -110,7 +112,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kb3ao9bj6gjab3y5cdwuc7b58',
@@ -122,7 +124,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mm4knih0nyvhd4vvy6vr969dk',
@@ -134,7 +136,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g1y49u7xrq1qu4gvm42f3q25y',
@@ -146,7 +148,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dutn6db8am2f58u96ou0f4ha3',
@@ -158,7 +160,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ipxhirbm3blfebww69xrq6rfc',
@@ -170,7 +172,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q3robth7nuy6qoyncmkyfd2wr',
@@ -182,7 +184,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's0ekzf665nsmkeljo30v36ymq',
@@ -194,7 +196,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6lvgbsqnvdamibmbuhfxrvsp6',
@@ -206,7 +208,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o29wwqt6ycsubf43yzypd40ua',
@@ -218,7 +220,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2jbu40xg710e63y9p6l292vhl',
@@ -230,7 +232,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ribk8hlz1o926iinrs5ohob0s',
@@ -242,7 +244,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q6n7ulzw5qkwr23akuuyd2bzf',
@@ -254,7 +256,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a4azxp7ry1q743lgeot5pxz0m',
@@ -266,7 +268,7 @@ export const deviseDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -275,41 +277,41 @@ export const deviseDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['tnnbdv2o6svxuz0wm7yp56rhn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3oq1zywey14y8w67kyiork0zf',
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['vkhvag7othohyjh6828ybk3ca'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jk7nrup4dw6xrx11boprthswy',
                         name: 'users_reset_password_token_unique',
                         unique: true,
                         fieldIds: ['1vz318dy43ajqkltguj4cgu8b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rh4czfl0w3nzd5xuqnx6bi9vx',
                         name: 'users_unlock_token_unique',
                         unique: true,
                         fieldIds: ['2jbu40xg710e63y9p6l292vhl'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h5vv3jzsud0eeon3xs60xc651',
                         name: 'users_confirmation_token_unique',
                         unique: true,
                         fieldIds: ['ipxhirbm3blfebww69xrq6rfc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
                 width: 337,
             },
         ],
