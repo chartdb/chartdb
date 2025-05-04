@@ -152,9 +152,7 @@ export const Menu: React.FC<MenuProps> = () => {
     }, [showRelationships, setShowRelationships]);
 
     const emojiAI = '✨';
-    console.log(typeof setShowRelationships);
-    console.log(setShowRelationships);
-    console.log("LocalConfig Output:", useLocalConfig);
+
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
