@@ -171,9 +171,11 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                 : false,
         [checkIfRelationshipRemoved, relationship?.id]
     );
+
     if (!showRelationships) {
         return null;
     }
+    
     return (
         <>
             <path
