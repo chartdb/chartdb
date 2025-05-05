@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/laravel-activitylog-db.png';
 import imageDark from '@/assets/templates/laravel-activitylog-db-dark.png';
 
+const now = Date.now();
+
 export const laravelActivitylogDb: Template = {
     slug: 'laravel-activitylog-database',
     name: 'Laravel Activitylog',
@@ -38,7 +40,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zvvytqmfe4orhi45k75278wel',
@@ -51,7 +53,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j51d80x714299knbz7z92foow',
@@ -64,7 +66,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qpuyahkualqltg8bwesy2xkx6',
@@ -76,7 +78,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ehh1993c7675onxybh3f476cs',
@@ -89,7 +91,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jszmokhj5rh1oixx4gjafyn2j',
@@ -102,7 +104,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dy9v51ey1731raepj4b4vpars',
@@ -114,7 +116,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z72ugem30h3hfzosc8kzktdyl',
@@ -127,7 +129,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v1iw9y1su4j6bqv7x4hethye8',
@@ -139,7 +141,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hhj0bm5t270jkake9hryq0wop',
@@ -152,7 +154,7 @@ export const laravelActivitylogDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e76wqcihlqq8mvq7sodb7grlb',
@@ -164,7 +166,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ynaua9wzhssaba9iw7o4bg10f',
@@ -176,7 +178,7 @@ export const laravelActivitylogDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -185,14 +187,14 @@ export const laravelActivitylogDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['aotc76lw9u7uxh7pro07f6j0p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e21o6cephz679p0g4re89x9sv',
                         name: 'activity_log_log_name_index',
                         unique: false,
                         fieldIds: ['zvvytqmfe4orhi45k75278wel'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xk0o7g6f7rraatqucvbiussmd',
@@ -202,7 +204,7 @@ export const laravelActivitylogDb: Template = {
                             'qpuyahkualqltg8bwesy2xkx6',
                             'ehh1993c7675onxybh3f476cs',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't8e0k3sg3ajh037hbxmaw2cvq',
@@ -212,13 +214,13 @@ export const laravelActivitylogDb: Template = {
                             'dy9v51ey1731raepj4b4vpars',
                             'z72ugem30h3hfzosc8kzktdyl',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [],

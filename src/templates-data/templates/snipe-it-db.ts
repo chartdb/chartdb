@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/snipe-it-db.png';
 import imageDark from '@/assets/templates/snipe-it-db-dark.png';
 
+const now = Date.now();
+
 export const snipeItDb: Template = {
     slug: 'snipe-it-database',
     name: 'Snipe-It',
@@ -39,7 +41,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('manufacturers_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c7wgj7lldd95ttcbq1v6i7r5z',
@@ -51,7 +53,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jih406a8ozkwheozpctjt1bnj',
@@ -63,7 +65,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'em6l86idb3wvq44568ojy8x1h',
@@ -75,7 +77,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -84,13 +86,13 @@ export const snipeItDb: Template = {
                         name: 'manufacturers_pkey',
                         unique: true,
                         fieldIds: ['m0b0t5o6zlhkgtj13jb3rj6tm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9gcncr71xdcz74srhajdxi3d4',
@@ -110,7 +112,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('departments_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y5jjmvijho6u7j30p78h1kyfo',
@@ -122,7 +124,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'euwdhzg1wp6bylfjks0zuh4nf',
@@ -134,7 +136,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4cjj3kkt620wn51waely9sdfx',
@@ -146,7 +148,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vyns2omw23hxtvs1pu6isj3qe',
@@ -158,7 +160,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -167,20 +169,20 @@ export const snipeItDb: Template = {
                         name: 'departments_pkey',
                         unique: true,
                         fieldIds: ['thqtiib2tn2dwhapd0ol2fjzo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'auy3qr1fm32174nbm50b0sa0k',
                         name: 'idx_departments_name',
                         unique: false,
                         fieldIds: ['y5jjmvijho6u7j30p78h1kyfo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aqt9gvsat8bmsb7psji7u6toc',
@@ -200,7 +202,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('tickets_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm8av1nsf1hcptfc6n6paye7h2',
@@ -212,7 +214,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4w39kdvys1a2km7588eiexufx',
@@ -224,7 +226,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7pp2cy8lphuguudpfpvb599eh',
@@ -236,7 +238,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6a3eio7yrbsah8zzy8ybrsovm',
@@ -248,7 +250,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y1u7ypv40mefrymgkhra2zkl7',
@@ -260,7 +262,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2a383uuagfr8wa4mkpn82jccm',
@@ -272,7 +274,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -281,13 +283,13 @@ export const snipeItDb: Template = {
                         name: 'tickets_pkey',
                         unique: true,
                         fieldIds: ['y6l33akqbfjhg3eepkl4wfwh4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd0mkjmeux1avwtq1aq41do1ms',
@@ -306,7 +308,7 @@ export const snipeItDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '78lg6ty9o982a6ifi65e4k99j',
@@ -318,7 +320,7 @@ export const snipeItDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -330,13 +332,13 @@ export const snipeItDb: Template = {
                             'iss2nftrbb9vazcg1v10678ed',
                             '78lg6ty9o982a6ifi65e4k99j',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dij8tkboo7q39p94qdqs191g1',
@@ -356,7 +358,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ps48ttjk5ebn30u1h01mf7cif',
@@ -368,7 +370,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oedjk6mk40v9enc8b8yf2lrn5',
@@ -380,7 +382,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gc8uvfoa218571j12udh805zb',
@@ -392,7 +394,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '86o59x4z63hl4luqiksr1oyrw',
@@ -404,7 +406,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'es7vujl5j3w1kumu8a2zp30ll',
@@ -416,7 +418,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'haxxbuzgojqamq2kz9fz65c7d',
@@ -428,7 +430,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -437,27 +439,27 @@ export const snipeItDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['nu3he7otigkya7voa2ilcvpcq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lqdnu934plvvrcpq7na72ss1d',
                         name: 'users_email_key',
                         unique: true,
                         fieldIds: ['ps48ttjk5ebn30u1h01mf7cif'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j8bh7kkt7f3gxbtf29cy123kh',
                         name: 'idx_users_email',
                         unique: false,
                         fieldIds: ['ps48ttjk5ebn30u1h01mf7cif'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'f9tjw0nac1c8otmtkua4xh73y',
@@ -477,7 +479,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('announcements_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rh9t3d9pcfdfljgbeyse4jv20',
@@ -489,7 +491,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zpmrrmoosp3dx3vaptnirv1zm',
@@ -501,7 +503,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g6zlr5p8qqm2etltdx76pvuda',
@@ -513,7 +515,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'du866b1k1a7vq803mo245covi',
@@ -525,7 +527,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uft1z5t868hej28avtmh2m8s4',
@@ -537,7 +539,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4mme2no7t3d9jwpr9fgbkrz66',
@@ -549,7 +551,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -558,20 +560,20 @@ export const snipeItDb: Template = {
                         name: 'idx_announcements_user_id',
                         unique: false,
                         fieldIds: ['rh9t3d9pcfdfljgbeyse4jv20'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qjibuua3hrny94d6z15uka2e9',
                         name: 'announcements_pkey',
                         unique: true,
                         fieldIds: ['rm8abre1xote1m9oihpqd63om'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ffvfm6f2835bxy763oezmhq9b',
@@ -591,7 +593,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('locations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0ivxybxsru506k9y8vetybefz',
@@ -603,7 +605,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1fufafdu0kbtyk6tjwx3mkp7e',
@@ -615,7 +617,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fjqtati7ql4ikgg4zrdysdyf6',
@@ -627,7 +629,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gmxslfpx75j91py07bnu5krpy',
@@ -639,7 +641,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -648,20 +650,20 @@ export const snipeItDb: Template = {
                         name: 'idx_locations_name',
                         unique: false,
                         fieldIds: ['0ivxybxsru506k9y8vetybefz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e3vlo1znvr6la5xgrpnfjpmx9',
                         name: 'locations_pkey',
                         unique: true,
                         fieldIds: ['728n5xow82pj4jmszi11408a5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hxpfhx7gb3dkdnc70nvuqo9bp',
@@ -681,7 +683,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('assets_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1nie7ygadkg6r3yuhzigc9ml1',
@@ -693,7 +695,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ieerp2kaa7k8ekgld0rlpttin',
@@ -705,7 +707,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qo8lrpd3fb8ltkatsgzez5rl6',
@@ -717,7 +719,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'akq22zkf7hfhzgojv63jl5mmq',
@@ -729,7 +731,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nvo2jzz6b9jq9ga8e2lzopl4n',
@@ -741,7 +743,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sovbsi9ykfqpr8bftc8d9l687',
@@ -753,7 +755,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w8uafrnm06hizt01jw7sqx0ay',
@@ -765,7 +767,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ttlir0dsodgczpyu63ktxnyaz',
@@ -777,7 +779,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tr7junzlm7xzxy6tv9rfmskyq',
@@ -789,7 +791,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -798,20 +800,20 @@ export const snipeItDb: Template = {
                         name: 'idx_assets_name',
                         unique: false,
                         fieldIds: ['1nie7ygadkg6r3yuhzigc9ml1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a1f5jk16ehacvtc385zm0ieh8',
                         name: 'assets_pkey',
                         unique: true,
                         fieldIds: ['hqp6bxym8g6ms3w3vt7f31ywq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'l82uf64ic8m1v3gi01mys2lq9',
@@ -831,7 +833,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('notifications_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'prikl42cn9lx1n9emhz4mu7yq',
@@ -843,7 +845,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jucd5cm6hy4p7kbac1ku1v72c',
@@ -855,7 +857,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pkxxhhz7bzojzwhjt1tj06myp',
@@ -868,7 +870,7 @@ export const snipeItDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'false',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k3ygf755g81u2slnc6znxb4g9',
@@ -880,7 +882,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pfvbw4j70m0ww5dv8fiea6d0r',
@@ -892,7 +894,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -901,20 +903,20 @@ export const snipeItDb: Template = {
                         name: 'idx_notifications_user_id',
                         unique: false,
                         fieldIds: ['prikl42cn9lx1n9emhz4mu7yq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jzud0kjk3rxmm0a1r9p3fh4g2',
                         name: 'notifications_pkey',
                         unique: true,
                         fieldIds: ['3a8dd2dr9j741475lvz9w535n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ppwcitqjfqq174m7dthgrovfs',
@@ -933,7 +935,7 @@ export const snipeItDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6262o6z79z2n1dljr6k8bh5sc',
@@ -945,7 +947,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cso11nttqhs12xu00nxbs21r1',
@@ -957,7 +959,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -966,13 +968,13 @@ export const snipeItDb: Template = {
                         name: 'password_resets_pkey',
                         unique: true,
                         fieldIds: ['gqg3znfr9qzx5b4b20wto5hjo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qbczan7ykpkqz7206wudxmgtp',
@@ -992,7 +994,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('invoices_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'enbx5078tzufrn0y7ttm0aeov',
@@ -1004,7 +1006,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sxn0pz881z5pp2so9ppkpco9c',
@@ -1018,7 +1020,7 @@ export const snipeItDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '08ha5fg9kfnmataebchctmyxb',
@@ -1030,7 +1032,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'udjeu8ew7m0ak4r2aojldqhti',
@@ -1042,7 +1044,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tggkxsjqmyicwjwh22tkcosh8',
@@ -1054,7 +1056,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x703lgwbw7exdg0z3180kfwvr',
@@ -1066,7 +1068,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1075,20 +1077,20 @@ export const snipeItDb: Template = {
                         name: 'idx_invoices_user_id',
                         unique: false,
                         fieldIds: ['enbx5078tzufrn0y7ttm0aeov'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '898sqiujupoyk7frfdmiaafdk',
                         name: 'invoices_pkey',
                         unique: true,
                         fieldIds: ['hlfnrnmozo119wwvtgsblv9u9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ugav1xjtjdyr5vfghur1h6340',
@@ -1108,7 +1110,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('maintenance_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ubu8l1ydpalv4lty2gi7i70kz',
@@ -1120,7 +1122,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u4qh5p38t832l8508z2mnmwqa',
@@ -1132,7 +1134,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gkmvb1sz32pbwov34xfz193rr',
@@ -1144,7 +1146,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fq5nb0afbcv3eccpfdhy1ni4b',
@@ -1156,7 +1158,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'usvz5a9ct4oj182sbac64fi82',
@@ -1168,7 +1170,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1177,13 +1179,13 @@ export const snipeItDb: Template = {
                         name: 'maintenance_pkey',
                         unique: true,
                         fieldIds: ['67a0fvhtrj9ga0fugb3r60vtf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'w8oufyqqtq1nziht8qkilr8sk',
@@ -1203,7 +1205,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('categories_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xqd8yv56sj4ruw0pdafzym25l',
@@ -1215,7 +1217,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8va4d40rw10qa6hk6lmu4gmj4',
@@ -1227,7 +1229,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c8ioi75gxuuruu1qovhdyqisj',
@@ -1239,7 +1241,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qhum8q0qtbhjqtbrp0y7unkyn',
@@ -1251,7 +1253,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1260,20 +1262,20 @@ export const snipeItDb: Template = {
                         name: 'idx_categories_name',
                         unique: false,
                         fieldIds: ['xqd8yv56sj4ruw0pdafzym25l'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1la3spjexqkyw994wer52wplc',
                         name: 'categories_pkey',
                         unique: true,
                         fieldIds: ['gmxe57sfvks6oyeawm7riergd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zklx3zotwnp54mzmvomis61gt',
@@ -1293,7 +1295,7 @@ export const snipeItDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('api_tokens_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iu1wfvffursno9rz9sy1ukifa',
@@ -1305,7 +1307,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'keyu8vcr514705z1j3i2pfpn2',
@@ -1317,7 +1319,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sxnobuli69iin9zryafegqz4l',
@@ -1329,7 +1331,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tygu0g6gveg3p393xdpyl4i9g',
@@ -1341,7 +1343,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'js37tir385vh3xsvqku2kvbrr',
@@ -1353,7 +1355,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ws8h2b1dab8miileukh39lpr6',
@@ -1365,7 +1367,7 @@ export const snipeItDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1374,20 +1376,20 @@ export const snipeItDb: Template = {
                         name: 'api_tokens_pkey',
                         unique: true,
                         fieldIds: ['g4dc7oz2zta9az8t793fmck2t'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qi5q29fia5g3t6f5u2ao5ftl2',
                         name: 'api_tokens_token_key',
                         unique: true,
                         fieldIds: ['sxnobuli69iin9zryafegqz4l'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1402,7 +1404,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'thqtiib2tn2dwhapd0ol2fjzo',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6d7nzsjcbhm3ru0um23l5xqhs',
@@ -1415,7 +1417,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'hqp6bxym8g6ms3w3vt7f31ywq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6mb9ahqjbh3vyy4d3yy6av56m',
@@ -1428,7 +1430,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'm0b0t5o6zlhkgtj13jb3rj6tm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b6aim2soqplyd67j5kqwotchq',
@@ -1441,7 +1443,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fdgvzi4kstd0jd3sc8scem2c3',
@@ -1454,7 +1456,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'hqp6bxym8g6ms3w3vt7f31ywq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gzg5jumr6l2pn7ajsmf8orrs9',
@@ -1467,7 +1469,7 @@ export const snipeItDb: Template = {
                 targetFieldId: '728n5xow82pj4jmszi11408a5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hydyrblwbzyexplek8wzm3cke',
@@ -1480,7 +1482,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'hqp6bxym8g6ms3w3vt7f31ywq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'kjoon43dtxtalwlnymqib8ote',
@@ -1493,7 +1495,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mjrulubxg0lpx5qxvtrs85z8n',
@@ -1506,7 +1508,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mnp0avfbisw7gy8kri8npmsdk',
@@ -1519,7 +1521,7 @@ export const snipeItDb: Template = {
                 targetFieldId: '728n5xow82pj4jmszi11408a5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rf75bt0r0i971l7v5be7pb9le',
@@ -1532,7 +1534,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'gmxe57sfvks6oyeawm7riergd',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rojmfwlsa4d49jhko581q3wen',
@@ -1545,7 +1547,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vr9b7v1e6t8oqe0mzb6jctlk5',
@@ -1558,7 +1560,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xza9qob37bymmkj5lwed9etuv',
@@ -1571,7 +1573,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'gmxe57sfvks6oyeawm7riergd',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yg6lgz90nn9syiw4g9c76pscs',
@@ -1584,7 +1586,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'nu3he7otigkya7voa2ilcvpcq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yw3kr853lwxfolflp3annw1n3',
@@ -1597,7 +1599,7 @@ export const snipeItDb: Template = {
                 targetFieldId: 'thqtiib2tn2dwhapd0ol2fjzo',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

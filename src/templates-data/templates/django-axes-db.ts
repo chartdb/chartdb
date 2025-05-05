@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/django-axes-db.png';
 import imageDark from '@/assets/templates/django-axes-db-dark.png';
 
+const now = Date.now();
+
 export const djangoAxesDb: Template = {
     slug: 'django-axes-database',
     name: 'Django-Axes',
@@ -38,7 +40,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '66cz3gwbtp76bdcwt0h7yd59o',
@@ -50,7 +52,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7x8xnt3d6tvg8ypgutg69ezwf',
@@ -62,7 +64,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4uzrfehffgkko23kkfnem845e',
@@ -74,7 +76,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'em88cnmugu1hbz2eoitw0pg41',
@@ -86,7 +88,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r3ci7zx7hpqfjl7xh901o26t0',
@@ -98,7 +100,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x7gp2rhiyeuxfo9z7do6m8jx5',
@@ -110,7 +112,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5kr5n4kw3yj9zyrdzge1dmmel',
@@ -122,7 +124,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w9ftgbg7eageinlswv81236i6',
@@ -134,7 +136,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1uzevngyjshchz6ng4pminmn6',
@@ -146,7 +148,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -155,34 +157,34 @@ export const djangoAxesDb: Template = {
                         name: 'axes_accessattempt_pkey',
                         unique: true,
                         fieldIds: ['qiifgo2m69wr2f5r540ighdn5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'atwekklt473ufr376hwecjmto',
                         name: 'axes_accessattempt_ip_address_index',
                         unique: false,
                         fieldIds: ['7x8xnt3d6tvg8ypgutg69ezwf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '392z7orwsld9pvus25g0o9x7q',
                         name: 'axes_accessattempt_username_index',
                         unique: false,
                         fieldIds: ['4uzrfehffgkko23kkfnem845e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dl7hqeogexegty5n8mthkd42t',
                         name: 'axes_accessattempt_user_agent_index',
                         unique: false,
                         fieldIds: ['66cz3gwbtp76bdcwt0h7yd59o'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'knudgan04alr6isbtj71hrp4o',
@@ -201,7 +203,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h646hkm3f7l44e7636t1vy36k',
@@ -213,7 +215,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8d4thw73t977q0urpsz9kb756',
@@ -225,7 +227,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '81tx841qnh0w0aivsi80zlwnj',
@@ -237,7 +239,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iznj6y8lya85cxmbflx1php3k',
@@ -249,7 +251,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tes78cloyrabu6qcqx4uydc11',
@@ -261,7 +263,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l9bfkhgnydp27ijjcmt8pivdw',
@@ -273,7 +275,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i98mn16tjtmrbkmiddnm6al1g',
@@ -285,7 +287,7 @@ export const djangoAxesDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -294,34 +296,34 @@ export const djangoAxesDb: Template = {
                         name: 'axes_accesslog_user_agent_index',
                         unique: false,
                         fieldIds: ['h646hkm3f7l44e7636t1vy36k'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm2e0wcfv78sbu0tuqr54ewlh2',
                         name: 'axes_accesslog_pkey',
                         unique: true,
                         fieldIds: ['gb0jb6h526ovyigq59hasphe9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rcy8x74jr39osxh727jjnkj3',
                         name: 'axes_accesslog_username_index',
                         unique: false,
                         fieldIds: ['81tx841qnh0w0aivsi80zlwnj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fyq3q7zy49bcehsh236skz9ah',
                         name: 'axes_accesslog_ip_address_index',
                         unique: false,
                         fieldIds: ['8d4thw73t977q0urpsz9kb756'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [],

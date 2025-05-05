@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/comfortable-mexican-sofa-db.png';
 import imageDark from '@/assets/templates/comfortable-mexican-sofa-db-dark.png';
 
+const now = Date.now();
+
 export const comfortableMexicanSofaDb: Template = {
     slug: 'comfortable-mexican-sofa-database',
     name: 'Comfortable Mexican Sofa',
@@ -39,7 +41,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('comfy_cms_sites_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8bxj4xa6rywvosk8ekofzaz35',
@@ -51,7 +53,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nbtc2wglf8xkl7znqie3at6h7',
@@ -63,7 +65,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7nk84w17fgjfcn84qyp4vqhj4',
@@ -75,7 +77,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xvubpmmhixw5cs46zgakqr36r',
@@ -87,7 +89,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mqpx5e62hvz8m2plgyyhp6a2t',
@@ -99,7 +101,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0h85xog67px24oqmzhib6yfbz',
@@ -111,7 +113,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9xilgpouep3ilbgvcqsz6i8xt',
@@ -123,7 +125,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -132,20 +134,20 @@ export const comfortableMexicanSofaDb: Template = {
                         name: 'comfy_cms_sites_identifier_key',
                         unique: true,
                         fieldIds: ['nbtc2wglf8xkl7znqie3at6h7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8vh92c3er6lelsm0j1pgbrje3',
                         name: 'comfy_cms_sites_pkey',
                         unique: true,
                         fieldIds: ['a2hyi3q08x3a1hp394ebbb66h'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4gz554fu1is9nn8kokdv8k8lw',
@@ -165,7 +167,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('comfy_cms_files_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kemt4iwpzt3qf6gtfaf8zr3av',
@@ -177,7 +179,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e2nr7ks3slw8yztccnh06f1m7',
@@ -189,7 +191,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w7c6tok6nwealgzyk6khrfq0y',
@@ -201,7 +203,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l3htahdq7e4gssdxnplb884de',
@@ -213,7 +215,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's9nl9d8uwtjrdihqzvqhj6qm6',
@@ -225,7 +227,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g4yoyg2v5zraqq81ukwx0u8xa',
@@ -237,7 +239,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -246,7 +248,7 @@ export const comfortableMexicanSofaDb: Template = {
                         name: 'comfy_cms_files_pkey',
                         unique: true,
                         fieldIds: ['hsm3jnswoloro6813a5p5uuex'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8h1j1qttxran6h04gfvkpqzh7',
@@ -256,7 +258,7 @@ export const comfortableMexicanSofaDb: Template = {
                             'kemt4iwpzt3qf6gtfaf8zr3av',
                             'l3htahdq7e4gssdxnplb884de',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rtz0dwod40zqc4agv0semgyyj',
@@ -266,13 +268,13 @@ export const comfortableMexicanSofaDb: Template = {
                             'kemt4iwpzt3qf6gtfaf8zr3av',
                             'l3htahdq7e4gssdxnplb884de',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6m12iicr5bmvmjh7vc4nnxwx4',
@@ -293,7 +295,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_snippets_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5ma4bqfgltiom4f52uy265ahr',
@@ -305,7 +307,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n8nqm3k04418heznsuiw62ckd',
@@ -317,7 +319,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k8m4pz4gn8cjgn3fgso3yybc6',
@@ -329,7 +331,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ktpth3ljnbjjhmveit45v6q4j',
@@ -341,7 +343,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e6gzbg1dwy39n3uvgxdkvjwsd',
@@ -353,7 +355,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b7uxypx2zgdkz87j1bucw56dy',
@@ -365,7 +367,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dpfauggf6mb8v97qft1cp84g7',
@@ -377,7 +379,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -389,7 +391,7 @@ export const comfortableMexicanSofaDb: Template = {
                             '5ma4bqfgltiom4f52uy265ahr',
                             'k8m4pz4gn8cjgn3fgso3yybc6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k1z087zzwq0ku42plzsahvgkn',
@@ -399,20 +401,20 @@ export const comfortableMexicanSofaDb: Template = {
                             '5ma4bqfgltiom4f52uy265ahr',
                             'k8m4pz4gn8cjgn3fgso3yybc6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r8rriohbeqg3fco25fcl3vfjb',
                         name: 'comfy_cms_snippets_pkey',
                         unique: true,
                         fieldIds: ['uvy743vegv4khu0lorjnvbyiw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bpeqtu17nlds7fk9qt6ouax09',
@@ -433,7 +435,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_revisions_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '53owojbphqee657dnec46qj4n',
@@ -445,7 +447,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iflix9rs1nr0vwdxer4pl15bv',
@@ -457,7 +459,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jom8gfntmivq3rdqjxthm02e7',
@@ -469,7 +471,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qxgj8m7fqil2r4hee3cdxhpym',
@@ -481,7 +483,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -494,20 +496,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'iflix9rs1nr0vwdxer4pl15bv',
                             'qxgj8m7fqil2r4hee3cdxhpym',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qlwz0yr1dd6tuk856dfc50hhu',
                         name: 'comfy_cms_revisions_pkey',
                         unique: true,
                         fieldIds: ['vwjv1tpj9swhqpl0sp4yku2xa'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'cyfncpo2zosklocsicymvl4g2',
@@ -528,7 +530,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_categorizations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '31nek4b2kuigij52w2r11h9g8',
@@ -540,7 +542,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i8pknlei7jbvml67hcgkppkv4',
@@ -552,7 +554,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5efokkfv8xj0ezihwq9vwld6k',
@@ -564,7 +566,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -577,7 +579,7 @@ export const comfortableMexicanSofaDb: Template = {
                             'i8pknlei7jbvml67hcgkppkv4',
                             '5efokkfv8xj0ezihwq9vwld6k',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6w0y2wxbz70w78gntc2doram3',
@@ -588,20 +590,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'i8pknlei7jbvml67hcgkppkv4',
                             '5efokkfv8xj0ezihwq9vwld6k',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4l1axse9ewvlff6iwc72nfa4a',
                         name: 'comfy_cms_categorizations_pkey',
                         unique: true,
                         fieldIds: ['80xj3jejisj80x7c36jiq7jkk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e5834gyvmwro9zxtg3b5cw3bz',
@@ -621,7 +623,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('comfy_cms_pages_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fa381qe39zwfs3bkhb99lfs9f',
@@ -633,7 +635,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'du2trf4cbs0tsezfdwymoavhp',
@@ -645,7 +647,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uxc4pj43vq7pdr1eikkgqxmus',
@@ -657,7 +659,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fpmprec23i7bkqqa1xqtkrvzh',
@@ -669,7 +671,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1k2yq61cqrs8kso303vrw4ome',
@@ -681,7 +683,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fe1ytks9wbi9fddf47op5h9r8',
@@ -693,7 +695,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iwn2e2bqt9t87vean88uoy5p5',
@@ -705,7 +707,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm7p3cagtdjefx06u4vrib6v14',
@@ -717,7 +719,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z9soyv27f3xolxv0801vi7dgq',
@@ -730,7 +732,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'true',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bwyl6de3l5lbxfh3wy2y8hw8x',
@@ -742,7 +744,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kjln20azmmcynt6wy14l8hsl2',
@@ -755,7 +757,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: false,
                         nullable: true,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lzc9npr5qp2ynj2vw7afz9rty',
@@ -767,7 +769,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '88xuyadd1wdfw73fwrh9zf45c',
@@ -779,7 +781,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -791,14 +793,14 @@ export const comfortableMexicanSofaDb: Template = {
                             'fa381qe39zwfs3bkhb99lfs9f',
                             'iwn2e2bqt9t87vean88uoy5p5',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c4amy2sqghpq7nrfcgke6mm2v',
                         name: 'comfy_cms_pages_slug_key',
                         unique: true,
                         fieldIds: ['fe1ytks9wbi9fddf47op5h9r8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ujw1dat9o1mjrkjms3f55nw2c',
@@ -808,20 +810,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'fa381qe39zwfs3bkhb99lfs9f',
                             'iwn2e2bqt9t87vean88uoy5p5',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rq35dpca7famqkzmsyylxcpol',
                         name: 'comfy_cms_pages_pkey',
                         unique: true,
                         fieldIds: ['y8j19xae7nn91wn0m7aebp5h0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jpvv0pdp82w3vvpmdi9yu79ef',
@@ -842,7 +844,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_fragments_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't388xy2ksn68e3dqg689itbv1',
@@ -854,7 +856,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y3u0b8fi951vpj3zob1tpjqzj',
@@ -866,7 +868,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5kftfbvqps0segb7chn4p1sxl',
@@ -878,7 +880,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pbzkl3drt5citimcz5ud6l4ee',
@@ -890,7 +892,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k7cptmkwjjrn1hzpwa8kxwgzx',
@@ -902,7 +904,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '60v7n5m6s9nnoa88u9watqx5t',
@@ -914,7 +916,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't2k02w621znunzmb9eb364o9m',
@@ -926,7 +928,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6n2qcdgxfeerac0rx713p6db8',
@@ -938,7 +940,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a3313v4ymwp4kc2om16yv2bug',
@@ -950,7 +952,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -959,7 +961,7 @@ export const comfortableMexicanSofaDb: Template = {
                         name: 'comfy_cms_fragments_pkey',
                         unique: true,
                         fieldIds: ['m0s6k37m1oom3wihysdnj3imt'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a8bfgynwe32gw61wk9zu26izz',
@@ -970,7 +972,7 @@ export const comfortableMexicanSofaDb: Template = {
                             'y3u0b8fi951vpj3zob1tpjqzj',
                             '5kftfbvqps0segb7chn4p1sxl',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vb4ynhwszf6l38zu9wtx2r78i',
@@ -981,13 +983,13 @@ export const comfortableMexicanSofaDb: Template = {
                             'y3u0b8fi951vpj3zob1tpjqzj',
                             '5kftfbvqps0segb7chn4p1sxl',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'knry1hxcqwwa09vnlpyunt6a8',
@@ -1008,7 +1010,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_layouts_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g5f55dk6u10i0e8twlopis5yn',
@@ -1020,7 +1022,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7lg3lic3upf5opwjhorqve3n7',
@@ -1032,7 +1034,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nypj8f9ge4by4pds1jskvpj09',
@@ -1044,7 +1046,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cb7bkgpw11yjvz64pi91jqcmh',
@@ -1056,7 +1058,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wgr37zn8b6j31whn35jisbnfp',
@@ -1068,7 +1070,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bjzpv4r293wagif7rs7vtbs6j',
@@ -1080,7 +1082,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r9dzwl2pkctxvoey4gjo85ibv',
@@ -1092,7 +1094,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sb4t7nwxx2dl16oseryk7jdd1',
@@ -1104,7 +1106,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uqdj1ajkrrf2zlm48a9pg0r3y',
@@ -1116,7 +1118,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n3yv8vh9zad5zgpyjiri2zz64',
@@ -1128,7 +1130,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vad7ga2i4i6r5155127awywsb',
@@ -1140,7 +1142,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1152,7 +1154,7 @@ export const comfortableMexicanSofaDb: Template = {
                             'g5f55dk6u10i0e8twlopis5yn',
                             'wgr37zn8b6j31whn35jisbnfp',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pahvbcuq0isyvr105qf4eopra',
@@ -1162,20 +1164,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'g5f55dk6u10i0e8twlopis5yn',
                             'wgr37zn8b6j31whn35jisbnfp',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxopbq1wyvbfg0fhcjad7w8pn',
                         name: 'comfy_cms_layouts_pkey',
                         unique: true,
                         fieldIds: ['vvpb6i0zl180z0xtkbkmbt8zq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'og53dwps4q7txai0egunnh6zb',
@@ -1196,7 +1198,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_translations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mhn2bonfsd00rqia8lb7xbe62',
@@ -1208,7 +1210,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm92nfn5papv27p2dx5zxaalkp',
@@ -1220,7 +1222,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd8cm7femomjqul6q7ivzj9ehi',
@@ -1232,7 +1234,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'laz84kf43o2k9dao2k31f4z7h',
@@ -1244,7 +1246,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8z5ahzbm6vcmxh333kkw6pnou',
@@ -1256,7 +1258,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c5ir6j00habaly8w7r9ec3007',
@@ -1269,7 +1271,7 @@ export const comfortableMexicanSofaDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'true',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zelme1en34qemwre4i9k8cnmr',
@@ -1281,7 +1283,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xva9vjrgao3cbgaaqqer26xnc',
@@ -1293,7 +1295,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1306,20 +1308,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'm92nfn5papv27p2dx5zxaalkp',
                             'd8cm7femomjqul6q7ivzj9ehi',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nf9dzxg2ciy86qq9o24bbk24i',
                         name: 'comfy_cms_translations_pkey',
                         unique: true,
                         fieldIds: ['vcf3qw3w08vbi1y3giku8jjbd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's88553ow908alh5oai78mda7r',
@@ -1340,7 +1342,7 @@ export const comfortableMexicanSofaDb: Template = {
                         nullable: false,
                         default:
                             "nextval('comfy_cms_categories_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9wzko2usjtxzmtha8iwjtyh36',
@@ -1352,7 +1354,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dhvm5i7whcc1shu8yd3j3j281',
@@ -1364,7 +1366,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jp5qxf4ahf2b1blzr0t0c10fj',
@@ -1376,7 +1378,7 @@ export const comfortableMexicanSofaDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1389,20 +1391,20 @@ export const comfortableMexicanSofaDb: Template = {
                             'jp5qxf4ahf2b1blzr0t0c10fj',
                             'dhvm5i7whcc1shu8yd3j3j281',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p1986ujktrv7yec63i9op4yli',
                         name: 'comfy_cms_categories_pkey',
                         unique: true,
                         fieldIds: ['76g8ntmzax7x5la7tjh1nc81e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1417,7 +1419,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'uvy743vegv4khu0lorjnvbyiw',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '37d5nyoucm96qyjrc4j8tnfa4',
@@ -1430,7 +1432,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'a2hyi3q08x3a1hp394ebbb66h',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3axngwbad8wo46zbk6ycfrt79',
@@ -1443,7 +1445,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'y8j19xae7nn91wn0m7aebp5h0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6gz2382uk6rbtvshq9l1zzqys',
@@ -1456,7 +1458,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'y8j19xae7nn91wn0m7aebp5h0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '74zqqon9vqax6krkvxzdhizwj',
@@ -1469,7 +1471,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'vvpb6i0zl180z0xtkbkmbt8zq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dcfp1of3r49syon1m7ji7r4jz',
@@ -1482,7 +1484,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'vvpb6i0zl180z0xtkbkmbt8zq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fbfi778xy1oafoaorb69l7xpx',
@@ -1495,7 +1497,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'y8j19xae7nn91wn0m7aebp5h0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'j7mbc1pgg3gxhcw1mtw33q2eu',
@@ -1508,7 +1510,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: '76g8ntmzax7x5la7tjh1nc81e',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k7obmh3n8juorg1l87fiiij8g',
@@ -1521,7 +1523,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'vvpb6i0zl180z0xtkbkmbt8zq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'kjlielgazpuvg5lzb5i5d6q15',
@@ -1534,7 +1536,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'y8j19xae7nn91wn0m7aebp5h0',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mvs0re4fz6xs7ivjev7yxqxw4',
@@ -1547,7 +1549,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'a2hyi3q08x3a1hp394ebbb66h',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q6hdn2vkibid8ffhdpoajdg32',
@@ -1560,7 +1562,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'a2hyi3q08x3a1hp394ebbb66h',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rzp18p74yxwu1u2y6y9euofm3',
@@ -1573,7 +1575,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'a2hyi3q08x3a1hp394ebbb66h',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 't7qh9ic3s8ivfkzk644qjl54i',
@@ -1586,7 +1588,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'a2hyi3q08x3a1hp394ebbb66h',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'w7seqm46riwegnvpp2ofzjv60',
@@ -1599,7 +1601,7 @@ export const comfortableMexicanSofaDb: Template = {
                 targetFieldId: 'vvpb6i0zl180z0xtkbkmbt8zq',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

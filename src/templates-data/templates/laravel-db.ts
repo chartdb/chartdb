@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/laravel-db.png';
 import imageDark from '@/assets/templates/laravel-db-dark.png';
 
+const now = Date.now();
+
 export const laravelDb: Template = {
     slug: 'laravel-database',
     name: 'Laravel',
@@ -39,7 +41,7 @@ export const laravelDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('failed_jobs_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9fyo2qdmsglsw7ctthmzlep1j',
@@ -51,7 +53,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ut52fvqjpa0u27jd2t6t92tom',
@@ -63,7 +65,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'plvfv0t9im2km2v0a0qzt8udo',
@@ -75,7 +77,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g5ef3gfi72xw0xeb0x6ox4b7r',
@@ -87,7 +89,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ez9j04lvylcn570ne77xjsbta',
@@ -99,7 +101,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -108,20 +110,20 @@ export const laravelDb: Template = {
                         name: 'idx_failed_jobs_failed_at',
                         unique: false,
                         fieldIds: ['ez9j04lvylcn570ne77xjsbta'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ztnvgd4m167ut9473h1kiofge',
                         name: 'failed_jobs_pkey',
                         unique: true,
                         fieldIds: ['stybn7gf7n84qhv3kizvxz13p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ytrk4k6ihrm2fhkodz3t2ovzb',
@@ -141,7 +143,7 @@ export const laravelDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('migrations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wjccp1hwlalr87ct56q35mf11',
@@ -153,7 +155,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jomrea7wdjx21q2510vyxz0y7',
@@ -165,7 +167,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -174,13 +176,13 @@ export const laravelDb: Template = {
                         name: 'migrations_pkey',
                         unique: true,
                         fieldIds: ['uldhz9mhxosp9dqfmmpvabzta'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yw7xlj5rjjevf292enea0qbgv',
@@ -200,7 +202,7 @@ export const laravelDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lzzou36zm6l6r4vmizdf24q8x',
@@ -212,7 +214,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lh4oc6cam3kb161f1thohs95j',
@@ -224,7 +226,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'luulms1e4cbai05978ufc0xdi',
@@ -236,7 +238,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xai5t98b0syebn21hkdvcf6sg',
@@ -248,7 +250,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b93oi649bi053g51mfobb94mq',
@@ -260,7 +262,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '76dz2udxcbudh5c8sdmauwsas',
@@ -272,7 +274,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '267qdi3o75bdg9lsf5wuhku9s',
@@ -284,7 +286,7 @@ export const laravelDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -293,27 +295,27 @@ export const laravelDb: Template = {
                         name: 'idx_users_email',
                         unique: false,
                         fieldIds: ['lh4oc6cam3kb161f1thohs95j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tgx4fsgm3j6q793g7ttfdr8em',
                         name: 'users_email_key',
                         unique: true,
                         fieldIds: ['lh4oc6cam3kb161f1thohs95j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kmp3sogww6j7lovhrv25dolxp',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['79ny0my0rv9ztzg7ww735rmrj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [],

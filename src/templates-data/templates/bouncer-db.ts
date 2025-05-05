@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/bouncer-db.png';
 import imageDark from '@/assets/templates/bouncer-db-dark.png';
 
+const now = Date.now();
+
 export const bouncerDb: Template = {
     slug: 'bouncer-database',
     name: 'Bouncer',
@@ -38,7 +40,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g8j0s94za7lstfgqpu0rjv30q',
@@ -50,7 +52,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mt51mbyv77zhhlxo6aoqtdrvb',
@@ -62,7 +64,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r0kdjfscr4qrxug9lltz8ff05',
@@ -74,7 +76,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8pc8xntbm3ie0to59grej0hi0',
@@ -86,7 +88,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r1bpa7kr06tlijcc5g6ozhyi1',
@@ -98,7 +100,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fcghi02e6v8ituzvhxcqvry5s',
@@ -110,7 +112,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -119,7 +121,7 @@ export const bouncerDb: Template = {
                         name: 'roles_pkey',
                         unique: true,
                         fieldIds: ['6dgpy48ulwwj4la0v9qyasacn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vb8w5m8rtwigvffo0hza1cnq5',
@@ -129,20 +131,20 @@ export const bouncerDb: Template = {
                             'g8j0s94za7lstfgqpu0rjv30q',
                             '8pc8xntbm3ie0to59grej0hi0',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'us1nbhilpzrzzdz20ee8b2yz5',
                         name: 'roles_scope_index',
                         unique: false,
                         fieldIds: ['8pc8xntbm3ie0to59grej0hi0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2dk2y86w5uwob2walqmzpvd38',
@@ -161,7 +163,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dln78b8156xss9vmtzufiyq89',
@@ -173,7 +175,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aybk9y71s2rkghsn2fpze24bc',
@@ -185,7 +187,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6jy0ziy0307k43itxl9syi36d',
@@ -197,7 +199,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'os6d10ohhct1tftf3ddpzplgl',
@@ -209,7 +211,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o6zy8fbod1pojyclv43hpnzyq',
@@ -221,7 +223,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -230,7 +232,7 @@ export const bouncerDb: Template = {
                         name: 'permissions_pkey',
                         unique: true,
                         fieldIds: ['dw9wefm90272eqrtdzc0kija2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zauknvtjvcvv8s9kzmpcbidmq',
@@ -241,27 +243,27 @@ export const bouncerDb: Template = {
                             '6jy0ziy0307k43itxl9syi36d',
                             'o6zy8fbod1pojyclv43hpnzyq',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm9h7f90dxevidzoel423z84pq',
                         name: 'permissions_ability_id_index',
                         unique: false,
                         fieldIds: ['dln78b8156xss9vmtzufiyq89'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e25jukkbmmmgtbux5mprd5c2t',
                         name: 'permissions_scope_index',
                         unique: false,
                         fieldIds: ['o6zy8fbod1pojyclv43hpnzyq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'cv6gzut9xl6vi18h1uipfszse',
@@ -280,7 +282,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b5fkxgkqocrav6gdjw5u8qna9',
@@ -292,7 +294,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p9ein9lspzmrtrcgxnwcu4jtr',
@@ -304,7 +306,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o7iqp8jvekbqmufkriravzd14',
@@ -316,7 +318,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z6347t0nenn6l7zfckobbkwky',
@@ -328,7 +330,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a42we94njfh5wfe40tzshz7yy',
@@ -340,7 +342,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ot976a09yh5xjnidymxl4bvx7',
@@ -352,7 +354,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sd6tn5b4dhrezroc5deefct22',
@@ -364,7 +366,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7ei2ayl775rt4anar8we426b7',
@@ -376,7 +378,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9frp78uwm48o3rehdgi8zfgwe',
@@ -388,7 +390,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -397,20 +399,20 @@ export const bouncerDb: Template = {
                         name: 'abilities_pkey',
                         unique: true,
                         fieldIds: ['5klow3heh0h4wyysvvlolrd3k'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd4sskhldtbn57htxwc3qobpwp',
                         name: 'abilities_scope_index',
                         unique: false,
                         fieldIds: ['sd6tn5b4dhrezroc5deefct22'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e5a0uhiuu982vjhbujvd40klh',
@@ -429,7 +431,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ojer4wzhyne7fdrgw9qy47x12',
@@ -441,7 +443,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dzak2cn4sxwh0i85qpxxwnkz9',
@@ -453,7 +455,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's6asnly67otxpgpvsfu0u4du5',
@@ -465,7 +467,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -478,13 +480,13 @@ export const bouncerDb: Template = {
                             'ojer4wzhyne7fdrgw9qy47x12',
                             'dzak2cn4sxwh0i85qpxxwnkz9',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ftblbz8shvhibeyenqw2j66og',
@@ -503,7 +505,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hdvep6n3x5mpyize0poffmi8x',
@@ -515,7 +517,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2zvadpju6k7472brqxnjwc25y',
@@ -527,7 +529,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0a7ypts0qu8p8xdgmx973r0j2',
@@ -539,7 +541,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -548,13 +550,13 @@ export const bouncerDb: Template = {
                         name: 'tenants_pkey',
                         unique: true,
                         fieldIds: ['rilheq75e61ukzvoovax5dww5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'lyw5j25p9jijopmxeg9wh21wt',
@@ -573,7 +575,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wg9z61qv2m6gmqulnfrozpp0f',
@@ -585,7 +587,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mr6hxkrpypz2vdsfidw3ilvzh',
@@ -597,7 +599,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g7u6a5onmfgzgm7qb528koa6w',
@@ -609,7 +611,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gvlv2hj10lgelg9cn3366sslu',
@@ -621,7 +623,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1devmagh0xrj16ynyxvas28b4',
@@ -633,7 +635,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '27rz618ufyo31x2v9tqmv7bf9',
@@ -645,7 +647,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -658,34 +660,34 @@ export const bouncerDb: Template = {
                             'g7u6a5onmfgzgm7qb528koa6w',
                             '27rz618ufyo31x2v9tqmv7bf9',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ngfkhhz8p8qd1in8jfp3m33dh',
                         name: 'assigned_roles_role_id_index',
                         unique: false,
                         fieldIds: ['wg9z61qv2m6gmqulnfrozpp0f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dmqwn02z4vxbyajgx9a85o9z4',
                         name: 'assigned_roles_scope_index',
                         unique: false,
                         fieldIds: ['27rz618ufyo31x2v9tqmv7bf9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eanj0487n1x5r3kbf3asm1sgg',
                         name: 'assigned_roles_pkey',
                         unique: true,
                         fieldIds: ['md1pv885295zlruqjf3bc2cn4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mcsql3yipul3bvoa8zp2z6xhm',
@@ -704,7 +706,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dv9059syivzdb1lq2ibqhu0rf',
@@ -716,7 +718,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tg1p3nusig09vpso36nv4cqsm',
@@ -728,7 +730,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1ak37xnicelk5z4tpekrdhrcn',
@@ -740,7 +742,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -753,13 +755,13 @@ export const bouncerDb: Template = {
                             'dv9059syivzdb1lq2ibqhu0rf',
                             'tg1p3nusig09vpso36nv4cqsm',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'oy09nzysvqt9q38z38qdop5ky',
@@ -778,7 +780,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ki90zf8yhg9cr4qa58hoi4mhh',
@@ -790,7 +792,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8qm8ms9bgwz5hhlaq5l36hnm1',
@@ -802,7 +804,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vyso7h7t0wc441lj7zo51n5wd',
@@ -814,7 +816,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8tmf7j5sga201ll66tufvruiu',
@@ -826,7 +828,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5l5z4tzttk5f1xff7cot9aoxl',
@@ -838,7 +840,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -847,13 +849,13 @@ export const bouncerDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['y13z863nrqq2jx88humld1c8l'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rk4mh3tnvjgx2olpm5nu317g9',
@@ -872,7 +874,7 @@ export const bouncerDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ulzkft5ohumvi9faj4ha0r1rn',
@@ -884,7 +886,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'r7utet2eq51fiqks56uird3ut',
@@ -896,7 +898,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '73nnegxjwq3fpccbqzxhmhgfp',
@@ -908,7 +910,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vav8txgj5835e0w3g86be4ozi',
@@ -920,7 +922,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nopldofnpy5yhlx2qcy92j3ix',
@@ -932,7 +934,7 @@ export const bouncerDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -941,13 +943,13 @@ export const bouncerDb: Template = {
                         name: 'activity_logs_pkey',
                         unique: true,
                         fieldIds: ['78k97fv3zqmnhqlygy10lq7oy'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -962,7 +964,7 @@ export const bouncerDb: Template = {
                 targetFieldId: '5klow3heh0h4wyysvvlolrd3k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wkembgjtz8w9fau09ngjlxa8v',
@@ -975,7 +977,7 @@ export const bouncerDb: Template = {
                 targetFieldId: '6dgpy48ulwwj4la0v9qyasacn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

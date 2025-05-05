@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/refinerycms-db.png';
 import imageDark from '@/assets/templates/refinerycms-db-dark.png';
 
+const now = Date.now();
+
 export const refinerycmsDb: Template = {
     slug: 'refinerycms-database',
     name: 'Refinerycms',
@@ -39,7 +41,7 @@ export const refinerycmsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('refinery_pages_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lzevldhuyo06sspphm4wucizo',
@@ -51,7 +53,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yk4bq7711j5fddoqsof7j4u9v',
@@ -63,7 +65,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm7vykm599oa0s7hak069u57qu',
@@ -76,7 +78,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'true',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oimep75r2bju12ph7ztijflsw',
@@ -88,7 +90,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vcd3buqs75mdojua7076xqjbv',
@@ -100,7 +102,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ppdpuv5kms8eiz1mq1qvmmret',
@@ -113,7 +115,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'true',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dr3j1wjfkeyiyle1q5qnit2vc',
@@ -126,7 +128,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'false',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iaa88kbyxvsbq8fprf57q31ve',
@@ -139,7 +141,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'false',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'katwma7rn3pw0e6x7rexgtlfe',
@@ -151,7 +153,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vcfz7zok6l27dlfdtj95wjgpx',
@@ -163,7 +165,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1ckfcg95ky3lp1ec55hver01e',
@@ -175,7 +177,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rcb5rnq8nl4fayhzt02gfnegf',
@@ -187,7 +189,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rlklhd2qaco6zjldz8rmdzdn',
@@ -199,7 +201,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pgf4zovdu5618qzaz76nr271d',
@@ -211,7 +213,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'usqziu3i0ntpdidisg3vygyjy',
@@ -223,7 +225,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ayqgxg0m24cydemeg2j6thvkd',
@@ -236,7 +238,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -245,20 +247,20 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_pages_pkey',
                         unique: true,
                         fieldIds: ['5w012p88r4rek8982cxclnl48'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'va9hp8z6nawt4pmn89sct0yat',
                         name: 'idx_refinery_pages_parent_id',
                         unique: false,
                         fieldIds: ['lzevldhuyo06sspphm4wucizo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '92c2fr501z0r9f3w1nuv7hqth',
@@ -279,7 +281,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_page_translations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gxucq2jirgj2154f1kbosszje',
@@ -291,7 +293,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qphxggyr451wu60jxqmwyeo34',
@@ -303,7 +305,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a8yanumpne9ljm99x5gbhkumn',
@@ -315,7 +317,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qd63pzr1wg1pgmkh4afvqv1ko',
@@ -327,7 +329,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ppar7easmrljvwjucwezdwjcd',
@@ -339,7 +341,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '54t4qguqt3ecd159e44rdup1u',
@@ -351,7 +353,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0i8cdq5il4gs0rpt1mkxai2wg',
@@ -363,7 +365,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '83xoggy6fq9qmjvmahnvy76pm',
@@ -375,7 +377,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -384,7 +386,7 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_page_translations_pkey',
                         unique: true,
                         fieldIds: ['uu5py9i7tvqt7yb20cbl12epi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3836t31nwewjaop5qlxa6lqc5',
@@ -394,20 +396,20 @@ export const refinerycmsDb: Template = {
                             'gxucq2jirgj2154f1kbosszje',
                             'qphxggyr451wu60jxqmwyeo34',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '12edjtllo0c5pj3j3khr122zn',
                         name: 'idx_refinery_page_translations_page_id',
                         unique: false,
                         fieldIds: ['gxucq2jirgj2154f1kbosszje'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'az3v69juj3jrw4xtvuv3w5f5d',
@@ -428,7 +430,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_authentication_users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j9a0tv182t7nkp9s4zzjg698e',
@@ -440,7 +442,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ybw25y34rgbrqq7cuv5c3yp24',
@@ -452,7 +454,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd1ltk39stbddosok6q9belgx7',
@@ -464,7 +466,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5axdyqn4990anbktrhuj7uofj',
@@ -476,7 +478,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jg2q4b95zv8u126i52mztou90',
@@ -488,7 +490,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xdz334d3k511vuhj74idw5tgh',
@@ -500,7 +502,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p3ea62dol30delzexoazvo1c5',
@@ -512,7 +514,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b2i970wo3lhmqxv5qvcvjswpd',
@@ -525,7 +527,7 @@ export const refinerycmsDb: Template = {
                         unique: false,
                         nullable: true,
                         default: '0',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5iewf3892e3gl97qd4v5t9uzi',
@@ -537,7 +539,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xcvl0keiint8jddwcw40eip51',
@@ -549,7 +551,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fehqicapvw16eyiy83nm5035h',
@@ -561,7 +563,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xgdn0zjl5srwt2cdfpmzn2jig',
@@ -573,7 +575,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hlx0959pz7g96mx43osm50b3m',
@@ -585,7 +587,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1aiosqosixnfedk8xtduj252y',
@@ -597,7 +599,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gtipy4p2z0k1vce7wh2oeitre',
@@ -609,7 +611,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -618,13 +620,13 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_authentication_users_pkey',
                         unique: true,
                         fieldIds: ['91ttm15k7g2vorzb6rgo0444u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'bgv9x5k13hzj1re3wqt0t9o4v',
@@ -645,7 +647,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_page_part_translations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qllab1c60stttba572afmuiai',
@@ -657,7 +659,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'se0uglcze7spj1k5w8q3z73xb',
@@ -669,7 +671,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y7sfbpy7la99re2xdvmfsxd3f',
@@ -681,7 +683,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f7yw2vrw55ob428limom1uln7',
@@ -693,7 +695,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2lg5qdu8as4edbpptg5zufm9g',
@@ -705,7 +707,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -714,7 +716,7 @@ export const refinerycmsDb: Template = {
                         name: 'idx_refinery_page_part_translations_part_id',
                         unique: false,
                         fieldIds: ['qllab1c60stttba572afmuiai'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cw8ptlacxfhvnwdn4x5mrm3t4',
@@ -724,20 +726,20 @@ export const refinerycmsDb: Template = {
                             'qllab1c60stttba572afmuiai',
                             'se0uglcze7spj1k5w8q3z73xb',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3pstn8fz4gcu765yjhua3b8rj',
                         name: 'refinery_page_part_translations_pkey',
                         unique: true,
                         fieldIds: ['na82v4308qa3fibjpb5axjzql'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd9lhzeswfxg2yf5rwj0u6c4h2',
@@ -758,7 +760,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_authentication_user_roles_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mj35p9z8gx9f79n0dvfa4bskv',
@@ -770,7 +772,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ybixjuasbfq711r01cpsmy4uv',
@@ -782,7 +784,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -791,7 +793,7 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_authentication_user_roles_pkey',
                         unique: true,
                         fieldIds: ['42794lkejwwtxizfwn5666y7n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2k2lud63wcdnke7rlyi0wtyi2',
@@ -801,27 +803,27 @@ export const refinerycmsDb: Template = {
                             'mj35p9z8gx9f79n0dvfa4bskv',
                             'ybixjuasbfq711r01cpsmy4uv',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8auv7que43c4ng2v86217o8lx',
                         name: 'idx_refinery_authentication_user_roles_user_id',
                         unique: false,
                         fieldIds: ['mj35p9z8gx9f79n0dvfa4bskv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xqjh7jcg87g0hd971ft31ly9g',
                         name: 'idx_refinery_authentication_user_roles_role_id',
                         unique: false,
                         fieldIds: ['ybixjuasbfq711r01cpsmy4uv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jlkaqwomq1h61d2ukg41ckcvi',
@@ -841,7 +843,7 @@ export const refinerycmsDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('refinery_images_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'utjysodvtiwoxumz6stidot7v',
@@ -853,7 +855,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2bn1rg82hfltbe0eo5604g52m',
@@ -865,7 +867,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'thuyam3y8kl4hlaouyb82rapm',
@@ -877,7 +879,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o161ddzn9487c8wcvl0ro2mh3',
@@ -889,7 +891,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'we1izdong38a2oon1qz82m50u',
@@ -901,7 +903,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4s9w55236dz4z3qnrdyhwwqsq',
@@ -913,7 +915,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5092e6ce9fli7k8fjziogtr59',
@@ -925,7 +927,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vpo0mcy4pb60v3x9ltjf51yn4',
@@ -937,7 +939,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -946,13 +948,13 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_images_pkey',
                         unique: true,
                         fieldIds: ['pflvzdhfc8eue9m46ndkmb011'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jtjpfsqpmhkplka00h7fvkweu',
@@ -973,7 +975,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_authentication_roles_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '854irrwfbuu2al0q5z6qyyebs',
@@ -985,7 +987,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -994,13 +996,13 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_authentication_roles_pkey',
                         unique: true,
                         fieldIds: ['lnclb8wwog1fehv7owsoecj6j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ojwtj2y46se64tt1qd7m7lkcw',
@@ -1021,7 +1023,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_resource_translations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p56j9c43zosgj116fxg3guydb',
@@ -1033,7 +1035,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iiavrhga4p4m4ccjnvgovru0o',
@@ -1045,7 +1047,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9mb3el80bt0c0fyd3ah9mfan9',
@@ -1057,7 +1059,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zbou3jywd329ofcfknfvgmxu8',
@@ -1069,7 +1071,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '320a7qzypj8emcwsz31o9ebc8',
@@ -1081,7 +1083,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1093,27 +1095,27 @@ export const refinerycmsDb: Template = {
                             'p56j9c43zosgj116fxg3guydb',
                             'iiavrhga4p4m4ccjnvgovru0o',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9zt4chajx7e7ytsfm0or8y6kk',
                         name: 'refinery_resource_translations_pkey',
                         unique: true,
                         fieldIds: ['zfky51214gs41juaz0nfb1z4e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qjqataetyjctqm3je37b6f1bh',
                         name: 'idx_refinery_resource_translations_resource_id',
                         unique: false,
                         fieldIds: ['p56j9c43zosgj116fxg3guydb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ozy6j111lda7uukpdsjcd4dhh',
@@ -1134,7 +1136,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_page_parts_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mjn96dcqh1eglgrfbqswy8h0w',
@@ -1146,7 +1148,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '99nnttv8fh3v4pfwqr0byx7js',
@@ -1158,7 +1160,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nab8y2kg1ia5e99jto9fw40z6',
@@ -1170,7 +1172,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4cc5vgizxdw8cmskijg5fvpe8',
@@ -1182,7 +1184,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0cs57b62awzmsge44qee2bxj9',
@@ -1194,7 +1196,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '10d4ypau9r7va848q2fbxmh0x',
@@ -1206,7 +1208,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1215,20 +1217,20 @@ export const refinerycmsDb: Template = {
                         name: 'idx_refinery_page_parts_page_id',
                         unique: false,
                         fieldIds: ['mjn96dcqh1eglgrfbqswy8h0w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0sdoid7tbbbfl48jqlbjx0rj9',
                         name: 'refinery_page_parts_pkey',
                         unique: true,
                         fieldIds: ['8uqx94rc08fid6ni08eryfs7o'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p5hofapibkk3hf64g0ak4am2v',
@@ -1249,7 +1251,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_resources_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2geu0um0k2a25nt4ic6lpdgmf',
@@ -1261,7 +1263,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'di74d3v5s6xjo1wudcwd2d6nu',
@@ -1273,7 +1275,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd3z436v5i6qybn7xxz0i43r7z',
@@ -1285,7 +1287,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jw9skkurlrgqn32fl01r4ft20',
@@ -1297,7 +1299,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c0ax48fupz3lbwt7z323m3qlc',
@@ -1309,7 +1311,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uefd28uyvdhv2mz6tvtb38zmf',
@@ -1321,7 +1323,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6nzulglmtpiwz0f1jdwdt9gq2',
@@ -1333,7 +1335,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1342,13 +1344,13 @@ export const refinerycmsDb: Template = {
                         name: 'refinery_resources_pkey',
                         unique: true,
                         fieldIds: ['fpz87bef6sxzktbnsc2f16x7u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'z6wjw0jok023a9o6z420pbypt',
@@ -1369,7 +1371,7 @@ export const refinerycmsDb: Template = {
                         nullable: false,
                         default:
                             "nextval('refinery_image_translations_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ktz1mn9yugv5gwsjr9s9bulwz',
@@ -1381,7 +1383,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xzv1q8m8az73w28jw4id8verk',
@@ -1393,7 +1395,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5jj95obtrmpme85y919r3wm5w',
@@ -1405,7 +1407,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'otok7kgos7i9tpfyneczcdvex',
@@ -1417,7 +1419,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'opqceeimb8zwzmwxf2rlva8nl',
@@ -1429,7 +1431,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xb8uoknax98spicvsjea6dskx',
@@ -1441,7 +1443,7 @@ export const refinerycmsDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1453,27 +1455,27 @@ export const refinerycmsDb: Template = {
                             'ktz1mn9yugv5gwsjr9s9bulwz',
                             'xzv1q8m8az73w28jw4id8verk',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'si5487fpr2xj5puqcpszukdzf',
                         name: 'idx_refinery_image_translations_image_id',
                         unique: false,
                         fieldIds: ['ktz1mn9yugv5gwsjr9s9bulwz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nq7iy3jnlm64m1lfzo32n3zr3',
                         name: 'refinery_image_translations_pkey',
                         unique: true,
                         fieldIds: ['lu3limyzf56lsray464ynun9z'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1488,7 +1490,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: 'pflvzdhfc8eue9m46ndkmb011',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2ia47qvis4w2elsngz0wsoajn',
@@ -1501,7 +1503,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: 'lnclb8wwog1fehv7owsoecj6j',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5plx2308myiry2npue0uz3d1w',
@@ -1514,7 +1516,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: '5w012p88r4rek8982cxclnl48',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'cl9r3l2zdykd3rugbdt6x0pg8',
@@ -1527,7 +1529,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: '5w012p88r4rek8982cxclnl48',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'e44lnvcqfwm1530359w6dew6n',
@@ -1540,7 +1542,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: '8uqx94rc08fid6ni08eryfs7o',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uul1nr7grcd4q3ehw407tvku2',
@@ -1553,7 +1555,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: 'fpz87bef6sxzktbnsc2f16x7u',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vkc75adlk6trztbc7n7elu3vc',
@@ -1566,7 +1568,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: '5w012p88r4rek8982cxclnl48',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zmcyzmo9bdk5jbs1g6fsi2u9m',
@@ -1579,7 +1581,7 @@ export const refinerycmsDb: Template = {
                 targetFieldId: '91ttm15k7g2vorzb6rgo0444u',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],
