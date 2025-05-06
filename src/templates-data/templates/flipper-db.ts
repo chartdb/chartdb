@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/flipper-db.png';
 import imageDark from '@/assets/templates/flipper-db-dark.png';
 
+const now = Date.now();
+
 export const flipperDb: Template = {
     slug: 'flipper-database',
     name: 'Flipper',
@@ -37,7 +39,7 @@ export const flipperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nhyf4lcb6wavevyf57lf5sgg6',
@@ -50,7 +52,7 @@ export const flipperDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j767ltyzmrue9da0834y51dm2',
@@ -62,7 +64,7 @@ export const flipperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jxv356syc9l7pn70o5ypjsvu2',
@@ -74,7 +76,7 @@ export const flipperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -83,20 +85,20 @@ export const flipperDb: Template = {
                         name: 'flipper_features_key_unique',
                         unique: true,
                         fieldIds: ['nhyf4lcb6wavevyf57lf5sgg6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '688euilbvac7l4g4td0f4ope0',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['kzvapep4sezv1ehvx9jut4msa'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k3fi60h438pnhfit52zds2y22',
@@ -115,7 +117,7 @@ export const flipperDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hyk3w9a3cj48338mma85vm4vn',
@@ -128,7 +130,7 @@ export const flipperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pss1gs5xz19bm3nbldxq4qgyc',
@@ -141,7 +143,7 @@ export const flipperDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'shzigzjrhv0m3mlb5mvjit3up',
@@ -154,7 +156,7 @@ export const flipperDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v92wmlsa70mbcgdlz5pz50xx1',
@@ -166,7 +168,7 @@ export const flipperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'atxf546zsrtvq8mzavfc8gm3e',
@@ -178,7 +180,7 @@ export const flipperDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -191,20 +193,20 @@ export const flipperDb: Template = {
                             'pss1gs5xz19bm3nbldxq4qgyc',
                             'shzigzjrhv0m3mlb5mvjit3up',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'canhlx66b19z1ota9z9l353ou',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['pqq0xmwknc6byigyseyh8r9q8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [],

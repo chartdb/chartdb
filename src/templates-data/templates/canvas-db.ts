@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/canvas-db.png';
 import imageDark from '@/assets/templates/canvas-db-dark.png';
 
+const now = Date.now();
+
 export const canvasDb: Template = {
     slug: 'canvas-database',
     name: 'Canvas',
@@ -38,7 +40,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tsd8jzjwcmfw6mx5jer3whbph',
@@ -50,7 +52,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -62,13 +64,13 @@ export const canvasDb: Template = {
                             'fhwlpd8w33hobomelorttw9tj',
                             'tsd8jzjwcmfw6mx5jer3whbph',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5xwa6smxaoukrdo6g2e19nskt',
@@ -87,7 +89,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ciza8eyl53g1goacncp93e8vy',
@@ -99,7 +101,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qzpmc3xjhw23d73cadadb1ozn',
@@ -111,7 +113,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rqq5qwf4p9d3x3mtvydimloei',
@@ -123,7 +125,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'offrjkr13nazmlgh9elxzae39',
@@ -135,7 +137,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nys8tpb5w0th3ur2a9wj9bv59',
@@ -147,7 +149,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z2xzqa6lurpwoeiqkean8rdfa',
@@ -159,7 +161,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dvac9q5ctgq3kmebn2o8a13g2',
@@ -171,7 +173,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -180,20 +182,20 @@ export const canvasDb: Template = {
                         name: 'users_email_unique',
                         unique: true,
                         fieldIds: ['qzpmc3xjhw23d73cadadb1ozn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nph7qdsk1091nhvo7fclbc1ls',
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['1nv304nagqmk8a01qgm8ghdmm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gpzadn5qm3mx6jotmjgpu8htc',
@@ -212,7 +214,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1zmnya1d85gksdyt8742t3lbs',
@@ -224,7 +226,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9nxqq9vkbtv7l889tl87d0bpf',
@@ -236,7 +238,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lv36rainmlib6eqk8ap4wfo9t',
@@ -248,7 +250,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o3vcqg4uebkluvhcjy6cnmuv5',
@@ -260,7 +262,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sjnm2biaejyxnoy1bcbcv03xh',
@@ -272,7 +274,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7kisl6d3lygky70d0fbovq9lc',
@@ -284,7 +286,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zzdd3opqp6co2a17zr49g5ppg',
@@ -296,7 +298,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6hmnwaur8d0s2wpgdo6sccok3',
@@ -308,7 +310,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e6lyhjoudpy4188gagz2dsd04',
@@ -320,7 +322,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uqoms2dp83n25kpt74izuwqv3',
@@ -332,7 +334,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zqhyvmdl3u9yifta5ix8du66v',
@@ -344,7 +346,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'seo6rh5chhw21ialsfvqrgfzw',
@@ -356,7 +358,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -368,27 +370,27 @@ export const canvasDb: Template = {
                             '1zmnya1d85gksdyt8742t3lbs',
                             '6hmnwaur8d0s2wpgdo6sccok3',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mmvgnwdm8uavgw4u0cvbpnbif',
                         name: 'canvas_posts_user_id_index',
                         unique: false,
                         fieldIds: ['6hmnwaur8d0s2wpgdo6sccok3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zvws6jn6245yw352tuc0utdpa',
                         name: 'canvas_posts_pkey',
                         unique: true,
                         fieldIds: ['x0y13niv8biq1ak1zoglm6fvi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'iide3o2zr3cbfno06ybiepksi',
@@ -407,7 +409,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oamdcg0otmd1ay9u5s9gjsxq3',
@@ -419,7 +421,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7001koh5z398wvhl9r9fs0ofx',
@@ -431,7 +433,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '95x1eme6vkztws5at4y5wrkmu',
@@ -443,7 +445,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'usqep9g1eg7r3uzeya23o7ylv',
@@ -455,7 +457,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zrz0uwma9wgh8i01olfct6qzy',
@@ -467,7 +469,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lah5uz5ow7n2pvadpy5xfeeh0',
@@ -479,7 +481,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -488,27 +490,27 @@ export const canvasDb: Template = {
                         name: 'canvas_views_created_at_index',
                         unique: false,
                         fieldIds: ['zrz0uwma9wgh8i01olfct6qzy'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ava38h63ynadth3y2o2y28l4t',
                         name: 'canvas_views_post_id_index',
                         unique: false,
                         fieldIds: ['oamdcg0otmd1ay9u5s9gjsxq3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rk3e3cvk1ogo7518766qktphc',
                         name: 'canvas_views_pkey',
                         unique: true,
                         fieldIds: ['uxyx4dl5s6z110zpg8i8x7r6o'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ncirb4xdc32o0mwjwzytcp416',
@@ -527,7 +529,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'diauddisg9mnphj140hw5k5ym',
@@ -539,7 +541,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -551,13 +553,13 @@ export const canvasDb: Template = {
                             'diauddisg9mnphj140hw5k5ym',
                             'dfuimnqjpwl68zflelvzwmgxf',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ovevnjzoigctv3dutsxan190o',
@@ -576,7 +578,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4mrfv6tuaztwcryj17132ix6r',
@@ -588,7 +590,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lk15xv28nncv6ctaf202umv3s',
@@ -600,7 +602,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zaamgq75pfe4d3q03c2lghdfj',
@@ -612,7 +614,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8hfj04tk2f5zgl06i83klq4o5',
@@ -624,7 +626,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8s0iop4ybulq1w7zwufbz4r7y',
@@ -636,7 +638,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w81rnyabax7b5sibu5amo8em0',
@@ -648,7 +650,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -657,13 +659,13 @@ export const canvasDb: Template = {
                         name: 'canvas_visits_pkey',
                         unique: true,
                         fieldIds: ['6vvv572e003po9n7ie13y23bf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uwehb077txcxeqkhv97hujbex',
@@ -682,7 +684,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kesn93ygn92k45dx11tvhbh9d',
@@ -694,7 +696,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kl0ro5wchfewz6liz7oh2th6w',
@@ -706,7 +708,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sth033xoe10qffjcc73gfov17',
@@ -718,7 +720,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'okdes9su8kfo9yrrcmsdemeii',
@@ -730,7 +732,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n5a10udc9b8vqew1u82i20gas',
@@ -742,7 +744,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9hpf0v45z9k6d81qnckkwpkux',
@@ -754,7 +756,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -763,7 +765,7 @@ export const canvasDb: Template = {
                         name: 'canvas_topics_user_id_index',
                         unique: false,
                         fieldIds: ['sth033xoe10qffjcc73gfov17'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5dd0rh0a64hkl5hkmyi3kbc8a',
@@ -773,27 +775,27 @@ export const canvasDb: Template = {
                             'kesn93ygn92k45dx11tvhbh9d',
                             'sth033xoe10qffjcc73gfov17',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iimiysue67n6ecwcznbuwbb42',
                         name: 'canvas_topics_created_at_index',
                         unique: false,
                         fieldIds: ['okdes9su8kfo9yrrcmsdemeii'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8yi15kli2hw55cl64zjcu46y7',
                         name: 'canvas_topics_pkey',
                         unique: true,
                         fieldIds: ['e9f661z3ajm6vc2hx6mamcors'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xyf5m4fnsxoincpi4awmkmxd1',
@@ -812,7 +814,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '24e272fkgpkwyphbopj7ysbvg',
@@ -824,7 +826,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gr39zqf3qfm9hq9r2tbfgw7uz',
@@ -836,7 +838,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rxcacuumalld6p0jy60by1fpa',
@@ -848,7 +850,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'son9xgckjjm0g0qizsronu3jd',
@@ -860,7 +862,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zfmt1zw89cwh4qw647w8l71w1',
@@ -872,7 +874,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j8ydw0maa3qlxed3i5sarf8br',
@@ -884,7 +886,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -896,34 +898,34 @@ export const canvasDb: Template = {
                             '24e272fkgpkwyphbopj7ysbvg',
                             'rxcacuumalld6p0jy60by1fpa',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '27ba2dh6ou8ed0dzzi4ufw08x',
                         name: 'canvas_tags_user_id_index',
                         unique: false,
                         fieldIds: ['rxcacuumalld6p0jy60by1fpa'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l3ddstoogmu6eo6ky5qm2o7p0',
                         name: 'canvas_tags_created_at_index',
                         unique: false,
                         fieldIds: ['son9xgckjjm0g0qizsronu3jd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i2bxvfqhq7zi9dzqvu988edn0',
                         name: 'canvas_tags_pkey',
                         unique: true,
                         fieldIds: ['qrhlkoa6d2hg7d0mevn3aras3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'y1p8d5ws68urgi9ph9cklc2m1',
@@ -942,7 +944,7 @@ export const canvasDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cypru4jaldrqgnnxg1cny9vii',
@@ -954,7 +956,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3rvybnhy2vuqibcfpoktpcaf9',
@@ -966,7 +968,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i6k8y025obgy7sizsxis02fkm',
@@ -978,7 +980,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '91vu6mey8jj25zutewzftbtwy',
@@ -990,7 +992,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jzhd12j45j4iehxtbr9tkvmhz',
@@ -1002,7 +1004,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w6oi9cyi0el5n711kr98nw2kh',
@@ -1014,7 +1016,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'it3fnf1j4z8hjaixr57304c6n',
@@ -1026,7 +1028,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p9eg12tl3vh7u9kyuebbnwcp6',
@@ -1038,7 +1040,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g15xjuuij9wreoga2c06ywar0',
@@ -1050,7 +1052,7 @@ export const canvasDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1059,27 +1061,27 @@ export const canvasDb: Template = {
                         name: 'canvas_user_meta_user_id_unique',
                         unique: true,
                         fieldIds: ['cypru4jaldrqgnnxg1cny9vii'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gs3wkqexghdui0bi6gvbnjyc6',
                         name: 'canvas_user_meta_username_unique',
                         unique: true,
                         fieldIds: ['3rvybnhy2vuqibcfpoktpcaf9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zjxh74zdiibeam0h94rm6jg86',
                         name: 'canvas_user_meta_pkey',
                         unique: true,
                         fieldIds: ['mp5l57l8614xq7iy1f129dpgu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1094,7 +1096,7 @@ export const canvasDb: Template = {
                 targetFieldId: '1nv304nagqmk8a01qgm8ghdmm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2p2sb1ssqjvsbq812m7h0vf97',
@@ -1107,7 +1109,7 @@ export const canvasDb: Template = {
                 targetFieldId: '1nv304nagqmk8a01qgm8ghdmm',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5utm4qfn4x8qohn5ykwum5eu7',
@@ -1120,7 +1122,7 @@ export const canvasDb: Template = {
                 targetFieldId: '1nv304nagqmk8a01qgm8ghdmm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '66qirqfe18tjg2qmxbxht4jhm',
@@ -1133,7 +1135,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'x0y13niv8biq1ak1zoglm6fvi',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aws5a2liece7gkr5ju64vvpei',
@@ -1146,7 +1148,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'qrhlkoa6d2hg7d0mevn3aras3',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'g8l06m7u2tcc6vo5950zhkxf1',
@@ -1159,7 +1161,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'x0y13niv8biq1ak1zoglm6fvi',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hvhh9uoagz4arkdvkr93tgns5',
@@ -1172,7 +1174,7 @@ export const canvasDb: Template = {
                 targetFieldId: '1nv304nagqmk8a01qgm8ghdmm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k9kdmrlb7me0qf44rev7gpuy5',
@@ -1185,7 +1187,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'x0y13niv8biq1ak1zoglm6fvi',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'l1sendu65brach1zzwoz3jw3l',
@@ -1198,7 +1200,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'e9f661z3ajm6vc2hx6mamcors',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'y3fcflr0szdgg1cui3yrlxwxn',
@@ -1211,7 +1213,7 @@ export const canvasDb: Template = {
                 targetFieldId: 'x0y13niv8biq1ak1zoglm6fvi',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

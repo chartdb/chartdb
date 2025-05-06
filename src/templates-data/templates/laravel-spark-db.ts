@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/laravel-spark-db.png';
 import imageDark from '@/assets/templates/laravel-spark-db-dark.png';
 
+const now = Date.now();
+
 export const laravelSparkDb: Template = {
     slug: 'laravel-spark-database',
     name: 'Laravel Spark',
@@ -39,7 +41,7 @@ export const laravelSparkDb: Template = {
                         nullable: false,
                         default:
                             "nextval('team_subscriptions_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nzbta5jmnf258kdchfqiylit2',
@@ -51,7 +53,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zga7iw6n1q6fosentweehy7lb',
@@ -63,7 +65,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fe138jknzenrpxmybn18gyiah',
@@ -75,7 +77,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9afe5ufrgwznyge7ztudoc0o0',
@@ -87,7 +89,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5a75wrotyz2g0ip2w5skwnwyy',
@@ -99,7 +101,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gqvio9lgehtv8pri0u0go32ea',
@@ -111,7 +113,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kanw1laa5vfr5uouxxw3jzov1',
@@ -123,7 +125,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ppi5ztfmfh67jits6pq5yes9x',
@@ -135,7 +137,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -144,13 +146,13 @@ export const laravelSparkDb: Template = {
                         name: 'team_subscriptions_pkey',
                         unique: true,
                         fieldIds: ['37h5tfskdps7rmp9us2uceq6c'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4bxahy0gb1h3dyrtd2459qwvb',
@@ -170,7 +172,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('invoices_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nzcdiown05omd5pfp8bvqso1j',
@@ -182,7 +184,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5fyx2qkkbxsppr4tozd5josct',
@@ -194,7 +196,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oof54cb2pyvtsd1unjooyfxvy',
@@ -206,7 +208,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3yove3hk4pdnlpk4oj5csruwz',
@@ -218,7 +220,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tlvqsks3da74kq4fk80vz2fi2',
@@ -232,7 +234,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nor9z7skycbwyjdytxi3s6alr',
@@ -246,7 +248,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hzz3pnoi87x0htllztuw079ad',
@@ -260,7 +262,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y51cso8kguaxlffleiqhubdoi',
@@ -272,7 +274,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm0pp8pu3013abiaheevskatqs',
@@ -284,7 +286,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aafhr7qxqx15jyeitjw5rxtwp',
@@ -296,7 +298,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'saw9z3z4qcvyx87t58hxxovwa',
@@ -308,7 +310,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yhib760afvdargf39d90awcch',
@@ -320,7 +322,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1yc4aeauxjb8tvcgzxfm3znyw',
@@ -332,7 +334,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ogsfx4sscq471x94tcfbazcui',
@@ -344,7 +346,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cbox2xmtjema491daedwfgchg',
@@ -356,7 +358,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nsz71xz2c10todqm0b7x8pgzf',
@@ -368,7 +370,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -377,13 +379,13 @@ export const laravelSparkDb: Template = {
                         name: 'invoices_pkey',
                         unique: true,
                         fieldIds: ['zplhikdjwej558393rgu5wsxi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5hxs7wpg67p88r4521wi8syep',
@@ -402,7 +404,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zdsjqtn7ihjg6t7bccpy8vl13',
@@ -414,7 +416,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7a2yjh7lksumxpk0vp5m8tyzl',
@@ -426,7 +428,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '81sn5cdvfs5bsxuxsfyr5erse',
@@ -438,7 +440,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '02xpsjtazmemsg9o0hh63bwhf',
@@ -450,7 +452,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xtz16agynpqqmgslwznpksu5k',
@@ -462,7 +464,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a6ztogu4es0q20c7my4vuy1o6',
@@ -474,7 +476,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tbnqficb95tgel5wb3obx174h',
@@ -486,7 +488,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yynj32ludyklabh4qz6sjnsiq',
@@ -498,7 +500,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -510,20 +512,20 @@ export const laravelSparkDb: Template = {
                             'zdsjqtn7ihjg6t7bccpy8vl13',
                             'tbnqficb95tgel5wb3obx174h',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ax4fbjaxzc3wzkjsbc32cxlwq',
                         name: 'notifications_pkey',
                         unique: true,
                         fieldIds: ['6qsl64hukbivf2m2yanctaopx'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '89xjr2o46iek3wzb8r7eej9r0',
@@ -543,7 +545,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('announcements_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w2cv9qy96agjnd6mhdxmozpxw',
@@ -555,7 +557,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nnada99l55gu46noiurmvz5eu',
@@ -567,7 +569,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sdm18o43ctcs6t07orbo9vqyk',
@@ -579,7 +581,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nr2dk9wn19sqpwfwljivj7m6m',
@@ -591,7 +593,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'khogjyfb35l3hlrqeuzymnfry',
@@ -603,7 +605,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's3rmg7iklhkcfltn6ir0xgnog',
@@ -615,7 +617,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -624,13 +626,13 @@ export const laravelSparkDb: Template = {
                         name: 'announcements_pkey',
                         unique: true,
                         fieldIds: ['vzinhpw7l1u8sjl1jg1qcy63p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'awdd4fwb2bu3x7135cs86zkhz',
@@ -649,7 +651,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tqgy5bjffa8rafp48pxrfnhv6',
@@ -661,7 +663,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8pvasrruu1npdypr5rz1pcas7',
@@ -673,7 +675,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -685,7 +687,7 @@ export const laravelSparkDb: Template = {
                             '021igiwy41c1jfhrd40ugbndx',
                             'tqgy5bjffa8rafp48pxrfnhv6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rnseay48dvtxmq7lcoka8iph5',
@@ -695,13 +697,13 @@ export const laravelSparkDb: Template = {
                             '021igiwy41c1jfhrd40ugbndx',
                             'tqgy5bjffa8rafp48pxrfnhv6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dyct2wou6zaw3j3oepnaxw6qi',
@@ -721,7 +723,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('api_tokens_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yml91en4uxha1berq47n661eu',
@@ -733,7 +735,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2kcxypjuuwop4c8o389jekfqu',
@@ -745,7 +747,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '49g7o5vla8va8t344y7p9lcbl',
@@ -757,7 +759,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jr2h39t8ejz678xhkfb5cawwl',
@@ -769,7 +771,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rpw805wva55y9yr93kr82s4h4',
@@ -781,7 +783,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qavrwwjxhccmmtciwybkssyf2',
@@ -793,7 +795,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'it2f67pg5qaboozfm9o1b7v1r',
@@ -805,7 +807,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6pwce5wd253r4bms6u2z47nrw',
@@ -817,7 +819,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l1gw8cm8ecggag9pghk0pgvi3',
@@ -829,7 +831,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -841,27 +843,27 @@ export const laravelSparkDb: Template = {
                             'yml91en4uxha1berq47n661eu',
                             'it2f67pg5qaboozfm9o1b7v1r',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sudzw632z52onlaix20qp44g4',
                         name: 'api_tokens_pkey',
                         unique: true,
                         fieldIds: ['261md8r0ntxcalop6ialip4vb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rewq0hkvpqosmr0e4whh8uxbs',
                         name: 'api_tokens_token_key',
                         unique: true,
                         fieldIds: ['49g7o5vla8va8t344y7p9lcbl'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dyr53kx47mi6qqosnbpblawrx',
@@ -881,7 +883,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('users_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hcgubljbqptmd3j3g7j1zva4i',
@@ -893,7 +895,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4wh2w3qvaecsawe7n8jxf9cul',
@@ -905,7 +907,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jcdq04nu4smidfbu3z3dhtctp',
@@ -917,7 +919,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q7qb9x22zxbd0h8uxvg9b7j2m',
@@ -929,7 +931,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'acei9o7l6vve1rk87utw4tcap',
@@ -941,7 +943,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6y18329rg227dbemxo052r5nt',
@@ -953,7 +955,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vph3us73jyozvmw91ymjx1sgm',
@@ -965,7 +967,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n46p8pnzskj19dgjh0mui4l3l',
@@ -977,7 +979,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6fuchxoyqjzc6brp1kdcw7eg4',
@@ -989,7 +991,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nv5q9h6tbzd12wydwj6qsjxln',
@@ -1001,7 +1003,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nrirhcg3dula877mp2tg3hs1q',
@@ -1013,7 +1015,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6wymm09r8p402oj3zxnmfwcna',
@@ -1025,7 +1027,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h777hdxb4qntx3onxf4846tg6',
@@ -1037,7 +1039,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8k5rtidl2cfigc3m61dh55pj9',
@@ -1049,7 +1051,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7jylxl8s5ea4gg7tlwkuhvecd',
@@ -1061,7 +1063,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd6na5l4kshiuzxppxwr68wyh3',
@@ -1073,7 +1075,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mtpo6kip3q8po6jser5zn4wog',
@@ -1085,7 +1087,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3nwo24a92ycmhibtn5wxfecxh',
@@ -1097,7 +1099,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z44r9d201dy89zli8austinx9',
@@ -1109,7 +1111,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '32mp2nhighgp3gf30kykx9dbn',
@@ -1121,7 +1123,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5ybid22eod84ba2xii9rhnr8e',
@@ -1133,7 +1135,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6fhidkemuq1p6k1jr6pspe7bi',
@@ -1145,7 +1147,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ghn69851yk78u6car8e7w6xgi',
@@ -1157,7 +1159,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'khq0glqyk4yehku92np3t4b9d',
@@ -1169,7 +1171,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k0z4qob80anbw3n2ob7y61njn',
@@ -1181,7 +1183,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aa6orp4j6uk9jvw3or9tyg98l',
@@ -1193,7 +1195,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oct21boksdf5eh78v3gq721a2',
@@ -1205,7 +1207,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ezk8twf5bz6u55xg9t79cqph7',
@@ -1217,7 +1219,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qvh7flrph4hnhcftxpql87au4',
@@ -1229,7 +1231,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1238,27 +1240,27 @@ export const laravelSparkDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['t7luke7y8ogkwumfxmooa70jm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sgw20bq4otfk19bopyuwk91bi',
                         name: 'users_email_key',
                         unique: true,
                         fieldIds: ['4wh2w3qvaecsawe7n8jxf9cul'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j7acx0mvr5ow2z006fxc50ugg',
                         name: 'idx_users_email',
                         unique: false,
                         fieldIds: ['4wh2w3qvaecsawe7n8jxf9cul'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'foix2fjym2dbo1v3lycoc9ld7',
@@ -1278,7 +1280,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('teams_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ly6dam6u5qyb7ktsegzb8ru9i',
@@ -1290,7 +1292,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oqxomaynw3kmifkuhu5gde0d0',
@@ -1302,7 +1304,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z7m2il14zuiz3qtc5r2cly110',
@@ -1314,7 +1316,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l33bb50b4dqzkdfazdfmf2x9g',
@@ -1326,7 +1328,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tuw70rn6qilumweo5d3loycet',
@@ -1338,7 +1340,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'szrh7bfnec0t8hlogro8zyp4a',
@@ -1350,7 +1352,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hrixv4yjhcnrfkhyj18x64cf5',
@@ -1362,7 +1364,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q50nndo05zae0t0v04qpm65eh',
@@ -1374,7 +1376,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ezuwxy8kyx65pxjhpzs0ssnbr',
@@ -1386,7 +1388,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cdhgc4hf1xv0qojjb9z6gzmkt',
@@ -1398,7 +1400,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o2v2ufdkj94o5nj6l5ago08q4',
@@ -1410,7 +1412,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6gz8x1ktjn2g9tcv1grsf47op',
@@ -1422,7 +1424,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '99w636vdtw3exws3zod1b56ly',
@@ -1434,7 +1436,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i0kyd9g6by9pleqdojahg7wde',
@@ -1446,7 +1448,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c1fs08z68vbae40r84lncwh69',
@@ -1458,7 +1460,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6y7o4yttpdcoxi1rstld1tdqr',
@@ -1470,7 +1472,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ukk4x3zbcmi8xx10pm31zvhf',
@@ -1482,7 +1484,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lwn30dqlkw3x8idth6bgl78xe',
@@ -1494,7 +1496,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ihhsxmcqh0r120ubmdz7w24i',
@@ -1506,7 +1508,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxqujcrc9uezdksrf6a3sdsh9',
@@ -1518,7 +1520,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1527,20 +1529,20 @@ export const laravelSparkDb: Template = {
                         name: 'teams_pkey',
                         unique: true,
                         fieldIds: ['7do8qklbp9i98s27yx0le0v7j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h2gg3jr91cgrymzjy6a9sz2c8',
                         name: 'teams_slug_key',
                         unique: true,
                         fieldIds: ['z7m2il14zuiz3qtc5r2cly110'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'i0x468sfe0orhcn5pl6fvctl0',
@@ -1559,7 +1561,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x09zb6gjt7wdbooo5cb4dbb9j',
@@ -1571,7 +1573,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '70z8qcdbdgnt89nj0fsaq7b6t',
@@ -1583,7 +1585,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1592,13 +1594,13 @@ export const laravelSparkDb: Template = {
                         name: 'password_resets_pkey',
                         unique: true,
                         fieldIds: ['4kfq3wdknxrbo3fxqv7el0qg7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mlsskjr0dy8ui6uq81l22e0cp',
@@ -1619,7 +1621,7 @@ export const laravelSparkDb: Template = {
                         nullable: false,
                         default:
                             "nextval('performance_indicators_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'djaylwov03o19fpkbu1p22spq',
@@ -1633,7 +1635,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gwvhemf09j09seio53576x3un',
@@ -1647,7 +1649,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ftzeqeyifkwzb9smylwbe04a7',
@@ -1661,7 +1663,7 @@ export const laravelSparkDb: Template = {
                         nullable: true,
                         precision: 10,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm0h6x57a5vycqjllwpx0gn2n2',
@@ -1673,7 +1675,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '657gnbtfzipgitf47hjwfa2vr',
@@ -1685,7 +1687,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '91df0rgshayr9wmcuz3s3yra6',
@@ -1697,7 +1699,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1706,13 +1708,13 @@ export const laravelSparkDb: Template = {
                         name: 'performance_indicators_pkey',
                         unique: true,
                         fieldIds: ['fztvo3qtbsuak5l1qe77floi3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pygvuwu2zvvci6a47wzh7pioj',
@@ -1731,7 +1733,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '10p0uvi5oy4zs6ozqbr2awl76',
@@ -1743,7 +1745,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a7otts0e7rxskcpyr6kcr763k',
@@ -1755,7 +1757,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c7zyanlfu1r28gbojd8fuw4bb',
@@ -1767,7 +1769,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3j20j1jtx3gprznpacta0cv7s',
@@ -1779,7 +1781,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3msnr6vw2mvdr04bpz9lk8lik',
@@ -1791,7 +1793,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4a1i9879g73v0i2wwcbqmtxm1',
@@ -1803,7 +1805,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8kxhrf1pdue9g8z4vdajp0hzv',
@@ -1815,7 +1817,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1824,20 +1826,20 @@ export const laravelSparkDb: Template = {
                         name: 'invitations_pkey',
                         unique: true,
                         fieldIds: ['pt3b4qn4njj4eomj0kvv38p70'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y7gxetceqqa5n7qolqb5hr731',
                         name: 'invitations_token_key',
                         unique: true,
                         fieldIds: ['3msnr6vw2mvdr04bpz9lk8lik'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qyk9l1afii25znsdwtq7ac823',
@@ -1857,7 +1859,7 @@ export const laravelSparkDb: Template = {
                         unique: true,
                         nullable: false,
                         default: "nextval('subscriptions_id_seq'::regclass)",
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h6z443oalimgg5cbtsjdkjx9k',
@@ -1869,7 +1871,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'spjiaursn6keivjeld9xzsufl',
@@ -1881,7 +1883,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0uiu9ov6ef47kspq6o0jy1ez2',
@@ -1893,7 +1895,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g7rqzqs3r4q2tzpv12ya3r71l',
@@ -1905,7 +1907,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ugx33969bkrm0qhxrqth6bphr',
@@ -1917,7 +1919,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '50qg2uv0ulhm8mu0lrx839pfn',
@@ -1929,7 +1931,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8t0xhytz6stqxnxdv2t10swon',
@@ -1941,7 +1943,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'blb3osdhvvld4fsoazhp7121n',
@@ -1953,7 +1955,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't48jobc4xslo39sr8z6769r32',
@@ -1965,7 +1967,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wb7fhj8dbz3jmk2poupyk18il',
@@ -1977,7 +1979,7 @@ export const laravelSparkDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1986,13 +1988,13 @@ export const laravelSparkDb: Template = {
                         name: 'subscriptions_pkey',
                         unique: true,
                         fieldIds: ['d3omubr5vxb9hg4wyim8l3sxc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -2007,7 +2009,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5vq90hp8wfqeo5ecriydsj77i',
@@ -2020,7 +2022,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'curtlz417gcs4uskjmekbpy3d',
@@ -2033,7 +2035,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: '7do8qklbp9i98s27yx0le0v7j',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hx93kg5pld1dmnjkml295budo',
@@ -2046,7 +2048,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: '7do8qklbp9i98s27yx0le0v7j',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ls7bcyp19xis8xrp5nxlsd6vg',
@@ -2059,7 +2061,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mplfehxojkx9rv9b1u9z5rcx8',
@@ -2072,7 +2074,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's8n7oinpqoxgd8gsehqqisxdm',
@@ -2085,7 +2087,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vh9e8se2mrt3p4al5uffybh0r',
@@ -2098,7 +2100,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wa6p46cu4s9xexfowury339ru',
@@ -2111,7 +2113,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: '7do8qklbp9i98s27yx0le0v7j',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ynitl1nohp9f3w9wl1zpnq4dt',
@@ -2124,7 +2126,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'z9oh68wp0hbpcw0ihw1sd3b43',
@@ -2137,7 +2139,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: '7do8qklbp9i98s27yx0le0v7j',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zkdba7smxqg1m0q9kz7bh6t83',
@@ -2150,7 +2152,7 @@ export const laravelSparkDb: Template = {
                 targetFieldId: 't7luke7y8ogkwumfxmooa70jm',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

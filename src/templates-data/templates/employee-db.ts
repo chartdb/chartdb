@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/employeedb.png';
 import imageDark from '@/assets/templates/employeedb-dark.png';
 
+const now = Date.now();
+
 export const employeeDb: Template = {
     slug: 'employees-database',
     name: 'Employees',
@@ -35,7 +37,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '4',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pb0j4xvevy9dics5euelx7ay9',
@@ -46,7 +48,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '40',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -55,20 +57,20 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['gaj3scrtaz46ezfmc162ingxf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ltt6su8loqpf29ok7okzqblg2',
                         name: 'dept_name',
                         unique: true,
                         fieldIds: ['pb0j4xvevy9dics5euelx7ay9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rkc38w1yqrvhz2pmveunp6nsw',
@@ -83,7 +85,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jdw1yrh9xf1i7927gzs9pob2p',
@@ -94,7 +96,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '4',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm3zu12iy2jmfraliisks0rqcv',
@@ -103,7 +105,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yq4k0bqt39aap0956aejicud4',
@@ -112,7 +114,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -121,27 +123,27 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['wcgycjif09xrq0ly3txkq6ocu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8wh6op49abv143qdfjzm211xj',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['jdw1yrh9xf1i7927gzs9pob2p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iw9hjbmuchq0jisgd8zb13qy6',
                         name: 'dept_no',
                         unique: false,
                         fieldIds: ['jdw1yrh9xf1i7927gzs9pob2p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd2xqiqlffjfsg3kgsmpck5xay',
@@ -156,7 +158,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v8plj7wq1cly03y178bysft2f',
@@ -167,7 +169,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '4',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3u0rfkvw0yokndqhfqx0nuzpi',
@@ -176,7 +178,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xrcw2488t50shssn4vn3n6vad',
@@ -185,7 +187,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -194,27 +196,27 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['ecx2zbzdc5o54e04aeg7tlg54'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vgxv8rkf4890yf659o2oklffv',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['v8plj7wq1cly03y178bysft2f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '60gtoaq9vnwwbii97ks47ph82',
                         name: 'dept_no',
                         unique: false,
                         fieldIds: ['v8plj7wq1cly03y178bysft2f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1c03hu41ko98myywerwbazeli',
@@ -229,7 +231,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gnvcnj2i5jgktg7vauhveaorb',
@@ -238,7 +240,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8savn7ht0fogo4odxdhekrret',
@@ -249,7 +251,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '14',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ol8kezsspmjx25avlf2dvic5q',
@@ -260,7 +262,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '16',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jga5lfkkoxueqslcljj2vng9q',
@@ -271,7 +273,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '1',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i0kgsun3nzrjpaz8ykwjgogyb',
@@ -280,7 +282,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -289,13 +291,13 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['04csyx8ds9t3rh93txiqs4dm4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'u97myqcs1osilg7x0v263qpzd',
@@ -310,7 +312,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n654h28i8yeeadznzht9mjc8f',
@@ -319,7 +321,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0s10erufqpl6y3hpqmvbcneol',
@@ -328,7 +330,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bwohji7dj67xpa6p5diyy6pis',
@@ -337,7 +339,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'orkgizf8qbmtly3rw5cbxtc2i',
@@ -349,7 +351,7 @@ export const employeeDb: Template = {
                         precision: 10,
                         scale: 2,
                         default: '13.21',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -358,20 +360,20 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['b8c9v5vtpbnt5tjzcd3iat85f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w40nnsrsnlz7z7vycs4yf0s8d',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['0s10erufqpl6y3hpqmvbcneol'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fa0ozznyrckx572fqztyw3w4z',
@@ -386,7 +388,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5evr59tury66sayiu59esoc61',
@@ -397,7 +399,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '50',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0vs1nqvrb6t53niz5ns2eskre',
@@ -406,7 +408,7 @@ export const employeeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n6csxwmdm60y920p5jovlx4c6',
@@ -416,7 +418,7 @@ export const employeeDb: Template = {
                         unique: false,
                         nullable: true,
                         default: 'NULL',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -425,27 +427,27 @@ export const employeeDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['hr2gdoc0wtwvs4pfqo6m0fwc3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wgneqfte0nq7d5vzed2hcqie6',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['5evr59tury66sayiu59esoc61'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jbe9t9adhluqy8d3i7w1vgygd',
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['0vs1nqvrb6t53niz5ns2eskre'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gq5r3cuh74h1xzgzjmiu26t1e',
@@ -460,7 +462,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fv7o6txqvmy2349aq3pg0hnkm',
@@ -471,7 +473,7 @@ export const employeeDb: Template = {
                         nullable: false,
                         characterMaximumLength: '4',
                         collation: 'utf8mb4_general_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hneqjqobdvcumv91ymvqhv42a',
@@ -480,7 +482,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n9yj0xtw6uu0aqn2ankvniuat',
@@ -489,14 +491,14 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#b0b0b0',
                 isView: true,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q248uisjcid20tdqfnbj5qec6',
@@ -511,7 +513,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dxhqoscu6zk87ob7sfvxo7if4',
@@ -520,7 +522,7 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ys76pzey5i9twf13g2g0taju7',
@@ -529,14 +531,14 @@ export const employeeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [],
                 color: '#b0b0b0',
                 isView: true,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -550,7 +552,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b9y9q200df95qtzdi4lkeiw2w',
@@ -562,7 +564,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tt4jz3plk26zz3p8hvu3e4m27',
@@ -574,7 +576,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'y3p9kp0rcfle3ivoe2owx7tu3',
@@ -586,7 +588,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'imavnkr77bjlanlaxj3og9fh6',
@@ -598,7 +600,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'x4m88eqis6owszjfozerntmzt',
@@ -610,7 +612,7 @@ export const employeeDb: Template = {
 
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
     },

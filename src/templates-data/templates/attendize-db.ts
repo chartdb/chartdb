@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/attendize-db.png';
 import imageDark from '@/assets/templates/attendize-db-dark.png';
 
+const now = Date.now();
+
 export const attendizeDb: Template = {
     slug: 'attendize-database',
     name: 'Attendize',
@@ -37,7 +39,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '551jkb65dg7f5oyta09ttn68b',
@@ -49,7 +51,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h44j0estu8g3yfxit6xllj8f2',
@@ -61,7 +63,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yuewzyu2envul0q5coqp4kb41',
@@ -73,7 +75,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '01zxu9u0z9eycl1noeo2rhaqx',
@@ -85,7 +87,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l6hazgkrlf7dzf8m37ltvq35s',
@@ -97,7 +99,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4ons0ucakzf4i76kszn5vcgrd',
@@ -109,7 +111,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm38nm4dwes6272nd257n7o2lb',
@@ -121,7 +123,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'afyykt7b7kab5y1kj1hh2hm8m',
@@ -133,7 +135,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6r48a8ooxo23f2dlkedx6c74g',
@@ -145,7 +147,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0h03h251rttium4z6vqa47v0y',
@@ -157,7 +159,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ocfwbywq66q19n3u2vf4zhnvc',
@@ -169,7 +171,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4hqc25cbtshdd5frt7x3g71uu',
@@ -181,7 +183,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8dxjmuf810e03xqebg8c7viit',
@@ -193,7 +195,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ela1ejpw4pz23qgw741u19zik',
@@ -205,7 +207,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g0s13ork9t6upxu2foj32nu4b',
@@ -217,7 +219,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'veufp7hhciexbypfdl1jglrob',
@@ -229,7 +231,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'br2wbwxs2ho8u86d49lyizakh',
@@ -241,7 +243,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2lj6iuzloa0b6s6ycy28cix9z',
@@ -255,7 +257,7 @@ export const attendizeDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qqusdhwx81sfqk29n9drf277g',
@@ -269,7 +271,7 @@ export const attendizeDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b1wslrmena3ni2rzbqgo0zxki',
@@ -283,7 +285,7 @@ export const attendizeDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't4riie2ok6p102i5xekeemys4',
@@ -295,7 +297,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qnu2xverzkz1iznsnbcvt0nzo',
@@ -307,7 +309,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bdmu78k7fp6uoav1ja9zvaq4f',
@@ -319,7 +321,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '66qp7z0087ohkemh5ghtek2iu',
@@ -331,7 +333,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ssddven3mrhq7v5knq73scalp',
@@ -343,7 +345,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gvnloxh4i706sl7f4h1kpzdpy',
@@ -355,7 +357,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nq7k57asiop6jvn0n16twwtqo',
@@ -369,7 +371,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lmgmg6l75jwt6kh1yc9vzqygo',
@@ -383,7 +385,7 @@ export const attendizeDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dobgq59yozcsjev94gkmsmsj8',
@@ -395,7 +397,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'laenvryoe9a8c5jbou7qp12g3',
@@ -407,7 +409,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '38g2cbqby1poucoakr0521fsz',
@@ -419,7 +421,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'evsd4s3syosskxg67pa57jqj4',
@@ -431,7 +433,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q4rolcmf5149tus8im4t41iga',
@@ -443,7 +445,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdj15n2jz1tmepl7yuyos2cvh',
@@ -455,7 +457,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y253tvj79w9ud6se3gpybzqn3',
@@ -467,7 +469,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -476,27 +478,27 @@ export const attendizeDb: Template = {
                         name: 'orders_event_id_index',
                         unique: false,
                         fieldIds: ['dobgq59yozcsjev94gkmsmsj8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1wnvptolv546w1jubkcl1vc1i',
                         name: 'orders_pkey',
                         unique: true,
                         fieldIds: ['v5ytdip4utwx6w7kejm9znuu6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wwovpp5a6nqgy6n9zu2j50ltl',
                         name: 'orders_account_id_index',
                         unique: false,
                         fieldIds: ['551jkb65dg7f5oyta09ttn68b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2knq69p6g7wv6m2yl0b9mjfkm',
@@ -515,7 +517,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ni9a3elhdhujfm1gey5im8fj',
@@ -527,7 +529,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sn27ywu9j7yp6vze774g46nxq',
@@ -539,7 +541,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7q2z9qnpwuhgf4dr0ztgna5du',
@@ -551,7 +553,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dzi9nvxcfmt1wxndx5nht6uts',
@@ -563,7 +565,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -572,13 +574,13 @@ export const attendizeDb: Template = {
                         name: 'failed_jobs_pkey',
                         unique: true,
                         fieldIds: ['zik0e3t6xyf13drfazh68my1z'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2z2bq85ryoxfem6hosxg7jt7b',
@@ -597,7 +599,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wa1vqnaj7ppcgk3u9jrjgjb8n',
@@ -609,7 +611,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd070udj5945xtzvo50at6hq5o',
@@ -621,7 +623,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uqpjyh1hruljk9gmqhfux3en7',
@@ -633,7 +635,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jy7ns4cqyjkwskkh6ket78g4p',
@@ -645,7 +647,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x0rg5zeap5id6ynr55t0tgceu',
@@ -657,7 +659,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '817z2mzn1ajmbflvf0co4zpvl',
@@ -669,7 +671,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4vaib7ts4kqjoiqx2i3azz676',
@@ -681,7 +683,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'npeznpthwqpemxdp95l5o06wl',
@@ -693,7 +695,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q6orgktrlnycrlzu1xk6nlez4',
@@ -705,7 +707,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '92h351zr6bq4j15shrbbjc1eq',
@@ -717,7 +719,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ibmnpbvte6elrrlpsr7l819zs',
@@ -729,7 +731,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'thot8uouyfdavfy5n7dxghiln',
@@ -741,7 +743,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e16qouna5zy8788o9zoknfwd0',
@@ -753,7 +755,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sgzxfd07fu6odkesjt7pnas7a',
@@ -765,7 +767,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8i2w4deud33imv3i5bsh6z3o9',
@@ -777,7 +779,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -786,27 +788,27 @@ export const attendizeDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['bvnn57vmyjywrcyu7kmlw38bj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mcxwwa7qhr5a1j4pqozl0d7a0',
                         name: 'users_api_token_unique',
                         unique: true,
                         fieldIds: ['8i2w4deud33imv3i5bsh6z3o9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zdmz073p2cjlquycni928ju59',
                         name: 'users_account_id_index',
                         unique: false,
                         fieldIds: ['wa1vqnaj7ppcgk3u9jrjgjb8n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4rdnnwi1cuzwxyvkx57vrfryi',
@@ -825,7 +827,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g17kpbuh2v9ae5163u1joj4yb',
@@ -837,7 +839,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -846,13 +848,13 @@ export const attendizeDb: Template = {
                         name: 'order_statuses_pkey',
                         unique: true,
                         fieldIds: ['pogtj140gvwfm4zruz343526g'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5v39qfrtcdt9bkh9kx55r3th2',
@@ -871,7 +873,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dzk1oytdukrb9aqlf9m4jns5x',
@@ -883,7 +885,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o06yl4othecyh19jcxt2jlofc',
@@ -895,7 +897,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -904,27 +906,27 @@ export const attendizeDb: Template = {
                         name: 'question_ticket_pkey',
                         unique: true,
                         fieldIds: ['8arj70a7fonutq7djdovcs073'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ow3hjxgh061v0shfda75ohbtt',
                         name: 'question_ticket_question_id_index',
                         unique: false,
                         fieldIds: ['dzk1oytdukrb9aqlf9m4jns5x'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wutl4w0onn191d1mca60y60r6',
                         name: 'question_ticket_ticket_id_index',
                         unique: false,
                         fieldIds: ['o06yl4othecyh19jcxt2jlofc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '655xhyywzvk1y116a1428j0g8',
@@ -943,7 +945,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'odg4sjp4jpbu4uutuzznxm5zb',
@@ -955,7 +957,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -964,13 +966,13 @@ export const attendizeDb: Template = {
                         name: 'ticket_statuses_pkey',
                         unique: true,
                         fieldIds: ['zlr74wvtqhm6l0votftkwqy5j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '658lzdwgz9s2tqb68d1u8nj16',
@@ -989,7 +991,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4u3x8ykce619j5vzffjhejl5m',
@@ -1001,7 +1003,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'azxb6h0cdsn7pzhn8voc01ah5',
@@ -1013,7 +1015,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oa3eu7z56uyppivlnn9yr07td',
@@ -1025,7 +1027,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o3gvyh4fl1j7hbz9e802c4on3',
@@ -1037,7 +1039,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wezunsodna8e0knu561yozebr',
@@ -1049,7 +1051,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qhncqpoyadkzzkfgsbarf8rlj',
@@ -1061,7 +1063,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4ytad52e7fr5emd8n4510pf03',
@@ -1073,7 +1075,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fptf3zdvzc6ku1lwq3y1420bn',
@@ -1085,7 +1087,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jixydkd42z0ledhdk0395h7fl',
@@ -1097,7 +1099,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e12c55nxwk2b29clw3h9onpv1',
@@ -1109,7 +1111,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lpsz5enypto1iqavkdf7qeoc2',
@@ -1121,7 +1123,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'enrx30599r68k2i5a3yszbo5o',
@@ -1133,7 +1135,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nbjitkdeuwh85hdx7pqy3bilj',
@@ -1145,7 +1147,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3gq7raenmbloncqsuw2m72u22',
@@ -1157,7 +1159,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '60y0f5c2ggtd19i8kclchgtfw',
@@ -1169,7 +1171,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xhomwf7dm3d4tk2b5ns6xstdi',
@@ -1181,7 +1183,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jmsnoznlvuuuptwqlhw2pprqu',
@@ -1193,7 +1195,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mn8lwio0jhqwvb8wq9x9qanlk',
@@ -1205,7 +1207,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7wvq67t2co5prlhvw8jix1awj',
@@ -1217,7 +1219,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ny8m0cpyycwwodyifsv9eafr',
@@ -1229,7 +1231,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ki2ek9je2t6pwuvr7baemg8n',
@@ -1241,7 +1243,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's0esmt93jhr6lhzozppeelwj9',
@@ -1253,7 +1255,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x436mu0f8n53484f8eraqf98c',
@@ -1265,7 +1267,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iuhuomg9erkan1lgzff1yujb6',
@@ -1277,7 +1279,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fj36j4jaq539fpun11aeitfro',
@@ -1289,7 +1291,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1298,20 +1300,20 @@ export const attendizeDb: Template = {
                         name: 'organisers_account_id_index',
                         unique: false,
                         fieldIds: ['o3gvyh4fl1j7hbz9e802c4on3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0bybav905kfz1x73kpxj4k2zc',
                         name: 'organisers_pkey',
                         unique: true,
                         fieldIds: ['s6e068z03w8qkfxitviitkkoc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6a55dg99s0tq6epao17d36q6h',
@@ -1330,7 +1332,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't1ee56evaeivjmszzeq149zqu',
@@ -1342,7 +1344,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g5upisq0mq8wlyyhk4sple4o6',
@@ -1354,7 +1356,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0v69jvosc6zivgru95kernxi9',
@@ -1366,7 +1368,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a2qpiqjbaa0y58yn4x4lcoeja',
@@ -1378,7 +1380,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1387,13 +1389,13 @@ export const attendizeDb: Template = {
                         name: 'question_types_pkey',
                         unique: true,
                         fieldIds: ['zy3495xhg4r7jf0jajidpca9p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a16s8vnuh3aqdchm6tzgnalcc',
@@ -1412,7 +1414,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b7lji8f8km982bo5yth88tm1f',
@@ -1424,7 +1426,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5r1cxcpr2xq1ytwu5d6pmh4zg',
@@ -1436,7 +1438,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1445,20 +1447,20 @@ export const attendizeDb: Template = {
                         name: 'password_resets_token_index',
                         unique: false,
                         fieldIds: ['b7lji8f8km982bo5yth88tm1f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kghkevfc6eeccat065eeda6qm',
                         name: 'password_resets_email_index',
                         unique: false,
                         fieldIds: ['xnbc1aarqcq0jqo6yw4rv8gl4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ai9wqugvgyan2g0001y80raad',
@@ -1477,7 +1479,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dskk0lzqq4d5bdzd78cxuhzz4',
@@ -1489,7 +1491,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3trzn12deeovttx370jes0r1k',
@@ -1501,7 +1503,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kllvepzzsrqh3w4b16grw6j54',
@@ -1513,7 +1515,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '55umrlgm1mu1stc0guevrthi1',
@@ -1525,7 +1527,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mgj2sfh9lkx32jhqnrt8tueyr',
@@ -1537,7 +1539,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dbtpnucdk2yyewhoqykdfjj1k',
@@ -1549,7 +1551,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qkzgz6a7qfrwxj88aj1ay1oju',
@@ -1561,7 +1563,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '99i1vfpim6zxv27lb5se7tg4d',
@@ -1573,7 +1575,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pmmz49f1t1le3l316lfyga029',
@@ -1585,7 +1587,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oxx972emj01o6u1d6zwts7qsp',
@@ -1597,7 +1599,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '96gsyciolskn9a6sfmdzrwlrq',
@@ -1609,7 +1611,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kxpswqm3f8bpt4qryy6pgj1c9',
@@ -1621,7 +1623,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'shgaixs273l0if8dkuw8y5imj',
@@ -1633,7 +1635,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1642,13 +1644,13 @@ export const attendizeDb: Template = {
                         name: 'countries_pkey',
                         unique: true,
                         fieldIds: ['l4xa66t2m3mb21wcq4g8ruukj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd02btgvrqua69zcgbehgcn1gr',
@@ -1667,7 +1669,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g9t0az2xm977clbpva6nis7f6',
@@ -1679,7 +1681,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e50gyay4czpivpnzfdjpo3r1y',
@@ -1691,7 +1693,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3iytb5kp27z0cwsyvdvq4br4e',
@@ -1703,7 +1705,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w9lj85pb57l0uxohgqvqgajar',
@@ -1715,7 +1717,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '12wlwlqnmt4yvbcibo7dnk6ji',
@@ -1727,7 +1729,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd6duek9o19clqajfu91f8cta2',
@@ -1739,7 +1741,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h8hrihehigpyr10agej5x1syf',
@@ -1751,7 +1753,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't5axtjxx0ql4kkd3n8k57pzwa',
@@ -1763,7 +1765,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b9013ih0gsx3a65bc9hlu9klz',
@@ -1775,7 +1777,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uauce2z3q4tl6mxgvzepbnm0h',
@@ -1789,7 +1791,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm8yowdn438fivfyx95kdeqjlo',
@@ -1801,7 +1803,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q2cxicuoskeafalmwrk43876c',
@@ -1813,7 +1815,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '74s1q29xgkmvcnbo4hnqr4yvy',
@@ -1825,7 +1827,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iey8g10lvwb6y2mr3nril4w8u',
@@ -1837,7 +1839,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's7dtufcz9vka1m5aaea0jk40v',
@@ -1849,7 +1851,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'toaydejs82qgvofw5oxmru6vj',
@@ -1861,7 +1863,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '32ade9ilav4m7kfxxj8bbgf1p',
@@ -1875,7 +1877,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w2uap53geg2ncupgylblrmp9v',
@@ -1889,7 +1891,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j5c7dlv70dtkto1o1bwxzecnw',
@@ -1901,7 +1903,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hqh6qd3jw29lq6o3kbj3zbodn',
@@ -1913,7 +1915,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8vylrq8edgyepnmrgoq5x9i7h',
@@ -1925,7 +1927,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't57adaf4odc2x47vp1ys5dyt0',
@@ -1937,7 +1939,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3d5llmrwa9nhuezgn2oclrgce',
@@ -1949,7 +1951,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1958,34 +1960,34 @@ export const attendizeDb: Template = {
                         name: 'tickets_event_id_index',
                         unique: false,
                         fieldIds: ['h8hrihehigpyr10agej5x1syf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'li6z3kudniq60iwor7yxxa9zh',
                         name: 'tickets_account_id_index',
                         unique: false,
                         fieldIds: ['12wlwlqnmt4yvbcibo7dnk6ji'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '29sti7y2bkxbc0rvgulsaoftc',
                         name: 'tickets_public_id_index',
                         unique: false,
                         fieldIds: ['hqh6qd3jw29lq6o3kbj3zbodn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i40q1iviaxg65kz8791gv2kij',
                         name: 'tickets_pkey',
                         unique: true,
                         fieldIds: ['yia7etzlthe63e7l6vylb64rg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dj6793s7aaseyzmkdfvehhic8',
@@ -2004,7 +2006,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z0tu4dmtw62r5822h1qaljn67',
@@ -2016,7 +2018,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '42g11ttmj6u4e4tg9em4aqer0',
@@ -2028,7 +2030,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jr4v69i918bnijz6txgzqgy20',
@@ -2040,7 +2042,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1bk7gdd0td6cc0928k3mfxy8j',
@@ -2052,7 +2054,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iotnp5e27hpnp4fdq9dy6qtg7',
@@ -2064,7 +2066,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mdqs8iyyos4xla75x56mwinga',
@@ -2076,7 +2078,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kt71yz9mvr9ipxxqkkf2od0qe',
@@ -2088,7 +2090,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2097,41 +2099,41 @@ export const attendizeDb: Template = {
                         name: 'question_answers_event_id_index',
                         unique: false,
                         fieldIds: ['42g11ttmj6u4e4tg9em4aqer0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5fs4uy4wzc5mirs47yi7ylwii',
                         name: 'question_answers_question_id_index',
                         unique: false,
                         fieldIds: ['jr4v69i918bnijz6txgzqgy20'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jt2b4c3qw0253m541a20eerar',
                         name: 'question_answers_pkey',
                         unique: true,
                         fieldIds: ['fl8c5nbbvo9lueey18xszn2zg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't7r2hsqiu9bn1b19ax08h0n0l',
                         name: 'question_answers_account_id_index',
                         unique: false,
                         fieldIds: ['1bk7gdd0td6cc0928k3mfxy8j'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i5tfkbrraix0b6er1lc1akk2j',
                         name: 'question_answers_attendee_id_index',
                         unique: false,
                         fieldIds: ['z0tu4dmtw62r5822h1qaljn67'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'f4xl1qz0xo1bkj8nrcakrawnl',
@@ -2150,7 +2152,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'swoe8b5rmc5ik46fpzeig6kyr',
@@ -2162,7 +2164,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c8nvvzqdhpc7aj942gqo078cl',
@@ -2174,7 +2176,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4jw2vllg8hdo6clfcwbjr5esi',
@@ -2186,7 +2188,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '91ansiau3zntv6rzd8m21hvlk',
@@ -2198,7 +2200,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bjl9ekjqqkpm7zv6r9mi59yu9',
@@ -2210,7 +2212,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x6664rsebhp07pbg0wp1koa7d',
@@ -2222,7 +2224,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i6zyi9xd8yu6t9e6c74dq0c5w',
@@ -2234,7 +2236,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tf8h1wb3fj86syr52lejcij0f',
@@ -2246,7 +2248,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2255,13 +2257,13 @@ export const attendizeDb: Template = {
                         name: 'payment_gateways_pkey',
                         unique: true,
                         fieldIds: ['ktigomjopdv0sa9tycebw3nm5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fzo811akulhpt5nrkplly34jw',
@@ -2280,7 +2282,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '253dqd9oqiqeniktxk9romhql',
@@ -2292,7 +2294,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x8vg6oa76x6o51oqo5dj5nw5r',
@@ -2304,7 +2306,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j4vrx5nmwwvr7j2vr5azdz9a7',
@@ -2316,7 +2318,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ee7qgl7v87sm3jzr1d7yg4v7p',
@@ -2328,7 +2330,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'isb4kxin3zcpeq9kz5u4bnje6',
@@ -2340,7 +2342,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2nfy3clt34b38cnzqttgopw08',
@@ -2352,7 +2354,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2361,13 +2363,13 @@ export const attendizeDb: Template = {
                         name: 'event_images_pkey',
                         unique: true,
                         fieldIds: ['bb3mw237kmcwk85jqf85xt7vi'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gnh3sy3oid51u6ez04alw5mam',
@@ -2386,7 +2388,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y62yqnkkms0xp7sscnorwafgf',
@@ -2398,7 +2400,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kse3vbs4y0v5two69yal8cr1l',
@@ -2410,7 +2412,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6r9eilcxj8zrmrxi5ym8jkavz',
@@ -2422,7 +2424,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '135od2zzffhiib9d2u5j96n0j',
@@ -2434,7 +2436,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a0l1sk5rg16uzvnn3jm7b98cu',
@@ -2446,7 +2448,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'luh4i9j32py3y4ium39lt76fl',
@@ -2458,7 +2460,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2467,13 +2469,13 @@ export const attendizeDb: Template = {
                         name: 'event_access_codes_pkey',
                         unique: true,
                         fieldIds: ['pabq42zess0hb3f2s4y1rsj9f'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'h7n2foxmyb8c70hi4fcihvab2',
@@ -2492,7 +2494,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i63yixq3geoas9opsc2r2lhx6',
@@ -2504,7 +2506,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b1qn83jdhuy4vdmls5sw9oy3s',
@@ -2516,7 +2518,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2525,27 +2527,27 @@ export const attendizeDb: Template = {
                         name: 'event_question_event_id_index',
                         unique: false,
                         fieldIds: ['i63yixq3geoas9opsc2r2lhx6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6p85t3673367dq2ib6zs8iq5b',
                         name: 'event_question_question_id_index',
                         unique: false,
                         fieldIds: ['b1qn83jdhuy4vdmls5sw9oy3s'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0bq9zejb8cxs1duqpkyakcypz',
                         name: 'event_question_pkey',
                         unique: true,
                         fieldIds: ['i4r5vofhtlafnx0xqca9tcthb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'i5u0kd4mjmdgun131p883b70e',
@@ -2564,7 +2566,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mqne6s73ttzvwrit31p0fhlum',
@@ -2576,7 +2578,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4wsyj4dyrobwyxoe9ejhqzb2k',
@@ -2588,7 +2590,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '47kpvyaujh0nslg7wmwh9adcs',
@@ -2600,7 +2602,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a6z2158madqgcvnxpd1oofzg5',
@@ -2612,7 +2614,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yk2wy3xts1d4erqv5kgxeduyd',
@@ -2624,7 +2626,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wdv6l0lyf781obifh2xifzz64',
@@ -2636,7 +2638,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jzh317x4368w0gzk258yyd43a',
@@ -2648,7 +2650,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's1vhopawjq7aqe5gq83omp601',
@@ -2660,7 +2662,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6zila6tkyo36pv5rd6tgafnfp',
@@ -2672,7 +2674,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2681,20 +2683,20 @@ export const attendizeDb: Template = {
                         name: 'questions_account_id_index',
                         unique: false,
                         fieldIds: ['47kpvyaujh0nslg7wmwh9adcs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ixg8dwdqw3k72gc6wdl4skzku',
                         name: 'questions_pkey',
                         unique: true,
                         fieldIds: ['jw4acgrxqabbq2ptpz8o1ke1e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'oq4zp3pg7o4ada4q374ca06ue',
@@ -2713,7 +2715,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '25p7hhg97oxp8j885xcr5ob1o',
@@ -2725,7 +2727,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0u3iq5b7pe74g69kt2adu1kmv',
@@ -2737,7 +2739,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uaf4mvkh6am4ir1ejrjtjlf4s',
@@ -2749,7 +2751,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6xnd3fremr07dw0rcjswvjn1h',
@@ -2761,7 +2763,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0ui3mfgb3rexg35p5dx3femx0',
@@ -2773,7 +2775,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't3d6p6twew3v48w785yimm0eo',
@@ -2785,7 +2787,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eqxoq0fmvjfh7fp1nmruqfi70',
@@ -2797,7 +2799,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2806,13 +2808,13 @@ export const attendizeDb: Template = {
                         name: 'reserved_tickets_pkey',
                         unique: true,
                         fieldIds: ['nxjm8p19svck7cjhs9y2y6ro2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'phg9zkuircctz782gq3g94qty',
@@ -2831,7 +2833,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kgotvefy9nujd9c061jj8ikwf',
@@ -2843,7 +2845,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0mff4k3u32drwr6h8y44z4xkf',
@@ -2855,7 +2857,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zdjijp5tri7p9q8huelv1fslr',
@@ -2867,7 +2869,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5df4v106n30iuk8z71gqxabjf',
@@ -2879,7 +2881,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rw9rqgkfmsbdcj670u2c96lmr',
@@ -2891,7 +2893,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wvi60k9c585lam8bja9jzj1b9',
@@ -2903,7 +2905,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lg19r94ifazr9gk9mlqw6mhcs',
@@ -2915,7 +2917,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hft3124brpjj6n0fe2by4i8dw',
@@ -2927,7 +2929,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ppkgdlbm358fyhr6kymadq4n3',
@@ -2939,7 +2941,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '81pp5lsbbapkqqd94qhep8a3m',
@@ -2951,7 +2953,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dfdmhafobxnbiner1qwou4mr3',
@@ -2963,7 +2965,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zuywpdp3bln7jn2ub05elnagn',
@@ -2975,7 +2977,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd6bp7r8wxmqoc34c6ertvgdp6',
@@ -2987,7 +2989,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5vtctmdfxkdmff8ay26jrjsdd',
@@ -2999,7 +3001,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ahyuwdfk4r4wuay59um1cbypl',
@@ -3011,7 +3013,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bb7ju38mvfhcx7fjwfjlo886e',
@@ -3023,7 +3025,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3032,48 +3034,48 @@ export const attendizeDb: Template = {
                         name: 'attendees_ticket_id_index',
                         unique: false,
                         fieldIds: ['zdjijp5tri7p9q8huelv1fslr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0fp5gbf0luzxcnlaapfkucbdc',
                         name: 'attendees_private_reference_number_index',
                         unique: false,
                         fieldIds: ['lg19r94ifazr9gk9mlqw6mhcs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yk8gnhr6arbx0iaa3z664pm6p',
                         name: 'attendees_pkey',
                         unique: true,
                         fieldIds: ['wr8k5tmphui1x4xsnzwkot8up'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ekch9gngtrjveq44mdz5uwt25',
                         name: 'attendees_event_id_index',
                         unique: false,
                         fieldIds: ['0mff4k3u32drwr6h8y44z4xkf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jeigom46dj0mxacbsyuzparw7',
                         name: 'attendees_account_id_index',
                         unique: false,
                         fieldIds: ['5vtctmdfxkdmff8ay26jrjsdd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '40smxqsku1lj2t8ofyyd71cvw',
                         name: 'attendees_order_id_index',
                         unique: false,
                         fieldIds: ['kgotvefy9nujd9c061jj8ikwf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qxivebcj5m5hag01sl2jncho1',
@@ -3092,7 +3094,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm14as80fi8057e4zh5q8huxwe',
@@ -3104,7 +3106,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '788bsnrvx6re5y370enor9kto',
@@ -3116,7 +3118,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bo6c5yctibf4zv7rbm30wepx1',
@@ -3128,7 +3130,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ov18xjczv54cmi9ygmeica28q',
@@ -3140,7 +3142,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w72btrfyytr8jv6156tbtkych',
@@ -3152,7 +3154,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4z771kjbg4hqu03s9olhhve8m',
@@ -3164,7 +3166,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'k30sbakswjttbi8wv58gxub1m',
@@ -3176,7 +3178,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zj6zjsivy9k8d3qju7796nogm',
@@ -3188,7 +3190,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l6aqx2u3g7c6xsizuvyiyf7e0',
@@ -3200,7 +3202,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ielpdtazgxkcddiio9atz2qh',
@@ -3212,7 +3214,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3221,20 +3223,20 @@ export const attendizeDb: Template = {
                         name: 'messages_account_id_index',
                         unique: false,
                         fieldIds: ['ov18xjczv54cmi9ygmeica28q'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sln81d8mxwuypgln2q0c22iib',
                         name: 'messages_pkey',
                         unique: true,
                         fieldIds: ['yka9xs1lrfnp9xxzjcpor19q6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'r3wzkvdnw2rksu7z4gt7syenh',
@@ -3253,7 +3255,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7l9hnypk451mzflppn6tti2pd',
@@ -3265,7 +3267,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0xevkhf6nc5i02i6bjx8wzwma',
@@ -3277,7 +3279,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ju84xyfm0ypck9wnxsolf0fnw',
@@ -3289,7 +3291,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o2epb9nerdglek6av8awio858',
@@ -3301,7 +3303,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3310,13 +3312,13 @@ export const attendizeDb: Template = {
                         name: 'ticket_event_access_code_pkey',
                         unique: true,
                         fieldIds: ['oyqoc1vil6z2cmzybidxlhsm7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'r4lj4hos2mth0h379311kftcm',
@@ -3335,7 +3337,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1kb0i0ll90zlqsmz7a1b0cs9w',
@@ -3347,7 +3349,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1g847ydfipq2j8my2j6o6u9dq',
@@ -3359,7 +3361,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'awrqi78v84vtvgkwgf1t18fgw',
@@ -3371,7 +3373,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bduvdb32nroaaxljpb0uvllzg',
@@ -3385,7 +3387,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4payptr8hpsdbpb09kppvp6ze',
@@ -3397,7 +3399,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1nfepstv5v3owgltvsufin4p1',
@@ -3409,7 +3411,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '85o58550e05kial8t4mov52gt',
@@ -3421,7 +3423,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w1rzi914ggatqx1k75wk3xiqi',
@@ -3433,7 +3435,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hg0pd27rgiy4cgtbnd5z3fds7',
@@ -3445,7 +3447,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3454,20 +3456,20 @@ export const attendizeDb: Template = {
                         name: 'affiliates_pkey',
                         unique: true,
                         fieldIds: ['vtam97jo6l0s784hpviqigj1m'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hkqyuomavcx3zdtybnuzgcad3',
                         name: 'affiliates_account_id_index',
                         unique: false,
                         fieldIds: ['1nfepstv5v3owgltvsufin4p1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rayvxwcf1pwf8chw6g8r4piaz',
@@ -3486,7 +3488,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a2a1myj7f77dz5hyhhvtm454r',
@@ -3498,7 +3500,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dq31imrne3ti02f3xchx4mvwy',
@@ -3510,7 +3512,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd1ca6wrp9v8bi7xoknwdh215v',
@@ -3524,7 +3526,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'out3m0i6m33p1varnhmlgcxhl',
@@ -3538,7 +3540,7 @@ export const attendizeDb: Template = {
                         nullable: true,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'elh5g8yb7t7dhan4leu6tgmic',
@@ -3550,7 +3552,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9yeyvcif8625l0v8j7gk41084',
@@ -3562,7 +3564,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3571,13 +3573,13 @@ export const attendizeDb: Template = {
                         name: 'order_items_pkey',
                         unique: true,
                         fieldIds: ['nak0ucxedn1tnetw2rrq2q1vk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's7lhy5krmgfp0ph64nhvmlypd',
@@ -3596,7 +3598,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'km9kvbmuou7p9s89hkjiorvsr',
@@ -3608,7 +3610,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1zeat4z4lvkkaetvtosvb1yda',
@@ -3620,7 +3622,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lgjlvepxg0rig47ulapio2hju',
@@ -3632,7 +3634,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i30c6xqvfuwxwx5j5gr8pnv64',
@@ -3644,7 +3646,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b8bpujbd3do0puylo2q68x7ym',
@@ -3656,7 +3658,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h0yp4e744y5lc3mzwul8c308x',
@@ -3668,7 +3670,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -3677,13 +3679,13 @@ export const attendizeDb: Template = {
                         name: 'account_payment_gateways_pkey',
                         unique: true,
                         fieldIds: ['z9522ibk404611f3cq96t09fs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 't3j52rhdvgmu9rab2jsfah0u6',
@@ -3702,7 +3704,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'irfs56kvv5xzfoaul7zzu0q2i',
@@ -3714,7 +3716,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vjgu16phfgb28a2skvy8g101j',
@@ -3726,7 +3728,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bhh1uidzjc193c9bu4gt4gnr4',
@@ -3738,7 +3740,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '62cmd84esjcz2wax7v1ob4kzp',
@@ -3750,7 +3752,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dhnysbow6yqwjc0dhqkmn5xt1',
@@ -3762,7 +3764,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6cg66erxwjzsv9hyba8qjfcwl',
@@ -3774,7 +3776,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '08ira3f80y0q7qz09ve54gxlc',
@@ -3786,7 +3788,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ad4e0j95aohbl0zct1tcc6wsj',
@@ -3798,7 +3800,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lhgd1b5tzc0ntg9fzw4y8z78r',
@@ -3810,7 +3812,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tb4xu2rk94ilwkbgbhjoijo14',
@@ -3822,7 +3824,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pmmsk7x5bi98bcwrp4ud7yn4l',
@@ -3834,7 +3836,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'igm6eim5l1qp9r20b87zyxmfm',
@@ -3846,7 +3848,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't3gfv2oz37mns2eadyrn9inla',
@@ -3858,7 +3860,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '78q7yiw3svksl9udgmahxt2pl',
@@ -3870,7 +3872,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z63um5z02iituamag08fsg2ue',
@@ -3882,7 +3884,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6isgtybgi6iwoefyw22to01m9',
@@ -3894,7 +3896,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zsgamlakyco4fbrvf66vwq396',
@@ -3906,7 +3908,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u6oj40bdg5ou7rjyf3droecfn',
@@ -3918,7 +3920,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6t8rjlkz76pp6f4yfv02bq275',
@@ -3930,7 +3932,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hs0nd0h1hkwwge5jlynhrixl2',
@@ -3942,7 +3944,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sz3dp4qk8jkykjqf0xpuzubf3',
@@ -3954,7 +3956,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kzs6ix9bv5gut1e5xn2dbh1ie',
@@ -3966,7 +3968,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5aix6y9622ddofojdoy3qkl7w',
@@ -3978,7 +3980,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lvrs9esspqkj8inw36p7p3m2j',
@@ -3990,7 +3992,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sjw9ypzih49fc3sn718zi9ne6',
@@ -4002,7 +4004,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1dqljjzxuc13wiritndulf7kw',
@@ -4014,7 +4016,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eh47tgmymd8lna4hzhnij4v71',
@@ -4026,7 +4028,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd5tvsk5w7dpn3jtjyxj49e53u',
@@ -4038,7 +4040,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pawut3s7rndqpckllfjy5pm78',
@@ -4050,7 +4052,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4059,13 +4061,13 @@ export const attendizeDb: Template = {
                         name: 'accounts_pkey',
                         unique: true,
                         fieldIds: ['zfgkmu7oopzooff6xbuhe4g27'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 't3rjit3hwpiuvn4c5p7rwh8im',
@@ -4084,7 +4086,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dbaoc83bonkvi6v8wjff9a364',
@@ -4096,7 +4098,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7yzen8wtbuukqdag6inwoq5b7',
@@ -4108,7 +4110,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z1nqkt1afnueg41w3e9ojb6ec',
@@ -4120,7 +4122,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4129,13 +4131,13 @@ export const attendizeDb: Template = {
                         name: 'date_formats_pkey',
                         unique: true,
                         fieldIds: ['udagvzlt0do9u2rv2f7gxn5ui'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tk7v1jd8qxwc02fv9rkm4bja6',
@@ -4154,7 +4156,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f4biyyux9yqe9kv3v7waxjld4',
@@ -4166,7 +4168,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yhexrlsw5k9blqshsse51888a',
@@ -4178,7 +4180,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4187,27 +4189,27 @@ export const attendizeDb: Template = {
                         name: 'ticket_order_pkey',
                         unique: true,
                         fieldIds: ['slploaa1skttmg8f96ytp34za'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3drd185y7ihix5xbhttls825j',
                         name: 'ticket_order_ticket_id_index',
                         unique: false,
                         fieldIds: ['yhexrlsw5k9blqshsse51888a'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6iy7105pbnblxq0f3biyxdijp',
                         name: 'ticket_order_order_id_index',
                         unique: false,
                         fieldIds: ['f4biyyux9yqe9kv3v7waxjld4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'v3t7cbh63rf9wkm598qxcwepx',
@@ -4226,7 +4228,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g5an7dwuffy876cor4q713139',
@@ -4238,7 +4240,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xpdk4fxg9584wisecgqum86yo',
@@ -4250,7 +4252,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4259,20 +4261,20 @@ export const attendizeDb: Template = {
                         name: 'question_options_question_id_index',
                         unique: false,
                         fieldIds: ['xpdk4fxg9584wisecgqum86yo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n7d5z23gvve5xmr94icn2qvao',
                         name: 'question_options_pkey',
                         unique: true,
                         fieldIds: ['3sz8kejmlsmvzofddktril5db'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'v5629tdwxzwvabufh7zhckqsm',
@@ -4291,7 +4293,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's2tnkrf4ddhp8clv9z8f55lu1',
@@ -4303,7 +4305,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p7t5lyzg5zl7dg5eetc4asc5j',
@@ -4315,7 +4317,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'veaj9c0i4472cu9vd6fu89d6g',
@@ -4327,7 +4329,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cwegd0rjcql0eel7suzg3b7f6',
@@ -4339,7 +4341,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u7o5s7bcddsex97c7z3hqvott',
@@ -4353,7 +4355,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w14sjvkdvehjwytudwip3pgki',
@@ -4367,7 +4369,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4muo9udg9d4j5qe296fxnl4c1',
@@ -4379,7 +4381,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4388,20 +4390,20 @@ export const attendizeDb: Template = {
                         name: 'event_stats_event_id_index',
                         unique: false,
                         fieldIds: ['4muo9udg9d4j5qe296fxnl4c1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ut4k8ka3umy97p6n681a4v0ok',
                         name: 'event_stats_pkey',
                         unique: true,
                         fieldIds: ['t5jsl7cfs1996wbu8wdb7rksu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wk57z8m9f9pehd7gwk8ecwl4g',
@@ -4420,7 +4422,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3hm2ovr8z5uo4pvyrg6mv0gx4',
@@ -4432,7 +4434,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xh5o6wx1cj42oxx4mmdm9eg4o',
@@ -4444,7 +4446,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xhi41xlv8vijmlkgoiqa5xwid',
@@ -4456,7 +4458,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ebva3ne7c6i4nii09c65qe0og',
@@ -4468,7 +4470,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7t75gj8d5jf98dikmtc91z5e6',
@@ -4480,7 +4482,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xmnrujkjx4fydn7mxxr6l2y1w',
@@ -4492,7 +4494,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lx7omghqyd6z39v9xe3xi1c3t',
@@ -4504,7 +4506,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'idmpdsdcyoqfsqv1hp93a2jde',
@@ -4516,7 +4518,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'glqyseykbl7g9io85fo5l81tk',
@@ -4528,7 +4530,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5ay8cbl2i3uie6p5sien8pb2k',
@@ -4540,7 +4542,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h4cx3n0gmi1bbltpnd8s1vmop',
@@ -4552,7 +4554,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4561,13 +4563,13 @@ export const attendizeDb: Template = {
                         name: 'currencies_pkey',
                         unique: true,
                         fieldIds: ['444a71g6r6sx4k0cgpwkub56b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wuyp5audt963j9pq7reh2avl7',
@@ -4586,7 +4588,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '08trc1hzqekjnmxcb2ikv9u9o',
@@ -4598,7 +4600,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yxynnajub45obu6oswvmvofsv',
@@ -4610,7 +4612,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hqgidgyhjfcdiuz6tq3zu3z3z',
@@ -4622,7 +4624,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4631,13 +4633,13 @@ export const attendizeDb: Template = {
                         name: 'datetime_formats_pkey',
                         unique: true,
                         fieldIds: ['mal8m8p3ipitp8v9kr4z0gn9g'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xgclzdzifx4slkk2ra0rfeq0a',
@@ -4656,7 +4658,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3w7cpucusg3l6mhu7z9b73v8b',
@@ -4668,7 +4670,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a7s5w4845shlpovnlvpe2f4gn',
@@ -4680,7 +4682,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -4689,13 +4691,13 @@ export const attendizeDb: Template = {
                         name: 'timezones_pkey',
                         unique: true,
                         fieldIds: ['j1o7cqiz607herbp5zphm45r3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zcv2giiq4g2xpqzi1q9pmqpf3',
@@ -4714,7 +4716,7 @@ export const attendizeDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lz25cas1wnfm3dwdxpyzwd4d8',
@@ -4726,7 +4728,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tljecb9xc4v96n1oo8hsyzt87',
@@ -4738,7 +4740,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm4k7ww0oebrib903utek14vqh',
@@ -4750,7 +4752,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'esumhe53iavl2893vcoanw9vf',
@@ -4762,7 +4764,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9cwj0gf8o6ctbqftccmo4q732',
@@ -4774,7 +4776,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1oondjvfc6mf377h0xf7et6kz',
@@ -4786,7 +4788,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l96yo6yxwa5aayaxs1cxgza26',
@@ -4798,7 +4800,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5zg4hb8mmio1zgua7v5s4qg2x',
@@ -4810,7 +4812,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'avw7ftidln3mo27eiwlwtz9y2',
@@ -4822,7 +4824,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e838qlpegmrmaff1wnzjjy304',
@@ -4834,7 +4836,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9foct6uao3s8muyg8lgtey0i7',
@@ -4846,7 +4848,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's1nmk9mi77xs65j3blhu2t8c7',
@@ -4858,7 +4860,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ldda5g82fmdfppaet1ksscroq',
@@ -4872,7 +4874,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i2fp8xy4em07845lt3ur64v1o',
@@ -4886,7 +4888,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5kzxxy20l1ijsddbt2g5e59gn',
@@ -4900,7 +4902,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y8dl7cjtguvhxqd3dbd3xiihq',
@@ -4914,7 +4916,7 @@ export const attendizeDb: Template = {
                         nullable: false,
                         precision: 8,
                         scale: 2,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9juhjf1odl1odb8bdjxjlszea',
@@ -4926,7 +4928,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oh8gvinvyt6icm9nj6xi708wz',
@@ -4938,7 +4940,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2jsx9eb2xegft1x2oxdvhsz7b',
@@ -4950,7 +4952,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3bt3d296oeawofr6v52vpxw0b',
@@ -4962,7 +4964,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2c4lq21j9njc032bpn4f8j99b',
@@ -4974,7 +4976,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j7gag9oolwy8tfdr9zvqmihbm',
@@ -4986,7 +4988,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lgxjx411jt5pffwn2ohvyywyh',
@@ -4998,7 +5000,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e47i34unptpx4sh9v6o3tbkaf',
@@ -5010,7 +5012,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '84rhgbmxwyn0kjkj9y0dahnia',
@@ -5022,7 +5024,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h4qq1iddxtk7qbudp80a9mu2l',
@@ -5034,7 +5036,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3seajga7yxh9jxld48ehd5jlc',
@@ -5046,7 +5048,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2tagpa5ji10r0tbp4hzo9mfg7',
@@ -5058,7 +5060,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o10lyaro8b26tmn8py6lqgmzt',
@@ -5070,7 +5072,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5rb2exy1lg0v1fjx53pbcn6le',
@@ -5082,7 +5084,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2bonisfc2ae1gs8kntiwko0c1',
@@ -5094,7 +5096,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '79dktsa6deubaoq6vb3yitfod',
@@ -5106,7 +5108,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fd4w4o9gb8wqulwum1jszgkxq',
@@ -5118,7 +5120,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uw9jjybj6tyfsotaq7v5dnyr1',
@@ -5130,7 +5132,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9fe0ruug7mepmobq33r9f88k3',
@@ -5142,7 +5144,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qp95ave5s2ozae0x5tawmy259',
@@ -5154,7 +5156,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mrkqngll3p0v2sql1o86ka3wz',
@@ -5166,7 +5168,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '33ksiv1dwlnhoxqjj89fxcv27',
@@ -5178,7 +5180,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lijyrxqwt1zgu4wu40b5x3sq7',
@@ -5190,7 +5192,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9rienv3zzsrk24fvzgtlgd7x7',
@@ -5202,7 +5204,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nvuskbs5racfglrtkdvmx0pwd',
@@ -5214,7 +5216,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2xswshy7kyzs61s7cmvx9e50b',
@@ -5226,7 +5228,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1e8l62agfos0y4k23xxg5tjiv',
@@ -5238,7 +5240,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ev947h2c7dt8e72eh7l58anhw',
@@ -5250,7 +5252,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ujsgkxw4fptwhplndltjbed6w',
@@ -5262,7 +5264,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xdvzvdxs3j4eypxtic00ynrvg',
@@ -5274,7 +5276,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x2p3xdtg9quujxgeilhkjduv1',
@@ -5286,7 +5288,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nl0a62vne08t5skiwwnenn74d',
@@ -5298,7 +5300,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6n3jpnlv7aksg9us78x5bear8',
@@ -5310,7 +5312,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2oxl49ibe79xvbpsd6jek1k2h',
@@ -5322,7 +5324,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fqsqfkxprsy75jordmo0263t5',
@@ -5334,7 +5336,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ztejrf5mmdsmdql9rtd525uj6',
@@ -5346,7 +5348,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'flfmvdkpaei3h7lpfrigl37b3',
@@ -5358,7 +5360,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bxdgcpccsidhelfz6vd5rfnj5',
@@ -5370,7 +5372,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3039bcferleocvo53zxvbsk70',
@@ -5382,7 +5384,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2xrf2wkcvajk8tapt59r80mh5',
@@ -5394,7 +5396,7 @@ export const attendizeDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -5403,20 +5405,20 @@ export const attendizeDb: Template = {
                         name: 'events_account_id_index',
                         unique: false,
                         fieldIds: ['e838qlpegmrmaff1wnzjjy304'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8gmt7d1kafg73n7yfcf2wxr1w',
                         name: 'events_pkey',
                         unique: true,
                         fieldIds: ['yp7x0pfyy99eaajf0vldvzp4k'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -5431,7 +5433,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'v5ytdip4utwx6w7kejm9znuu6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1ezzeo3p2g4cj2mqkdssfrfu2',
@@ -5444,7 +5446,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1yf4uc1g5887yr3buf7paud5j',
@@ -5457,7 +5459,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3fzjxxdof1baekatl5f24zvof',
@@ -5470,7 +5472,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3ijxwx8v5cvgbcub9coqk3h3v',
@@ -5483,7 +5485,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3mcx6xvwl5ap1r1wxzi264vun',
@@ -5496,7 +5498,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'v5ytdip4utwx6w7kejm9znuu6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '403ff9ki6fh2qvhz2elaycxe8',
@@ -5509,7 +5511,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4cknx78dy80dol1xkik468mmm',
@@ -5522,7 +5524,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5436x0bt28mgmvky6qrl5hnmn',
@@ -5535,7 +5537,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5hqvkghwvd4n0ah8vtw3g9u5l',
@@ -5548,7 +5550,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6z4bs4snxqalo1oetclsv28h2',
@@ -5561,7 +5563,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'jw4acgrxqabbq2ptpz8o1ke1e',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7nfq321inwsdnr8i90tx8s2yj',
@@ -5574,7 +5576,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'v5ytdip4utwx6w7kejm9znuu6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8715crwnkwc7s61nkf4onzeja',
@@ -5587,7 +5589,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yia7etzlthe63e7l6vylb64rg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8rjavjxvr6cr0u8epok7j8432',
@@ -5600,7 +5602,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'bvnn57vmyjywrcyu7kmlw38bj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8xu0snkct7xo028l6xkasxj0x',
@@ -5613,7 +5615,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'jw4acgrxqabbq2ptpz8o1ke1e',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a164e0un5ar54z70jtyxe8yjo',
@@ -5626,7 +5628,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'jw4acgrxqabbq2ptpz8o1ke1e',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'aeka387ec03ju2ba23uxb9v54',
@@ -5639,7 +5641,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'bvnn57vmyjywrcyu7kmlw38bj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c10bk83p529tek51k1z2mnl9x',
@@ -5652,7 +5654,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c2pqn629lrkllku4770zda7px',
@@ -5665,7 +5667,7 @@ export const attendizeDb: Template = {
                 targetFieldId: '444a71g6r6sx4k0cgpwkub56b',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ckrt2dsovui1x4h1zh3gow7w7',
@@ -5678,7 +5680,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'cqqe2ns7sunf4rgzsp8e0rnx3',
@@ -5691,7 +5693,7 @@ export const attendizeDb: Template = {
                 targetFieldId: '444a71g6r6sx4k0cgpwkub56b',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd1uzyx86mesher4k72rczg4hh',
@@ -5704,7 +5706,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'ktigomjopdv0sa9tycebw3nm5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd3fps0gdffxsvpr3ll159jo4f',
@@ -5717,7 +5719,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yia7etzlthe63e7l6vylb64rg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dl4im3sb8vde25hm40jrys44b',
@@ -5730,7 +5732,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'faprapc7qxhm5p52htlrngrjn',
@@ -5743,7 +5745,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'pabq42zess0hb3f2s4y1rsj9f',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fsulvlxvprfsiy4gf77h2p6wy',
@@ -5756,7 +5758,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'g93x2wtth1oldbjxahldrjy84',
@@ -5769,7 +5771,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hnak70tseah6ifryhr6til8oj',
@@ -5782,7 +5784,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'ktigomjopdv0sa9tycebw3nm5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ic64g32uavbgf85ajw8savvl6',
@@ -5795,7 +5797,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k6t6zylx6coqjfqpgw2oaxzbj',
@@ -5808,7 +5810,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'bvnn57vmyjywrcyu7kmlw38bj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'khvw0kye9owvbcsa65b619gek',
@@ -5821,7 +5823,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mp611gs8lnf4bwtq282nb9slg',
@@ -5834,7 +5836,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'v5ytdip4utwx6w7kejm9znuu6',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mynehg0ug9wuxccgdgfdr5468',
@@ -5847,7 +5849,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'udagvzlt0do9u2rv2f7gxn5ui',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nu0kkdeo9wy0tl2k3w2tue11q',
@@ -5860,7 +5862,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o8pzoutegcnwpv9njce2w4y69',
@@ -5873,7 +5875,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p7fx5pdi7uabmbve7vdi0ch8o',
@@ -5886,7 +5888,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'peyyvs2wi84dsq2trvhgvx559',
@@ -5899,7 +5901,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pvwnj2ih1rxxdssl2hd2i737j',
@@ -5912,7 +5914,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'wr8k5tmphui1x4xsnzwkot8up',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q79kf4bivnc21fk8ctd77l03v',
@@ -5925,7 +5927,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q7b1ttyrzh4ydaofz5gkvzgd2',
@@ -5938,7 +5940,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yia7etzlthe63e7l6vylb64rg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qg868l9w7eu9xx84y8sf7e9fl',
@@ -5951,7 +5953,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'jw4acgrxqabbq2ptpz8o1ke1e',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qu0o5wu9xwjfkbfcjet5tyddu',
@@ -5964,7 +5966,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'bvnn57vmyjywrcyu7kmlw38bj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qw6gw4kekzq28z0hbxxn25ap0',
@@ -5977,7 +5979,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'l4xa66t2m3mb21wcq4g8ruukj',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'r8vkeqtd78bicjtv67i514afg',
@@ -5990,7 +5992,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yia7etzlthe63e7l6vylb64rg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sjs2v7xjxwgx4b4qq94n27us6',
@@ -6003,7 +6005,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 's6e068z03w8qkfxitviitkkoc',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sko6960fmz6v6192tuh39ww97',
@@ -6016,7 +6018,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'ktigomjopdv0sa9tycebw3nm5',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'td2txrdoydjwr99sci46fzpcz',
@@ -6029,7 +6031,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'topskgxrwrhti6x0ju0sb76hk',
@@ -6042,7 +6044,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'mal8m8p3ipitp8v9kr4z0gn9g',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'v6yhslr1d8n8mzxfpwrrzwkz3',
@@ -6055,7 +6057,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'j1o7cqiz607herbp5zphm45r3',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'w3v0utzgol4xpnb33s5z7tgcr',
@@ -6068,7 +6070,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yp7x0pfyy99eaajf0vldvzp4k',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yblmvxbjc5s6hi303gg8r2zcn',
@@ -6081,7 +6083,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zy3495xhg4r7jf0jajidpca9p',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ydhs1q637af2baw3g0i7iaaur',
@@ -6094,7 +6096,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'pogtj140gvwfm4zruz343526g',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ys4pb3v3b5kbwxpixbdgf67g3',
@@ -6107,7 +6109,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'yia7etzlthe63e7l6vylb64rg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'zvp7qh704xsilvjk0lxm17t8a',
@@ -6120,7 +6122,7 @@ export const attendizeDb: Template = {
                 targetFieldId: 'zfgkmu7oopzooff6xbuhe4g27',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

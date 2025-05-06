@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/ticketit-db.png';
 import imageDark from '@/assets/templates/ticketit-db-dark.png';
 
+const now = Date.now();
+
 export const ticketitDb: Template = {
     slug: 'ticketit-database',
     name: 'Ticketit',
@@ -38,7 +40,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd3mi2mtrr2jc2n95k7nwdt70s',
@@ -50,7 +52,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e3fgy0e6csdti4pi3ui9b3fks',
@@ -62,7 +64,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wdsh73xzbbsi54pab7xtad191',
@@ -74,7 +76,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'n01hkpxj6fq3zyr3v0x23a8om',
@@ -86,7 +88,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qmlwi5i0753kcajivc502ema8',
@@ -98,7 +100,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -107,27 +109,27 @@ export const ticketitDb: Template = {
                         name: 'idx_audits_ticket_id',
                         unique: false,
                         fieldIds: ['wdsh73xzbbsi54pab7xtad191'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'aouy1pcwynjmzkiijmwxgfwcx',
                         name: 'ticketit_audits_pkey',
                         unique: true,
                         fieldIds: ['k6iv8ifwf2x5copb6v8r6v7iu'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iytlkj7j9c44qe71eomf263cc',
                         name: 'idx_audits_user_id',
                         unique: false,
                         fieldIds: ['e3fgy0e6csdti4pi3ui9b3fks'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5un8j89oxdps0ebr548leu56w',
@@ -146,7 +148,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wzde4of9xw0zc8b5s5hrxmn7u',
@@ -158,7 +160,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gl25ihfx8w110dubt7uk9zavd',
@@ -170,7 +172,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -179,13 +181,13 @@ export const ticketitDb: Template = {
                         name: 'ticketit_priorities_pkey',
                         unique: true,
                         fieldIds: ['te5uirox6vofoa0sh0os7pj7w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '78j4wvik02wgfbo1fhywgmqup',
@@ -204,7 +206,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1o5v5fdvf5wbv7sqkw88smr7c',
@@ -216,7 +218,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dikevzslifq2bcg2wdnteub5h',
@@ -228,7 +230,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -237,13 +239,13 @@ export const ticketitDb: Template = {
                         name: 'users_pkey',
                         unique: true,
                         fieldIds: ['dj5tenp91tk5hoy9v6ep9b6wf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '8960j1v0o5biqetave5q78wen',
@@ -262,7 +264,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wqryw39tfrm83cmzhl6h8j8fm',
@@ -274,7 +276,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -286,27 +288,27 @@ export const ticketitDb: Template = {
                             'gbnvz6152pjkz8onibjiao4x6',
                             'wqryw39tfrm83cmzhl6h8j8fm',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6bsr7vxw3qad6xhmrkuj6q3a2',
                         name: 'idx_category_user_category_id',
                         unique: false,
                         fieldIds: ['gbnvz6152pjkz8onibjiao4x6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9ryb22txfq77u7whriagapcv8',
                         name: 'idx_category_user_user_id',
                         unique: false,
                         fieldIds: ['wqryw39tfrm83cmzhl6h8j8fm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '99j0hy58vmx1pontrz2vkl03s',
@@ -325,7 +327,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7ovg771u4wfvqc9hkpwyca3gl',
@@ -337,7 +339,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd4p2q78a4cdrraotl00056nph',
@@ -349,7 +351,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -358,13 +360,13 @@ export const ticketitDb: Template = {
                         name: 'ticketit_categories_pkey',
                         unique: true,
                         fieldIds: ['vleh1ly31xenjjoz211fe34bn'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9w9yqderz2181v35mkasdcrbj',
@@ -383,7 +385,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5tk8nu3gzdstxi68txr1q2bo9',
@@ -395,7 +397,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'irvsej0q4dcq0aziggwfsa95r',
@@ -407,7 +409,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o75wo7213v3wo05rvkh83rwhh',
@@ -419,7 +421,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'szbze5jp6i328qubvhcdfapxd',
@@ -431,7 +433,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g0xxd2jknv366nir4ju4h1ouz',
@@ -443,7 +445,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jiv95mthj5zk2v1pwl5wa6u1y',
@@ -455,7 +457,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -464,20 +466,20 @@ export const ticketitDb: Template = {
                         name: 'ticketit_settings_slug_key',
                         unique: true,
                         fieldIds: ['irvsej0q4dcq0aziggwfsa95r'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pa4q5imgwcko0b4mc9hvs299z',
                         name: 'ticketit_settings_pkey',
                         unique: true,
                         fieldIds: ['k8gw7x7dxtv51g1vlis0u7x50'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'kwgr7cd982jkc0tedwthl2jtw',
@@ -496,7 +498,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wkjdtpkj99z40yjcdbt5om8dm',
@@ -508,7 +510,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8dqvvm3cxx6cgd5qgxibmtkkl',
@@ -520,7 +522,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nmcsf6bwla347c6cbln44xkn4',
@@ -532,7 +534,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'czwwgho0ohzmabq6br2upb89m',
@@ -544,7 +546,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f0s75wjpcfp6tz8uddxdjolbq',
@@ -556,7 +558,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cj0v1qyoxkhowpvkr2rkpd4t9',
@@ -568,7 +570,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '854yp8e8x13v1yzoanpn4takh',
@@ -580,7 +582,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gzwfz4656zvpzxezqjv4pzc9y',
@@ -592,7 +594,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ujb9zbi9hmtwxyos5a04xmyp9',
@@ -604,7 +606,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mzdtu9lp5vum568aezjwpgyvm',
@@ -616,7 +618,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o7ataxliaqchc4icwiakd80mb',
@@ -628,7 +630,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -637,48 +639,48 @@ export const ticketitDb: Template = {
                         name: 'idx_ticketit_category_id',
                         unique: false,
                         fieldIds: ['gzwfz4656zvpzxezqjv4pzc9y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1iv89uankqx5ip7nj0potqyhv',
                         name: 'ticketit_pkey',
                         unique: true,
                         fieldIds: ['iidzujagfol5hdkmunkzm0tdr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lw4w383csto8q5h023fhzloro',
                         name: 'idx_ticketit_status_id',
                         unique: false,
                         fieldIds: ['czwwgho0ohzmabq6br2upb89m'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vttkmp14b0mivsl657tbp7cqn',
                         name: 'idx_ticketit_agent_id',
                         unique: false,
                         fieldIds: ['854yp8e8x13v1yzoanpn4takh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bs4vr3arjn4nfbpuwd4easpyn',
                         name: 'idx_ticketit_user_id',
                         unique: false,
                         fieldIds: ['cj0v1qyoxkhowpvkr2rkpd4t9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ekh8xcx11tkbrm87mc1b7wdg0',
                         name: 'idx_ticketit_priority_id',
                         unique: false,
                         fieldIds: ['f0s75wjpcfp6tz8uddxdjolbq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'thzy8ttwg16hac00om8t8ap50',
@@ -697,7 +699,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '65o2wmaptzm5nttx8ienn1fre',
@@ -709,7 +711,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iwrnauzmac1bv5hic09fra1tf',
@@ -721,7 +723,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -730,13 +732,13 @@ export const ticketitDb: Template = {
                         name: 'ticketit_statuses_pkey',
                         unique: true,
                         fieldIds: ['hudebn1pmnvhfxi985ip4y35n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tk4jypnatvj407xp4low182gm',
@@ -755,7 +757,7 @@ export const ticketitDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'prues5pt55l57mzowte9h683q',
@@ -767,7 +769,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zmzss3b27188540sykvo1q0li',
@@ -779,7 +781,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kmnt802a8ih7i0epe1ae1es0u',
@@ -791,7 +793,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xw3o5bheynyk9ji06yylto4jq',
@@ -803,7 +805,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ijojcws4nt74zz3eittmwv44s',
@@ -815,7 +817,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'txvaoxxxlwvmgjnzrv2egvzol',
@@ -827,7 +829,7 @@ export const ticketitDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -836,27 +838,27 @@ export const ticketitDb: Template = {
                         name: 'idx_comments_user_id',
                         unique: false,
                         fieldIds: ['zmzss3b27188540sykvo1q0li'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q3vownf8y3w3d2txrlbdb7hlg',
                         name: 'idx_comments_ticket_id',
                         unique: false,
                         fieldIds: ['kmnt802a8ih7i0epe1ae1es0u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5tgk184b3a5h93iyqpuolsdpu',
                         name: 'ticketit_comments_pkey',
                         unique: true,
                         fieldIds: ['12atn0726m9zj4lvtxwno8l3t'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -871,7 +873,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'iidzujagfol5hdkmunkzm0tdr',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1tv2sebrsag1zad95fbkjmkf1',
@@ -884,7 +886,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '91agbnk35l3v0ncju9ltcordl',
@@ -897,7 +899,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'hudebn1pmnvhfxi985ip4y35n',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd2ecw1m439dwtlpciliis2g82',
@@ -910,7 +912,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dwdxu3m1q56lpf2j55uk4me9g',
@@ -923,7 +925,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fe1sw7t5dbcuy66jwzw5dipsj',
@@ -936,7 +938,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'h2b7oip9v7rfnb5nkeejsnqzv',
@@ -949,7 +951,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jbvrua3879cmjt9r44bjqi5vf',
@@ -962,7 +964,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'iidzujagfol5hdkmunkzm0tdr',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jpkr91h4waoej055pk1mw9dno',
@@ -975,7 +977,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nkcqu2n9gu0v6yo58ehrymhh0',
@@ -988,7 +990,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o9axvh1pktujlzc75uaxa795q',
@@ -1001,7 +1003,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'hudebn1pmnvhfxi985ip4y35n',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'pm2zyhrdqt5gtf7e8snraau65',
@@ -1014,7 +1016,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'iidzujagfol5hdkmunkzm0tdr',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'tyuwqfxp1c66horkabun3hrow',
@@ -1027,7 +1029,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'te5uirox6vofoa0sh0os7pj7w',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'uez4yimmi8tcrdxid8tf08nn0',
@@ -1040,7 +1042,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'v0eryjqywayuwkm45chtr8n7m',
@@ -1053,7 +1055,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'te5uirox6vofoa0sh0os7pj7w',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'x4qqjhejn6odbz6om3l13zcxt',
@@ -1066,7 +1068,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'vleh1ly31xenjjoz211fe34bn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xk0yufiya5tjf6x3vg2ayp9l1',
@@ -1079,7 +1081,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'dj5tenp91tk5hoy9v6ep9b6wf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xphc1c9sjd8bhbiu0pt13sw59',
@@ -1092,7 +1094,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'iidzujagfol5hdkmunkzm0tdr',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yo75ynn0lezwwle67cy6fws7i',
@@ -1105,7 +1107,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'vleh1ly31xenjjoz211fe34bn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'z0pc9ufxugj8fuev0vkiin9qs',
@@ -1118,7 +1120,7 @@ export const ticketitDb: Template = {
                 targetFieldId: 'vleh1ly31xenjjoz211fe34bn',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

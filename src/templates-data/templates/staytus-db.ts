@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/staytus-db.png';
 import imageDark from '@/assets/templates/staytus-db-dark.png';
 
+const now = Date.now();
+
 export const staytusDb: Template = {
     slug: 'staytus-database',
     name: 'Staytus',
@@ -38,7 +40,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'llujh8t25ff7c1is70ep8u5do',
@@ -51,7 +53,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h9pse4cqmchzi3w685ssfde7o',
@@ -64,7 +66,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ol1oh7n9wywvl4vrqqzqw4tq',
@@ -76,7 +78,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qvr5uie0jlzroqbh44589f7v1',
@@ -88,7 +90,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dqxyfu4ewhb0fuxrg7slrnel0',
@@ -100,7 +102,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i07uatas3r3nsj3x277nfgtgq',
@@ -112,7 +114,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'win0hcvv3oxsw4vk7evvddao2',
@@ -124,7 +126,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7ryh3dr8o3gbheab4hindw7gn',
@@ -136,7 +138,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ra2evksjk2rbku64d3gsuctgd',
@@ -148,7 +150,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vdv729crfxnldatfgknxox31s',
@@ -160,7 +162,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'exbmkiz87wse3sqhsx2eyjyv3',
@@ -173,7 +175,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lfp5r2qtfjpm349x0gdh34uvr',
@@ -185,7 +187,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -194,27 +196,27 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['uec8qvmjsjyc3eyt0ob6g1lo4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cid1j08voe69kpw75d6ry873k',
                         name: 'maintenances_service_status_id_foreign',
                         unique: false,
                         fieldIds: ['win0hcvv3oxsw4vk7evvddao2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm8z30ytau823v5xslhj1t3794',
                         name: 'maintenances_user_id_foreign',
                         unique: false,
                         fieldIds: ['i07uatas3r3nsj3x277nfgtgq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2dfe92ureapqe4n4hxv54bw5x',
@@ -233,7 +235,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3huo3ep5ftlwm0phkn8d6urbq',
@@ -245,7 +247,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f5149o44pkz5sn61i4m4itn6q',
@@ -257,7 +259,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ftvkprxy3bw4lvx94j3wjyc0p',
@@ -269,7 +271,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hle17dqp0sjv6xuhdva0vsugt',
@@ -282,7 +284,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '57jh963nk2duy6rcuzpqxiwd7',
@@ -295,7 +297,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cehjbntug4uy919jcdt3joovi',
@@ -307,7 +309,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zx8t6rkegqw433yckdhy6karg',
@@ -319,7 +321,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i8bb5x9qsbs1d933y2jxndig9',
@@ -332,7 +334,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9o218g5m4bs1vwlediqjd9h7b',
@@ -344,7 +346,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -353,34 +355,34 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['q23xz0e62etyc5rxl5fk1vb0z'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xaqtf6bks9ym18b9nf62aqx1y',
                         name: 'issue_updates_issue_id_foreign',
                         unique: false,
                         fieldIds: ['3huo3ep5ftlwm0phkn8d6urbq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9jq5xtabi67a8j1modrsi77ae',
                         name: 'issue_updates_service_status_id_foreign',
                         unique: false,
                         fieldIds: ['ftvkprxy3bw4lvx94j3wjyc0p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '812qcj18okqh5di677sxsivs1',
                         name: 'issue_updates_user_id_foreign',
                         unique: false,
                         fieldIds: ['f5149o44pkz5sn61i4m4itn6q'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4k36q8p2lmugq9ophivx8893g',
@@ -399,7 +401,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4kieqa4ce7xgqpgxf4v8qw5e9',
@@ -412,7 +414,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f2e98lk5z0cjp3ey5qbl99n97',
@@ -425,7 +427,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'u3f8tmxzgw0cuncvljoenrdh4',
@@ -438,7 +440,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '03vz3at5tyf4g1h4567u9qc6z',
@@ -450,7 +452,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'arseju0svgq3zea5w4nqg2s8v',
@@ -462,7 +464,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -471,13 +473,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['5lpim898x5ttzvxpoi41zf6rj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a37clougxq0ts3bxx4xagcdkk',
@@ -496,7 +498,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'emb6xna8sr3wd29oovid4b2nb',
@@ -508,7 +510,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '58bvgcijjsdxzgw6ukill1zo2',
@@ -520,7 +522,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f06g60jgg10ufj9ts3w10vvwm',
@@ -532,7 +534,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'evnmfzv5i6luss8f662b00s39',
@@ -544,7 +546,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -553,27 +555,27 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['wdr6j56qa1uc99shh4a0nfyhj'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gcrmlf0n2jc1ugos85vm7qqja',
                         name: 'issue_service_joins_service_id_foreign',
                         unique: false,
                         fieldIds: ['58bvgcijjsdxzgw6ukill1zo2'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wgytkayv2l5zur5o3em23rygq',
                         name: 'issue_service_joins_issue_id_foreign',
                         unique: false,
                         fieldIds: ['emb6xna8sr3wd29oovid4b2nb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b2gxamp2gt9j785k5abstt1if',
@@ -592,7 +594,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '98vm8oinmunmbv6o64d45pobe',
@@ -605,7 +607,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kmlzuzbbf07ho6tcbi03kuvy0',
@@ -617,7 +619,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8swrvw0jr27gyyv3kidf80a60',
@@ -629,7 +631,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -638,13 +640,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['p61xa77uo395h1mu2eu2qj4yb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'c0nf3rv6aurgeu4v4sb80alfa',
@@ -663,7 +665,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8rgf912c5nf9g373gpr70h03x',
@@ -676,7 +678,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '94neqxt1fj40bxaay8mc11wdy',
@@ -689,7 +691,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qcekauvexznfcyasektcvkba9',
@@ -702,7 +704,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y58p386j1hcs07v6kkc37ym6w',
@@ -714,7 +716,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pyiw4cyyhm4sr6e649f1i460s',
@@ -726,7 +728,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -735,13 +737,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['vrzwr7lu2hpqdqpz4hl8ufyex'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'czbdab8cspeejqxrkiiuo7qye',
@@ -760,7 +762,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8lybdggqtfhsa9us0roz9d4em',
@@ -773,7 +775,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6s4ekwra17z058qjfydr8j6rv',
@@ -786,7 +788,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'e1r31s3espm10lquo1wu8puwm',
@@ -798,7 +800,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ydcn1fxx4tfy8syts46yb1zh',
@@ -810,7 +812,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6exnpipgvs345fzwje5vivogr',
@@ -822,7 +824,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q0psxlmj7dul4uki56zu8p1zf',
@@ -834,7 +836,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ypy405vin8689dk90t5e8awwc',
@@ -846,7 +848,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '154gt2jpjtzgder8zac9wh5k8',
@@ -859,7 +861,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ecmuzclgzy092amsgzn7qjsbj',
@@ -871,7 +873,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -880,27 +882,27 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['rl329e4vykjc5xv45hmcdvs7x'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qni9eoeg9rew6m7yga0t1mdsh',
                         name: 'issues_user_id_foreign',
                         unique: false,
                         fieldIds: ['ypy405vin8689dk90t5e8awwc'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b208tntnuc3ebt2vmoaxtvafr',
                         name: 'issues_service_status_id_foreign',
                         unique: false,
                         fieldIds: ['e1r31s3espm10lquo1wu8puwm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'd5js6gwtocry906qkehcusydy',
@@ -919,7 +921,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6z05h0143apzo8poc8csqpy6j',
@@ -932,7 +934,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hg59mk2peb3sctx4igeledvmv',
@@ -945,7 +947,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '89oij5cx7wksixy0u66ar0x0u',
@@ -958,7 +960,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hqayf9ybw39zpybkectxnlkva',
@@ -971,7 +973,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xzh3iuwxjhfv1qbk7bn5jb61o',
@@ -983,7 +985,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rc99cbr4kdem191sk47e1dygo',
@@ -995,7 +997,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1004,13 +1006,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['4ylkkblyu3f3h57rhuslcsf9u'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dau33uzp82nosjepxy2in8nqi',
@@ -1029,7 +1031,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uc6oz8qpi7lq8q84517zp6ze1',
@@ -1042,7 +1044,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'agp2h28omgrerfr36fyytfet4',
@@ -1055,7 +1057,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'l3naxsa2r5wkd4dwc4ntchpzh',
@@ -1067,7 +1069,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lb76qv6tr5tvqv73z6hkz6owv',
@@ -1079,7 +1081,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xkioyacaw3obogeqedzqjkb2l',
@@ -1091,7 +1093,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1100,13 +1102,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['acq9ot8s555ffu2sk13ey5emo'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'grpts66abujxx6gpro0hiqt1o',
@@ -1125,7 +1127,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rf3otnxb3b9v8yriyxg6idyj1',
@@ -1138,7 +1140,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'raqmgxhp0qs08xez87c1couxc',
@@ -1151,7 +1153,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'b3gnntsvvfo8npbnzb412fqg6',
@@ -1163,7 +1165,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm0pzlbjrcwv77ny5t8b3vwrh2',
@@ -1175,7 +1177,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xhzkwd9ze1wzcyhebqmxv98xk',
@@ -1187,7 +1189,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h01qaw51hp219ix6sfiw5eyw8',
@@ -1199,7 +1201,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nn8menylb0k5438v18ebjeauk',
@@ -1212,7 +1214,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nvmn090gv9ua3silqubvqdcal',
@@ -1224,7 +1226,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1233,13 +1235,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['n8efkgaj2ik4zbjf8842sun97'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'j4hgct19im0ei9rcojyvtth37',
@@ -1258,7 +1260,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm88n5l0ihz96g8g5gccxcrfnd',
@@ -1270,7 +1272,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i46cg5rpmtxwxt26qy2kmmooz',
@@ -1282,7 +1284,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4luugl08vxs6jm1tb2nvj4yez',
@@ -1294,7 +1296,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ofiz3xfa8o2ywe0gxl9znjnvu',
@@ -1306,7 +1308,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1315,27 +1317,27 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['js12beggk6epunil5q25q03w3'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yvuk1o2tgxcxbm46l62j5gali',
                         name: 'maintenance_service_joins_service_id_foreign',
                         unique: false,
                         fieldIds: ['i46cg5rpmtxwxt26qy2kmmooz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1ffizfe7z67al3pwlpboh51ct',
                         name: 'maintenance_service_joins_maintenance_id_foreign',
                         unique: false,
                         fieldIds: ['m88n5l0ihz96g8g5gccxcrfnd'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'js833ozrqu0ahqlvdtvub5e1w',
@@ -1354,7 +1356,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wmkvsq6cg807v9hmczpnojx2x',
@@ -1366,7 +1368,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lbus7jul4rh5st35kg4simts7',
@@ -1379,7 +1381,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4f9542vo3g1pxtaavbchyhl4i',
@@ -1392,7 +1394,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3baa3eustwoepsyncrrders8h',
@@ -1405,7 +1407,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '79x2a7n33wucok5z31pbym4jh',
@@ -1418,7 +1420,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fxe9k4z6h5zzscvyyy70dijjq',
@@ -1431,7 +1433,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rpica94cidday7eyn3cgsxgcr',
@@ -1444,7 +1446,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xr88q5g1oboflm3h2tkz4vq2p',
@@ -1456,7 +1458,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g74osj819y5rd0mhk9zgn8qjm',
@@ -1468,7 +1470,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1477,13 +1479,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['2cpwgtfacjocpwapm3u7lzis5'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'll9l5paivbwcyghae9fmz6rla',
@@ -1502,7 +1504,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'sfqgoj2rpzfqg9gx4d4jjwil8',
@@ -1514,7 +1516,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9d5e1037vumn767pm68cvw8ko',
@@ -1526,7 +1528,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2j8igatoudxooz9tpqouw49wk',
@@ -1539,7 +1541,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bfaokb7m2um4wxzztlxftgkr7',
@@ -1551,7 +1553,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c827zalc08gc3kytkb9x3q5pi',
@@ -1563,7 +1565,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jwjyb21fxlfyb64g9x2tuyj4c',
@@ -1576,7 +1578,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cxjn2vieevo50x9zu9mzle4p3',
@@ -1588,7 +1590,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1597,27 +1599,27 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['z2hrcqiud7svg6nkwek0o4k4e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rw5b6txruvh04sfncxyksoc5',
                         name: 'maintenance_updates_user_id_foreign',
                         unique: false,
                         fieldIds: ['9d5e1037vumn767pm68cvw8ko'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tbolhha9a7v8tlumk4ayqcrz2',
                         name: 'maintenance_updates_maintenance_id_foreign',
                         unique: false,
                         fieldIds: ['sfqgoj2rpzfqg9gx4d4jjwil8'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'oetpge5zxdnpwukcfvtq557rq',
@@ -1636,7 +1638,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1sky9o7smcqijj93alxz0fhk0',
@@ -1648,7 +1650,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd1a07yqmilzaqgsk2342ene57',
@@ -1660,7 +1662,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2ahemgkz8irydabhuinz7cc0o',
@@ -1673,7 +1675,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ml6qugkiqunc04ye1x1yjss2',
@@ -1686,7 +1688,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gtfnvpxjg9uf04gtfst9buk12',
@@ -1698,7 +1700,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nt6znxx9f9e412bk0cmxhtm1m',
@@ -1710,7 +1712,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xcewih8h0euvuzee4ookmwv8x',
@@ -1722,7 +1724,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0nj1jvwnaa1od4vda38dx9qgy',
@@ -1735,7 +1737,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ksuux2ns62lt2w9suv0eaigo3',
@@ -1748,7 +1750,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0kn0m44a6d6orfh7b18qam2a9',
@@ -1760,7 +1762,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xlscf5cl4rvytac2byh8f30is',
@@ -1772,7 +1774,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1781,7 +1783,7 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['tdmbg0fhg8e738oemx9vk4h2a'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'arx8egq3hiejrqpa1cc2qg094',
@@ -1791,13 +1793,13 @@ export const staytusDb: Template = {
                             '1sky9o7smcqijj93alxz0fhk0',
                             'gtfnvpxjg9uf04gtfst9buk12',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qj3k989r08fiytsb69actqlve',
@@ -1816,7 +1818,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xz1m9h2q9lbbjbdxuoxc8xp89',
@@ -1829,7 +1831,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f067ttfu6i7yeui1t8igpfqhq',
@@ -1842,7 +1844,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hktz9r8kquur7ooa844s8ywwm',
@@ -1855,7 +1857,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2c2ugfbe9jxv6lmzodqs1m9f2',
@@ -1868,7 +1870,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hu0plfefx7rb91dczem468l7t',
@@ -1881,7 +1883,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qlh82vqij4qrbo85w3rgsw57c',
@@ -1894,7 +1896,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dvn2as5apajy0lwhcl8ulq7fk',
@@ -1906,7 +1908,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wnqqnnox26c0iyt8f13axi41c',
@@ -1919,7 +1921,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g2in3lqgztjueajby9ceozc97',
@@ -1932,7 +1934,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ohs3a489y0qtr5wktct90jjz9',
@@ -1944,7 +1946,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mj7023r7agkv8bplkqyynl73c',
@@ -1957,7 +1959,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1966,13 +1968,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['5qmffm48z3ytoys9ryy7rtr5b'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qwvef3qmweu7f30uy1zn3pma9',
@@ -1991,7 +1993,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bs14e7bajtrrol12q0yltxj50',
@@ -2004,7 +2006,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qv83ohlaw18czz4gqr6jolifv',
@@ -2016,7 +2018,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dzr8cp4r5heo8a1hr9c5627ry',
@@ -2028,7 +2030,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2037,13 +2039,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['5n0rej8wov1cuiu4rojhphjhq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'u33vrcdis4tbjx8ecru7pc4e1',
@@ -2062,7 +2064,7 @@ export const staytusDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '20vip2n3ox713p1fxxtqounhw',
@@ -2075,7 +2077,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'le54gonncqvb4cl58xxs65id5',
@@ -2088,7 +2090,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h3bnty6pgyxctl9nrvstk2tj4',
@@ -2101,7 +2103,7 @@ export const staytusDb: Template = {
                         unique: false,
                         nullable: true,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9jijcg1vvvye7loyffhezdbuv',
@@ -2113,7 +2115,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3fx6m813n5u934ls4d62lw2ai',
@@ -2125,7 +2127,7 @@ export const staytusDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2134,13 +2136,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['2t3nmlmh26z2t6beufqnt32u0'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'vhzp9fmqtb634958p9oiu954t',
@@ -2160,7 +2162,7 @@ export const staytusDb: Template = {
                         unique: true,
                         nullable: false,
                         collation: 'utf8mb4_0900_ai_ci',
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2169,13 +2171,13 @@ export const staytusDb: Template = {
                         name: 'PRIMARY',
                         unique: true,
                         fieldIds: ['8tskgia6di4cdzmay2ybj3utz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -2190,7 +2192,7 @@ export const staytusDb: Template = {
                 targetFieldId: '4ylkkblyu3f3h57rhuslcsf9u',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6uo6fpzcy8l6t2fczkdbzs1t3',
@@ -2203,7 +2205,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'vrzwr7lu2hpqdqpz4hl8ufyex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '9ez6y26qsei1922e981dnth1l',
@@ -2216,7 +2218,7 @@ export const staytusDb: Template = {
                 targetFieldId: '4ylkkblyu3f3h57rhuslcsf9u',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a4cjgzag00tz49lov7hin20n2',
@@ -2229,7 +2231,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'rl329e4vykjc5xv45hmcdvs7x',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'agylss1pgizqt7i15ilqw6m67',
@@ -2242,7 +2244,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'vrzwr7lu2hpqdqpz4hl8ufyex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'doygqq2xx7vh5hsha6768s3qw',
@@ -2255,7 +2257,7 @@ export const staytusDb: Template = {
                 targetFieldId: '4ylkkblyu3f3h57rhuslcsf9u',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'f4wq0g29fsadu7bji6kf2iwiw',
@@ -2268,7 +2270,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'n8efkgaj2ik4zbjf8842sun97',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fg6cxcjo5n75x0mnn9vsrpz6g',
@@ -2281,7 +2283,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'rl329e4vykjc5xv45hmcdvs7x',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ht2gy8v0pjbl05felmu9ofvvk',
@@ -2294,7 +2296,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'n8efkgaj2ik4zbjf8842sun97',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'i8r5ezusju31bix7vf5stziqw',
@@ -2307,7 +2309,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'uec8qvmjsjyc3eyt0ob6g1lo4',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ujfj4hph8fxuwb86hik7pytxg',
@@ -2320,7 +2322,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'vrzwr7lu2hpqdqpz4hl8ufyex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wqhuhzlk270w95qob8rkx5p58',
@@ -2333,7 +2335,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'uec8qvmjsjyc3eyt0ob6g1lo4',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yw48nli4sicx73rpprsmlfvnp',
@@ -2346,7 +2348,7 @@ export const staytusDb: Template = {
                 targetFieldId: 'vrzwr7lu2hpqdqpz4hl8ufyex',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

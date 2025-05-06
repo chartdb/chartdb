@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/wordpress-db.png';
 import imageDark from '@/assets/templates/wordpress-db-dark.png';
 
+const now = Date.now();
+
 export const wordpressDb: Template = {
     slug: 'wordpress-database',
     name: 'WordPress',
@@ -38,7 +40,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9gcbrwsozyfns0idfgd6ub3yp',
@@ -50,7 +52,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zu0irjx9matzcomj45840skd3',
@@ -62,7 +64,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8m4t1f1mqj5p435lm55jhcp72',
@@ -74,7 +76,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '90yjj43pyrf4oknjhdpmcede6',
@@ -86,7 +88,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9wv0n7zwu10gad2ugrstl8eaz',
@@ -98,7 +100,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3g0ijqdycpq4nc75exb71qiiw',
@@ -110,7 +112,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vdmz1ajoyc2xwznmgfoz0gx5s',
@@ -122,7 +124,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3xxffrdsv3hylkj7bp0uq2qcb',
@@ -134,7 +136,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '10gs93wwzyzy9gkkrsulw4c97',
@@ -146,7 +148,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'skavp5904rjm2mw54pz3vdwof',
@@ -158,7 +160,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'badup0ted1jq1d9rbd1pwvx1o',
@@ -170,7 +172,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5lyput0k6dh67uz5kiyfmq6nr',
@@ -182,7 +184,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -191,13 +193,13 @@ export const wordpressDb: Template = {
                         name: 'wp_links_pkey',
                         unique: true,
                         fieldIds: ['0agxjmlgdfxs2d5mqg6e4xzhk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1uahxx5482z55o3qwak1h5a44',
@@ -216,7 +218,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lt4q60oj4rnf3h8eururikgn4',
@@ -228,7 +230,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6y1gm20l4nf0see3koo63lier',
@@ -240,7 +242,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qhf8zc4y071l3ykayin4hhem0',
@@ -252,7 +254,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -261,20 +263,20 @@ export const wordpressDb: Template = {
                         name: 'wp_options_pkey',
                         unique: true,
                         fieldIds: ['70ynpgmk5xjp5iguilhhjj6g1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '800weq9gculw8afj0uu0cyxx2',
                         name: 'wp_options_option_name_key',
                         unique: true,
                         fieldIds: ['lt4q60oj4rnf3h8eururikgn4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5719hh2vceoxft07yyuw412nf',
@@ -293,7 +295,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6opwy4tby70gcyv07zfdlwy5z',
@@ -305,7 +307,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7bgk2oy3ykao02uvbbnu74mlf',
@@ -317,7 +319,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h0xoiiuu7ihaiz9mkfmmf0wu2',
@@ -329,7 +331,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tmsopgd72sfhe1dy32fv2r7q3',
@@ -341,7 +343,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3qu1qj91vrd1vimyz2rursrnd',
@@ -353,7 +355,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oazkocnck8wkhspbpsdqeyvqi',
@@ -365,7 +367,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pig65jbco2l2y8zwmf6otby7v',
@@ -377,7 +379,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '618xiwel3scylyeoi7opio2dj',
@@ -389,7 +391,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0h5yv2ub4rhznqojxc4sauweb',
@@ -401,7 +403,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8i3pv4bug291cqgsd3n2l9xdi',
@@ -413,7 +415,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9qwgn1bxb2c02byxrcrol89ub',
@@ -425,7 +427,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hdtjrcdk2v9s99v8sfirjsd6f',
@@ -437,7 +439,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wsx4qk1cyr62z4ed6adgxhj77',
@@ -449,7 +451,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bzfamxzjmb99922r0msiht80n',
@@ -461,7 +463,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -470,20 +472,20 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_comments_user_id',
                         unique: false,
                         fieldIds: ['bzfamxzjmb99922r0msiht80n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'x6kbgq3n1etid29q4r7q7llmv',
                         name: 'wp_comments_pkey',
                         unique: true,
                         fieldIds: ['bu3m7h9vakhkun8k6nrrs18ld'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5o1x7miqtyc34fu92j2l1mre4',
@@ -502,7 +504,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yypk0zyhffe78lz0vgqh5g1zr',
@@ -514,7 +516,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'w3b8raw9fx6gubup56qzbf8iq',
@@ -526,7 +528,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -535,13 +537,13 @@ export const wordpressDb: Template = {
                         name: 'wp_site_pkey',
                         unique: true,
                         fieldIds: ['yob6do17uh4cr0ypj2i0fie0o'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6xlz7vv2yf4k4likkwbpt9n7c',
@@ -560,7 +562,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0t4c7nsthdqvl95v50v558w3e',
@@ -572,7 +574,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vp668iig5lshcqr1uanec0jcj',
@@ -584,7 +586,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'p3jdzyyjn6cwndz3353ycruyv',
@@ -596,7 +598,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'den9kni94m7m1z8lrszj7pyx4',
@@ -608,7 +610,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gcde1c5kzrgzx4d8nkm7qhznf',
@@ -620,7 +622,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '00em3r6d25yjb992vsg4wfftq',
@@ -632,7 +634,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6lyarfyrof6n8vmjw1jnms2ge',
@@ -644,7 +646,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2dfgxrt0oys3tgy10migbazmj',
@@ -656,7 +658,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y4zts7xz61p7eynp7rrnp0z2t',
@@ -668,7 +670,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -677,20 +679,20 @@ export const wordpressDb: Template = {
                         name: 'wp_users_pkey',
                         unique: true,
                         fieldIds: ['hxm27ltfcn5nmpe916rghd74y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7270l49u9x2dshb88swnhjdo5',
                         name: 'idx_wp_users_user_login',
                         unique: true,
                         fieldIds: ['0t4c7nsthdqvl95v50v558w3e'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7ce2o0mij9li0k4g83swbhi5x',
@@ -709,7 +711,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '40t7da14vj9s1haz7l8kke0ed',
@@ -721,7 +723,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'summxvmemrgxmwg0svx1tdjsc',
@@ -733,7 +735,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hinm4tfni2cj9fritsg9t5pf2',
@@ -745,7 +747,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -754,13 +756,13 @@ export const wordpressDb: Template = {
                         name: 'wp_terms_pkey',
                         unique: true,
                         fieldIds: ['fc9nfbmnaj04jkd8v2iv42wqk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ew6aq96etubkyb6z3zytzf11s',
@@ -779,7 +781,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '21hja8tuvhtx7a4en2cdw7f9j',
@@ -791,7 +793,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i20cjuc58u7f2e07bdmf38tgl',
@@ -803,7 +805,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'da0w5tjgi47xh633g4jz5xwxn',
@@ -815,7 +817,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1cstdt4eevv85o10ccros1wna',
@@ -827,7 +829,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '851lt85ljpm51po81gh1par1u',
@@ -839,7 +841,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -848,13 +850,13 @@ export const wordpressDb: Template = {
                         name: 'wp_term_taxonomy_pkey',
                         unique: true,
                         fieldIds: ['09qxmhzgvtmmjaorme35vy3u1'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'f4i287zfm1wa9bic8m4yxoql4',
@@ -873,7 +875,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wu2nu9g8om1yx8w7jgepo10z1',
@@ -885,7 +887,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j5svtjr4n8rlguslajiod57l2',
@@ -897,7 +899,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't3giqzegtkxjvqev8h2jhuxhl',
@@ -909,7 +911,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gfnnysvndpw0cmu9nlid6m0eq',
@@ -921,7 +923,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -930,13 +932,13 @@ export const wordpressDb: Template = {
                         name: 'wp_registration_log_pkey',
                         unique: true,
                         fieldIds: ['071hdw9pi8k45lyk1diymh2me'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jctta9mhqs7w2j538wury1c1w',
@@ -955,7 +957,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rnwokdmkf593zs2l752sqqzv6',
@@ -967,7 +969,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gnlcycyrp7f1q7bkxbdrh03xb',
@@ -979,7 +981,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ukhfp21h84idda7auuei8uyus',
@@ -991,7 +993,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1000,20 +1002,20 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_sitemeta_meta_key',
                         unique: false,
                         fieldIds: ['gnlcycyrp7f1q7bkxbdrh03xb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xlrirwu5g04wcysbdtdfaqip5',
                         name: 'wp_sitemeta_pkey',
                         unique: true,
                         fieldIds: ['zl8twki9u4t486f0p21m31eiw'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'jnxcbry0h8skqzb9hcycb3yyo',
@@ -1032,7 +1034,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8lhehz3ccq3uk6pj9ljs1n8ps',
@@ -1044,7 +1046,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6ot5byk6w7lgsnph1lu26snjq',
@@ -1056,7 +1058,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ob8e6h2awjhgpynq2fr8qti93',
@@ -1068,7 +1070,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1077,27 +1079,27 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_usermeta_meta_key',
                         unique: false,
                         fieldIds: ['6ot5byk6w7lgsnph1lu26snjq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ts3ynssl3wyk7to1c5mvsg9ig',
                         name: 'idx_wp_usermeta_user_id',
                         unique: false,
                         fieldIds: ['8lhehz3ccq3uk6pj9ljs1n8ps'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6rtblmvm4pgeuqts9t28av0nm',
                         name: 'wp_usermeta_pkey',
                         unique: true,
                         fieldIds: ['jqfsj7temp0fsbzlryvvkyo6g'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'm2pgq2gj9kmakbqiuhhm0ymko',
@@ -1116,7 +1118,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'irhkiwlxmpkt03b9t9movacxf',
@@ -1128,7 +1130,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yk1zwabnq4d9yiuz7x4jlvkax',
@@ -1140,7 +1142,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8jiskj9rqrg5zz3j7pifsj4z2',
@@ -1152,7 +1154,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1161,20 +1163,20 @@ export const wordpressDb: Template = {
                         name: 'wp_commentmeta_pkey',
                         unique: true,
                         fieldIds: ['6cze2mduwrww0iur1f1c3s2p7'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'z1xl2x7tdla1zgrhhfe3wcibz',
                         name: 'idx_wp_commentmeta_meta_key',
                         unique: false,
                         fieldIds: ['yk1zwabnq4d9yiuz7x4jlvkax'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nfun7jg6et5f144k96bq7eu2c',
@@ -1193,7 +1195,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'oyvu5e3do75r1ak7fmtco10a6',
@@ -1205,7 +1207,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wu2tjxmt00xdb8k4f6hhtx8nk',
@@ -1217,7 +1219,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1229,13 +1231,13 @@ export const wordpressDb: Template = {
                             'cmjlk9apmb8hz592dkvjl1xv7',
                             'oyvu5e3do75r1ak7fmtco10a6',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o9wjk1il4nid4wtm7pf2c0gl3',
@@ -1254,7 +1256,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bkg7pyku9dmaxsw8v1ppewqyy',
@@ -1266,7 +1268,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '34seq71wmki6hepb80m1tba8q',
@@ -1278,7 +1280,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'zf0rlrrv1xly7zkcod23cfhw3',
@@ -1290,7 +1292,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i343vq5wnfdk8b884m7aoyw8j',
@@ -1302,7 +1304,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7uzxip5edic2mjmh84p673ywo',
@@ -1314,7 +1316,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h9f0qmodolqu6mfm823w7oubo',
@@ -1326,7 +1328,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g5h3d3cvr7tv07xe9braw9its',
@@ -1338,7 +1340,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '48cvgw9xvake61539g6xihg65',
@@ -1350,7 +1352,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0b494kintpbzk4e9z61tzym8e',
@@ -1362,7 +1364,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4urj19xliob1s0d8udyojyqp4',
@@ -1374,7 +1376,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nj2xm6ik42ishwlgkqq9d96pj',
@@ -1386,7 +1388,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0rxwj5teawq06zsjz1o42ogp9',
@@ -1398,7 +1400,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '20be8sgu7moxo4q37r2xe4qcf',
@@ -1410,7 +1412,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rf7i6j7514u8f1gi6baxsdbdr',
@@ -1422,7 +1424,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dzbr49f08buq2p7v96wxdj5fb',
@@ -1434,7 +1436,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y83q018xhzmaghohl3yf6t5lq',
@@ -1446,7 +1448,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kr9xstgjcs28w0p9xl7ou99sx',
@@ -1458,7 +1460,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5uv7pk14zonon7o2wu23jh28j',
@@ -1470,7 +1472,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dvbur4nldxoaau4r52n5yd17x',
@@ -1482,7 +1484,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '822fs67u0lsbr09urmd57fp0v',
@@ -1494,7 +1496,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wh1hlt26f6c4zew0d6e4npqzt',
@@ -1506,7 +1508,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lorg0ztm3l10izxwfn8bhjp5k',
@@ -1518,7 +1520,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1527,20 +1529,20 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_posts_post_author',
                         unique: false,
                         fieldIds: ['bkg7pyku9dmaxsw8v1ppewqyy'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fl4rkl6pnivpsl2hqep6m5xp0',
                         name: 'wp_posts_pkey',
                         unique: true,
                         fieldIds: ['ohqdzo2yw6xrfvgazfk83qibs'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rs34x80mnoaxv269n3k7cc0yc',
@@ -1559,7 +1561,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't6c5iykqfbud8mikvtt8du77k',
@@ -1571,7 +1573,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lqeojhpm1ecoslt7ch85mngav',
@@ -1583,7 +1585,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lffog8fqfh2nguak3k0tl0x8m',
@@ -1595,7 +1597,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'diasmqvuuw46fhu7m9lyyd5hc',
@@ -1607,7 +1609,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ca7q66r0fxwxot45n1rtyyaqm',
@@ -1619,7 +1621,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '07zl3e49zyd4wthaz7yh7f39s',
@@ -1631,7 +1633,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i013ak1jy912dlt3jihijybpb',
@@ -1643,7 +1645,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '99j846njnrleej2dots1eb7u3',
@@ -1655,7 +1657,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6dq939xrodri1jtac4omgfdsg',
@@ -1667,7 +1669,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vrh2qb8tnce02anrm7co3y4mh',
@@ -1679,7 +1681,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1688,13 +1690,13 @@ export const wordpressDb: Template = {
                         name: 'wp_signups_pkey',
                         unique: true,
                         fieldIds: ['ikroslhrzcvu6qu454toiw0gm'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'wqlqwd8ae4ejnblmh220lkqfp',
@@ -1713,7 +1715,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qxigvqtet9arcsufkto8t2lei',
@@ -1725,7 +1727,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ypbzmo8ujg13j4hapsumsbkrl',
@@ -1737,7 +1739,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3a8x9a5a2uey3q652red9kh2d',
@@ -1749,7 +1751,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1758,20 +1760,20 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_termmeta_meta_key',
                         unique: false,
                         fieldIds: ['ypbzmo8ujg13j4hapsumsbkrl'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cj3ani53e1qq3py2ltiy6w0kq',
                         name: 'wp_termmeta_pkey',
                         unique: true,
                         fieldIds: ['1jcuakfvukr5ad57hvumcqw05'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ygw2bw4n5eduybebung4kr0a0',
@@ -1790,7 +1792,7 @@ export const wordpressDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '15jh2sepwhc688w3aurbw0h8y',
@@ -1802,7 +1804,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2k8xrzsnzr4l2lyvag54j1wd6',
@@ -1814,7 +1816,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7u8y6qis3ukz7m00cynbzyoez',
@@ -1826,7 +1828,7 @@ export const wordpressDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1835,27 +1837,27 @@ export const wordpressDb: Template = {
                         name: 'idx_wp_postmeta_post_id',
                         unique: false,
                         fieldIds: ['15jh2sepwhc688w3aurbw0h8y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6s5df7dgo3czgr50qohgd5cd7',
                         name: 'idx_wp_postmeta_meta_key',
                         unique: false,
                         fieldIds: ['2k8xrzsnzr4l2lyvag54j1wd6'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1c36k6xpsqrn41bsxbjox6pyf',
                         name: 'wp_postmeta_pkey',
                         unique: true,
                         fieldIds: ['x51latdrxck97z1jvwrznv3gq'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -1870,7 +1872,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'hxm27ltfcn5nmpe916rghd74y',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7igklsiesi7t0i80knwn7yrw5',
@@ -1883,7 +1885,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'yob6do17uh4cr0ypj2i0fie0o',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '89y687cq1w5o844t9z819rn49',
@@ -1896,7 +1898,7 @@ export const wordpressDb: Template = {
                 targetFieldId: '09qxmhzgvtmmjaorme35vy3u1',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'a86cjc98872nta2h9svn0zh5m',
@@ -1909,7 +1911,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'hxm27ltfcn5nmpe916rghd74y',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b2pol2cl7cvwia9ijndykugry',
@@ -1922,7 +1924,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'fc9nfbmnaj04jkd8v2iv42wqk',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b3yv64bbnp2ba5zz15gjjitfo',
@@ -1935,7 +1937,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'fc9nfbmnaj04jkd8v2iv42wqk',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'f219so73ppnc8ekaf85ginq6n',
@@ -1948,7 +1950,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'ohqdzo2yw6xrfvgazfk83qibs',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fc7cpnphzy7vwgu5ufsv5gyhm',
@@ -1961,7 +1963,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'ohqdzo2yw6xrfvgazfk83qibs',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'kupr53r1vouh0z2ltruwa6dns',
@@ -1974,7 +1976,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'ohqdzo2yw6xrfvgazfk83qibs',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qxotox85i9w98igh93fles0dt',
@@ -1987,7 +1989,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'hxm27ltfcn5nmpe916rghd74y',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's417vqou6082w7vjq5gi69ta0',
@@ -2000,7 +2002,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'hxm27ltfcn5nmpe916rghd74y',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'svol4nyb1j4x1xhqr90ztudut',
@@ -2013,7 +2015,7 @@ export const wordpressDb: Template = {
                 targetFieldId: 'bu3m7h9vakhkun8k6nrrs18ld',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],

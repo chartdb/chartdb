@@ -3,6 +3,8 @@ import type { Template } from '../templates-data';
 import image from '@/assets/templates/cabot-db.png';
 import imageDark from '@/assets/templates/cabot-db-dark.png';
 
+const now = Date.now();
+
 export const cabotDb: Template = {
     slug: 'cabot-database',
     name: 'Cabot',
@@ -38,7 +40,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2r2cnnbeqhyux66sg5bkny39s',
@@ -50,7 +52,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6wl4lm63u9hz6we757ghokj3g',
@@ -62,7 +64,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qaot6vldsaanl7ll3es8sumb0',
@@ -74,7 +76,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdbblg6j4dq54zqyyznjm8jp5',
@@ -86,7 +88,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '48bg1kecwo2bfw73088ff1iv4',
@@ -98,7 +100,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2oxndze8gbufgfq1ry6tb2swy',
@@ -110,7 +112,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'v8s1vno4mwfm7ihefn0tyk64i',
@@ -122,7 +124,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -131,13 +133,13 @@ export const cabotDb: Template = {
                         name: 'instance_status_snapshot_pkey',
                         unique: true,
                         fieldIds: ['ffg7cgh3d4tzcfkdxpbiwgvv9'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8eb7ff',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2g5a37ob099bhsuieq9ab929o',
@@ -156,7 +158,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd01n6izgorbu9uvstne0y3u1x',
@@ -168,7 +170,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dth8p4sc3de0ejikckptooqc9',
@@ -180,7 +182,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -189,13 +191,13 @@ export const cabotDb: Template = {
                         name: 'service_status_check_pkey',
                         unique: true,
                         fieldIds: ['qn00uqdnd8ogrw364tidyjbxk'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2ghbyz6qz80jg3clggsq2fwy9',
@@ -214,7 +216,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7titj5v9ih6rgj9gwy0suaojd',
@@ -226,7 +228,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'apcysjrim5wq83p8vx0tsgwxh',
@@ -238,7 +240,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -247,13 +249,13 @@ export const cabotDb: Template = {
                         name: 'instance_status_check_pkey',
                         unique: true,
                         fieldIds: ['z0qaexmm21uen0z5ddqimv12n'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'acyynxu05uajz4kegsv252ph9',
@@ -272,7 +274,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'g3cs00ub96ophp4zk2wxy8wdx',
@@ -284,7 +286,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j3i65nsbpfp9u45tmg4jmp6pc',
@@ -296,7 +298,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -305,13 +307,13 @@ export const cabotDb: Template = {
                         name: 'alert_plugin_service_pkey',
                         unique: true,
                         fieldIds: ['wwhwjf7iizrzhghyrbqex4z2w'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'adepxg04z9rk1yxale4m0pu8z',
@@ -330,7 +332,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uby6hrs70gtws67wwthlaz1if',
@@ -342,7 +344,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ojgqs3fbjexpre4yazvztuals',
@@ -354,7 +356,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -363,13 +365,13 @@ export const cabotDb: Template = {
                         name: 'alert_plugin_instance_pkey',
                         unique: true,
                         fieldIds: ['ie9mcbcvvexv52jw6vs050doh'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'b26phz0szmrtpu3xukpp0afcv',
@@ -388,7 +390,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vg4c0zy1k30w9apkujb13frbz',
@@ -400,7 +402,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9fh7zixbq92yu42te3ckkcn16',
@@ -412,7 +414,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1rjf68w2fmkx7ksny0dbtgukj',
@@ -424,7 +426,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'it5cv2y8r5le5s2la1bskrtz2',
@@ -436,7 +438,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd1nbxak6lk5dj5yfl13s8lngp',
@@ -448,7 +450,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's24ogodllxi4ob2nwvcf32o1z',
@@ -460,7 +462,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'jwzm8nxzuvcg5g724mwwmc94q',
@@ -472,7 +474,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qlkk5aenwu5lmfff4rx8k8b85',
@@ -484,7 +486,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5pzb6ei7suoxmvytkvuu9a9rf',
@@ -496,7 +498,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uzu0gf6jmv7ng9igvkyvnnd6g',
@@ -508,7 +510,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -517,13 +519,13 @@ export const cabotDb: Template = {
                         name: 'user_pkey',
                         unique: true,
                         fieldIds: ['8apkn00up0ucg3r4dwcmu8plg'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#4dee8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'dkxb5j0xwpxd7m8sld626yikf',
@@ -542,7 +544,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gp4pc5wz39hav0p9vgijnuoa6',
@@ -554,7 +556,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'c9nlkxqlogouurre9599rfj87',
@@ -566,7 +568,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -575,13 +577,13 @@ export const cabotDb: Template = {
                         name: 'icmp_status_check_pkey',
                         unique: true,
                         fieldIds: ['soe2o9gdqveztta1wmbjmr59t'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'erpxfyf9b0nn0b8ruuezd7nnt',
@@ -600,7 +602,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q9atbq7csij46qs7snwbmw677',
@@ -612,7 +614,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ssmv81aewvc261ud8a72atacj',
@@ -624,7 +626,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o0c93op0gwm4piux9j5ucdnuy',
@@ -636,7 +638,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -648,20 +650,20 @@ export const cabotDb: Template = {
                             'q9atbq7csij46qs7snwbmw677',
                             'o0c93op0gwm4piux9j5ucdnuy',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '2tva3wbf9mzr8ex1l5qv6hnr1',
                         name: 'alert_plugin_user_data_pkey',
                         unique: true,
                         fieldIds: ['v5hdctjhcetf31b0itn7nky1p'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'gwgd7y6e3gvkwlxcnbzvorgh1',
@@ -680,7 +682,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'iaw1nst78z6yeba21hcffzfdn',
@@ -692,7 +694,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bu38eh2hip801hd13upjw2fi3',
@@ -704,7 +706,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q5r6911ccvfoklejpl8wu6fom',
@@ -716,7 +718,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '77apnla5xb3sk7mqfx9xm8jlg',
@@ -728,7 +730,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -737,13 +739,13 @@ export const cabotDb: Template = {
                         name: 'jenkins_config_pkey',
                         unique: true,
                         fieldIds: ['b14pj3k6c2e6al6vki0b1elca'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#c05dcf',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'h5qj5g52zspl2tszk24110nev',
@@ -762,7 +764,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'stzg5a3ltgiybqhyu68vzgkp3',
@@ -774,7 +776,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nvatz1cfhk8kopcpeahp1zkh5',
@@ -786,7 +788,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -795,13 +797,13 @@ export const cabotDb: Template = {
                         name: 'service_user_pkey',
                         unique: true,
                         fieldIds: ['onnmsci24vqisx39msw4labp4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'hmw4ezzrg10e6080h4p54qi4m',
@@ -820,7 +822,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 't8r1t9xetnci09exb2pqibbgu',
@@ -832,7 +834,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f7zah30nbrutvnt2jzwq9f1ts',
@@ -844,7 +846,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rgpugt8b7ojgtm47kuqom4zfy',
@@ -856,7 +858,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0wthdjk9www61bra07lognmo7',
@@ -868,7 +870,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ze1t6xwmzgpby0we8v9u0rfw5',
@@ -880,7 +882,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kfrnei2y38udimsjconza7nz8',
@@ -892,7 +894,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4uq736kai6k8i3mvcxw7wxd2b',
@@ -904,7 +906,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'grhptktoweczo1r30u2tmdy3z',
@@ -916,7 +918,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ixih12xwofuj86ydhwrscpcu4',
@@ -928,7 +930,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4i0kx5z3sz2p9vrygcb8dbfun',
@@ -940,7 +942,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5yonoa5bok9g4xsl1bh6i66xa',
@@ -952,7 +954,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dz0rbo912655vei5dbl7vyjsy',
@@ -964,7 +966,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '56zqi49jquj3r7158kvfxq32l',
@@ -976,7 +978,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'veascaebxv35c0ncl5u6kojce',
@@ -988,7 +990,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6udbu1ikbhp6yvr1baps3xxrl',
@@ -1000,7 +1002,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'vo1pk8o993t7w1s98zify6ym8',
@@ -1012,7 +1014,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm3otp201bzx8ojt2xfs732emf',
@@ -1024,7 +1026,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j50ontr5ra84xgmujduce0sqq',
@@ -1036,7 +1038,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'saydfqolyrftrdpsk6w48bjd6',
@@ -1048,7 +1050,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3021drapgyviauqziuyu1qrca',
@@ -1060,7 +1062,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 's4zd8fm5cy70wel5oktf3t1xf',
@@ -1072,7 +1074,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0fkna6qy8yr3zbfr8rr44dogu',
@@ -1084,7 +1086,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1093,13 +1095,13 @@ export const cabotDb: Template = {
                         name: 'status_check_pkey',
                         unique: true,
                         fieldIds: ['7zypig7cu0jo1kufq0nu9g9xe'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#8a61f5',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ihd99d2agwucv4szocruel4il',
@@ -1118,7 +1120,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3smw558f4t2azn6fz3ixhrdjt',
@@ -1130,7 +1132,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1139,13 +1141,13 @@ export const cabotDb: Template = {
                         name: 'jenkins_status_check_pkey',
                         unique: true,
                         fieldIds: ['o5m53rxstoj07ot5lxkgki8ur'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'k9nq8pb1s0vtvi676huizdeac',
@@ -1164,7 +1166,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ho6gwfsp2h9o402atokdi14bn',
@@ -1176,7 +1178,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '39rolyh0m57c3caizwnod8j1n',
@@ -1188,7 +1190,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1197,13 +1199,13 @@ export const cabotDb: Template = {
                         name: 'instance_service_pkey',
                         unique: true,
                         fieldIds: ['8ly2x5z0ygws9rz47xxmaztwt'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff9f74',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'm2n2pgaz6i329c06oreesemhj',
@@ -1222,7 +1224,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uf8obr3vrnue7ogg8xyuly3li',
@@ -1234,7 +1236,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dnlp6rac6kxsrqat8sg1fflmo',
@@ -1246,7 +1248,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1255,13 +1257,13 @@ export const cabotDb: Template = {
                         name: 'instance_users_pkey',
                         unique: true,
                         fieldIds: ['2bdf3hpo6grtec53tnogewu9y'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ogwixfufu9zxpakbxxqyb3viq',
@@ -1280,7 +1282,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ro15p478wm4qqsqmbdqzrc1xg',
@@ -1292,7 +1294,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hgfhi0bi1n6i43mjtrlm5puvr',
@@ -1304,7 +1306,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ngkxp7sabuv0aq2z3x5o6t2xl',
@@ -1316,7 +1318,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ucoghjrrs2g8sk0pclvfk3wmb',
@@ -1328,7 +1330,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5oa2hyprnbj3ni5cjh0b88gaa',
@@ -1340,7 +1342,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fmng66ujr96g0g3c0t90343xp',
@@ -1352,7 +1354,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'h8qniszk0jrx73emrqgvj9ds7',
@@ -1364,7 +1366,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5negnbzs245jss752ies2r998',
@@ -1376,7 +1378,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i4kls5hvmkv5eao8t7zgycqj9',
@@ -1388,7 +1390,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yvcrgrplm1s6wpkwcblbjsrml',
@@ -1400,7 +1402,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fons8opzz4zlrw3ubaayeodhy',
@@ -1412,7 +1414,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '7u8ook85e9pwrxn63abkclgf6',
@@ -1424,7 +1426,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'daqmlme5pquyz54xu5d42chz7',
@@ -1436,7 +1438,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1445,13 +1447,13 @@ export const cabotDb: Template = {
                         name: 'instance_pkey',
                         unique: true,
                         fieldIds: ['7w7zi9jfsf8ttxkw2hgzppwkf'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#b067e9',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ovnwer9a3ie8kfv1h9rfdp278',
@@ -1470,7 +1472,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'hk1r2copv8uara4xworqe40ue',
@@ -1482,7 +1484,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'xdisxsc299xbvcvkl49c8kx60',
@@ -1494,7 +1496,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ts79mqj9x7dysm7gfozbvc3p3',
@@ -1506,7 +1508,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'yxq88l5umx54lioifunhzkrm2',
@@ -1518,7 +1520,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qpoytl6n1mo0r57n12c2neabd',
@@ -1530,7 +1532,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1539,13 +1541,13 @@ export const cabotDb: Template = {
                         name: 'graphite_status_check_pkey',
                         unique: true,
                         fieldIds: ['96mgizk5xa787xkpensbr2dye'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'p16q7p1q8j9p3ud529lwtrss7',
@@ -1564,7 +1566,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'wnjd1fdb127pr56zx3keicr6o',
@@ -1576,7 +1578,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ngzreixxzgzn3rb6uvinoq6lj',
@@ -1588,7 +1590,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'j4tmnkco7uhsnpfcfwzz4crbg',
@@ -1600,7 +1602,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'rc55akr0tj6sf7jubuo5p70l7',
@@ -1612,7 +1614,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3y3lumb16v7asidckv27lqzhc',
@@ -1624,7 +1626,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1633,13 +1635,13 @@ export const cabotDb: Template = {
                         name: 'alert_acknowledgement_pkey',
                         unique: true,
                         fieldIds: ['6f69ubh5rpdk9entbq6782hkz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'qb1s1uv828fkercy98l9aqm0n',
@@ -1658,7 +1660,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ab7aymxm4t3mdxmxganiu5wsu',
@@ -1670,7 +1672,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8m09odhicfxjjwb5y2iclene4',
@@ -1682,7 +1684,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nnnvjd1g0zforflqjc69q3c6p',
@@ -1694,7 +1696,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kdqd46xfpkixpwzizsp8dxiq1',
@@ -1706,7 +1708,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mq2vpnevaznggtq6jawjzs631',
@@ -1718,7 +1720,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ojz1lp63052z0xhorqorl9xtv',
@@ -1730,7 +1732,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1739,13 +1741,13 @@ export const cabotDb: Template = {
                         name: 'shift_pkey',
                         unique: true,
                         fieldIds: ['fwx7pk5a5g9zhl79qrrm70mfv'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'r99f8hhi0dlvoyj64vweu0ba6',
@@ -1764,7 +1766,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'pf92vncoeowbghzbpsdtxe1tm',
@@ -1776,7 +1778,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lfj6izi97abq2mooaz6on5xv9',
@@ -1788,7 +1790,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '4yrlcmqrlao4xhwf8s1dhwjvj',
@@ -1800,7 +1802,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8ccszwn2a2xyffyart9480f2c',
@@ -1812,7 +1814,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'lu49y640z7hrnftkw51lh14tj',
@@ -1824,7 +1826,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '9hy1jyx5z1ozyrem7sdxm8o74',
@@ -1836,7 +1838,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'bevyt1y4xxhoojpq3sw8f7sty',
@@ -1848,7 +1850,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'q69vdd82hemmt8dezlvl628sw',
@@ -1860,7 +1862,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1872,7 +1874,7 @@ export const cabotDb: Template = {
                             'bevyt1y4xxhoojpq3sw8f7sty',
                             '1xgnw2ml9ho5ebak2tjueljef',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'i1ozz684afv7jieuslvtac4ua',
@@ -1882,20 +1884,20 @@ export const cabotDb: Template = {
                             'bevyt1y4xxhoojpq3sw8f7sty',
                             'lfj6izi97abq2mooaz6on5xv9',
                         ],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'o9y40kx1cswrsbvpnqcjbjq3f',
                         name: 'status_check_result_pkey',
                         unique: true,
                         fieldIds: ['1xgnw2ml9ho5ebak2tjueljef'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#9ef07a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 's5btmt2a3k5fbn5nivbotb63y',
@@ -1914,7 +1916,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'nrlgbn2rc22iiqsylycpz3hqz',
@@ -1926,7 +1928,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'fn4bepjnta313q6oirc0d49o7',
@@ -1938,7 +1940,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '07brcfef8p9z45umqa31qd16m',
@@ -1950,7 +1952,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -1959,20 +1961,20 @@ export const cabotDb: Template = {
                         name: 'alert_plugin_pkey',
                         unique: true,
                         fieldIds: ['54ypudmdos0gh9zt45v4dlg44'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6dxfk6azl4bkvffup18er26pb',
                         name: 'alert_plugin_title_unique',
                         unique: true,
                         fieldIds: ['nrlgbn2rc22iiqsylycpz3hqz'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#7175fa',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'snty6zszcj35lqom3xr5l1w9l',
@@ -1991,7 +1993,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'tb1wf1z7p189oaao5xq4mxjay',
@@ -2003,7 +2005,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'a7f3eyybm52i55ir3xmeyxknf',
@@ -2015,7 +2017,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qo29qqqg86f2q4pdsllczrwlw',
@@ -2027,7 +2029,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'thubom65c0m2fv73h54lpqpuc',
@@ -2039,7 +2041,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '5sqvqysig5h7s4r2vx6bajhg6',
@@ -2051,7 +2053,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'dhk00492pbzbaps1srv8bsa3f',
@@ -2063,7 +2065,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ainy01vnu7zggetwrr2co1qpg',
@@ -2075,7 +2077,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cqbyoq7zcnxt9k7npyy1xr93f',
@@ -2087,7 +2089,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'funagoza5ak3mx7f6ayhh9ga5',
@@ -2099,7 +2101,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '1cmwrcod33fvr90uhntporj0a',
@@ -2111,7 +2113,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '55nlhf43trkj5oao5q8rr7jps',
@@ -2123,7 +2125,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'cj93y2b3xzsfrz7jao9j14174',
@@ -2135,7 +2137,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '8x3spwrmv8jess8bkdx7ynkkx',
@@ -2147,7 +2149,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ebr6xvkab9wtd5a28jzpyzjvf',
@@ -2159,7 +2161,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ge7qik8ahl3n8sk7a8has1en5',
@@ -2171,7 +2173,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2180,13 +2182,13 @@ export const cabotDb: Template = {
                         name: 'service_pkey',
                         unique: true,
                         fieldIds: ['nlm46bzo6jaaq10dvqgmxkugb'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6b8a',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sw5x2x57xh3f7pbdas1ngqcl2',
@@ -2205,7 +2207,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'akad3j3w1intr80wji4mr27m3',
@@ -2217,7 +2219,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'gogrb86l7xdnmjskjpll9361r',
@@ -2229,7 +2231,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '27rbdru8cv1izg8u9igxozbh9',
@@ -2241,7 +2243,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'di3phup16zvmxc368a2g7r01k',
@@ -2253,7 +2255,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2262,13 +2264,13 @@ export const cabotDb: Template = {
                         name: 'user_profile_pkey',
                         unique: true,
                         fieldIds: ['aje7zj82cpxn68d3yrz7kidm4'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ffe374',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'xgbea63bte2hpv60z8pldw43a',
@@ -2287,7 +2289,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'eai0ljiapn6buhwrjb9krw9g5',
@@ -2299,7 +2301,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'mph3ml501y0ws89772fvgnhx2',
@@ -2311,7 +2313,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '3fg16dd4zumip7acn7kmehxnj',
@@ -2323,7 +2325,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'qqdvjimxj1jzpaugsj7dphz6i',
@@ -2335,7 +2337,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '0jhtzfcu43sccn2vt26iyk5x1',
@@ -2347,7 +2349,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'y7yokk40m31ezrmr4xour0azq',
@@ -2359,7 +2361,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '6yhlh8spgs0q7bbmqhoyntzrx',
@@ -2371,7 +2373,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2380,13 +2382,13 @@ export const cabotDb: Template = {
                         name: 'service_status_snapshot_pkey',
                         unique: true,
                         fieldIds: ['jxpfsv0jsj00ft5ah03rzzuzr'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#ff6363',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'yimq43j0fcwgehlt8rzbx7fkp',
@@ -2405,7 +2407,7 @@ export const cabotDb: Template = {
                         primaryKey: true,
                         unique: true,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: '93f9sh7nwyeg9kr1la1fivjxl',
@@ -2417,7 +2419,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'd6wdbnshnibzupitcj2c78nn2',
@@ -2429,7 +2431,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'uhly8fn4dm48irbas9vqvv42s',
@@ -2441,7 +2443,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'ywxd4nu0yy0ljz17je8fwokyu',
@@ -2453,7 +2455,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'f58dg55vj0qkp1fnbtpkrji0v',
@@ -2465,7 +2467,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'm7m78h658plv0qo0zzgorfcpw',
@@ -2477,7 +2479,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: true,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                     {
                         id: 'kalcno5ni4ecna2c99jjta04j',
@@ -2489,7 +2491,7 @@ export const cabotDb: Template = {
                         primaryKey: false,
                         unique: false,
                         nullable: false,
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 indexes: [
@@ -2498,13 +2500,13 @@ export const cabotDb: Template = {
                         name: 'http_status_check_pkey',
                         unique: true,
                         fieldIds: ['sy3351o5ihnwtwj37wkctcr05'],
-                        createdAt: Date.now(),
+                        createdAt: now,
                     },
                 ],
                 color: '#42e0c0',
                 isView: false,
                 isMaterializedView: false,
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         relationships: [
@@ -2519,7 +2521,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7w7zi9jfsf8ttxkw2hgzppwkf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '0vumrls4g0p90vt5uajxh7tf1',
@@ -2532,7 +2534,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '1bsdknrof46s6pz0snfzresvq',
@@ -2545,7 +2547,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'o5m53rxstoj07ot5lxkgki8ur',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2j1xxy9ddm7h5xopb2cjhgr62',
@@ -2558,7 +2560,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7w7zi9jfsf8ttxkw2hgzppwkf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '2uya9mus02ppn6jt2zuyvz5zy',
@@ -2571,7 +2573,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '33xy4g6uhclcdoe8xc68vmw19',
@@ -2584,7 +2586,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7w7zi9jfsf8ttxkw2hgzppwkf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '3td9qy14l8mb5z33lrrlj5dcl',
@@ -2597,7 +2599,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '402hqz0da264q3ikobnvjrka3',
@@ -2610,7 +2612,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '4nv6halyuy5ez47d10at5o3v0',
@@ -2623,7 +2625,7 @@ export const cabotDb: Template = {
                 targetFieldId: '54ypudmdos0gh9zt45v4dlg44',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '55dy81mrmr2tenctrnnf67a9n',
@@ -2636,7 +2638,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '5nc8bc22ijhzjz52ofnjrb6u0',
@@ -2649,7 +2651,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '6f5gn0q8n9vvpmyox0lymg87h',
@@ -2662,7 +2664,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'b14pj3k6c2e6al6vki0b1elca',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7ccy5968fnta1ykrc3ad0kbmv',
@@ -2675,7 +2677,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: '7y6qzxa0kwpbuxyxj6stp4cdn',
@@ -2688,7 +2690,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'eunzidbn3wbtm3w8eila85lpl',
@@ -2701,7 +2703,7 @@ export const cabotDb: Template = {
                 targetFieldId: '54ypudmdos0gh9zt45v4dlg44',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'fwrhr33pcsowp8vl7vnj3rfd4',
@@ -2714,7 +2716,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ilq1g6xxcrqs9t3wrssxb6oeo',
@@ -2727,7 +2729,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'ml97mydp58p2gp99cnvt2fs3x',
@@ -2740,7 +2742,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'mp7sd2vr6kviku8je4v0gitit',
@@ -2753,7 +2755,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nd86cd2ul5mafn30l401mbmu5',
@@ -2766,7 +2768,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'nynmn81ctitgf5ev89vrviub5',
@@ -2779,7 +2781,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7w7zi9jfsf8ttxkw2hgzppwkf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'o3soaflcj89drxef42p2ad9pl',
@@ -2792,7 +2794,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7w7zi9jfsf8ttxkw2hgzppwkf',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'q6nu6q2dzadpyy2bh3ic4b5zw',
@@ -2805,7 +2807,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'quc8uhh3mbic9y1bvre6ocmhd',
@@ -2818,7 +2820,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'aje7zj82cpxn68d3yrz7kidm4',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'r7okcqvz32jta8p2t2r5lpk96',
@@ -2831,7 +2833,7 @@ export const cabotDb: Template = {
                 targetFieldId: 'nlm46bzo6jaaq10dvqgmxkugb',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'rb1mlvgujn3kp0k4klvzk670p',
@@ -2844,7 +2846,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'one',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'sq3l1tareyohngl38qdgs4dn3',
@@ -2857,7 +2859,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'upd17z1nugn0d1xmudd5za3jy',
@@ -2870,7 +2872,7 @@ export const cabotDb: Template = {
                 targetFieldId: '8apkn00up0ucg3r4dwcmu8plg',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
             {
                 id: 'x3fnbhrr6ro547sjw0zaghaow',
@@ -2883,7 +2885,7 @@ export const cabotDb: Template = {
                 targetFieldId: '7zypig7cu0jo1kufq0nu9g9xe',
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                createdAt: Date.now(),
+                createdAt: now,
             },
         ],
         dependencies: [],
