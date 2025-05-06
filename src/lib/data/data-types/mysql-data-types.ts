@@ -3,7 +3,12 @@ import type { DataTypeData } from './data-types';
 export const mysqlDataTypes: readonly DataTypeData[] = [
     // Level 1 - Most commonly used types
     { name: 'int', id: 'int', usageLevel: 1 },
-    { name: 'varchar', id: 'varchar', hasCharMaxLength: true, usageLevel: 1 },
+    {
+        name: 'varchar',
+        id: 'varchar',
+        fieldAttributes: { hasCharMaxLength: true },
+        usageLevel: 1,
+    },
     { name: 'text', id: 'text', usageLevel: 1 },
     { name: 'boolean', id: 'boolean', usageLevel: 1 },
     { name: 'timestamp', id: 'timestamp', usageLevel: 1 },
@@ -11,7 +16,23 @@ export const mysqlDataTypes: readonly DataTypeData[] = [
 
     // Level 2 - Second most common types
     { name: 'bigint', id: 'bigint', usageLevel: 2 },
-    { name: 'decimal', id: 'decimal', usageLevel: 2 },
+    {
+        name: 'decimal',
+        id: 'decimal',
+        usageLevel: 2,
+        fieldAttributes: {
+            precision: {
+                max: 65,
+                min: 1,
+                default: 10,
+            },
+            scale: {
+                max: 30,
+                min: 0,
+                default: 0,
+            },
+        },
+    },
     { name: 'datetime', id: 'datetime', usageLevel: 2 },
     { name: 'json', id: 'json', usageLevel: 2 },
 
@@ -22,7 +43,7 @@ export const mysqlDataTypes: readonly DataTypeData[] = [
     { name: 'float', id: 'float' },
     { name: 'double', id: 'double' },
     { name: 'bit', id: 'bit' },
-    { name: 'char', id: 'char', hasCharMaxLength: true },
+    { name: 'char', id: 'char', fieldAttributes: { hasCharMaxLength: true } },
     { name: 'tinytext', id: 'tinytext' },
     { name: 'mediumtext', id: 'mediumtext' },
     { name: 'longtext', id: 'longtext' },

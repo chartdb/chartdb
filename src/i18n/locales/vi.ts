@@ -26,6 +26,8 @@ export const vi: LanguageTranslation = {
                 hide_sidebar: 'Ẩn thanh bên',
                 hide_cardinality: 'Ẩn số lượng',
                 show_cardinality: 'Hiển thị số lượng',
+                show_field_attributes: 'Hiển thị thuộc tính trường',
+                hide_field_attributes: 'Ẩn thuộc tính trường',
                 zoom_on_scroll: 'Thu phóng khi cuộn',
                 theme: 'Chủ đề',
                 show_dependencies: 'Hiển thị các phụ thuộc',
@@ -149,8 +151,9 @@ export const vi: LanguageTranslation = {
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
-                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Độ chính xác',
+                        scale: 'Tỷ lệ',
                     },
                     index_actions: {
                         title: 'Thuộc tính chỉ mục',
