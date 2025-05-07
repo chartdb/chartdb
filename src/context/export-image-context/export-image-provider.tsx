@@ -57,8 +57,55 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const getBackgroundColor = (
+        theme: 'light' | 'dark',
+        isTransparent: boolean
+    ): string => {
+        if (isTransparent) return 'transparent';
+        return theme === 'light' ? '#ffffff' : '#141414';
+    };
+
+    function getDiagramBoundingBox(): DOMRect | null {
+        const viewportElement = window.document.querySelector(
+            '.react-flow__viewport'
+        ) as HTMLElement;
+        const viewportBoundingRect = viewportElement.getBoundingClientRect();
+        const elements = document.querySelectorAll(
+            '.react-flow__node, .react-flow__edge-path'
+        );
+
+        if (elements.length === 0) return null;
+
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+
+        elements.forEach((el) => {
+            const box = el.getBoundingClientRect();
+
+            minX = Math.min(minX, box.left);
+            minY = Math.min(minY, box.top);
+            maxX = Math.max(maxX, box.right);
+            maxY = Math.max(maxY, box.bottom);
+        });
+
+        return new DOMRect(
+            viewportBoundingRect.left - minX,
+            viewportBoundingRect.top - minY,
+            maxX - minX,
+            maxY - minY
+        );
+    }
+
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (type, scale = 1) => {
+        async (
+            type,
+            useBackground = false,
+            isTransparent = true,
+            hasWatermark = true,
+            scale = 1
+        ) => {
             showLoader({
                 animated: false,
             });
@@ -68,9 +115,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             );
 
             const viewport = getViewport();
-            const reactFlowBounds = document
-                .querySelector('.react-flow')
-                ?.getBoundingClientRect();
+            const reactFlowBounds = getDiagramBoundingBox()!;
 
             if (!reactFlowBounds) {
                 console.error('Could not find React Flow container');
@@ -140,8 +185,11 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     effectiveTheme === 'light' ? '#92939C' : '#777777';
                 dot.setAttribute('fill', dotColor);
 
-                pattern.appendChild(dot);
-                defs.appendChild(pattern);
+                if (useBackground) {
+                    pattern.appendChild(dot);
+                    defs.appendChild(pattern);
+                }
+
                 tempSvg.appendChild(defs);
 
                 const backgroundRect = document.createElementNS(
@@ -174,44 +222,34 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 );
 
                 try {
-                    // Handle SVG export differently
-                    if (type === 'svg') {
-                        const dataUrl = await imageCreateFn(viewportElement, {
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
-                            style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
-                            },
-                            quality: 1,
-                            pixelRatio: scale,
-                            skipFonts: true,
-                        });
-                        downloadImage(dataUrl, type);
-                        return;
-                    }
+                    const padding = Math.max(
+                        12,
+                        Math.floor(reactFlowBounds.width * 0.024)
+                    );
+                    const paddingY = padding * (hasWatermark ? 2.5 : 1);
 
-                    // For PNG and JPEG, continue with the watermark process
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
-                            backgroundColor:
-                                effectiveTheme === 'light'
-                                    ? '#ffffff'
-                                    : '#141414',
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
+                            backgroundColor: getBackgroundColor(
+                                effectiveTheme,
+                                isTransparent
+                            ),
+                            width: reactFlowBounds.width + padding,
+                            height: reactFlowBounds.height + paddingY,
                             style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                                transform: `translate(${reactFlowBounds.x + padding / 2}px, ${reactFlowBounds.y + padding / 2}px) scale(${viewport.zoom})`,
                             },
                             quality: 1,
                             pixelRatio: scale,
                             skipFonts: true,
                         }
                     );
+
+                    if (type === 'svg') {
+                        downloadImage(initialDataUrl, type);
+                        return;
+                    }
 
                     // Create a canvas to combine the diagram and watermark
                     const canvas = document.createElement('canvas');
@@ -223,8 +261,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     }
 
                     // Set canvas size to match the export size
-                    canvas.width = reactFlowBounds.width * scale;
-                    canvas.height = reactFlowBounds.height * scale;
+                    canvas.width = (reactFlowBounds.width + padding) * scale;
+                    canvas.height = (reactFlowBounds.height + paddingY) * scale;
 
                     // Load the exported diagram
                     const diagramImage = new Image();
@@ -235,40 +273,45 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             // Draw the diagram
                             ctx.drawImage(diagramImage, 0, 0);
 
-                            // Calculate logo size
-                            const logoHeight = Math.max(
-                                24,
-                                Math.floor(canvas.width * 0.024)
-                            );
-                            const padding = Math.max(
-                                12,
-                                Math.floor(logoHeight * 0.5)
-                            );
+                            if (hasWatermark) {
+                                // Calculate logo size
+                                const logoHeight = Math.max(
+                                    24,
+                                    Math.floor(canvas.width * 0.024)
+                                );
+                                const padding = Math.max(
+                                    12,
+                                    Math.floor(logoHeight * 0.5)
+                                );
 
-                            // Load and draw the logo
-                            const logoImage = new Image();
-                            logoImage.src = logoBase64;
+                                // Load and draw the logo
+                                const logoImage = new Image();
+                                logoImage.src = logoBase64;
 
-                            await new Promise((resolve) => {
-                                logoImage.onload = () => {
-                                    // Calculate logo width while maintaining aspect ratio
-                                    const logoWidth =
-                                        (logoImage.width / logoImage.height) *
-                                        logoHeight;
+                                await new Promise((resolve) => {
+                                    logoImage.onload = () => {
+                                        // Calculate logo width while maintaining aspect ratio
+                                        const logoWidth =
+                                            (logoImage.width /
+                                                logoImage.height) *
+                                            logoHeight;
 
-                                    // Draw logo in bottom-left corner
-                                    ctx.globalAlpha = 0.9;
-                                    ctx.drawImage(
-                                        logoImage,
-                                        padding,
-                                        canvas.height - logoHeight - padding,
-                                        logoWidth,
-                                        logoHeight
-                                    );
-                                    ctx.globalAlpha = 1;
-                                    resolve(null);
-                                };
-                            });
+                                        // Draw logo in bottom-left corner
+                                        ctx.globalAlpha = 0.9;
+                                        ctx.drawImage(
+                                            logoImage,
+                                            padding,
+                                            canvas.height -
+                                                logoHeight -
+                                                padding,
+                                            logoWidth,
+                                            logoHeight
+                                        );
+                                        ctx.globalAlpha = 1;
+                                        resolve(null);
+                                    };
+                                });
+                            }
 
                             // Convert canvas to data URL
                             const finalDataUrl = canvas.toDataURL(
