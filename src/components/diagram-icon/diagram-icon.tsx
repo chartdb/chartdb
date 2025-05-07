@@ -22,7 +22,7 @@ export interface DiagramIconProps
 export const DiagramIcon = React.forwardRef<
     React.ElementRef<typeof TooltipTrigger>,
     DiagramIconProps
->(({ databaseType, databaseEdition, className, imgClassName }, ref) =>
+>(({ databaseType, databaseEdition, className, imgClassName, onClick }, ref) =>
     databaseEdition ? (
         <Tooltip>
             <TooltipTrigger className={cn('mr-1', className)} ref={ref} asChild>
@@ -30,6 +30,7 @@ export const DiagramIcon = React.forwardRef<
                     src={databaseEditionToImageMap[databaseEdition]}
                     className={cn('h-5 max-w-fit rounded-full', imgClassName)}
                     alt="database"
+                    onClick={onClick}
                 />
             </TooltipTrigger>
             <TooltipContent>
@@ -43,6 +44,7 @@ export const DiagramIcon = React.forwardRef<
                     src={databaseSecondaryLogoMap[databaseType]}
                     className={cn('h-5 max-w-fit', imgClassName)}
                     alt="database"
+                    onClick={onClick}
                 />
             </TooltipTrigger>
             <TooltipContent>
