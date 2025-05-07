@@ -389,7 +389,7 @@ export const hi: LanguageTranslation = {
             error: {
                 title: 'Error exporting diagram',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Something went wrong. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate
@@ -401,7 +401,7 @@ export const hi: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

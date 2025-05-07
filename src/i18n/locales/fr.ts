@@ -384,7 +384,7 @@ export const fr: LanguageTranslation = {
             error: {
                 title: "Erreur lors de l'exportation du diagramme",
                 description:
-                    "Une erreur s'est produite. Besoin d'aide ? chartdb.io@gmail.com",
+                    "Une erreur s'est produite. Besoin d'aide ? support@chartdb.io",
             },
         },
         import_diagram_dialog: {
@@ -395,7 +395,7 @@ export const fr: LanguageTranslation = {
             error: {
                 title: "Erreur lors de l'exportation du diagramme",
                 description:
-                    "Le diagramme JSON n'est pas valide. Veuillez vérifier le JSON et réessayer. Besoin d'aide ? chartdb.io@gmail.com",
+                    "Le diagramme JSON n'est pas valide. Veuillez vérifier le JSON et réessayer. Besoin d'aide ? support@chartdb.io",
             },
         },
         import_dbml_dialog: {

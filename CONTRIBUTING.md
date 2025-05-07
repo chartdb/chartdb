@@ -18,7 +18,7 @@ To submit a pull request:
 
 If you find a bug, check [GitHub issues](https://github.com/chartdb/chartdb/issues) to see if it’s already reported. If not, feel free to [report it](https://github.com/chartdb/chartdb/issues/new?labels=bug).
 
-For questions about using ChartDB, reach out to us via Email (chartdb.io@gmail.com) or [Discord](https://discord.gg/QeFwyWSKwC). For feature requests, create a [new feature](https://github.com/chartdb/chartdb/issues/new?labels=enhancement).
+For questions about using ChartDB, reach out to us via Email (support@chartdb.io) or [Discord](https://discord.gg/QeFwyWSKwC). For feature requests, create a [new feature](https://github.com/chartdb/chartdb/issues/new?labels=enhancement).
 
 ### Creating a Branch
 
@@ -35,7 +35,7 @@ By contributing, you agree that your work will be licensed under ChartDB's [lice
 ## Questions?
 
 Feel free to ask in `#contributing` on [Discord](https://discord.gg/QeFwyWSKwC) if you have questions about our process, how to proceed, etc.
-or [Email](chartdb.io@gmail.com)
+or [Email](support@chartdb.io)
 
 ---
 

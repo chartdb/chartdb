@@ -383,7 +383,7 @@ export const uk: LanguageTranslation = {
             error: {
                 title: 'Помилка експорут діаграми',
                 description:
-                    'Щось пішло не так. Потрібна допомога? chartdb.io@gmail.com',
+                    'Щось пішло не так. Потрібна допомога? support@chartdb.io',
             },
         },
         import_diagram_dialog: {
@@ -394,7 +394,7 @@ export const uk: LanguageTranslation = {
             error: {
                 title: 'Помилка імпорту діаграми',
                 description:
-                    'JSON діаграми є неправильним. Будь ласка, перевірте JSON і спробуйте ще раз. Потрібна допомога? chartdb.io@gmail.com',
+                    'JSON діаграми є неправильним. Будь ласка, перевірте JSON і спробуйте ще раз. Потрібна допомога? support@chartdb.io',
             },
         },
         // TODO: Translate
