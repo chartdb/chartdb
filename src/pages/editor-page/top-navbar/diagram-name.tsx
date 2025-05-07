@@ -13,6 +13,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useDialog } from '@/hooks/use-dialog';
 
 export interface DiagramNameProps {}
 
@@ -24,6 +25,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     const [editedDiagramName, setEditedDiagramName] =
         React.useState(diagramName);
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const { openOpenDiagramDialog } = useDialog();
 
     useEffect(() => {
         setEditedDiagramName(diagramName);
@@ -60,6 +62,10 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                 <DiagramIcon
                     databaseType={currentDiagram.databaseType}
                     databaseEdition={currentDiagram.databaseEdition}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        openOpenDiagramDialog({ canClose: true });
+                    }}
                 />
                 <div className="flex flex-row items-center gap-1">
                     {editMode ? (
