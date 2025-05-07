@@ -383,7 +383,7 @@ export const ko_KR: LanguageTranslation = {
             error: {
                 title: '다이어그램 내보내기 오류',
                 description:
-                    '무언가 문제가 발생하였습니다. 도움이 필요하신 경우 chartdb.io@gmail.com으로 연락해주세요.',
+                    '무언가 문제가 발생하였습니다. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
             },
         },
         import_diagram_dialog: {
@@ -394,7 +394,7 @@ export const ko_KR: LanguageTranslation = {
             error: {
                 title: '다이어그램 가져오기 오류',
                 description:
-                    '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 chartdb.io@gmail.com으로 연락해주세요.',
+                    '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
             },
         },
         // TODO: Translate

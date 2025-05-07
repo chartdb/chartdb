@@ -32,7 +32,7 @@ import { parseSQLError } from '@/lib/data/sql-import';
 import type { editor } from 'monaco-editor';
 
 const errorScriptOutputMessage =
-    'Invalid JSON. Please correct it or contact us at chartdb.io@gmail.com for help.';
+    'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
 
 export interface ImportDatabaseProps {
     goBack?: () => void;
