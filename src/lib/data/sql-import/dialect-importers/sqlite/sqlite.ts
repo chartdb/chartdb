@@ -32,12 +32,43 @@ export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
 
     try {
+        // SPECIAL HANDLING: Direct line-by-line parser for SQLite DDL
+        // This ensures we preserve the exact data types from the original DDL
+        const directlyParsedTables = parseCreateTableStatements(sqlContent);
+
+        // Check if we successfully parsed tables directly
+        if (directlyParsedTables.length > 0) {
+            // Map the direct parsing results to the expected SQLParserResult format
+            directlyParsedTables.forEach((table) => {
+                const tableId = getTableIdWithSchemaSupport(table.name);
+                tableMap[table.name] = tableId;
+
+                // Add the table with its columns
+                tables.push({
+                    id: tableId,
+                    name: table.name,
+                    columns: table.columns,
+                    indexes: [],
+                    order: tables.length,
+                });
+            });
+
+            // Process foreign keys using the regex approach
+            findForeignKeysUsingRegex(sqlContent, tableMap, relationships);
+
+            // Return the result
+            return { tables, relationships };
+        }
+
+        // Preprocess SQL to handle SQLite quoted identifiers
+        const preprocessedSQL = preprocessSQLiteDDL(sqlContent);
+
         // Parse the SQL DDL statements
         const { Parser } = await import('node-sql-parser');
         const parser = new Parser();
 
         const ast = parser.astify(
-            sqlContent,
+            preprocessedSQL,
             parserOpts
         ) as unknown as SQLASTNode[];
 
@@ -85,6 +116,141 @@ export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
         console.error('Error parsing SQLite SQL:', error);
         throw error;
     }
+}
+
+/**
+ * Parse SQLite CREATE TABLE statements directly to preserve exact type information
+ */
+function parseCreateTableStatements(sqlContent: string): {
+    name: string;
+    columns: SQLColumn[];
+}[] {
+    const tables: {
+        name: string;
+        columns: SQLColumn[];
+    }[] = [];
+
+    // Split SQL content into lines
+    const lines = sqlContent.split('\n');
+
+    let currentTable: { name: string; columns: SQLColumn[] } | null = null;
+    let inCreateTable = false;
+
+    // Process each line
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // Skip empty lines and comments
+        if (!line || line.startsWith('--')) {
+            continue;
+        }
+
+        // Check for CREATE TABLE statement
+        if (line.toUpperCase().startsWith('CREATE TABLE')) {
+            // Extract table name
+            const tableNameMatch =
+                /CREATE\s+TABLE\s+(?:if\s+not\s+exists\s+)?["'`]?(\w+)["'`]?/i.exec(
+                    line
+                );
+            if (tableNameMatch && tableNameMatch[1]) {
+                inCreateTable = true;
+                currentTable = {
+                    name: tableNameMatch[1],
+                    columns: [],
+                };
+            }
+        }
+        // Check for end of CREATE TABLE statement
+        else if (inCreateTable && line.includes(');')) {
+            if (currentTable) {
+                tables.push(currentTable);
+            }
+            inCreateTable = false;
+            currentTable = null;
+        }
+        // Process column definitions inside CREATE TABLE
+        else if (inCreateTable && currentTable && line.includes('"')) {
+            // Column line pattern optimized for user's DDL format
+            const columnPattern = /\s*["'`](\w+)["'`]\s+([A-Za-z0-9_]+)(.+)?/i;
+            const match = columnPattern.exec(line);
+
+            if (match) {
+                const columnName = match[1];
+                const rawType = match[2].toUpperCase();
+                const restOfLine = match[3] || '';
+
+                // Determine column properties
+                const isPrimaryKey = restOfLine
+                    .toUpperCase()
+                    .includes('PRIMARY KEY');
+                const isNotNull = restOfLine.toUpperCase().includes('NOT NULL');
+                const isUnique = restOfLine.toUpperCase().includes('UNIQUE');
+
+                // Extract default value
+                let defaultValue = '';
+                const defaultMatch = /DEFAULT\s+([^,\s)]+)/i.exec(restOfLine);
+                if (defaultMatch) {
+                    defaultValue = defaultMatch[1];
+                }
+
+                // Map to appropriate SQLite storage class
+                let columnType = rawType;
+                if (rawType === 'INTEGER' || rawType === 'INT') {
+                    columnType = 'INTEGER';
+                } else if (
+                    ['REAL', 'FLOAT', 'DOUBLE', 'NUMERIC', 'DECIMAL'].includes(
+                        rawType
+                    )
+                ) {
+                    columnType = 'REAL';
+                } else if (rawType === 'BLOB' || rawType === 'BINARY') {
+                    columnType = 'BLOB';
+                } else if (
+                    ['TIMESTAMP', 'DATETIME', 'DATE'].includes(rawType)
+                ) {
+                    columnType = 'TIMESTAMP';
+                } else {
+                    columnType = 'TEXT';
+                }
+
+                // Add column to the table
+                currentTable.columns.push({
+                    name: columnName,
+                    type: columnType,
+                    nullable: !isNotNull,
+                    primaryKey: isPrimaryKey,
+                    unique: isUnique || isPrimaryKey,
+                    default: defaultValue,
+                    increment: isPrimaryKey && columnType === 'INTEGER',
+                });
+            }
+        }
+    }
+
+    return tables;
+}
+
+/**
+ * Preprocess SQLite DDL to handle specific syntax issues that might cause parsing problems
+ */
+function preprocessSQLiteDDL(sqlContent: string): string {
+    // Replace quoted identifiers with their unquoted equivalents
+    let processedSQL = sqlContent;
+
+    // Handle column type declarations with quotes around them
+    // For example: "id" "TEXT" PRIMARY KEY -> "id" TEXT PRIMARY KEY
+    processedSQL = processedSQL.replace(
+        /(['"`])(\w+)(['"`])\s+(['"`])(\w+)(['"`])/g,
+        (_match, q1, col, q2, ...rest) => {
+            // Extract the type from rest parameters
+            // match, q1, col, q2, q3, type, q4
+            const type = rest[1];
+            // Preserve the quotes around column name, but remove quotes around type
+            return `${q1}${col}${q2} ${type}`;
+        }
+    );
+
+    return processedSQL;
 }
 
 /**
@@ -139,6 +305,7 @@ function processCreateTableStatement(
         createTableStmt.create_definitions &&
         Array.isArray(createTableStmt.create_definitions)
     ) {
+        // First pass - collect column information from the SQL
         createTableStmt.create_definitions.forEach((def) => {
             if ('column' in def) {
                 // Process column definition
@@ -158,7 +325,34 @@ function processCreateTableStatement(
                 };
 
                 if (columnDef.dataType) {
-                    typeName = columnDef.dataType.dataType || 'text';
+                    // Get the raw data type string and clean it up
+                    typeName =
+                        columnDef.dataType.dataType?.toUpperCase() || 'TEXT';
+
+                    // Set the exact type according to SQLite's type system
+                    // SQLite has 5 storage classes: NULL, INTEGER, REAL, TEXT, and BLOB
+                    if (typeName === 'INTEGER' || typeName === 'INT') {
+                        typeName = 'INTEGER';
+                    } else if (
+                        typeName === 'REAL' ||
+                        typeName === 'FLOAT' ||
+                        typeName === 'DOUBLE' ||
+                        typeName === 'NUMERIC' ||
+                        typeName === 'DECIMAL'
+                    ) {
+                        typeName = 'REAL';
+                    } else if (typeName === 'BLOB') {
+                        typeName = 'BLOB';
+                    } else if (
+                        typeName === 'TIMESTAMP' ||
+                        typeName === 'DATETIME' ||
+                        typeName === 'DATE'
+                    ) {
+                        typeName = 'TIMESTAMP'; // Preserve TIMESTAMP as a special type
+                    } else {
+                        typeName = 'TEXT'; // Default SQLite type
+                    }
+
                     const args = getTypeArgs(columnDef.dataType);
                     typeArgs.length = args.size > 0 ? args.size : undefined;
                     typeArgs.precision = args.precision;

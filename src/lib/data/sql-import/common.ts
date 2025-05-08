@@ -209,11 +209,48 @@ export function determineCardinality(
 }
 
 // Map SQL data type to generic data type in our system
-export function mapSQLTypeToGenericType(sqlType: string): DataType {
-    const normalizedType = sqlType.toLowerCase().replace(/\(.*\)/, '');
+export function mapSQLTypeToGenericType(
+    sqlType: string,
+    databaseType?: DatabaseType
+): DataType {
+    if (!sqlType) {
+        return genericDataTypes.find((t) => t.id === 'text')!;
+    }
+
+    // Normalize the SQL type to lowercase for consistency
+    const normalizedSqlType = sqlType.toLowerCase();
+
+    // Add special case handling for SQLite INTEGER type
+    if (
+        databaseType === DatabaseType.SQLITE &&
+        (normalizedSqlType === 'integer' || normalizedSqlType === 'int')
+    ) {
+        return genericDataTypes.find((t) => t.id === 'integer')!;
+    }
+
+    // Get dialect-specific type mappings
+    const dialectAffinity =
+        (databaseType && typeAffinity[databaseType]) ||
+        typeAffinity[DatabaseType.GENERIC];
+
+    // Handle specific database dialect mappings
+    if (databaseType) {
+        // Try to find a mapping for the normalized type
+        const typeMapping = dialectAffinity[normalizedSqlType];
+        if (typeMapping) {
+            const foundType = genericDataTypes.find(
+                (t) => t.id === typeMapping
+            );
+            if (foundType) return foundType;
+        }
+    }
+
+    // Try direct mapping by normalizing the input type
+    const normalizedType = normalizedSqlType.replace(/\(.*\)/, '');
     const matchedType = genericDataTypes.find((t) => t.id === normalizedType);
     if (matchedType) return matchedType;
 
+    // Generic type mappings as a fallback
     const typeMap: Record<string, string> = {
         int: 'integer',
         integer: 'integer',
@@ -236,6 +273,8 @@ export function mapSQLTypeToGenericType(sqlType: string): DataType {
         time: 'time',
         json: 'json',
         jsonb: 'json',
+        real: 'real',
+        blob: 'blob',
     };
 
     const mappedType = typeMap[normalizedType];
@@ -244,79 +283,163 @@ export function mapSQLTypeToGenericType(sqlType: string): DataType {
         if (foundType) return foundType;
     }
 
-    return genericDataTypes.find((t) => t.id === 'varchar')!;
+    // Default to text as last resort
+    return genericDataTypes.find((t) => t.id === 'text')!;
 }
 
 // Type affinity definitions for different database dialects
 export const typeAffinity: Record<string, Record<string, string>> = {
     [DatabaseType.POSTGRESQL]: {
-        INT: 'INTEGER',
-        INTEGER: 'INTEGER',
-        MEDIUMINT: 'INTEGER',
-        BIT: 'BOOLEAN',
+        // PostgreSQL data types (all lowercase for consistency)
+        int: 'integer',
+        integer: 'integer',
+        int4: 'integer',
+        smallint: 'smallint',
+        int2: 'smallint',
+        bigint: 'bigint',
+        int8: 'bigint',
+        decimal: 'decimal',
+        numeric: 'numeric',
+        real: 'real',
+        'double precision': 'double',
+        float: 'float',
+        float4: 'float',
+        float8: 'double',
+        boolean: 'boolean',
+        bool: 'boolean',
+        varchar: 'varchar',
+        'character varying': 'varchar',
+        char: 'char',
+        character: 'char',
+        text: 'text',
+        date: 'date',
+        timestamp: 'timestamp',
+        time: 'time',
+        json: 'json',
+        jsonb: 'jsonb',
     },
     [DatabaseType.MYSQL]: {
-        INT: 'INTEGER',
-        INTEGER: 'INTEGER',
-        BOOL: 'BOOLEAN',
-        BOOLEAN: 'TINYINT',
+        // MySQL data types (all lowercase for consistency)
+        int: 'integer',
+        integer: 'integer',
+        smallint: 'smallint',
+        tinyint: 'tinyint',
+        bigint: 'bigint',
+        decimal: 'decimal',
+        numeric: 'numeric',
+        float: 'float',
+        double: 'double',
+        boolean: 'tinyint',
+        bool: 'tinyint',
+        varchar: 'varchar',
+        char: 'char',
+        text: 'text',
+        date: 'date',
+        datetime: 'datetime',
+        timestamp: 'timestamp',
+        time: 'time',
+        json: 'json',
     },
     [DatabaseType.MARIADB]: {
-        INT: 'INTEGER',
-        INTEGER: 'INTEGER',
-        BOOL: 'BOOLEAN',
-        BOOLEAN: 'TINYINT',
+        // MariaDB data types (all lowercase for consistency)
+        int: 'integer',
+        integer: 'integer',
+        smallint: 'smallint',
+        tinyint: 'tinyint',
+        bigint: 'bigint',
+        decimal: 'decimal',
+        numeric: 'numeric',
+        float: 'float',
+        double: 'double',
+        boolean: 'tinyint',
+        bool: 'tinyint',
+        varchar: 'varchar',
+        char: 'char',
+        text: 'text',
+        date: 'date',
+        datetime: 'datetime',
+        timestamp: 'timestamp',
+        time: 'time',
+        json: 'json',
     },
     [DatabaseType.SQL_SERVER]: {
-        INT: 'INTEGER',
-        INTEGER: 'INT',
-        BOOL: 'BIT',
-        BOOLEAN: 'BIT',
+        // SQL Server data types (all lowercase for consistency)
+        int: 'integer',
+        integer: 'integer',
+        smallint: 'smallint',
+        bigint: 'bigint',
+        decimal: 'decimal',
+        numeric: 'numeric',
+        float: 'float',
+        real: 'real',
+        bit: 'bit',
+        boolean: 'bit',
+        bool: 'bit',
+        varchar: 'varchar',
+        nvarchar: 'nvarchar',
+        char: 'char',
+        nchar: 'nchar',
+        text: 'text',
+        ntext: 'ntext',
+        date: 'date',
+        datetime: 'datetime',
+        datetime2: 'datetime2',
+        time: 'time',
+        uniqueidentifier: 'uniqueidentifier',
     },
     [DatabaseType.SQLITE]: {
-        INT: 'INTEGER',
-        BOOL: 'INTEGER',
-        BOOLEAN: 'INTEGER',
+        // SQLite storage classes (all lowercase for consistency)
+        integer: 'integer',
+        int: 'integer',
+        bigint: 'bigint',
+        smallint: 'smallint',
+        tinyint: 'tinyint',
+        real: 'real',
+        float: 'real',
+        double: 'real',
+        numeric: 'real',
+        decimal: 'real',
+        text: 'text',
+        varchar: 'text',
+        char: 'text',
+        blob: 'blob',
+        binary: 'blob',
+        varbinary: 'blob',
+        timestamp: 'timestamp',
+        datetime: 'timestamp',
+        date: 'date',
+        boolean: 'integer',
+        bool: 'integer',
+        time: 'text',
+        json: 'text',
     },
     [DatabaseType.GENERIC]: {
-        INTEGER: 'integer',
-        INT: 'integer',
-        MEDIUMINT: 'integer',
-        BIT: 'boolean',
-        VARCHAR: 'varchar',
-        'CHARACTER VARYING': 'varchar',
-        CHAR: 'char',
-        CHARACTER: 'char',
-        TEXT: 'text',
-        BOOLEAN: 'boolean',
-        BOOL: 'boolean',
-        TIMESTAMP: 'timestamp',
-        DATETIME: 'timestamp',
-        DATE: 'date',
-        TIME: 'time',
-        JSON: 'json',
-        JSONB: 'json',
-        DECIMAL: 'decimal',
-        NUMERIC: 'numeric',
-        FLOAT: 'float',
-        DOUBLE: 'double',
-        BIGINT: 'bigint',
-        SMALLINT: 'smallint',
+        // Generic fallback types (all lowercase for consistency)
+        integer: 'integer',
+        int: 'integer',
+        smallint: 'smallint',
+        bigint: 'bigint',
+        decimal: 'decimal',
+        numeric: 'numeric',
+        float: 'float',
+        double: 'double',
+        real: 'real',
+        boolean: 'boolean',
+        bool: 'boolean',
+        varchar: 'varchar',
+        'character varying': 'varchar',
+        char: 'char',
+        character: 'char',
+        text: 'text',
+        date: 'date',
+        timestamp: 'timestamp',
+        datetime: 'timestamp',
+        time: 'time',
+        json: 'json',
+        jsonb: 'json',
+        blob: 'blob',
     },
 };
-
-// For safe type conversions
-export function getTypeAffinity(
-    databaseType: DatabaseType,
-    sqlType: string
-): string {
-    if (!sqlType) return 'varchar';
-
-    const normalizedType = sqlType.toUpperCase();
-    const dialectAffinity =
-        typeAffinity[databaseType] || typeAffinity[DatabaseType.GENERIC];
-    return dialectAffinity[normalizedType] || sqlType.toLowerCase();
-}
 
 // Convert SQLParserResult to ChartDB Diagram structure
 export function convertToChartDBDiagram(
@@ -337,10 +460,89 @@ export function convertToChartDBDiagram(
 
         // Create fields from columns
         const fields: DBField[] = table.columns.map((column) => {
+            // Use special case handling for specific database types to ensure correct mapping
+            let mappedType: DataType;
+
+            // SQLite-specific handling for numeric types
+            if (sourceDatabaseType === DatabaseType.SQLITE) {
+                const normalizedType = column.type.toLowerCase();
+
+                if (normalizedType === 'integer' || normalizedType === 'int') {
+                    // Ensure integer types are preserved
+                    mappedType = { id: 'integer', name: 'integer' };
+                } else if (
+                    normalizedType === 'real' ||
+                    normalizedType === 'float' ||
+                    normalizedType === 'double' ||
+                    normalizedType === 'numeric' ||
+                    normalizedType === 'decimal'
+                ) {
+                    // Ensure real types are preserved
+                    mappedType = { id: 'real', name: 'real' };
+                } else if (normalizedType === 'blob') {
+                    // Ensure blob types are preserved
+                    mappedType = { id: 'blob', name: 'blob' };
+                } else {
+                    // Use the standard mapping for other types
+                    mappedType = mapSQLTypeToGenericType(
+                        column.type,
+                        sourceDatabaseType
+                    );
+                }
+            }
+            // Handle MySQL/MariaDB integer types specifically
+            else if (
+                sourceDatabaseType === DatabaseType.MYSQL ||
+                sourceDatabaseType === DatabaseType.MARIADB
+            ) {
+                const normalizedType = column.type
+                    .toLowerCase()
+                    .replace(/\(\d+\)/, '')
+                    .trim();
+
+                // Handle various integer types
+                if (normalizedType === 'tinyint') {
+                    mappedType = { id: 'tinyint', name: 'tinyint' };
+                } else if (
+                    normalizedType === 'int' ||
+                    normalizedType === 'integer'
+                ) {
+                    mappedType = { id: 'int', name: 'int' };
+                } else if (normalizedType === 'smallint') {
+                    mappedType = { id: 'smallint', name: 'smallint' };
+                } else if (normalizedType === 'mediumint') {
+                    mappedType = { id: 'mediumint', name: 'mediumint' };
+                } else if (normalizedType === 'bigint') {
+                    mappedType = { id: 'bigint', name: 'bigint' };
+                } else {
+                    // Use the standard mapping for other types
+                    mappedType = mapSQLTypeToGenericType(
+                        column.type,
+                        sourceDatabaseType
+                    );
+                }
+            }
+            // Handle PostgreSQL integer type specifically
+            else if (
+                sourceDatabaseType === DatabaseType.POSTGRESQL &&
+                (column.type.toLowerCase() === 'integer' ||
+                    column.type.toLowerCase() === 'int' ||
+                    column.type.toLowerCase() === 'int4')
+            ) {
+                // Ensure integer types are preserved
+                mappedType = { id: 'integer', name: 'integer' };
+            } else {
+                // Use the standard mapping for other types
+                mappedType = mapSQLTypeToGenericType(
+                    column.type,
+                    sourceDatabaseType
+                );
+            }
+
             const field: DBField = {
                 id: generateId(),
                 name: column.name,
-                type: mapSQLTypeToGenericType(column.type),
+                type: mappedType,
                 nullable: column.nullable,
                 primaryKey: column.primaryKey,
                 unique: column.unique,
