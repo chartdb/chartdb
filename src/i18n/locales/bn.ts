@@ -352,6 +352,12 @@ export const bn: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'বাতিল করুন',
             export: 'রপ্তানি করুন',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

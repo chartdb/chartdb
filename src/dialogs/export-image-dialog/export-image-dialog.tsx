@@ -17,14 +17,19 @@ import { useTranslation } from 'react-i18next';
 import type { ImageType } from '@/context/export-image-context/export-image-context';
 import { useExportImage } from '@/hooks/use-export-image';
 import { Checkbox } from '@/components/checkbox/checkbox';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/accordion/accordion';
 
 export interface ExportImageDialogProps extends BaseDialogProps {
     format: ImageType;
 }
 
-const DEFAULT_HAS_PATTERN = true;
+const DEFAULT_INCLUDE_PATTERN_BG = true;
 const DEFAULT_TRANSPARENT = false;
-const DEFAULT_WATERMARK = true;
 const DEFAULT_SCALE = '2';
 export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
     dialog,
@@ -32,31 +37,28 @@ export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const [scale, setScale] = useState<string>(DEFAULT_SCALE);
-    const [hasPattern, setHasPattern] = useState<boolean>(DEFAULT_HAS_PATTERN);
-    const [isTransparent, setIsTransparent] =
+    const [includePatternBG, setIncludePatternBG] = useState<boolean>(
+        DEFAULT_INCLUDE_PATTERN_BG
+    );
+    const [transparent, setTransparent] =
         useState<boolean>(DEFAULT_TRANSPARENT);
-    const [hasWatermark, setHasWatermark] =
-        useState<boolean>(DEFAULT_WATERMARK);
     const { exportImage } = useExportImage();
 
     useEffect(() => {
         if (!dialog.open) return;
         setScale(DEFAULT_SCALE);
-        setHasPattern(DEFAULT_HAS_PATTERN);
-        setIsTransparent(DEFAULT_TRANSPARENT);
-        setHasWatermark(DEFAULT_WATERMARK);
+        setIncludePatternBG(DEFAULT_INCLUDE_PATTERN_BG);
+        setTransparent(DEFAULT_TRANSPARENT);
     }, [dialog.open]);
     const { closeExportImageDialog } = useDialog();
 
     const handleExport = useCallback(() => {
-        exportImage(
-            format,
-            Boolean(hasPattern),
-            Boolean(isTransparent),
-            Boolean(hasWatermark),
-            Number(scale)
-        );
-    }, [exportImage, format, hasPattern, isTransparent, hasWatermark, scale]);
+        exportImage(format, {
+            transparent,
+            includePatternBG,
+            scale: Number(scale),
+        });
+    }, [exportImage, format, includePatternBG, transparent, scale]);
 
     const scaleOptions: SelectBoxOption[] = useMemo(
         () =>
@@ -84,68 +86,75 @@ export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-4 py-1">
-                    <div className="flex flex-col gap-2">
-                        <span className="font-semibold">
-                            {t('export_image_dialog.scale')}
-                        </span>
-                        <SelectBox
-                            options={scaleOptions}
-                            multiple={false}
-                            value={scale}
-                            onChange={(value) => setScale(value as string)}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold">
-                                {t('export_image_dialog.pattern')}
-                            </span>
-                            <Checkbox
-                                className="data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600 data-[state=checked]:text-white"
-                                checked={hasPattern}
-                                onCheckedChange={(value) =>
-                                    setHasPattern(value as boolean)
-                                }
-                            />
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                            {t('export_image_dialog.pattern_description')}
-                        </span>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold">
-                                {t('export_image_dialog.transparent')}
-                            </span>
-                            <Checkbox
-                                className="data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600 data-[state=checked]:text-white"
-                                checked={isTransparent}
-                                onCheckedChange={(value) =>
-                                    setIsTransparent(value as boolean)
-                                }
-                            />
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                            {t('export_image_dialog.transparent_description')}
-                        </span>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold">
-                                {t('export_image_dialog.watermark')}
-                            </span>
-                            <Checkbox
-                                className="data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600 data-[state=checked]:text-white"
-                                checked={hasWatermark}
-                                onCheckedChange={(value) =>
-                                    setHasWatermark(value as boolean)
-                                }
-                            />
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                            {t('export_image_dialog.watermark_description')}
-                        </span>
-                    </div>
+                    <SelectBox
+                        options={scaleOptions}
+                        multiple={false}
+                        value={scale}
+                        onChange={(value) => setScale(value as string)}
+                    />
+                    <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="settings">
+                            <AccordionTrigger className="justify-start py-1.5">
+                                {t('export_image_dialog.advanced_options')}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <div className="flex flex-col gap-3 py-2">
+                                    <div className="flex items-start gap-3">
+                                        <Checkbox
+                                            id="pattern-checkbox"
+                                            className="mt-1 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600 data-[state=checked]:text-white"
+                                            checked={includePatternBG}
+                                            onCheckedChange={(value) =>
+                                                setIncludePatternBG(
+                                                    value as boolean
+                                                )
+                                            }
+                                        />
+                                        <div className="flex flex-col">
+                                            <label
+                                                htmlFor="pattern-checkbox"
+                                                className="cursor-pointer font-medium"
+                                            >
+                                                {t(
+                                                    'export_image_dialog.pattern'
+                                                )}
+                                            </label>
+                                            <span className="text-sm text-muted-foreground">
+                                                {t(
+                                                    'export_image_dialog.pattern_description'
+                                                )}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <Checkbox
+                                            id="transparent-checkbox"
+                                            className="mt-1 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600 data-[state=checked]:text-white"
+                                            checked={transparent}
+                                            onCheckedChange={(value) =>
+                                                setTransparent(value as boolean)
+                                            }
+                                        />
+                                        <div className="flex flex-col">
+                                            <label
+                                                htmlFor="transparent-checkbox"
+                                                className="cursor-pointer font-medium"
+                                            >
+                                                {t(
+                                                    'export_image_dialog.transparent'
+                                                )}
+                                            </label>
+                                            <span className="text-sm text-muted-foreground">
+                                                {t(
+                                                    'export_image_dialog.transparent_description'
+                                                )}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>

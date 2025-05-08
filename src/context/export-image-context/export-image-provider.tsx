@@ -8,6 +8,7 @@ import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useTheme } from '@/hooks/use-theme';
 import logoDark from '@/assets/logo-dark.png';
 import logoLight from '@/assets/logo-light.png';
+import type { EffectiveTheme } from '../theme-context/theme-context';
 
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -57,22 +58,16 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
-    const getBackgroundColor = (
-        theme: 'light' | 'dark',
-        isTransparent: boolean
-    ): string => {
-        if (isTransparent) return 'transparent';
-        return theme === 'light' ? '#ffffff' : '#141414';
-    };
+    const getBackgroundColor = useCallback(
+        (theme: EffectiveTheme, transparent: boolean): string => {
+            if (transparent) return 'transparent';
+            return theme === 'light' ? '#ffffff' : '#141414';
+        },
+        []
+    );
 
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (
-            type,
-            useBackground = false,
-            isTransparent = true,
-            hasWatermark = true,
-            scale = 1
-        ) => {
+        async (type, { includePatternBG, transparent, scale }) => {
             showLoader({
                 animated: false,
             });
@@ -128,33 +123,33 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     defs.innerHTML = markerDefs.innerHTML;
                 }
 
-                const pattern = document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'pattern'
-                );
-                pattern.setAttribute('id', 'background-pattern');
-                pattern.setAttribute('width', String(16 * viewport.zoom));
-                pattern.setAttribute('height', String(16 * viewport.zoom));
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                pattern.setAttribute(
-                    'patternTransform',
-                    `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
-                );
+                if (includePatternBG) {
+                    const pattern = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'pattern'
+                    );
+                    pattern.setAttribute('id', 'background-pattern');
+                    pattern.setAttribute('width', String(16 * viewport.zoom));
+                    pattern.setAttribute('height', String(16 * viewport.zoom));
+                    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                    pattern.setAttribute(
+                        'patternTransform',
+                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
+                    );
 
-                const dot = document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'circle'
-                );
+                    const dot = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'circle'
+                    );
 
-                const dotSize = viewport.zoom * 0.5;
-                dot.setAttribute('cx', String(viewport.zoom));
-                dot.setAttribute('cy', String(viewport.zoom));
-                dot.setAttribute('r', String(dotSize));
-                const dotColor =
-                    effectiveTheme === 'light' ? '#92939C' : '#777777';
-                dot.setAttribute('fill', dotColor);
+                    const dotSize = viewport.zoom * 0.5;
+                    dot.setAttribute('cx', String(viewport.zoom));
+                    dot.setAttribute('cy', String(viewport.zoom));
+                    dot.setAttribute('r', String(dotSize));
+                    const dotColor =
+                        effectiveTheme === 'light' ? '#92939C' : '#777777';
+                    dot.setAttribute('fill', dotColor);
 
-                if (useBackground) {
                     pattern.appendChild(dot);
                     defs.appendChild(pattern);
                 }
@@ -215,7 +210,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         {
                             backgroundColor: getBackgroundColor(
                                 effectiveTheme,
-                                isTransparent
+                                transparent
                             ),
                             width: reactFlowBounds.width,
                             height: reactFlowBounds.height,
@@ -252,45 +247,40 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             // Draw the diagram
                             ctx.drawImage(diagramImage, 0, 0);
 
-                            if (hasWatermark) {
-                                // Calculate logo size
-                                const logoHeight = Math.max(
-                                    24,
-                                    Math.floor(canvas.width * 0.024)
-                                );
-                                const padding = Math.max(
-                                    12,
-                                    Math.floor(logoHeight * 0.5)
-                                );
+                            // Calculate logo size
+                            const logoHeight = Math.max(
+                                24,
+                                Math.floor(canvas.width * 0.024)
+                            );
+                            const padding = Math.max(
+                                12,
+                                Math.floor(logoHeight * 0.5)
+                            );
 
-                                // Load and draw the logo
-                                const logoImage = new Image();
-                                logoImage.src = logoBase64;
+                            // Load and draw the logo
+                            const logoImage = new Image();
+                            logoImage.src = logoBase64;
 
-                                await new Promise((resolve) => {
-                                    logoImage.onload = () => {
-                                        // Calculate logo width while maintaining aspect ratio
-                                        const logoWidth =
-                                            (logoImage.width /
-                                                logoImage.height) *
-                                            logoHeight;
+                            await new Promise((resolve) => {
+                                logoImage.onload = () => {
+                                    // Calculate logo width while maintaining aspect ratio
+                                    const logoWidth =
+                                        (logoImage.width / logoImage.height) *
+                                        logoHeight;
 
-                                        // Draw logo in bottom-left corner
-                                        ctx.globalAlpha = 0.9;
-                                        ctx.drawImage(
-                                            logoImage,
-                                            padding,
-                                            canvas.height -
-                                                logoHeight -
-                                                padding,
-                                            logoWidth,
-                                            logoHeight
-                                        );
-                                        ctx.globalAlpha = 1;
-                                        resolve(null);
-                                    };
-                                });
-                            }
+                                    // Draw logo in bottom-left corner
+                                    ctx.globalAlpha = 0.9;
+                                    ctx.drawImage(
+                                        logoImage,
+                                        padding,
+                                        canvas.height - logoHeight - padding,
+                                        logoWidth,
+                                        logoHeight
+                                    );
+                                    ctx.globalAlpha = 1;
+                                    resolve(null);
+                                };
+                            });
 
                             // Convert canvas to data URL
                             const finalDataUrl = canvas.toDataURL(
@@ -307,6 +297,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             }, 0);
         },
         [
+            getBackgroundColor,
             downloadImage,
             getViewport,
             hideLoader,

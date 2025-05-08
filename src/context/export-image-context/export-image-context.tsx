@@ -5,10 +5,11 @@ export type ImageType = 'png' | 'jpeg' | 'svg';
 export interface ExportImageContext {
     exportImage: (
         type: ImageType,
-        useBackground: boolean,
-        isTransparent: boolean,
-        hasWatermark: boolean,
-        scale: number
+        options: {
+            includePatternBG: boolean;
+            transparent: boolean;
+            scale: number;
+        }
     ) => Promise<void>;
 }
 
