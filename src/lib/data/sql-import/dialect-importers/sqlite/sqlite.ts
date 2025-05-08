@@ -241,7 +241,7 @@ function preprocessSQLiteDDL(sqlContent: string): string {
     // For example: "id" "TEXT" PRIMARY KEY -> "id" TEXT PRIMARY KEY
     processedSQL = processedSQL.replace(
         /(['"`])(\w+)(['"`])\s+(['"`])(\w+)(['"`])/g,
-        (match, q1, col, q2, ...rest) => {
+        (_match, q1, col, q2, ...rest) => {
             // Extract the type from rest parameters
             // match, q1, col, q2, q3, type, q4
             const type = rest[1];
