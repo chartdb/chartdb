@@ -8,6 +8,7 @@ import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useTheme } from '@/hooks/use-theme';
 import logoDark from '@/assets/logo-dark.png';
 import logoLight from '@/assets/logo-light.png';
+import type { EffectiveTheme } from '../theme-context/theme-context';
 
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -57,8 +58,16 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const getBackgroundColor = useCallback(
+        (theme: EffectiveTheme, transparent: boolean): string => {
+            if (transparent) return 'transparent';
+            return theme === 'light' ? '#ffffff' : '#141414';
+        },
+        []
+    );
+
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (type, scale = 1) => {
+        async (type, { includePatternBG, transparent, scale }) => {
             showLoader({
                 animated: false,
             });
@@ -114,34 +123,37 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     defs.innerHTML = markerDefs.innerHTML;
                 }
 
-                const pattern = document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'pattern'
-                );
-                pattern.setAttribute('id', 'background-pattern');
-                pattern.setAttribute('width', String(16 * viewport.zoom));
-                pattern.setAttribute('height', String(16 * viewport.zoom));
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                pattern.setAttribute(
-                    'patternTransform',
-                    `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
-                );
+                if (includePatternBG) {
+                    const pattern = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'pattern'
+                    );
+                    pattern.setAttribute('id', 'background-pattern');
+                    pattern.setAttribute('width', String(16 * viewport.zoom));
+                    pattern.setAttribute('height', String(16 * viewport.zoom));
+                    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                    pattern.setAttribute(
+                        'patternTransform',
+                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
+                    );
 
-                const dot = document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'circle'
-                );
+                    const dot = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'circle'
+                    );
 
-                const dotSize = viewport.zoom * 0.5;
-                dot.setAttribute('cx', String(viewport.zoom));
-                dot.setAttribute('cy', String(viewport.zoom));
-                dot.setAttribute('r', String(dotSize));
-                const dotColor =
-                    effectiveTheme === 'light' ? '#92939C' : '#777777';
-                dot.setAttribute('fill', dotColor);
+                    const dotSize = viewport.zoom * 0.5;
+                    dot.setAttribute('cx', String(viewport.zoom));
+                    dot.setAttribute('cy', String(viewport.zoom));
+                    dot.setAttribute('r', String(dotSize));
+                    const dotColor =
+                        effectiveTheme === 'light' ? '#92939C' : '#777777';
+                    dot.setAttribute('fill', dotColor);
 
-                pattern.appendChild(dot);
-                defs.appendChild(pattern);
+                    pattern.appendChild(dot);
+                    defs.appendChild(pattern);
+                }
+
                 tempSvg.appendChild(defs);
 
                 const backgroundRect = document.createElementNS(
@@ -196,10 +208,10 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
-                            backgroundColor:
-                                effectiveTheme === 'light'
-                                    ? '#ffffff'
-                                    : '#141414',
+                            backgroundColor: getBackgroundColor(
+                                effectiveTheme,
+                                transparent
+                            ),
                             width: reactFlowBounds.width,
                             height: reactFlowBounds.height,
                             style: {
@@ -285,6 +297,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             }, 0);
         },
         [
+            getBackgroundColor,
             downloadImage,
             getViewport,
             hideLoader,

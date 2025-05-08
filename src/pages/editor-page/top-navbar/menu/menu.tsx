@@ -80,7 +80,11 @@ export const Menu: React.FC<MenuProps> = () => {
     };
 
     const exportSVG = useCallback(() => {
-        exportImage('svg', 1);
+        exportImage('svg', {
+            scale: 1,
+            transparent: true,
+            includePatternBG: false,
+        });
     }, [exportImage]);
 
     const exportPNG = useCallback(() => {
