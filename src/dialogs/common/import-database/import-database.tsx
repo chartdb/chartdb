@@ -1,4 +1,10 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useState,
+    useRef,
+} from 'react';
 import { Button } from '@/components/button/button';
 import {
     DialogClose,
@@ -67,6 +73,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 }) => {
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -134,6 +141,16 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
     }, [errorMessage.length, onImport, scriptResult]);
 
+    const formatEditor = useCallback(() => {
+        if (editorRef.current) {
+            setTimeout(() => {
+                editorRef.current
+                    ?.getAction('editor.action.formatDocument')
+                    ?.run();
+            }, 50);
+        }
+    }, []);
+
     const handleInputChange: OnChange = useCallback(
         (inputValue) => {
             setScriptResult(inputValue ?? '');
@@ -156,17 +173,20 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (isStringMetadataJson(fixedJson)) {
             setScriptResult(fixedJson);
             setErrorMessage('');
+            formatEditor();
         } else {
             setScriptResult(fixedJson);
             setErrorMessage(errorScriptOutputMessage);
+            formatEditor();
         }
 
         setShowCheckJsonButton(false);
         setIsCheckingJson(false);
-    }, [scriptResult, setScriptResult]);
+    }, [scriptResult, setScriptResult, formatEditor]);
 
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
+            editorRef.current = editor;
             editor.onDidPaste(() => {
                 setTimeout(() => {
                     editor.getAction('editor.action.formatDocument')?.run();
