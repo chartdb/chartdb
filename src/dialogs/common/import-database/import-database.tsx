@@ -40,6 +40,49 @@ import type { editor } from 'monaco-editor';
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
 
+// Helper to detect if content is likely SQL DDL or JSON
+const detectContentType = (content: string): 'query' | 'ddl' | null => {
+    if (!content || content.trim().length === 0) return null;
+
+    // Common SQL DDL keywords
+    const ddlKeywords = [
+        'CREATE TABLE',
+        'ALTER TABLE',
+        'DROP TABLE',
+        'CREATE INDEX',
+        'CREATE VIEW',
+        'CREATE PROCEDURE',
+        'CREATE FUNCTION',
+        'CREATE SCHEMA',
+        'CREATE DATABASE',
+    ];
+
+    const upperContent = content.toUpperCase();
+
+    // Check for SQL DDL patterns
+    const hasDDLKeywords = ddlKeywords.some((keyword) =>
+        upperContent.includes(keyword)
+    );
+    if (hasDDLKeywords) return 'ddl';
+
+    // Check if it looks like JSON
+    try {
+        // Just check structure, don't need full parse for detection
+        if (
+            (content.trim().startsWith('{') && content.trim().endsWith('}')) ||
+            (content.trim().startsWith('[') && content.trim().endsWith(']'))
+        ) {
+            return 'query';
+        }
+    } catch (error) {
+        // Not valid JSON, might be partial
+        console.error('Error detecting content type:', error);
+    }
+
+    // If we can't confidently detect, return null
+    return null;
+};
+
 export interface ImportDatabaseProps {
     goBack?: () => void;
     onImport: () => void;
@@ -74,6 +117,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const [isAutoDetecting, setIsAutoDetecting] = useState(false);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -135,6 +179,18 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
     }, [scriptResult, importMethod]);
 
+    // Auto-detect content type when script result changes (if not empty and not already detecting)
+    useEffect(() => {
+        if (isAutoDetecting || !scriptResult.trim()) return;
+
+        const detectedType = detectContentType(scriptResult);
+        if (detectedType && detectedType !== importMethod) {
+            setImportMethod(detectedType);
+        }
+
+        setIsAutoDetecting(false);
+    }, [scriptResult, importMethod, setImportMethod, isAutoDetecting]);
+
     const handleImport = useCallback(() => {
         if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
             onImport();
@@ -191,9 +247,22 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 setTimeout(() => {
                     editor.getAction('editor.action.formatDocument')?.run();
                 }, 0);
+
+                // Get pasted content and auto-detect type
+                setTimeout(() => {
+                    const content = editor.getValue();
+                    if (content && content.trim()) {
+                        setIsAutoDetecting(true);
+                        const detectedType = detectContentType(content);
+                        if (detectedType && detectedType !== importMethod) {
+                            setImportMethod(detectedType);
+                        }
+                        setIsAutoDetecting(false);
+                    }
+                }, 100);
             });
         },
-        []
+        [importMethod, setImportMethod]
     );
 
     const renderHeader = useCallback(() => {
