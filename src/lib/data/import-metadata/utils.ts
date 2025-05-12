@@ -6,6 +6,18 @@ export const fixMetadataJson = async (
 ): Promise<string> => {
     await waitFor(1000);
 
+    // Replace problematic array default values with null
+    metadataJson = metadataJson.replace(
+        /"default": "?'?\[[^\]]*\]'?"?(\\")?(,|\})/gs,
+        '"default": null$2'
+    );
+
+    // Generic fix for all default values with '\ pattern - convert to just '
+    metadataJson = metadataJson.replace(
+        /"default":\s*"(.*?)'\\"(,|\})/g,
+        '"default": "$1"$2'
+    );
+
     // TODO: remove this temporary eslint disable
     return (
         metadataJson

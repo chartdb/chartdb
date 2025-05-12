@@ -9,6 +9,25 @@ import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 
+// Simple function to replace Spanish special characters
+export const sanitizeDBML = (content: string): string => {
+    return content
+        .replace(/[áàäâ]/g, 'a')
+        .replace(/[éèëê]/g, 'e')
+        .replace(/[íìïî]/g, 'i')
+        .replace(/[óòöô]/g, 'o')
+        .replace(/[úùüû]/g, 'u')
+        .replace(/[ñ]/g, 'n')
+        .replace(/[ç]/g, 'c')
+        .replace(/Á/g, 'A')
+        .replace(/É/g, 'E')
+        .replace(/Í/g, 'I')
+        .replace(/Ó/g, 'O')
+        .replace(/Ú/g, 'U')
+        .replace(/Ñ/g, 'N')
+        .replace(/Ç/g, 'C');
+};
+
 interface DBMLTypeArgs {
     length?: number;
     precision?: number;
@@ -108,7 +127,9 @@ export const importDBMLToDiagram = async (
 ): Promise<Diagram> => {
     try {
         const parser = new Parser();
-        const parsedData = parser.parse(dbmlContent, 'dbml');
+        // Sanitize DBML content to remove special characters
+        const sanitizedContent = sanitizeDBML(dbmlContent);
+        const parsedData = parser.parse(sanitizedContent, 'dbml');
         const dbmlData = parsedData.schemas[0];
 
         // Extract only the necessary data from the parsed DBML
