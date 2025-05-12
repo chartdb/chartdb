@@ -548,6 +548,7 @@ export function convertToChartDBDiagram(
                 unique: column.unique,
                 default: column.default || '',
                 createdAt: Date.now(),
+                increment: column.increment,
             };
 
             // Add type arguments if present

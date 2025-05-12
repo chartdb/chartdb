@@ -10,7 +10,7 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 
 function parsePostgresDefault(field: DBField): string {
-    if (!field.default) {
+    if (!field.default || typeof field.default !== 'string') {
         return '';
     }
 
@@ -165,6 +165,21 @@ export function exportPostgreSQL(diagram: Diagram): string {
 
                     // Handle PostgreSQL specific type formatting
                     let typeWithSize = typeName;
+                    let serialType = null;
+
+                    if (field.increment && !field.nullable) {
+                        if (
+                            typeName.toLowerCase() === 'integer' ||
+                            typeName.toLowerCase() === 'int'
+                        ) {
+                            serialType = 'SERIAL';
+                        } else if (typeName.toLowerCase() === 'bigint') {
+                            serialType = 'BIGSERIAL';
+                        } else if (typeName.toLowerCase() === 'smallint') {
+                            serialType = 'SMALLSERIAL';
+                        }
+                    }
+
                     if (field.characterMaximumLength) {
                         if (
                             typeName.toLowerCase() === 'varchar' ||
@@ -221,7 +236,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
                             : '';
 
                     // Do not add PRIMARY KEY as a column constraint - will add as table constraint
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${identity}${unique}${defaultValue}`;
+                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${serialType || typeWithSize}${serialType ? '' : notNull}${identity}${unique}${defaultValue}`;
                 })
                 .join(',\n')}${
                 primaryKeyFields.length > 0

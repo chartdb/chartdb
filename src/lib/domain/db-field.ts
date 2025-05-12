@@ -14,6 +14,7 @@ export interface DBField {
     primaryKey: boolean;
     unique: boolean;
     nullable: boolean;
+    increment?: boolean;
     createdAt: number;
     characterMaximumLength?: string;
     precision?: number;
@@ -30,6 +31,7 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
     primaryKey: z.boolean(),
     unique: z.boolean(),
     nullable: z.boolean(),
+    increment: z.boolean().optional(),
     createdAt: z.number(),
     characterMaximumLength: z.string().optional(),
     precision: z.number().optional(),
