@@ -55,9 +55,6 @@ function findForeignKeysUsingRegex(
         .replace(/\bFOREIGN\s+KEY\b/g, ' FOREIGN KEY ')
         .replace(/\bNOT\s+NULL\b/g, ' NOT NULL ');
 
-    // Debug: Log normalized SQL
-    console.log('Normalized SQL:', normalizedSQL);
-
     // First extract all table names to ensure they're in the tableMap
     const tableNamePattern =
         /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?/gi;
@@ -109,9 +106,6 @@ function findForeignKeysUsingRegex(
 
             // Skip if any part is invalid
             if (!sourceColumn || !targetTable || !targetColumn) {
-                console.log(
-                    'Skipping invalid reference - missing required parts'
-                );
                 continue;
             }
 
@@ -120,10 +114,6 @@ function findForeignKeysUsingRegex(
 
             // Skip if we've already added this relationship
             if (addedRelationships.has(relationshipKey)) {
-                console.log(
-                    'Skipping duplicate relationship:',
-                    relationshipKey
-                );
                 continue;
             }
 
@@ -178,31 +168,13 @@ function findForeignKeysUsingRegex(
                 sourceCardinality,
                 targetCardinality,
             });
-
-            console.log('AST FK:', {
-                name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
-                sourceTable,
-                sourceSchema,
-                sourceColumn,
-                targetTable,
-                targetSchema,
-                targetColumn,
-                sourceTableId,
-                targetTableId,
-                sourceCardinality,
-                targetCardinality,
-                isOneToOne: isUnique,
-                reason: isUnique ? 'PRIMARY KEY foreign key' : 'many-to-one',
-            });
-
             addedRelationships.add(relationshipKey);
         }
     }
 }
 
 function getDefaultValueString(
-    columnDef: ColumnDefinition,
-    columnName: string
+    columnDef: ColumnDefinition
 ): string | undefined {
     let defVal = columnDef.default_val;
 
@@ -219,7 +191,6 @@ function getDefaultValueString(
     if (defVal === undefined || defVal === null) return undefined;
 
     let value: string | undefined;
-    console.log(`AST for column '${columnName}':`, defVal);
 
     switch (typeof defVal) {
         case 'string':
@@ -256,10 +227,6 @@ function getDefaultValueString(
                 }
             } else {
                 const built = buildSQLFromAST(defVal);
-                console.log(
-                    `buildSQLFromAST for column '${columnName}':`,
-                    built
-                );
                 value =
                     typeof built === 'string' ? built : JSON.stringify(built);
             }
@@ -793,22 +760,6 @@ export async function fromPostgres(
                                                 };
 
                                                 relationships.push(fk);
-
-                                                console.log('AST FK:', {
-                                                    name: `FK_${tableName}_${sourceColumns[i]}_${targetTable}`,
-                                                    sourceTable: tableName,
-                                                    sourceSchema: schemaName,
-                                                    sourceColumn:
-                                                        sourceColumns[i],
-                                                    targetTable,
-                                                    targetSchema,
-                                                    targetColumn:
-                                                        targetColumns[i],
-                                                    sourceTableId: tableId,
-                                                    targetTableId,
-                                                    sourceCardinality: 'many',
-                                                    targetCardinality: 'one',
-                                                });
                                             }
                                         }
                                     }
@@ -1144,20 +1095,6 @@ export async function fromPostgres(
                                         };
 
                                         relationships.push(fk);
-
-                                        console.log('AST FK:', {
-                                            name: `FK_${tableName}_${sourceColumns[i]}_${targetTable}`,
-                                            sourceTable: tableName,
-                                            sourceSchema: schemaName,
-                                            sourceColumn: sourceColumns[i],
-                                            targetTable,
-                                            targetSchema,
-                                            targetColumn: targetColumns[i],
-                                            sourceTableId,
-                                            targetTableId,
-                                            sourceCardinality: 'many',
-                                            targetCardinality: 'one',
-                                        });
                                     }
                                 }
                             } else if (
@@ -1199,21 +1136,6 @@ export async function fromPostgres(
             const keyA = `${a.sourceTable}.${a.sourceColumn}-${a.targetTable}.${a.targetColumn}`;
             const keyB = `${b.sourceTable}.${b.sourceColumn}-${b.targetTable}.${b.targetColumn}`;
             return keyA.localeCompare(keyB);
-        });
-
-        // Log final relationships for debugging
-        uniqueRelationships.forEach((fk) => {
-            console.log('AST FK:', {
-                name: fk.name,
-                sourceTable: fk.sourceTable,
-                sourceSchema: fk.sourceSchema,
-                sourceColumn: fk.sourceColumn,
-                targetTable: fk.targetTable,
-                targetSchema: fk.targetSchema,
-                targetColumn: fk.targetColumn,
-                sourceCardinality: fk.sourceCardinality,
-                targetCardinality: fk.targetCardinality,
-            });
         });
 
         return { tables, relationships: uniqueRelationships };

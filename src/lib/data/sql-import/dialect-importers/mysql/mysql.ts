@@ -987,9 +987,6 @@ function findForeignKeysUsingRegex(
         .replace(/\bFOREIGN\s+KEY\b/g, ' FOREIGN KEY ')
         .replace(/\bENGINE\s*=\s*InnoDB\b/gi, ' ENGINE=InnoDB ');
 
-    // Debug: Log normalized SQL
-    console.log('Normalized SQL:', normalizedSQL);
-
     // First extract all table names to ensure they're in the tableMap
     const tableNamePattern =
         /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s+(?:`?([^`\s.]+)`?\.)?(?:`([^`]+)`|([A-Za-z0-9_]+))/gi;
@@ -1003,14 +1000,11 @@ function findForeignKeysUsingRegex(
         // Skip invalid table names
         if (!tableName || tableName.toUpperCase() === 'CREATE') continue;
 
-        console.log('Found table:', { schemaName, tableName });
-
         // Ensure the table is in our tableMap
         const tableKey = `${schemaName}.${tableName}`;
         if (!tableMap[tableKey]) {
             const tableId = generateId();
             tableMap[tableKey] = tableId;
-            console.log('Added table to map:', { tableKey, tableId });
         }
     }
 
@@ -1028,8 +1022,6 @@ function findForeignKeysUsingRegex(
         const sourceSchema = tableMatch[1] || 'public';
         const sourceTable = tableMatch[2] || tableMatch[3];
         if (!sourceTable) continue;
-
-        console.log('Processing table:', { sourceSchema, sourceTable, stmt });
 
         // Check if this table has a composite primary key that includes the foreign key columns
         const pkMatch = stmt.match(/PRIMARY\s+KEY\s*\(\s*([^)]+)\)/i);
@@ -1059,15 +1051,8 @@ function findForeignKeysUsingRegex(
             const targetTable = fkMatch[2] || fkMatch[3]; // fkMatch[2] for backtick quoted, fkMatch[3] for unquoted
             const targetColumn = fkMatch[4];
 
-            console.log('Found FK:', {
-                sourceColumn,
-                targetTable,
-                targetColumn,
-            });
-
             // Skip if any part is invalid
             if (!sourceColumn || !targetTable || !targetColumn) {
-                console.log('Skipping invalid FK - missing parts');
                 continue;
             }
 
@@ -1076,7 +1061,6 @@ function findForeignKeysUsingRegex(
 
             // Skip if we've already added this relationship
             if (addedRelationships.has(relationshipKey)) {
-                console.log('Skipping duplicate FK:', relationshipKey);
                 continue;
             }
 
@@ -1087,17 +1071,8 @@ function findForeignKeysUsingRegex(
             const sourceTableId = tableMap[sourceTableKey];
             const targetTableId = tableMap[targetTableKey];
 
-            console.log('Table IDs:', {
-                sourceTableKey,
-                targetTableKey,
-                sourceTableId,
-                targetTableId,
-                availableTables: Object.keys(tableMap),
-            });
-
             // Skip if either table ID is missing
             if (!sourceTableId || !targetTableId) {
-                console.log('Skipping FK - missing table IDs');
                 continue;
             }
 
@@ -1128,26 +1103,6 @@ function findForeignKeysUsingRegex(
                 targetTableId,
                 sourceCardinality,
                 targetCardinality,
-            });
-
-            console.log('Added FK:', {
-                name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
-                sourceTable,
-                sourceSchema,
-                sourceColumn,
-                targetTable,
-                targetSchema: sourceSchema,
-                targetColumn,
-                sourceTableId,
-                targetTableId,
-                sourceCardinality,
-                targetCardinality,
-                isOneToOne: isUnique,
-                reason: isUnique
-                    ? pkColumns.length === 1 && pkColumns[0] === sourceColumn
-                        ? 'PRIMARY KEY foreign key'
-                        : 'UNIQUE constraint'
-                    : 'many-to-one',
             });
 
             addedRelationships.add(relationshipKey);
