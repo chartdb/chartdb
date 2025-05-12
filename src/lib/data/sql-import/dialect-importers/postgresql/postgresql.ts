@@ -224,6 +224,77 @@ function findForeignKeysUsingRegex(
     }
 }
 
+function getDefaultValueString(
+    columnDef: ColumnDefinition,
+    columnName: string
+): string | undefined {
+    let defVal = columnDef.default_val;
+
+    // Unwrap {type: 'default', value: ...}
+    if (
+        defVal &&
+        typeof defVal === 'object' &&
+        defVal.type === 'default' &&
+        'value' in defVal
+    ) {
+        defVal = defVal.value;
+    }
+
+    if (defVal === undefined || defVal === null) return undefined;
+
+    let value: string | undefined;
+    console.log(`AST for column '${columnName}':`, defVal);
+
+    switch (typeof defVal) {
+        case 'string':
+            value = defVal;
+            break;
+        case 'number':
+            value = String(defVal);
+            break;
+        case 'boolean':
+            value = defVal ? 'TRUE' : 'FALSE';
+            break;
+        case 'object':
+            if ('value' in defVal && typeof defVal.value === 'string') {
+                value = defVal.value;
+            } else if ('raw' in defVal && typeof defVal.raw === 'string') {
+                value = defVal.raw;
+            } else if (defVal.type === 'bool') {
+                value = defVal.value ? 'TRUE' : 'FALSE';
+            } else if (defVal.type === 'function' && defVal.name) {
+                // Handle nested structure: { name: { name: [{ value: ... }] } }
+                const fnName = defVal.name;
+                if (
+                    fnName &&
+                    typeof fnName === 'object' &&
+                    Array.isArray(fnName.name) &&
+                    fnName.name.length > 0 &&
+                    fnName.name[0].value
+                ) {
+                    value = fnName.name[0].value.toUpperCase();
+                } else if (typeof fnName === 'string') {
+                    value = fnName.toUpperCase();
+                } else {
+                    value = 'UNKNOWN_FUNCTION';
+                }
+            } else {
+                const built = buildSQLFromAST(defVal);
+                console.log(
+                    `buildSQLFromAST for column '${columnName}':`,
+                    built
+                );
+                value =
+                    typeof built === 'string' ? built : JSON.stringify(built);
+            }
+            break;
+        default:
+            value = undefined;
+    }
+
+    return value;
+}
+
 // PostgreSQL-specific parsing logic
 export async function fromPostgres(
     sqlContent: string
@@ -353,11 +424,10 @@ export async function fromPostgres(
                                         ),
                                         default: isSerialType
                                             ? undefined
-                                            : columnDef.default_val
-                                              ? buildSQLFromAST(
-                                                    columnDef.default_val
-                                                )
-                                              : undefined,
+                                            : getDefaultValueString(
+                                                  columnDef,
+                                                  columnName
+                                              ),
                                         increment:
                                             isSerialType ||
                                             columnDef.auto_increment ===
