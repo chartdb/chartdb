@@ -53,6 +53,8 @@ export interface SQLForeignKey {
     targetTableId: string;
     updateAction?: string;
     deleteAction?: string;
+    sourceCardinality?: 'one' | 'many';
+    targetCardinality?: 'one' | 'many';
 }
 
 export interface SQLParserResult {
@@ -664,7 +666,7 @@ export function convertToChartDBDiagram(
         );
 
         if (!sourceField || !targetField) {
-            console.warn('Relationship refers to non-existent field:', {
+            console.log('Relationship refers to non-existent field:', {
                 sourceTable: rel.sourceTable,
                 sourceField: rel.sourceColumn,
                 targetTable: rel.targetTable,
@@ -673,10 +675,13 @@ export function convertToChartDBDiagram(
             return;
         }
 
-        const { sourceCardinality, targetCardinality } = determineCardinality(
-            sourceField.unique || sourceField.primaryKey,
-            targetField.unique || targetField.primaryKey
-        );
+        // Use the cardinality from the SQL parser if available, otherwise determine it
+        const sourceCardinality =
+            (rel.sourceCardinality as Cardinality) ||
+            (sourceField.unique || sourceField.primaryKey ? 'one' : 'many');
+        const targetCardinality =
+            (rel.targetCardinality as Cardinality) ||
+            (targetField.unique || targetField.primaryKey ? 'one' : 'many');
 
         relationships.push({
             id: generateId(),
