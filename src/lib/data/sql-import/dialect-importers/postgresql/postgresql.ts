@@ -312,8 +312,22 @@ export async function fromPostgres(
                                 const columnName = extractColumnName(
                                     columnDef.column
                                 );
-                                const dataType =
-                                    columnDef.definition?.dataType || '';
+                                const rawDataType =
+                                    columnDef.definition?.dataType?.toUpperCase() ||
+                                    '';
+                                let finalDataType = rawDataType;
+                                let isSerialType = false;
+
+                                if (rawDataType === 'SERIAL') {
+                                    finalDataType = 'INTEGER';
+                                    isSerialType = true;
+                                } else if (rawDataType === 'BIGSERIAL') {
+                                    finalDataType = 'BIGINT';
+                                    isSerialType = true;
+                                } else if (rawDataType === 'SMALLSERIAL') {
+                                    finalDataType = 'SMALLINT';
+                                    isSerialType = true;
+                                }
 
                                 // Handle the column definition and add to columns array
                                 if (columnName) {
@@ -326,23 +340,28 @@ export async function fromPostgres(
 
                                     columns.push({
                                         name: columnName,
-                                        type: dataType,
-                                        nullable:
-                                            columnDef.nullable?.type !==
-                                            'not null',
-                                        primaryKey: isPrimaryKey,
+                                        type: finalDataType,
+                                        nullable: isSerialType
+                                            ? false
+                                            : columnDef.nullable?.type !==
+                                              'not null',
+                                        primaryKey:
+                                            isPrimaryKey || isSerialType,
                                         unique: columnDef.unique === 'unique',
                                         typeArgs: getTypeArgs(
                                             columnDef.definition
                                         ),
-                                        default: columnDef.default_val
-                                            ? buildSQLFromAST(
-                                                  columnDef.default_val
-                                              )
-                                            : undefined,
+                                        default: isSerialType
+                                            ? undefined
+                                            : columnDef.default_val
+                                              ? buildSQLFromAST(
+                                                    columnDef.default_val
+                                                )
+                                              : undefined,
                                         increment:
+                                            isSerialType ||
                                             columnDef.auto_increment ===
-                                            'auto_increment',
+                                                'auto_increment',
                                     });
                                 }
                             } else if (def.resource === 'constraint') {
