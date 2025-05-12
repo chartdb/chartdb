@@ -117,7 +117,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    const [isAutoDetecting, setIsAutoDetecting] = useState(false);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -179,18 +178,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
     }, [scriptResult, importMethod]);
 
-    // Auto-detect content type when script result changes (if not empty and not already detecting)
-    useEffect(() => {
-        if (isAutoDetecting || !scriptResult.trim()) return;
-
-        const detectedType = detectContentType(scriptResult);
-        if (detectedType && detectedType !== importMethod) {
-            setImportMethod(detectedType);
-        }
-
-        setIsAutoDetecting(false);
-    }, [scriptResult, importMethod, setImportMethod, isAutoDetecting]);
-
     const handleImport = useCallback(() => {
         if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
             onImport();
@@ -240,29 +227,35 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setIsCheckingJson(false);
     }, [scriptResult, setScriptResult, formatEditor]);
 
+    const detectAndSetImportMethod = useCallback(() => {
+        const content = editorRef.current?.getValue();
+        if (content && content.trim()) {
+            const detectedType = detectContentType(content);
+            if (detectedType && detectedType !== importMethod) {
+                setImportMethod(detectedType);
+            }
+        }
+    }, [setImportMethod, importMethod]);
+
+    useEffect(() => {
+        if (editorRef.current) {
+            editorRef.current.onDidPaste(() => {
+                setTimeout(() => {
+                    editorRef.current
+                        ?.getAction('editor.action.formatDocument')
+                        ?.run();
+                }, 0);
+
+                setTimeout(detectAndSetImportMethod, 0);
+            });
+        }
+    }, [detectAndSetImportMethod]);
+
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
-            editor.onDidPaste(() => {
-                setTimeout(() => {
-                    editor.getAction('editor.action.formatDocument')?.run();
-                }, 0);
-
-                // Get pasted content and auto-detect type
-                setTimeout(() => {
-                    const content = editor.getValue();
-                    if (content && content.trim()) {
-                        setIsAutoDetecting(true);
-                        const detectedType = detectContentType(content);
-                        if (detectedType && detectedType !== importMethod) {
-                            setImportMethod(detectedType);
-                        }
-                        setIsAutoDetecting(false);
-                    }
-                }, 100);
-            });
         },
-        [importMethod, setImportMethod]
+        []
     );
 
     const renderHeader = useCallback(() => {
