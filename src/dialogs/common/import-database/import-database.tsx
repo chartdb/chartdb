@@ -237,23 +237,25 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
     }, [setImportMethod, importMethod]);
 
+    const [editorDidMount, setEditorDidMount] = useState(false);
+
     useEffect(() => {
-        if (editorRef.current) {
+        if (editorRef.current && editorDidMount) {
             editorRef.current.onDidPaste(() => {
                 setTimeout(() => {
                     editorRef.current
                         ?.getAction('editor.action.formatDocument')
                         ?.run();
                 }, 0);
-
                 setTimeout(detectAndSetImportMethod, 0);
             });
         }
-    }, [detectAndSetImportMethod]);
+    }, [detectAndSetImportMethod, editorDidMount]);
 
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
+            setEditorDidMount(true);
         },
         []
     );
