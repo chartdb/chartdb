@@ -53,6 +53,8 @@ export interface SQLForeignKey {
     targetTableId: string;
     updateAction?: string;
     deleteAction?: string;
+    sourceCardinality?: Cardinality;
+    targetCardinality?: Cardinality;
 }
 
 export interface SQLParserResult {
@@ -187,23 +189,23 @@ export function determineCardinality(
 ): { sourceCardinality: Cardinality; targetCardinality: Cardinality } {
     if (isSourceUnique && isTargetUnique) {
         return {
-            sourceCardinality: 'one' as Cardinality,
-            targetCardinality: 'one' as Cardinality,
+            sourceCardinality: 'one',
+            targetCardinality: 'one',
         };
     } else if (isSourceUnique) {
         return {
-            sourceCardinality: 'one' as Cardinality,
-            targetCardinality: 'many' as Cardinality,
+            sourceCardinality: 'one',
+            targetCardinality: 'many',
         };
     } else if (isTargetUnique) {
         return {
-            sourceCardinality: 'many' as Cardinality,
-            targetCardinality: 'one' as Cardinality,
+            sourceCardinality: 'many',
+            targetCardinality: 'one',
         };
     } else {
         return {
-            sourceCardinality: 'many' as Cardinality,
-            targetCardinality: 'many' as Cardinality,
+            sourceCardinality: 'many',
+            targetCardinality: 'many',
         };
     }
 }
@@ -664,7 +666,7 @@ export function convertToChartDBDiagram(
         );
 
         if (!sourceField || !targetField) {
-            console.warn('Relationship refers to non-existent field:', {
+            console.log('Relationship refers to non-existent field:', {
                 sourceTable: rel.sourceTable,
                 sourceField: rel.sourceColumn,
                 targetTable: rel.targetTable,
@@ -673,10 +675,13 @@ export function convertToChartDBDiagram(
             return;
         }
 
-        const { sourceCardinality, targetCardinality } = determineCardinality(
-            sourceField.unique || sourceField.primaryKey,
-            targetField.unique || targetField.primaryKey
-        );
+        // Use the cardinality from the SQL parser if available, otherwise determine it
+        const sourceCardinality =
+            rel.sourceCardinality ||
+            (sourceField.unique || sourceField.primaryKey ? 'one' : 'many');
+        const targetCardinality =
+            rel.targetCardinality ||
+            (targetField.unique || targetField.primaryKey ? 'one' : 'many');
 
         relationships.push({
             id: generateId(),

@@ -33,24 +33,27 @@ import {
 function findForeignKeysUsingRegex(
     sqlContent: string,
     tableMap: Record<string, string>,
-    relationships: SQLForeignKey[]
+    relationships: SQLForeignKey[],
+    addedRelationships: Set<string>
 ): void {
-    // Track already added relationships to avoid duplicates
-    const addedRelationships = new Set<string>();
-
-    // Build a set of existing relationships to avoid duplicates
-    relationships.forEach((rel) => {
-        const relationshipKey = `${rel.sourceTable}.${rel.sourceColumn}-${rel.targetTable}.${rel.targetColumn}`;
-        addedRelationships.add(relationshipKey);
-    });
-
     // Normalize SQL content: replace multiple whitespaces and newlines with single space
-    // This helps handle DDL with unusual formatting like linebreaks in column definitions
     const normalizedSQL = sqlContent
         .replace(/\s+/g, ' ')
         // Replace common bracket/brace formatting issues
         .replace(/\[\s*(\d+)\s*\]/g, '[$1]')
-        .replace(/\{\s*(\d+)\s*\}/g, '{$1}');
+        .replace(/\{\s*(\d+)\s*\}/g, '{$1}')
+        // Normalize commas and parentheses to help regex matching
+        .replace(/\s*,\s*/g, ', ')
+        .replace(/\s*\(\s*/g, ' (')
+        .replace(/\s*\)\s*/g, ') ')
+        // Ensure spaces around keywords
+        .replace(/\bREFERENCES\b/g, ' REFERENCES ')
+        .replace(/\bINT\b/g, ' INT ')
+        .replace(/\bINTEGER\b/g, ' INTEGER ')
+        .replace(/\bPRIMARY\s+KEY\b/g, ' PRIMARY KEY ')
+        .replace(/\bUNIQUE\b/g, ' UNIQUE ')
+        .replace(/\bFOREIGN\s+KEY\b/g, ' FOREIGN KEY ')
+        .replace(/\bNOT\s+NULL\b/g, ' NOT NULL ');
 
     // First extract all table names to ensure they're in the tableMap
     const tableNamePattern =
@@ -73,75 +76,46 @@ function findForeignKeysUsingRegex(
         }
     }
 
-    // Extract original column names from CREATE TABLE statements
-    const createTablePattern =
-        /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s*\((.*?)(?:,\s*(?:CONSTRAINT|PRIMARY|UNIQUE|CHECK|FOREIGN|INDEX|EXCLUDE)\s|,\s*\);|\);)/gis;
+    // Now process each CREATE TABLE statement separately to find REFERENCES
+    const createTableStatements = normalizedSQL.split(';');
+    for (const stmt of createTableStatements) {
+        if (!stmt.trim().toUpperCase().startsWith('CREATE TABLE')) continue;
 
-    // Map to store column names by table
-    const tableColumns: Record<string, string[]> = {};
+        // Extract the table name from the CREATE TABLE statement
+        const tableMatch = stmt.match(
+            /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?/i
+        );
+        if (!tableMatch) continue;
 
-    createTablePattern.lastIndex = 0;
-    while ((match = createTablePattern.exec(normalizedSQL)) !== null) {
-        const schemaName = match[1] || 'public';
-        const tableName = match[2];
-        const columnDefinitions = match[3];
+        const sourceSchema = tableMatch[1] || 'public';
+        const sourceTable = tableMatch[2];
+        if (!sourceTable) continue;
 
-        if (!tableName || !columnDefinitions) continue;
+        // Find all REFERENCES clauses in this CREATE TABLE statement
+        // Updated pattern to handle both inline and FOREIGN KEY REFERENCES with better column name capture
+        const referencesPattern =
+            /(?:["'`]?(\w+)["'`]?\s+(?:INTEGER|INT|BIGINT|SMALLINT)(?:\s+NOT\s+NULL)?(?:\s+PRIMARY\s+KEY)?\s+REFERENCES\s+["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)|FOREIGN\s+KEY\s*\(\s*["'`]?(\w+)["'`]?\s*\)\s*REFERENCES\s+["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\))/gi;
 
-        const tableKey = `${schemaName}.${tableName}`;
-
-        // Extract column names from definitions
-        const columns: string[] = [];
-        const columnPattern = /["'`]?(\w+)["'`]?\s+\w+/g;
-        let columnMatch;
-
-        while ((columnMatch = columnPattern.exec(columnDefinitions)) !== null) {
-            if (
-                columnMatch[1] &&
-                !columnMatch[1].match(
-                    /^(CONSTRAINT|PRIMARY|UNIQUE|CHECK|FOREIGN|KEY|INDEX|EXCLUDE)$/i
-                )
-            ) {
-                columns.push(columnMatch[1]);
-            }
-        }
-
-        tableColumns[tableKey] = columns;
-    }
-
-    // Define patterns for finding foreign keys in PostgreSQL DDL
-    const foreignKeyPatterns = [
-        // In-line column references pattern - more flexible for odd formatting
-        /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?.*?["'`]?(\w+)["'`]?\s+\w+(?:\([^)]*\))?\s+(?:NOT\s+NULL\s+)?REFERENCES\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)/gi,
-
-        // Multi-line foreign key declarations with better support for varied formatting
-        /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?.*?FOREIGN\s+KEY\s*\(\s*["'`]?(\w+)["'`]?\s*\)\s+REFERENCES\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)/gi,
-
-        // ALTER TABLE pattern with improved matching
-        /ALTER\s+TABLE(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s+ADD\s+(?:CONSTRAINT\s+\w+\s+)?FOREIGN\s+KEY\s*\(\s*["'`]?(\w+)["'`]?\s*\)\s+REFERENCES\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)/gi,
-    ];
-
-    // Process each pattern
-    for (const pattern of foreignKeyPatterns) {
-        pattern.lastIndex = 0;
-        while ((match = pattern.exec(normalizedSQL)) !== null) {
-            const sourceSchema = match[1] || 'public';
-            const sourceTable = match[2];
-            const sourceColumn = match[3];
-            const targetSchema = match[4] || 'public';
-            const targetTable = match[5];
-            const targetColumn = match[6];
+        let refMatch;
+        while ((refMatch = referencesPattern.exec(stmt)) !== null) {
+            // Extract source and target info based on which pattern matched
+            const sourceColumn = refMatch[1] || refMatch[4]; // Column name from either pattern
+            const targetTable = refMatch[2] || refMatch[5]; // Referenced table from either pattern
+            const targetColumn = refMatch[3] || refMatch[6]; // Referenced column from either pattern
+            const targetSchema = 'public'; // Default to public schema
 
             // Skip if any part is invalid
-            if (!sourceTable || !sourceColumn || !targetTable || !targetColumn)
+            if (!sourceColumn || !targetTable || !targetColumn) {
                 continue;
+            }
 
             // Create a unique key to track this relationship
             const relationshipKey = `${sourceTable}.${sourceColumn}-${targetTable}.${targetColumn}`;
 
             // Skip if we've already added this relationship
-            if (addedRelationships.has(relationshipKey)) continue;
-            addedRelationships.add(relationshipKey);
+            if (addedRelationships.has(relationshipKey)) {
+                continue;
+            }
 
             // Get table IDs
             const sourceTableKey = `${sourceSchema}.${sourceTable}`;
@@ -152,6 +126,33 @@ function findForeignKeysUsingRegex(
 
             // Skip if either table ID is missing
             if (!sourceTableId || !targetTableId) continue;
+
+            // Check if this is a one-to-one relationship
+            const isUnique =
+                stmt
+                    .toLowerCase()
+                    .includes(
+                        `${sourceColumn.toLowerCase()} integer primary key`
+                    ) ||
+                stmt
+                    .toLowerCase()
+                    .includes(
+                        `${sourceColumn.toLowerCase()} int primary key`
+                    ) ||
+                stmt
+                    .toLowerCase()
+                    .includes(
+                        `"${sourceColumn.toLowerCase()}" integer primary key`
+                    ) ||
+                stmt
+                    .toLowerCase()
+                    .includes(
+                        `"${sourceColumn.toLowerCase()}" int primary key`
+                    );
+
+            // For one-to-one relationships, both sides are 'one'
+            const sourceCardinality = isUnique ? 'one' : 'many';
+            const targetCardinality = 'one'; // Referenced PK is always one
 
             // Add the relationship
             relationships.push({
@@ -164,69 +165,16 @@ function findForeignKeysUsingRegex(
                 targetColumn,
                 sourceTableId,
                 targetTableId,
+                sourceCardinality,
+                targetCardinality,
             });
-        }
-    }
-
-    // Special handling for CHECK constraints with REFERENCES pattern
-    // This captures the cases where column definitions have CHECK constraints
-    // that might interfere with FK detection
-    const checkWithReferencesPattern =
-        /CREATE\s+TABLE.*?["'`]?([^"'`\s.(]+)["'`]?.*?CHECK\s*\(\s*(\w+)\s+(?:IN|=|REFERENCES)\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?\s*\(\s*["'`]?(\w+)["'`]?\s*\)/gi;
-
-    checkWithReferencesPattern.lastIndex = 0;
-    while ((match = checkWithReferencesPattern.exec(normalizedSQL)) !== null) {
-        // Extract potential FK information from CHECK constraints
-        // This is a best-effort approach for particularly complex DDL
-        // Only continue processing if it looks like a valid relationship
-        if (match.length >= 5 && match[1] && match[2] && match[4] && match[5]) {
-            // Confirm it's a potential relationship by checking the column exists
-            const sourceTable = match[1];
-            const sourceColumn = match[2];
-            const targetSchema = match[3] || 'public';
-            const targetTable = match[4];
-            const targetColumn = match[5];
-
-            const sourceTableKey = `public.${sourceTable}`;
-            const tableColumnList = tableColumns[sourceTableKey] || [];
-
-            // Only if the column actually exists in the table
-            if (tableColumnList.includes(sourceColumn)) {
-                // Create a unique key to track this relationship
-                const relationshipKey = `${sourceTable}.${sourceColumn}-${targetTable}.${targetColumn}`;
-
-                // Skip if we've already added this relationship
-                if (addedRelationships.has(relationshipKey)) continue;
-                addedRelationships.add(relationshipKey);
-
-                // Get table IDs
-                const sourceTableId = tableMap[sourceTableKey];
-                const targetTableKey = `${targetSchema}.${targetTable}`;
-                const targetTableId = tableMap[targetTableKey];
-
-                // Skip if either table ID is missing
-                if (!sourceTableId || !targetTableId) continue;
-
-                // Add the relationship
-                relationships.push({
-                    name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
-                    sourceTable,
-                    sourceSchema: 'public',
-                    sourceColumn,
-                    targetTable,
-                    targetSchema,
-                    targetColumn,
-                    sourceTableId,
-                    targetTableId,
-                });
-            }
+            addedRelationships.add(relationshipKey);
         }
     }
 }
 
 function getDefaultValueString(
-    columnDef: ColumnDefinition,
-    columnName: string
+    columnDef: ColumnDefinition
 ): string | undefined {
     let defVal = columnDef.default_val;
 
@@ -243,7 +191,6 @@ function getDefaultValueString(
     if (defVal === undefined || defVal === null) return undefined;
 
     let value: string | undefined;
-    console.log(`AST for column '${columnName}':`, defVal);
 
     switch (typeof defVal) {
         case 'string':
@@ -280,10 +227,6 @@ function getDefaultValueString(
                 }
             } else {
                 const built = buildSQLFromAST(defVal);
-                console.log(
-                    `buildSQLFromAST for column '${columnName}':`,
-                    built
-                );
                 value =
                     typeof built === 'string' ? built : JSON.stringify(built);
             }
@@ -302,6 +245,7 @@ export async function fromPostgres(
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
+    const addedRelationships = new Set<string>(); // Initialize set to track added FKs
 
     try {
         const { Parser } = await import('node-sql-parser');
@@ -313,7 +257,42 @@ export async function fromPostgres(
             throw new Error('Failed to parse SQL DDL - AST is not an array');
         }
 
-        // Process each CREATE TABLE statement
+        // Process each CREATE TABLE statement first to build tableMap
+        ast.forEach((stmt: SQLAstNode) => {
+            if (stmt.type === 'create' && stmt.keyword === 'table') {
+                const createTableStmt = stmt as CreateTableStatement;
+                let tableName = '';
+                let schemaName = '';
+
+                if (
+                    createTableStmt.table &&
+                    typeof createTableStmt.table === 'object'
+                ) {
+                    if (
+                        Array.isArray(createTableStmt.table) &&
+                        createTableStmt.table.length > 0
+                    ) {
+                        const tableObj = createTableStmt.table[0];
+                        tableName = tableObj.table || '';
+                        schemaName = tableObj.schema || tableObj.db || '';
+                    } else {
+                        const tableObj =
+                            createTableStmt.table as TableReference;
+                        tableName = tableObj.table || '';
+                        schemaName = tableObj.schema || tableObj.db || '';
+                    }
+                }
+
+                if (!tableName) return;
+                if (!schemaName) schemaName = 'public';
+
+                const tableId = generateId();
+                const tableKey = `${schemaName}.${tableName}`;
+                tableMap[tableKey] = tableId;
+            }
+        });
+
+        // Now process tables and relationships
         ast.forEach((stmt: SQLAstNode) => {
             if (stmt.type === 'create' && stmt.keyword === 'table') {
                 // Extract table name and schema
@@ -424,10 +403,7 @@ export async function fromPostgres(
                                         ),
                                         default: isSerialType
                                             ? undefined
-                                            : getDefaultValueString(
-                                                  columnDef,
-                                                  columnName
-                                              ),
+                                            : getDefaultValueString(columnDef),
                                         increment:
                                             isSerialType ||
                                             columnDef.auto_increment ===
@@ -776,6 +752,8 @@ export async function fromPostgres(
                                                         reference.on_update,
                                                     deleteAction:
                                                         reference.on_delete,
+                                                    sourceCardinality: 'many',
+                                                    targetCardinality: 'one',
                                                 };
 
                                                 relationships.push(fk);
@@ -1109,6 +1087,8 @@ export async function fromPostgres(
                                             targetTableId,
                                             updateAction,
                                             deleteAction,
+                                            sourceCardinality: 'many',
+                                            targetCardinality: 'one',
                                         };
 
                                         relationships.push(fk);
@@ -1127,42 +1107,35 @@ export async function fromPostgres(
             }
         });
 
-        // Update table IDs in relationships and fix missing target table IDs
-        relationships.forEach((rel) => {
-            // Ensure schemas are set to 'public' if empty
-            if (!rel.sourceSchema) rel.sourceSchema = 'public';
-            if (!rel.targetSchema) rel.targetSchema = 'public';
-
-            // Only check/fix sourceTableId if not already set
-            if (!rel.sourceTableId) {
-                rel.sourceTableId =
-                    getTableIdWithSchemaSupport(
-                        tableMap,
-                        rel.sourceTable,
-                        rel.sourceSchema
-                    ) || '';
-            }
-
-            // Check/fix targetTableId if not already set
-            if (!rel.targetTableId) {
-                rel.targetTableId =
-                    getTableIdWithSchemaSupport(
-                        tableMap,
-                        rel.targetTable,
-                        rel.targetSchema
-                    ) || '';
-            }
-        });
-
         // Use regex as fallback to find additional foreign keys that the parser may have missed
-        findForeignKeysUsingRegex(sqlContent, tableMap, relationships);
-
-        // Filter out relationships with missing source table IDs or target table IDs
-        const validRelationships = relationships.filter(
-            (rel) => rel.sourceTableId && rel.targetTableId
+        findForeignKeysUsingRegex(
+            sqlContent,
+            tableMap,
+            relationships,
+            addedRelationships
         );
 
-        return { tables, relationships: validRelationships };
+        // Filter out any duplicate relationships that might have been added
+        const uniqueRelationships = relationships.filter((rel, index) => {
+            const key = `${rel.sourceTable}.${rel.sourceColumn}-${rel.targetTable}.${rel.targetColumn}`;
+            return (
+                index ===
+                relationships.findIndex(
+                    (r) =>
+                        `${r.sourceTable}.${r.sourceColumn}-${r.targetTable}.${r.targetColumn}` ===
+                        key
+                )
+            );
+        });
+
+        // Sort relationships for consistent output
+        uniqueRelationships.sort((a, b) => {
+            const keyA = `${a.sourceTable}.${a.sourceColumn}-${a.targetTable}.${a.targetColumn}`;
+            const keyB = `${b.sourceTable}.${b.sourceColumn}-${b.targetTable}.${b.targetColumn}`;
+            return keyA.localeCompare(keyB);
+        });
+
+        return { tables, relationships: uniqueRelationships };
     } catch (error: unknown) {
         throw new Error(
             `Error parsing PostgreSQL SQL: ${(error as Error).message}`

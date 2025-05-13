@@ -208,11 +208,39 @@ function processCreateIndexStatement(
     }
 }
 
+/**
+ * Detects if a CREATE TABLE statement contains inline REFERENCES (PostgreSQL-style)
+ * which is not supported in MySQL
+ */
+function detectInlineReferences(sqlContent: string): {
+    found: boolean;
+    line: number;
+} {
+    const lines = sqlContent.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        // Match column definitions with inline REFERENCES
+        if (/\w+\s+\w+\s+(?:PRIMARY\s+KEY\s+)?REFERENCES\s+/i.test(line)) {
+            return { found: true, line: i + 1 };
+        }
+    }
+    return { found: false, line: 0 };
+}
+
 export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
+    // Check for inline REFERENCES before proceeding
+    const { found, line } = detectInlineReferences(sqlContent);
+    if (found) {
+        throw new Error(
+            `MySQL does not support inline REFERENCES in column definitions (line ${line}). Please use FOREIGN KEY constraints instead:\n\nCREATE TABLE UserProfile (\n    user_id INT PRIMARY KEY,\n    bio TEXT,\n    avatar_url VARCHAR(255),\n    FOREIGN KEY (user_id) REFERENCES Users(id)\n);`
+        );
+    }
+
     const tables: SQLTable[] = [];
     const relationships: SQLForeignKey[] = [];
     const tableMap: Record<string, string> = {}; // Maps table name to its ID
     const pendingForeignKeys: PendingForeignKey[] = []; // Store FKs that reference tables not yet created
+    const addedRelationships = new Set<string>();
 
     try {
         // Extract SQL statements from the dump
@@ -877,6 +905,13 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
             }
         }
 
+        findForeignKeysUsingRegex(
+            sqlContent,
+            tableMap,
+            relationships,
+            addedRelationships
+        );
+
         return { tables, relationships };
     } catch (error) {
         console.error('Error in MySQL dump parser:', error);
@@ -926,4 +961,151 @@ export function isMySQLFormat(sqlContent: string): boolean {
     const isLikelyMysql = hasBackticks && patternCount >= 2;
 
     return isLikelyMysql;
+}
+
+function findForeignKeysUsingRegex(
+    sqlContent: string,
+    tableMap: Record<string, string>,
+    relationships: SQLForeignKey[],
+    addedRelationships: Set<string>
+): void {
+    // Normalize SQL content: replace multiple whitespaces and newlines with single space
+    const normalizedSQL = sqlContent
+        .replace(/\s+/g, ' ')
+        // Replace common bracket/brace formatting issues
+        .replace(/\[\s*(\d+)\s*\]/g, '[$1]')
+        .replace(/\{\s*(\d+)\s*\}/g, '{$1}')
+        // Normalize commas and parentheses to help regex matching
+        .replace(/\s*,\s*/g, ', ')
+        .replace(/\s*\(\s*/g, ' (')
+        .replace(/\s*\)\s*/g, ') ')
+        // Ensure spaces around keywords
+        .replace(/\bREFERENCES\b/g, ' REFERENCES ')
+        .replace(/\bINT\b/g, ' INT ')
+        .replace(/\bPRIMARY\s+KEY\b/g, ' PRIMARY KEY ')
+        .replace(/\bUNIQUE\b/g, ' UNIQUE ')
+        .replace(/\bFOREIGN\s+KEY\b/g, ' FOREIGN KEY ')
+        .replace(/\bENGINE\s*=\s*InnoDB\b/gi, ' ENGINE=InnoDB ');
+
+    // First extract all table names to ensure they're in the tableMap
+    const tableNamePattern =
+        /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s+(?:`?([^`\s.]+)`?\.)?(?:`([^`]+)`|([A-Za-z0-9_]+))/gi;
+    let match;
+
+    tableNamePattern.lastIndex = 0;
+    while ((match = tableNamePattern.exec(normalizedSQL)) !== null) {
+        const schemaName = match[1] || 'public';
+        const tableName = match[2] || match[3]; // match[2] for backtick quoted, match[3] for unquoted
+
+        // Skip invalid table names
+        if (!tableName || tableName.toUpperCase() === 'CREATE') continue;
+
+        // Ensure the table is in our tableMap
+        const tableKey = `${schemaName}.${tableName}`;
+        if (!tableMap[tableKey]) {
+            const tableId = generateId();
+            tableMap[tableKey] = tableId;
+        }
+    }
+
+    // Now process each CREATE TABLE statement separately to find REFERENCES
+    const createTableStatements = normalizedSQL.split(';');
+    for (const stmt of createTableStatements) {
+        if (!stmt.trim().toUpperCase().startsWith('CREATE TABLE')) continue;
+
+        // Extract the table name from the CREATE TABLE statement
+        const tableMatch = stmt.match(
+            /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s+(?:`?([^`\s.]+)`?\.)?(?:`([^`]+)`|([A-Za-z0-9_]+))/i
+        );
+        if (!tableMatch) continue;
+
+        const sourceSchema = tableMatch[1] || 'public';
+        const sourceTable = tableMatch[2] || tableMatch[3];
+        if (!sourceTable) continue;
+
+        // Check if this table has a composite primary key that includes the foreign key columns
+        const pkMatch = stmt.match(/PRIMARY\s+KEY\s*\(\s*([^)]+)\)/i);
+        const pkColumns = pkMatch
+            ? pkMatch[1]
+                  .split(',')
+                  .map((col) => col.trim().replace(/[`'"]/g, ''))
+            : [];
+
+        // Find single-column PRIMARY KEY declarations
+        const singlePkPattern =
+            /`?(\w+)`?\s+(?:INT|INTEGER|BIGINT|SMALLINT)(?:\([^)]*\))?\s+PRIMARY\s+KEY\b/gi;
+        let pkMatch2;
+        while ((pkMatch2 = singlePkPattern.exec(stmt)) !== null) {
+            const pkCol = pkMatch2[1];
+            if (!pkColumns.includes(pkCol)) {
+                pkColumns.push(pkCol);
+            }
+        }
+
+        // Find FOREIGN KEY constraints
+        const fkPattern =
+            /FOREIGN\s+KEY\s*\(\s*`?(\w+)`?\s*\)\s*REFERENCES\s+(?:`?([^`\s.]+)`?|(\w+))\s*\(\s*`?(\w+)`?\s*\)/gi;
+        let fkMatch;
+        while ((fkMatch = fkPattern.exec(stmt)) !== null) {
+            const sourceColumn = fkMatch[1];
+            const targetTable = fkMatch[2] || fkMatch[3]; // fkMatch[2] for backtick quoted, fkMatch[3] for unquoted
+            const targetColumn = fkMatch[4];
+
+            // Skip if any part is invalid
+            if (!sourceColumn || !targetTable || !targetColumn) {
+                continue;
+            }
+
+            // Create a unique key to track this relationship
+            const relationshipKey = `${sourceTable}.${sourceColumn}-${targetTable}.${targetColumn}`;
+
+            // Skip if we've already added this relationship
+            if (addedRelationships.has(relationshipKey)) {
+                continue;
+            }
+
+            // Get table IDs
+            const sourceTableKey = `${sourceSchema}.${sourceTable}`;
+            const targetTableKey = `${sourceSchema}.${targetTable}`;
+
+            const sourceTableId = tableMap[sourceTableKey];
+            const targetTableId = tableMap[targetTableKey];
+
+            // Skip if either table ID is missing
+            if (!sourceTableId || !targetTableId) {
+                continue;
+            }
+
+            // Check if this is a one-to-one relationship
+            const isUnique =
+                stmt.toLowerCase().includes(`unique (${sourceColumn})`) ||
+                stmt.toLowerCase().includes(`unique(\`${sourceColumn}\`)`) ||
+                stmt.toLowerCase().includes(`unique key (${sourceColumn})`) ||
+                stmt
+                    .toLowerCase()
+                    .includes(`unique key(\`${sourceColumn}\`)`) ||
+                (pkColumns.length === 1 && pkColumns[0] === sourceColumn);
+
+            // For one-to-one relationships, both sides are 'one'
+            const sourceCardinality = isUnique ? 'one' : 'many';
+            const targetCardinality = 'one'; // Referenced PK is always one
+
+            // Add the relationship
+            relationships.push({
+                name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
+                sourceTable,
+                sourceSchema,
+                sourceColumn,
+                targetTable,
+                targetSchema: sourceSchema,
+                targetColumn,
+                sourceTableId,
+                targetTableId,
+                sourceCardinality,
+                targetCardinality,
+            });
+
+            addedRelationships.add(relationshipKey);
+        }
+    }
 }
