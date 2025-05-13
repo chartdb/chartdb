@@ -53,8 +53,8 @@ export interface SQLForeignKey {
     targetTableId: string;
     updateAction?: string;
     deleteAction?: string;
-    sourceCardinality?: 'one' | 'many';
-    targetCardinality?: 'one' | 'many';
+    sourceCardinality?: Cardinality;
+    targetCardinality?: Cardinality;
 }
 
 export interface SQLParserResult {
@@ -189,23 +189,23 @@ export function determineCardinality(
 ): { sourceCardinality: Cardinality; targetCardinality: Cardinality } {
     if (isSourceUnique && isTargetUnique) {
         return {
-            sourceCardinality: 'one' as Cardinality,
-            targetCardinality: 'one' as Cardinality,
+            sourceCardinality: 'one',
+            targetCardinality: 'one',
         };
     } else if (isSourceUnique) {
         return {
-            sourceCardinality: 'one' as Cardinality,
-            targetCardinality: 'many' as Cardinality,
+            sourceCardinality: 'one',
+            targetCardinality: 'many',
         };
     } else if (isTargetUnique) {
         return {
-            sourceCardinality: 'many' as Cardinality,
-            targetCardinality: 'one' as Cardinality,
+            sourceCardinality: 'many',
+            targetCardinality: 'one',
         };
     } else {
         return {
-            sourceCardinality: 'many' as Cardinality,
-            targetCardinality: 'many' as Cardinality,
+            sourceCardinality: 'many',
+            targetCardinality: 'many',
         };
     }
 }
@@ -677,10 +677,10 @@ export function convertToChartDBDiagram(
 
         // Use the cardinality from the SQL parser if available, otherwise determine it
         const sourceCardinality =
-            (rel.sourceCardinality as Cardinality) ||
+            rel.sourceCardinality ||
             (sourceField.unique || sourceField.primaryKey ? 'one' : 'many');
         const targetCardinality =
-            (rel.targetCardinality as Cardinality) ||
+            rel.targetCardinality ||
             (targetField.unique || targetField.primaryKey ? 'one' : 'many');
 
         relationships.push({

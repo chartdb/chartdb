@@ -403,10 +403,7 @@ export async function fromPostgres(
                                         ),
                                         default: isSerialType
                                             ? undefined
-                                            : getDefaultValueString(
-                                                  columnDef,
-                                                  columnName
-                                              ),
+                                            : getDefaultValueString(columnDef),
                                         increment:
                                             isSerialType ||
                                             columnDef.auto_increment ===
