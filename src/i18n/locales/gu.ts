@@ -352,6 +352,12 @@ export const gu: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'રદ કરો',
             export: 'નિકાસ કરો',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -386,7 +392,7 @@ export const gu: LanguageTranslation = {
             error: {
                 title: 'ડાયાગ્રામ નિકાસમાં ભૂલ',
                 description:
-                    'કશુક તો ખોટું થયું. મદદ જોઈએ? chartdb.io@gmail.com પર સંપર્ક કરો.',
+                    'કશુક તો ખોટું થયું. મદદ જોઈએ? support@chartdb.io પર સંપર્ક કરો.',
             },
         },
 
@@ -398,7 +404,7 @@ export const gu: LanguageTranslation = {
             error: {
                 title: 'ડાયાગ્રામ આયાતમાં ભૂલ',
                 description:
-                    'ડાયાગ્રામ JSON અમાન્ય છે. કૃપા કરીને JSON તપાસો અને ફરી પ્રયાસ કરો. મદદ જોઈએ? chartdb.io@gmail.com પર સંપર્ક કરો.',
+                    'ડાયાગ્રામ JSON અમાન્ય છે. કૃપા કરીને JSON તપાસો અને ફરી પ્રયાસ કરો. મદદ જોઈએ? support@chartdb.io પર સંપર્ક કરો.',
             },
         },
         // TODO: Translate

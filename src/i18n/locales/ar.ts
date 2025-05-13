@@ -351,6 +351,12 @@ export const ar: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'إلغاء',
             export: 'تصدير',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -383,7 +389,7 @@ export const ar: LanguageTranslation = {
             error: {
                 title: 'حدث خطأ أثناء التصدير',
                 description:
-                    'chartdb.io@gmail.com حدث خطأ ما. هل تحتاج إلى مساعدة؟',
+                    'support@chartdb.io حدث خطأ ما. هل تحتاج إلى مساعدة؟',
             },
         },
         import_diagram_dialog: {
@@ -394,7 +400,7 @@ export const ar: LanguageTranslation = {
             error: {
                 title: 'حدث خطأ أثناء الاستيراد',
                 description:
-                    'chartdb.io@gmail.com و المحاولة مرة اخرى. هل تحتاج إلى المساعدة؟ JSON غير صالح. يرجى التحقق من JSON الرسم البياني',
+                    'support@chartdb.io و المحاولة مرة اخرى. هل تحتاج إلى المساعدة؟ JSON غير صالح. يرجى التحقق من JSON الرسم البياني',
             },
         },
         import_dbml_dialog: {

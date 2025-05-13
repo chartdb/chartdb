@@ -347,6 +347,12 @@ export const zh_CN: LanguageTranslation = {
             scale_4x: '4x',
             cancel: '取消',
             export: '导出',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -379,7 +385,7 @@ export const zh_CN: LanguageTranslation = {
             error: {
                 title: 'Error exporting diagram',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Something went wrong. Need help? support@chartdb.io',
             },
         },
 
@@ -391,7 +397,7 @@ export const zh_CN: LanguageTranslation = {
             error: {
                 title: '导入关系图时出错',
                 description:
-                    '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 chartdb.io@gmail.com',
+                    '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 support@chartdb.io',
             },
         },
         // TODO: Translate

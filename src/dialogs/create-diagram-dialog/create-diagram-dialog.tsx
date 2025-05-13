@@ -91,7 +91,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         }
 
         await addDiagram({ diagram });
-        await updateConfig({ defaultDiagramId: diagram.id });
+        await updateConfig({ config: { defaultDiagramId: diagram.id } });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
     }, [
@@ -120,7 +120,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         };
 
         await addDiagram({ diagram });
-        await updateConfig({ defaultDiagramId: diagram.id });
+        await updateConfig({ config: { defaultDiagramId: diagram.id } });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
         setTimeout(

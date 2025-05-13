@@ -6,6 +6,18 @@ export const fixMetadataJson = async (
 ): Promise<string> => {
     await waitFor(1000);
 
+    // Replace problematic array default values with null
+    metadataJson = metadataJson.replace(
+        /"default": "?'?\[[^\]]*\]'?"?(\\")?(,|\})/gs,
+        '"default": null$2'
+    );
+
+    // Generic fix for all default values with '\ pattern - convert to just '
+    metadataJson = metadataJson.replace(
+        /"default":\s*"(.*?)'\\"(,|\})/g,
+        '"default": "$1"$2'
+    );
+
     // TODO: remove this temporary eslint disable
     return (
         metadataJson
@@ -23,6 +35,26 @@ export const fixMetadataJson = async (
             .replace(/""""/g, '""') // Remove Quadruple quotes from keys
             .replace(/"""([^",}]+)"""/g, '"$1"') // Remove tripple quotes from keys
             .replace(/""([^",}]+)""/g, '"$1"') // Remove double quotes from keys
+
+            .replace(/'"([^"]+)"'/g, '\\"$1\\"') // Replace single-quoted double quotes
+            .replace(/'(".*?")'/g, "'\\$1'") // Handle cases like '"{}"'::json
+
+            // Handle specific case for nextval with quoted identifiers
+            .replace(
+                /nextval\('(".*?")'::regclass\)/g,
+                "nextval('\\$1'::regclass)"
+            )
+
+            // Handle cases like "'CHAT'::"CustomType"" (ensures existing quotes are escaped for JSON)
+            /* eslint-disable-next-line no-useless-escape */
+            .replace(/'([^']+)'::\"([^\"]+)\"/g, '\'$1\'::\\\"$2\\\"')
+
+            // Convert string "null" to actual null for precision field
+            .replace(/"precision": "null"/g, '"precision": null')
+
+            // Convert string "true"/"false" to actual boolean for nullable field
+            .replace(/"nullable": "false"/g, '"nullable": false')
+            .replace(/"nullable": "true"/g, '"nullable": true')
 
             /* eslint-disable-next-line no-useless-escape */
             .replace(/\"/g, '___ESCAPED_QUOTE___') // Temporarily replace empty strings

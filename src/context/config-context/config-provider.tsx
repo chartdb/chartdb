@@ -19,15 +19,29 @@ export const ConfigProvider: React.FC<React.PropsWithChildren> = ({
         loadConfig();
     }, [getConfig]);
 
-    const updateConfig: ConfigContext['updateConfig'] = async (
-        config: Partial<ChartDBConfig>
-    ) => {
-        await updateDataConfig(config);
-        setConfig((prevConfig) =>
-            prevConfig
-                ? { ...prevConfig, ...config }
-                : { ...{ defaultDiagramId: '' }, ...config }
-        );
+    const updateConfig: ConfigContext['updateConfig'] = async ({
+        config,
+        updateFn,
+    }) => {
+        const promise = new Promise<void>((resolve) => {
+            setConfig((prevConfig) => {
+                let baseConfig: ChartDBConfig = { defaultDiagramId: '' };
+                if (prevConfig) {
+                    baseConfig = prevConfig;
+                }
+
+                const updatedConfig = updateFn
+                    ? updateFn(baseConfig)
+                    : { ...baseConfig, ...config };
+
+                updateDataConfig(updatedConfig).then(() => {
+                    resolve();
+                });
+                return updatedConfig;
+            });
+        });
+
+        return promise;
     };
 
     return (

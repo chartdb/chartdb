@@ -346,6 +346,12 @@ export const tr: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'İptal',
             export: 'Dışa Aktar',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
         new_table_schema_dialog: {
             title: 'Şema Seç',
@@ -377,7 +383,7 @@ export const tr: LanguageTranslation = {
             error: {
                 title: 'Error exporting diagram',
                 description:
-                    'Something went wrong. Need help? chartdb.io@gmail.com',
+                    'Something went wrong. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate
@@ -389,7 +395,7 @@ export const tr: LanguageTranslation = {
             error: {
                 title: 'Error importing diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? chartdb.io@gmail.com',
+                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

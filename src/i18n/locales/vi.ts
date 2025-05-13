@@ -350,6 +350,12 @@ export const vi: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Hủy',
             export: 'Xuất',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -383,7 +389,7 @@ export const vi: LanguageTranslation = {
             error: {
                 title: 'Lỗi khi xuất sơ đồ',
                 description:
-                    'Có gì đó không ổn. Cần trợ giúp? chartdb.io@gmail.com',
+                    'Có gì đó không ổn. Cần trợ giúp? support@chartdb.io',
             },
         },
 
@@ -395,7 +401,7 @@ export const vi: LanguageTranslation = {
             error: {
                 title: 'Lỗi khi nhập sơ đồ',
                 description:
-                    'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? chartdb.io@gmail.com',
+                    'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? support@chartdb.io',
             },
         },
         // TODO: Translate

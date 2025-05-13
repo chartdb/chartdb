@@ -65,7 +65,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const openDiagram = useCallback(
         (diagramId: string) => {
             if (diagramId) {
-                updateConfig({ defaultDiagramId: diagramId });
+                updateConfig({ config: { defaultDiagramId: diagramId } });
                 navigate(`/diagrams/${diagramId}`);
             }
         },

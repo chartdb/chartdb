@@ -350,6 +350,12 @@ export const id_ID: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Batal',
             export: 'Ekspor',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -384,7 +390,7 @@ export const id_ID: LanguageTranslation = {
             error: {
                 title: 'Error ekspor diagram',
                 description:
-                    'Sesuatu yang salah. Butuh bantuan? chartdb.io@gmail.com',
+                    'Sesuatu yang salah. Butuh bantuan? support@chartdb.io',
             },
         },
 
@@ -396,7 +402,7 @@ export const id_ID: LanguageTranslation = {
             error: {
                 title: 'Error impor diagram',
                 description:
-                    'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? chartdb.io@gmail.com',
+                    'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? support@chartdb.io',
             },
         },
         // TODO: Translate

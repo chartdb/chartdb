@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Editor } from '@/components/code-snippet/code-snippet';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
-import { importDBMLToDiagram } from '@/lib/dbml-import';
+import { importDBMLToDiagram, sanitizeDBML } from '@/lib/dbml-import';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Parser } from '@dbml/core';
 import { useCanvas } from '@/hooks/use-canvas';
@@ -189,8 +189,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             if (!content.trim()) return;
 
             try {
+                const sanitizedContent = sanitizeDBML(content);
                 const parser = new Parser();
-                parser.parse(content, 'dbml');
+                parser.parse(sanitizedContent, 'dbml');
             } catch (e) {
                 const parsedError = parseDBMLError(e);
                 if (parsedError) {
@@ -241,7 +242,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            const importedDiagram = await importDBMLToDiagram(dbmlContent);
+            // Sanitize DBML content before importing
+            const sanitizedContent = sanitizeDBML(dbmlContent);
+            const importedDiagram = await importDBMLToDiagram(sanitizedContent);
             const tableIdsToRemove = tables
                 .filter((table) =>
                     importedDiagram.tables?.some(
@@ -330,7 +333,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             }}
         >
             <DialogContent
-                className="flex h-[80vh] max-h-screen flex-col"
+                className="flex h-[80vh] max-h-screen w-full flex-col md:max-w-[900px]"
                 showClose
             >
                 <DialogHeader>

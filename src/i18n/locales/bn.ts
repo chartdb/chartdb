@@ -352,6 +352,12 @@ export const bn: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'বাতিল করুন',
             export: 'রপ্তানি করুন',
+            // TODO: Translate
+            advanced_options: 'Advanced Options',
+            pattern: 'Include background pattern',
+            pattern_description: 'Add subtle grid pattern to background.',
+            transparent: 'Transparent background',
+            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
@@ -386,7 +392,7 @@ export const bn: LanguageTranslation = {
             error: {
                 title: 'চিত্র রপ্তানিতে ত্রুটি',
                 description:
-                    'কিছু ভুল হয়েছে। সাহায্যের প্রয়োজন? chartdb.io@gmail.com-এ যোগাযোগ করুন।',
+                    'কিছু ভুল হয়েছে। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
             },
         },
 
@@ -398,7 +404,7 @@ export const bn: LanguageTranslation = {
             error: {
                 title: 'চিত্র আমদানিতে ত্রুটি',
                 description:
-                    'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? chartdb.io@gmail.com-এ যোগাযোগ করুন।',
+                    'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
             },
         },
         // TODO: Translate

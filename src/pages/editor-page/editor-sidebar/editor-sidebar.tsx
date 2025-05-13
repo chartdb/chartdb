@@ -19,6 +19,7 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export interface SidebarItem {
     title: string;
@@ -36,8 +37,10 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
-    const items: SidebarItem[] = useMemo(
-        () => [
+    const { dependencies } = useChartDB();
+
+    const items: SidebarItem[] = useMemo(() => {
+        const baseItems = [
             {
                 title: t('side_panel.tables_section.tables'),
                 icon: Table,
@@ -57,15 +60,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'relationships',
             },
             {
-                title: t('side_panel.dependencies_section.dependencies'),
-                icon: SquareStack,
-                onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('dependencies');
-                },
-                active: selectedSidebarSection === 'dependencies',
-            },
-            {
                 title: t('side_panel.areas_section.areas'),
                 icon: Group,
                 onClick: () => {
@@ -74,9 +68,28 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'areas',
             },
-        ],
-        [selectSidebarSection, selectedSidebarSection, t, showSidePanel]
-    );
+        ];
+
+        if (dependencies && dependencies.length > 0) {
+            baseItems.splice(2, 0, {
+                title: t('side_panel.dependencies_section.dependencies'),
+                icon: SquareStack,
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('dependencies');
+                },
+                active: selectedSidebarSection === 'dependencies',
+            });
+        }
+
+        return baseItems;
+    }, [
+        selectSidebarSection,
+        selectedSidebarSection,
+        t,
+        showSidePanel,
+        dependencies,
+    ]);
 
     const footerItems: SidebarItem[] = useMemo(
         () => [
