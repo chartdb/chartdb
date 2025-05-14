@@ -93,8 +93,11 @@ export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
                         onChange={(value) => setScale(value as string)}
                     />
                     <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="settings">
-                            <AccordionTrigger className="justify-start py-1.5">
+                        <AccordionItem value="settings" className="border-0">
+                            <AccordionTrigger
+                                className="py-1.5"
+                                iconPosition="right"
+                            >
                                 {t('export_image_dialog.advanced_options')}
                             </AccordionTrigger>
                             <AccordionContent>
