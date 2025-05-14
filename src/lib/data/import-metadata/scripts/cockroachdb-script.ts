@@ -176,8 +176,7 @@ cols AS (
 ), views AS (
     SELECT array_to_string(array_agg(CONCAT('{"schema":"', views.schemaname::TEXT,
                       '","view_name":"', viewname::TEXT,
-                      '","view_definition":"', encode(convert_to(REPLACE(definition::TEXT, '"', '\\"'), 'UTF8'), 'base64'),
-                    '"}')),
+                      '","view_definition":""}')),
                       ',') AS views_metadata
     FROM pg_views views
     WHERE views.schemaname NOT IN ('information_schema', 'pg_catalog')${cockroachdbViewsFilter}
