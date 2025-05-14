@@ -166,15 +166,7 @@ views AS (
                 JSON_QUERY(N'{
                     "schema": "' + STRING_ESCAPE(COALESCE(REPLACE(s.name, '"', ''), ''), 'json') +
                     '", "view_name": "' + STRING_ESCAPE(COALESCE(REPLACE(v.name, '"', ''), ''), 'json') +
-                    '", "view_definition": "' +
-                    STRING_ESCAPE(
-                        CAST(
-                            '' AS XML
-                        ).value(
-                            'xs:base64Binary(sql:column("DefinitionBinary"))',
-                            'VARCHAR(MAX)'
-                        ), 'json') +
-                    N'"}') COLLATE DATABASE_DEFAULT
+                    '", "view_definition": ""}') COLLATE DATABASE_DEFAULT
                 ), N','
         ) + N']' AS all_views_json
     FROM sys.views v
@@ -385,12 +377,7 @@ views AS (
                                 N'{
                                 "schema": "' + STRING_ESCAPE(COALESCE(REPLACE(s.name, '"', ''), ''), 'json') +
                                 '", "view_name": "' + STRING_ESCAPE(COALESCE(REPLACE(v.name, '"', ''), ''), 'json') +
-                                '", "view_definition": "' +
-                                CAST(
-                                    (
-                                        SELECT CAST(OBJECT_DEFINITION(v.object_id) AS VARBINARY(MAX)) FOR XML PATH('')
-                                    ) AS NVARCHAR(MAX)
-                                ) + N'"}'
+                                '", "view_definition": ""}'
                             )
                         )
                         FROM

@@ -6,7 +6,7 @@ import { SSMSInfo } from './ssms-info/ssms-info';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '@/components/tabs/tabs';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
-import { minimizeQuery } from '@/lib/data/import-metadata/scripts/minimize-script';
+import { minimizeQuery } from '@/lib/data/import-metadata/utils';
 import {
     databaseClientToLabelMap,
     databaseTypeToClientsMap,

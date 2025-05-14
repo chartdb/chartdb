@@ -133,7 +133,7 @@ export const getMySQLQuery = (
                    AND table_schema = DATABASE()
                    AND (0x00) IN (@views:=CONCAT_WS(',', @views, CONCAT('{', '"schema":"', \`TABLE_SCHEMA\`, '",',
                                                    '"view_name":"', \`TABLE_NAME\`, '",',
-                                                   '"view_definition":"', REPLACE(REPLACE(TO_BASE64(VIEW_DEFINITION), ' ', ''), '\n', ''), '"}'))) ) )
+                                                   '"view_definition":""}'))) ) )
 )
 (SELECT CAST(CONCAT('{"fk_info": [',IFNULL(@fk_info,''),
                 '], "pk_info": [', IFNULL(@pk_info, ''),
@@ -286,7 +286,7 @@ export const getMySQLQuery = (
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\` AS view_name,
-               REPLACE(REPLACE(TO_BASE64(\`VIEW_DEFINITION\`), ' ', ''), '\n', '') AS view_definition
+               null AS view_definition
         FROM information_schema.views vws
         WHERE vws.table_schema = DATABASE()
     ) AS vws), ''),
