@@ -30,8 +30,8 @@
   <a href="https://discord.gg/QeFwyWSKwC">
     <img src="https://img.shields.io/discord/1277047413705670678?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord community channel" />
   </a>
-  <a href="https://x.com/intent/follow?screen_name=jonathanfishner">
-    <img src="https://img.shields.io/twitter/follow/jonathanfishner?style=social"/>
+  <a href="https://x.com/intent/follow?screen_name=chartdb">
+    <img src="https://img.shields.io/twitter/follow/chartdb?style=social"/>
   </a>
 
 </h4>
