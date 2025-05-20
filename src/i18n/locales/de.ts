@@ -260,7 +260,7 @@ export const de: LanguageTranslation = {
                 title: 'Datenbank importieren',
                 database_edition: 'Datenbank Edition:',
                 step_1: 'Führen Sie dieses Skript in Ihrer Datenbank aus:',
-                step_2: 'Fügen Sie das Skriptergebnis hier ein:',
+                step_2: 'Fügen Sie das Skriptergebnis hier ein →',
                 script_results_placeholder: 'Skriptergebnisse hier...',
                 ssms_instructions: {
                     button_text: 'SSMS Anweisungen',

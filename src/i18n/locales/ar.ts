@@ -257,7 +257,7 @@ export const ar: LanguageTranslation = {
                 title: 'إسترد قاعدة بياناتك',
                 database_edition: ':إصدار قاعدة البيانات',
                 step_1: ':قم بتشغيل هذا البرنامج النصي في قاعدة بياناتك',
-                step_2: ':إلصق نتيجة البرنامج النصي هنا',
+                step_2: ':إلصق نتيجة البرنامج النصي هنا →',
                 script_results_placeholder: '...نتيجة البرنامج النصي هنا',
                 ssms_instructions: {
                     button_text: 'SSMS تعليمات',

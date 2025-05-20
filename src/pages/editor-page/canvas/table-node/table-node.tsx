@@ -60,7 +60,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const { updateTable, relationships, readonly } = useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
-        const [expanded, setExpanded] = useState(false);
+        const [expanded, setExpanded] = useState(table.expanded ?? false);
         const { t } = useTranslation();
         const [editMode, setEditMode] = useState(false);
         const [tableName, setTableName] = useState(table.name);
@@ -138,9 +138,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             });
         }, [table.id, updateTable]);
 
-        const toggleExpand = () => {
-            setExpanded(!expanded);
-        };
+        const toggleExpand = useCallback(() => {
+            setExpanded((prev) => {
+                const value = !prev;
+                updateTable(table.id, { expanded: value });
+                return value;
+            });
+        }, [table.id, updateTable]);
 
         const isMustDisplayedField = useCallback(
             (field: DBField) => {

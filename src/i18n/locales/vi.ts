@@ -257,7 +257,7 @@ export const vi: LanguageTranslation = {
                 title: 'Nhập cơ sở dữ liệu của bạn',
                 database_edition: 'Loại:',
                 step_1: 'Chạy lệnh này trong cơ sở dữ liệu của bạn:',
-                step_2: 'Dán kết quả vào đây:',
+                step_2: 'Dán kết quả vào đây →',
                 script_results_placeholder: 'Kết quả...',
                 ssms_instructions: {
                     button_text: 'Hướng dẫn SSMS',

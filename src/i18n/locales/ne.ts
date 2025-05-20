@@ -260,7 +260,7 @@ export const ne: LanguageTranslation = {
                 title: 'तपाईंको डाटाबेस आयात गर्नुहोस्',
                 database_edition: 'डाटाबेस संस्करण:',
                 step_1: 'तपाईंको डाटाबेसमा यो स्क्रिप्ट चलाउनुहोस्:',
-                step_2: 'यो स्क्रिप्ट परिणाम यहाँ पेस्ट गर्नुहोस्:',
+                step_2: 'यो स्क्रिप्ट परिणाम यहाँ पेस्ट गर्नुहोस् →',
                 script_results_placeholder: 'स्क्रिप्ट परिणाम यहाँ...',
                 ssms_instructions: {
                     button_text: 'SSMS निर्देशन',

@@ -257,7 +257,7 @@ export const id_ID: LanguageTranslation = {
                 title: 'Impor Database Anda',
                 database_edition: 'Edisi Database:',
                 step_1: 'Jalankan skrip ini di database Anda:',
-                step_2: 'Tempel hasil skrip di sini:',
+                step_2: 'Tempel hasil skrip di sini →',
                 script_results_placeholder: 'Hasil skrip di sini...',
                 ssms_instructions: {
                     button_text: 'Instruksi SSMS',

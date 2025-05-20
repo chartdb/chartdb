@@ -256,7 +256,7 @@ export const uk: LanguageTranslation = {
                 title: 'Імпортуйте вашу базу даних',
                 database_edition: 'Варіант бази даних:',
                 step_1: 'Запустіть цей сценарій у своїй базі даних:',
-                step_2: 'Вставте сюди результат сценарію:',
+                step_2: 'Вставте сюди результат сценарію →',
                 script_results_placeholder: 'Результати сценарію має бути тут…',
                 ssms_instructions: {
                     button_text: 'SSMS Інструкції',

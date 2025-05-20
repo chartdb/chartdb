@@ -258,7 +258,7 @@ export const gu: LanguageTranslation = {
                 title: 'તમારું ડેટાબેસ આયાત કરો',
                 database_edition: 'ડેટાબેસ આવૃત્તિ:',
                 step_1: 'તમારા ડેટાબેસમાં આ સ્ક્રિપ્ટ ચલાવો:',
-                step_2: 'સ્ક્રિપ્ટનો પરિણામ અહીં પેસ્ટ કરો:',
+                step_2: 'સ્ક્રિપ્ટનો પરિણામ અહીં પેસ્ટ કરો →',
                 script_results_placeholder: 'સ્ક્રિપ્ટના પરિણામ અહીં...',
                 ssms_instructions: {
                     button_text: 'SSMS સૂચનાઓ',

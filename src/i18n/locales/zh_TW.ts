@@ -253,7 +253,7 @@ export const zh_TW: LanguageTranslation = {
                 title: '匯入資料庫',
                 database_edition: '資料庫版本:',
                 step_1: '請在資料庫中執行以下腳本:',
-                step_2: '將腳本結果貼到此處:',
+                step_2: '將腳本結果貼到此處 →',
                 script_results_placeholder: '在此處貼上腳本結果...',
                 ssms_instructions: {
                     button_text: 'SSMS 操作步驟',
