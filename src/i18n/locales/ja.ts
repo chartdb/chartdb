@@ -263,7 +263,7 @@ export const ja: LanguageTranslation = {
                 title: 'データベースをインポート',
                 database_edition: 'データベースエディション:',
                 step_1: 'このスクリプトをデータベースで実行してください:',
-                step_2: 'ここにスクリプトの結果を貼り付けてください:',
+                step_2: 'ここにスクリプトの結果を貼り付けてください →',
                 script_results_placeholder: 'ここにスクリプトの結果...',
                 ssms_instructions: {
                     button_text: 'SSMSの手順',

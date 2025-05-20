@@ -255,7 +255,7 @@ export const tr: LanguageTranslation = {
                 title: 'Veritabanını İçe Aktar',
                 database_edition: 'Veritabanı Sürümü:',
                 step_1: 'Bu komut dosyasını veritabanınızda çalıştırın:',
-                step_2: 'Komut dosyası sonucunu buraya yapıştırın:',
+                step_2: 'Komut dosyası sonucunu buraya yapıştırın →',
                 script_results_placeholder: 'Komut dosyası sonuçları burada...',
                 ssms_instructions: {
                     button_text: 'SSMS Talimatları',

@@ -259,7 +259,7 @@ export const hi: LanguageTranslation = {
                 title: 'अपना डेटाबेस आयात करें',
                 database_edition: 'डेटाबेस संस्करण:',
                 step_1: 'अपने डेटाबेस में यह स्क्रिप्ट चलाएँ:',
-                step_2: 'यहाँ स्क्रिप्ट का परिणाम पेस्ट करें:',
+                step_2: 'यहाँ स्क्रिप्ट का परिणाम पेस्ट करें →',
                 script_results_placeholder: 'स्क्रिप्ट के परिणाम यहाँ...',
                 ssms_instructions: {
                     button_text: 'SSMS निर्देश',

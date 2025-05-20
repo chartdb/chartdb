@@ -258,7 +258,7 @@ export const pt_BR: LanguageTranslation = {
                 title: 'Importe seu Banco de Dados',
                 database_edition: 'Edição do Banco de Dados:',
                 step_1: 'Execute este script no seu banco de dados:',
-                step_2: 'Cole o resultado do script aqui:',
+                step_2: 'Cole o resultado do script aqui →',
                 script_results_placeholder: 'Resultados do script aqui...',
                 ssms_instructions: {
                     button_text: 'Instruções do SSMS',

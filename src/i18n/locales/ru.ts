@@ -255,7 +255,7 @@ export const ru: LanguageTranslation = {
                 title: 'Импортируйте свою базу данных',
                 database_edition: 'Версия базы данных:',
                 step_1: 'Запустите этот скрипт в своей базе данных:',
-                step_2: 'Вставьте вывод скрипта сюда:',
+                step_2: 'Вставьте вывод скрипта сюда →',
                 script_results_placeholder: 'Вывод скрипта здесь...',
                 ssms_instructions: {
                     button_text: 'SSMS Инструкции',

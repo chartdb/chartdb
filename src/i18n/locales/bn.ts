@@ -258,7 +258,7 @@ export const bn: LanguageTranslation = {
                 title: 'আপনার ডাটাবেস আমদানি করুন',
                 database_edition: 'ডাটাবেস সংস্করণ:',
                 step_1: 'আপনার ডাটাবেসে এই স্ক্রিপ্ট চালান:',
-                step_2: 'স্ক্রিপ্টের ফলাফল এখানে পেস্ট করুন:',
+                step_2: 'স্ক্রিপ্টের ফলাফল এখানে পেস্ট করুন →',
                 script_results_placeholder: 'স্ক্রিপ্টের ফলাফল এখানে...',
                 ssms_instructions: {
                     button_text: 'SSMS নির্দেশনা',
