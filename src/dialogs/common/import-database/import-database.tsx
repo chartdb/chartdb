@@ -298,7 +298,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 <div className="w-full text-center text-xs text-muted-foreground">
                     {importMethod === 'query'
                         ? 'Smart Query Output'
-                        : 'SQL DDL'}
+                        : 'SQL Script'}
                 </div>
                 <div className="flex-1 overflow-hidden">
                     <Suspense fallback={<Spinner />}>

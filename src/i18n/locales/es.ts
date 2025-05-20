@@ -248,7 +248,7 @@ export const es: LanguageTranslation = {
                 title: 'Importa tu Base de Datos',
                 database_edition: 'Edición de Base de Datos:',
                 step_1: 'Ejecuta este script en tu base de datos:',
-                step_2: 'Pega el resultado del script aquí:',
+                step_2: 'Pega el resultado del script aquí →',
                 script_results_placeholder: 'Resultados del script aquí...',
                 ssms_instructions: {
                     button_text: 'Instrucciones SSMS',
