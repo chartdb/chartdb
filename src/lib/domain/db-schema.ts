@@ -23,4 +23,5 @@ export const databasesWithSchemas: DatabaseType[] = [
     DatabaseType.SQL_SERVER,
     DatabaseType.CLICKHOUSE,
     DatabaseType.COCKROACHDB,
+    DatabaseType.ORACLE,
 ];

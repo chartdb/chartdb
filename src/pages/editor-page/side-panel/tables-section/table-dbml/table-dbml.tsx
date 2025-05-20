@@ -33,6 +33,7 @@ const databaseTypeToImportFormat = (
         case DatabaseType.POSTGRESQL:
         case DatabaseType.COCKROACHDB:
         case DatabaseType.SQLITE:
+        case DatabaseType.ORACLE:
             return 'postgres';
         default:
             return 'postgres';

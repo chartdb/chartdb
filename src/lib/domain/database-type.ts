@@ -7,4 +7,5 @@ export enum DatabaseType {
     SQLITE = 'sqlite',
     CLICKHOUSE = 'clickhouse',
     COCKROACHDB = 'cockroachdb',
+    ORACLE = 'oracle',
 }

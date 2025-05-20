@@ -8,6 +8,7 @@ import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseClient } from '@/lib/domain/database-clients';
 import { clickhouseQuery } from './clickhouse-script';
 import { cockroachdbQuery } from './cockroachdb-script';
+import { oracleDBQuery } from './oracle-script';
 
 export type ImportMetadataScripts = Record<
     DatabaseType,
@@ -26,4 +27,5 @@ export const importMetadataScripts: ImportMetadataScripts = {
     [DatabaseType.MARIADB]: () => mariaDBQuery,
     [DatabaseType.CLICKHOUSE]: () => clickhouseQuery,
     [DatabaseType.COCKROACHDB]: () => cockroachdbQuery,
+    [DatabaseType.ORACLE]: () => oracleDBQuery,
 };

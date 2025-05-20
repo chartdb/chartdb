@@ -415,6 +415,16 @@ export const typeAffinity: Record<string, Record<string, string>> = {
         time: 'text',
         json: 'text',
     },
+    [DatabaseType.ORACLE]: {
+        // Oracle data types (all lowercase for consistency)
+        varchar2: 'varchar',
+        nvarchar2: 'varchar',
+        number: 'numeric',
+        date: 'date',
+        timestamp: 'timestamp',
+        clob: 'text',
+        blob: 'blob',
+    },
     [DatabaseType.GENERIC]: {
         // Generic fallback types (all lowercase for consistency)
         integer: 'integer',

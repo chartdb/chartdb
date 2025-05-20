@@ -63,4 +63,5 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
         [DatabaseType.MARIADB]: [],
         [DatabaseType.CLICKHOUSE]: [],
         [DatabaseType.COCKROACHDB]: [],
+        [DatabaseType.ORACLE]: [],
     };
