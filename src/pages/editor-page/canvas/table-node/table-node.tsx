@@ -138,11 +138,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             });
         }, [table.id, updateTable]);
 
-        const toggleExpand = () => {
-            const newExpandedState = !expanded;
-            setExpanded(newExpandedState);
-            updateTable(table.id, { expanded: newExpandedState });
-        };
+        const toggleExpand = useCallback(() => {
+            setExpanded((prev) => {
+                const value = !prev;
+                updateTable(table.id, { expanded: value });
+                return value;
+            });
+        }, [table.id, updateTable]);
 
         const isMustDisplayedField = useCallback(
             (field: DBField) => {
