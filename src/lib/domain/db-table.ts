@@ -25,6 +25,7 @@ import {
 import { DatabaseType } from './database-type';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import { z } from 'zod';
+import { getTableDimensions } from '@/pages/editor-page/canvas/canvas-utils';
 
 export interface DBTable {
     id: string;
@@ -41,6 +42,7 @@ export interface DBTable {
     width?: number;
     comments?: string;
     order?: number;
+    expanded?: boolean;
 }
 
 export const dbTableSchema: z.ZodType<DBTable> = z.object({
@@ -58,6 +60,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     width: z.number().optional(),
     comments: z.string().optional(),
     order: z.number().optional(),
+    expanded: z.boolean().optional(),
 });
 
 export const shouldShowTablesBySchemaFilter = (
@@ -175,8 +178,8 @@ export const adjustTablePositions = ({
     const relationships = deepCopy(inputRelationships);
 
     const adjustPositionsForTables = (tablesToAdjust: DBTable[]) => {
-        const tableWidth = 200;
-        const tableHeight = 300;
+        const defaultTableWidth = 200;
+        const defaultTableHeight = 300;
         const gapX = 100;
         const gapY = 100;
         const startX = 100;
@@ -205,6 +208,20 @@ export const adjustTablePositions = ({
         const positionedTables = new Set<string>();
         const tablePositions = new Map<string, { x: number; y: number }>();
 
+        const getTableWidthAndHeight = (
+            tableId: string
+        ): {
+            width: number;
+            height: number;
+        } => {
+            const table = tablesToAdjust.find((t) => t.id === tableId);
+
+            if (!table)
+                return { width: defaultTableWidth, height: defaultTableHeight };
+
+            return getTableDimensions(table);
+        };
+
         const isOverlapping = (
             x: number,
             y: number,
@@ -212,9 +229,11 @@ export const adjustTablePositions = ({
         ): boolean => {
             for (const [tableId, pos] of tablePositions) {
                 if (tableId === currentTableId) continue;
+
+                const { width, height } = getTableWidthAndHeight(tableId);
                 if (
-                    Math.abs(x - pos.x) < tableWidth + gapX &&
-                    Math.abs(y - pos.y) < tableHeight + gapY
+                    Math.abs(x - pos.x) < width + gapX &&
+                    Math.abs(y - pos.y) < height + gapY
                 ) {
                     return true;
                 }
@@ -227,7 +246,8 @@ export const adjustTablePositions = ({
             baseY: number,
             tableId: string
         ): { x: number; y: number } => {
-            const spiralStep = Math.max(tableWidth, tableHeight) / 2;
+            const { width, height } = getTableWidthAndHeight(tableId);
+            const spiralStep = Math.max(width, height) / 2;
             let angle = 0;
             let radius = 0;
             let iterations = 0;
@@ -279,10 +299,21 @@ export const adjustTablePositions = ({
                         (t) => t.id === connectedTableId
                     );
                     if (connectedTable) {
+                        const { width: tableWidth, height: tableHeight } =
+                            getTableWidthAndHeight(table.id);
+                        const {
+                            width: connectedTableWidth,
+                            height: connectedTableHeight,
+                        } = getTableWidthAndHeight(connectedTableId);
+                        const avgWidth = (tableWidth + connectedTableWidth) / 2;
+
+                        const avgHeight =
+                            (tableHeight + connectedTableHeight) / 2;
+
                         const newX =
-                            x + Math.cos(angle) * (tableWidth + gapX * 2);
+                            x + Math.cos(angle) * (avgWidth + gapX * 2);
                         const newY =
-                            y + Math.sin(angle) * (tableHeight + gapY * 2);
+                            y + Math.sin(angle) * (avgHeight + gapY * 2);
                         positionTable(connectedTable, newX, newY);
                         angle += angleStep;
                     }
@@ -295,6 +326,9 @@ export const adjustTablePositions = ({
             if (!positionedTables.has(table.id)) {
                 const row = Math.floor(index / 6);
                 const col = index % 6;
+                const { width: tableWidth, height: tableHeight } =
+                    getTableWidthAndHeight(table.id);
+
                 const x = startX + col * (tableWidth + gapX * 2);
                 const y = startY + row * (tableHeight + gapY * 2);
                 positionTable(table, x, y);

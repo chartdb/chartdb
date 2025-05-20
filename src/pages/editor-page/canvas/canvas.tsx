@@ -760,7 +760,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
                 const measured = {
                     ...(node.measured ?? {}),
-                    height: calcTableHeight(event.data.fields.length),
+                    height: calcTableHeight({
+                        ...node.data.table,
+                        fields: event.data.fields,
+                    }),
                 };
 
                 newOverlappingGraph = findTableOverlapping(
