@@ -250,65 +250,86 @@ export const Menu: React.FC<MenuProps> = () => {
                             {t('menu.file.export_sql')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
-                            <MenubarItem
-                                onClick={() => exportSQL(DatabaseType.GENERIC)}
-                            >
-                                {databaseTypeToLabelMap['generic']}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    exportSQL(DatabaseType.POSTGRESQL)
-                                }
-                            >
-                                {databaseTypeToLabelMap['postgresql']}
-                                {databaseType !== DatabaseType.POSTGRESQL && (
+                            {databaseType === DatabaseType.GENERIC && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.GENERIC)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['generic']}
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.GENERIC && (
+                                <MenubarItem
+                                    onClick={() => exportSQL(databaseType)}
+                                >
+                                    {
+                                        databaseTypeToLabelMap[
+                                            databaseType as keyof typeof databaseTypeToLabelMap
+                                        ]
+                                    }
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.POSTGRESQL && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.POSTGRESQL)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['postgresql']}
                                     <MenubarShortcut className="text-base">
                                         {emojiAI}
                                     </MenubarShortcut>
-                                )}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() => exportSQL(DatabaseType.MYSQL)}
-                            >
-                                {databaseTypeToLabelMap['mysql']}
-                                {databaseType !== DatabaseType.MYSQL && (
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.MYSQL && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.MYSQL)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['mysql']}
                                     <MenubarShortcut className="text-base">
                                         {emojiAI}
                                     </MenubarShortcut>
-                                )}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    exportSQL(DatabaseType.SQL_SERVER)
-                                }
-                            >
-                                {databaseTypeToLabelMap['sql_server']}
-                                {databaseType !== DatabaseType.SQL_SERVER && (
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.SQL_SERVER && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.SQL_SERVER)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['sql_server']}
                                     <MenubarShortcut className="text-base">
                                         {emojiAI}
                                     </MenubarShortcut>
-                                )}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() => exportSQL(DatabaseType.MARIADB)}
-                            >
-                                {databaseTypeToLabelMap['mariadb']}
-                                {databaseType !== DatabaseType.MARIADB && (
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.MARIADB && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.MARIADB)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['mariadb']}
                                     <MenubarShortcut className="text-base">
                                         {emojiAI}
                                     </MenubarShortcut>
-                                )}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() => exportSQL(DatabaseType.SQLITE)}
-                            >
-                                {databaseTypeToLabelMap['sqlite']}
-                                {databaseType !== DatabaseType.SQLITE && (
+                                </MenubarItem>
+                            )}
+                            {databaseType !== DatabaseType.SQLITE && (
+                                <MenubarItem
+                                    onClick={() =>
+                                        exportSQL(DatabaseType.SQLITE)
+                                    }
+                                >
+                                    {databaseTypeToLabelMap['sqlite']}
                                     <MenubarShortcut className="text-base">
                                         {emojiAI}
                                     </MenubarShortcut>
-                                )}
-                            </MenubarItem>
+                                </MenubarItem>
+                            )}
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSub>
