@@ -16,7 +16,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
-import { useSortable } from '@dnd-kit/sortable';
+// import { useSortable } from '@dnd-kit/sortable';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,19 +31,30 @@ import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/tooltip/tooltip';
+// import {
+//     Tooltip,
+//     TooltipContent,
+//     TooltipTrigger,
+// } from '@/components/tooltip/tooltip';
 import { cloneTable } from '@/lib/clone';
+import { HighlightText } from '@/components/highlight-text/highlight-text';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
+    searchText?: string;
+    searchOptions?: {
+        searchInFields: boolean;
+        searchInTypes: boolean;
+        searchInComments: boolean;
+        caseSensitive: boolean;
+    };
 }
 
 export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     table,
+    searchText,
+    searchOptions,
+    ...props
 }) => {
     const {
         updateTable,
@@ -62,7 +73,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const [tableName, setTableName] = React.useState(table.name);
     const { isMd: isDesktop } = useBreakpoint('md');
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const { listeners } = useSortable({ id: table.id });
+    // const { listeners } = useSortable({ id: table.id });
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -260,47 +271,44 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     }
 
     return (
-        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div
-                className="flex cursor-move items-center justify-center"
-                {...listeners}
-            >
-                <GripVertical className="size-4 text-muted-foreground" />
-            </div>
-            <div className="flex min-w-0 flex-1 px-1">
+        <div className="flex w-full items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+                <div
+                    className="flex w-4 shrink-0 cursor-move items-center justify-center"
+                    {...props}
+                >
+                    <GripVertical className="size-3.5 text-muted-foreground" />
+                </div>
                 {editMode ? (
                     <Input
                         ref={inputRef}
-                        autoFocus
                         type="text"
-                        placeholder={table.name}
+                        className="h-8 w-full focus-visible:ring-0"
                         value={tableName}
-                        onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setTableName(e.target.value)}
-                        className="h-7 w-full focus-visible:ring-0"
+                        onClick={(e) => e.stopPropagation()}
                     />
                 ) : (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <div
-                                onDoubleClick={enterEditMode}
-                                className="text-editable truncate px-2 py-0.5"
-                            >
-                                {table.name}
-                                <span className="text-xs text-muted-foreground">
-                                    {schemaToDisplay
-                                        ? ` (${schemaToDisplay})`
-                                        : ''}
-                                </span>
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            {t('tool_tips.double_click_to_edit')}
-                        </TooltipContent>
-                    </Tooltip>
+                    <div className="flex items-center gap-1">
+                        <HighlightText
+                            text={table.name}
+                            highlight={searchText || ''}
+                            caseSensitive={searchOptions?.caseSensitive}
+                        />
+                        {schemaToDisplay && (
+                            <>
+                                <span className="text-muted-foreground">.</span>
+                                <HighlightText
+                                    text={schemaToDisplay}
+                                    highlight={searchText || ''}
+                                    caseSensitive={searchOptions?.caseSensitive}
+                                />
+                            </>
+                        )}
+                    </div>
                 )}
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex items-center gap-1">
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
