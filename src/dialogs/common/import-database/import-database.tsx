@@ -366,7 +366,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 {isDesktop ? (
                     <ResizablePanelGroup
                         direction={isDesktop ? 'horizontal' : 'vertical'}
-                        className="min-h-[500px] md:min-h-fit"
+                        className="min-h-[500px]"
                     >
                         <ResizablePanel
                             defaultSize={25}
