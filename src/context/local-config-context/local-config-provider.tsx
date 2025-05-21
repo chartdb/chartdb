@@ -12,6 +12,7 @@ const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
+const showRelationshipsKey = 'show_relationships';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -58,6 +59,11 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     const [showMiniMapOnCanvas, setShowMiniMapOnCanvas] =
         React.useState<boolean>(
             (localStorage.getItem(showMiniMapOnCanvasKey) || 'true') === 'true'
+        );
+
+        const [showRelationships, setShowRelationships] =
+        React.useState<boolean>(
+            (localStorage.getItem(showRelationshipsKey) || 'true') === 'true'
         );
 
     useEffect(() => {
@@ -108,6 +114,12 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         );
     }, [showMiniMapOnCanvas]);
 
+    useEffect(() => {
+        localStorage.setItem(
+            showRelationshipsKey,
+            showRelationships.toString()
+        );
+    }, [showRelationships]);
     return (
         <LocalConfigContext.Provider
             value={{
@@ -129,6 +141,9 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setShowDependenciesOnCanvas,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
+                showRelationships,
+                setShowRelationships,
+
             }}
         >
             {children}
