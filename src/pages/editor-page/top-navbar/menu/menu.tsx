@@ -233,6 +233,15 @@ export const Menu: React.FC<MenuProps> = () => {
                             >
                                 {databaseTypeToLabelMap['sqlite']}
                             </MenubarItem>
+                            <MenubarItem
+                                onClick={() =>
+                                    openImportDatabaseDialog({
+                                        databaseType: DatabaseType.ORACLE,
+                                    })
+                                }
+                            >
+                                {databaseTypeToLabelMap['oracle']}
+                            </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />
