@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/chartdb/chartdb/compare/v1.12.0...v1.13.0) (2025-05-21)
+
+
+### Features
+
+* **oracle:** support oracle in ChartDB ([#709](https://github.com/chartdb/chartdb/issues/709)) ([765a1c4](https://github.com/chartdb/chartdb/commit/765a1c43547a29bd3428c942c7afb56f63aaf046))
+
+
+### Bug Fixes
+
+* **menu:** add oracle to import menu ([#713](https://github.com/chartdb/chartdb/issues/713)) ([aee5779](https://github.com/chartdb/chartdb/commit/aee577998342eb4a2b05b3e03181992a435712d8))
+
 ## [1.12.0](https://github.com/chartdb/chartdb/compare/v1.11.0...v1.12.0) (2025-05-20)
 
 
