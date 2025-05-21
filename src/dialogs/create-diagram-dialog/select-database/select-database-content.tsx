@@ -20,6 +20,7 @@ const SUPPORTED_DB_TYPES: DatabaseType[] = [
     DatabaseType.MARIADB,
     DatabaseType.SQLITE,
     DatabaseType.SQL_SERVER,
+    DatabaseType.ORACLE,
     DatabaseType.COCKROACHDB,
     DatabaseType.CLICKHOUSE,
 ];

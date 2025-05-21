@@ -7,6 +7,7 @@ import { mysqlDataTypes } from './mysql-data-types';
 import { postgresDataTypes } from './postgres-data-types';
 import { sqlServerDataTypes } from './sql-server-data-types';
 import { sqliteDataTypes } from './sqlite-data-types';
+import { oracleDataTypes } from './oracle-data-types';
 
 export interface DataType {
     id: string;
@@ -32,6 +33,7 @@ export const dataTypeMap: Record<DatabaseType, readonly DataTypeData[]> = {
     [DatabaseType.SQLITE]: sqliteDataTypes,
     [DatabaseType.CLICKHOUSE]: clickhouseDataTypes,
     [DatabaseType.COCKROACHDB]: postgresDataTypes,
+    [DatabaseType.ORACLE]: oracleDataTypes,
 } as const;
 
 export const sortDataTypes = (dataTypes: DataTypeData[]): DataTypeData[] => {
@@ -71,6 +73,9 @@ export const sortedDataTypeMap: Record<DatabaseType, readonly DataTypeData[]> =
         [DatabaseType.COCKROACHDB]: sortDataTypes([
             ...dataTypeMap[DatabaseType.COCKROACHDB],
         ]),
+        [DatabaseType.ORACLE]: sortDataTypes([
+            ...dataTypeMap[DatabaseType.ORACLE],
+        ]),
     } as const;
 
 const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
@@ -88,6 +93,7 @@ const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.SQLITE]: {},
     [DatabaseType.CLICKHOUSE]: {},
     [DatabaseType.COCKROACHDB]: {},
+    [DatabaseType.ORACLE]: {},
     [DatabaseType.GENERIC]: {},
 };
 

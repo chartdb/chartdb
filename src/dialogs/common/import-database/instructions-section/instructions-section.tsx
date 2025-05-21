@@ -21,6 +21,7 @@ import { DDLInstructions } from './instructions/ddl-instructions';
 
 const DatabasesWithoutDDLInstructions: DatabaseType[] = [
     DatabaseType.CLICKHOUSE,
+    DatabaseType.ORACLE,
 ];
 
 export interface InstructionsSectionProps {

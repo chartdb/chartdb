@@ -91,6 +91,7 @@ const DDLInstructionsMap: Record<DatabaseType, DDLInstruction[]> = {
             text: 'Open the exported SQL file, copy its contents, and paste them here.',
         },
     ],
+    [DatabaseType.ORACLE]: [],
 };
 
 export interface DDLInstructionsProps {

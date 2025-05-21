@@ -27,6 +27,7 @@ export const databaseTypeToClientsMap: Record<DatabaseType, DatabaseClient[]> =
         [DatabaseType.MARIADB]: [],
         [DatabaseType.CLICKHOUSE]: [],
         [DatabaseType.COCKROACHDB]: [],
+        [DatabaseType.ORACLE]: [],
     };
 
 export const databaseEditionToClientsMap: Record<
