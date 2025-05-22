@@ -102,6 +102,7 @@ export const createTablesFromMetadata = ({
         columns,
         indexes,
         views: views,
+        custom_types: customTypes,
     } = databaseMetadata;
 
     return tableInfos.map((tableInfo: TableInfo) => {
@@ -120,6 +121,7 @@ export const createTablesFromMetadata = ({
             primaryKeys,
             tableInfo,
             tableSchema,
+            customTypes,
         });
 
         const dbIndexes = createIndexesFromMetadata({
