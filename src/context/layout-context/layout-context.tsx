@@ -5,7 +5,8 @@ export type SidebarSection =
     | 'tables'
     | 'relationships'
     | 'dependencies'
-    | 'areas';
+    | 'areas'
+    | 'customTypes';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;

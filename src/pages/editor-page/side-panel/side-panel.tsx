@@ -18,6 +18,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { DependenciesSection } from './dependencies-section/dependencies-section';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { AreasSection } from './areas-section/areas-section';
+import { CustomTypesSection } from './custom-types-section/custom-types-section';
 
 export interface SidePanelProps {}
 
@@ -117,6 +118,11 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                 <SelectItem value="areas">
                                     {t('side_panel.areas_section.areas')}
                                 </SelectItem>
+                                <SelectItem value="customTypes">
+                                    {t(
+                                        'side_panel.custom_types_section.custom_types'
+                                    )}
+                                </SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -128,8 +134,10 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <RelationshipsSection />
             ) : selectedSidebarSection === 'dependencies' ? (
                 <DependenciesSection />
-            ) : (
+            ) : selectedSidebarSection === 'areas' ? (
                 <AreasSection />
+            ) : (
+                <CustomTypesSection />
             )}
         </aside>
     );

@@ -226,6 +226,18 @@ export const en = {
                     description: 'Create an area to get started',
                 },
             },
+
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+            },
         },
 
         toolbar: {

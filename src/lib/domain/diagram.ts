@@ -20,6 +20,9 @@ import {
 } from './db-table';
 import { generateDiagramId } from '@/lib/utils';
 import { areaSchema, type Area } from './area';
+import type { CustomType } from './custom-type';
+import { customTypeSchema, createCustomTypesFromMetadata } from './custom-type';
+
 export interface Diagram {
     id: string;
     name: string;
@@ -29,6 +32,7 @@ export interface Diagram {
     relationships?: DBRelationship[];
     dependencies?: DBDependency[];
     areas?: Area[];
+    customTypes?: CustomType[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -42,6 +46,7 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     relationships: z.array(dbRelationshipSchema).optional(),
     dependencies: z.array(dbDependencySchema).optional(),
     areas: z.array(areaSchema).optional(),
+    customTypes: z.array(customTypeSchema).optional(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });
@@ -57,7 +62,11 @@ export const loadFromDatabaseMetadata = async ({
     diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
 }): Promise<Diagram> => {
-    const { fk_info: foreignKeys, views: views } = databaseMetadata;
+    const {
+        fk_info: foreignKeys,
+        views: views,
+        custom_types: customTypes,
+    } = databaseMetadata;
 
     const tables = createTablesFromMetadata({
         databaseMetadata,
@@ -74,6 +83,12 @@ export const loadFromDatabaseMetadata = async ({
         tables,
         databaseType,
     });
+
+    const dbCustomTypes = customTypes
+        ? createCustomTypesFromMetadata({
+              customTypes,
+          })
+        : [];
 
     const adjustedTables = adjustTablePositions({
         tables,
@@ -102,6 +117,7 @@ export const loadFromDatabaseMetadata = async ({
         tables: sortedTables,
         relationships,
         dependencies,
+        customTypes: dbCustomTypes,
         createdAt: new Date(),
         updatedAt: new Date(),
     };

@@ -11,6 +11,7 @@ import type { DBSchema } from '@/lib/domain/db-schema';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
+import type { CustomType } from '@/lib/domain/custom-type';
 
 export type ChartDBEventType =
     | 'add_tables'
@@ -18,7 +19,10 @@ export type ChartDBEventType =
     | 'remove_tables'
     | 'add_field'
     | 'remove_field'
-    | 'load_diagram';
+    | 'load_diagram'
+    | 'add_custom_types'
+    | 'update_custom_type'
+    | 'remove_custom_types';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
     action: T;
@@ -55,13 +59,31 @@ export type LoadDiagramEvent = ChartDBEventBase<
     { diagram: Diagram }
 >;
 
+export type AddCustomTypesEvent = ChartDBEventBase<
+    'add_custom_types',
+    { customTypes: CustomType[] }
+>;
+
+export type UpdateCustomTypeEvent = ChartDBEventBase<
+    'update_custom_type',
+    { id: string; customType: Partial<CustomType> }
+>;
+
+export type RemoveCustomTypesEvent = ChartDBEventBase<
+    'remove_custom_types',
+    { customTypeIds: string[] }
+>;
+
 export type ChartDBEvent =
     | CreateTableEvent
     | UpdateTableEvent
     | RemoveTableEvent
     | AddFieldEvent
     | RemoveFieldEvent
-    | LoadDiagramEvent;
+    | LoadDiagramEvent
+    | AddCustomTypesEvent
+    | UpdateCustomTypeEvent
+    | RemoveCustomTypesEvent;
 
 export interface ChartDBContext {
     diagramId: string;
@@ -72,6 +94,7 @@ export interface ChartDBContext {
     relationships: DBRelationship[];
     dependencies: DBDependency[];
     areas: Area[];
+    customTypes: CustomType[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
     readonly?: boolean;
@@ -248,6 +271,33 @@ export interface ChartDBContext {
         area: Partial<Area>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+
+    // Custom type operations
+    createCustomType: (
+        attributes?: Partial<Omit<CustomType, 'id'>>
+    ) => Promise<CustomType>;
+    addCustomType: (
+        customType: CustomType,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addCustomTypes: (
+        customTypes: CustomType[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    getCustomType: (id: string) => CustomType | null;
+    removeCustomType: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeCustomTypes: (
+        ids: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateCustomType: (
+        id: string,
+        customType: Partial<CustomType>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -258,6 +308,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     relationships: [],
     dependencies: [],
     areas: [],
+    customTypes: [],
     schemas: [],
     filteredSchemas: [],
     filterSchemas: emptyFn,
@@ -333,4 +384,13 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeArea: emptyFn,
     removeAreas: emptyFn,
     updateArea: emptyFn,
+
+    // Custom type operations
+    createCustomType: emptyFn,
+    addCustomType: emptyFn,
+    addCustomTypes: emptyFn,
+    getCustomType: emptyFn,
+    removeCustomType: emptyFn,
+    removeCustomTypes: emptyFn,
+    updateCustomType: emptyFn,
 });

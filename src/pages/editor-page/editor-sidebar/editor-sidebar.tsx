@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import { Twitter, BookOpen, Group } from 'lucide-react';
+import { Twitter, BookOpen, Group, Database } from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
@@ -67,6 +67,15 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                     selectSidebarSection('areas');
                 },
                 active: selectedSidebarSection === 'areas',
+            },
+            {
+                title: t('side_panel.custom_types_section.custom_types'),
+                icon: Database,
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('customTypes');
+                },
+                active: selectedSidebarSection === 'customTypes',
             },
         ];
 
