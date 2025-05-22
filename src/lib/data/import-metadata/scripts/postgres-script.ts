@@ -279,28 +279,6 @@ cols AS (
 
         UNION ALL
 
-        -- DOMAIN types
-        SELECT CONCAT(
-            '{"schema":"', n.nspname,
-            '","type":"', t.typname,
-            '","kind":"domain"',
-            ',"base_type":"', format_type(t.typbasetype, NULL),
-            '","check":"', COALESCE(REPLACE(pg_get_constraintdef(c.oid), '"', '\\"'), ''), '"}'
-        ) AS type_json
-        FROM pg_type t
-        JOIN pg_namespace n ON n.oid = t.typnamespace
-        LEFT JOIN pg_constraint c ON c.contypid = t.oid AND c.contype = 'c'
-        WHERE t.typtype = 'd'
-          AND n.nspname NOT IN ('pg_catalog', 'information_schema') ${
-              databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-                  ? timescaleViewsFilter
-                  : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-                    ? supabaseViewsFilter
-                    : ''
-          }
-
-        UNION ALL
-
         -- COMPOSITE types
         SELECT CONCAT(
             '{"schema":"', schema_name,
@@ -321,6 +299,7 @@ cols AS (
             JOIN pg_class c ON c.oid = t.typrelid
             JOIN pg_attribute a ON a.attrelid = c.oid
             WHERE t.typtype = 'c'
+              AND c.relkind = 'c'  -- ✅ Only user-defined composite types
               AND a.attnum > 0 AND NOT a.attisdropped
               AND n.nspname NOT IN ('pg_catalog', 'information_schema') ${
                   databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
@@ -331,26 +310,6 @@ cols AS (
               }
             GROUP BY n.nspname, t.typname
         ) AS comp
-
-        UNION ALL
-
-        -- RANGE types
-        SELECT CONCAT(
-            '{"schema":"', n.nspname,
-            '","type":"', t.typname,
-            '","kind":"range"',
-            ',"subtype":"', format_type(r.rngsubtype, NULL), '"}'
-        ) AS type_json
-        FROM pg_type t
-        JOIN pg_namespace n ON n.oid = t.typnamespace
-        JOIN pg_range r ON r.rngtypid = t.oid
-        WHERE n.nspname NOT IN ('pg_catalog', 'information_schema') ${
-            databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-                ? timescaleViewsFilter
-                : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-                  ? supabaseViewsFilter
-                  : ''
-        }
     ) AS all_types
 )
 SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
