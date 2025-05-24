@@ -45,8 +45,12 @@ export const TableField: React.FC<TableFieldProps> = ({
     ].map((type) => ({
         label: type.name,
         value: type.id,
-        regex: type.hasCharMaxLength ? `^${type.name}\\(\\d+\\)$` : undefined,
-        extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+        regex: type.fieldAttributes?.hasCharMaxLength
+            ? `^${type.name}\\(\\d+\\)$`
+            : undefined,
+        extractRegex: type.fieldAttributes?.hasCharMaxLength
+            ? /\((\d+)\)/
+            : undefined,
     }));
 
     const onChangeDataType = useCallback<
@@ -62,11 +66,14 @@ export const TableField: React.FC<TableFieldProps> = ({
 
             let characterMaximumLength: string | undefined = undefined;
 
-            if (regexMatches?.length && dataType?.hasCharMaxLength) {
+            if (
+                regexMatches?.length &&
+                dataType?.fieldAttributes?.hasCharMaxLength
+            ) {
                 characterMaximumLength = regexMatches[1];
             } else if (
                 field.characterMaximumLength &&
-                dataType?.hasCharMaxLength
+                dataType?.fieldAttributes?.hasCharMaxLength
             ) {
                 characterMaximumLength = field.characterMaximumLength;
             }
@@ -134,9 +141,14 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.type.id}
                                 valueSuffix={
-                                    field.characterMaximumLength
-                                        ? `(${field.characterMaximumLength})`
-                                        : ''
+                                    field.precision &&
+                                    ((typeof field.scale == 'number' &&
+                                        !Number.isNaN(field.scale)) ||
+                                        field.scale === 0)
+                                        ? `(${field.precision}, ${field.scale})`
+                                        : field.characterMaximumLength
+                                          ? `(${field.characterMaximumLength})`
+                                          : ''
                                 }
                                 optionSuffix={(option) => {
                                     const type = sortedDataTypeMap[
@@ -147,7 +159,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         return '';
                                     }
 
-                                    if (type.hasCharMaxLength) {
+                                    if (
+                                        type.fieldAttributes?.hasCharMaxLength
+                                    ) {
                                         return `(${!field.characterMaximumLength ? 'n' : field.characterMaximumLength})`;
                                     }
 

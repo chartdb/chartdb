@@ -26,6 +26,8 @@ export const ja: LanguageTranslation = {
                 hide_sidebar: 'サイドバーを非表示',
                 hide_cardinality: 'カーディナリティを非表示',
                 show_cardinality: 'カーディナリティを表示',
+                hide_field_attributes: 'フィールド属性を非表示',
+                show_field_attributes: 'フィールド属性を表示',
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
                 // TODO: Translate
@@ -155,6 +157,8 @@ export const ja: LanguageTranslation = {
                         delete_field: 'フィールドを削除',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小数点以下桁数',
                     },
                     index_actions: {
                         title: 'インデックス属性',
