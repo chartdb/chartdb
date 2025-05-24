@@ -46,10 +46,12 @@ export const TableField: React.FC<TableFieldProps> = ({
         ].map((type) => ({
             label: type.name,
             value: type.id,
-            regex: type.hasCharMaxLength
+            regex: type.fieldAttributes?.hasCharMaxLength
                 ? `^${type.name}\\(\\d+\\)$`
                 : undefined,
-            extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+            extractRegex: type.fieldAttributes?.hasCharMaxLength
+                ? /\((\d+)\)/
+                : undefined,
             group: customTypes?.length ? 'Standard Types' : undefined,
         }));
 
@@ -84,11 +86,14 @@ export const TableField: React.FC<TableFieldProps> = ({
 
             let characterMaximumLength: string | undefined = undefined;
 
-            if (regexMatches?.length && dataType?.hasCharMaxLength) {
+            if (
+                regexMatches?.length &&
+                dataType?.fieldAttributes?.hasCharMaxLength
+            ) {
                 characterMaximumLength = regexMatches[1];
             } else if (
                 field.characterMaximumLength &&
-                dataType?.hasCharMaxLength
+                dataType?.fieldAttributes?.hasCharMaxLength
             ) {
                 characterMaximumLength = field.characterMaximumLength;
             }
@@ -175,7 +180,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         return '';
                                     }
 
-                                    if (type.hasCharMaxLength) {
+                                    if (
+                                        type.fieldAttributes?.hasCharMaxLength
+                                    ) {
                                         return `(${!field.characterMaximumLength ? 'n' : field.characterMaximumLength})`;
                                     }
 

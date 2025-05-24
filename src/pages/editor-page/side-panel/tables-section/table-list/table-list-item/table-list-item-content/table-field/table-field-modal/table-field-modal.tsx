@@ -133,11 +133,11 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             </div>
                         ) : null}
                         {findDataTypeDataById(field.type.id)?.fieldAttributes
-                            ?.precision &&
+                            ?.precision ||
                         findDataTypeDataById(field.type.id)?.fieldAttributes
                             ?.scale ? (
-                            <>
-                                <div className="flex flex-col gap-2">
+                            <div className="flex gap-2">
+                                <div className="flex flex-1 flex-col gap-2">
                                     <Label
                                         htmlFor="width"
                                         className="text-subtitle"
@@ -150,45 +150,45 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         value={localField.precision ?? ''}
                                         type="number"
                                         max={
-                                            (
-                                                findDataTypeDataById(
-                                                    field.type.id
-                                                )?.fieldAttributes
-                                                    ?.precision as FieldAttributeRange
-                                            ).max
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.precision
+                                                ? (
+                                                      findDataTypeDataById(
+                                                          field.type.id
+                                                      )?.fieldAttributes
+                                                          ?.precision as FieldAttributeRange
+                                                  ).max
+                                                : undefined
                                         }
                                         min={
-                                            (
-                                                findDataTypeDataById(
-                                                    field.type.id
-                                                )?.fieldAttributes
-                                                    ?.precision as FieldAttributeRange
-                                            ).min
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.precision
+                                                ? (
+                                                      findDataTypeDataById(
+                                                          field.type.id
+                                                      )?.fieldAttributes
+                                                          ?.precision as FieldAttributeRange
+                                                  ).min
+                                                : undefined
                                         }
-                                        placeholder={`${(findDataTypeDataById(field.type.id)?.fieldAttributes?.precision as FieldAttributeRange).default}`}
+                                        placeholder={
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.precision
+                                                ? `${(findDataTypeDataById(field.type.id)?.fieldAttributes?.precision as FieldAttributeRange).default}`
+                                                : 'Optional'
+                                        }
                                         onChange={(e) =>
                                             setLocalField((current) => ({
                                                 ...current,
-                                                precision: parseInt(
-                                                    e.target.value
-                                                ),
-                                                scale:
-                                                    typeof current.scale ===
-                                                        'number' &&
-                                                    !Number.isNaN(current.scale)
-                                                        ? current.scale
-                                                        : (
-                                                              findDataTypeDataById(
-                                                                  field.type.id
-                                                              )?.fieldAttributes
-                                                                  ?.scale as FieldAttributeRange
-                                                          ).min,
+                                                precision: e.target.value
+                                                    ? parseInt(e.target.value)
+                                                    : undefined,
                                             }))
                                         }
                                         className="w-full rounded-md bg-muted text-sm"
                                     />
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-1 flex-col gap-2">
                                     <Label
                                         htmlFor="width"
                                         className="text-subtitle"
@@ -200,62 +200,46 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     <Input
                                         value={localField.scale ?? ''}
                                         max={
-                                            (
-                                                findDataTypeDataById(
-                                                    field.type.id
-                                                )?.fieldAttributes
-                                                    ?.scale as FieldAttributeRange
-                                            ).max
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.scale
+                                                ? (
+                                                      findDataTypeDataById(
+                                                          field.type.id
+                                                      )?.fieldAttributes
+                                                          ?.scale as FieldAttributeRange
+                                                  ).max
+                                                : undefined
                                         }
                                         min={
-                                            (
-                                                findDataTypeDataById(
-                                                    field.type.id
-                                                )?.fieldAttributes
-                                                    ?.scale as FieldAttributeRange
-                                            ).min
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.scale
+                                                ? (
+                                                      findDataTypeDataById(
+                                                          field.type.id
+                                                      )?.fieldAttributes
+                                                          ?.scale as FieldAttributeRange
+                                                  ).min
+                                                : undefined
                                         }
-                                        placeholder={`${(findDataTypeDataById(field.type.id)?.fieldAttributes?.scale as FieldAttributeRange).default}`}
+                                        placeholder={
+                                            findDataTypeDataById(field.type.id)
+                                                ?.fieldAttributes?.scale
+                                                ? `${(findDataTypeDataById(field.type.id)?.fieldAttributes?.scale as FieldAttributeRange).default}`
+                                                : 'Optional'
+                                        }
                                         type="number"
                                         onChange={(e) =>
                                             setLocalField((current) => ({
                                                 ...current,
-                                                scale: parseInt(e.target.value),
-                                                precision:
-                                                    typeof current.precision ===
-                                                        'number' &&
-                                                    !Number.isNaN(
-                                                        current.precision
-                                                    )
-                                                        ? current.precision
-                                                        : (
-                                                              findDataTypeDataById(
-                                                                  field.type.id
-                                                              )?.fieldAttributes
-                                                                  ?.precision as FieldAttributeRange
-                                                          ).min,
+                                                scale: e.target.value
+                                                    ? parseInt(e.target.value)
+                                                    : undefined,
                                             }))
                                         }
                                         className="w-full rounded-md bg-muted text-sm"
                                     />
                                 </div>
-                                <Button
-                                    disabled={
-                                        localField.scale === undefined &&
-                                        localField.precision === undefined
-                                    }
-                                    variant="destructive"
-                                    onClick={() => {
-                                        setLocalField((current) => ({
-                                            ...current,
-                                            precision: undefined,
-                                            scale: undefined,
-                                        }));
-                                    }}
-                                >
-                                    {t('menu.edit.clear')}
-                                </Button>
-                            </>
+                            </div>
                         ) : null}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="width" className="text-subtitle">

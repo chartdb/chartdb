@@ -40,7 +40,22 @@ export const mariadbDataTypes: readonly DataTypeData[] = [
     { name: 'tinyint', id: 'tinyint' },
     { name: 'smallint', id: 'smallint' },
     { name: 'mediumint', id: 'mediumint' },
-    { name: 'numeric', id: 'numeric' },
+    {
+        name: 'numeric',
+        id: 'numeric',
+        fieldAttributes: {
+            precision: {
+                max: 65,
+                min: 1,
+                default: 10,
+            },
+            scale: {
+                max: 30,
+                min: 0,
+                default: 0,
+            },
+        },
+    },
     { name: 'float', id: 'float' },
     { name: 'double', id: 'double' },
     { name: 'bit', id: 'bit' },

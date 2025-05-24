@@ -430,16 +430,14 @@ export const Menu: React.FC<MenuProps> = () => {
                             ? t('menu.view.hide_cardinality')
                             : t('menu.view.show_cardinality')}
                     </MenubarItem>
-                    {databaseType !== DatabaseType.CLICKHOUSE &&
-                    dependencies &&
-                    dependencies.length > 0 ? (
                     <MenubarItem onClick={showOrHideFieldAttributes}>
                         {showFieldAttributes
                             ? t('menu.view.hide_field_attributes')
                             : t('menu.view.show_field_attributes')}
                     </MenubarItem>
-                    ) : null}
-                    {databaseType !== DatabaseType.CLICKHOUSE ? (
+                    {databaseType !== DatabaseType.CLICKHOUSE &&
+                    dependencies &&
+                    dependencies.length > 0 ? (
                         <MenubarItem onClick={showOrHideDependencies}>
                             {showDependenciesOnCanvas
                                 ? t('menu.view.hide_dependencies')

@@ -29,7 +29,7 @@ export const postgresDataTypes: readonly DataTypeData[] = [
             scale: {
                 max: 16383,
                 min: 0,
-                default: 0,
+                default: 2,
             },
         },
     },
@@ -44,7 +44,22 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     },
 
     // Less common types
-    { name: 'numeric', id: 'numeric' },
+    {
+        name: 'numeric',
+        id: 'numeric',
+        fieldAttributes: {
+            precision: {
+                max: 131072,
+                min: 0,
+                default: 10,
+            },
+            scale: {
+                max: 16383,
+                min: 0,
+                default: 2,
+            },
+        },
+    },
     { name: 'real', id: 'real' },
     { name: 'double precision', id: 'double_precision' },
     { name: 'smallserial', id: 'smallserial' },

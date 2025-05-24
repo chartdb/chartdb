@@ -28,7 +28,7 @@ export const genericDataTypes: readonly DataTypeData[] = [
             scale: {
                 max: 999,
                 min: 0,
-                default: 0,
+                default: 2,
             },
         },
     },
@@ -48,7 +48,22 @@ export const genericDataTypes: readonly DataTypeData[] = [
     { name: 'double', id: 'double' },
     { name: 'enum', id: 'enum' },
     { name: 'float', id: 'float' },
-    { name: 'numeric', id: 'numeric' },
+    {
+        name: 'numeric',
+        id: 'numeric',
+        fieldAttributes: {
+            precision: {
+                max: 999,
+                min: 1,
+                default: 10,
+            },
+            scale: {
+                max: 999,
+                min: 0,
+                default: 2,
+            },
+        },
+    },
     { name: 'real', id: 'real' },
     { name: 'set', id: 'set' },
     { name: 'smallint', id: 'smallint' },

@@ -27,8 +27,16 @@ export const sqlServerDataTypes: readonly DataTypeData[] = [
         id: 'decimal',
         usageLevel: 2,
         fieldAttributes: {
-            hasPrecision: true,
-            hasScale: true,
+            precision: {
+                max: 38,
+                min: 1,
+                default: 18,
+            },
+            scale: {
+                max: 38,
+                min: 0,
+                default: 0,
+            },
         },
     },
     { name: 'datetime2', id: 'datetime2', usageLevel: 2 },
@@ -36,7 +44,22 @@ export const sqlServerDataTypes: readonly DataTypeData[] = [
     { name: 'json', id: 'json', usageLevel: 2 },
 
     // Less common types
-    { name: 'numeric', id: 'numeric' },
+    {
+        name: 'numeric',
+        id: 'numeric',
+        fieldAttributes: {
+            precision: {
+                max: 38,
+                min: 1,
+                default: 18,
+            },
+            scale: {
+                max: 38,
+                min: 0,
+                default: 0,
+            },
+        },
+    },
     { name: 'smallint', id: 'smallint' },
     { name: 'smallmoney', id: 'smallmoney' },
     { name: 'tinyint', id: 'tinyint' },
