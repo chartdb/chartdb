@@ -14,46 +14,46 @@ export const getPostgresQuery = (
         options.databaseEdition;
     // Define additional filters based on the database option
     const supabaseFilters = `
-                AND connamespace::regnamespace::text NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
-    `;
+                    AND connamespace::regnamespace::text NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+        `;
 
     const supabaseColFilter = `
-                AND cols.table_schema NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
-    `;
+                    AND cols.table_schema NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+        `;
 
     const supabaseTableFilter = `
-                AND tbls.table_schema NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
-    `;
+                    AND tbls.table_schema NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+        `;
 
     const supabaseIndexesFilter = `
-                WHERE schema_name NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
-    `;
+                    WHERE schema_name NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+        `;
 
     const supabaseViewsFilter = `
-                AND views.schemaname NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
-    `;
+                    AND views.schemaname NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+        `;
 
     const timescaleFilters = `
-                AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
-    `;
+                    AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
+        `;
 
     const timescaleColFilter = `
-                AND cols.table_schema !~ '^(timescaledb_|_timescaledb_)'
-                AND cols.table_name !~ '^(pg_stat_)'
-    `;
+                    AND cols.table_schema !~ '^(timescaledb_|_timescaledb_)'
+                    AND cols.table_name !~ '^(pg_stat_)'
+        `;
 
     const timescaleTableFilter = `
-                AND tbls.table_schema !~ '^(timescaledb_|_timescaledb_)'
-                AND tbls.table_name !~ '^(pg_stat_)'
-    `;
+                    AND tbls.table_schema !~ '^(timescaledb_|_timescaledb_)'
+                    AND tbls.table_name !~ '^(pg_stat_)'
+        `;
 
     const timescaleIndexesFilter = `
-                WHERE schema_name !~ '^(timescaledb_|_timescaledb_)'
-    `;
+                    WHERE schema_name !~ '^(timescaledb_|_timescaledb_)'
+        `;
 
     const timescaleViewsFilter = `
-                AND views.schemaname !~ '^(timescaledb_|_timescaledb_)'
-    `;
+                    AND views.schemaname !~ '^(timescaledb_|_timescaledb_)'
+        `;
 
     // Define the base query
     const query = `${`/* ${databaseEdition ? databaseEditionToLabelMap[databaseEdition] : 'PostgreSQL'} edition */`}
@@ -175,7 +175,7 @@ cols AS (
                                                     ELSE 'null'
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
-                                            ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
+                                            ',"default":"', null,
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
                                             '","comment":"', COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '"}')), ',') AS cols_metadata
@@ -332,8 +332,8 @@ FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, inde
 
     if (options.databaseClient === DatabaseClient.POSTGRESQL_PSQL) {
         return `${psqlPreCommand}psql -h HOST_NAME -p PORT -U USER_NAME -d DATABASE_NAME -c "
-${query.replace(/"/g, '\\"').replace(/\\\\/g, '\\\\\\').replace(/\\x/g, '\\\\x')}
-" -t -A > output.json;`;
+    ${query.replace(/"/g, '\\"').replace(/\\\\/g, '\\\\\\').replace(/\\x/g, '\\\\x')}
+    " -t -A > output.json;`;
     }
 
     return query;

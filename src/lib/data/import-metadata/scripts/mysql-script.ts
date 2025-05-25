@@ -86,7 +86,7 @@ export const getMySQLQuery = (
                     END,
                 ',"ordinal_position":', cols.ordinal_position,
                 ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), ''),
+                ',"default":"', "",
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (

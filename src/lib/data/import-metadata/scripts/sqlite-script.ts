@@ -114,7 +114,7 @@ WITH fk_info AS (
                       END
                   ELSE null
               END,
-              'default', COALESCE(REPLACE(p.dflt_value, '"', '\\"'), '')
+              'default', null
           )
       ) AS cols_metadata
   FROM

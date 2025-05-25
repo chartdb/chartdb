@@ -80,7 +80,7 @@ WITH fk_info AS (
 	       KEY 'ordinal_position'         VALUE column_id,
 	       KEY 'nullable'                 VALUE CASE nullable
 	                                            WHEN 'Y' THEN 'true' ELSE 'false' END FORMAT JSON,
-	       KEY 'default'                  VALUE NULL,
+	       KEY 'default'                  VALUE '""' FORMAT JSON,
 	       KEY 'collation'                VALUE '""' FORMAT JSON
 	       RETURNING CLOB
 	     ) AS json_data

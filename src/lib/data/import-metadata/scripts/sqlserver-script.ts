@@ -81,8 +81,7 @@ cols AS (
                                 ELSE 'null'
                             END +
                         ', "nullable": ' + CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
-                        ', "default": ' +
-                            '"' + STRING_ESCAPE(COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '\\"'), ''), 'json') + '"' +
+                        ', "default": ' + '""' +
                         ', "collation": ' + CASE
                             WHEN cols.COLLATION_NAME IS NULL THEN 'null'
                             ELSE '"' + STRING_ESCAPE(cols.COLLATION_NAME, 'json') + '"'
@@ -276,7 +275,7 @@ cols AS (
                                     END +
                                 ', "nullable": ' + CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
                                 ', "default": ' +
-                                    '"' + STRING_ESCAPE(COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '\\"'), ''), 'json') + '"' +
+                                    '"' + null + '"' +
                                 ', "collation": ' +
                                     CASE
                                         WHEN cols.COLLATION_NAME IS NULL THEN 'null'
