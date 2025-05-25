@@ -33,7 +33,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
     const customType = getCustomType(customTypeId);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [typeName, setTypeName] = useState(customType?.type || '');
+    const [typeName, setTypeName] = useState(customType?.name || '');
     const [typeKind, setTypeKind] = useState<DBCustomTypeKind>(
         customType?.kind || 'enum'
     );
@@ -52,7 +52,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
 
     const handleSave = async () => {
         await updateCustomType(customTypeId, {
-            type: typeName,
+            name: typeName,
             kind: typeKind,
             values: typeKind === 'enum' ? enumValues : undefined,
             fields: typeKind === 'composite' ? fields : undefined,
@@ -61,7 +61,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
     };
 
     const handleCancel = () => {
-        setTypeName(customType.type);
+        setTypeName(customType.name);
         setTypeKind(customType.kind);
         setEnumValues(customType.values || []);
         setFields(customType.fields || []);
@@ -112,7 +112,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
                                 className="w-full"
                             />
                         ) : (
-                            customType.type
+                            customType.name
                         )}
                     </h3>
                     <div className="flex items-center space-x-2">
@@ -323,7 +323,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
                     </DialogHeader>
                     <DialogDescription>
                         Are you sure you want to delete the custom type "
-                        {customType.type}"? This action cannot be undone.
+                        {customType.name}"? This action cannot be undone.
                     </DialogDescription>
                     <DialogFooter>
                         <Button

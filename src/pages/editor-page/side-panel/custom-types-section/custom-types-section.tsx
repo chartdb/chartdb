@@ -25,7 +25,7 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
         return customTypes.filter(
             (type) =>
                 !filterText?.trim?.() ||
-                type.type.toLowerCase().includes(filterText.toLowerCase())
+                type.name.toLowerCase().includes(filterText.toLowerCase())
         );
     }, [customTypes, filterText]);
 

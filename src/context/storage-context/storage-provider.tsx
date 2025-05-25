@@ -35,7 +35,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             Area & { diagramId: string },
             'id' // primary key "id" (for the typings only)
         >;
-        custom_types: EntityTable<
+        db_custom_types: EntityTable<
             DBCustomType & { diagramId: string },
             'id' // primary key "id" (for the typings only)
         >;
@@ -181,7 +181,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         db_dependencies:
             '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
         areas: '++id, diagramId, name, x, y, width, height, color',
-        custom_types: '++id, diagramId, schema, type, kind, values, fields',
+        db_custom_types: '++id, diagramId, schema, type, kind, values, fields',
         config: '++id, defaultDiagramId',
     });
 
@@ -396,7 +396,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             db.db_relationships.where('diagramId').equals(id).delete(),
             db.db_dependencies.where('diagramId').equals(id).delete(),
             db.areas.where('diagramId').equals(id).delete(),
-            db.custom_types.where('diagramId').equals(id).delete(),
+            db.db_custom_types.where('diagramId').equals(id).delete(),
         ]);
     };
 
@@ -621,7 +621,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         diagramId: string;
         customType: DBCustomType;
     }) => {
-        await db.custom_types.add({
+        await db.db_custom_types.add({
             ...customType,
             diagramId,
         });
@@ -634,7 +634,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         diagramId: string;
         id: string;
     }): Promise<DBCustomType | undefined> => {
-        return await db.custom_types.get({ id, diagramId });
+        return await db.db_custom_types.get({ id, diagramId });
     };
 
     const updateCustomType: StorageContext['updateCustomType'] = async ({
@@ -644,7 +644,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         id: string;
         attributes: Partial<DBCustomType>;
     }) => {
-        await db.custom_types.update(id, attributes);
+        await db.db_custom_types.update(id, attributes);
     };
 
     const deleteCustomType: StorageContext['deleteCustomType'] = async ({
@@ -654,22 +654,28 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         id: string;
         diagramId: string;
     }) => {
-        await db.custom_types.where({ id, diagramId }).delete();
+        await db.db_custom_types.where({ id, diagramId }).delete();
     };
 
     const listCustomTypes: StorageContext['listCustomTypes'] = async (
         diagramId: string
     ): Promise<DBCustomType[]> => {
         return (
-            await db.custom_types.where('diagramId').equals(diagramId).toArray()
+            await db.db_custom_types
+                .where('diagramId')
+                .equals(diagramId)
+                .toArray()
         ).sort((a, b) => {
-            return a.type.localeCompare(b.type);
+            return a.name.localeCompare(b.name);
         });
     };
 
     const deleteDiagramCustomTypes: StorageContext['deleteDiagramCustomTypes'] =
         async (diagramId: string) => {
-            await db.custom_types.where('diagramId').equals(diagramId).delete();
+            await db.db_custom_types
+                .where('diagramId')
+                .equals(diagramId)
+                .delete();
         };
 
     return (

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { DBCustomTypeInfo } from '@/lib/data/import-metadata/metadata-types/custom-type-info';
 import { generateId } from '../utils';
+import { schemaNameToDomainSchemaName } from './db-schema';
 
 export type DBCustomTypeKind = 'enum' | 'composite';
 
@@ -11,8 +12,8 @@ export interface DBCustomTypeField {
 
 export interface DBCustomType {
     id: string;
-    schema: string;
-    type: string; // The name of the type
+    schema?: string;
+    name: string;
     kind: DBCustomTypeKind;
     values?: string[]; // For enum types
     fields?: DBCustomTypeField[]; // For composite types
@@ -26,7 +27,7 @@ export const dbCustomTypeFieldSchema = z.object({
 export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     id: z.string(),
     schema: z.string(),
-    type: z.string(),
+    name: z.string(),
     kind: z.enum(['enum', 'composite']),
     values: z.array(z.string()).optional(),
     fields: z.array(dbCustomTypeFieldSchema).optional(),
@@ -40,8 +41,8 @@ export const createCustomTypesFromMetadata = ({
     return customTypes.map((customType) => {
         return {
             id: generateId(),
-            schema: customType.schema,
-            type: customType.type,
+            schema: schemaNameToDomainSchemaName(customType.schema),
+            name: customType.type,
             kind: customType.kind,
             values: customType.values,
             fields: customType.fields,

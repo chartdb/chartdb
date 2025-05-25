@@ -26,7 +26,6 @@ import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
-import { createCustomType as createCustomTypeUtil } from '@/lib/domain/db-custom-type';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -196,6 +195,7 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagramDependencies(diagramId),
                 db.deleteDiagramAreas(diagramId),
+                db.deleteDiagramCustomTypes(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -219,6 +219,7 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagram(diagramId),
                 db.deleteDiagramDependencies(diagramId),
                 db.deleteDiagramAreas(diagramId),
+                db.deleteDiagramCustomTypes(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -1578,8 +1579,6 @@ export const ChartDBProvider: React.FC<
                 ),
             ]);
 
-            events.emit({ action: 'add_custom_types', data: { customTypes } });
-
             if (options.updateHistory) {
                 addUndoAction({
                     action: 'addCustomTypes',
@@ -1589,7 +1588,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setCustomTypes, addUndoAction, resetRedoStack, events]
+        [db, diagramId, setCustomTypes, addUndoAction, resetRedoStack]
     );
 
     const addCustomType: ChartDBContext['addCustomType'] = useCallback(
@@ -1601,13 +1600,13 @@ export const ChartDBProvider: React.FC<
 
     const createCustomType: ChartDBContext['createCustomType'] = useCallback(
         async (attributes) => {
-            const customType = createCustomTypeUtil({
-                schema: 'public',
-                type: `custom_type_${customTypes.length + 1}`,
+            const customType: DBCustomType = {
+                id: generateId(),
+                name: `custom_type_${customTypes.length + 1}`,
                 kind: 'enum',
                 values: [],
                 ...attributes,
-            });
+            };
 
             await addCustomType(customType);
             return customType;
@@ -1624,11 +1623,6 @@ export const ChartDBProvider: React.FC<
             setCustomTypes((types) =>
                 types.filter((type) => !ids.includes(type.id))
             );
-
-            events.emit({
-                action: 'remove_custom_types',
-                data: { customTypeIds: ids },
-            });
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
@@ -1658,7 +1652,6 @@ export const ChartDBProvider: React.FC<
             addUndoAction,
             resetRedoStack,
             getCustomType,
-            events,
         ]
     );
 
@@ -1679,11 +1672,6 @@ export const ChartDBProvider: React.FC<
             setCustomTypes((types) =>
                 types.map((t) => (t.id === id ? { ...t, ...customType } : t))
             );
-
-            events.emit({
-                action: 'update_custom_type',
-                data: { id, customType },
-            });
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
@@ -1709,7 +1697,6 @@ export const ChartDBProvider: React.FC<
             resetRedoStack,
             getCustomType,
             diagramId,
-            events,
         ]
     );
 

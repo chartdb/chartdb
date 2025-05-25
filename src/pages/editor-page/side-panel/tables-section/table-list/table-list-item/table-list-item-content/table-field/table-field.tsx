@@ -63,8 +63,8 @@ export const TableField: React.FC<TableFieldProps> = ({
         // Add custom types as options
         const customTypeOptions: SelectBoxOption[] = customTypes.map(
             (type) => ({
-                label: type.type,
-                value: `custom-type-${type.type}`,
+                label: type.name,
+                value: `custom-type-${type.name}`,
                 // Add additional info to distinguish custom types
                 description:
                     type.kind === 'enum'
@@ -144,7 +144,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     const getCustomTypeDisplayValue = () => {
         if (field.type.id.startsWith('custom-type-')) {
             const typeName = field.type.name;
-            const customType = customTypes?.find((ct) => ct.type === typeName);
+            const customType = customTypes?.find((ct) => ct.name === typeName);
 
             if (customType) {
                 return typeName;

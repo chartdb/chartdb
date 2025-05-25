@@ -19,10 +19,7 @@ export type ChartDBEventType =
     | 'remove_tables'
     | 'add_field'
     | 'remove_field'
-    | 'load_diagram'
-    | 'add_custom_types'
-    | 'update_custom_type'
-    | 'remove_custom_types';
+    | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
     action: T;
@@ -59,31 +56,13 @@ export type LoadDiagramEvent = ChartDBEventBase<
     { diagram: Diagram }
 >;
 
-export type AddCustomTypesEvent = ChartDBEventBase<
-    'add_custom_types',
-    { customTypes: DBCustomType[] }
->;
-
-export type UpdateCustomTypeEvent = ChartDBEventBase<
-    'update_custom_type',
-    { id: string; customType: Partial<DBCustomType> }
->;
-
-export type RemoveCustomTypesEvent = ChartDBEventBase<
-    'remove_custom_types',
-    { customTypeIds: string[] }
->;
-
 export type ChartDBEvent =
     | CreateTableEvent
     | UpdateTableEvent
     | RemoveTableEvent
     | AddFieldEvent
     | RemoveFieldEvent
-    | LoadDiagramEvent
-    | AddCustomTypesEvent
-    | UpdateCustomTypeEvent
-    | RemoveCustomTypesEvent;
+    | LoadDiagramEvent;
 
 export interface ChartDBContext {
     diagramId: string;

@@ -32,7 +32,7 @@ export const CustomTypeList: React.FC<CustomTypeListProps> = ({
                     >
                         <div className="flex items-center gap-2">
                             <Database className="size-4 text-muted-foreground" />
-                            <span className="font-medium">{type.type}</span>
+                            <span className="font-medium">{type.name}</span>
                             <span className="text-xs text-muted-foreground">
                                 ({type.schema})
                             </span>
