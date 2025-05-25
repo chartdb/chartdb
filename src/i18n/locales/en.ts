@@ -37,6 +37,7 @@ export const en = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: 'Save to Minio',
             },
             help: {
                 help: 'Help',

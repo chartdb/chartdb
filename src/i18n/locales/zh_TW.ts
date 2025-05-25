@@ -38,6 +38,7 @@ export const zh_TW: LanguageTranslation = {
                 backup: '備份',
                 export_diagram: '匯出圖表',
                 restore_diagram: '恢復圖表',
+                save_to_minio: '儲存到 Minio',
             },
             help: {
                 help: '幫助',

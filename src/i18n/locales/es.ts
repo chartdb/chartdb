@@ -38,6 +38,7 @@ export const es: LanguageTranslation = {
                 backup: 'Respaldo',
                 export_diagram: 'Exportar Diagrama',
                 restore_diagram: 'Restaurar Diagrama',
+                save_to_minio: 'Guardar en Minio',
             },
             help: {
                 help: 'Ayuda',

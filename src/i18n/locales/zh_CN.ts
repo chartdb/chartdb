@@ -38,6 +38,7 @@ export const zh_CN: LanguageTranslation = {
                 backup: '备份',
                 export_diagram: '导出关系图',
                 restore_diagram: '还原图表',
+                save_to_minio: '保存到 Minio',
             },
             help: {
                 help: '帮助',
@@ -260,7 +261,7 @@ export const zh_CN: LanguageTranslation = {
                     title: '说明',
                     step_1: '前往 工具 > 选项 > 查询结果 > SQL Server。',
                     // TODO: Add translations
-                    step_2: '如果您使用“Result to Grid”功能，请将非 XML 数据的最大提取字符数更改为 9999999。',
+                    step_2: '如果您使用"Result to Grid"功能，请将非 XML 数据的最大提取字符数更改为 9999999。',
                 },
                 instructions_link: '需要帮助？看看如何操作',
                 check_script_result: '检查脚本结果',

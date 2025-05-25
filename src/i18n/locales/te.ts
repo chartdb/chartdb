@@ -39,6 +39,7 @@ export const te: LanguageTranslation = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: 'Minio లో సేవ్ చేయండి',
             },
             help: {
                 help: 'సహాయం',
@@ -93,7 +94,7 @@ export const te: LanguageTranslation = {
 
         theme: {
             system: 'సిస్టమ్',
-            light: 'హালకా',
+            light: 'హాలకా',
             dark: 'నలుపు',
         },
 

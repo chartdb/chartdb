@@ -38,6 +38,7 @@ export const ko_KR: LanguageTranslation = {
                 backup: '백업',
                 export_diagram: '다이어그램 내보내기',
                 restore_diagram: '다이어그램 복구',
+                save_to_minio: 'Minio에 저장',
             },
             help: {
                 help: '도움말',

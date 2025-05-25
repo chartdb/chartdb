@@ -38,6 +38,7 @@ export const id_ID: LanguageTranslation = {
                 backup: 'Cadangan',
                 export_diagram: 'Ekspor Diagram',
                 restore_diagram: 'Pulihkan Diagram',
+                save_to_minio: 'Simpan ke Minio',
             },
             help: {
                 help: 'Bantuan',

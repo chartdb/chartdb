@@ -40,6 +40,7 @@ export const ja: LanguageTranslation = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: 'Minioに保存',
             },
             help: {
                 help: 'ヘルプ',

@@ -39,6 +39,7 @@ export const de: LanguageTranslation = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: 'In Minio speichern',
             },
             help: {
                 help: 'Hilfe',

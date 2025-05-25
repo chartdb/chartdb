@@ -38,6 +38,7 @@ export const hi: LanguageTranslation = {
                 backup: 'बैकअप',
                 export_diagram: 'आरेख निर्यात करें',
                 restore_diagram: 'आरेख पुनर्स्थापित करें',
+                save_to_minio: 'Minio में सहेजें',
             },
             help: {
                 help: 'मदद',

@@ -39,6 +39,7 @@ export const mr: LanguageTranslation = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: 'Minio मध्ये जतन करा',
             },
             help: {
                 help: 'मदत',

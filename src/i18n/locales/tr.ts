@@ -39,6 +39,7 @@ export const tr: LanguageTranslation = {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
+                save_to_minio: "Minio'ya Kaydet",
             },
             help: {
                 help: 'Yardım',

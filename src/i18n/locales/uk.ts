@@ -37,6 +37,7 @@ export const uk: LanguageTranslation = {
                 backup: 'Резервне копіювання',
                 export_diagram: 'Експорт діаграми',
                 restore_diagram: 'Відновити діаграму',
+                save_to_minio: 'Зберегти в Minio',
             },
             help: {
                 help: 'Довідка',

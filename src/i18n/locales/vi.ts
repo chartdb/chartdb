@@ -38,6 +38,7 @@ export const vi: LanguageTranslation = {
                 backup: 'Hỗ trợ',
                 export_diagram: 'Xuất sơ đồ',
                 restore_diagram: 'Khôi phục sơ đồ',
+                save_to_minio: 'Lưu vào Minio',
             },
             help: {
                 help: 'Trợ giúp',
