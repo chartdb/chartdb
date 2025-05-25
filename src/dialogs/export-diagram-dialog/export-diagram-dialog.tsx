@@ -42,14 +42,14 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
 
     const handleExport = useCallback(async () => {
         try {
-            await exportDiagram({ diagram: currentDiagram });
+            await exportDiagram({ diagram: currentDiagram, destination });
             closeExportDiagramDialog();
         } catch (e) {
             setError(true);
 
             throw e;
         }
-    }, [exportDiagram, currentDiagram, closeExportDiagramDialog]);
+    }, [exportDiagram, currentDiagram, closeExportDiagramDialog, destination]);
 
     const outputTypeOptions: SelectBoxOption[] = useMemo(
         () =>
