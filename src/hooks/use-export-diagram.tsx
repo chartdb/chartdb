@@ -3,7 +3,12 @@ import { useDialog } from '@/hooks/use-dialog';
 import { diagramToJSONOutput } from '@/lib/export-import-utils';
 import { waitFor } from '@/lib/utils';
 import type { Diagram } from '@/lib/domain/diagram';
-import { S3Client, PutObjectCommand, HeadObjectCommand, NotFound } from '@aws-sdk/client-s3';
+import {
+    S3Client,
+    PutObjectCommand,
+    HeadObjectCommand,
+    NotFound,
+} from '@aws-sdk/client-s3';
 
 interface ExportOptions {
     diagram: Diagram;
@@ -51,22 +56,27 @@ export const useExportDiagram = () => {
                 // Если файл не найден, получим ошибку NotFound
                 if (headError instanceof NotFound) {
                     fileExists = false;
-                    console.log(`Файл ${fileName} не найден в MinIO, создаем новый`);
+                    console.log(
+                        `Файл ${fileName} не найден в MinIO, создаем новый`
+                    );
                 } else {
                     // Если произошла другая ошибка при проверке, продолжаем загрузку
-                    console.warn('Ошибка при проверке существования файла:', headError);
+                    console.warn(
+                        'Ошибка при проверке существования файла:',
+                        headError
+                    );
                 }
             }
 
             // Если файл существует, генерируем уникальное имя
-            let finalFileName = fileName;
-            //if (fileExists) {
-            //    // Добавляем текущую дату и время к имени файла
-            //    const now = new Date();
-            //    const timestamp = now.toISOString().replace(/[:.]/g, '-');
-            //    finalFileName = `ChartDB (${name})_${timestamp}.json`;
-            //    console.log(`Создаем новую версию файла: ${finalFileName}`);
-            //}
+            const finalFileName = fileName;
+            if (fileExists) {
+                //    // Добавляем текущую дату и время к имени файла
+                //    const now = new Date();
+                //    const timestamp = now.toISOString().replace(/[:.]/g, '-');
+                //    finalFileName = `ChartDB (${name})_${timestamp}.json`;
+                //    console.log(`Создаем новую версию файла: ${finalFileName}`);
+            }
 
             // Преобразуем Blob в ArrayBuffer для загрузки
             const arrayBuffer = await blob.arrayBuffer();
