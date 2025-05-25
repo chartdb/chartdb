@@ -17,6 +17,7 @@ export const vi: LanguageTranslation = {
                 new: 'Sơ đồ mới',
                 browse: 'Duyệt...',
                 save: 'Lưu',
+                duplicate: 'Nhân đôi',
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',

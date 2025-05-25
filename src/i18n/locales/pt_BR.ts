@@ -17,6 +17,7 @@ export const pt_BR: LanguageTranslation = {
                 new: 'Novo Diagrama',
                 browse: 'Navegar...',
                 save: 'Salvar',
+                duplicate: 'Duplicar',
                 import: 'Importar Banco de Dados',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
