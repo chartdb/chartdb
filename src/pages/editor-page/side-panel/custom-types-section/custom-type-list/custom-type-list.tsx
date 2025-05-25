@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import type { CustomType } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { Database } from 'lucide-react';
 import { CustomTypeDetail } from '../custom-type-detail/custom-type-detail';
 
 export interface CustomTypeListProps {
-    customTypes: CustomType[];
+    customTypes: DBCustomType[];
 }
 
 export const CustomTypeList: React.FC<CustomTypeListProps> = ({

@@ -5,7 +5,7 @@ import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-i
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
-import type { CustomTypeInfo } from '../data/import-metadata/metadata-types/custom-type-info';
+import type { DBCustomTypeInfo } from '../data/import-metadata/metadata-types/custom-type-info';
 import { schemaNameToDomainSchemaName } from './db-schema';
 
 export interface DBField {
@@ -45,8 +45,8 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
 // Helper function to find the best matching custom type for a column
 const findMatchingCustomType = (
     columnName: string,
-    customTypes: CustomTypeInfo[]
-): CustomTypeInfo | undefined => {
+    customTypes: DBCustomTypeInfo[]
+): DBCustomTypeInfo | undefined => {
     // 1. Exact name match (highest priority)
     const exactMatch = customTypes.find((ct) => ct.type === columnName);
     if (exactMatch) return exactMatch;
@@ -98,7 +98,7 @@ export const createFieldsFromMetadata = ({
     tableInfo: TableInfo;
     primaryKeys: PrimaryKeyInfo[];
     aggregatedIndexes: AggregatedIndexInfo[];
-    customTypes?: CustomTypeInfo[];
+    customTypes?: DBCustomTypeInfo[];
 }) => {
     const uniqueColumns = columns
         .filter(
@@ -126,7 +126,7 @@ export const createFieldsFromMetadata = ({
         .map((pk) => pk.column.trim());
 
     // Create a mapping between column names and custom types
-    const typeMap: Record<string, CustomTypeInfo> = {};
+    const typeMap: Record<string, DBCustomTypeInfo> = {};
 
     if (customTypes && customTypes.length > 0) {
         // Filter to custom types in this schema

@@ -9,7 +9,7 @@ import { determineCardinalities } from '@/lib/domain/db-relationship';
 import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
-import type { CustomType } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -36,7 +36,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             'id' // primary key "id" (for the typings only)
         >;
         custom_types: EntityTable<
-            CustomType & { diagramId: string },
+            DBCustomType & { diagramId: string },
             'id' // primary key "id" (for the typings only)
         >;
         config: EntityTable<
@@ -619,7 +619,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         customType,
     }: {
         diagramId: string;
-        customType: CustomType;
+        customType: DBCustomType;
     }) => {
         await db.custom_types.add({
             ...customType,
@@ -633,7 +633,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     }: {
         diagramId: string;
         id: string;
-    }): Promise<CustomType | undefined> => {
+    }): Promise<DBCustomType | undefined> => {
         return await db.custom_types.get({ id, diagramId });
     };
 
@@ -642,7 +642,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         attributes,
     }: {
         id: string;
-        attributes: Partial<CustomType>;
+        attributes: Partial<DBCustomType>;
     }) => {
         await db.custom_types.update(id, attributes);
     };
@@ -659,7 +659,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
 
     const listCustomTypes: StorageContext['listCustomTypes'] = async (
         diagramId: string
-    ): Promise<CustomType[]> => {
+    ): Promise<DBCustomType[]> => {
         return (
             await db.custom_types.where('diagramId').equals(diagramId).toArray()
         ).sort((a, b) => {

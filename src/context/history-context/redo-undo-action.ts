@@ -5,7 +5,7 @@ import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
-import type { CustomType } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 
 type Action = keyof ChartDBContext;
 
@@ -145,20 +145,20 @@ type RedoUndoActionRemoveAreas = RedoUndoActionBase<
 
 type RedoUndoActionAddCustomTypes = RedoUndoActionBase<
     'addCustomTypes',
-    { customTypes: CustomType[] },
+    { customTypes: DBCustomType[] },
     { customTypeIds: string[] }
 >;
 
 type RedoUndoActionUpdateCustomType = RedoUndoActionBase<
     'updateCustomType',
-    { customTypeId: string; customType: Partial<CustomType> },
-    { customTypeId: string; customType: Partial<CustomType> }
+    { customTypeId: string; customType: Partial<DBCustomType> },
+    { customTypeId: string; customType: Partial<DBCustomType> }
 >;
 
 type RedoUndoActionRemoveCustomTypes = RedoUndoActionBase<
     'removeCustomTypes',
     { customTypeIds: string[] },
-    { customTypes: CustomType[] }
+    { customTypes: DBCustomType[] }
 >;
 
 export type RedoUndoAction =

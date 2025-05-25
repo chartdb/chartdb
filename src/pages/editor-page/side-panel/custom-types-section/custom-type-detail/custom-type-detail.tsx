@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { CustomTypeKind } from '@/lib/domain/custom-type';
+import type { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
@@ -34,7 +34,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
 
     const [isEditing, setIsEditing] = useState(false);
     const [typeName, setTypeName] = useState(customType?.type || '');
-    const [typeKind, setTypeKind] = useState<CustomTypeKind>(
+    const [typeKind, setTypeKind] = useState<DBCustomTypeKind>(
         customType?.kind || 'enum'
     );
     const [enumValues, setEnumValues] = useState<string[]>(
@@ -165,7 +165,7 @@ export const CustomTypeDetail: React.FC<CustomTypeDetailProps> = ({
                             <Select
                                 value={typeKind}
                                 onValueChange={(value) =>
-                                    setTypeKind(value as CustomTypeKind)
+                                    setTypeKind(value as DBCustomTypeKind)
                                 }
                             >
                                 <SelectTrigger className="w-32">

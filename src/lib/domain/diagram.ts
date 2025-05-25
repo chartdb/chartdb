@@ -20,8 +20,11 @@ import {
 } from './db-table';
 import { generateDiagramId } from '@/lib/utils';
 import { areaSchema, type Area } from './area';
-import type { CustomType } from './custom-type';
-import { customTypeSchema, createCustomTypesFromMetadata } from './custom-type';
+import type { DBCustomType } from './db-custom-type';
+import {
+    dbCustomTypeSchema,
+    createCustomTypesFromMetadata,
+} from './db-custom-type';
 
 export interface Diagram {
     id: string;
@@ -32,7 +35,7 @@ export interface Diagram {
     relationships?: DBRelationship[];
     dependencies?: DBDependency[];
     areas?: Area[];
-    customTypes?: CustomType[];
+    customTypes?: DBCustomType[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -46,7 +49,7 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     relationships: z.array(dbRelationshipSchema).optional(),
     dependencies: z.array(dbDependencySchema).optional(),
     areas: z.array(areaSchema).optional(),
-    customTypes: z.array(customTypeSchema).optional(),
+    customTypes: z.array(dbCustomTypeSchema).optional(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

@@ -176,6 +176,101 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             [isOpen, onOpenChange]
         );
 
+        const groups = React.useMemo(
+            () =>
+                options.reduce(
+                    (acc, option) => {
+                        if (option.group) {
+                            if (!acc[option.group]) {
+                                acc[option.group] = [];
+                            }
+                            acc[option.group].push(option);
+                        } else {
+                            if (!acc['default']) {
+                                acc['default'] = [];
+                            }
+                            acc['default'].push(option);
+                        }
+                        return acc;
+                    },
+                    {} as Record<string, SelectBoxOption[]>
+                ),
+            [options]
+        );
+
+        const hasGroups = React.useMemo(
+            () =>
+                Object.keys(groups).filter((group) => group !== 'default')
+                    .length > 0,
+            [groups]
+        );
+
+        const renderOption = React.useCallback(
+            (option: SelectBoxOption) => {
+                const isSelected =
+                    Array.isArray(value) && value.includes(option.value);
+
+                const isRegexMatch =
+                    option.regex && new RegExp(option.regex)?.test(searchTerm);
+
+                const matches = option.extractRegex
+                    ? searchTerm.match(option.extractRegex)
+                    : undefined;
+
+                return (
+                    <CommandItem
+                        className="flex items-center"
+                        key={option.value}
+                        keywords={option.regex ? [option.regex] : undefined}
+                        onSelect={() =>
+                            handleSelect(
+                                option.value,
+                                matches?.map((match) => match.toString())
+                            )
+                        }
+                    >
+                        {multiple && (
+                            <div
+                                className={cn(
+                                    'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                                    isSelected
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'opacity-50 [&_svg]:invisible'
+                                )}
+                            >
+                                <CheckIcon />
+                            </div>
+                        )}
+                        <div className="flex items-center truncate">
+                            <span>
+                                {isRegexMatch ? searchTerm : option.label}
+                                {!isRegexMatch && optionSuffix
+                                    ? optionSuffix(option)
+                                    : ''}
+                            </span>
+                            {option.description && (
+                                <span className="ml-1 text-xs text-muted-foreground">
+                                    {option.description}
+                                </span>
+                            )}
+                        </div>
+                        {((!multiple && option.value === value) ||
+                            isRegexMatch) && (
+                            <CheckIcon
+                                className={cn(
+                                    'ml-auto',
+                                    option.value === value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                )}
+                            />
+                        )}
+                    </CommandItem>
+                );
+            },
+            [value, multiple, searchTerm, handleSelect, optionSuffix]
+        );
+
         return (
             <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
                 <PopoverTrigger asChild tabIndex={0} onKeyDown={handleKeyDown}>
@@ -318,132 +413,27 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
 
                         <ScrollArea>
                             <div className="max-h-64 w-full">
-                                {(() => {
-                                    const groupedOptions = options.reduce(
-                                        (acc, option) => {
-                                            const group =
-                                                option.group || 'Default';
-                                            if (!acc[group]) {
-                                                acc[group] = [];
-                                            }
-                                            acc[group].push(option);
-                                            return acc;
-                                        },
-                                        {} as Record<string, SelectBoxOption[]>
-                                    );
-
-                                    return Object.entries(groupedOptions).map(
-                                        ([groupName, groupOptions]) => (
-                                            <CommandGroup
-                                                key={groupName}
-                                                heading={groupName}
-                                            >
-                                                <CommandList className="max-h-fit w-full">
-                                                    {groupOptions.map(
-                                                        (option) => {
-                                                            const isSelected =
-                                                                Array.isArray(
-                                                                    value
-                                                                ) &&
-                                                                value.includes(
-                                                                    option.value
-                                                                );
-
-                                                            const isRegexMatch =
-                                                                option.regex &&
-                                                                new RegExp(
-                                                                    option.regex
-                                                                )?.test(
-                                                                    searchTerm
-                                                                );
-
-                                                            const matches =
-                                                                option.extractRegex
-                                                                    ? searchTerm.match(
-                                                                          option.extractRegex
-                                                                      )
-                                                                    : undefined;
-
-                                                            return (
-                                                                <CommandItem
-                                                                    className="flex items-center"
-                                                                    key={
-                                                                        option.value
-                                                                    }
-                                                                    keywords={
-                                                                        option.regex
-                                                                            ? [
-                                                                                  option.regex,
-                                                                              ]
-                                                                            : undefined
-                                                                    }
-                                                                    onSelect={() =>
-                                                                        handleSelect(
-                                                                            option.value,
-                                                                            matches?.map(
-                                                                                (
-                                                                                    match
-                                                                                ) =>
-                                                                                    match.toString()
-                                                                            )
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {multiple && (
-                                                                        <div
-                                                                            className={cn(
-                                                                                'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                                                                                isSelected
-                                                                                    ? 'bg-primary text-primary-foreground'
-                                                                                    : 'opacity-50 [&_svg]:invisible'
-                                                                            )}
-                                                                        >
-                                                                            <CheckIcon />
-                                                                        </div>
-                                                                    )}
-                                                                    <div className="flex items-center truncate">
-                                                                        <span>
-                                                                            {isRegexMatch
-                                                                                ? searchTerm
-                                                                                : option.label}
-                                                                            {!isRegexMatch &&
-                                                                            optionSuffix
-                                                                                ? optionSuffix(
-                                                                                      option
-                                                                                  )
-                                                                                : ''}
-                                                                        </span>
-                                                                        {option.description && (
-                                                                            <span className="ml-1 text-xs text-muted-foreground">
-                                                                                {
-                                                                                    option.description
-                                                                                }
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                    {((!multiple &&
-                                                                        option.value ===
-                                                                            value) ||
-                                                                        isRegexMatch) && (
-                                                                        <CheckIcon
-                                                                            className={cn(
-                                                                                'ml-auto',
-                                                                                option.value ===
-                                                                                    value
-                                                                                    ? 'opacity-100'
-                                                                                    : 'opacity-0'
-                                                                            )}
-                                                                        />
-                                                                    )}
-                                                                </CommandItem>
-                                                            );
-                                                        }
-                                                    )}
-                                                </CommandList>
-                                            </CommandGroup>
-                                        )
-                                    );
-                                })()}
+                                <CommandGroup>
+                                    <CommandList className="max-h-fit w-full">
+                                        {hasGroups
+                                            ? Object.entries(groups).map(
+                                                  ([
+                                                      groupName,
+                                                      groupOptions,
+                                                  ]) => (
+                                                      <CommandGroup
+                                                          key={groupName}
+                                                          heading={groupName}
+                                                      >
+                                                          {groupOptions.map(
+                                                              renderOption
+                                                          )}
+                                                      </CommandGroup>
+                                                  )
+                                              )
+                                            : options.map(renderOption)}
+                                    </CommandList>
+                                </CommandGroup>
                             </div>
                         </ScrollArea>
                     </Command>

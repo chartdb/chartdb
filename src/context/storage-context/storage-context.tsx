@@ -6,7 +6,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
-import type { CustomType } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 
 export interface StorageContext {
     // Config operations
@@ -109,21 +109,21 @@ export interface StorageContext {
     // Custom type operations
     addCustomType: (params: {
         diagramId: string;
-        customType: CustomType;
+        customType: DBCustomType;
     }) => Promise<void>;
     getCustomType: (params: {
         diagramId: string;
         id: string;
-    }) => Promise<CustomType | undefined>;
+    }) => Promise<DBCustomType | undefined>;
     updateCustomType: (params: {
         id: string;
-        attributes: Partial<CustomType>;
+        attributes: Partial<DBCustomType>;
     }) => Promise<void>;
     deleteCustomType: (params: {
         diagramId: string;
         id: string;
     }) => Promise<void>;
-    listCustomTypes: (diagramId: string) => Promise<CustomType[]>;
+    listCustomTypes: (diagramId: string) => Promise<DBCustomType[]>;
     deleteDiagramCustomTypes: (diagramId: string) => Promise<void>;
 }
 

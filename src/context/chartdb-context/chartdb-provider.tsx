@@ -25,8 +25,8 @@ import type { Area } from '@/lib/domain/area';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
-import type { CustomType } from '@/lib/domain/custom-type';
-import { createCustomType as createCustomTypeUtil } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import { createCustomType as createCustomTypeUtil } from '@/lib/domain/db-custom-type';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -60,7 +60,7 @@ export const ChartDBProvider: React.FC<
         diagram?.dependencies ?? []
     );
     const [areas, setAreas] = useState<Area[]>(diagram?.areas ?? []);
-    const [customTypes, setCustomTypes] = useState<CustomType[]>(
+    const [customTypes, setCustomTypes] = useState<DBCustomType[]>(
         diagram?.customTypes ?? []
     );
     const { events: diffEvents } = useDiff();
@@ -1564,7 +1564,7 @@ export const ChartDBProvider: React.FC<
 
     const addCustomTypes: ChartDBContext['addCustomTypes'] = useCallback(
         async (
-            customTypes: CustomType[],
+            customTypes: DBCustomType[],
             options = { updateHistory: true }
         ) => {
             setCustomTypes((currentTypes) => [...currentTypes, ...customTypes]);
@@ -1593,7 +1593,7 @@ export const ChartDBProvider: React.FC<
     );
 
     const addCustomType: ChartDBContext['addCustomType'] = useCallback(
-        async (customType: CustomType, options = { updateHistory: true }) => {
+        async (customType: DBCustomType, options = { updateHistory: true }) => {
             return addCustomTypes([customType], options);
         },
         [addCustomTypes]
@@ -1619,7 +1619,7 @@ export const ChartDBProvider: React.FC<
         async (ids, options = { updateHistory: true }) => {
             const typesToRemove = ids
                 .map((id) => getCustomType(id))
-                .filter(Boolean) as CustomType[];
+                .filter(Boolean) as DBCustomType[];
 
             setCustomTypes((types) =>
                 types.filter((type) => !ids.includes(type.id))
@@ -1672,7 +1672,7 @@ export const ChartDBProvider: React.FC<
     const updateCustomType: ChartDBContext['updateCustomType'] = useCallback(
         async (
             id: string,
-            customType: Partial<CustomType>,
+            customType: Partial<DBCustomType>,
             options = { updateHistory: true }
         ) => {
             const prevCustomType = getCustomType(id);

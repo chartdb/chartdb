@@ -11,7 +11,7 @@ import type { DBSchema } from '@/lib/domain/db-schema';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
-import type { CustomType } from '@/lib/domain/custom-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 
 export type ChartDBEventType =
     | 'add_tables'
@@ -61,12 +61,12 @@ export type LoadDiagramEvent = ChartDBEventBase<
 
 export type AddCustomTypesEvent = ChartDBEventBase<
     'add_custom_types',
-    { customTypes: CustomType[] }
+    { customTypes: DBCustomType[] }
 >;
 
 export type UpdateCustomTypeEvent = ChartDBEventBase<
     'update_custom_type',
-    { id: string; customType: Partial<CustomType> }
+    { id: string; customType: Partial<DBCustomType> }
 >;
 
 export type RemoveCustomTypesEvent = ChartDBEventBase<
@@ -94,7 +94,7 @@ export interface ChartDBContext {
     relationships: DBRelationship[];
     dependencies: DBDependency[];
     areas: Area[];
-    customTypes: CustomType[];
+    customTypes: DBCustomType[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
     readonly?: boolean;
@@ -274,17 +274,17 @@ export interface ChartDBContext {
 
     // Custom type operations
     createCustomType: (
-        attributes?: Partial<Omit<CustomType, 'id'>>
-    ) => Promise<CustomType>;
+        attributes?: Partial<Omit<DBCustomType, 'id'>>
+    ) => Promise<DBCustomType>;
     addCustomType: (
-        customType: CustomType,
+        customType: DBCustomType,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
     addCustomTypes: (
-        customTypes: CustomType[],
+        customTypes: DBCustomType[],
         options?: { updateHistory: boolean }
     ) => Promise<void>;
-    getCustomType: (id: string) => CustomType | null;
+    getCustomType: (id: string) => DBCustomType | null;
     removeCustomType: (
         id: string,
         options?: { updateHistory: boolean }
@@ -295,7 +295,7 @@ export interface ChartDBContext {
     ) => Promise<void>;
     updateCustomType: (
         id: string,
-        customType: Partial<CustomType>,
+        customType: Partial<DBCustomType>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
 }
