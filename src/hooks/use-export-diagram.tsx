@@ -3,7 +3,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { diagramToJSONOutput } from '@/lib/export-import-utils';
 import { waitFor } from '@/lib/utils';
 import type { Diagram } from '@/lib/domain/diagram';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, HeadObjectCommand, NotFound } from '@aws-sdk/client-s3';
 
 interface ExportOptions {
     diagram: Diagram;
@@ -35,7 +35,38 @@ export const useExportDiagram = () => {
             });
 
             const bucketName = import.meta.env.VITE_MINIO_BUCKET_NAME;
-            const fileName = `ChartDB(${name}).json`;
+            const fileName = `ChartDB (${name}).json`;
+
+            // Проверяем, существует ли уже файл с таким именем
+            let fileExists = false;
+            try {
+                const headCommand = new HeadObjectCommand({
+                    Bucket: bucketName,
+                    Key: fileName,
+                });
+                await s3Client.send(headCommand);
+                fileExists = true;
+                console.log(`Файл ${fileName} уже существует в MinIO`);
+            } catch (headError) {
+                // Если файл не найден, получим ошибку NotFound
+                if (headError instanceof NotFound) {
+                    fileExists = false;
+                    console.log(`Файл ${fileName} не найден в MinIO, создаем новый`);
+                } else {
+                    // Если произошла другая ошибка при проверке, продолжаем загрузку
+                    console.warn('Ошибка при проверке существования файла:', headError);
+                }
+            }
+
+            // Если файл существует, генерируем уникальное имя
+            let finalFileName = fileName;
+            //if (fileExists) {
+            //    // Добавляем текущую дату и время к имени файла
+            //    const now = new Date();
+            //    const timestamp = now.toISOString().replace(/[:.]/g, '-');
+            //    finalFileName = `ChartDB (${name})_${timestamp}.json`;
+            //    console.log(`Создаем новую версию файла: ${finalFileName}`);
+            //}
 
             // Преобразуем Blob в ArrayBuffer для загрузки
             const arrayBuffer = await blob.arrayBuffer();
@@ -43,13 +74,13 @@ export const useExportDiagram = () => {
             // Загружаем файл в MinIO
             const putCommand = new PutObjectCommand({
                 Bucket: bucketName,
-                Key: fileName,
+                Key: finalFileName,
                 Body: new Uint8Array(arrayBuffer),
                 ContentType: 'application/json',
             });
 
             await s3Client.send(putCommand);
-            console.log(`Файл ${fileName} успешно загружен в MinIO`);
+            console.log(`Файл ${finalFileName} успешно загружен в MinIO`);
         } catch (error) {
             console.error('Ошибка при загрузке файла в MinIO:', error);
             throw error;
