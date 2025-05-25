@@ -487,7 +487,7 @@ export const Menu: React.FC<MenuProps> = () => {
                     <MenubarItem onClick={openImportDiagramDialog}>
                         {t('menu.backup.restore_diagram')}
                     </MenubarItem>
-                    <MenubarItem onClick={openImportDiagramDialog}>
+                    <MenubarItem onClick={saveToMinio}>
                         {t('menu.backup.save_to_minio')}
                     </MenubarItem>
                 </MenubarContent>
