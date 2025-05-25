@@ -49,6 +49,11 @@ export const Menu: React.FC<MenuProps> = () => {
         openImportDiagramDialog,
         openImportDBMLDialog,
     } = useDialog();
+
+    const saveToMinio = useCallback(() => {
+        openExportDiagramDialog({ destination: 'minio' });
+    }, [openExportDiagramDialog]);
+
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -181,8 +186,8 @@ export const Menu: React.FC<MenuProps> = () => {
                             {t('menu.file.import')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
-                            <MenubarItem onClick={openImportDiagramDialog}>
-                                .json
+                            <MenubarItem onClick={() => openExportDiagramDialog({ destination: 'local' })}>
+                                {t('menu.file.export_diagram')}
                             </MenubarItem>
                             <MenubarItem onClick={() => openImportDBMLDialog()}>
                                 .dbml
@@ -320,7 +325,7 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={exportJPG}>JPG</MenubarItem>
                             <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
                             <MenubarSeparator />
-                            <MenubarItem onClick={openExportDiagramDialog}>
+                            <MenubarItem onClick={() => openExportDiagramDialog({ destination: 'local' })}>
                                 JSON
                             </MenubarItem>
                         </MenubarSubContent>
@@ -481,13 +486,13 @@ export const Menu: React.FC<MenuProps> = () => {
             <MenubarMenu>
                 <MenubarTrigger>{t('menu.backup.backup')}</MenubarTrigger>
                 <MenubarContent>
-                    <MenubarItem onClick={openExportDiagramDialog}>
+                    <MenubarItem onClick={() => openExportDiagramDialog({ destination: 'local' })}>
                         {t('menu.backup.export_diagram')}
                     </MenubarItem>
                     <MenubarItem onClick={openImportDiagramDialog}>
                         {t('menu.backup.restore_diagram')}
                     </MenubarItem>
-                    <MenubarItem onClick={saveToMinio}>
+                    <MenubarItem onClick={() => openExportDiagramDialog({ destination: 'minio' })}>
                         {t('menu.backup.save_to_minio')}
                     </MenubarItem>
                 </MenubarContent>

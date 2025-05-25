@@ -20,10 +20,13 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
 import { useExportDiagram } from '@/hooks/use-export-diagram';
 
-export interface ExportDiagramDialogProps extends BaseDialogProps {}
+export interface ExportDiagramDialogProps extends BaseDialogProps {
+    destination?: 'local' | 'minio';
+}
 
 export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
     dialog,
+    destination,
 }) => {
     const { t } = useTranslation();
     const { currentDiagram } = useChartDB();
@@ -69,7 +72,9 @@ export const ExportDiagramDialog: React.FC<ExportDiagramDialogProps> = ({
             <DialogContent className="flex flex-col" showClose>
                 <DialogHeader>
                     <DialogTitle>
-                        {t('export_diagram_dialog.title')}
+                        {destination === 'minio'
+                            ? 'Export Diagram to MinIO'
+                            : 'Export Diagram Locally'}
                     </DialogTitle>
                     <DialogDescription>
                         {t('export_diagram_dialog.description')}
