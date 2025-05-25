@@ -17,6 +17,7 @@ export const ko_KR: LanguageTranslation = {
                 new: '새 다이어그램',
                 browse: '찾아보기...',
                 save: '저장',
+                duplicate: '복사',
                 import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',

@@ -17,6 +17,7 @@ export const zh_TW: LanguageTranslation = {
                 new: '新增圖表',
                 browse: '瀏覽...',
                 save: '儲存',
+                duplicate: '複製',
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',

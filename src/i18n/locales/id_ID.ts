@@ -17,6 +17,7 @@ export const id_ID: LanguageTranslation = {
                 new: 'Diagram Baru',
                 browse: 'Jelajahi...',
                 save: 'Simpan',
+                duplicate: 'Duplikat',
                 import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',

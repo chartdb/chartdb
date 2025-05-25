@@ -17,6 +17,7 @@ export const hi: LanguageTranslation = {
                 new: 'नया आरेख',
                 browse: 'ब्राउज़ करें...',
                 save: 'सहेजें',
+                duplicate: 'डुप्लिकेट',
                 import: 'डेटाबेस आयात करें',
                 export_sql: 'SQL निर्यात करें',
                 export_as: 'के रूप में निर्यात करें',

@@ -17,6 +17,7 @@ export const ar: LanguageTranslation = {
                 new: 'مخطط جديد',
                 browse: 'تصفح...',
                 save: 'حفظ',
+                duplicate: 'تكرار',
                 import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',

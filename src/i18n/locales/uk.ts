@@ -17,6 +17,7 @@ export const uk: LanguageTranslation = {
                 new: 'Нова діаграма',
                 browse: 'Огляд...',
                 save: 'Зберегти',
+                duplicate: 'Дублювати',
                 import: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',

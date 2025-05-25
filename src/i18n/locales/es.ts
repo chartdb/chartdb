@@ -17,6 +17,7 @@ export const es: LanguageTranslation = {
                 new: 'Nuevo Diagrama',
                 browse: 'Examinar...',
                 save: 'Guardar',
+                duplicate: 'Duplicar',
                 import: 'Importar Base de Datos',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',

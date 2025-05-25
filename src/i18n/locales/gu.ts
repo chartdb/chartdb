@@ -17,6 +17,7 @@ export const gu: LanguageTranslation = {
                 new: 'નવું ડાયાગ્રામ',
                 browse: 'બ્રાઉજ કરો...',
                 save: 'સાચવો',
+                duplicate: 'ડુપ્લિકેટ',
                 import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
