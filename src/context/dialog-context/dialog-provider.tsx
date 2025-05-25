@@ -125,14 +125,18 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     // Export diagram dialog
-    const [openExportDiagramDialog, setOpenExportDiagramDialog] = useState(false);
-    const [exportDiagramParams, setExportDiagramParams] = useState<{destination?: 'local' | 'minio'}>({});
-    
-    const openExportDiagramDialogHandler: DialogContext['openExportDiagramDialog'] = useCallback((params) => {
-        setExportDiagramParams(params || {});
-        setOpenExportDiagramDialog(true);
-    }, []);
-    
+    const [openExportDiagramDialog, setOpenExportDiagramDialog] =
+        useState(false);
+    const [exportDiagramParams, setExportDiagramParams] = useState<{
+        destination?: 'local' | 'minio';
+    }>({});
+
+    const openExportDiagramDialogHandler: DialogContext['openExportDiagramDialog'] =
+        useCallback((params) => {
+            setExportDiagramParams(params || {});
+            setOpenExportDiagramDialog(true);
+        }, []);
+
     const closeExportDiagramDialogHandler = useCallback(() => {
         setOpenExportDiagramDialog(false);
     }, []);
@@ -210,8 +214,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
             />
-            <ExportDiagramDialog 
-                dialog={{ open: openExportDiagramDialog }} 
+            <ExportDiagramDialog
+                dialog={{ open: openExportDiagramDialog }}
                 destination={exportDiagramParams.destination}
             />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
