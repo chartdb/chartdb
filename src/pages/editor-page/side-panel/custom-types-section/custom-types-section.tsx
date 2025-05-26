@@ -34,10 +34,7 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
     }, []);
 
     const handleCreateCustomType = useCallback(async () => {
-        await createCustomType({
-            kind: 'enum',
-            values: [],
-        });
+        await createCustomType();
     }, [createCustomType]);
 
     const operatingSystem = useMemo(() => getOperatingSystem(), []);

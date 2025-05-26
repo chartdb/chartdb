@@ -25,7 +25,10 @@ import type { Area } from '@/lib/domain/area';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
-import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import {
+    DBCustomTypeKind,
+    type DBCustomType,
+} from '@/lib/domain/db-custom-type';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -1603,8 +1606,9 @@ export const ChartDBProvider: React.FC<
             const customType: DBCustomType = {
                 id: generateId(),
                 name: `custom_type_${customTypes.length + 1}`,
-                kind: 'enum',
+                kind: DBCustomTypeKind.enum,
                 values: [],
+                fields: [],
                 ...attributes,
             };
 
