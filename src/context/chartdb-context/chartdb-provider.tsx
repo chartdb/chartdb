@@ -1605,7 +1605,7 @@ export const ChartDBProvider: React.FC<
         async (attributes) => {
             const customType: DBCustomType = {
                 id: generateId(),
-                name: `custom_type_${customTypes.length + 1}`,
+                name: `type_${customTypes.length + 1}`,
                 kind: DBCustomTypeKind.enum,
                 values: [],
                 fields: [],

@@ -26,7 +26,12 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
-import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import {
+    customTypeKindToLabel,
+    DBCustomTypeKind,
+    type DBCustomType,
+} from '@/lib/domain/db-custom-type';
+import { Badge } from '@/components/badge/badge';
 
 export interface CustomTypeListItemHeaderProps {
     customType: DBCustomType;
@@ -149,10 +154,18 @@ export const CustomTypeListItemHeader: React.FC<
                     </Tooltip>
                 )}
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>
+                        {customType.kind === DBCustomTypeKind.enum ? (
+                            <Badge
+                                variant="outline"
+                                className="h-fit bg-background px-2 text-xs md:group-hover:hidden"
+                            >
+                                {customTypeKindToLabel[customType.kind]}
+                            </Badge>
+                        ) : null}
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                             <ListItemHeaderButton onClick={enterEditMode}>
                                 <Pencil />
