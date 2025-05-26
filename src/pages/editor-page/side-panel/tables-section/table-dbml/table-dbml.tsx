@@ -12,10 +12,40 @@ import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-lang
 import { DatabaseType } from '@/lib/domain/database-type';
 import { ArrowLeftRight } from 'lucide-react';
 import { type DBField } from '@/lib/domain/db-field';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
 }
+
+// Use DBCustomType for generating Enum DBML
+const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
+    if (!customTypes || customTypes.length === 0) {
+        return '';
+    }
+
+    // Filter for enum types and map them
+    return customTypes
+        .filter((ct) => ct.kind === DBCustomTypeKind.enum)
+        .map((enumDef) => {
+            const enumIdentifier = enumDef.schema
+                ? `"${enumDef.schema}"."${enumDef.name.replace(/"/g, '\\"')}"`
+                : `"${enumDef.name.replace(/"/g, '\\"')}"`;
+
+            const valuesString = (enumDef.values || []) // Ensure values array exists
+                .map((valueName) => {
+                    // valueName is a string as per DBCustomType
+                    const valLine = `    "${valueName.replace(/"/g, '\\"')}"`;
+                    // If you have notes per enum value, you'd need to adjust DBCustomType
+                    // For now, assuming no notes per value in DBCustomType
+                    return valLine;
+                })
+                .join('\n');
+            return `Enum ${enumIdentifier} {\n${valuesString}\n}\n`;
+        })
+        .join('\n');
+};
 
 const getEditorTheme = (theme: EffectiveTheme) => {
     return theme === 'dark' ? 'dbml-dark' : 'dbml-light';
@@ -140,6 +170,19 @@ const sanitizeSQLforDBML = (sql: string): string => {
             }
         }
     );
+
+    // Comment out self-referencing foreign keys to prevent "Two endpoints are the same" error
+    // Example: ALTER TABLE public.class ADD CONSTRAINT ... FOREIGN KEY (class_id) REFERENCES public.class (class_id);
+    const lines = sanitized.split('\n');
+    const processedLines = lines.map((line) => {
+        const selfRefFKPattern =
+            /ALTER\s+TABLE\s+(?:\S+\.)?(\S+)\s+ADD\s+CONSTRAINT\s+\S+\s+FOREIGN\s+KEY\s*\([^)]+\)\s+REFERENCES\s+(?:\S+\.)?\1\s*\([^)]+\)\s*;/i;
+        if (selfRefFKPattern.test(line)) {
+            return `-- ${line}`; // Comment out the line
+        }
+        return line;
+    });
+    sanitized = processedLines.join('\n');
 
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
@@ -287,7 +330,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
-        'standard'
+        'inline'
     );
 
     // --- Effect for handling empty field name warnings ---
@@ -439,6 +482,9 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         let inline = '';
         let baseScript = ''; // Define baseScript outside try
 
+        // Use finalDiagramForExport.customTypes which should be DBCustomType[]
+        const enumsDBML = generateEnumsDBML(finalDiagramForExport.customTypes);
+
         try {
             baseScript = exportBaseSQL({
                 diagram: finalDiagramForExport, // Use final diagram
@@ -467,6 +513,9 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 )
             );
 
+            // Prepend Enum DBML to the standard output
+            standard = enumsDBML + '\n' + standard;
+
             inline = normalizeCharTypeFormat(convertToInlineRefs(standard));
         } catch (error: unknown) {
             console.error(
@@ -494,6 +543,15 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                         'Could not generate DBML due to an unknown error',
                     variant: 'destructive',
                 });
+            }
+
+            // If an error occurred, still prepend enums if they exist, or they'll be lost.
+            // The error message will then follow.
+            if (standard.startsWith('// Error generating DBML:')) {
+                standard = enumsDBML + standard;
+            }
+            if (inline.startsWith('// Error generating DBML:')) {
+                inline = enumsDBML + inline;
             }
         }
         return { standardDbml: standard, inlineDbml: inline };
