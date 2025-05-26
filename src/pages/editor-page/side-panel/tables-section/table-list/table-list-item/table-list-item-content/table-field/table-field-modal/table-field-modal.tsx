@@ -31,6 +31,10 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
 
+    useEffect(() => {
+        setLocalField(field);
+    }, [field]);
+
     const debouncedUpdateFieldRef = useRef<((value?: DBField) => void) | null>(
         null
     );
