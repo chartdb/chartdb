@@ -53,11 +53,17 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         };
     }, [updateField]);
 
+    const prevFieldRef = useRef<DBField>(field);
+
     useEffect(() => {
-        if (debouncedUpdateFieldRef.current && !equal(field, localField)) {
+        if (
+            debouncedUpdateFieldRef.current &&
+            !equal(prevFieldRef.current, localField)
+        ) {
             debouncedUpdateFieldRef.current(localField);
         }
-    }, [localField, field]);
+        prevFieldRef.current = localField;
+    }, [localField]);
 
     return (
         <Popover
