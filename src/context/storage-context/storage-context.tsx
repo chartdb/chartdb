@@ -20,6 +20,7 @@ export interface StorageContext {
         includeRelationships?: boolean;
         includeDependencies?: boolean;
         includeAreas?: boolean;
+        includeCustomTypes?: boolean;
     }) => Promise<Diagram[]>;
     getDiagram: (
         id: string,
