@@ -267,11 +267,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             includeRelationships?: boolean;
             includeDependencies?: boolean;
             includeAreas?: boolean;
+            includeCustomTypes?: boolean;
         } = {
             includeRelationships: false,
             includeTables: false,
             includeDependencies: false,
             includeAreas: false,
+            includeCustomTypes: false,
         }
     ): Promise<Diagram[]> => {
         let diagrams = await db.diagrams.toArray();
@@ -307,6 +309,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             diagrams = await Promise.all(
                 diagrams.map(async (diagram) => {
                     diagram.areas = await listAreas(diagram.id);
+                    return diagram;
+                })
+            );
+        }
+
+        if (options.includeCustomTypes) {
+            diagrams = await Promise.all(
+                diagrams.map(async (diagram) => {
+                    diagram.customTypes = await listCustomTypes(diagram.id);
                     return diagram;
                 })
             );
@@ -380,6 +391,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     .equals(id)
                     .modify({ diagramId: attributes.id }),
                 db.db_dependencies
+                    .where('diagramId')
+                    .equals(id)
+                    .modify({ diagramId: attributes.id }),
+                db.areas.where('diagramId').equals(id).modify({
+                    diagramId: attributes.id,
+                }),
+                db.db_custom_types
                     .where('diagramId')
                     .equals(id)
                     .modify({ diagramId: attributes.id }),
