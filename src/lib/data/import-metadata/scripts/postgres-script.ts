@@ -255,6 +255,62 @@ cols AS (
               ? supabaseViewsFilter
               : ''
     }
+), custom_types AS (
+    SELECT array_to_string(array_agg(type_json), ',') AS custom_types_metadata
+    FROM (
+        -- ENUM types
+        SELECT CONCAT(
+            '{"schema":"', n.nspname,
+            '","type":"', t.typname,
+            '","kind":"enum"',
+            ',"values":[', string_agg('"' || e.enumlabel || '"', ',' ORDER BY e.enumsortorder), ']}'
+        ) AS type_json
+        FROM pg_type t
+        JOIN pg_enum e ON t.oid = e.enumtypid
+        JOIN pg_namespace n ON n.oid = t.typnamespace
+        WHERE n.nspname NOT IN ('pg_catalog', 'information_schema') ${
+            databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
+                ? timescaleViewsFilter
+                : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
+                  ? supabaseViewsFilter
+                  : ''
+        }
+        GROUP BY n.nspname, t.typname
+
+        UNION ALL
+
+        -- COMPOSITE types
+        SELECT CONCAT(
+            '{"schema":"', schema_name,
+            '","type":"', type_name,
+            '","kind":"composite"',
+            ',"fields":[', fields_json, ']}'
+        ) AS type_json
+        FROM (
+            SELECT
+                n.nspname AS schema_name,
+                t.typname AS type_name,
+                string_agg(
+                    CONCAT('{"field":"', a.attname, '","type":"', format_type(a.atttypid, a.atttypmod), '"}'),
+                    ',' ORDER BY a.attnum
+                ) AS fields_json
+            FROM pg_type t
+            JOIN pg_namespace n ON n.oid = t.typnamespace
+            JOIN pg_class c ON c.oid = t.typrelid
+            JOIN pg_attribute a ON a.attrelid = c.oid
+            WHERE t.typtype = 'c'
+              AND c.relkind = 'c'  -- ✅ Only user-defined composite types
+              AND a.attnum > 0 AND NOT a.attisdropped
+              AND n.nspname NOT IN ('pg_catalog', 'information_schema') ${
+                  databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
+                      ? timescaleViewsFilter
+                      : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
+                        ? supabaseViewsFilter
+                        : ''
+              }
+            GROUP BY n.nspname, t.typname
+        ) AS comp
+    ) AS all_types
 )
 SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
                     '], "pk_info": [', COALESCE(pk_metadata, ''),
@@ -262,9 +318,10 @@ SELECT CONCAT('{    "fk_info": [', COALESCE(fk_metadata, ''),
                     '], "indexes": [', COALESCE(indexes_metadata, ''),
                     '], "tables":[', COALESCE(tbls_metadata, ''),
                     '], "views":[', COALESCE(views_metadata, ''),
+                    '], "custom_types": [', COALESCE(custom_types_metadata, ''),
                     '], "database_name": "', CURRENT_DATABASE(), '', '", "version": "', '',
               '"}') AS metadata_json_to_import
-FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views;
+FROM fk_info${databaseEdition ? '_' + databaseEdition : ''}, pk_info, cols, indexes_metadata, tbls, config, views, custom_types;
     `;
 
     const psqlPreCommand = `# *** Remember to change! (HOST_NAME, PORT, USER_NAME, DATABASE_NAME) *** \n`;

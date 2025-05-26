@@ -16,6 +16,8 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { getOperatingSystem } from '@/lib/utils';
 
 export interface RelationshipsSectionProps {}
 
@@ -25,6 +27,7 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
     const { closeAllRelationshipsInSidebar } = useLayout();
     const { t } = useTranslation();
     const { openCreateRelationshipDialog } = useDialog();
+    const filterInputRef = React.useRef<HTMLInputElement>(null);
 
     const filteredRelationships = useMemo(() => {
         const filterName: (relationship: DBRelationship) => boolean = (
@@ -45,6 +48,19 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
         setFilterText('');
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog, setFilterText]);
+
+    const operatingSystem = useMemo(() => getOperatingSystem(), []);
+
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
+        () => {
+            filterInputRef.current?.focus();
+        },
+        {
+            preventDefault: true,
+        },
+        [filterInputRef]
+    );
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">
@@ -69,6 +85,7 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
                 </div>
                 <div className="flex-1">
                     <Input
+                        ref={filterInputRef}
                         type="text"
                         placeholder={t(
                             'side_panel.relationships_section.filter'
