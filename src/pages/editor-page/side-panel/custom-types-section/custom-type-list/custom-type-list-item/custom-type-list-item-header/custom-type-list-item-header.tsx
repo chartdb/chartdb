@@ -49,6 +49,7 @@ export const CustomTypeListItemHeader: React.FC<
         filteredSchemas,
         highlightedCustomTypeId,
         setHighlightedCustomTypeId,
+        isCustomTypeUsed,
     } = useChartDB();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
@@ -87,8 +88,9 @@ export const CustomTypeListItemHeader: React.FC<
         setHighlightedCustomTypeId(customType.id);
     }, [customType.id, setHighlightedCustomTypeId]);
 
-    const renderDropDownMenu = useCallback(
-        () => (
+    const renderDropDownMenu = useCallback(() => {
+        const isUsed = isCustomTypeUsed(customType.id);
+        return (
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <ListItemHeaderButton>
@@ -105,6 +107,7 @@ export const CustomTypeListItemHeader: React.FC<
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             onClick={toggleHighlightCustomType}
+                            disabled={!isUsed}
                             className={cn(
                                 'flex justify-between',
                                 highlightedCustomTypeId === customType.id
@@ -120,7 +123,9 @@ export const CustomTypeListItemHeader: React.FC<
                                     'size-3.5',
                                     highlightedCustomTypeId === customType.id
                                         ? 'text-yellow-600'
-                                        : 'text-muted-foreground'
+                                        : isUsed
+                                          ? 'text-muted-foreground'
+                                          : 'text-slate-400 dark:text-slate-600'
                                 )}
                             />
                         </DropdownMenuItem>
@@ -136,15 +141,15 @@ export const CustomTypeListItemHeader: React.FC<
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-        [
-            deleteCustomTypeHandler,
-            t,
-            toggleHighlightCustomType,
-            customType.id,
-            highlightedCustomTypeId,
-        ]
-    );
+        );
+    }, [
+        deleteCustomTypeHandler,
+        t,
+        toggleHighlightCustomType,
+        customType.id,
+        highlightedCustomTypeId,
+        isCustomTypeUsed,
+    ]);
 
     let schemaToDisplay;
 

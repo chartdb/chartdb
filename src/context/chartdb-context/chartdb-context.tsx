@@ -80,6 +80,7 @@ export interface ChartDBContext {
 
     highlightedCustomTypeId: string | null;
     setHighlightedCustomTypeId: (id: string | null) => void;
+    isCustomTypeUsed: (customTypeId: string) => boolean;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
@@ -294,6 +295,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     schemas: [],
     highlightedCustomTypeId: null,
     setHighlightedCustomTypeId: emptyFn,
+    isCustomTypeUsed: () => false,
     filteredSchemas: [],
     filterSchemas: emptyFn,
     currentDiagram: {
