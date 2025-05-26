@@ -247,6 +247,7 @@ export const en = {
                     add_field: 'Add Field',
                     custom_type_actions: {
                         title: 'Actions',
+                        highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',

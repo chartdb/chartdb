@@ -67,6 +67,11 @@ export const ChartDBProvider: React.FC<
     );
     const { events: diffEvents } = useDiff();
 
+    // New state for highlighted custom type ID
+    const [highlightedCustomTypeId, setHighlightedCustomTypeIdState] = useState<
+        string | null
+    >(null);
+
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
         const { tablesAdded, fieldsAdded, relationshipsAdded } = event.data;
         setTables((tables) =>
@@ -1516,22 +1521,36 @@ export const ChartDBProvider: React.FC<
         [db, diagramId, setAreas, getArea, addUndoAction, resetRedoStack]
     );
 
+    // New function to set/toggle the highlighted custom type ID
+    const setHighlightedCustomTypeId = useCallback(
+        (id: string | null) => {
+            setHighlightedCustomTypeIdState((currentId) =>
+                currentId === id ? null : id
+            );
+        },
+        [setHighlightedCustomTypeIdState]
+    );
+
     const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
         useCallback(
-            async (diagram) => {
+            (diagram) => {
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
                 setDatabaseEdition(diagram.databaseEdition);
-                setTables(diagram?.tables ?? []);
-                setRelationships(diagram?.relationships ?? []);
-                setDependencies(diagram?.dependencies ?? []);
-                setAreas(diagram?.areas ?? []);
-                setCustomTypes(diagram?.customTypes ?? []);
+                setTables(diagram.tables ?? []);
+                setRelationships(diagram.relationships ?? []);
+                setDependencies(diagram.dependencies ?? []);
+                setAreas(diagram.areas ?? []);
+                setCustomTypes(diagram.customTypes ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
+                setHighlightedCustomTypeIdState(null);
 
                 events.emit({ action: 'load_diagram', data: { diagram } });
+
+                resetRedoStack();
+                resetUndoStack();
             },
             [
                 setDiagramId,
@@ -1545,7 +1564,10 @@ export const ChartDBProvider: React.FC<
                 setCustomTypes,
                 setDiagramCreatedAt,
                 setDiagramUpdatedAt,
+                setHighlightedCustomTypeIdState,
                 events,
+                resetRedoStack,
+                resetUndoStack,
             ]
         );
 
@@ -1712,80 +1734,177 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    const contextValue = useMemo<ChartDBContext>(
+        () => ({
+            diagramId,
+            diagramName,
+            databaseType,
+            databaseEdition,
+            tables,
+            schemas,
+            filteredSchemas,
+            relationships,
+            dependencies,
+            areas,
+            customTypes,
+            currentDiagram,
+            events,
+            readonly,
+            filterSchemas,
+            // General operations
+            updateDiagramId,
+            updateDiagramName,
+            updateDiagramUpdatedAt,
+            loadDiagram,
+            loadDiagramFromData,
+            clearDiagramData,
+            deleteDiagram,
+            // Database type operations
+            updateDatabaseType,
+            updateDatabaseEdition,
+            // Table operations
+            createTable,
+            addTable,
+            addTables,
+            getTable,
+            removeTable,
+            removeTables,
+            updateTable,
+            updateTablesState,
+            // Field operations
+            getField,
+            updateField,
+            removeField,
+            createField,
+            addField,
+            // Index operations
+            createIndex,
+            addIndex,
+            getIndex,
+            removeIndex,
+            updateIndex,
+            // Relationship operations
+            createRelationship,
+            addRelationship,
+            addRelationships,
+            getRelationship,
+            removeRelationship,
+            removeRelationships,
+            updateRelationship,
+            // Dependency operations
+            createDependency,
+            addDependency,
+            addDependencies,
+            getDependency,
+            removeDependency,
+            removeDependencies,
+            updateDependency,
+            // Area operations
+            createArea,
+            addArea,
+            addAreas,
+            getArea,
+            removeArea,
+            removeAreas,
+            updateArea,
+            // Custom type operations
+            createCustomType,
+            addCustomType,
+            addCustomTypes,
+            getCustomType,
+            removeCustomType,
+            removeCustomTypes,
+            updateCustomType,
+            // New highlight feature
+            highlightedCustomTypeId,
+            setHighlightedCustomTypeId,
+        }),
+        [
+            diagramId,
+            diagramName,
+            databaseType,
+            databaseEdition,
+            tables,
+            schemas,
+            filteredSchemas,
+            relationships,
+            dependencies,
+            areas,
+            customTypes,
+            currentDiagram,
+            events,
+            readonly,
+            filterSchemas,
+            updateDiagramId,
+            updateDiagramName,
+            updateDiagramUpdatedAt,
+            loadDiagram,
+            loadDiagramFromData,
+            clearDiagramData,
+            deleteDiagram,
+            updateDatabaseType,
+            updateDatabaseEdition,
+            createTable,
+            addTable,
+            addTables,
+            getTable,
+            removeTable,
+            removeTables,
+            updateTable,
+            updateTablesState,
+            getField,
+            updateField,
+            removeField,
+            createField,
+            addField,
+            createIndex,
+            addIndex,
+            getIndex,
+            removeIndex,
+            updateIndex,
+            createRelationship,
+            addRelationship,
+            addRelationships,
+            getRelationship,
+            removeRelationship,
+            removeRelationships,
+            updateRelationship,
+            createDependency,
+            addDependency,
+            addDependencies,
+            getDependency,
+            removeDependency,
+            removeDependencies,
+            updateDependency,
+            createArea,
+            addArea,
+            addAreas,
+            getArea,
+            removeArea,
+            removeAreas,
+            updateArea,
+            createCustomType,
+            addCustomType,
+            addCustomTypes,
+            getCustomType,
+            removeCustomType,
+            removeCustomTypes,
+            updateCustomType,
+            // New highlight feature dependencies
+            highlightedCustomTypeId,
+            setHighlightedCustomTypeId,
+        ]
+    );
+
+    React.useEffect(() => {
+        if (diagram) {
+            loadDiagramFromData(diagram);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [diagram]); // diagram only, loadDiagramFromData is stable due to useCallback
+
     return (
-        <chartDBContext.Provider
-            value={{
-                diagramId,
-                diagramName,
-                databaseType,
-                tables,
-                relationships,
-                dependencies,
-                areas,
-                currentDiagram,
-                schemas,
-                filteredSchemas,
-                events,
-                readonly,
-                filterSchemas,
-                updateDiagramId,
-                updateDiagramName,
-                loadDiagram,
-                loadDiagramFromData,
-                updateDatabaseType,
-                updateDatabaseEdition,
-                clearDiagramData,
-                deleteDiagram,
-                updateDiagramUpdatedAt,
-                createTable,
-                addTable,
-                addTables,
-                getTable,
-                removeTable,
-                removeTables,
-                updateTable,
-                updateTablesState,
-                updateField,
-                removeField,
-                createField,
-                addField,
-                addIndex,
-                createIndex,
-                removeIndex,
-                getField,
-                getIndex,
-                updateIndex,
-                addRelationship,
-                addRelationships,
-                createRelationship,
-                getRelationship,
-                removeRelationship,
-                removeRelationships,
-                updateRelationship,
-                addDependency,
-                addDependencies,
-                createDependency,
-                getDependency,
-                removeDependency,
-                removeDependencies,
-                updateDependency,
-                createArea,
-                addArea,
-                addAreas,
-                getArea,
-                removeArea,
-                removeAreas,
-                updateArea,
-                customTypes,
-                createCustomType,
-                addCustomType,
-                addCustomTypes,
-                getCustomType,
-                removeCustomType,
-                removeCustomTypes,
-                updateCustomType,
-            }}
-        >
+        <chartDBContext.Provider value={contextValue}>
             {children}
         </chartDBContext.Provider>
     );
