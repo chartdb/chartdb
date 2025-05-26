@@ -1,68 +1,156 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { Accordion } from '@/components/accordion/accordion';
+import { useLayout } from '@/hooks/use-layout';
+import {
+    closestCenter,
+    DndContext,
+    type DragEndEvent,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useChartDB } from '@/hooks/use-chartdb.ts';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
-import { Database } from 'lucide-react';
-import { CustomTypeDetail } from '../custom-type-detail/custom-type-detail';
+import { CustomTypeListItem } from './custom-type-list-item/custom-type-list-item';
 
-export interface CustomTypeListProps {
+export interface CustomTypeProps {
     customTypes: DBCustomType[];
 }
 
-export const CustomTypeList: React.FC<CustomTypeListProps> = ({
-    customTypes,
-}) => {
-    const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
+export const CustomTypeList: React.FC<CustomTypeProps> = ({ customTypes }) => {
+    const { updateCustomType } = useChartDB();
 
-    const handleSelectType = (typeId: string) => {
-        setSelectedTypeId(typeId === selectedTypeId ? null : typeId);
-    };
+    const { openCustomTypeFromSidebar, openedCustomTypeInSidebar } =
+        useLayout();
+    const lastOpenedCustomType = React.useRef<string | null>(null);
+    const refs = useMemo(
+        () =>
+            customTypes.reduce(
+                (acc, customType) => {
+                    acc[customType.id] = React.createRef();
+                    return acc;
+                },
+                {} as Record<string, React.RefObject<HTMLDivElement>>
+            ),
+        [customTypes]
+    );
 
-    const handleCloseDetail = () => {
-        setSelectedTypeId(null);
-    };
+    const scrollToCustomType = useCallback(
+        (id: string) =>
+            refs[id]?.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            }),
+        [refs]
+    );
+
+    const sensors = useSensors(useSensor(PointerSensor));
+
+    const handleDragEnd = useCallback(
+        (event: DragEndEvent) => {
+            const { active, over } = event;
+
+            if (active?.id !== over?.id && !!over && !!active) {
+                const oldIndex = customTypes.findIndex(
+                    (customType) => customType.id === active.id
+                );
+                const newIndex = customTypes.findIndex(
+                    (customType) => customType.id === over.id
+                );
+
+                const newCustomTypesOrder = arrayMove<DBCustomType>(
+                    customTypes,
+                    oldIndex,
+                    newIndex
+                );
+
+                newCustomTypesOrder.forEach((customType, index) => {
+                    updateCustomType(customType.id, { order: index });
+                });
+            }
+        },
+        [customTypes, updateCustomType]
+    );
+
+    const handleScrollToCustomType = useCallback(() => {
+        if (
+            openedCustomTypeInSidebar &&
+            lastOpenedCustomType.current !== openedCustomTypeInSidebar
+        ) {
+            lastOpenedCustomType.current = openedCustomTypeInSidebar;
+            scrollToCustomType(openedCustomTypeInSidebar);
+        }
+    }, [scrollToCustomType, openedCustomTypeInSidebar]);
 
     return (
-        <div className="space-y-2 p-1">
-            {customTypes.map((type) => (
-                <React.Fragment key={type.id}>
-                    <div
-                        onClick={() => handleSelectType(type.id)}
-                        className={`flex cursor-pointer items-center justify-between rounded-md border p-2 hover:bg-muted ${
-                            selectedTypeId === type.id ? 'border-primary' : ''
-                        }`}
-                    >
-                        <div className="flex items-center gap-2">
-                            <Database className="size-4 text-muted-foreground" />
-                            <span className="font-medium">{type.name}</span>
-                            <span className="text-xs text-muted-foreground">
-                                ({type.schema})
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                                {type.kind}
-                            </span>
-                            {type.kind === 'enum' && (
-                                <span className="text-xs text-muted-foreground">
-                                    {type.values?.length} values
-                                </span>
-                            )}
-                            {type.kind === 'composite' && (
-                                <span className="text-xs text-muted-foreground">
-                                    {type.fields?.length} fields
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    {selectedTypeId === type.id && (
-                        <div className="mb-2 mt-1 rounded-md border bg-card">
-                            <CustomTypeDetail
-                                customTypeId={type.id}
-                                onClose={handleCloseDetail}
+        <Accordion
+            type="single"
+            collapsible
+            className="flex w-full flex-col gap-1"
+            value={openedCustomTypeInSidebar}
+            onValueChange={openCustomTypeFromSidebar}
+            onAnimationEnd={handleScrollToCustomType}
+        >
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext
+                    items={customTypes}
+                    strategy={verticalListSortingStrategy}
+                >
+                    {customTypes
+                        .sort(
+                            (
+                                customType1: DBCustomType,
+                                customType2: DBCustomType
+                            ) => {
+                                // if one has order and the other doesn't, the one with order should come first
+                                if (
+                                    customType1.order &&
+                                    customType2.order === undefined
+                                ) {
+                                    return -1;
+                                }
+
+                                if (
+                                    customType1.order === undefined &&
+                                    customType2.order
+                                ) {
+                                    return 1;
+                                }
+
+                                // if both have order, sort by order
+                                if (
+                                    customType1.order !== undefined &&
+                                    customType2.order !== undefined
+                                ) {
+                                    return (
+                                        customType1.order - customType2.order
+                                    );
+                                }
+
+                                // sort by name
+                                return customType1.name.localeCompare(
+                                    customType2.name
+                                );
+                            }
+                        )
+                        .map((customType) => (
+                            <CustomTypeListItem
+                                key={customType.id}
+                                customType={customType}
+                                ref={refs[customType.id]}
                             />
-                        </div>
-                    )}
-                </React.Fragment>
-            ))}
-        </div>
+                        ))}
+                </SortableContext>
+            </DndContext>
+        </Accordion>
     );
 };

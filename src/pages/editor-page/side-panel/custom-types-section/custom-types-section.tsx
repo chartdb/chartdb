@@ -35,7 +35,6 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
 
     const handleCreateCustomType = useCallback(async () => {
         await createCustomType({
-            schema: 'public',
             kind: 'enum',
             values: [],
         });

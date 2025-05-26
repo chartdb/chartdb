@@ -237,6 +237,20 @@ export const en = {
                     description:
                         'Custom types will appear here when they are available in your database',
                 },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
             },
         },
 

@@ -55,8 +55,7 @@ export const TableField: React.FC<TableFieldProps> = ({
             group: 'Standard Types',
         }));
 
-        // Only add custom types for PostgreSQL databases
-        if (databaseType !== 'postgresql' || !customTypes?.length) {
+        if (!customTypes?.length) {
             return standardTypes;
         }
 
@@ -67,9 +66,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 value: `custom-type-${type.name}`,
                 // Add additional info to distinguish custom types
                 description:
-                    type.kind === 'enum'
-                        ? `enum: ${type.values?.join(', ')}`
-                        : `composite type`,
+                    type.kind === 'enum' ? `${type.values?.join(' | ')}` : '',
                 // Group custom types together
                 group: 'Custom Types',
             })
@@ -194,6 +191,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <span>
                             <SelectBox
                                 className="flex h-8 min-h-8 w-full"
+                                popoverClassName="min-w-[350px]"
                                 options={dataFieldOptions}
                                 placeholder={t(
                                     'side_panel.tables_section.table.field_type'

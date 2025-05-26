@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import { Twitter, BookOpen, Group, Database } from 'lucide-react';
+import { Twitter, BookOpen, Group, FileType } from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface SidebarItem {
     title: string;
@@ -37,7 +38,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
-    const { dependencies } = useChartDB();
+    const { dependencies, databaseType } = useChartDB();
 
     const items: SidebarItem[] = useMemo(() => {
         const baseItems = [
@@ -68,28 +69,37 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'areas',
             },
-            {
-                title: t('side_panel.custom_types_section.custom_types'),
-                icon: Database,
-                onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('customTypes');
-                },
-                active: selectedSidebarSection === 'customTypes',
-            },
+            ...(dependencies && dependencies.length > 0
+                ? [
+                      {
+                          title: t(
+                              'side_panel.dependencies_section.dependencies'
+                          ),
+                          icon: SquareStack,
+                          onClick: () => {
+                              showSidePanel();
+                              selectSidebarSection('dependencies');
+                          },
+                          active: selectedSidebarSection === 'dependencies',
+                      },
+                  ]
+                : []),
+            ...(databaseType === DatabaseType.POSTGRESQL
+                ? [
+                      {
+                          title: t(
+                              'side_panel.custom_types_section.custom_types'
+                          ),
+                          icon: FileType,
+                          onClick: () => {
+                              showSidePanel();
+                              selectSidebarSection('customTypes');
+                          },
+                          active: selectedSidebarSection === 'customTypes',
+                      },
+                  ]
+                : []),
         ];
-
-        if (dependencies && dependencies.length > 0) {
-            baseItems.splice(2, 0, {
-                title: t('side_panel.dependencies_section.dependencies'),
-                icon: SquareStack,
-                onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('dependencies');
-                },
-                active: selectedSidebarSection === 'dependencies',
-            });
-        }
 
         return baseItems;
     }, [
@@ -98,6 +108,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         t,
         showSidePanel,
         dependencies,
+        databaseType,
     ]);
 
     const footerItems: SidebarItem[] = useMemo(

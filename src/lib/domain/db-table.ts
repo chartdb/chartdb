@@ -121,7 +121,10 @@ export const createTablesFromMetadata = ({
             primaryKeys,
             tableInfo,
             tableSchema,
-            customTypes,
+            customTypes:
+                databaseType === DatabaseType.POSTGRESQL
+                    ? customTypes
+                    : undefined,
         });
 
         const dbIndexes = createIndexesFromMetadata({

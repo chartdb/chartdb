@@ -7,6 +7,7 @@ import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/prim
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import type { DBCustomTypeInfo } from '../data/import-metadata/metadata-types/custom-type-info';
 import { schemaNameToDomainSchemaName } from './db-schema';
+import { getCustomTypeId } from './db-custom-type';
 
 export interface DBField {
     id: string;
@@ -155,7 +156,7 @@ export const createFieldsFromMetadata = ({
         if (col.type.toLowerCase() === 'user-defined' && typeMap[col.name]) {
             const customType = typeMap[col.name];
             type = {
-                id: `custom-type-${customType.type}`,
+                id: getCustomTypeId(customType.type),
                 name: customType.type,
             };
         } else {

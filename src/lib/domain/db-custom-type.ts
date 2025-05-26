@@ -3,7 +3,10 @@ import type { DBCustomTypeInfo } from '@/lib/data/import-metadata/metadata-types
 import { generateId } from '../utils';
 import { schemaNameToDomainSchemaName } from './db-schema';
 
-export type DBCustomTypeKind = 'enum' | 'composite';
+export enum DBCustomTypeKind {
+    enum = 'enum',
+    composite = 'composite',
+}
 
 export interface DBCustomTypeField {
     field: string;
@@ -17,6 +20,7 @@ export interface DBCustomType {
     kind: DBCustomTypeKind;
     values?: string[]; // For enum types
     fields?: DBCustomTypeField[]; // For composite types
+    order?: number;
 }
 
 export const dbCustomTypeFieldSchema = z.object({
@@ -28,7 +32,7 @@ export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     id: z.string(),
     schema: z.string(),
     name: z.string(),
-    kind: z.enum(['enum', 'composite']),
+    kind: z.nativeEnum(DBCustomTypeKind),
     values: z.array(z.string()).optional(),
     fields: z.array(dbCustomTypeFieldSchema).optional(),
 });
@@ -43,9 +47,17 @@ export const createCustomTypesFromMetadata = ({
             id: generateId(),
             schema: schemaNameToDomainSchemaName(customType.schema),
             name: customType.type,
-            kind: customType.kind,
+            kind: customType.kind as DBCustomTypeKind,
             values: customType.values,
             fields: customType.fields,
         };
     });
 };
+
+export const customTypeKindToLabel: Record<DBCustomTypeKind, string> = {
+    enum: 'Enum',
+    composite: 'Composite',
+};
+
+export const getCustomTypeId = (name: string) =>
+    `custom-type-${name.toLowerCase().trim()}`;

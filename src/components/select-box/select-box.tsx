@@ -52,6 +52,7 @@ export interface SelectBoxProps {
     disabled?: boolean;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
+    popoverClassName?: string;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -76,6 +77,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             disabled,
             open,
             onOpenChange: setOpen,
+            popoverClassName,
         },
         ref
     ) => {
@@ -241,7 +243,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                 <CheckIcon />
                             </div>
                         )}
-                        <div className="flex items-center truncate">
+                        <div className="flex flex-1 items-center truncate">
                             <span>
                                 {isRegexMatch ? searchTerm : option.label}
                                 {!isRegexMatch && optionSuffix
@@ -249,7 +251,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                     : ''}
                             </span>
                             {option.description && (
-                                <span className="ml-1 text-xs text-muted-foreground">
+                                <span className="ml-1 w-0 flex-1 truncate text-xs text-muted-foreground">
                                     {option.description}
                                 </span>
                             )}
@@ -341,7 +343,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     </div>
                 </PopoverTrigger>
                 <PopoverContent
-                    className="w-fit min-w-[var(--radix-popover-trigger-width)] p-0"
+                    className={cn(
+                        'w-fit min-w-[var(--radix-popover-trigger-width)] p-0',
+                        popoverClassName
+                    )}
                     align="center"
                 >
                     <Command

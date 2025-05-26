@@ -25,6 +25,10 @@ export interface LayoutContext {
     openAreaFromSidebar: (areaId: string) => void;
     closeAllAreasInSidebar: () => void;
 
+    openedCustomTypeInSidebar: string | undefined;
+    openCustomTypeFromSidebar: (customTypeId: string) => void;
+    closeAllCustomTypesInSidebar: () => void;
+
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
 
@@ -53,6 +57,10 @@ export const layoutContext = createContext<LayoutContext>({
     openedAreaInSidebar: undefined,
     openAreaFromSidebar: emptyFn,
     closeAllAreasInSidebar: emptyFn,
+
+    openedCustomTypeInSidebar: undefined,
+    openCustomTypeFromSidebar: emptyFn,
+    closeAllCustomTypesInSidebar: emptyFn,
 
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,
