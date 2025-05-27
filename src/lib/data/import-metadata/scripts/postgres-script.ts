@@ -165,7 +165,7 @@ cols AS (
                                             '","table":"', cols.table_name,
                                             '","name":"', cols.column_name,
                                             '","ordinal_position":', cols.ordinal_position,
-                                            ',"type":"', LOWER(replace(cols.data_type, '"', '')),
+                                            ',"type":"', case when LOWER(replace(cols.data_type, '"', '')) = 'user-defined' then pg_type.typname else LOWER(replace(cols.data_type, '"', '')) end,
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::text, 'null'),
                                             '","precision":',
                                                 CASE
@@ -184,8 +184,12 @@ cols AS (
         ON c.relname = cols.table_name
     JOIN pg_catalog.pg_namespace n
         ON n.oid = c.relnamespace AND n.nspname = cols.table_schema
-    LEFT JOIN pg_catalog.pg_description dsc ON dsc.objoid = c.oid
-                                        AND dsc.objsubid = cols.ordinal_position
+    LEFT JOIN pg_catalog.pg_description dsc
+        ON dsc.objoid = c.oid AND dsc.objsubid = cols.ordinal_position
+    LEFT JOIN pg_catalog.pg_attribute attr
+        ON attr.attrelid = c.oid AND attr.attname = cols.column_name
+    LEFT JOIN pg_catalog.pg_type
+        ON pg_type.oid = attr.atttypid
     WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
         databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleColFilter

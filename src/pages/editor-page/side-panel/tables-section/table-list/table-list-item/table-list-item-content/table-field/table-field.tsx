@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBField } from '@/lib/domain/db-field';
@@ -6,7 +6,6 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import {
     dataTypeDataToDataType,
     sortedDataTypeMap,
-    type DataType,
 } from '@/lib/data/data-types/data-types';
 import {
     Tooltip,
@@ -35,98 +34,51 @@ export const TableField: React.FC<TableFieldProps> = ({
     updateField,
     removeField,
 }) => {
-    const { databaseType, customTypes } = useChartDB();
+    const { databaseType } = useChartDB();
     const { t } = useTranslation();
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
-    const dataFieldOptions = useMemo(() => {
-        // Start with the built-in data types
-        const standardTypes: SelectBoxOption[] = sortedDataTypeMap[
-            databaseType
-        ].map((type) => ({
-            label: type.name,
-            value: type.id,
-            regex: type.hasCharMaxLength
-                ? `^${type.name}\\(\\d+\\)$`
-                : undefined,
-            extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
-            group: 'Standard Types',
-        }));
-
-        if (!customTypes?.length) {
-            return standardTypes;
-        }
-
-        // Add custom types as options
-        const customTypeOptions: SelectBoxOption[] = customTypes.map(
-            (type) => ({
-                label: type.name,
-                value: `custom-type-${type.name}`,
-                // Add additional info to distinguish custom types
-                description:
-                    type.kind === 'enum' ? `${type.values?.join(' | ')}` : '',
-                // Group custom types together
-                group: 'Custom Types',
-            })
-        );
-
-        return [...standardTypes, ...customTypeOptions];
-    }, [databaseType, customTypes]);
+    const dataFieldOptions: SelectBoxOption[] = sortedDataTypeMap[
+        databaseType
+    ].map((type) => ({
+        label: type.name,
+        value: type.id,
+        regex: type.hasCharMaxLength ? `^${type.name}\\(\\d+\\)$` : undefined,
+        extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+    }));
 
     const onChangeDataType = useCallback<
         NonNullable<SelectBoxProps['onChange']>
     >(
         (value, regexMatches) => {
-            // Check if this is a custom type
-            const isCustomType =
-                typeof value === 'string' && value.startsWith('custom-type-');
-
-            let newType: DataType;
-
-            if (isCustomType && typeof value === 'string') {
-                // For custom types, create a custom DataType object
-                const typeName = value.replace('custom-type-', '');
-                newType = {
-                    id: value as string,
-                    name: typeName,
-                };
-            } else {
-                // For standard types, use the existing logic
-                const dataType = sortedDataTypeMap[databaseType].find(
-                    (v) => v.id === value
-                ) ?? {
-                    id: value as string,
-                    name: value as string,
-                };
-
-                newType = dataTypeDataToDataType(dataType);
-            }
+            const dataType = sortedDataTypeMap[databaseType].find(
+                (v) => v.id === value
+            ) ?? {
+                id: value as string,
+                name: value as string,
+            };
 
             let characterMaximumLength: string | undefined = undefined;
 
-            if (regexMatches?.length && !isCustomType) {
-                const dataType = sortedDataTypeMap[databaseType].find(
-                    (v) => v.id === value
-                );
-
-                if (dataType?.hasCharMaxLength) {
-                    characterMaximumLength = regexMatches[1];
-                }
-            } else if (field.characterMaximumLength && !isCustomType) {
-                const dataType = sortedDataTypeMap[databaseType].find(
-                    (v) => v.id === value
-                );
-
-                if (dataType?.hasCharMaxLength) {
-                    characterMaximumLength = field.characterMaximumLength;
-                }
+            if (regexMatches?.length && dataType?.hasCharMaxLength) {
+                characterMaximumLength = regexMatches[1];
+            } else if (
+                field.characterMaximumLength &&
+                dataType?.hasCharMaxLength
+            ) {
+                characterMaximumLength = field.characterMaximumLength;
             }
 
             updateField({
                 characterMaximumLength,
-                type: newType,
+                type: dataTypeDataToDataType(
+                    dataType ?? {
+                        id: value as string,
+                        name: value as string,
+                    }
+                ),
             });
         },
         [updateField, databaseType, field.characterMaximumLength]
@@ -136,21 +88,6 @@ export const TableField: React.FC<TableFieldProps> = ({
         transform: CSS.Translate.toString(transform),
         transition,
     };
-
-    // Helper to get the display value for custom types
-    const getCustomTypeDisplayValue = () => {
-        if (field.type.id.startsWith('custom-type-')) {
-            const typeName = field.type.name;
-            const customType = customTypes?.find((ct) => ct.name === typeName);
-
-            if (customType) {
-                return typeName;
-            }
-        }
-        return undefined;
-    };
-
-    const customTypeDisplayValue = getCustomTypeDisplayValue();
 
     return (
         <div
@@ -198,22 +135,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.type.id}
                                 valueSuffix={
-                                    customTypeDisplayValue
-                                        ? ``
-                                        : field.characterMaximumLength
-                                          ? `(${field.characterMaximumLength})`
-                                          : ''
+                                    field.characterMaximumLength
+                                        ? `(${field.characterMaximumLength})`
+                                        : ''
                                 }
                                 optionSuffix={(option) => {
-                                    // For custom types, we don't need to add a suffix
-                                    if (
-                                        option.value
-                                            .toString()
-                                            .startsWith('custom-type-')
-                                    ) {
-                                        return '';
-                                    }
-
                                     const type = sortedDataTypeMap[
                                         databaseType
                                     ].find((v) => v.id === option.value);
@@ -236,12 +162,10 @@ export const TableField: React.FC<TableFieldProps> = ({
                         </span>
                     </TooltipTrigger>
                     <TooltipContent>
-                        {customTypeDisplayValue ||
-                            `${field.type.name}${
-                                field.characterMaximumLength
-                                    ? `(${field.characterMaximumLength})`
-                                    : ''
-                            }`}
+                        {field.type.name}
+                        {field.characterMaximumLength
+                            ? `(${field.characterMaximumLength})`
+                            : ''}
                     </TooltipContent>
                 </Tooltip>
             </div>
