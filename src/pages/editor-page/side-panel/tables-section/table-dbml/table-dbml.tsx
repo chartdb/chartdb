@@ -497,13 +497,27 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             // Append COMMENTS for tables renamed due to SQL keywords
             sqlRenamedTables.forEach((originalName, newName) => {
                 const escapedOriginal = originalName.replace(/'/g, "\\'");
-                baseScript += `\nCOMMENT ON TABLE "${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+                // Find the table to get its schema
+                const table = finalDiagramForExport.tables?.find(
+                    (t) => t.name === newName
+                );
+                const tableIdentifier = table?.schema
+                    ? `"${table.schema}"."${newName}"`
+                    : `"${newName}"`;
+                baseScript += `\nCOMMENT ON TABLE ${tableIdentifier} IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
             });
 
             // Append COMMENTS for fields renamed due to SQL keyword conflicts
             fieldRenames.forEach(({ table, originalName, newName }) => {
                 const escapedOriginal = originalName.replace(/'/g, "\\'");
-                baseScript += `\nCOMMENT ON COLUMN "${table}"."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+                // Find the table to get its schema
+                const tableObj = finalDiagramForExport.tables?.find(
+                    (t) => t.name === table
+                );
+                const tableIdentifier = tableObj?.schema
+                    ? `"${tableObj.schema}"."${table}"`
+                    : `"${table}"`;
+                baseScript += `\nCOMMENT ON COLUMN ${tableIdentifier}."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
             });
 
             standard = normalizeCharTypeFormat(
