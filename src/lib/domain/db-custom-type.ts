@@ -58,6 +58,3 @@ export const customTypeKindToLabel: Record<DBCustomTypeKind, string> = {
     enum: 'Enum',
     composite: 'Composite',
 };
-
-export const getCustomTypeId = (name: string) =>
-    `custom-type-${name.toLowerCase().trim()}`;

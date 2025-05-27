@@ -55,7 +55,7 @@ export const CustomTypeCompositeFields: React.FC<
     const customDataTypes = useMemo<DataTypeData[]>(
         () =>
             customTypes.map<DataTypeData>((type) => ({
-                id: `custom-type-${type.id}`,
+                id: type.name,
                 name: type.name,
             })),
         [customTypes]
