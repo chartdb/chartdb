@@ -5,7 +5,6 @@ import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-i
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
-import type { DBCustomTypeInfo } from '../data/import-metadata/metadata-types/custom-type-info';
 import { schemaNameToDomainSchemaName } from './db-schema';
 
 export interface DBField {
@@ -54,7 +53,6 @@ export const createFieldsFromMetadata = ({
     tableInfo: TableInfo;
     primaryKeys: PrimaryKeyInfo[];
     aggregatedIndexes: AggregatedIndexInfo[];
-    customTypes?: DBCustomTypeInfo[];
 }) => {
     const uniqueColumns = columns
         .filter(
