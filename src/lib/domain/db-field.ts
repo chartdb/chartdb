@@ -1,4 +1,3 @@
-import { nanoid as generateId } from 'nanoid';
 import { z } from 'zod';
 import { dataTypeSchema, type DataType } from '../data/data-types/data-types';
 import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
@@ -6,6 +5,7 @@ import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { schemaNameToDomainSchemaName } from './db-schema';
+import { generateId } from '../utils';
 
 export interface DBField {
     id: string;
