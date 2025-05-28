@@ -55,6 +55,14 @@ export const getPostgresQuery = (
                 AND views.schemaname !~ '^(timescaledb_|_timescaledb_)'
     `;
 
+    const withExtras = false;
+
+    const withDefault = `COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), '')`;
+    const withoutDefault = `null`;
+
+    const withComments = `COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), '')`;
+    const withoutComments = `null`;
+
     // Define the base query
     const query = `${`/* ${databaseEdition ? databaseEditionToLabelMap[databaseEdition] : 'PostgreSQL'} edition */`}
 WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
@@ -175,9 +183,9 @@ cols AS (
                                                     ELSE 'null'
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
-                                            ',"default":"', COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), ''),
+                                            ',"default":"', ${withExtras ? withDefault : withoutDefault},
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
-                                            '","comment":"', COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), ''),
+                                            '","comment":"', ${withExtras ? withComments : withoutComments},
                                             '"}')), ',') AS cols_metadata
     FROM information_schema.columns cols
     LEFT JOIN pg_catalog.pg_class c

@@ -1,3 +1,7 @@
+const withExtras = false;
+const withDefault = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
+const withoutDefault = `""`;
+
 export const mariaDBQuery = `WITH fk_info as (
   (SELECT (@fk_info:=NULL),
               (SELECT (0)
@@ -76,7 +80,7 @@ export const mariaDBQuery = `WITH fk_info as (
                     END,
                 ',"ordinal_position":', cols.ordinal_position,
                 ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
+                ',"default":"', ${withExtras ? withDefault : withoutDefault},
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (

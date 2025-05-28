@@ -7,7 +7,7 @@ cols AS (
                ',"ordinal_position":', toString(col_tuple.4),
                ',"type":"', col_tuple.5, '"',
                ',"nullable":"', if(col_tuple.6 = 'NULLABLE', 'true', 'false'), '"',
-               ',"default":"', if(col_tuple.7 = '', 'null', col_tuple.7), '"',
+               ',"default":"', col_tuple.7, '"',
                ',"comment":', if(col_tuple.8 = '', '""', toString(toJSONString(col_tuple.8))), '}'),
         groupArray((
             col.database,
@@ -15,7 +15,7 @@ cols AS (
             col.name,
             col.position,
             col.type,
-            col.default_kind,
+            null as default_kind,
             col.default_expression,
             col.comment
         ))
