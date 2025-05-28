@@ -11,6 +11,7 @@ export const pt_BR: LanguageTranslation = {
                 import: 'Importar Banco de Dados',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
+                copy: 'Copiar',
                 delete_diagram: 'Excluir Diagrama',
                 exit: 'Sair',
             },

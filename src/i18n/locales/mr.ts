@@ -11,6 +11,7 @@ export const mr: LanguageTranslation = {
                 import: 'डेटाबेस इम्पोर्ट करा',
                 export_sql: 'SQL एक्स्पोर्ट करा',
                 export_as: 'म्हणून एक्स्पोर्ट करा',
+                copy: 'कॉपी',
                 delete_diagram: 'आरेख हटवा',
                 exit: 'बाहेर पडा',
             },

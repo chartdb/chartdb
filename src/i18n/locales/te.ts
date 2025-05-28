@@ -11,6 +11,7 @@ export const te: LanguageTranslation = {
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',
+                copy: 'క్లిప్ బోర్డ్ కూపీ',
                 delete_diagram: 'చిత్రాన్ని తొలగించండి',
                 exit: 'నిష్క్రమించు',
             },

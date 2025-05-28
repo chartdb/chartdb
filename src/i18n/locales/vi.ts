@@ -11,6 +11,7 @@ export const vi: LanguageTranslation = {
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
+                copy: 'Kopya',
                 delete_diagram: 'Xóa sơ đồ',
                 exit: 'Thoát',
             },

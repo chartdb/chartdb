@@ -11,6 +11,7 @@ export const uk: LanguageTranslation = {
                 import: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',
+                copy: 'Копіювати',
                 delete_diagram: 'Видалити діаграму',
                 exit: 'Вийти',
             },

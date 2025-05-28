@@ -11,6 +11,7 @@ export const ar: LanguageTranslation = {
                 import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',
+                copy: 'نسخ',
                 delete_diagram: 'حذف الرسم البياني',
                 exit: 'خروج',
             },

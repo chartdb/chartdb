@@ -11,6 +11,7 @@ export const ru: LanguageTranslation = {
                 import: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
+                copy: 'Копировать',
                 delete_diagram: 'Удалить диаграмму',
                 exit: 'Выход',
             },

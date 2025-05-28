@@ -11,6 +11,7 @@ export const gu: LanguageTranslation = {
                 import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
+                copy: 'કોપી',
                 delete_diagram: 'ડાયાગ્રામ કાઢી નાખો',
                 exit: 'બહાર જાઓ',
             },

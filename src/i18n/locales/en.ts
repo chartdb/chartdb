@@ -11,6 +11,7 @@ export const en = {
                 import: 'Import',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
+                copy: 'Copy',
                 delete_diagram: 'Delete Diagram',
                 exit: 'Exit',
             },

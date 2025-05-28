@@ -11,6 +11,7 @@ export const id_ID: LanguageTranslation = {
                 import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
+                copy: 'Salin',
                 delete_diagram: 'Hapus Diagram',
                 exit: 'Keluar',
             },

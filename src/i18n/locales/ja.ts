@@ -11,6 +11,7 @@ export const ja: LanguageTranslation = {
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
+                copy: 'コピー',
                 delete_diagram: 'ダイアグラムを削除',
                 exit: '終了',
             },

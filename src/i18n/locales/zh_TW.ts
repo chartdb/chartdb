@@ -11,6 +11,7 @@ export const zh_TW: LanguageTranslation = {
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
+                copy: '複製',
                 delete_diagram: '刪除圖表',
                 exit: '退出',
             },

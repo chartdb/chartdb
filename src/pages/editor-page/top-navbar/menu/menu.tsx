@@ -15,6 +15,9 @@ import {
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { useExportImage } from '@/hooks/use-export-image';
+import { diagramToJSONOutput } from '@/lib/export-import-utils';
+import { exportBaseSQL } from '@/lib/data/export-metadata/export-sql-script';
+// import type { Diagram } from '@/lib/domain/diagram';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
@@ -38,6 +41,7 @@ export const Menu: React.FC<MenuProps> = () => {
         updateDiagramUpdatedAt,
         databaseType,
         dependencies,
+        currentDiagram,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -87,6 +91,90 @@ export const Menu: React.FC<MenuProps> = () => {
             includePatternBG: false,
         });
     }, [exportImage]);
+
+    // Functions for copying to clipboard
+    const copyPNG = useCallback(async () => {
+        try {
+            // Get PNG with transparent background
+            const pngUrl = await exportImage('png', {
+                scale: 2, // Increase scale for better quality
+                transparent: true, // Transparent background
+                includePatternBG: false, // Without background pattern
+            });
+
+            // Get Blob from URL
+            const response = await fetch(pngUrl);
+            const blob = await response.blob();
+
+            // Copy to clipboard
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'image/png': blob,
+                }),
+            ]);
+
+            console.log('Diagram copied to clipboard as PNG');
+        } catch (error) {
+            console.error('Error copying PNG to clipboard:', error);
+        }
+    }, [exportImage]);
+
+    const copyGenericSQL = useCallback(async () => {
+        try {
+            // Get generic SQL script
+            const sqlScript = exportBaseSQL({
+                diagram: currentDiagram,
+                targetDatabaseType: DatabaseType.GENERIC,
+            });
+
+            // Copy SQL as text
+            await navigator.clipboard.writeText(sqlScript);
+
+            console.log('Diagram copied to clipboard as Generic SQL');
+        } catch (error) {
+            console.error('Error copying Generic SQL to clipboard:', error);
+        }
+    }, [currentDiagram]);
+
+    const copyPostgresSQL = useCallback(async () => {
+        try {
+            // Get current diagram
+            if (!currentDiagram) {
+                console.error('No diagram available');
+                return;
+            }
+
+            // Generate SQL script
+            if (typeof window !== 'undefined') {
+                // Use exportBaseSQL as a fallback option
+                const baseScript = exportBaseSQL({
+                    diagram: currentDiagram,
+                    targetDatabaseType: DatabaseType.POSTGRESQL,
+                });
+
+                // Copy the result to clipboard
+                await navigator.clipboard.writeText(baseScript);
+            }
+
+            console.log('Diagram copied to clipboard as PostgreSQL');
+        } catch (error) {
+            console.error('Error copying PostgreSQL to clipboard:', error);
+        }
+    }, [currentDiagram]);
+
+    const copyJSON = useCallback(async () => {
+        try {
+            // Get diagram JSON
+            const jsonString = diagramToJSONOutput(currentDiagram);
+
+            // Copy JSON as text
+            await navigator.clipboard.writeText(jsonString);
+
+            console.log('Diagram copied to clipboard as JSON');
+        } catch (error) {
+            console.error('Error copying JSON to clipboard:', error);
+        }
+    }, [currentDiagram]);
 
     const exportPNG = useCallback(() => {
         openExportImageDialog({
@@ -322,6 +410,25 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarSeparator />
                             <MenubarItem onClick={openExportDiagramDialog}>
                                 JSON
+                            </MenubarItem>
+                        </MenubarSubContent>
+                    </MenubarSub>
+                    <MenubarSub>
+                        <MenubarSubTrigger>
+                            {t('menu.file.copy')}
+                        </MenubarSubTrigger>
+                        <MenubarSubContent>
+                            <MenubarItem onClick={copyPNG}>PNG</MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem onClick={copyJSON}>
+                                JSON (dbml)
+                            </MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem onClick={copyGenericSQL}>
+                                SQL (generic)
+                            </MenubarItem>
+                            <MenubarItem onClick={copyPostgresSQL}>
+                                SQL (PostgreSQL)
                             </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>

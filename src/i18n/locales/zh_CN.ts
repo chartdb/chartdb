@@ -11,6 +11,7 @@ export const zh_CN: LanguageTranslation = {
                 import: '导入数据库',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
+                copy: '复制',
                 delete_diagram: '删除关系图',
                 exit: '退出',
             },

@@ -11,6 +11,7 @@ export const ko_KR: LanguageTranslation = {
                 import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
+                copy: '복사',
                 delete_diagram: '다이어그램 삭제',
                 exit: '종료',
             },

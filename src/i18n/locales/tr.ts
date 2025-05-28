@@ -11,6 +11,7 @@ export const tr: LanguageTranslation = {
                 import: 'Veritabanı İçe Aktar',
                 export_sql: 'SQL Olarak Dışa Aktar',
                 export_as: 'Olarak Dışa Aktar',
+                copy: 'Kopya',
                 delete_diagram: 'Diyagramı Sil',
                 exit: 'Çıkış',
             },

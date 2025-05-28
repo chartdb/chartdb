@@ -11,6 +11,7 @@ export const de: LanguageTranslation = {
                 import: 'Datenbank importieren',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
+                copy: 'Kopieren',
                 delete_diagram: 'Diagramm löschen',
                 exit: 'Beenden',
             },

@@ -11,6 +11,7 @@ export const ne: LanguageTranslation = {
                 import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
+                copy: 'कॉपी',
                 delete_diagram: 'डायाग्राम हटाउनुहोस्',
                 exit: 'बाहिर निस्कनुहोस्',
             },

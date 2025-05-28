@@ -11,6 +11,7 @@ export const bn: LanguageTranslation = {
                 import: 'ডাটাবেস আমদানি করুন',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
+                copy: 'কপি',
                 delete_diagram: 'ডায়াগ্রাম মুছুন',
                 exit: 'প্রস্থান করুন',
             },
