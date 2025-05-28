@@ -19,6 +19,9 @@ export interface LocalConfigContext {
     showCardinality: boolean;
     setShowCardinality: (showCardinality: boolean) => void;
 
+    showFieldAttributes: boolean;
+    setShowFieldAttributes: (showFieldAttributes: boolean) => void;
+
     hideMultiSchemaNotification: boolean;
     setHideMultiSchemaNotification: (
         hideMultiSchemaNotification: boolean
@@ -49,6 +52,9 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     showCardinality: true,
     setShowCardinality: emptyFn,
+
+    showFieldAttributes: true,
+    setShowFieldAttributes: emptyFn,
 
     hideMultiSchemaNotification: false,
     setHideMultiSchemaNotification: emptyFn,

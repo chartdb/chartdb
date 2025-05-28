@@ -24,6 +24,8 @@ export const es: LanguageTranslation = {
                 view: 'Ver',
                 hide_cardinality: 'Ocultar Cardinalidad',
                 show_cardinality: 'Mostrar Cardinalidad',
+                show_field_attributes: 'Mostrar Atributos de Campo',
+                hide_field_attributes: 'Ocultar Atributos de Campo',
                 show_sidebar: 'Mostrar Barra Lateral',
                 hide_sidebar: 'Ocultar Barra Lateral',
                 zoom_on_scroll: 'Zoom al Desplazarse',
@@ -142,6 +144,8 @@ export const es: LanguageTranslation = {
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Precisión',
+                        scale: 'Escala',
                     },
                     index_actions: {
                         title: 'Atributos del Índice',

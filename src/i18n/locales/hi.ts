@@ -26,6 +26,8 @@ export const hi: LanguageTranslation = {
                 hide_sidebar: 'साइडबार छिपाएँ',
                 hide_cardinality: 'कार्डिनैलिटी छिपाएँ',
                 show_cardinality: 'कार्डिनैलिटी दिखाएँ',
+                hide_field_attributes: 'फ़ील्ड विशेषताएँ छिपाएँ',
+                show_field_attributes: 'फ़ील्ड विशेषताएँ दिखाएँ',
                 zoom_on_scroll: 'स्क्रॉल पर ज़ूम',
                 theme: 'थीम',
                 show_dependencies: 'निर्भरता दिखाएँ',
@@ -152,6 +154,8 @@ export const hi: LanguageTranslation = {
                         delete_field: 'फ़ील्ड हटाएँ',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Precision',
+                        scale: 'Scale',
                     },
                     index_actions: {
                         title: 'सूचकांक विशेषताएँ',

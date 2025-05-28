@@ -14,9 +14,28 @@ export interface DataType {
     name: string;
 }
 
-export interface DataTypeData extends DataType {
+export interface FieldAttributeRange {
+    max: number;
+    min: number;
+    default: number;
+}
+
+interface FieldAttributes {
+    [key: string]:
+        | FieldAttributeRange
+        | boolean
+        | number
+        | string
+        | null
+        | undefined;
     hasCharMaxLength?: boolean;
+    precision?: FieldAttributeRange;
+    scale?: FieldAttributeRange;
+}
+
+export interface DataTypeData extends DataType {
     usageLevel?: 1 | 2; // Level 1 is most common, Level 2 is second most common
+    fieldAttributes?: FieldAttributes;
 }
 
 export const dataTypeSchema: z.ZodType<DataType> = z.object({

@@ -48,18 +48,30 @@ export const clickhouseDataTypes: readonly DataTypeData[] = [
     { name: 'mediumblob', id: 'mediumblob' },
     { name: 'tinyblob', id: 'tinyblob' },
     { name: 'blob', id: 'blob' },
-    { name: 'varchar', id: 'varchar', hasCharMaxLength: true },
-    { name: 'char', id: 'char', hasCharMaxLength: true },
+    {
+        name: 'varchar',
+        id: 'varchar',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
+    { name: 'char', id: 'char', fieldAttributes: { hasCharMaxLength: true } },
     { name: 'char large object', id: 'char_large_object' },
-    { name: 'char varying', id: 'char_varying', hasCharMaxLength: true },
+    {
+        name: 'char varying',
+        id: 'char_varying',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     { name: 'character large object', id: 'character_large_object' },
     {
         name: 'character varying',
         id: 'character_varying',
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
     { name: 'nchar large object', id: 'nchar_large_object' },
-    { name: 'nchar varying', id: 'nchar_varying', hasCharMaxLength: true },
+    {
+        name: 'nchar varying',
+        id: 'nchar_varying',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     {
         name: 'national character large object',
         id: 'national_character_large_object',
@@ -67,22 +79,34 @@ export const clickhouseDataTypes: readonly DataTypeData[] = [
     {
         name: 'national character varying',
         id: 'national_character_varying',
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
     {
         name: 'national char varying',
         id: 'national_char_varying',
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
     {
         name: 'national character',
         id: 'national_character',
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
-    { name: 'national char', id: 'national_char', hasCharMaxLength: true },
+    {
+        name: 'national char',
+        id: 'national_char',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     { name: 'binary large object', id: 'binary_large_object' },
-    { name: 'binary varying', id: 'binary_varying', hasCharMaxLength: true },
-    { name: 'fixedstring', id: 'fixedstring', hasCharMaxLength: true },
+    {
+        name: 'binary varying',
+        id: 'binary_varying',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
+    {
+        name: 'fixedstring',
+        id: 'fixedstring',
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     { name: 'string', id: 'string' },
 
     // Date Types
