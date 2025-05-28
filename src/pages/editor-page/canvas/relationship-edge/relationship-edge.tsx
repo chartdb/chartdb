@@ -8,6 +8,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -41,6 +42,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
         openRelationshipFromSidebar(id);
     }, [id, openRelationshipFromSidebar, selectSidebarSection]);
 
+    const { showRelationships } = useLocalConfig();
     const edgeNumber = useMemo(
         () =>
             relationships
@@ -170,6 +172,10 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
         [checkIfRelationshipRemoved, relationship?.id]
     );
 
+    if (!showRelationships) {
+        return null;
+    }
+    
     return (
         <>
             <path
