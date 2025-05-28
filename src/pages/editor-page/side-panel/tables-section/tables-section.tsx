@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, List, X, Code } from 'lucide-react';
+import { Table, List, X, Code, Settings } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
@@ -20,8 +20,69 @@ import { useDialog } from '@/hooks/use-dialog';
 import { TableDBML } from './table-dbml/table-dbml';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getOperatingSystem } from '@/lib/utils';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/popover/popover';
+import { Checkbox } from '@/components/checkbox/checkbox';
+import { Label } from '@/components/label/label';
+import { Separator } from '@/components/separator/separator';
 
 export interface TablesSectionProps {}
+
+interface SearchOptions {
+    searchInFields: boolean; // whether to search field names
+    searchInTypes: boolean; // whether to search field types
+    searchInComments: boolean; // whether to search comments
+    caseSensitive: boolean; // whether to be case sensitive
+}
+
+const getMatchCounts = (
+    tables: DBTable[],
+    searchText: string,
+    options: SearchOptions
+) => {
+    if (!searchText.trim()) {
+        return { fields: 0, types: 0, comments: 0 };
+    }
+
+    const searchValue = options.caseSensitive
+        ? searchText
+        : searchText.toLowerCase();
+    const counts = { fields: 0, types: 0, comments: 0 };
+
+    tables.forEach((table) => {
+        table.fields.forEach((field) => {
+            if (options.searchInFields) {
+                const fieldName = options.caseSensitive
+                    ? field.name
+                    : field.name.toLowerCase();
+                if (fieldName.includes(searchValue)) {
+                    counts.fields++;
+                }
+            }
+            if (options.searchInTypes) {
+                const typeName = options.caseSensitive
+                    ? field.type.name
+                    : field.type.name.toLowerCase();
+                if (typeName.includes(searchValue)) {
+                    counts.types++;
+                }
+            }
+            if (options.searchInComments && field.comments) {
+                const comment = options.caseSensitive
+                    ? field.comments
+                    : field.comments.toLowerCase();
+                if (comment.includes(searchValue)) {
+                    counts.comments++;
+                }
+            }
+        });
+    });
+
+    return counts;
+};
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { createTable, tables, filteredSchemas, schemas } = useChartDB();
@@ -32,17 +93,68 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
     const filterInputRef = React.useRef<HTMLInputElement>(null);
+    const [searchOptions, setSearchOptions] = useState<SearchOptions>({
+        searchInFields: false,
+        searchInTypes: false,
+        searchInComments: false,
+        caseSensitive: false,
+    });
 
-    const filteredTables = useMemo(() => {
-        const filterTableName: (table: DBTable) => boolean = (table) =>
-            !filterText?.trim?.() ||
-            table.name.toLowerCase().includes(filterText.toLowerCase());
+    const filteredTables = useMemo<DBTable[]>(() => {
+        const searchText = searchOptions.caseSensitive
+            ? filterText
+            : filterText.toLowerCase();
+        const filterTable: (table: DBTable) => boolean = (table) => {
+            if (!filterText?.trim?.()) return true;
+            const matches: boolean[] = [];
+            // match table name
+            const tableName = searchOptions.caseSensitive
+                ? table.name
+                : table.name.toLowerCase();
+            matches.push(tableName.includes(searchText));
+            // match field names
+            if (searchOptions.searchInFields) {
+                matches.push(
+                    table.fields.some((field) =>
+                        (searchOptions.caseSensitive
+                            ? field.name
+                            : field.name.toLowerCase()
+                        ).includes(searchText)
+                    )
+                );
+            }
+            // match field types
+            if (searchOptions.searchInTypes) {
+                matches.push(
+                    table.fields.some((field) =>
+                        (searchOptions.caseSensitive
+                            ? field.type.name
+                            : field.type.name.toLowerCase()
+                        ).includes(searchText)
+                    )
+                );
+            }
+            // match comments
+            if (searchOptions.searchInComments) {
+                matches.push(
+                    table.fields.some(
+                        (field) =>
+                            field.comments &&
+                            (searchOptions.caseSensitive
+                                ? field.comments
+                                : field.comments.toLowerCase()
+                            ).includes(searchText)
+                    )
+                );
+            }
+            return matches.some((match) => match);
+        };
 
         const filterSchema: (table: DBTable) => boolean = (table) =>
-            shouldShowTablesBySchemaFilter(table, filteredSchemas);
+            shouldShowTablesBySchemaFilter(table, filteredSchemas as string[]);
 
-        return tables.filter(filterSchema).filter(filterTableName);
-    }, [tables, filterText, filteredSchemas]);
+        return tables.filter(filterSchema).filter(filterTable);
+    }, [tables, filterText, filteredSchemas, searchOptions]);
 
     const createTableWithLocation = useCallback(
         async (schema?: string) => {
@@ -120,6 +232,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         [setShowDBML]
     );
 
+    const matchCounts = useMemo(
+        () => getMatchCounts(filteredTables, filterText, searchOptions),
+        [filteredTables, filterText, searchOptions]
+    );
+
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -153,7 +270,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         </TooltipContent>
                     </Tooltip>
                 </div>
-                <div className="flex-1">
+                <div className="flex items-center gap-2">
                     <Input
                         ref={filterInputRef}
                         type="text"
@@ -162,6 +279,95 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
                     />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-8"
+                            >
+                                <Settings className="size-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-60">
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label>Search Scope</Label>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                checked={
+                                                    searchOptions.searchInFields
+                                                }
+                                                onCheckedChange={(checked) =>
+                                                    setSearchOptions(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            searchInFields:
+                                                                !!checked,
+                                                        })
+                                                    )
+                                                }
+                                            />
+                                            <Label>Field Names</Label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                checked={
+                                                    searchOptions.searchInTypes
+                                                }
+                                                onCheckedChange={(checked) =>
+                                                    setSearchOptions(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            searchInTypes:
+                                                                !!checked,
+                                                        })
+                                                    )
+                                                }
+                                            />
+                                            <Label>Field Types</Label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                checked={
+                                                    searchOptions.searchInComments
+                                                }
+                                                onCheckedChange={(checked) =>
+                                                    setSearchOptions(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            searchInComments:
+                                                                !!checked,
+                                                        })
+                                                    )
+                                                }
+                                            />
+                                            <Label>Comments</Label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Separator />
+                                <div className="space-y-2">
+                                    <Label>Search Options</Label>
+                                    <div className="flex items-center gap-2">
+                                        <Checkbox
+                                            checked={
+                                                searchOptions.caseSensitive
+                                            }
+                                            onCheckedChange={(checked) =>
+                                                setSearchOptions((prev) => ({
+                                                    ...prev,
+                                                    caseSensitive: !!checked,
+                                                }))
+                                            }
+                                        />
+                                        <Label>Case Sensitive</Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 <Button
                     variant="secondary"
@@ -203,7 +409,42 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 </Button>
                             </div>
                         ) : (
-                            <TableList tables={filteredTables} />
+                            <>
+                                <div className="px-2 py-1 text-sm text-muted-foreground">
+                                    Found {filteredTables.length}
+                                    matching tables
+                                    {filterText && (
+                                        <>
+                                            {searchOptions.searchInFields &&
+                                                matchCounts.fields > 0 && (
+                                                    <span>
+                                                        , {matchCounts.fields}
+                                                        matching field names
+                                                    </span>
+                                                )}
+                                            {searchOptions.searchInTypes &&
+                                                matchCounts.types > 0 && (
+                                                    <span>
+                                                        , {matchCounts.types}
+                                                        matching field types
+                                                    </span>
+                                                )}
+                                            {searchOptions.searchInComments &&
+                                                matchCounts.comments > 0 && (
+                                                    <span>
+                                                        , {matchCounts.comments}
+                                                        matching comments
+                                                    </span>
+                                                )}
+                                        </>
+                                    )}
+                                </div>
+                                <TableList
+                                    tables={filteredTables}
+                                    searchText={filterText}
+                                    searchOptions={searchOptions}
+                                />
+                            </>
                         )}
                     </ScrollArea>
                 )}

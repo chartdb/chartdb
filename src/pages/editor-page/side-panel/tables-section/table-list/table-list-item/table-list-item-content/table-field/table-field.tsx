@@ -22,17 +22,27 @@ import type {
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
+import { HighlightText } from '@/components/highlight-text/highlight-text';
 
 export interface TableFieldProps {
     field: DBField;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
+    searchText?: string;
+    searchOptions?: {
+        searchInFields: boolean;
+        searchInTypes: boolean;
+        searchInComments: boolean;
+        caseSensitive: boolean;
+    };
 }
 
 export const TableField: React.FC<TableFieldProps> = ({
     field,
     updateField,
     removeField,
+    searchText,
+    searchOptions,
 }) => {
     const { databaseType } = useChartDB();
     const { t } = useTranslation();
@@ -89,9 +99,53 @@ export const TableField: React.FC<TableFieldProps> = ({
         transition,
     };
 
+    const hasMatch = React.useMemo(() => {
+        if (!searchText?.trim()) return false;
+
+        const searchValue = searchOptions?.caseSensitive
+            ? searchText
+            : searchText.toLowerCase();
+
+        const matches = [];
+
+        // Check field name
+        if (searchOptions?.searchInFields) {
+            matches.push(
+                (searchOptions.caseSensitive
+                    ? field.name
+                    : field.name.toLowerCase()
+                ).includes(searchValue)
+            );
+        }
+
+        // Check field type
+        if (searchOptions?.searchInTypes) {
+            matches.push(
+                (searchOptions.caseSensitive
+                    ? field.type.name
+                    : field.type.name.toLowerCase()
+                ).includes(searchValue)
+            );
+        }
+
+        // Check comments
+        if (searchOptions?.searchInComments && field.comments) {
+            matches.push(
+                (searchOptions.caseSensitive
+                    ? field.comments
+                    : field.comments.toLowerCase()
+                ).includes(searchValue)
+            );
+        }
+
+        return matches.some((match) => match);
+    }, [field, searchText, searchOptions]);
+
     return (
         <div
-            className="flex flex-1 touch-none flex-row justify-between p-1"
+            className={`flex flex-1 touch-none flex-row justify-between p-1 ${
+                hasMatch ? 'bg-yellow-100/50 dark:bg-yellow-800/30' : ''
+            }`}
             ref={setNodeRef}
             style={style}
             {...attributes}
@@ -101,7 +155,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     className="flex w-4 shrink-0 cursor-move items-center justify-center"
                     {...listeners}
                 >
-                    <GripVertical className="size-3.5  text-muted-foreground" />
+                    <GripVertical className="size-3.5 text-muted-foreground" />
                 </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
@@ -121,7 +175,13 @@ export const TableField: React.FC<TableFieldProps> = ({
                             />
                         </span>
                     </TooltipTrigger>
-                    <TooltipContent>{field.name}</TooltipContent>
+                    <TooltipContent>
+                        <HighlightText
+                            text={field.name}
+                            highlight={searchText || ''}
+                            caseSensitive={searchOptions?.caseSensitive}
+                        />
+                    </TooltipContent>
                 </Tooltip>
                 <Tooltip>
                     <TooltipTrigger className="flex h-8 !w-5/12" asChild>
@@ -162,7 +222,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                         </span>
                     </TooltipTrigger>
                     <TooltipContent>
-                        {field.type.name}
+                        <HighlightText
+                            text={field.type.name}
+                            highlight={searchText || ''}
+                            caseSensitive={searchOptions?.caseSensitive}
+                        />
                         {field.characterMaximumLength
                             ? `(${field.characterMaximumLength})`
                             : ''}

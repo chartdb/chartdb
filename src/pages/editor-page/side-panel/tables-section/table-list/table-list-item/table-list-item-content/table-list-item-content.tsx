@@ -35,10 +35,19 @@ type AccordionItemValue = 'fields' | 'indexes';
 
 export interface TableListItemContentProps {
     table: DBTable;
+    searchText?: string;
+    searchOptions?: {
+        searchInFields: boolean;
+        searchInTypes: boolean;
+        searchInComments: boolean;
+        caseSensitive: boolean;
+    };
 }
 
 export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     table,
+    searchText,
+    searchOptions,
 }) => {
     const {
         updateField,
@@ -159,6 +168,8 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         removeField={() =>
                                             removeField(table.id, field.id)
                                         }
+                                        searchText={searchText}
+                                        searchOptions={searchOptions}
                                     />
                                 ))}
                             </SortableContext>
