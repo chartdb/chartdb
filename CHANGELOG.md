@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.13.0](https://github.com/chartdb/chartdb/compare/v1.12.0...v1.13.0) (2025-05-28)
+
+
+### Features
+
+* **custom-types:** add enums and composite types for Postgres ([#714](https://github.com/chartdb/chartdb/issues/714)) ([c3904d9](https://github.com/chartdb/chartdb/commit/c3904d9fdd63ef5b76a44e73582d592f2c418687))
+* **export-sql:** add custom types to export sql script ([#720](https://github.com/chartdb/chartdb/issues/720)) ([cad155e](https://github.com/chartdb/chartdb/commit/cad155e6550f171b8faecbfdff27032798ecea43))
+* **oracle:** support oracle in ChartDB ([#709](https://github.com/chartdb/chartdb/issues/709)) ([765a1c4](https://github.com/chartdb/chartdb/commit/765a1c43547a29bd3428c942c7afb56f63aaf046))
+
+
+### Bug Fixes
+
+* **canvas:** prevent canvas blink and lag on field edit ([#723](https://github.com/chartdb/chartdb/issues/723)) ([cd44346](https://github.com/chartdb/chartdb/commit/cd443466c7952f1cdc3739645c12130b9231e3a1))
+* **canvas:** prevent canvas blink and lag on primary field edit ([#725](https://github.com/chartdb/chartdb/issues/725)) ([4477b1c](https://github.com/chartdb/chartdb/commit/4477b1ca1fe6b282b604739a23e31181acd4d7bc))
+* **custom_types:** fix custom types on storage provider ([#721](https://github.com/chartdb/chartdb/issues/721)) ([beb0151](https://github.com/chartdb/chartdb/commit/beb015194f917c0ba644458410162d2b7599918c))
+* **custom_types:** fix custom types on storage provider ([#722](https://github.com/chartdb/chartdb/issues/722)) ([18012dd](https://github.com/chartdb/chartdb/commit/18012ddab1718bcce3432aea626adf6fc9be25d9))
+* **custom-types:** fetch directly via the smart-query the custom types ([#729](https://github.com/chartdb/chartdb/issues/729)) ([cf1e141](https://github.com/chartdb/chartdb/commit/cf1e141837eda77d717ad87489ce9946b688e226))
+* **dbml-editor:** export comments with schema if existsed ([#728](https://github.com/chartdb/chartdb/issues/728)) ([73f542a](https://github.com/chartdb/chartdb/commit/73f542adad2d66a1e84fc656a0c34d9b1f39f33c))
+* **dbml-editor:** fix export dbml - to show enums ([#724](https://github.com/chartdb/chartdb/issues/724)) ([3894a22](https://github.com/chartdb/chartdb/commit/3894a221745d32c13160bedcb1bcf53d89897698))
+* **import-database:** remove the default fetch from import database ([#718](https://github.com/chartdb/chartdb/issues/718)) ([0d11b0c](https://github.com/chartdb/chartdb/commit/0d11b0c55a94a12a764785cfdcf2ba10437241d6))
+* **menu:** add oracle to import menu ([#713](https://github.com/chartdb/chartdb/issues/713)) ([aee5779](https://github.com/chartdb/chartdb/commit/aee577998342eb4a2b05b3e03181992a435712d8))
+* **relationship:** fix creating of relationships ([#732](https://github.com/chartdb/chartdb/issues/732)) ([08b627c](https://github.com/chartdb/chartdb/commit/08b627cb8ca8fdf08d8ed2ff7e89104887deffb7))
+
 ## [1.12.0](https://github.com/chartdb/chartdb/compare/v1.11.0...v1.12.0) (2025-05-20)
 
 
