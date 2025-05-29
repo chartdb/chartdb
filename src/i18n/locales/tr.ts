@@ -40,6 +40,13 @@ export const tr: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: "MinIO'ya Kaydet",
+                import_from_minio: "MinIO'dan İçe Aktar",
+                copy_url: 'URL Kopyala',
+                copy_url_tooltip: 'Bu diyagram için URL kopyala',
+            },
             help: {
                 help: 'Yardım',
                 docs_website: 'Belgeleme',
@@ -62,6 +69,11 @@ export const tr: LanguageTranslation = {
             cancel: 'İptal',
             clear: 'Temizle',
         },
+
+        copy_url_success: 'URL kopyalandı',
+        saving_to_minio: "MinIO'ya kaydediliyor...",
+        saved_to_minio_success: "MinIO'ya başarıyla kaydedildi",
+        error_saving_to_minio: "MinIO'ya kaydetme hatası",
 
         reorder_diagram_alert: {
             title: 'Diyagramı Yeniden Sırala',
@@ -276,6 +288,7 @@ export const tr: LanguageTranslation = {
                     'Her veritabanının kendine özgü özellikleri ve yetenekleri vardır.',
                 check_examples_long: 'Örnekleri Kontrol Et',
                 check_examples_short: 'Örnekler',
+                open_from_minio: "MinIO'dan Aç",
             },
             import_database: {
                 title: 'Veritabanını İçe Aktar',
@@ -424,6 +437,25 @@ export const tr: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio dan İçe Aktar',
+            description:
+                'Minio depolama alanından içe aktarmak için bir diyagram dosyası seçin.',
+            table_columns: {
+                name: 'Ad',
+                last_modified: 'Son Değişiklik',
+                size: 'Boyut',
+            },
+            import: 'İçe Aktar',
+            cancel: 'İptal',
+            no_files: 'Minio depolama alanında dosya bulunamadı',
+            error: {
+                title: 'Hata',
+                description: 'Minio depolama alanında dosya yüklenemedi',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

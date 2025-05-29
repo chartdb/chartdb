@@ -37,8 +37,16 @@ export const de: LanguageTranslation = {
             // TODO: Translate
             backup: {
                 backup: 'Backup',
-                export_diagram: 'Export Diagram',
-                restore_diagram: 'Restore Diagram',
+                export_diagram: 'Diagramm exportieren',
+                restore_diagram: 'Diagramm wiederherstellen',
+            },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'In MinIO speichern',
+                import_from_minio: 'Aus MinIO öffnen',
+                copy_url: 'URL mit MinIO-Parameter kopieren',
+                copy_url_tooltip:
+                    'Link zu diesem Diagramm mit minio-Parameter kopieren',
             },
             help: {
                 help: 'Hilfe',
@@ -62,6 +70,11 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
             clear: 'Leeren',
         },
+
+        copy_url_success: 'URL kopiert',
+        saving_to_minio: 'Speichern in MinIO...',
+        saved_to_minio_success: 'Erfolgreich in MinIO gespeichert',
+        error_saving_to_minio: 'Fehler beim Speichern in MinIO',
 
         reorder_diagram_alert: {
             title: 'Diagramm neu anordnen',
@@ -280,6 +293,7 @@ export const de: LanguageTranslation = {
                     'Jede Datenbank hat ihre eigenen Funktionen und Möglichkeiten.',
                 check_examples_long: 'Beispiele ansehen',
                 check_examples_short: 'Beispiele',
+                open_from_minio: 'Aus MinIO öffnen',
             },
 
             import_database: {
@@ -436,6 +450,26 @@ export const de: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio importieren',
+            description:
+                'Wählen Sie eine Diagrammdatei aus, um sie aus dem Minio-Speicher zu importieren.',
+            table_columns: {
+                name: 'Name',
+                last_modified: 'Letzte Änderung',
+                size: 'Größe',
+            },
+            import: 'Importieren',
+            cancel: 'Abbrechen',
+            no_files: 'Keine Dateien im Minio-Speicher gefunden',
+            error: {
+                title: 'Fehler',
+                description:
+                    'Fehler beim Laden von Dateien aus dem Minio-Speicher',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

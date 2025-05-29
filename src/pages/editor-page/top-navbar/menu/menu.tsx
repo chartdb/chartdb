@@ -13,6 +13,7 @@ import {
     MenubarTrigger,
 } from '@/components/menubar/menubar';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useExportDiagram } from '@/hooks/use-export-diagram';
 import { useDialog } from '@/hooks/use-dialog';
 import { useExportImage } from '@/hooks/use-export-image';
 import { databaseTypeToLabelMap } from '@/lib/databases';
@@ -38,7 +39,9 @@ export const Menu: React.FC<MenuProps> = () => {
         updateDiagramUpdatedAt,
         databaseType,
         dependencies,
+        currentDiagram,
     } = useChartDB();
+    const { exportDiagram } = useExportDiagram();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -48,7 +51,9 @@ export const Menu: React.FC<MenuProps> = () => {
         openExportDiagramDialog,
         openImportDiagramDialog,
         openImportDBMLDialog,
+        openImportFromMinioDialog,
     } = useDialog();
+
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -181,8 +186,14 @@ export const Menu: React.FC<MenuProps> = () => {
                             {t('menu.file.import')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
-                            <MenubarItem onClick={openImportDiagramDialog}>
-                                .json
+                            <MenubarItem
+                                onClick={() =>
+                                    openExportDiagramDialog({
+                                        destination: 'local',
+                                    })
+                                }
+                            >
+                                {t('menu.file.export_diagram')}
                             </MenubarItem>
                             <MenubarItem onClick={() => openImportDBMLDialog()}>
                                 .dbml
@@ -320,7 +331,13 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={exportJPG}>JPG</MenubarItem>
                             <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
                             <MenubarSeparator />
-                            <MenubarItem onClick={openExportDiagramDialog}>
+                            <MenubarItem
+                                onClick={() =>
+                                    openExportDiagramDialog({
+                                        destination: 'local',
+                                    })
+                                }
+                            >
                                 JSON
                             </MenubarItem>
                         </MenubarSubContent>
@@ -481,11 +498,120 @@ export const Menu: React.FC<MenuProps> = () => {
             <MenubarMenu>
                 <MenubarTrigger>{t('menu.backup.backup')}</MenubarTrigger>
                 <MenubarContent>
-                    <MenubarItem onClick={openExportDiagramDialog}>
+                    <MenubarItem
+                        onClick={() =>
+                            openExportDiagramDialog({
+                                destination: 'local',
+                            })
+                        }
+                    >
                         {t('menu.backup.export_diagram')}
                     </MenubarItem>
                     <MenubarItem onClick={openImportDiagramDialog}>
                         {t('menu.backup.restore_diagram')}
+                    </MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+
+            <MenubarMenu>
+                <MenubarTrigger>{t('menu.minio.minio')}</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarItem onClick={() => openImportFromMinioDialog()}>
+                        {t('menu.minio.import_from_minio')}
+                    </MenubarItem>
+                    <MenubarItem
+                        onClick={async () => {
+                            // Create one notification element, which we will update
+                            const toast = document.createElement('div');
+                            toast.className =
+                                'fixed top-4 right-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded shadow-md z-50 transition-opacity duration-500';
+                            toast.innerHTML = `<p>${t('saving_to_minio')}</p>`;
+                            document.body.appendChild(toast);
+
+                            try {
+                                // Directly export diagram to MinIO
+                                await exportDiagram({
+                                    diagram: currentDiagram,
+                                    destination: 'minio',
+                                });
+
+                                // Update toast to show success message
+                                toast.className =
+                                    'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md z-50 transition-opacity duration-500';
+                                toast.innerHTML = `<p>${t('saved_to_minio_success')}</p>`;
+
+                                // Remove notification after 2 seconds
+                                setTimeout(() => {
+                                    toast.style.opacity = '0';
+                                    setTimeout(() => {
+                                        document.body.removeChild(toast);
+                                    }, 500);
+                                }, 2000);
+                            } catch (error) {
+                                console.error('Error saving to MinIO:', error);
+                                // Update toast to show error message
+                                toast.className =
+                                    'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-md z-50 transition-opacity duration-500';
+                                toast.innerHTML = `<p>${t('error_saving_to_minio')}</p>`;
+
+                                // Remove error notification after 3 seconds
+                                setTimeout(() => {
+                                    toast.style.opacity = '0';
+                                    setTimeout(() => {
+                                        document.body.removeChild(toast);
+                                    }, 500);
+                                }, 3000);
+                            }
+                        }}
+                    >
+                        {t('menu.minio.save_to_minio')}
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem
+                        onClick={async () => {
+                            try {
+                                // Get the current URL
+                                const url = new URL(window.location.href);
+
+                                // Set the path to root
+                                url.pathname = '/';
+
+                                // Add minio parameter with current diagram name
+                                url.searchParams.set(
+                                    'minio',
+                                    currentDiagram.name
+                                );
+
+                                // Copy URL to clipboard
+                                await navigator.clipboard.writeText(
+                                    url.toString()
+                                );
+
+                                // Visual feedback - use toast notification
+                                const copyElement =
+                                    document.createElement('div');
+                                copyElement.className =
+                                    'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md z-50 transition-opacity duration-500';
+                                copyElement.innerHTML = `<p>${t('copy_url_success', 'URL copied')}</p>`;
+
+                                document.body.appendChild(copyElement);
+
+                                // Remove after 2 seconds
+                                setTimeout(() => {
+                                    copyElement.style.opacity = '0';
+                                    setTimeout(() => {
+                                        document.body.removeChild(copyElement);
+                                    }, 500);
+                                }, 2000);
+                            } catch (error) {
+                                console.error(
+                                    'Error copying URL to clipboard:',
+                                    error
+                                );
+                            }
+                        }}
+                    >
+                        {t('menu.minio.copy_url')}
                     </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
