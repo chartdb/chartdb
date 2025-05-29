@@ -11,6 +11,7 @@ export const zh_TW: LanguageTranslation = {
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
+                copy: '複製',
                 delete_diagram: '刪除圖表',
                 exit: '退出',
             },
@@ -39,6 +40,13 @@ export const zh_TW: LanguageTranslation = {
                 export_diagram: '匯出圖表',
                 restore_diagram: '恢復圖表',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: '儲存到 MinIO',
+                import_from_minio: '從 MinIO 匯入',
+                copy_url: '儲存到 MinIO',
+                copy_url_tooltip: '儲存到 MinIO',
+            },
             help: {
                 help: '幫助',
                 docs_website: '文件',
@@ -59,6 +67,11 @@ export const zh_TW: LanguageTranslation = {
             cancel: '取消',
             clear: '清除',
         },
+
+        copy_url_success: 'URL 已複製',
+        saving_to_minio: '正在儲存至 MinIO...',
+        saved_to_minio_success: '成功儲存至 MinIO',
+        error_saving_to_minio: '儲存至 MinIO 時發生錯誤',
 
         reorder_diagram_alert: {
             title: '重新排列圖表',
@@ -273,6 +286,7 @@ export const zh_TW: LanguageTranslation = {
                 description: '每種資料庫都有其獨特的功能和能力。',
                 check_examples_long: '查看範例',
                 check_examples_short: '範例',
+                open_from_minio: '從 MinIO 開啟',
             },
 
             import_database: {
@@ -425,6 +439,24 @@ export const zh_TW: LanguageTranslation = {
                     '圖表的 JSON 無效。請檢查 JSON 並再試一次。如需幫助，請聯繫 support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: '從 Minio 匯入',
+            description: '從 Minio 存儲中選擇一個圖表文件匯入。',
+            table_columns: {
+                name: '名稱',
+                last_modified: '最後修改',
+                size: '大小',
+            },
+            import: '匯入',
+            cancel: '取消',
+            no_files: 'Minio 存儲中未找到文件',
+            error: {
+                title: '錯誤',
+                description: '無法從 Minio 存儲加載文件',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

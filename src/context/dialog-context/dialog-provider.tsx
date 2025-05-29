@@ -22,6 +22,7 @@ import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diag
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import { ImportDBMLDialog } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
+import { ImportFromMinioDialog } from '@/dialogs/import-from-minio-dialog/import-from-minio-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -127,6 +128,19 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     // Export diagram dialog
     const [openExportDiagramDialog, setOpenExportDiagramDialog] =
         useState(false);
+    const [exportDiagramParams, setExportDiagramParams] = useState<{
+        destination?: 'local' | 'minio';
+    }>({});
+
+    const openExportDiagramDialogHandler: DialogContext['openExportDiagramDialog'] =
+        useCallback((params) => {
+            setExportDiagramParams(params || {});
+            setOpenExportDiagramDialog(true);
+        }, []);
+
+    const closeExportDiagramDialogHandler = useCallback(() => {
+        setOpenExportDiagramDialog(false);
+    }, []);
 
     // Import diagram dialog
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
@@ -136,6 +150,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     const [openImportDBMLDialog, setOpenImportDBMLDialog] = useState(false);
     const [importDBMLDialogParams, setImportDBMLDialogParams] =
         useState<Omit<ImportDBMLDialogProps, 'dialog'>>();
+
+    // Import from Minio dialog
+    const [openImportFromMinioDialog, setOpenImportFromMinioDialog] =
+        useState(false);
 
     return (
         <dialogContext.Provider
@@ -159,9 +177,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
-                openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
-                closeExportDiagramDialog: () =>
-                    setOpenExportDiagramDialog(false),
+                openExportDiagramDialog: openExportDiagramDialogHandler,
+                closeExportDiagramDialog: closeExportDiagramDialogHandler,
                 openImportDiagramDialog: () => setOpenImportDiagramDialog(true),
                 closeImportDiagramDialog: () =>
                     setOpenImportDiagramDialog(false),
@@ -170,6 +187,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenImportDBMLDialog(true);
                 },
                 closeImportDBMLDialog: () => setOpenImportDBMLDialog(false),
+                openImportFromMinioDialog: () =>
+                    setOpenImportFromMinioDialog(true),
+                closeImportFromMinioDialog: () =>
+                    setOpenImportFromMinioDialog(false),
             }}
         >
             {children}
@@ -202,11 +223,17 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
             />
-            <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
+            <ExportDiagramDialog
+                dialog={{ open: openExportDiagramDialog }}
+                destination={exportDiagramParams.destination}
+            />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             <ImportDBMLDialog
                 dialog={{ open: openImportDBMLDialog }}
                 {...importDBMLDialogParams}
+            />
+            <ImportFromMinioDialog
+                dialog={{ open: openImportFromMinioDialog }}
             />
         </dialogContext.Provider>
     );
