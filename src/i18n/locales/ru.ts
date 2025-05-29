@@ -69,7 +69,8 @@ export const ru: LanguageTranslation = {
             clear: 'Очистить',
         },
 
-        copy_url_success: 'URL скопирован',
+        copy_url_success:
+            'URL скопирован. Используйте его, чтобы открыть диаграмму в другом браузере или компьютере',
         saving_to_minio: 'Сохранение в MinIO...',
         saved_to_minio_success: 'Успешно сохранено в MinIO',
         error_saving_to_minio: 'Ошибка при сохранении в MinIO',

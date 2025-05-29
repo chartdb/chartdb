@@ -70,7 +70,8 @@ export const es: LanguageTranslation = {
             clear: 'Limpiar',
         },
 
-        copy_url_success: 'URL copiada',
+        copy_url_success:
+            'URL copiada. Úséla para abrir el diagrama en otro navegador o computadora',
         saving_to_minio: 'Guardando en MinIO...',
         saved_to_minio_success: 'Guardado exitosamente en MinIO',
         error_saving_to_minio: 'Error al guardar en MinIO',

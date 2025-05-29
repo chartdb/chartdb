@@ -69,7 +69,8 @@ export const hi: LanguageTranslation = {
             clear: 'साफ़ करें',
         },
 
-        copy_url_success: 'URL कॉपी किया गया!',
+        copy_url_success:
+            'URL कॉपी किया गया! इसका उपयोग डायग्राम को किसी अन्य ब्राउजर या कंप्यूटर पर खोलने के लिए करें',
         saving_to_minio: 'MinIO में सहेजा जा रहा है...',
         saved_to_minio_success: 'MinIO में सफलतापूर्वक सहेजा गया',
         error_saving_to_minio: 'MinIO में सहेजने में त्रुटि',

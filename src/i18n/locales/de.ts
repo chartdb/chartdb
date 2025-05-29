@@ -71,7 +71,8 @@ export const de: LanguageTranslation = {
             clear: 'Leeren',
         },
 
-        copy_url_success: 'URL kopiert',
+        copy_url_success:
+            'URL kopiert. Verwenden Sie sie, um das Diagramm in einem anderen Browser oder Computer zu öffnen',
         saving_to_minio: 'Speichern in MinIO...',
         saved_to_minio_success: 'Erfolgreich in MinIO gespeichert',
         error_saving_to_minio: 'Fehler beim Speichern in MinIO',

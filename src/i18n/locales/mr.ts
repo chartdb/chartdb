@@ -70,7 +70,8 @@ export const mr: LanguageTranslation = {
             clear: 'साफ करा',
         },
 
-        copy_url_success: 'URL कॉपी केला',
+        copy_url_success:
+            'URL कॉपी केला. इतर ब्राउझर किंवा संगणकावर आकृती उघडण्यासाठी वापरा',
         saving_to_minio: 'MinIO मध्ये सेव्ह करत आहे...',
         saved_to_minio_success: 'MinIO मध्ये यशस्वीरित्या सेव्ह केले',
         error_saving_to_minio: 'MinIO मध्ये सेव्ह करताना त्रुटी',

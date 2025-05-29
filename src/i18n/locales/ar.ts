@@ -69,7 +69,8 @@ export const ar: LanguageTranslation = {
             clear: 'مسح',
         },
 
-        copy_url_success: 'URL نسخت',
+        copy_url_success:
+            'URL نسخت. استخدمه لفتح الرسم البياني في متصفح أو جهاز كمبيوتر آخر',
         saving_to_minio: 'جاري الحفظ في MinIO...',
         saved_to_minio_success: 'تم الحفظ في MinIO بنجاح',
         error_saving_to_minio: 'خطأ في الحفظ في MinIO',

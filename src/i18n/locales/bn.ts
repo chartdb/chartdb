@@ -63,7 +63,8 @@ export const bn: LanguageTranslation = {
             delete: 'মুছুন',
         },
 
-        copy_url_success: 'URL কপি করা হয়েছে',
+        copy_url_success:
+            'URL কপি করা হয়েছে। অন্য ব্রাউজার বা কম্পিউটারে ডায়াগ্রাম খুলতে এটি ব্যবহার করুন',
         saving_to_minio: 'MinIO-তে সেভ করা হচ্ছে...',
         saved_to_minio_success: 'MinIO-তে সফলভাবে সেভ করা হয়েছে',
         error_saving_to_minio: 'MinIO-তে সেভ করতে ত্রুটি',

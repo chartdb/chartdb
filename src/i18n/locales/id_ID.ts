@@ -70,7 +70,8 @@ export const id_ID: LanguageTranslation = {
             clear: 'Bersihkan',
         },
 
-        copy_url_success: 'URL disalin',
+        copy_url_success:
+            'URL disalin. Gunakan untuk membuka diagram di browser atau komputer lain',
         saving_to_minio: 'Menyimpan ke MinIO...',
         saved_to_minio_success: 'Berhasil disimpan ke MinIO',
         error_saving_to_minio: 'Kesalahan menyimpan ke MinIO',

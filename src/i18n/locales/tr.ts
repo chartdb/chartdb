@@ -70,7 +70,8 @@ export const tr: LanguageTranslation = {
             clear: 'Temizle',
         },
 
-        copy_url_success: 'URL kopyalandı',
+        copy_url_success:
+            'URL kopyalandı. Diyagramı başka bir tarayıcıda veya bilgisayarda açmak için kullanın',
         saving_to_minio: "MinIO'ya kaydediliyor...",
         saved_to_minio_success: "MinIO'ya başarıyla kaydedildi",
         error_saving_to_minio: "MinIO'ya kaydetme hatası",

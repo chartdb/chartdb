@@ -71,7 +71,8 @@ export const ja: LanguageTranslation = {
             clear: 'クリア',
         },
 
-        copy_url_success: 'URLがコピーされました',
+        copy_url_success:
+            'URLがコピーされました。他のブラウザやコンピュータで図表を開くのに使用してください',
         saving_to_minio: 'MinIOに保存中...',
         saved_to_minio_success: 'MinIOに正常に保存されました',
         error_saving_to_minio: 'MinIOへの保存中にエラーが発生しました',

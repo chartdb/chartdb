@@ -69,7 +69,8 @@ export const vi: LanguageTranslation = {
             clear: 'Xóa',
         },
 
-        copy_url_success: 'URL đã được sao chép',
+        copy_url_success:
+            'URL đã được sao chép. Sử dụng nó để mở sơ đồ trong trình duyệt hoặc máy tính khác',
         saving_to_minio: 'Đang lưu vào MinIO...',
         saved_to_minio_success: 'Đã lưu vào MinIO thành công',
         error_saving_to_minio: 'Lỗi khi lưu vào MinIO',

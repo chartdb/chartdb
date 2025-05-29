@@ -69,7 +69,8 @@ export const en = {
             clear: 'Clear',
         },
 
-        copy_url_success: 'URL copied',
+        copy_url_success:
+            'URL copied. Use it to open the diagram in another browser or computer',
         saving_to_minio: 'Saving to MinIO...',
         saved_to_minio_success: 'Saved to MinIO successfully',
         error_saving_to_minio: 'Error saving to MinIO',

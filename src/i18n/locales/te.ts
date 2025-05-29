@@ -71,7 +71,8 @@ export const te: LanguageTranslation = {
             clear: 'తొలగించు',
         },
 
-        copy_url_success: 'URL నకలం చేసింది!',
+        copy_url_success:
+            'URL కాపీ చేయబడింది! వేరే బ్రౌజర్ లేదా కంప్యూటర్‌లో డియాగ్రామ్‌ని తెరవడానికి దీన్ని ఉపయోగించండి',
         saving_to_minio: 'MinIOలో సేవ్ చేస్తోంది...',
         saved_to_minio_success: 'MinIOలో విజయవంతంగా సేవ్ చేయబడింది',
         error_saving_to_minio: 'MinIOలో సేవ్ చేయడంలో లోపం',

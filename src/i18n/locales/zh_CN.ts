@@ -67,7 +67,7 @@ export const zh_CN: LanguageTranslation = {
             clear: '清空',
         },
 
-        copy_url_success: 'URL 已复制',
+        copy_url_success: 'URL 已复制。用它在其他浏览器或计算机上打开图表',
         saving_to_minio: '正在保存到 MinIO...',
         saved_to_minio_success: '成功保存到 MinIO',
         error_saving_to_minio: '保存到 MinIO 时出错',

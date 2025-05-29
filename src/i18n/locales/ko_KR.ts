@@ -70,7 +70,8 @@ export const ko_KR: LanguageTranslation = {
             clear: '지우기',
         },
 
-        copy_url_success: 'URL이 복사되었습니다',
+        copy_url_success:
+            'URL이 복사되었습니다. 다른 브라우저나 컴퓨터에서 다이어그램을 열 때 사용하세요',
         saving_to_minio: 'MinIO에 저장 중...',
         saved_to_minio_success: 'MinIO에 성공적으로 저장했습니다',
         error_saving_to_minio: 'MinIO에 저장하는 중 오류가 발생했습니다',

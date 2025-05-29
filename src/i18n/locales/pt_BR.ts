@@ -71,7 +71,8 @@ export const pt_BR: LanguageTranslation = {
             clear: 'Limpar',
         },
 
-        copy_url_success: 'URL copiada',
+        copy_url_success:
+            'URL copiada. Use-a para abrir o diagrama em outro navegador ou computador',
         saving_to_minio: 'Salvando no MinIO...',
         saved_to_minio_success: 'Salvo com sucesso no MinIO',
         error_saving_to_minio: 'Erro ao salvar no MinIO',

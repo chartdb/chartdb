@@ -69,7 +69,8 @@ export const fr: LanguageTranslation = {
             clear: 'Effacer',
         },
 
-        copy_url_success: 'URL copiée',
+        copy_url_success:
+            'URL copiée. Utilisez-la pour ouvrir le diagramme dans un autre navigateur ou ordinateur',
         saving_to_minio: 'Enregistrement dans MinIO...',
         saved_to_minio_success: 'Enregistré dans MinIO avec succès',
         error_saving_to_minio: "Erreur lors de l'enregistrement dans MinIO",

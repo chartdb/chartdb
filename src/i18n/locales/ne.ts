@@ -71,7 +71,8 @@ export const ne: LanguageTranslation = {
             clear: 'स्पष्ट गर्नुहोस्',
         },
 
-        copy_url_success: 'URL प्रतिलिपि गरियो!',
+        copy_url_success:
+            'URL प्रतिलिपि गरियो! यसलाई अर्को ब्राउजर वा कम्प्युटरमा डायग्राम खोल्न प्रयोग गर्नुहोस्',
         saving_to_minio: 'MinIO मा सुरक्षित गर्दै...',
         saved_to_minio_success: 'MinIO मा सफलतापूर्वक सुरक्षित गरियो',
         error_saving_to_minio: 'MinIO मा सुरक्षित गर्दा त्रुटि',

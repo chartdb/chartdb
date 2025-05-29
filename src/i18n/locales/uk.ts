@@ -68,7 +68,8 @@ export const uk: LanguageTranslation = {
             clear: 'Очистити',
         },
 
-        copy_url_success: 'URL скопійовано',
+        copy_url_success:
+            'URL скопійовано. Використовуйте його, щоб відкрити діаграму в іншому браузері або комп’ютері',
         saving_to_minio: 'Збереження в MinIO...',
         saved_to_minio_success: 'Успішно збережено в MinIO',
         error_saving_to_minio: 'Помилка збереження в MinIO',

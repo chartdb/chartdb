@@ -70,7 +70,8 @@ export const gu: LanguageTranslation = {
             clear: 'સાફ કરો',
         },
 
-        copy_url_success: 'URL કોપી થઈ ગયું',
+        copy_url_success:
+            'URL કોપી થઈ ગઈ છે. તેનો ઉપયોગ અન્ય બ્રાઉઝર અથવા કોમ્પ્યુટરમાં ડાયાગ્રામ ખોલવા માટે કરો',
         saving_to_minio: 'MinIO પર સાચવી રહ્યું છે...',
         saved_to_minio_success: 'MinIO પર સફળતાપૂર્વક સાચવ્યું',
         error_saving_to_minio: 'MinIO પર સાચવવામાં ભૂલ',
