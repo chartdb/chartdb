@@ -40,6 +40,14 @@ export const bn: LanguageTranslation = {
                 export_diagram: 'ডায়াগ্রাম রপ্তানি করুন',
                 restore_diagram: 'ডায়াগ্রাম পুনরুদ্ধার করুন',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO-তে সংরক্ষণ করুন',
+                import_from_minio: 'MinIO থেকে খুলুন',
+                copy_url: 'MinIO প্যারামিটারসহ URL কপি করুন',
+                copy_url_tooltip:
+                    'এই ডায়াগ্রামের MinIO প্যারামিটারসহ লিংক কপি করুন',
+            },
             help: {
                 help: 'সাহায্য',
                 docs_website: 'ডকুমেন্টেশন',
@@ -54,6 +62,12 @@ export const bn: LanguageTranslation = {
             cancel: 'বাতিল করুন',
             delete: 'মুছুন',
         },
+
+        copy_url_success:
+            'URL কপি করা হয়েছে। অন্য ব্রাউজার বা কম্পিউটারে ডায়াগ্রাম খুলতে এটি ব্যবহার করুন',
+        saving_to_minio: 'MinIO-তে সেভ করা হচ্ছে...',
+        saved_to_minio_success: 'MinIO-তে সফলভাবে সেভ করা হয়েছে',
+        error_saving_to_minio: 'MinIO-তে সেভ করতে ত্রুটি',
 
         clear_diagram_alert: {
             title: 'ডায়াগ্রাম পরিষ্কার করুন',
@@ -232,6 +246,32 @@ export const bn: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -252,6 +292,7 @@ export const bn: LanguageTranslation = {
                     'প্রত্যেক ডাটাবেসের নিজস্ব বৈশিষ্ট্য এবং ক্ষমতা রয়েছে।',
                 check_examples_long: 'উদাহরণ দেখুন',
                 check_examples_short: 'উদাহরণ',
+                open_from_minio: 'MinIO থেকে খুলুন',
             },
 
             import_database: {
@@ -407,6 +448,24 @@ export const bn: LanguageTranslation = {
                     'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio থেকে আমদানি করুন',
+            description: 'Minio থেকে একটি চিত্র ফাইল নির্বাচন করুন:',
+            table_columns: {
+                name: 'নাম',
+                last_modified: 'সর্বশেষ পরিবর্তন',
+                size: 'আকার',
+            },
+            import: 'আমদানি করুন',
+            cancel: 'বাতিল করুন',
+            no_files: 'Minio স্টোরেজে ফাইল পাওয়া যায়নি',
+            error: {
+                title: 'ত্রুটি',
+                description: 'Minio থেকে ফাইল লোড করার সমস্যা',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

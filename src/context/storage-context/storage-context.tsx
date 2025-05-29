@@ -6,6 +6,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
 
 export interface StorageContext {
     // Config operations
@@ -19,6 +20,7 @@ export interface StorageContext {
         includeRelationships?: boolean;
         includeDependencies?: boolean;
         includeAreas?: boolean;
+        includeCustomTypes?: boolean;
     }) => Promise<Diagram[]>;
     getDiagram: (
         id: string,
@@ -27,6 +29,7 @@ export interface StorageContext {
             includeRelationships?: boolean;
             includeDependencies?: boolean;
             includeAreas?: boolean;
+            includeCustomTypes?: boolean;
         }
     ) => Promise<Diagram | undefined>;
     updateDiagram: (params: {
@@ -103,6 +106,26 @@ export interface StorageContext {
     deleteArea: (params: { diagramId: string; id: string }) => Promise<void>;
     listAreas: (diagramId: string) => Promise<Area[]>;
     deleteDiagramAreas: (diagramId: string) => Promise<void>;
+
+    // Custom type operations
+    addCustomType: (params: {
+        diagramId: string;
+        customType: DBCustomType;
+    }) => Promise<void>;
+    getCustomType: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<DBCustomType | undefined>;
+    updateCustomType: (params: {
+        id: string;
+        attributes: Partial<DBCustomType>;
+    }) => Promise<void>;
+    deleteCustomType: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<void>;
+    listCustomTypes: (diagramId: string) => Promise<DBCustomType[]>;
+    deleteDiagramCustomTypes: (diagramId: string) => Promise<void>;
 }
 
 export const storageInitialValue: StorageContext = {
@@ -143,6 +166,14 @@ export const storageInitialValue: StorageContext = {
     deleteArea: emptyFn,
     listAreas: emptyFn,
     deleteDiagramAreas: emptyFn,
+
+    // Custom type operations
+    addCustomType: emptyFn,
+    getCustomType: emptyFn,
+    updateCustomType: emptyFn,
+    deleteCustomType: emptyFn,
+    listCustomTypes: emptyFn,
+    deleteDiagramCustomTypes: emptyFn,
 };
 
 export const storageContext =

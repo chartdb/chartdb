@@ -5,6 +5,10 @@ import { ColumnInfoSchema, type ColumnInfo } from './column-info';
 import { IndexInfoSchema, type IndexInfo } from './index-info';
 import { TableInfoSchema, type TableInfo } from './table-info';
 import { ViewInfoSchema, type ViewInfo } from './view-info';
+import {
+    DBCustomTypeInfoSchema,
+    type DBCustomTypeInfo,
+} from './custom-type-info';
 
 export interface DatabaseMetadata {
     fk_info: ForeignKeyInfo[];
@@ -13,6 +17,7 @@ export interface DatabaseMetadata {
     indexes: IndexInfo[];
     tables: TableInfo[];
     views: ViewInfo[];
+    custom_types?: DBCustomTypeInfo[];
     database_name: string;
     version: string;
 }
@@ -24,6 +29,7 @@ export const DatabaseMetadataSchema: z.ZodType<DatabaseMetadata> = z.object({
     indexes: z.array(IndexInfoSchema),
     tables: z.array(TableInfoSchema),
     views: z.array(ViewInfoSchema),
+    custom_types: z.array(DBCustomTypeInfoSchema).optional(),
     database_name: z.string(),
     version: z.string(),
 });

@@ -8,6 +8,8 @@ import type { Diagram } from '@/lib/domain/diagram';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
 function parsePostgresDefault(field: DBField): string {
     if (!field.default || typeof field.default !== 'string') {
@@ -90,6 +92,57 @@ function mapPostgresType(typeName: string, fieldName: string): string {
     return typeName;
 }
 
+function exportCustomTypes(customTypes: DBCustomType[]): string {
+    if (!customTypes || customTypes.length === 0) {
+        return '';
+    }
+
+    let typesSql = '';
+
+    // Sort custom types to ensure enums are created before composite types that might use them
+    const sortedTypes = [...customTypes].sort((a, b) => {
+        if (
+            a.kind === DBCustomTypeKind.enum &&
+            b.kind === DBCustomTypeKind.composite
+        ) {
+            return -1;
+        }
+        if (
+            a.kind === DBCustomTypeKind.composite &&
+            b.kind === DBCustomTypeKind.enum
+        ) {
+            return 1;
+        }
+        return a.name.localeCompare(b.name);
+    });
+
+    sortedTypes.forEach((customType) => {
+        const typeName = customType.schema
+            ? `"${customType.schema}"."${customType.name}"`
+            : `"${customType.name}"`;
+
+        if (customType.kind === DBCustomTypeKind.enum) {
+            // Export enum type
+            if (customType.values && customType.values.length > 0) {
+                const enumValues = customType.values
+                    .map((value) => `'${value.replace(/'/g, "''")}'`)
+                    .join(', ');
+                typesSql += `CREATE TYPE ${typeName} AS ENUM (${enumValues});\n`;
+            }
+        } else if (customType.kind === DBCustomTypeKind.composite) {
+            // Export composite type
+            if (customType.fields && customType.fields.length > 0) {
+                const compositeFields = customType.fields
+                    .map((field) => `"${field.field}" ${field.type}`)
+                    .join(', ');
+                typesSql += `CREATE TYPE ${typeName} AS (${compositeFields});\n`;
+            }
+        }
+    });
+
+    return typesSql + '\n';
+}
+
 export function exportPostgreSQL(diagram: Diagram): string {
     if (!diagram.tables || !diagram.relationships) {
         return '';
@@ -97,6 +150,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
 
     const tables = diagram.tables;
     const relationships = diagram.relationships;
+    const customTypes = diagram.customTypes || [];
 
     // Create CREATE SCHEMA statements for all schemas
     let sqlScript = '';
@@ -108,11 +162,21 @@ export function exportPostgreSQL(diagram: Diagram): string {
         }
     });
 
+    // Also collect schemas from custom types
+    customTypes.forEach((customType) => {
+        if (customType.schema) {
+            schemas.add(customType.schema);
+        }
+    });
+
     // Add schema creation statements
     schemas.forEach((schema) => {
         sqlScript += `CREATE SCHEMA IF NOT EXISTS "${schema}";\n`;
     });
     sqlScript += '\n';
+
+    // Add custom types (enums and composite types)
+    sqlScript += exportCustomTypes(customTypes);
 
     // Add sequence creation statements
     const sequences = new Set<string>();

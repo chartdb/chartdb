@@ -38,6 +38,14 @@ export const ru: LanguageTranslation = {
                 export_diagram: 'Экспорт диаграммы',
                 restore_diagram: 'Восстановить диаграмму',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'Сохранить в MinIO',
+                import_from_minio: 'Открыть из MinIO',
+                copy_url: 'Копировать URL с параметром MinIO',
+                copy_url_tooltip:
+                    'Копировать ссылку на эту диаграмму с параметром MinIO',
+            },
             help: {
                 help: 'Помощь',
                 docs_website: 'Документация',
@@ -60,6 +68,12 @@ export const ru: LanguageTranslation = {
             cancel: 'Отменить',
             clear: 'Очистить',
         },
+
+        copy_url_success:
+            'URL скопирован. Используйте его, чтобы открыть диаграмму в другом браузере или компьютере',
+        saving_to_minio: 'Сохранение в MinIO...',
+        saved_to_minio_success: 'Успешно сохранено в MinIO',
+        error_saving_to_minio: 'Ошибка при сохранении в MinIO',
 
         reorder_diagram_alert: {
             title: 'Переупорядочить диаграмму',
@@ -229,6 +243,32 @@ export const ru: LanguageTranslation = {
                     description: 'Создайте область, чтобы начать',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -249,6 +289,7 @@ export const ru: LanguageTranslation = {
                     'Каждая база данных имеет свои уникальные функции и возможности.',
                 check_examples_long: 'Открыть примеры',
                 check_examples_short: 'Примеры',
+                open_from_minio: 'Открыть из MinIO',
             },
 
             import_database: {
@@ -403,6 +444,25 @@ export const ru: LanguageTranslation = {
                     'Код JSON диаграммы некорректен. Проверьте, пожалуйста, код и попробуйте снова. Проблема не решается? Напишите нам: support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Импорт из Minio',
+            description:
+                'Выберите файл диаграммы для импорта из хранилища Minio.',
+            table_columns: {
+                name: 'Имя',
+                last_modified: 'Последнее изменение',
+                size: 'Размер',
+            },
+            import: 'Импортировать',
+            cancel: 'Отменить',
+            no_files: 'Файлы не найдены в хранилище Minio',
+            error: {
+                title: 'Ошибка',
+                description: 'Не удалось загрузить файлы из хранилища Minio',
+            },
+        },
+
         import_dbml_dialog: {
             example_title: 'Импорт DBML',
             title: 'Импортировать DBML',

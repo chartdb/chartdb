@@ -1,6 +1,11 @@
 import { DatabaseEdition } from '@/lib/domain/database-edition';
 import { DatabaseClient } from '@/lib/domain/database-clients';
 
+const withExtras = true;
+
+const withDefault = `COALESCE(REPLACE(p.dflt_value, '"', '\\"'), '')`;
+const withoutDefault = `null`;
+
 const sqliteQuery = `${`/* Standard SQLite */`}
 WITH fk_info AS (
   SELECT
@@ -114,7 +119,7 @@ WITH fk_info AS (
                       END
                   ELSE null
               END,
-              'default', COALESCE(REPLACE(p.dflt_value, '"', '\\"'), '')
+              'default', ${withExtras ? withDefault : withoutDefault}
           )
       ) AS cols_metadata
   FROM
@@ -287,7 +292,7 @@ WITH fk_info AS (
                       END
                   ELSE null
               END,
-              'default', COALESCE(REPLACE(p.dflt_value, '"', '\\"'), '')
+              'default', ${withExtras ? withDefault : withoutDefault}
           )
       ) AS cols_metadata
   FROM

@@ -8,6 +8,11 @@ export const getMySQLQuery = (
     const databaseEdition: DatabaseEdition | undefined =
         options.databaseEdition;
 
+    const withExtras = false;
+
+    const withDefault = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
+    const withoutDefault = `""`;
+
     const newMySQLQuery = `WITH fk_info as (
 (SELECT (@fk_info:=NULL),
     (SELECT (0)
@@ -86,7 +91,7 @@ export const getMySQLQuery = (
                     END,
                 ',"ordinal_position":', cols.ordinal_position,
                 ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), ''),
+                ',"default":"', ${withExtras ? withDefault : withoutDefault},
                 '","collation":"', IFNULL(cols.collation_name, ''), '"}'
             )))))
 ), indexes as (
@@ -211,7 +216,7 @@ export const getMySQLQuery = (
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-               ',"default":"', IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', '\\"'), ''),
+               ',"default":"', ${withExtras ? withDefault : withoutDefault},
                '","collation":"', IFNULL(cols.collation_name, ''), '"}')
     ) FROM (
         SELECT cols.table_schema,

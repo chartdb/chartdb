@@ -41,6 +41,13 @@ export const ja: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIOに保存',
+                import_from_minio: 'MinIOからインポート',
+                copy_url: 'URLをコピー',
+                copy_url_tooltip: 'このダイアグラムのURLをコピー',
+            },
             help: {
                 help: 'ヘルプ',
                 docs_website: 'ドキュメント',
@@ -63,6 +70,12 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
             clear: 'クリア',
         },
+
+        copy_url_success:
+            'URLがコピーされました。他のブラウザやコンピュータで図表を開くのに使用してください',
+        saving_to_minio: 'MinIOに保存中...',
+        saved_to_minio_success: 'MinIOに正常に保存されました',
+        error_saving_to_minio: 'MinIOへの保存中にエラーが発生しました',
 
         reorder_diagram_alert: {
             title: 'ダイアグラムを並べ替え',
@@ -237,6 +250,32 @@ export const ja: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -257,6 +296,7 @@ export const ja: LanguageTranslation = {
                 description: '各データベースには独自の機能と能力があります。',
                 check_examples_long: '例を確認',
                 check_examples_short: '例',
+                open_from_minio: 'MinIOから開く',
             },
 
             import_database: {
@@ -414,6 +454,26 @@ export const ja: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minioからインポート',
+            description:
+                'Minio storageからインポートするためのファイルを選択してください。',
+            table_columns: {
+                name: '名前',
+                last_modified: '最終更新日',
+                size: 'サイズ',
+            },
+            import: 'インポート',
+            cancel: 'キャンセル',
+            no_files: 'Minio storageにファイルが見つかりません',
+            error: {
+                title: 'Error',
+                description:
+                    'Minio storageからファイルを読み込むことができませんでした',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

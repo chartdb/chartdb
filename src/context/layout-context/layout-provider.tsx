@@ -17,6 +17,8 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const [openedAreaInSidebar, setOpenedAreaInSidebar] = React.useState<
         string | undefined
     >();
+    const [openedCustomTypeInSidebar, setOpenedCustomTypeInSidebar] =
+        React.useState<string | undefined>();
     const [selectedSidebarSection, setSelectedSidebarSection] =
         React.useState<SidebarSection>('tables');
     const [isSidePanelShowed, setIsSidePanelShowed] =
@@ -35,6 +37,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
 
     const closeAllAreasInSidebar: LayoutContext['closeAllAreasInSidebar'] =
         () => setOpenedAreaInSidebar('');
+
+    const closeAllCustomTypesInSidebar: LayoutContext['closeAllCustomTypesInSidebar'] =
+        () => setOpenedCustomTypeInSidebar('');
 
     const hideSidePanel: LayoutContext['hideSidePanel'] = () =>
         setIsSidePanelShowed(false);
@@ -76,6 +81,13 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         setOpenedAreaInSidebar(areaId);
     };
 
+    const openCustomTypeFromSidebar: LayoutContext['openCustomTypeFromSidebar'] =
+        (customTypeId) => {
+            showSidePanel();
+            setSelectedSidebarSection('customTypes');
+            setOpenedTableInSidebar(customTypeId);
+        };
+
     const openSelectSchema: LayoutContext['openSelectSchema'] = () =>
         setIsSelectSchemaOpen(true);
 
@@ -105,6 +117,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 openedAreaInSidebar,
                 openAreaFromSidebar,
                 closeAllAreasInSidebar,
+                openedCustomTypeInSidebar,
+                openCustomTypeFromSidebar,
+                closeAllCustomTypesInSidebar,
             }}
         >
             {children}

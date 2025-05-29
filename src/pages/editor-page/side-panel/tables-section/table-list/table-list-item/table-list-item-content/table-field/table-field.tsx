@@ -128,6 +128,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <span>
                             <SelectBox
                                 className="flex h-8 min-h-8 w-full"
+                                popoverClassName="min-w-[350px]"
                                 options={dataFieldOptions}
                                 placeholder={t(
                                     'side_panel.tables_section.table.field_type'

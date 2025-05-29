@@ -40,6 +40,14 @@ export const te: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO లో సంరక్షించు',
+                import_from_minio: 'MinIO నుండి ఆయాతం చేయండి',
+                copy_url: 'URL కాపీ చేయండి',
+                copy_url_tooltip:
+                    'ఈ రేఖాచిత్రం కోసం MinIO పరామితితో URL కాపీ చేయండి',
+            },
             help: {
                 help: 'సహాయం',
                 docs_website: 'డాక్యుమెంటేషన్',
@@ -62,6 +70,12 @@ export const te: LanguageTranslation = {
             cancel: 'రద్దు',
             clear: 'తొలగించు',
         },
+
+        copy_url_success:
+            'URL కాపీ చేయబడింది! వేరే బ్రౌజర్ లేదా కంప్యూటర్‌లో డియాగ్రామ్‌ని తెరవడానికి దీన్ని ఉపయోగించండి',
+        saving_to_minio: 'MinIOలో సేవ్ చేస్తోంది...',
+        saved_to_minio_success: 'MinIOలో విజయవంతంగా సేవ్ చేయబడింది',
+        error_saving_to_minio: 'MinIOలో సేవ్ చేయడంలో లోపం',
 
         reorder_diagram_alert: {
             title: 'చిత్రాన్ని పునఃసరిచేయండి',
@@ -93,7 +107,7 @@ export const te: LanguageTranslation = {
 
         theme: {
             system: 'సిస్టమ్',
-            light: 'హালకా',
+            light: 'హాలకా',
             dark: 'నలుపు',
         },
 
@@ -233,6 +247,32 @@ export const te: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -253,6 +293,7 @@ export const te: LanguageTranslation = {
                     'ప్రతి డేటాబేస్‌కు ప్రత్యేక లక్షణాలు మరియు సామర్థ్యాలు ఉంటాయి.',
                 check_examples_long: 'ఉదాహరణలు చూడండి',
                 check_examples_short: 'ఉదాహరణలు',
+                open_from_minio: 'MinIO నుండి తెరవండి',
             },
 
             import_database: {
@@ -411,6 +452,24 @@ export const te: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'మాట్లాడి మాట్లాడి',
+            description: 'Minio స్టోరేజ్లో మాట్లాడి మాట్లాడి.',
+            table_columns: {
+                name: 'పేరు',
+                last_modified: 'ప్రస్తుతంగా మార్చింది',
+                size: 'పెద్దదేశం',
+            },
+            import: 'మాట్లాడి',
+            cancel: 'రద్దు',
+            no_files: 'Minio స్టోరేజ్లో ఫైల్లు కనుగొనబడలేదు',
+            error: {
+                title: 'ప్రశ్న',
+                description: 'Minio స్టోరేజ్లో ఫైల్లు లోడ్ అవుతుంది',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

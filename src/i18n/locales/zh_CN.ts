@@ -39,6 +39,13 @@ export const zh_CN: LanguageTranslation = {
                 export_diagram: '导出关系图',
                 restore_diagram: '还原图表',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: '保存到 MinIO',
+                import_from_minio: '从 MinIO 导入',
+                copy_url: '复制 URL',
+                copy_url_tooltip: '复制 diagram 的 URL',
+            },
             help: {
                 help: '帮助',
                 docs_website: '文档',
@@ -59,6 +66,11 @@ export const zh_CN: LanguageTranslation = {
             cancel: '取消',
             clear: '清空',
         },
+
+        copy_url_success: 'URL 已复制。用它在其他浏览器或计算机上打开图表',
+        saving_to_minio: '正在保存到 MinIO...',
+        saved_to_minio_success: '成功保存到 MinIO',
+        error_saving_to_minio: '保存到 MinIO 时出错',
 
         reorder_diagram_alert: {
             title: '重新排列关系图',
@@ -228,6 +240,32 @@ export const zh_CN: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -247,6 +285,7 @@ export const zh_CN: LanguageTranslation = {
                 description: '每种数据库都有其特性和功能。',
                 check_examples_long: '查看样例',
                 check_examples_short: '样例',
+                open_from_minio: '从 MinIO 打开',
             },
 
             import_database: {
@@ -260,7 +299,7 @@ export const zh_CN: LanguageTranslation = {
                     title: '说明',
                     step_1: '前往 工具 > 选项 > 查询结果 > SQL Server。',
                     // TODO: Add translations
-                    step_2: '如果您使用“Result to Grid”功能，请将非 XML 数据的最大提取字符数更改为 9999999。',
+                    step_2: '如果您使用"Result to Grid"功能，请将非 XML 数据的最大提取字符数更改为 9999999。',
                 },
                 instructions_link: '需要帮助？看看如何操作',
                 check_script_result: '检查脚本结果',
@@ -400,6 +439,24 @@ export const zh_CN: LanguageTranslation = {
                     '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: '从 Minio 导入',
+            description: '从 Minio 存储中选择一个图表文件导入。',
+            table_columns: {
+                name: '名称',
+                last_modified: '最后修改',
+                size: '大小',
+            },
+            import: '导入',
+            cancel: '取消',
+            no_files: 'Minio 存储中未找到文件',
+            error: {
+                title: '错误',
+                description: '无法从 Minio 存储加载文件',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

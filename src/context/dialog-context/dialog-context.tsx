@@ -73,6 +73,10 @@ export interface DialogContext {
         params?: Omit<ImportDBMLDialogProps, 'dialog'>
     ) => void;
     closeImportDBMLDialog: () => void;
+
+    // Import from Minio dialog
+    openImportFromMinioDialog: () => void;
+    closeImportFromMinioDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -98,4 +102,6 @@ export const dialogContext = createContext<DialogContext>({
     closeImportDiagramDialog: emptyFn,
     openImportDBMLDialog: emptyFn,
     closeImportDBMLDialog: emptyFn,
+    openImportFromMinioDialog: emptyFn,
+    closeImportFromMinioDialog: emptyFn,
 });

@@ -39,6 +39,13 @@ export const ar: LanguageTranslation = {
                 export_diagram: 'تصدير المخطط',
                 restore_diagram: 'استعادة المخطط',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'حفظ في MinIO',
+                import_from_minio: 'فتح من MinIO',
+                copy_url: 'نسخ الرابط مع وسيطة MinIO',
+                copy_url_tooltip: 'نسخ الرابط لهذا المخطط مع وسيطة MinIO',
+            },
             help: {
                 help: 'مساعدة',
                 docs_website: 'الوثائق',
@@ -61,6 +68,12 @@ export const ar: LanguageTranslation = {
             cancel: 'إلغاء',
             clear: 'مسح',
         },
+
+        copy_url_success:
+            'URL نسخت. استخدمه لفتح الرسم البياني في متصفح أو جهاز كمبيوتر آخر',
+        saving_to_minio: 'جاري الحفظ في MinIO...',
+        saved_to_minio_success: 'تم الحفظ في MinIO بنجاح',
+        error_saving_to_minio: 'خطأ في الحفظ في MinIO',
 
         reorder_diagram_alert: {
             title: 'إعادة ترتيب الرسم البياني',
@@ -231,6 +244,33 @@ export const ar: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -251,6 +291,7 @@ export const ar: LanguageTranslation = {
                     'تتمتع كل قاعدة بيانات بمميزاتها وقدراتها الفريدة.',
                 check_examples_long: 'ألقي نظرة على الأمثلة',
                 check_examples_short: 'أمثلة',
+                open_from_minio: 'فتح من MinIO',
             },
 
             import_database: {
@@ -403,6 +444,24 @@ export const ar: LanguageTranslation = {
                     'support@chartdb.io و المحاولة مرة اخرى. هل تحتاج إلى المساعدة؟ JSON غير صالح. يرجى التحقق من JSON الرسم البياني',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'استيراد من Minio',
+            description: 'اختر ملف الرسم البياني لاستيراده من Minio.',
+            table_columns: {
+                name: 'الاسم',
+                last_modified: 'آخر تعديل',
+                size: 'الحجم',
+            },
+            import: 'استيراد',
+            cancel: 'إلغاء',
+            no_files: 'لا يوجد ملفات في Minio',
+            error: {
+                title: 'خطأ',
+                description: 'فشل في تحميل الملفات من Minio',
+            },
+        },
+
         import_dbml_dialog: {
             // TODO: Translate
             title: 'Import DBML',

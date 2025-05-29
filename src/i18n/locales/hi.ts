@@ -39,6 +39,13 @@ export const hi: LanguageTranslation = {
                 export_diagram: 'आरेख निर्यात करें',
                 restore_diagram: 'आरेख पुनर्स्थापित करें',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO में संरक्षण करें',
+                import_from_minio: 'MinIO से आयात करें',
+                copy_url: 'URL कॉपी करें',
+                copy_url_tooltip: 'यह आरेख के लिए URL कॉपी करें',
+            },
             help: {
                 help: 'मदद',
                 docs_website: 'દસ્તાવેજીકરણ',
@@ -61,6 +68,12 @@ export const hi: LanguageTranslation = {
             cancel: 'रद्द करें',
             clear: 'साफ़ करें',
         },
+
+        copy_url_success:
+            'URL कॉपी किया गया! इसका उपयोग डायग्राम को किसी अन्य ब्राउजर या कंप्यूटर पर खोलने के लिए करें',
+        saving_to_minio: 'MinIO में सहेजा जा रहा है...',
+        saved_to_minio_success: 'MinIO में सफलतापूर्वक सहेजा गया',
+        error_saving_to_minio: 'MinIO में सहेजने में त्रुटि',
 
         reorder_diagram_alert: {
             title: 'आरेख पुनः व्यवस्थित करें',
@@ -233,6 +246,32 @@ export const hi: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -253,6 +292,7 @@ export const hi: LanguageTranslation = {
                     'प्रत्येक डेटाबेस की अपनी अनूठी विशेषताएँ और क्षमताएँ होती हैं।',
                 check_examples_long: 'उदाहरण देखें',
                 check_examples_short: 'उदाहरण',
+                open_from_minio: 'MinIO से खोलें',
             },
 
             import_database: {
@@ -410,6 +450,24 @@ export const hi: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio से आयात करें',
+            description: 'Minio से आरेख फाइल चुनें।',
+            table_columns: {
+                name: 'नाम',
+                last_modified: 'अंतिम मुख्य मैटेड',
+                size: 'आकार',
+            },
+            import: 'आयात करें',
+            cancel: 'रद्द करें',
+            no_files: 'Minio स्टोरेज में कोई फाइल नहीं मिली',
+            error: {
+                title: 'Error',
+                description: 'Minio स्टोरेज से फाइल्स लोड करने में भूल',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

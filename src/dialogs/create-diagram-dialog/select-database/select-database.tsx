@@ -29,7 +29,7 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
     createNewDiagram,
 }) => {
     const { t } = useTranslation();
-    const { openImportDiagramDialog } = useDialog();
+    const { openImportDiagramDialog, openImportFromMinioDialog } = useDialog();
 
     return (
         <>
@@ -49,22 +49,37 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                 />
             </DialogInternalContent>
             <DialogFooter className="mt-4 flex !justify-between gap-2">
-                {hasExistingDiagram ? (
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            {t('new_diagram_dialog.cancel')}
+                <div className="flex flex-col gap-2 md:flex-row md:justify-start md:space-x-2">
+                    {hasExistingDiagram ? (
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                                {t('new_diagram_dialog.cancel')}
+                            </Button>
+                        </DialogClose>
+                    ) : (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={openImportDiagramDialog}
+                        >
+                            {t('new_diagram_dialog.import_from_file')}
                         </Button>
-                    </DialogClose>
-                ) : (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={openImportDiagramDialog}
-                    >
-                        {t('new_diagram_dialog.import_from_file')}
-                    </Button>
-                )}
-                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
+                    )}
+                    {!hasExistingDiagram && (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => {
+                                openImportFromMinioDialog();
+                            }}
+                        >
+                            {t(
+                                'new_diagram_dialog.database_selection.open_from_minio'
+                            )}
+                        </Button>
+                    )}
+                </div>
+                <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end md:space-x-2">
                     <Button
                         type="button"
                         variant="outline"

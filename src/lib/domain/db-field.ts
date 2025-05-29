@@ -4,8 +4,8 @@ import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-i
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
-import { generateId } from '../utils';
 import { schemaNameToDomainSchemaName } from './db-schema';
+import { generateId } from '../utils';
 
 export interface DBField {
     id: string;

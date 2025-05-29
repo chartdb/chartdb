@@ -39,6 +39,14 @@ export const ko_KR: LanguageTranslation = {
                 export_diagram: '다이어그램 내보내기',
                 restore_diagram: '다이어그램 복구',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO에 저장',
+                import_from_minio: 'MinIO에서 가져오기',
+                copy_url: 'URL 복사',
+                copy_url_tooltip:
+                    'MinIO 매개변수와 함께 이 다이어그램에 대한 링크 복사',
+            },
             help: {
                 help: '도움말',
                 docs_website: '선적 서류 비치',
@@ -61,6 +69,12 @@ export const ko_KR: LanguageTranslation = {
             cancel: '취소',
             clear: '지우기',
         },
+
+        copy_url_success:
+            'URL이 복사되었습니다. 다른 브라우저나 컴퓨터에서 다이어그램을 열 때 사용하세요',
+        saving_to_minio: 'MinIO에 저장 중...',
+        saved_to_minio_success: 'MinIO에 성공적으로 저장했습니다',
+        error_saving_to_minio: 'MinIO에 저장하는 중 오류가 발생했습니다',
 
         reorder_diagram_alert: {
             title: '다이어그램 재정렬',
@@ -231,6 +245,32 @@ export const ko_KR: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+            // TODO: Translate
+            custom_types_section: {
+                custom_types: 'Custom Types',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No custom types found matching your filter.',
+                empty_state: {
+                    title: 'No custom types',
+                    description:
+                        'Custom types will appear here when they are available in your database',
+                },
+                custom_type: {
+                    kind: 'Kind',
+                    enum_values: 'Enum Values',
+                    composite_fields: 'Fields',
+                    no_fields: 'No fields defined',
+                    field_name_placeholder: 'Field name',
+                    field_type_placeholder: 'Select type',
+                    add_field: 'Add Field',
+                    custom_type_actions: {
+                        title: 'Actions',
+                        delete_custom_type: 'Delete',
+                    },
+                    delete_custom_type: 'Delete Type',
+                },
+            },
         },
 
         toolbar: {
@@ -251,6 +291,7 @@ export const ko_KR: LanguageTranslation = {
                     '각 데이터베이스에는 고유한 기능과 특징이 있습니다.',
                 check_examples_long: '예제 확인',
                 check_examples_short: '예제들',
+                open_from_minio: 'MinIO에서 열기',
             },
 
             import_database: {
@@ -403,6 +444,25 @@ export const ko_KR: LanguageTranslation = {
                     '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio에서 가져오기',
+            description:
+                'Minio storage에서 가져올 다이어그램 파일을 선택해주세요.',
+            table_columns: {
+                name: '이름',
+                last_modified: '마지막 수정일',
+                size: '크기',
+            },
+            import: '가져오기',
+            cancel: '취소',
+            no_files: 'Minio storage에 파일이 없습니다',
+            error: {
+                title: '에러',
+                description: 'Minio storage에서 파일을 불러오는데 실패했습니다',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

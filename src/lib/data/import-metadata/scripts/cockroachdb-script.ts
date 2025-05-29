@@ -124,7 +124,7 @@ cols AS (
                                                     ELSE 'null'
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN true ELSE false END::TEXT,
-                                            ',"default":"', COALESCE(replace(replace(cols.column_default::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
+                                            ',"default":"', null,
                                             '","collation":"', COALESCE(cols.COLLATION_NAME::TEXT, ''),
                                             '","comment":"', COALESCE(replace(replace(dsc.description::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '"}')), ',') AS cols_metadata
