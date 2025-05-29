@@ -40,6 +40,14 @@ export const id_ID: LanguageTranslation = {
                 export_diagram: 'Ekspor Diagram',
                 restore_diagram: 'Pulihkan Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'Simpan ke MinIO',
+                import_from_minio: 'Impor dari MinIO',
+                copy_url: 'Salin URL dengan Parameter MinIO',
+                copy_url_tooltip:
+                    'Salin tautan ke diagram ini dengan parameter minio',
+            },
             help: {
                 help: 'Bantuan',
                 docs_website: 'Dokumentasi',
@@ -62,6 +70,12 @@ export const id_ID: LanguageTranslation = {
             cancel: 'Batal',
             clear: 'Bersihkan',
         },
+
+        copy_url_success:
+            'URL disalin. Gunakan untuk membuka diagram di browser atau komputer lain',
+        saving_to_minio: 'Menyimpan ke MinIO...',
+        saved_to_minio_success: 'Berhasil disimpan ke MinIO',
+        error_saving_to_minio: 'Kesalahan menyimpan ke MinIO',
 
         reorder_diagram_alert: {
             title: 'Atur Ulang Diagram',
@@ -278,6 +292,7 @@ export const id_ID: LanguageTranslation = {
                     'Setiap database memiliki fitur dan kemampuan unik.',
                 check_examples_long: 'Lihat Contoh',
                 check_examples_short: 'Contoh',
+                open_from_minio: 'Buka dari MinIO',
             },
 
             import_database: {
@@ -432,6 +447,24 @@ export const id_ID: LanguageTranslation = {
                     'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio dari impor',
+            description: 'Pilih file diagram untuk diimpor dari Minio storage.',
+            table_columns: {
+                name: 'Nama',
+                last_modified: 'Terakhir diubah',
+                size: 'Ukuran',
+            },
+            import: 'Impor',
+            cancel: 'Batal',
+            no_files: 'Tidak ada file ditemukan di Minio storage',
+            error: {
+                title: 'Error',
+                description: 'Gagal memuat file dari Minio storage',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

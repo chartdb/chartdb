@@ -39,6 +39,14 @@ export const en = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'Save to MinIO',
+                import_from_minio: 'Open from MinIO',
+                copy_url: 'Copy URL with MinIO Parameter',
+                copy_url_tooltip:
+                    'Copy link to this diagram with minio parameter',
+            },
             help: {
                 help: 'Help',
                 docs_website: 'Docs',
@@ -61,6 +69,12 @@ export const en = {
             cancel: 'Cancel',
             clear: 'Clear',
         },
+
+        copy_url_success:
+            'URL copied. Use it to open the diagram in another browser or computer',
+        saving_to_minio: 'Saving to MinIO...',
+        saved_to_minio_success: 'Saved to MinIO successfully',
+        error_saving_to_minio: 'Error saving to MinIO',
 
         reorder_diagram_alert: {
             title: 'Reorder Diagram',
@@ -273,6 +287,7 @@ export const en = {
                     'Each database has its own unique features and capabilities.',
                 check_examples_long: 'Check Examples',
                 check_examples_short: 'Examples',
+                open_from_minio: 'Open from MinIO',
             },
 
             import_database: {
@@ -424,6 +439,23 @@ export const en = {
                 title: 'Error importing diagram',
                 description:
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+            },
+        },
+
+        import_from_minio_dialog: {
+            title: 'Import from Minio',
+            description: 'Select a diagram file to import from Minio storage.',
+            table_columns: {
+                name: 'Name',
+                last_modified: 'Last Modified',
+                size: 'Size',
+            },
+            import: 'Import',
+            cancel: 'Cancel',
+            no_files: 'No files found in Minio storage',
+            error: {
+                title: 'Error',
+                description: 'Failed to load files from Minio storage',
             },
         },
 

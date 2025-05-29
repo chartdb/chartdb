@@ -39,6 +39,14 @@ export const fr: LanguageTranslation = {
                 export_diagram: 'Exporter le diagramme',
                 restore_diagram: 'Restaurer le diagramme',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'Sauvegarder dans MinIO',
+                import_from_minio: 'Ouvrir depuis MinIO',
+                copy_url: "Copier l'URL avec le paramètre MinIO",
+                copy_url_tooltip:
+                    'Copier le lien vers ce diagramme avec le paramètre minio',
+            },
             help: {
                 help: 'Aide',
                 docs_website: 'Documentation',
@@ -61,6 +69,12 @@ export const fr: LanguageTranslation = {
             cancel: 'Annuler',
             clear: 'Effacer',
         },
+
+        copy_url_success:
+            'URL copiée. Utilisez-la pour ouvrir le diagramme dans un autre navigateur ou ordinateur',
+        saving_to_minio: 'Enregistrement dans MinIO...',
+        saved_to_minio_success: 'Enregistré dans MinIO avec succès',
+        error_saving_to_minio: "Erreur lors de l'enregistrement dans MinIO",
 
         reorder_diagram_alert: {
             title: 'Réorganiser le Diagramme',
@@ -267,6 +281,7 @@ export const fr: LanguageTranslation = {
                     'Chaque base de données a ses propres fonctionnalités et capacités uniques.',
                 check_examples_long: 'Voir les Exemples',
                 check_examples_short: 'Exemples',
+                open_from_minio: 'Ouvrir depuis MinIO',
             },
 
             import_database: {
@@ -431,6 +446,26 @@ export const fr: LanguageTranslation = {
                     "Le diagramme JSON n'est pas valide. Veuillez vérifier le JSON et réessayer. Besoin d'aide ? support@chartdb.io",
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Importer depuis Minio',
+            description:
+                'Sélectionnez un fichier de diagramme à importer depuis le stockage Minio.',
+            table_columns: {
+                name: 'Nom',
+                last_modified: 'Dernière modification',
+                size: 'Taille',
+            },
+            import: 'Importer',
+            cancel: 'Annuler',
+            no_files: 'Aucun fichier trouvé dans le stockage Minio',
+            error: {
+                title: 'Erreur',
+                description:
+                    'Échec du chargement des fichiers depuis le stockage Minio',
+            },
+        },
+
         import_dbml_dialog: {
             example_title: "Exemple d'importation DBML",
             title: 'Import DBML',

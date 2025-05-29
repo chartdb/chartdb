@@ -54,8 +54,13 @@ Instantly visualize your database schema with a single **"Smart Query."** Custom
 
 - **AI-Powered Export for Easy Migration**
   Our AI-driven export feature allows you to generate the DDL script in the dialect of your choice. Whether you're migrating from MySQL to PostgreSQL or from SQLite to MariaDB, ChartDB simplifies the process by providing the necessary scripts tailored to your target database.
+
 - **Interactive Editing**
   Fine-tune your database schema using our intuitive editor. Easily make adjustments or annotations to better visualize complex structures.
+
+- **Saving**
+  Your diagrams are automatically saved to your browser's local storage. Don't worry about losing your work if you close the tab or shut down your computer.
+  For backup and collaboration purposes, you can also configure connection to a Minio server. This allows you to access, edit and share your diagrams across multiple computers.
 
 ### Status
 
@@ -103,6 +108,8 @@ docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chart
 ```
 
 #### Build and Run locally
+
+For local development, copy `.env.example` to `.env` and fill in the required values.
 
 ```bash
 docker build -t chartdb .
