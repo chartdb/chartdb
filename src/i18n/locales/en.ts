@@ -8,6 +8,7 @@ export const en = {
                 new: 'New',
                 open: 'Open',
                 save: 'Save',
+                duplicate: 'Duplicate Diagram',
                 import: 'Import',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
