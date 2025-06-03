@@ -304,22 +304,27 @@ export const ChartDBProvider: React.FC<
     );
 
     const addTables: ChartDBContext['addTables'] = useCallback(
-        async (tables: DBTable[], options = { updateHistory: true }) => {
-            setTables((currentTables) => [...currentTables, ...tables]);
+        async (tablesToAdd: DBTable[], options = { updateHistory: true }) => {
+            setTables((currentTables) => [...currentTables, ...tablesToAdd]);
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
             await Promise.all([
                 db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-                ...tables.map((table) => db.addTable({ diagramId, table })),
+                ...tablesToAdd.map((table) =>
+                    db.addTable({ diagramId, table })
+                ),
             ]);
 
-            events.emit({ action: 'add_tables', data: { tables } });
+            events.emit({
+                action: 'add_tables',
+                data: { tables: tablesToAdd },
+            });
 
             if (options.updateHistory) {
                 addUndoAction({
                     action: 'addTables',
-                    redoData: { tables },
-                    undoData: { tableIds: tables.map((t) => t.id) },
+                    redoData: { tables: tablesToAdd },
+                    undoData: { tableIds: tablesToAdd.map((t) => t.id) },
                 });
                 resetRedoStack();
             }
@@ -778,13 +783,23 @@ export const ChartDBProvider: React.FC<
             options = { updateHistory: true }
         ) => {
             const fields = getTable(tableId)?.fields ?? [];
-            setTables((tables) =>
-                tables.map((table) =>
-                    table.id === tableId
-                        ? { ...table, fields: [...table.fields, field] }
-                        : table
-                )
-            );
+            setTables((tables) => {
+                return tables.map((table) => {
+                    if (table.id === tableId) {
+                        db.updateTable({
+                            id: tableId,
+                            attributes: {
+                                ...table,
+                                fields: [...table.fields, field],
+                            },
+                        });
+
+                        return { ...table, fields: [...table.fields, field] };
+                    }
+
+                    return table;
+                });
+            });
 
             events.emit({
                 action: 'add_field',
@@ -805,13 +820,6 @@ export const ChartDBProvider: React.FC<
             setDiagramUpdatedAt(updatedAt);
             await Promise.all([
                 db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-                db.updateTable({
-                    id: tableId,
-                    attributes: {
-                        ...table,
-                        fields: [...table.fields, field],
-                    },
-                }),
             ]);
 
             if (options.updateHistory) {
