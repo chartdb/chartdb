@@ -125,6 +125,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const [isCheckingJson, setIsCheckingJson] = useState(false);
     const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
 
+    const helpButtonRef = React.useRef<HTMLButtonElement>(null);
+
     useEffect(() => {
         setScriptResult('');
         setErrorMessage('');
@@ -201,6 +203,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             // Automatically open SSMS info when input length is exactly 65535
             if ((inputValue ?? '').length === 65535) {
                 setShowSSMSInfoDialog(true);
+            }
+
+            // Show instructions when input contains "WITH fk_info as"
+            if (inputValue.toLowerCase().includes('with fk_info as')) {
+                helpButtonRef.current?.click();
             }
         },
         [setScriptResult]
@@ -406,7 +413,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     )}
                     {isDesktop ? (
                         <ZoomableImage src="/load-new-db-instructions.gif">
-                            <Button type="button" variant="link">
+                            <Button
+                                type="button"
+                                variant="link"
+                                ref={helpButtonRef}
+                            >
                                 {t(
                                     'new_diagram_dialog.import_database.instructions_link'
                                 )}
@@ -472,7 +483,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
                     {!isDesktop ? (
                         <ZoomableImage src="/load-new-db-instructions.gif">
-                            <Button type="button" variant="link">
+                            <Button
+                                type="button"
+                                variant="link"
+                                ref={helpButtonRef}
+                            >
                                 {t(
                                     'new_diagram_dialog.import_database.instructions_link'
                                 )}
