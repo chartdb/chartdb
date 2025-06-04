@@ -10,7 +10,7 @@ export interface ExportImageContext {
             transparent: boolean;
             scale: number;
         }
-    ) => Promise<void>;
+    ) => Promise<string>;
 }
 
 export const exportImageContext = createContext<ExportImageContext>({

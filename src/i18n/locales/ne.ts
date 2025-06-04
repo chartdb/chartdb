@@ -11,6 +11,7 @@ export const ne: LanguageTranslation = {
                 import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
+                copy: 'कॉपी',
                 delete_diagram: 'डायाग्राम हटाउनुहोस्',
                 exit: 'बाहिर निस्कनुहोस्',
             },
@@ -40,6 +41,14 @@ export const ne: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO मा संरक्षण गर्नुहोस्',
+                import_from_minio: 'MinIO बाट आयात गर्नुहोस्',
+                copy_url: 'URL प्रतिलिपि गर्नुहोस्',
+                copy_url_tooltip:
+                    'MinIO प्यारामिटरको साथ यस रेखाचित्रमा लिङ्क प्रतिलिपि गर्नुहोस्',
+            },
             help: {
                 help: 'मद्दत',
                 docs_website: 'कागजात',
@@ -62,6 +71,12 @@ export const ne: LanguageTranslation = {
             cancel: 'रद्द गर्नुहोस्',
             clear: 'स्पष्ट गर्नुहोस्',
         },
+
+        copy_url_success:
+            'URL प्रतिलिपि गरियो! यसलाई अर्को ब्राउजर वा कम्प्युटरमा डायग्राम खोल्न प्रयोग गर्नुहोस्',
+        saving_to_minio: 'MinIO मा सुरक्षित गर्दै...',
+        saved_to_minio_success: 'MinIO मा सफलतापूर्वक सुरक्षित गरियो',
+        error_saving_to_minio: 'MinIO मा सुरक्षित गर्दा त्रुटि',
 
         reorder_diagram_alert: {
             title: 'डायाग्राम पुनः क्रमबद्ध गर्नुहोस्',
@@ -280,6 +295,7 @@ export const ne: LanguageTranslation = {
                     'प्रत्येक डाटाबेसलाई आफ्नो विशेषता र क्षमताहरू छन्।',
                 check_examples_long: 'उदाहरणहरू हेर्नुहोस्',
                 check_examples_short: 'उदाहरणहरू',
+                open_from_minio: 'MinIO बाट खोल्नुहोस्',
             },
 
             import_database: {
@@ -435,6 +451,25 @@ export const ne: LanguageTranslation = {
                     'डायाग्राम JSON अमान्य छ। कृपया JSON जाँच गर्नुहोस् र पुन: प्रयास गर्नुहोस्। मद्दत चाहिन्छ? support@chartdb.io मा सम्पर्क गर्नुहोस्',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minioमा आयात गर्नुहोस्',
+            description:
+                'Minio storageमा आयात गर्नका लागि एकाधिक आरेखाची फाइल निवडा.',
+            table_columns: {
+                name: 'नाव',
+                last_modified: 'मोठ्या बदलावीचे दिनांक',
+                size: 'आकार',
+            },
+            import: 'आयात गर्नुहोस्',
+            cancel: 'रद्द गर्नुहोस्',
+            no_files: 'Minio storageमधून फाइल नाहीत',
+            error: {
+                title: 'एरर',
+                description: 'Minio storageमधून फाइल लोड गर्न्यात असला असला',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

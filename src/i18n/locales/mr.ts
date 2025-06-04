@@ -11,6 +11,7 @@ export const mr: LanguageTranslation = {
                 import: 'डेटाबेस इम्पोर्ट करा',
                 export_sql: 'SQL एक्स्पोर्ट करा',
                 export_as: 'म्हणून एक्स्पोर्ट करा',
+                copy: 'कॉपी',
                 delete_diagram: 'आरेख हटवा',
                 exit: 'बाहेर पडा',
             },
@@ -40,6 +41,13 @@ export const mr: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO मध्ये संरक्षित करा',
+                import_from_minio: 'MinIO मधून आयात करा',
+                copy_url: 'URL कॉपी करा',
+                copy_url_tooltip: 'या आकृतीसाठी MinIO पॅरामीटरसह लिंक कॉपी करा',
+            },
             help: {
                 help: 'मदत',
                 docs_website: 'दस्तऐवजीकरण',
@@ -62,6 +70,12 @@ export const mr: LanguageTranslation = {
             cancel: 'रद्द करा',
             clear: 'साफ करा',
         },
+
+        copy_url_success:
+            'URL कॉपी केला. इतर ब्राउझर किंवा संगणकावर आकृती उघडण्यासाठी वापरा',
+        saving_to_minio: 'MinIO मध्ये सेव्ह करत आहे...',
+        saved_to_minio_success: 'MinIO मध्ये यशस्वीरित्या सेव्ह केले',
+        error_saving_to_minio: 'MinIO मध्ये सेव्ह करताना त्रुटी',
 
         reorder_diagram_alert: {
             title: 'आरेख पुनःक्रमित करा',
@@ -282,6 +296,7 @@ export const mr: LanguageTranslation = {
                     'प्रत्येक डेटाबेसचे स्वतःचे युनिक वैशिष्ट्ये आणि क्षमता आहेत.',
                 check_examples_long: 'उदाहरणे तपासा',
                 check_examples_short: 'उदाहरणे',
+                open_from_minio: 'MinIO मधून उघडा',
             },
 
             import_database: {
@@ -441,6 +456,25 @@ export const mr: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minioमध्ये आयात करा',
+            description:
+                'Minio storageमधून आयात करण्यासाठी एकाधिक आरेखाची फाइल निवडा.',
+            table_columns: {
+                name: 'नाव',
+                last_modified: 'मोठ्या बदलावीचे दिनांक',
+                size: 'आकार',
+            },
+            import: 'आयात करा',
+            cancel: 'रद्द करा',
+            no_files: 'Minio storageमधून फाइल नाहीत',
+            error: {
+                title: 'एरर',
+                description: 'Minio storageमधून फाइल लोड करण्यात असला असला',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
