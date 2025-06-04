@@ -47,7 +47,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         };
 
         // Schema declaration:
-        db.version(1).stores({
+        dexieDB.version(1).stores({
             diagrams: '++id, name, databaseType, createdAt, updatedAt',
             db_tables:
                 '++id, diagramId, name, x, y, fields, indexes, color, createdAt, width',
@@ -56,7 +56,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(2).upgrade((tx) =>
+        dexieDB.version(2).upgrade((tx) =>
             tx
                 .table<DBTable & { diagramId: string }>('db_tables')
                 .toCollection()
@@ -72,7 +72,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 })
         );
 
-        db.version(3).stores({
+        dexieDB.version(3).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -82,7 +82,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(4).stores({
+        dexieDB.version(4).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -92,7 +92,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(5).stores({
+        dexieDB.version(5).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -102,7 +102,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(6).upgrade((tx) =>
+        dexieDB.version(6).upgrade((tx) =>
             tx
                 .table<DBRelationship & { diagramId: string }>(
                     'db_relationships'
@@ -123,7 +123,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 })
         );
 
-        db.version(7).stores({
+        dexieDB.version(7).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -135,7 +135,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(8).stores({
+        dexieDB.version(8).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -147,7 +147,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(9).upgrade((tx) =>
+        dexieDB.version(9).upgrade((tx) =>
             tx
                 .table<DBTable & { diagramId: string }>('db_tables')
                 .toCollection()
@@ -162,7 +162,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 })
         );
 
-        db.version(10).stores({
+        dexieDB.version(10).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -175,7 +175,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.version(11).stores({
+        dexieDB.version(11).stores({
             diagrams:
                 '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
             db_tables:
@@ -190,13 +190,13 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
-        db.on('ready', async () => {
+        dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);
 
             if (!config) {
-                const diagrams = await db.diagrams.toArray();
+                const diagrams = await dexieDB.diagrams.toArray();
 
-                await db.config.add({
+                await dexieDB.config.add({
                     id: 1,
                     defaultDiagramId: diagrams?.[0]?.id ?? '',
                 });
