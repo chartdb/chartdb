@@ -280,15 +280,20 @@ export const exportBaseSQL = ({
 
         sqlScript += '\n);\n\n';
 
-        // Add table comment
+        // Helper function to escape single quotes in comments
+        const escapeComment = (comment: string): string => {
+            return comment.replace(/'/g, "''");
+        };
+
+        // Update the table comment section
         if (table.comments) {
-            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments}';\n`;
+            sqlScript += `COMMENT ON TABLE ${tableName} IS '${escapeComment(table.comments)}';\n`;
         }
 
+        // Update the column comment section
         table.fields.forEach((field) => {
-            // Add column comment
             if (field.comments) {
-                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments}';\n`;
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${escapeComment(field.comments)}';\n`;
             }
         });
 
