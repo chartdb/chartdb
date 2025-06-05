@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBField } from '@/lib/domain/db-field';
@@ -34,20 +34,42 @@ export const TableField: React.FC<TableFieldProps> = ({
     updateField,
     removeField,
 }) => {
-    const { databaseType } = useChartDB();
+    const { databaseType, customTypes } = useChartDB();
     const { t } = useTranslation();
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
-    const dataFieldOptions: SelectBoxOption[] = sortedDataTypeMap[
-        databaseType
-    ].map((type) => ({
-        label: type.name,
-        value: type.id,
-        regex: type.hasCharMaxLength ? `^${type.name}\\(\\d+\\)$` : undefined,
-        extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
-    }));
+    const dataFieldOptions = useMemo(() => {
+        const standardTypes: SelectBoxOption[] = sortedDataTypeMap[
+            databaseType
+        ].map((type) => ({
+            label: type.name,
+            value: type.id,
+            regex: type.hasCharMaxLength
+                ? `^${type.name}\\(\\d+\\)$`
+                : undefined,
+            extractRegex: type.hasCharMaxLength ? /\((\d+)\)/ : undefined,
+            group: customTypes?.length ? 'Standard Types' : undefined,
+        }));
+
+        if (!customTypes?.length) {
+            return standardTypes;
+        }
+
+        // Add custom types as options
+        const customTypeOptions: SelectBoxOption[] = customTypes.map(
+            (type) => ({
+                label: type.name,
+                value: type.name,
+                description:
+                    type.kind === 'enum' ? `${type.values?.join(' | ')}` : '',
+                group: 'Custom Types',
+            })
+        );
+
+        return [...standardTypes, ...customTypeOptions];
+    }, [databaseType, customTypes]);
 
     const onChangeDataType = useCallback<
         NonNullable<SelectBoxProps['onChange']>
