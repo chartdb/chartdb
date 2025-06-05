@@ -418,27 +418,22 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
 
                         <ScrollArea>
                             <div className="max-h-64 w-full">
-                                <CommandGroup>
-                                    <CommandList className="max-h-fit w-full">
-                                        {hasGroups
-                                            ? Object.entries(groups).map(
-                                                  ([
-                                                      groupName,
-                                                      groupOptions,
-                                                  ]) => (
-                                                      <CommandGroup
-                                                          key={groupName}
-                                                          heading={groupName}
-                                                      >
-                                                          {groupOptions.map(
-                                                              renderOption
-                                                          )}
-                                                      </CommandGroup>
-                                                  )
+                                <CommandList className="max-h-fit w-full">
+                                    {hasGroups
+                                        ? Object.entries(groups).map(
+                                              ([groupName, groupOptions]) => (
+                                                  <CommandGroup
+                                                      key={groupName}
+                                                      heading={groupName}
+                                                  >
+                                                      {groupOptions.map(
+                                                          renderOption
+                                                      )}
+                                                  </CommandGroup>
                                               )
-                                            : options.map(renderOption)}
-                                    </CommandList>
-                                </CommandGroup>
+                                          )
+                                        : options.map(renderOption)}
+                                </CommandList>
                             </div>
                         </ScrollArea>
                     </Command>
