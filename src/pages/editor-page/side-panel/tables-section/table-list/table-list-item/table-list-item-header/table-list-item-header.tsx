@@ -259,6 +259,12 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         schemaToDisplay = table.schema;
     }
 
+    React.useEffect(() => {
+        if (table.name.trim()) {
+            setTableName(table.name.trim());
+        }
+    }, [table.name]);
+
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
             <div

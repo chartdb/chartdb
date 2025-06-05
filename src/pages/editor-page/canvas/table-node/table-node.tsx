@@ -210,6 +210,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             setEditMode(true);
         };
 
+        React.useEffect(() => {
+            if (table.name.trim()) {
+                setTableName(table.name.trim());
+            }
+        }, [table.name]);
+
         return (
             <TableNodeContextMenu table={table}>
                 <div
