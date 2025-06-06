@@ -33,6 +33,7 @@ export const te: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'లైన్లను రంగు చేయండి',
             },
             // TODO: Translate
             backup: {

@@ -32,6 +32,7 @@ export const fr: LanguageTranslation = {
                 hide_dependencies: 'Masquer les Dépendances',
                 show_minimap: 'Afficher la Mini Carte',
                 hide_minimap: 'Masquer la Mini Carte',
+                colorize_lines: 'Colorier les lignes',
             },
             backup: {
                 backup: 'Sauvegarde',
