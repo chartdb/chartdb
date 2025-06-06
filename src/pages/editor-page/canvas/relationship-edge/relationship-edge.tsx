@@ -8,6 +8,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { getToColor } from '@/lib/colors';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -179,13 +180,14 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                 markerEnd={`url(#${targetMarker})`}
                 fill="none"
                 className={cn([
-                    'react-flow__edge-path',
-                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                    `!stroke-2`,
+                    `${getToColor(id)}`,
                     {
                         '!stroke-green-500 !stroke-[3px]':
                             isDiffNewRelationship,
                         '!stroke-red-500 !stroke-[3px]':
                             isDiffRelationshipRemoved,
+                        '!stroke-pink-600': selected,
                     },
                 ])}
                 onClick={(e) => {
