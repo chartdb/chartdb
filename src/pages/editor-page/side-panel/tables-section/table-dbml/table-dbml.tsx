@@ -184,6 +184,22 @@ const sanitizeSQLforDBML = (sql: string): string => {
     });
     sanitized = processedLines.join('\n');
 
+    // Fix PostgreSQL type casting syntax that the DBML parser doesn't understand
+    sanitized = sanitized.replace(/::regclass/g, '');
+    sanitized = sanitized.replace(/: :regclass/g, ''); // Fix corrupted version
+
+    // Fix duplicate columns in index definitions
+    sanitized = sanitized.replace(
+        /CREATE\s+(?:UNIQUE\s+)?INDEX\s+\S+\s+ON\s+\S+\s*\(([^)]+)\)/gi,
+        (match, columnList) => {
+            const columns = columnList
+                .split(',')
+                .map((col: string) => col.trim());
+            const uniqueColumns = [...new Set(columns)]; // Remove duplicates
+            return match.replace(columnList, uniqueColumns.join(', '));
+        }
+    );
+
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
 
@@ -316,6 +332,71 @@ const isSQLKeyword = (name: string): boolean => {
     return keywords.has(name.toUpperCase());
 };
 
+// Function to remove duplicate relationships from the diagram
+const deduplicateRelationships = (diagram: Diagram): Diagram => {
+    if (!diagram.relationships) return diagram;
+
+    const seenRelationships = new Set<string>();
+    const uniqueRelationships = diagram.relationships.filter((rel) => {
+        // Create a unique key based on the relationship endpoints
+        const relationshipKey = `${rel.sourceTableId}-${rel.sourceFieldId}->${rel.targetTableId}-${rel.targetFieldId}`;
+
+        if (seenRelationships.has(relationshipKey)) {
+            return false; // Skip duplicate
+        }
+
+        seenRelationships.add(relationshipKey);
+        return true; // Keep unique relationship
+    });
+
+    return {
+        ...diagram,
+        relationships: uniqueRelationships,
+    };
+};
+
+// Function to append comment statements for renamed tables and fields
+const appendRenameComments = (
+    baseScript: string,
+    sqlRenamedTables: Map<string, string>,
+    fieldRenames: Array<{
+        table: string;
+        originalName: string;
+        newName: string;
+    }>,
+    finalDiagramForExport: Diagram
+): string => {
+    let script = baseScript;
+
+    // Append COMMENTS for tables renamed due to SQL keywords
+    sqlRenamedTables.forEach((originalName, newName) => {
+        const escapedOriginal = originalName.replace(/'/g, "\\'");
+        // Find the table to get its schema
+        const table = finalDiagramForExport.tables?.find(
+            (t) => t.name === newName
+        );
+        const tableIdentifier = table?.schema
+            ? `"${table.schema}"."${newName}"`
+            : `"${newName}"`;
+        script += `\nCOMMENT ON TABLE ${tableIdentifier} IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+    });
+
+    // Append COMMENTS for fields renamed due to SQL keyword conflicts
+    fieldRenames.forEach(({ table, originalName, newName }) => {
+        const escapedOriginal = originalName.replace(/'/g, "\\'");
+        // Find the table to get its schema
+        const tableObj = finalDiagramForExport.tables?.find(
+            (t) => t.name === table
+        );
+        const tableIdentifier = tableObj?.schema
+            ? `"${tableObj.schema}"."${table}"`
+            : `"${table}"`;
+        script += `\nCOMMENT ON COLUMN ${tableIdentifier}."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
+    });
+
+    return script;
+};
+
 // Fix DBML formatting to ensure consistent display of char and varchar types
 const normalizeCharTypeFormat = (dbml: string): string => {
     // Replace "char (N)" with "char(N)" to match varchar's formatting
@@ -402,81 +483,82 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         const cleanDiagram = fixProblematicFieldNames(filteredDiagram);
 
         // --- Final sanitization and renaming pass ---
-        // Track tables renamed due to SQL keyword conflicts
+        const shouldRenameKeywords =
+            currentDiagram.databaseType === DatabaseType.POSTGRESQL ||
+            currentDiagram.databaseType === DatabaseType.SQLITE;
         const sqlRenamedTables = new Map<string, string>();
-        // Track fields renamed due to SQL keyword conflicts
         const fieldRenames: Array<{
             table: string;
             originalName: string;
             newName: string;
         }> = [];
-        const finalDiagramForExport: Diagram = {
-            ...cleanDiagram,
-            tables:
-                cleanDiagram.tables?.map((table) => {
-                    const originalName = table.name;
-                    // Sanitize table name
-                    let safeTableName = originalName.replace(/[^\w]/g, '_');
-                    // Rename if SQL keyword
-                    if (isSQLKeyword(safeTableName)) {
-                        const newName = `${safeTableName}_table`;
-                        sqlRenamedTables.set(newName, originalName);
-                        safeTableName = newName;
-                    }
 
-                    const fieldNameCounts = new Map<string, number>();
-                    const processedFields = table.fields.map((field) => {
-                        const originalSafeName = field.name.replace(
-                            /[^\w]/g,
-                            '_'
-                        );
-                        let finalSafeName = originalSafeName;
-                        const count =
-                            fieldNameCounts.get(originalSafeName) || 0;
+        const processTable = (table: DBTable) => {
+            const originalName = table.name;
+            let safeTableName = originalName.replace(/[^\w]/g, '_');
 
-                        if (count > 0) {
-                            finalSafeName = `${originalSafeName}_${count + 1}`; // Rename duplicate
-                        }
-                        fieldNameCounts.set(originalSafeName, count + 1);
+            // Rename table if SQL keyword (PostgreSQL only)
+            if (shouldRenameKeywords && isSQLKeyword(safeTableName)) {
+                const newName = `${safeTableName}_table`;
+                sqlRenamedTables.set(newName, originalName);
+                safeTableName = newName;
+            }
 
-                        // Create a copy and remove comments
-                        const sanitizedField: DBField = {
-                            ...field,
-                            name: finalSafeName,
-                        };
-                        delete sanitizedField.comments;
+            const fieldNameCounts = new Map<string, number>();
+            const processedFields = table.fields.map((field) => {
+                const originalSafeName = field.name.replace(/[^\w]/g, '_');
+                let finalSafeName = originalSafeName;
 
-                        // Rename if SQL keyword
-                        if (isSQLKeyword(finalSafeName)) {
-                            const newFieldName = `${finalSafeName}_field`;
-                            fieldRenames.push({
-                                table: safeTableName,
-                                originalName: finalSafeName,
-                                newName: newFieldName,
-                            });
-                            sanitizedField.name = newFieldName;
-                        }
-                        return sanitizedField;
+                // Handle duplicate field names
+                const count = fieldNameCounts.get(originalSafeName) || 0;
+                if (count > 0) {
+                    finalSafeName = `${originalSafeName}_${count + 1}`;
+                }
+                fieldNameCounts.set(originalSafeName, count + 1);
+
+                // Create sanitized field
+                const sanitizedField: DBField = {
+                    ...field,
+                    name: finalSafeName,
+                };
+                delete sanitizedField.comments;
+
+                // Rename field if SQL keyword (PostgreSQL only)
+                if (shouldRenameKeywords && isSQLKeyword(finalSafeName)) {
+                    const newFieldName = `${finalSafeName}_field`;
+                    fieldRenames.push({
+                        table: safeTableName,
+                        originalName: finalSafeName,
+                        newName: newFieldName,
                     });
+                    sanitizedField.name = newFieldName;
+                }
 
-                    return {
-                        ...table,
-                        name: safeTableName,
-                        fields: processedFields, // Use fields with renamed duplicates
-                        indexes: (table.indexes || []).map((index) => ({
-                            ...index,
-                            name: index.name
-                                ? index.name.replace(/[^\w]/g, '_')
-                                : `idx_${Math.random().toString(36).substring(2, 8)}`,
-                        })),
-                    };
-                }) ?? [],
+                return sanitizedField;
+            });
+
+            return {
+                ...table,
+                name: safeTableName,
+                fields: processedFields,
+                indexes: (table.indexes || []).map((index) => ({
+                    ...index,
+                    name: index.name
+                        ? index.name.replace(/[^\w]/g, '_')
+                        : `idx_${Math.random().toString(36).substring(2, 8)}`,
+                })),
+            };
+        };
+
+        const finalDiagramForExport: Diagram = deduplicateRelationships({
+            ...cleanDiagram,
+            tables: cleanDiagram.tables?.map(processTable) ?? [],
             relationships:
                 cleanDiagram.relationships?.map((rel, index) => ({
                     ...rel,
                     name: `fk_${index}_${rel.name ? rel.name.replace(/[^\w]/g, '_') : Math.random().toString(36).substring(2, 8)}`,
                 })) ?? [],
-        } as Diagram;
+        } as Diagram);
 
         let standard = '';
         let inline = '';
@@ -494,31 +576,15 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
 
             baseScript = sanitizeSQLforDBML(baseScript);
 
-            // Append COMMENTS for tables renamed due to SQL keywords
-            sqlRenamedTables.forEach((originalName, newName) => {
-                const escapedOriginal = originalName.replace(/'/g, "\\'");
-                // Find the table to get its schema
-                const table = finalDiagramForExport.tables?.find(
-                    (t) => t.name === newName
+            // Append comments for renamed tables and fields (PostgreSQL only)
+            if (shouldRenameKeywords) {
+                baseScript = appendRenameComments(
+                    baseScript,
+                    sqlRenamedTables,
+                    fieldRenames,
+                    finalDiagramForExport
                 );
-                const tableIdentifier = table?.schema
-                    ? `"${table.schema}"."${newName}"`
-                    : `"${newName}"`;
-                baseScript += `\nCOMMENT ON TABLE ${tableIdentifier} IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
-            });
-
-            // Append COMMENTS for fields renamed due to SQL keyword conflicts
-            fieldRenames.forEach(({ table, originalName, newName }) => {
-                const escapedOriginal = originalName.replace(/'/g, "\\'");
-                // Find the table to get its schema
-                const tableObj = finalDiagramForExport.tables?.find(
-                    (t) => t.name === table
-                );
-                const tableIdentifier = tableObj?.schema
-                    ? `"${tableObj.schema}"."${table}"`
-                    : `"${table}"`;
-                baseScript += `\nCOMMENT ON COLUMN ${tableIdentifier}."${newName}" IS 'Original name was "${escapedOriginal}" (renamed due to SQL keyword conflict).';`;
-            });
+            }
 
             standard = normalizeCharTypeFormat(
                 importer.import(

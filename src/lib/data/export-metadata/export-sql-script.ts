@@ -217,7 +217,10 @@ export const exportBaseSQL = ({
             sqlScript += `  ${field.name} ${typeName}`;
 
             // Add size for character types
-            if (field.characterMaximumLength) {
+            if (
+                field.characterMaximumLength &&
+                parseInt(field.characterMaximumLength) > 0
+            ) {
                 sqlScript += `(${field.characterMaximumLength})`;
             } else if (field.type.name.toLowerCase().includes('varchar')) {
                 // Keep varchar sizing, but don't apply to TEXT (previously enum)
