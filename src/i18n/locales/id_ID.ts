@@ -33,6 +33,7 @@ export const id_ID: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'Warnai Garis',
             },
             backup: {
                 backup: 'Cadangan',

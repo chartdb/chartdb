@@ -33,6 +33,7 @@ export const tr: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'Çizgileri Renklendir',
             },
             // TODO: Translate
             backup: {
