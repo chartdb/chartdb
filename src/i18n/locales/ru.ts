@@ -266,6 +266,7 @@ export const ru: LanguageTranslation = {
             redo: 'Вернуть',
             reorder_diagram: 'Переупорядочить диаграмму',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
+            colorize_lines: 'Цветные линии',
         },
 
         new_diagram_dialog: {

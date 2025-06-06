@@ -269,6 +269,7 @@ export const pt_BR: LanguageTranslation = {
             redo: 'Refazer',
             reorder_diagram: 'Reordenar Diagrama',
             highlight_overlapping_tables: 'Destacar Tabelas Sobrepostas',
+            colorize_lines: 'Colorir Linhas',
         },
 
         new_diagram_dialog: {

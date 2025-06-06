@@ -265,6 +265,7 @@ export const zh_TW: LanguageTranslation = {
             redo: '重做',
             reorder_diagram: '重新排列圖表',
             highlight_overlapping_tables: '突出顯示重疊表格',
+            colorize_lines: '著色線條',
         },
 
         new_diagram_dialog: {

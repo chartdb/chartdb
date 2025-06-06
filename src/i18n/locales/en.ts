@@ -263,6 +263,7 @@ export const en = {
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            colorize_lines: 'Colorize Lines',
         },
 
         new_diagram_dialog: {

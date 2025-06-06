@@ -273,6 +273,7 @@ export const mr: LanguageTranslation = {
             redo: 'पुन्हा करा',
             reorder_diagram: 'आरेख पुनःक्रमित करा',
             highlight_overlapping_tables: 'ओव्हरलॅपिंग टेबल्स हायलाइट करा',
+            colorize_lines: 'ओळी रंगवा',
         },
 
         new_diagram_dialog: {

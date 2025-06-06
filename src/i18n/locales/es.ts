@@ -259,6 +259,7 @@ export const es: LanguageTranslation = {
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
+            colorize_lines: 'Colorear líneas',
         },
 
         new_diagram_dialog: {

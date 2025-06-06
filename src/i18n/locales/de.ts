@@ -271,6 +271,7 @@ export const de: LanguageTranslation = {
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
             highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
+            colorize_lines: 'Linien einfärben',
         },
 
         new_diagram_dialog: {

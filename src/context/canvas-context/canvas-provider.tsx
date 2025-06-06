@@ -20,6 +20,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
     const { fitView } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
+    const [isColorizedLines, setIsColorizedLines] = useState(false);
 
     const reorderTables = useCallback(
         (
@@ -70,6 +71,10 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         [filteredSchemas, relationships, tables, updateTablesState, fitView]
     );
 
+    const toggleColorizeLines = useCallback(() => {
+        setIsColorizedLines((x) => !x);
+    }, []);
+
     return (
         <canvasContext.Provider
             value={{
@@ -77,6 +82,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 fitView,
                 setOverlapGraph,
                 overlapGraph,
+                isColorizedLines,
+                toggleColorizeLines,
             }}
         >
             {children}

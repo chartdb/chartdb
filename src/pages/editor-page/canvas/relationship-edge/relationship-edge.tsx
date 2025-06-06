@@ -8,6 +8,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useCanvas } from '@/hooks/use-canvas.ts';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -36,7 +37,8 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             const { checkIfRelationshipRemoved, checkIfNewRelationship } =
                 useDiff();
 
-            const { relationships } = useChartDB();
+            const { relationships, getTable } = useChartDB();
+            const { isColorizedLines } = useCanvas();
 
             const relationship = data?.relationship;
 
@@ -198,6 +200,18 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 [checkIfRelationshipRemoved, relationship?.id]
             );
 
+            const table = useMemo(() => getTable(source), [getTable, source]);
+
+            const style = useMemo(() => {
+                if (isColorizedLines) {
+                    return {
+                        stroke: `${table?.color}`,
+                    };
+                } else {
+                    return undefined;
+                }
+            }, [isColorizedLines, table?.color]);
+
             return (
                 <>
                     <path
@@ -206,10 +220,15 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         markerStart={`url(#${sourceMarker})`}
                         markerEnd={`url(#${targetMarker})`}
                         fill="none"
+                        style={style}
                         className={cn([
-                            'react-flow__edge-path',
-                            `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                            // INFO: order is important because here !important
+                            { 'react-flow__edge-path': !isColorizedLines },
+                            `!stroke-2`,
                             {
+                                '!stroke-pink-600': selected,
+                                '!stroke-slate-400':
+                                    !isColorizedLines && !selected,
                                 '!stroke-green-500 !stroke-[3px]':
                                     isDiffNewRelationship,
                                 '!stroke-red-500 !stroke-[3px]':

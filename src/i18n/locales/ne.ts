@@ -271,6 +271,7 @@ export const ne: LanguageTranslation = {
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
             highlight_overlapping_tables:
                 'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
+            colorize_lines: 'रेखाहरू रंगाउनुहोस्',
         },
 
         new_diagram_dialog: {

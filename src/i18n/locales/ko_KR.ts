@@ -268,6 +268,7 @@ export const ko_KR: LanguageTranslation = {
             redo: '다시 실행',
             reorder_diagram: '다이어그램 재정렬',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
+            colorize_lines: '선 색칠하기',
         },
 
         new_diagram_dialog: {

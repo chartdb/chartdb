@@ -270,6 +270,7 @@ export const hi: LanguageTranslation = {
             redo: 'पुनः करें',
             reorder_diagram: 'आरेख पुनः व्यवस्थित करें',
             highlight_overlapping_tables: 'ओवरलैपिंग तालिकाओं को हाइलाइट करें',
+            colorize_lines: 'लाइनों को रंग दें',
         },
 
         new_diagram_dialog: {
