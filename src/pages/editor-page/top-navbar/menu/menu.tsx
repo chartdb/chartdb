@@ -250,7 +250,7 @@ export const Menu: React.FC<MenuProps> = () => {
                             {t('menu.file.export_sql')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
-                            {databaseType === DatabaseType.GENERIC && (
+                            {databaseType === DatabaseType.GENERIC ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.GENERIC)
@@ -258,16 +258,12 @@ export const Menu: React.FC<MenuProps> = () => {
                                 >
                                     {databaseTypeToLabelMap['generic']}
                                 </MenubarItem>
-                            )}
+                            ) : null}
                             {databaseType !== DatabaseType.GENERIC && (
                                 <MenubarItem
                                     onClick={() => exportSQL(databaseType)}
                                 >
-                                    {
-                                        databaseTypeToLabelMap[
-                                            databaseType as keyof typeof databaseTypeToLabelMap
-                                        ]
-                                    }
+                                    {databaseTypeToLabelMap[databaseType]}
                                 </MenubarItem>
                             )}
                             {databaseType !== DatabaseType.POSTGRESQL && (
