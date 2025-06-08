@@ -24,7 +24,7 @@ import OracleLogo from '@/assets/oracle_logo.png';
 import OracleLogoDark from '@/assets/oracle_logo_dark.png';
 import OracleLogo2 from '@/assets/oracle_logo_2.png';
 import { DatabaseType } from './domain/database-type';
-import type { EffectiveTheme } from '@/context/theme-context/theme-context';
+import type { EffectiveTheme } from './types';
 
 export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: 'Generic',

@@ -1,11 +1,14 @@
 import type { Cardinality } from '@/lib/domain/db-relationship';
-import {
-    MIN_TABLE_SIZE,
-    TABLE_MINIMIZED_FIELDS,
-    type TableNodeType,
-} from './table-node/table-node';
+import { type TableNodeType } from './table-node/table-node';
 import { addEdge, createGraph, removeEdge, type Graph } from '@/lib/graph';
-import type { DBTable } from '@/lib/domain/db-table';
+import {
+    getTableDimensions,
+    calcTableHeight,
+    type DBTable,
+    MIN_TABLE_SIZE,
+} from '@/lib/domain/db-table';
+
+export { calcTableHeight, getTableDimensions };
 
 export const getCardinalityMarkerId = ({
     cardinality,
@@ -109,37 +112,4 @@ export const findOverlappingTables = ({
     }
 
     return graph;
-};
-
-export const calcTableHeight = (table?: DBTable): number => {
-    if (!table) {
-        return 300;
-    }
-
-    const FIELD_HEIGHT = 32; // h-8 per field
-    const TABLE_FOOTER_HEIGHT = 32; // h-8 for show more button
-    const TABLE_HEADER_HEIGHT = 42;
-    // Calculate how many fields are visible
-    const fieldCount = table.fields.length;
-    let visibleFieldCount = fieldCount;
-
-    // If not expanded, use minimum of field count and TABLE_MINIMIZED_FIELDS
-    if (!table.expanded) {
-        visibleFieldCount = Math.min(fieldCount, TABLE_MINIMIZED_FIELDS);
-    }
-
-    // Calculate height based on visible fields
-    const fieldsHeight = visibleFieldCount * FIELD_HEIGHT;
-    const showMoreButtonHeight =
-        fieldCount > TABLE_MINIMIZED_FIELDS ? TABLE_FOOTER_HEIGHT : 0;
-
-    return TABLE_HEADER_HEIGHT + fieldsHeight + showMoreButtonHeight;
-};
-
-export const getTableDimensions = (
-    table: DBTable
-): { width: number; height: number } => {
-    const height = calcTableHeight(table);
-    const width = table.width || MIN_TABLE_SIZE;
-    return { width, height };
 };

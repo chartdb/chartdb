@@ -1,8 +1,7 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-
-export type Theme = 'light' | 'dark' | 'system';
-export type EffectiveTheme = Exclude<Theme, 'system'>;
+import type { Theme, EffectiveTheme } from '@/lib/types';
+export type { Theme, EffectiveTheme };
 
 export interface ThemeContext {
     theme: Theme;
