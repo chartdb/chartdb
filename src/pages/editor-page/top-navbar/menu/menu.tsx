@@ -259,14 +259,14 @@ export const Menu: React.FC<MenuProps> = () => {
                                     {databaseTypeToLabelMap['generic']}
                                 </MenubarItem>
                             ) : null}
-                            {databaseType !== DatabaseType.GENERIC && (
+                            {databaseType !== DatabaseType.GENERIC ? (
                                 <MenubarItem
                                     onClick={() => exportSQL(databaseType)}
                                 >
                                     {databaseTypeToLabelMap[databaseType]}
                                 </MenubarItem>
-                            )}
-                            {databaseType !== DatabaseType.POSTGRESQL && (
+                            ) : null}
+                            {databaseType !== DatabaseType.POSTGRESQL ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.POSTGRESQL)
@@ -277,8 +277,8 @@ export const Menu: React.FC<MenuProps> = () => {
                                         {emojiAI}
                                     </MenubarShortcut>
                                 </MenubarItem>
-                            )}
-                            {databaseType !== DatabaseType.MYSQL && (
+                            ) : null}
+                            {databaseType !== DatabaseType.MYSQL ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.MYSQL)
@@ -289,8 +289,8 @@ export const Menu: React.FC<MenuProps> = () => {
                                         {emojiAI}
                                     </MenubarShortcut>
                                 </MenubarItem>
-                            )}
-                            {databaseType !== DatabaseType.SQL_SERVER && (
+                            ) : null}
+                            {databaseType !== DatabaseType.SQL_SERVER ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.SQL_SERVER)
@@ -301,8 +301,8 @@ export const Menu: React.FC<MenuProps> = () => {
                                         {emojiAI}
                                     </MenubarShortcut>
                                 </MenubarItem>
-                            )}
-                            {databaseType !== DatabaseType.MARIADB && (
+                            ) : null}
+                            {databaseType !== DatabaseType.MARIADB ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.MARIADB)
@@ -313,8 +313,8 @@ export const Menu: React.FC<MenuProps> = () => {
                                         {emojiAI}
                                     </MenubarShortcut>
                                 </MenubarItem>
-                            )}
-                            {databaseType !== DatabaseType.SQLITE && (
+                            ) : null}
+                            {databaseType !== DatabaseType.SQLITE ? (
                                 <MenubarItem
                                     onClick={() =>
                                         exportSQL(DatabaseType.SQLITE)
@@ -325,7 +325,7 @@ export const Menu: React.FC<MenuProps> = () => {
                                         {emojiAI}
                                     </MenubarShortcut>
                                 </MenubarItem>
-                            )}
+                            ) : null}
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSub>
