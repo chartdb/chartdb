@@ -25,7 +25,11 @@ import {
 import { DatabaseType } from './database-type';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import { z } from 'zod';
-import { getTableDimensions } from '@/pages/editor-page/canvas/canvas-utils';
+
+export const MAX_TABLE_SIZE = 450;
+export const MID_TABLE_SIZE = 337;
+export const MIN_TABLE_SIZE = 224;
+export const TABLE_MINIMIZED_FIELDS = 10;
 
 export interface DBTable {
     id: string;
@@ -367,4 +371,37 @@ export const adjustTablePositions = ({
     }
 
     return tables;
+};
+
+export const calcTableHeight = (table?: DBTable): number => {
+    if (!table) {
+        return 300;
+    }
+
+    const FIELD_HEIGHT = 32; // h-8 per field
+    const TABLE_FOOTER_HEIGHT = 32; // h-8 for show more button
+    const TABLE_HEADER_HEIGHT = 42;
+    // Calculate how many fields are visible
+    const fieldCount = table.fields.length;
+    let visibleFieldCount = fieldCount;
+
+    // If not expanded, use minimum of field count and TABLE_MINIMIZED_FIELDS
+    if (!table.expanded) {
+        visibleFieldCount = Math.min(fieldCount, TABLE_MINIMIZED_FIELDS);
+    }
+
+    // Calculate height based on visible fields
+    const fieldsHeight = visibleFieldCount * FIELD_HEIGHT;
+    const showMoreButtonHeight =
+        fieldCount > TABLE_MINIMIZED_FIELDS ? TABLE_FOOTER_HEIGHT : 0;
+
+    return TABLE_HEADER_HEIGHT + fieldsHeight + showMoreButtonHeight;
+};
+
+export const getTableDimensions = (
+    table: DBTable
+): { width: number; height: number } => {
+    const height = calcTableHeight(table);
+    const width = table.width || MIN_TABLE_SIZE;
+    return { width, height };
 };
