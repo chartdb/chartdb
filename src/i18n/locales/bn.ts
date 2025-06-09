@@ -8,6 +8,7 @@ export const bn: LanguageTranslation = {
                 new: 'নতুন',
                 open: 'খুলুন',
                 save: 'সংরক্ষণ করুন',
+                duplicate: 'ডুপ্লিকেট করুন',
                 import: 'ডাটাবেস আমদানি করুন',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
