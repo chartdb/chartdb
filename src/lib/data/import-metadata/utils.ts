@@ -1,11 +1,6 @@
-import { waitFor } from '@/lib/utils';
 import { isDatabaseMetadata } from './metadata-types/database-metadata';
 
-export const fixMetadataJson = async (
-    metadataJson: string
-): Promise<string> => {
-    await waitFor(1000);
-
+export const fixMetadataJson = (metadataJson: string): string => {
     // Replace problematic array default values with null
     metadataJson = metadataJson.replace(
         /"default": "?'?\[[^\]]*\]'?"?(\\")?(,|\})/gs,

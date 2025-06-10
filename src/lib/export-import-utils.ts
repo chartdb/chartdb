@@ -7,16 +7,23 @@ export const runningIdGenerator = (): (() => string) => {
     return () => (id++).toString();
 };
 
-const cloneDiagramWithRunningIds = (diagram: Diagram) =>
-    cloneDiagram(diagram, { generateId: runningIdGenerator() });
+export const cloneDiagramWithRunningIds = (
+    diagram: Diagram
+): { diagram: Diagram; idsMap: Map<string, string> } => {
+    const { diagram: clonedDiagram, idsMap } = cloneDiagram(diagram, {
+        generateId: runningIdGenerator(),
+    });
+
+    return { diagram: clonedDiagram, idsMap };
+};
 
 const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
-    ...cloneDiagram(diagram),
+    ...cloneDiagram(diagram).diagram,
     id: generateDiagramId(),
 });
 
 export const diagramToJSONOutput = (diagram: Diagram): string => {
-    const clonedDiagram = cloneDiagramWithRunningIds(diagram);
+    const clonedDiagram = cloneDiagramWithRunningIds(diagram).diagram;
     return JSON.stringify(clonedDiagram, null, 2);
 };
 

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import type { DBTable } from '../db-table';
-import { dbTableSchema } from '../db-table';
 
 export type TableDiffAttribute = keyof Pick<
     DBTable,
@@ -43,22 +42,33 @@ export const TableDiffRemovedSchema: z.ZodType<TableDiffRemoved> = z.object({
     tableId: z.string(),
 });
 
-export interface TableDiffAdded {
+export interface TableDiffAdded<T = DBTable> {
     object: 'table';
     type: 'added';
-    tableAdded: DBTable;
+    tableAdded: T;
 }
 
-export const TableDiffAddedSchema: z.ZodType<TableDiffAdded> = z.object({
-    object: z.literal('table'),
-    type: z.literal('added'),
-    tableAdded: dbTableSchema,
-});
+export const createTableDiffAddedSchema = <T = DBTable>(
+    tableSchema: z.ZodType<T>
+): z.ZodType<TableDiffAdded<T>> => {
+    return z.object({
+        object: z.literal('table'),
+        type: z.literal('added'),
+        tableAdded: tableSchema,
+    }) as z.ZodType<TableDiffAdded<T>>;
+};
 
-export type TableDiff = TableDiffChanged | TableDiffRemoved | TableDiffAdded;
+export type TableDiff<T = DBTable> =
+    | TableDiffChanged
+    | TableDiffRemoved
+    | TableDiffAdded<T>;
 
-export const tableDiffSchema: z.ZodType<TableDiff> = z.union([
-    TableDiffChangedSchema,
-    TableDiffRemovedSchema,
-    TableDiffAddedSchema,
-]);
+export const createTableDiffSchema = <T = DBTable>(
+    tableSchema: z.ZodType<T>
+): z.ZodType<TableDiff<T>> => {
+    return z.union([
+        TableDiffChangedSchema,
+        TableDiffRemovedSchema,
+        createTableDiffAddedSchema(tableSchema),
+    ]) as z.ZodType<TableDiff<T>>;
+};

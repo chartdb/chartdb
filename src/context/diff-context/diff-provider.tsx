@@ -6,7 +6,10 @@ import type {
 } from './diff-context';
 import { diffContext } from './diff-context';
 
-import { generateDiff, getDiffMapKey } from './diff-check/diff-check';
+import {
+    generateDiff,
+    getDiffMapKey,
+} from '@/lib/domain/diff/diff-check/diff-check';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useEventEmitter } from 'ahooks';
 import type { DBField } from '@/lib/domain/db-field';

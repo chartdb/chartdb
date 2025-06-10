@@ -121,7 +121,9 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
                                 table1.order !== undefined &&
                                 table2.order !== undefined
                             ) {
-                                return table1.order - table2.order;
+                                return (
+                                    (table1.order ?? 0) - (table2.order ?? 0)
+                                );
                             }
 
                             // if both tables don't have order, sort by name

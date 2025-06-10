@@ -1,19 +1,21 @@
 import { z } from 'zod';
 import type { DBRelationship } from '../db-relationship';
-import { dbRelationshipSchema } from '../db-relationship';
 
-export interface RelationshipDiffAdded {
+export interface RelationshipDiffAdded<T = DBRelationship> {
     object: 'relationship';
     type: 'added';
-    newRelationship: DBRelationship;
+    newRelationship: T;
 }
 
-export const relationshipDiffAddedSchema: z.ZodType<RelationshipDiffAdded> =
-    z.object({
+export const createRelationshipDiffAddedSchema = <T = DBRelationship>(
+    relationshipSchema: z.ZodType<T>
+): z.ZodType<RelationshipDiffAdded<T>> => {
+    return z.object({
         object: z.literal('relationship'),
         type: z.literal('added'),
-        newRelationship: dbRelationshipSchema,
-    });
+        newRelationship: relationshipSchema,
+    }) as z.ZodType<RelationshipDiffAdded<T>>;
+};
 
 export interface RelationshipDiffRemoved {
     object: 'relationship';
@@ -28,9 +30,15 @@ export const relationshipDiffRemovedSchema: z.ZodType<RelationshipDiffRemoved> =
         relationshipId: z.string(),
     });
 
-export type RelationshipDiff = RelationshipDiffAdded | RelationshipDiffRemoved;
+export type RelationshipDiff<T = DBRelationship> =
+    | RelationshipDiffAdded<T>
+    | RelationshipDiffRemoved;
 
-export const relationshipDiffSchema: z.ZodType<RelationshipDiff> = z.union([
-    relationshipDiffAddedSchema,
-    relationshipDiffRemovedSchema,
-]);
+export const createRelationshipDiffSchema = <T = DBRelationship>(
+    relationshipSchema: z.ZodType<T>
+): z.ZodType<RelationshipDiff<T>> => {
+    return z.union([
+        createRelationshipDiffAddedSchema(relationshipSchema),
+        relationshipDiffRemovedSchema,
+    ]) as z.ZodType<RelationshipDiff<T>>;
+};

@@ -11,9 +11,9 @@ import { generateId } from '@/lib/utils';
 export interface DBRelationship {
     id: string;
     name: string;
-    sourceSchema?: string;
+    sourceSchema?: string | null;
     sourceTableId: string;
-    targetSchema?: string;
+    targetSchema?: string | null;
     targetTableId: string;
     sourceFieldId: string;
     targetFieldId: string;
@@ -25,9 +25,9 @@ export interface DBRelationship {
 export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
     id: z.string(),
     name: z.string(),
-    sourceSchema: z.string().optional(),
+    sourceSchema: z.string().or(z.null()).optional(),
     sourceTableId: z.string(),
-    targetSchema: z.string().optional(),
+    targetSchema: z.string().or(z.null()).optional(),
     targetTableId: z.string(),
     sourceFieldId: z.string(),
     targetFieldId: z.string(),

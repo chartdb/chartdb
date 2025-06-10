@@ -244,7 +244,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
                         <Textarea
-                            value={table.comments}
+                            value={table.comments ?? undefined}
                             onChange={(e) =>
                                 updateTable(table.id, {
                                     comments: e.target.value,
