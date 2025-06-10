@@ -6,7 +6,7 @@ import { cloneDiagram } from '@/lib/clone';
 export const convertTemplateToNewDiagram = (template: Template): Diagram => {
     const diagramId = template.diagram.id;
 
-    const clonedDiagram = cloneDiagram(template.diagram);
+    const clonedDiagram: Diagram = cloneDiagram(template.diagram).diagram;
 
     return {
         ...template.diagram,

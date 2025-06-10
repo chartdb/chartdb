@@ -124,7 +124,7 @@ export const cloneDiagram = (
     } = {
         generateId: defaultGenerateId,
     }
-): Diagram => {
+): { diagram: Diagram; idsMap: Map<string, string> } => {
     const { generateId } = options;
     const diagramId = generateId();
 
@@ -214,13 +214,20 @@ export const cloneDiagram = (
             .filter((area): area is Area => area !== null) ?? [];
 
     return {
-        ...diagram,
-        id: diagramId,
-        dependencies,
-        relationships,
-        tables,
-        areas,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        diagram: {
+            ...diagram,
+            id: diagramId,
+            dependencies,
+            relationships,
+            tables,
+            areas,
+            createdAt: diagram.createdAt
+                ? new Date(diagram.createdAt)
+                : new Date(),
+            updatedAt: diagram.updatedAt
+                ? new Date(diagram.updatedAt)
+                : new Date(),
+        },
+        idsMap,
     };
 };

@@ -141,7 +141,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 )}
                             </Label>
                             <Textarea
-                                value={localField.comments}
+                                value={localField.comments ?? undefined}
                                 onChange={(e) =>
                                     setLocalField((current) => ({
                                         ...current,

@@ -1,27 +1,59 @@
 import { z } from 'zod';
 
 import type { FieldDiff } from './field-diff';
-import { fieldDiffSchema } from './field-diff';
+import { createFieldDiffSchema } from './field-diff';
 import type { IndexDiff } from './index-diff';
-import { indexDiffSchema } from './index-diff';
+import { createIndexDiffSchema } from './index-diff';
 import type { RelationshipDiff } from './relationship-diff';
-import { relationshipDiffSchema } from './relationship-diff';
+import { createRelationshipDiffSchema } from './relationship-diff';
 import type { TableDiff } from './table-diff';
-import { tableDiffSchema } from './table-diff';
+import { createTableDiffSchema } from './table-diff';
+import type { DBField, DBIndex, DBRelationship, DBTable } from '..';
 
-export type ChartDBDiff = TableDiff | FieldDiff | IndexDiff | RelationshipDiff;
+export type ChartDBDiff<
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+> =
+    | TableDiff<TTable>
+    | FieldDiff<TField>
+    | IndexDiff<TIndex>
+    | RelationshipDiff<TRelationship>;
 
-export const chartDBDiffSchema: z.ZodType<ChartDBDiff> = z.union([
-    tableDiffSchema,
-    fieldDiffSchema,
-    indexDiffSchema,
-    relationshipDiffSchema,
-]);
+export const createChartDBDiffSchema = <
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+>(
+    tableSchema: z.ZodType<TTable>,
+    fieldSchema: z.ZodType<TField>,
+    indexSchema: z.ZodType<TIndex>,
+    relationshipSchema: z.ZodType<TRelationship>
+): z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship>> => {
+    return z.union([
+        createTableDiffSchema(tableSchema),
+        createFieldDiffSchema(fieldSchema),
+        createIndexDiffSchema(indexSchema),
+        createRelationshipDiffSchema(relationshipSchema),
+    ]) as z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
+};
 
-export type DiffMap = Map<string, ChartDBDiff>;
+export type DiffMap<
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+> = Map<string, ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
 
-export type DiffObject =
-    | TableDiff['object']
-    | FieldDiff['object']
-    | IndexDiff['object']
-    | RelationshipDiff['object'];
+export type DiffObject<
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+> =
+    | TableDiff<TTable>['object']
+    | FieldDiff<TField>['object']
+    | IndexDiff<TIndex>['object']
+    | RelationshipDiff<TRelationship>['object'];

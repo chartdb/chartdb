@@ -14,14 +14,14 @@ export interface DBField {
     primaryKey: boolean;
     unique: boolean;
     nullable: boolean;
-    increment?: boolean;
+    increment?: boolean | null;
     createdAt: number;
-    characterMaximumLength?: string;
-    precision?: number;
-    scale?: number;
-    default?: string;
-    collation?: string;
-    comments?: string;
+    characterMaximumLength?: string | null;
+    precision?: number | null;
+    scale?: number | null;
+    default?: string | null;
+    collation?: string | null;
+    comments?: string | null;
 }
 
 export const dbFieldSchema: z.ZodType<DBField> = z.object({
@@ -31,14 +31,14 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
     primaryKey: z.boolean(),
     unique: z.boolean(),
     nullable: z.boolean(),
-    increment: z.boolean().optional(),
+    increment: z.boolean().or(z.null()).optional(),
     createdAt: z.number(),
-    characterMaximumLength: z.string().optional(),
-    precision: z.number().optional(),
-    scale: z.number().optional(),
-    default: z.string().optional(),
-    collation: z.string().optional(),
-    comments: z.string().optional(),
+    characterMaximumLength: z.string().or(z.null()).optional(),
+    precision: z.number().or(z.null()).optional(),
+    scale: z.number().or(z.null()).optional(),
+    default: z.string().or(z.null()).optional(),
+    collation: z.string().or(z.null()).optional(),
+    comments: z.string().or(z.null()).optional(),
 });
 
 export const createFieldsFromMetadata = ({

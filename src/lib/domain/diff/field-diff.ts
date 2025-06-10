@@ -5,7 +5,6 @@ import {
     dataTypeSchema,
 } from '@/lib/data/data-types/data-types';
 import type { DBField } from '../db-field';
-import { dbFieldSchema } from '../db-field';
 
 export type FieldDiffAttribute =
     | 'name'
@@ -24,19 +23,23 @@ export const fieldDiffAttributeSchema: z.ZodType<FieldDiffAttribute> = z.union([
     z.literal('comments'),
 ]);
 
-export interface FieldDiffAdded {
+export interface FieldDiffAdded<T = DBField> {
     object: 'field';
     type: 'added';
     tableId: string;
-    newField: DBField;
+    newField: T;
 }
 
-export const fieldDiffAddedSchema: z.ZodType<FieldDiffAdded> = z.object({
-    object: z.literal('field'),
-    type: z.literal('added'),
-    tableId: z.string(),
-    newField: dbFieldSchema,
-});
+export const createFieldDiffAddedSchema = <T = DBField>(
+    fieldSchema: z.ZodType<T>
+): z.ZodType<FieldDiffAdded<T>> => {
+    return z.object({
+        object: z.literal('field'),
+        type: z.literal('added'),
+        tableId: z.string(),
+        newField: fieldSchema,
+    }) as z.ZodType<FieldDiffAdded<T>>;
+};
 
 export interface FieldDiffRemoved {
     object: 'field';
@@ -72,10 +75,17 @@ export const fieldDiffChangedSchema: z.ZodType<FieldDiffChanged> = z.object({
     newValue: z.union([z.string(), z.boolean(), dataTypeSchema]),
 });
 
-export type FieldDiff = FieldDiffAdded | FieldDiffRemoved | FieldDiffChanged;
+export type FieldDiff<T = DBField> =
+    | FieldDiffAdded<T>
+    | FieldDiffRemoved
+    | FieldDiffChanged;
 
-export const fieldDiffSchema: z.ZodType<FieldDiff> = z.union([
-    fieldDiffRemovedSchema,
-    fieldDiffChangedSchema,
-    fieldDiffAddedSchema,
-]);
+export const createFieldDiffSchema = <T = DBField>(
+    fieldSchema: z.ZodType<T>
+): z.ZodType<FieldDiff<T>> => {
+    return z.union([
+        fieldDiffRemovedSchema,
+        fieldDiffChangedSchema,
+        createFieldDiffAddedSchema(fieldSchema),
+    ]) as z.ZodType<FieldDiff<T>>;
+};

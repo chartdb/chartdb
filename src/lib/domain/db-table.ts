@@ -34,37 +34,37 @@ export const TABLE_MINIMIZED_FIELDS = 10;
 export interface DBTable {
     id: string;
     name: string;
-    schema?: string;
+    schema?: string | null;
     x: number;
     y: number;
     fields: DBField[];
     indexes: DBIndex[];
     color: string;
     isView: boolean;
-    isMaterializedView?: boolean;
+    isMaterializedView?: boolean | null;
     createdAt: number;
-    width?: number;
-    comments?: string;
-    order?: number;
-    expanded?: boolean;
+    width?: number | null;
+    comments?: string | null;
+    order?: number | null;
+    expanded?: boolean | null;
 }
 
 export const dbTableSchema: z.ZodType<DBTable> = z.object({
     id: z.string(),
     name: z.string(),
-    schema: z.string().optional(),
+    schema: z.string().or(z.null()).optional(),
     x: z.number(),
     y: z.number(),
     fields: z.array(dbFieldSchema),
     indexes: z.array(dbIndexSchema),
     color: z.string(),
     isView: z.boolean(),
-    isMaterializedView: z.boolean().optional(),
+    isMaterializedView: z.boolean().or(z.null()).optional(),
     createdAt: z.number(),
-    width: z.number().optional(),
-    comments: z.string().optional(),
-    order: z.number().optional(),
-    expanded: z.boolean().optional(),
+    width: z.number().or(z.null()).optional(),
+    comments: z.string().or(z.null()).optional(),
+    order: z.number().or(z.null()).optional(),
+    expanded: z.boolean().or(z.null()).optional(),
 });
 
 export const shouldShowTablesBySchemaFilter = (
