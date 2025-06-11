@@ -33,6 +33,10 @@ export const getPostgresQuery = (
                 AND views.schemaname NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
     `;
 
+    const supabaseCustomTypesFilter = `
+                AND n.nspname NOT IN ('auth', 'extensions', 'pgsodium', 'realtime', 'storage', 'vault')
+    `;
+
     const timescaleFilters = `
                 AND connamespace::regnamespace::text !~ '^(timescaledb_|_timescaledb_)'
     `;
@@ -53,6 +57,10 @@ export const getPostgresQuery = (
 
     const timescaleViewsFilter = `
                 AND views.schemaname !~ '^(timescaledb_|_timescaledb_)'
+    `;
+
+    const timescaleCustomTypesFilter = `
+                AND n.nspname !~ '^(timescaledb_|_timescaledb_)'
     `;
 
     const withExtras = false;
@@ -232,7 +240,7 @@ cols AS (
                                                 FROM pg_stat_user_tables s
                                                 WHERE tbls.TABLE_SCHEMA = s.schemaname AND tbls.TABLE_NAME = s.relname),
                                                 0), ', "type":"', tbls.TABLE_TYPE, '",', '"engine":"",', '"collation":"",',
-                        '"comment":"', COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), ''),
+                        '"comment":"', ${withExtras ? withComments : withoutComments},
                         '"}'
                 )),
                 ',') AS tbls_metadata
@@ -282,9 +290,9 @@ cols AS (
         JOIN pg_namespace n ON n.oid = t.typnamespace
         WHERE n.nspname NOT IN ('pg_catalog', 'information_schema') ${
             databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-                ? timescaleViewsFilter
+                ? timescaleCustomTypesFilter
                 : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-                  ? supabaseViewsFilter
+                  ? supabaseCustomTypesFilter
                   : ''
         }
         GROUP BY n.nspname, t.typname
@@ -315,9 +323,9 @@ cols AS (
               AND a.attnum > 0 AND NOT a.attisdropped
               AND n.nspname NOT IN ('pg_catalog', 'information_schema') ${
                   databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
-                      ? timescaleViewsFilter
+                      ? timescaleCustomTypesFilter
                       : databaseEdition === DatabaseEdition.POSTGRESQL_SUPABASE
-                        ? supabaseViewsFilter
+                        ? supabaseCustomTypesFilter
                         : ''
               }
             GROUP BY n.nspname, t.typname
