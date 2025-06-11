@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.13.1](https://github.com/chartdb/chartdb/compare/v1.13.0...v1.13.1) (2025-06-11)
+
+
+### Bug Fixes
+
+* **custom_types:** fix display custom types in select box ([#737](https://github.com/chartdb/chartdb/issues/737)) ([24be28a](https://github.com/chartdb/chartdb/commit/24be28a662c48fc5bc62e76446b9669d83d7d3e0))
+* **dbml-editor:** for some cases that the dbml had issues ([#739](https://github.com/chartdb/chartdb/issues/739)) ([e0ff198](https://github.com/chartdb/chartdb/commit/e0ff198c3fd416498dac5680bb323ec88c54b65c))
+* **export-sql:** conditionally show generic option and reorder by diagram type ([#708](https://github.com/chartdb/chartdb/issues/708)) ([c6118e0](https://github.com/chartdb/chartdb/commit/c6118e0cdb0e5caaf73447d33db2fde1a98efe60))
+* **import-database:** for custom types query to import supabase & timescale ([#745](https://github.com/chartdb/chartdb/issues/745)) ([2fce832](https://github.com/chartdb/chartdb/commit/2fce8326b67b751d38dd34f409fea574449d0298))
+* **import-db:** fix mariadb import ([#740](https://github.com/chartdb/chartdb/issues/740)) ([7d063b9](https://github.com/chartdb/chartdb/commit/7d063b905f19f51501468bd0bd794a25cf65e1be))
+* **performance:** improve storage provider performance ([#734](https://github.com/chartdb/chartdb/issues/734)) ([c6788b4](https://github.com/chartdb/chartdb/commit/c6788b49173d9cce23571daeb460285cb7cffb11))
+* **table name:** updates table name value when its updated from canvas/sidebar ([#716](https://github.com/chartdb/chartdb/issues/716)) ([8b86e1c](https://github.com/chartdb/chartdb/commit/8b86e1c22992aaadcce7ad5fc1d267c5a57a99f0))
+
 ## [1.13.0](https://github.com/chartdb/chartdb/compare/v1.12.0...v1.13.0) (2025-05-28)
 
 
