@@ -32,7 +32,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
     const { openRelationshipFromSidebar, selectSidebarSection } = useLayout();
     const { checkIfRelationshipRemoved, checkIfNewRelationship } = useDiff();
 
-    const { relationships } = useChartDB();
+    const { relationships, getTable } = useChartDB();
 
     const relationship = data?.relationship;
 
@@ -170,6 +170,8 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
         [checkIfRelationshipRemoved, relationship?.id]
     );
 
+    const table = useMemo(() => getTable(source), [getTable, source]);
+
     return (
         <>
             <path
@@ -178,14 +180,17 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                 markerStart={`url(#${sourceMarker})`}
                 markerEnd={`url(#${targetMarker})`}
                 fill="none"
+                style={{
+                    stroke: `${table?.color}`,
+                }}
                 className={cn([
-                    'react-flow__edge-path',
-                    `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                    `!stroke-2`,
                     {
                         '!stroke-green-500 !stroke-[3px]':
                             isDiffNewRelationship,
                         '!stroke-red-500 !stroke-[3px]':
                             isDiffRelationshipRemoved,
+                        '!stroke-pink-600': selected,
                     },
                 ])}
                 onClick={(e) => {
