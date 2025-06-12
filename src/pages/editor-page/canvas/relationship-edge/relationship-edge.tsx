@@ -8,7 +8,6 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
-import { getToColor } from '@/lib/colors';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -33,7 +32,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
     const { openRelationshipFromSidebar, selectSidebarSection } = useLayout();
     const { checkIfRelationshipRemoved, checkIfNewRelationship } = useDiff();
 
-    const { relationships } = useChartDB();
+    const { relationships, getTable } = useChartDB();
 
     const relationship = data?.relationship;
 
@@ -171,6 +170,8 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
         [checkIfRelationshipRemoved, relationship?.id]
     );
 
+    const table = useMemo(() => getTable(source), [getTable, source]);
+
     return (
         <>
             <path
@@ -179,9 +180,11 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> = ({
                 markerStart={`url(#${sourceMarker})`}
                 markerEnd={`url(#${targetMarker})`}
                 fill="none"
+                style={{
+                    stroke: `${table?.color}`,
+                }}
                 className={cn([
                     `!stroke-2`,
-                    `${getToColor(id)}`,
                     {
                         '!stroke-green-500 !stroke-[3px]':
                             isDiffNewRelationship,
