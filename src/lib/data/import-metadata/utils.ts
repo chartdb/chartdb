@@ -18,6 +18,7 @@ export const fixMetadataJson = (metadataJson: string): string => {
         metadataJson
             .trim()
             // First unescape the JSON string
+            .replace(/\\""/g, '___QUOTE___') // Keep Escaped quotes
             .replace(/\\"/g, '"')
             .replace(/\\\\/g, '\\')
             .replace(/^[^{]*/, '') // Remove everything before the first '{'
@@ -57,6 +58,7 @@ export const fixMetadataJson = (metadataJson: string): string => {
             .replace(/""/g, '"') // Replace remaining double quotes
             .replace(/___ESCAPED_QUOTE___/g, '"') // Restore empty strings
             .replace(/___EMPTY___/g, '""') // Restore empty strings
+            .replace(/___QUOTE___/g, '\\"') // Restore Escaped quotes
             .replace(/\n/g, '')
     );
 };
