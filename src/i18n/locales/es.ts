@@ -8,6 +8,7 @@ export const es: LanguageTranslation = {
                 new: 'Nuevo',
                 open: 'Abrir',
                 save: 'Guardar',
+                duplicate: 'Duplicar',
                 import: 'Importar Base de Datos',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
