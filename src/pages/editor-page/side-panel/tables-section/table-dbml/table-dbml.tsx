@@ -451,16 +451,26 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             };
         });
 
+        // Remove duplicate tables (keep first occurrence by table name)
+        const seenTableNames = new Set<string>();
+        const uniqueTables = sanitizedTables.filter((table) => {
+            if (seenTableNames.has(table.name)) {
+                return false; // Skip duplicate
+            }
+            seenTableNames.add(table.name);
+            return true; // Keep unique table
+        });
+
         // Create the base filtered diagram structure
         const filteredDiagram: Diagram = {
             ...currentDiagram,
-            tables: sanitizedTables,
+            tables: uniqueTables,
             relationships:
                 currentDiagram.relationships?.filter((rel) => {
-                    const sourceTable = sanitizedTables.find(
+                    const sourceTable = uniqueTables.find(
                         (t) => t.id === rel.sourceTableId
                     );
-                    const targetTable = sanitizedTables.find(
+                    const targetTable = uniqueTables.find(
                         (t) => t.id === rel.targetTableId
                     );
                     const sourceFieldExists = sourceTable?.fields.some(
