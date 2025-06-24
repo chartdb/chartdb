@@ -22,6 +22,8 @@ export const en = {
             },
             view: {
                 view: 'View',
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
                 show_sidebar: 'Show Sidebar',
                 hide_sidebar: 'Hide Sidebar',
                 hide_cardinality: 'Hide Cardinality',
