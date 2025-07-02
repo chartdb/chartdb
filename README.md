@@ -125,6 +125,8 @@ docker run \
   -p 8080:80 chartdb
 ```
 
+> **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.
+
 > **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
 
 Open your browser and navigate to `http://localhost:8080`.
