@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
@@ -14,7 +14,7 @@ import { Label } from '@/components/label/label';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
-import { debounce } from '@/lib/utils';
+import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
 
 export interface TableFieldPopoverProps {
@@ -30,45 +30,40 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
 }) => {
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     useEffect(() => {
         setLocalField(field);
     }, [field]);
 
-    const debouncedUpdateFieldRef = useRef<((value?: DBField) => void) | null>(
-        null
+    const updateFieldStable = useCallback(
+        (attrs: Partial<DBField>) => {
+            updateField(attrs);
+        },
+        [updateField]
     );
 
-    useEffect(() => {
-        debouncedUpdateFieldRef.current = debounce((value?: DBField) => {
-            updateField({
-                comments: value?.comments,
-                characterMaximumLength: value?.characterMaximumLength,
-                unique: value?.unique,
-            });
-        }, 200);
-
-        return () => {
-            debouncedUpdateFieldRef.current = null;
-        };
-    }, [updateField]);
+    const debouncedUpdateField = useDebounce(updateFieldStable, 200);
 
     const prevFieldRef = useRef<DBField>(field);
 
     useEffect(() => {
-        if (
-            debouncedUpdateFieldRef.current &&
-            !equal(prevFieldRef.current, localField)
-        ) {
-            debouncedUpdateFieldRef.current(localField);
+        if (isOpen && !equal(prevFieldRef.current, localField)) {
+            debouncedUpdateField({
+                comments: localField.comments,
+                characterMaximumLength: localField.characterMaximumLength,
+                unique: localField.unique,
+            });
         }
         prevFieldRef.current = localField;
-    }, [localField]);
+    }, [localField, debouncedUpdateField, isOpen]);
 
     return (
         <Popover
-            onOpenChange={(isOpen) => {
-                if (isOpen) {
+            open={isOpen}
+            onOpenChange={(open) => {
+                setIsOpen(open);
+                if (open) {
                     setLocalField(field);
                 }
             }}
