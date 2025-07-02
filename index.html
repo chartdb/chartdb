@@ -13,11 +13,21 @@
             rel="stylesheet"
         />
         <script src="/config.js"></script>
-        <script
-            src="https://cdn.usefathom.com/script.js"
-            data-site="PRHIVBNN"
-            defer
-        ></script>
+        <script>
+            // Load analytics only if not disabled
+            (function() {
+                const disableAnalytics = (window.env && window.env.DISABLE_ANALYTICS === 'true') ||
+                                        (typeof process !== 'undefined' && process.env && process.env.VITE_DISABLE_ANALYTICS === 'true');
+
+                if (!disableAnalytics) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.usefathom.com/script.js';
+                    script.setAttribute('data-site', 'PRHIVBNN');
+                    script.defer = true;
+                    document.head.appendChild(script);
+                }
+            })();
+        </script>
     </head>
     <body>
         <div id="root"></div>
