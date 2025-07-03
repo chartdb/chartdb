@@ -11,6 +11,7 @@ export const vi: LanguageTranslation = {
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
+                copy: 'Kopya',
                 delete_diagram: 'Xóa sơ đồ',
                 exit: 'Thoát',
             },
@@ -39,6 +40,13 @@ export const vi: LanguageTranslation = {
                 export_diagram: 'Xuất sơ đồ',
                 restore_diagram: 'Khôi phục sơ đồ',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'Lưu vào MinIO',
+                import_from_minio: 'Nhập từ MinIO',
+                copy_url: 'URL sao chép',
+                copy_url_tooltip: 'Sao chép URL cho diagram này',
+            },
             help: {
                 help: 'Trợ giúp',
                 docs_website: 'Tài liệu',
@@ -61,6 +69,12 @@ export const vi: LanguageTranslation = {
             cancel: 'Hủy',
             clear: 'Xóa',
         },
+
+        copy_url_success:
+            'URL đã được sao chép. Sử dụng nó để mở sơ đồ trong trình duyệt hoặc máy tính khác',
+        saving_to_minio: 'Đang lưu vào MinIO...',
+        saved_to_minio_success: 'Đã lưu vào MinIO thành công',
+        error_saving_to_minio: 'Lỗi khi lưu vào MinIO',
 
         reorder_diagram_alert: {
             title: 'Sắp xếp lại sơ đồ',
@@ -277,6 +291,7 @@ export const vi: LanguageTranslation = {
                     'Mỗi cơ sở dữ liệu có những tính năng và khả năng riêng biệt.',
                 check_examples_long: 'Xem ví dụ',
                 check_examples_short: 'Ví dụ',
+                open_from_minio: 'Mở từ MinIO',
             },
 
             import_database: {
@@ -430,6 +445,24 @@ export const vi: LanguageTranslation = {
                     'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Nhập từ Minio',
+            description: 'Chọn một tệp sơ đồ để nhập từ Minio.',
+            table_columns: {
+                name: 'Tên',
+                last_modified: 'Lần cuối chỉnh sửa',
+                size: 'Kích thước',
+            },
+            import: 'Nhập',
+            cancel: 'Hủy',
+            no_files: 'Không tìm thấy tệp trong Minio',
+            error: {
+                title: 'Lỗi',
+                description: 'Không thể tải tệp từ Minio',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

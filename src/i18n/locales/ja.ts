@@ -11,6 +11,7 @@ export const ja: LanguageTranslation = {
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
+                copy: 'コピー',
                 delete_diagram: 'ダイアグラムを削除',
                 exit: '終了',
             },
@@ -41,6 +42,13 @@ export const ja: LanguageTranslation = {
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIOに保存',
+                import_from_minio: 'MinIOからインポート',
+                copy_url: 'URLをコピー',
+                copy_url_tooltip: 'このダイアグラムのURLをコピー',
+            },
             help: {
                 help: 'ヘルプ',
                 docs_website: 'ドキュメント',
@@ -63,6 +71,12 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
             clear: 'クリア',
         },
+
+        copy_url_success:
+            'URLがコピーされました。他のブラウザやコンピュータで図表を開くのに使用してください',
+        saving_to_minio: 'MinIOに保存中...',
+        saved_to_minio_success: 'MinIOに正常に保存されました',
+        error_saving_to_minio: 'MinIOへの保存中にエラーが発生しました',
 
         reorder_diagram_alert: {
             title: 'ダイアグラムを並べ替え',
@@ -283,6 +297,7 @@ export const ja: LanguageTranslation = {
                 description: '各データベースには独自の機能と能力があります。',
                 check_examples_long: '例を確認',
                 check_examples_short: '例',
+                open_from_minio: 'MinIOから開く',
             },
 
             import_database: {
@@ -440,6 +455,26 @@ export const ja: LanguageTranslation = {
                     'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minioからインポート',
+            description:
+                'Minio storageからインポートするためのファイルを選択してください。',
+            table_columns: {
+                name: '名前',
+                last_modified: '最終更新日',
+                size: 'サイズ',
+            },
+            import: 'インポート',
+            cancel: 'キャンセル',
+            no_files: 'Minio storageにファイルが見つかりません',
+            error: {
+                title: 'Error',
+                description:
+                    'Minio storageからファイルを読み込むことができませんでした',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',

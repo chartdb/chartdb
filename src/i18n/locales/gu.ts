@@ -11,6 +11,7 @@ export const gu: LanguageTranslation = {
                 import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
+                copy: 'કોપી',
                 delete_diagram: 'ડાયાગ્રામ કાઢી નાખો',
                 exit: 'બહાર જાઓ',
             },
@@ -40,6 +41,13 @@ export const gu: LanguageTranslation = {
                 export_diagram: 'ડાયાગ્રામ નિકાસ કરો',
                 restore_diagram: 'ડાયાગ્રામ પુનઃસ્થાપિત કરો',
             },
+            minio: {
+                minio: 'MinIO',
+                save_to_minio: 'MinIO માં સંભાળો',
+                import_from_minio: 'MinIO માંથી આયાત કરો',
+                copy_url: 'URL નકલ કરો',
+                copy_url_tooltip: 'છેલ્લે ડાયાગ્રામ પર માટે URL નકલ કરો',
+            },
             help: {
                 help: 'મદદ',
                 docs_website: 'દસ્તાવેજીકરણ',
@@ -62,6 +70,12 @@ export const gu: LanguageTranslation = {
             cancel: 'રદ કરો',
             clear: 'સાફ કરો',
         },
+
+        copy_url_success:
+            'URL કોપી થઈ ગઈ છે. તેનો ઉપયોગ અન્ય બ્રાઉઝર અથવા કોમ્પ્યુટરમાં ડાયાગ્રામ ખોલવા માટે કરો',
+        saving_to_minio: 'MinIO પર સાચવી રહ્યું છે...',
+        saved_to_minio_success: 'MinIO પર સફળતાપૂર્વક સાચવ્યું',
+        error_saving_to_minio: 'MinIO પર સાચવવામાં ભૂલ',
 
         reorder_diagram_alert: {
             title: 'ડાયાગ્રામ ફરી વ્યવસ્થિત કરો',
@@ -278,6 +292,7 @@ export const gu: LanguageTranslation = {
                 description: 'દરેક ડેટાબેસની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
                 check_examples_long: 'ઉદાહરણ જુઓ',
                 check_examples_short: 'ઉદાહરણ',
+                open_from_minio: 'MinIO માંથી ખોલો',
             },
 
             import_database: {
@@ -433,6 +448,24 @@ export const gu: LanguageTranslation = {
                     'ડાયાગ્રામ JSON અમાન્ય છે. કૃપા કરીને JSON તપાસો અને ફરી પ્રયાસ કરો. મદદ જોઈએ? support@chartdb.io પર સંપર્ક કરો.',
             },
         },
+
+        import_from_minio_dialog: {
+            title: 'Minio થી આયાત કરો',
+            description: 'Minio સ્ટોરેજમાંથી ડાયાગ્રામ ફાઇલ પસંદ કરો.',
+            table_columns: {
+                name: 'નામ',
+                last_modified: 'અંતીમ મુખ્ય મેટેડ',
+                size: 'સાધારણ મુખ્ય મેટેડ',
+            },
+            import: 'આયાત કરો',
+            cancel: 'રદ કરો',
+            no_files: 'Minio માં કોઈ ફાઇલ મળ્યા નથી',
+            error: {
+                title: 'ભૂલ',
+                description: 'Minio માં ફાઇલો લોડ કરવામાં ભૂલ',
+            },
+        },
+
         // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
