@@ -46,6 +46,27 @@ export interface TableNodeFieldProps {
     isConnectable: boolean;
 }
 
+const arePropsEqual = (
+    prevProps: TableNodeFieldProps,
+    nextProps: TableNodeFieldProps
+) => {
+    return (
+        prevProps.field.id === nextProps.field.id &&
+        prevProps.field.name === nextProps.field.name &&
+        prevProps.field.primaryKey === nextProps.field.primaryKey &&
+        prevProps.field.nullable === nextProps.field.nullable &&
+        prevProps.field.comments === nextProps.field.comments &&
+        prevProps.field.unique === nextProps.field.unique &&
+        prevProps.field.type.id === nextProps.field.type.id &&
+        prevProps.field.type.name === nextProps.field.type.name &&
+        prevProps.focused === nextProps.focused &&
+        prevProps.highlighted === nextProps.highlighted &&
+        prevProps.visible === nextProps.visible &&
+        prevProps.isConnectable === nextProps.isConnectable &&
+        prevProps.tableNodeId === nextProps.tableNodeId
+    );
+};
+
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
         const { removeField, relationships, readonly, updateField } =
@@ -64,17 +85,25 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     connection.fromHandle.id?.startsWith(
                         LEFT_HANDLE_ID_PREFIX
                     )),
-            [connection, tableNodeId]
+            [
+                connection.inProgress,
+                connection.fromNode?.id,
+                connection.fromHandle?.id,
+                tableNodeId,
+            ]
         );
-        const numberOfEdgesToField = useMemo(
-            () =>
-                relationships.filter(
-                    (relationship) =>
-                        relationship.targetTableId === tableNodeId &&
-                        relationship.targetFieldId === field.id
-                ).length,
-            [relationships, tableNodeId, field.id]
-        );
+        const numberOfEdgesToField = useMemo(() => {
+            let count = 0;
+            for (const rel of relationships) {
+                if (
+                    rel.targetTableId === tableNodeId &&
+                    rel.targetFieldId === field.id
+                ) {
+                    count++;
+                }
+            }
+            return count;
+        }, [relationships, tableNodeId, field.id]);
 
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
 
@@ -82,8 +111,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             if (
                 previousNumberOfEdgesToFieldRef.current !== numberOfEdgesToField
             ) {
-                updateNodeInternals(tableNodeId);
-                previousNumberOfEdgesToFieldRef.current = numberOfEdgesToField;
+                const timer = setTimeout(() => {
+                    updateNodeInternals(tableNodeId);
+                    previousNumberOfEdgesToFieldRef.current =
+                        numberOfEdgesToField;
+                }, 100);
+                return () => clearTimeout(timer);
             }
         }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 
@@ -112,39 +145,63 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             checkIfFieldHasChange,
         } = useDiff();
 
-        const isDiffFieldRemoved = useMemo(
-            () => checkIfFieldRemoved({ fieldId: field.id }),
-            [checkIfFieldRemoved, field.id]
-        );
+        const [diffState, setDiffState] = useState<{
+            isDiffFieldRemoved: boolean;
+            isDiffNewField: boolean;
+            fieldDiffChangedName: string | null;
+            fieldDiffChangedType: DBField['type'] | null;
+            isDiffFieldChanged: boolean;
+        }>({
+            isDiffFieldRemoved: false,
+            isDiffNewField: false,
+            fieldDiffChangedName: null,
+            fieldDiffChangedType: null,
+            isDiffFieldChanged: false,
+        });
 
-        const isDiffNewField = useMemo(
-            () => checkIfNewField({ fieldId: field.id }),
-            [checkIfNewField, field.id]
-        );
+        useEffect(() => {
+            // Calculate diff state asynchronously
+            const timer = requestAnimationFrame(() => {
+                setDiffState({
+                    isDiffFieldRemoved: checkIfFieldRemoved({
+                        fieldId: field.id,
+                    }),
+                    isDiffNewField: checkIfNewField({ fieldId: field.id }),
+                    fieldDiffChangedName: getFieldNewName({
+                        fieldId: field.id,
+                    }),
+                    fieldDiffChangedType: getFieldNewType({
+                        fieldId: field.id,
+                    }),
+                    isDiffFieldChanged: checkIfFieldHasChange({
+                        fieldId: field.id,
+                        tableId: tableNodeId,
+                    }),
+                });
+            });
+            return () => cancelAnimationFrame(timer);
+        }, [
+            checkIfFieldRemoved,
+            checkIfNewField,
+            getFieldNewName,
+            getFieldNewType,
+            checkIfFieldHasChange,
+            field.id,
+            tableNodeId,
+        ]);
 
-        const fieldDiffChangedName = useMemo(
-            () => getFieldNewName({ fieldId: field.id }),
-            [getFieldNewName, field.id]
-        );
+        const {
+            isDiffFieldRemoved,
+            isDiffNewField,
+            fieldDiffChangedName,
+            fieldDiffChangedType,
+            isDiffFieldChanged,
+        } = diffState;
 
-        const fieldDiffChangedType = useMemo(
-            () => getFieldNewType({ fieldId: field.id }),
-            [getFieldNewType, field.id]
-        );
-
-        const isDiffFieldChanged = useMemo(
-            () =>
-                checkIfFieldHasChange({
-                    fieldId: field.id,
-                    tableId: tableNodeId,
-                }),
-            [checkIfFieldHasChange, field.id, tableNodeId]
-        );
-
-        const enterEditMode = (e: React.MouseEvent) => {
+        const enterEditMode = useCallback((e: React.MouseEvent) => {
             e.stopPropagation();
             setEditMode(true);
-        };
+        }, []);
 
         return (
             <div
@@ -359,7 +416,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 )}
             </div>
         );
-    }
+    },
+    arePropsEqual
 );
 
 TableNodeField.displayName = 'TableNodeField';

@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, {
+    useCallback,
+    useState,
+    useMemo,
+    useRef,
+    useEffect,
+} from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
 import { NodeResizer, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
@@ -95,34 +101,89 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             return table.color;
         }, [tableChangedColor, table.color]);
 
-        const isDiffTableChanged = useMemo(
-            () => checkIfTableHasChange({ tableId: table.id }),
-            [checkIfTableHasChange, table.id]
+        const [diffState, setDiffState] = useState<{
+            isDiffTableChanged: boolean;
+            isDiffNewTable: boolean;
+            isDiffTableRemoved: boolean;
+        }>({
+            isDiffTableChanged: false,
+            isDiffNewTable: false,
+            isDiffTableRemoved: false,
+        });
+
+        const hasMountedRef = useRef(false);
+
+        useEffect(() => {
+            // Skip on initial mount to improve performance
+            const calculateDiff = () => {
+                setDiffState({
+                    isDiffTableChanged: checkIfTableHasChange({
+                        tableId: table.id,
+                    }),
+                    isDiffNewTable: checkIfNewTable({ tableId: table.id }),
+                    isDiffTableRemoved: checkIfTableRemoved({
+                        tableId: table.id,
+                    }),
+                });
+            };
+
+            if (!hasMountedRef.current) {
+                hasMountedRef.current = true;
+                // Defer diff calculation
+                requestAnimationFrame(calculateDiff);
+            } else {
+                calculateDiff();
+            }
+        }, [
+            checkIfTableHasChange,
+            checkIfNewTable,
+            checkIfTableRemoved,
+            table.id,
+        ]);
+
+        const { isDiffTableChanged, isDiffNewTable, isDiffTableRemoved } =
+            diffState;
+
+        const selectedRelEdges: RelationshipEdgeType[] = useMemo(() => {
+            if (edges.length === 0) return [];
+
+            const relEdges: RelationshipEdgeType[] = [];
+            for (const edge of edges) {
+                if (
+                    edge.type === 'relationship-edge' &&
+                    (edge.source === id || edge.target === id) &&
+                    (edge.selected || edge.data?.highlighted)
+                ) {
+                    relEdges.push(edge as RelationshipEdgeType);
+                }
+            }
+            return relEdges;
+        }, [edges, id]);
+
+        const highlightedFieldIds = useMemo(() => {
+            const fieldIds = new Set<string>();
+            selectedRelEdges.forEach((edge) => {
+                if (edge.data?.relationship.sourceFieldId) {
+                    fieldIds.add(edge.data.relationship.sourceFieldId);
+                }
+
+                if (edge.data?.relationship.targetFieldId) {
+                    fieldIds.add(edge.data.relationship.targetFieldId);
+                }
+            });
+
+            return fieldIds;
+        }, [selectedRelEdges]);
+
+        const focused = useMemo(
+            () => (!!selected && !dragging) || isHovering,
+            [selected, dragging, isHovering]
         );
 
-        const isDiffNewTable = useMemo(
-            () => checkIfNewTable({ tableId: table.id }),
-            [checkIfNewTable, table.id]
-        );
-
-        const isDiffTableRemoved = useMemo(
-            () => checkIfTableRemoved({ tableId: table.id }),
-            [checkIfTableRemoved, table.id]
-        );
-
-        const selectedRelEdges = edges.filter(
-            (edge) =>
-                (edge.source === id || edge.target === id) &&
-                (edge.selected || edge.data?.highlighted) &&
-                edge.type === 'relationship-edge'
-        ) as RelationshipEdgeType[];
-
-        const focused = (!!selected && !dragging) || isHovering;
-
-        const openTableInEditor = () => {
+        const openTableInEditor = useCallback(() => {
             selectSidebarSection('tables');
             openTableFromSidebar(table.id);
-        };
+        }, [selectSidebarSection, openTableFromSidebar, table.id]);
 
         const expandTable = useCallback(() => {
             updateTable(table.id, {
@@ -147,47 +208,56 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             });
         }, [table.id, updateTable]);
 
-        const isMustDisplayedField = useCallback(
-            (field: DBField) => {
-                return (
-                    relationships.some(
-                        (relationship) =>
-                            relationship.sourceFieldId === field.id ||
-                            relationship.targetFieldId === field.id
-                    ) || field.primaryKey
-                );
-            },
-            [relationships]
-        );
+        const relatedFieldIds = useMemo(() => {
+            const fieldIds = new Set<string>();
+            relationships.forEach((rel) => {
+                if (rel.sourceFieldId) fieldIds.add(rel.sourceFieldId);
+                if (rel.targetFieldId) fieldIds.add(rel.targetFieldId);
+            });
+            return fieldIds;
+        }, [relationships]);
 
         const visibleFields = useMemo(() => {
-            if (expanded) {
+            if (expanded || fields.length <= TABLE_MINIMIZED_FIELDS) {
                 return fields;
             }
 
-            const mustDisplayedFields = fields.filter((field: DBField) =>
-                isMustDisplayedField(field)
-            );
-            const nonMustDisplayedFields = fields.filter(
-                (field: DBField) => !isMustDisplayedField(field)
-            );
+            const mustDisplayedFields: DBField[] = [];
+            const nonMustDisplayedFields: DBField[] = [];
 
+            for (const field of fields) {
+                if (relatedFieldIds.has(field.id) || field.primaryKey) {
+                    mustDisplayedFields.push(field);
+                } else {
+                    nonMustDisplayedFields.push(field);
+                }
+            }
+
+            // Take required fields up to limit
             const visibleMustDisplayedFields = mustDisplayedFields.slice(
                 0,
                 TABLE_MINIMIZED_FIELDS
             );
             const remainingSlots =
                 TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
-            const visibleNonMustDisplayedFields = nonMustDisplayedFields.slice(
-                0,
-                remainingSlots
-            );
 
-            return [
+            // Fill remaining slots with non-required fields
+            const visibleNonMustDisplayedFields =
+                remainingSlots > 0
+                    ? nonMustDisplayedFields.slice(0, remainingSlots)
+                    : [];
+
+            // Combine and maintain original order
+            const visibleFieldsSet = new Set([
                 ...visibleMustDisplayedFields,
                 ...visibleNonMustDisplayedFields,
-            ].sort((a, b) => fields.indexOf(a) - fields.indexOf(b));
-        }, [expanded, fields, isMustDisplayedField]);
+            ]);
+            const result = fields.filter((field) =>
+                visibleFieldsSet.has(field)
+            );
+
+            return result;
+        }, [expanded, fields, relatedFieldIds]);
 
         const editTableName = useCallback(() => {
             if (!editMode) return;
@@ -206,10 +276,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         useKeyPressEvent('Enter', editTableName);
         useKeyPressEvent('Escape', abortEdit);
 
-        const enterEditMode = (e: React.MouseEvent) => {
+        const enterEditMode = useCallback((e: React.MouseEvent) => {
             e.stopPropagation();
             setEditMode(true);
-        };
+        }, []);
 
         React.useEffect(() => {
             if (table.name.trim()) {
@@ -217,35 +287,46 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             }
         }, [table.name]);
 
+        const tableClassName = useMemo(
+            () =>
+                cn(
+                    'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
+                    selected
+                        ? 'border-pink-600'
+                        : 'border-slate-500 dark:border-slate-700',
+                    isOverlapping
+                        ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
+                        : '',
+                    !highlightOverlappingTables && isOverlapping
+                        ? 'animate-scale'
+                        : '',
+                    highlightOverlappingTables && isOverlapping
+                        ? 'animate-scale-2'
+                        : '',
+                    isDiffTableChanged && !isDiffNewTable && !isDiffTableRemoved
+                        ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
+                        : '',
+                    isDiffNewTable
+                        ? 'outline outline-[3px] outline-green-500 dark:outline-green-900 outline-offset-[5px]'
+                        : '',
+                    isDiffTableRemoved
+                        ? 'outline outline-[3px] outline-red-500 dark:outline-red-900 outline-offset-[5px]'
+                        : ''
+                ),
+            [
+                selected,
+                isOverlapping,
+                highlightOverlappingTables,
+                isDiffTableChanged,
+                isDiffNewTable,
+                isDiffTableRemoved,
+            ]
+        );
+
         return (
             <TableNodeContextMenu table={table}>
                 <div
-                    className={cn(
-                        'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
-                        selected
-                            ? 'border-pink-600'
-                            : 'border-slate-500 dark:border-slate-700',
-                        isOverlapping
-                            ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
-                            : '',
-                        !highlightOverlappingTables && isOverlapping
-                            ? 'animate-scale'
-                            : '',
-                        highlightOverlappingTables && isOverlapping
-                            ? 'animate-scale-2'
-                            : '',
-                        isDiffTableChanged &&
-                            !isDiffNewTable &&
-                            !isDiffTableRemoved
-                            ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
-                            : '',
-                        isDiffNewTable
-                            ? 'outline outline-[3px] outline-green-500 dark:outline-green-900 outline-offset-[5px]'
-                            : '',
-                        isDiffTableRemoved
-                            ? 'outline outline-[3px] outline-red-500 dark:outline-red-900 outline-offset-[5px]'
-                            : ''
-                    )}
+                    className={tableClassName}
                     onClick={(e) => {
                         if (e.detail === 2) {
                             openTableInEditor();
@@ -421,20 +502,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                         }}
                     >
-                        {fields.map((field: DBField) => (
+                        {visibleFields.map((field: DBField) => (
                             <TableNodeField
                                 key={field.id}
                                 focused={focused}
                                 tableNodeId={id}
                                 field={field}
-                                highlighted={selectedRelEdges.some(
-                                    (edge) =>
-                                        edge.data?.relationship
-                                            .sourceFieldId === field.id ||
-                                        edge.data?.relationship
-                                            .targetFieldId === field.id
-                                )}
-                                visible={visibleFields.includes(field)}
+                                highlighted={highlightedFieldIds.has(field.id)}
+                                visible={true}
                                 isConnectable={!table.isView}
                             />
                         ))}
