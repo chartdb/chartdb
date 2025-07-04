@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.13.1](https://github.com/chartdb/chartdb/compare/v1.13.0...v1.13.1) (2025-07-04)
+
+
+### Bug Fixes
+
+* **custom_types:** fix display custom types in select box ([#737](https://github.com/chartdb/chartdb/issues/737)) ([24be28a](https://github.com/chartdb/chartdb/commit/24be28a662c48fc5bc62e76446b9669d83d7d3e0))
+* **dbml-editor:** for some cases that the dbml had issues ([#739](https://github.com/chartdb/chartdb/issues/739)) ([e0ff198](https://github.com/chartdb/chartdb/commit/e0ff198c3fd416498dac5680bb323ec88c54b65c))
+* **dbml:** Filter duplicate tables at diagram level before export dbml ([#746](https://github.com/chartdb/chartdb/issues/746)) ([d429128](https://github.com/chartdb/chartdb/commit/d429128e65aa28c500eac2487356e4869506e948))
+* **export-sql:** conditionally show generic option and reorder by diagram type ([#708](https://github.com/chartdb/chartdb/issues/708)) ([c6118e0](https://github.com/chartdb/chartdb/commit/c6118e0cdb0e5caaf73447d33db2fde1a98efe60))
+* general performance improvements on canvas ([#751](https://github.com/chartdb/chartdb/issues/751)) ([4fcc49d](https://github.com/chartdb/chartdb/commit/4fcc49d49a76a4b886ffd6cf0b40cf2fc49952ec))
+* **import-database:** for custom types query to import supabase & timescale ([#745](https://github.com/chartdb/chartdb/issues/745)) ([2fce832](https://github.com/chartdb/chartdb/commit/2fce8326b67b751d38dd34f409fea574449d0298))
+* **import-db:** fix mariadb import ([#740](https://github.com/chartdb/chartdb/issues/740)) ([7d063b9](https://github.com/chartdb/chartdb/commit/7d063b905f19f51501468bd0bd794a25cf65e1be))
+* **performance:** improve storage provider performance ([#734](https://github.com/chartdb/chartdb/issues/734)) ([c6788b4](https://github.com/chartdb/chartdb/commit/c6788b49173d9cce23571daeb460285cb7cffb11))
+* resolve unresponsive cursor and input glitches when editing field comments ([#749](https://github.com/chartdb/chartdb/issues/749)) ([d15985e](https://github.com/chartdb/chartdb/commit/d15985e3999a0cd54213b2fb08c55d48a1b8b3b2))
+* **table name:** updates table name value when its updated from canvas/sidebar ([#716](https://github.com/chartdb/chartdb/issues/716)) ([8b86e1c](https://github.com/chartdb/chartdb/commit/8b86e1c22992aaadcce7ad5fc1d267c5a57a99f0))
+
 ## [1.13.0](https://github.com/chartdb/chartdb/compare/v1.12.0...v1.13.0) (2025-05-28)
 
 
