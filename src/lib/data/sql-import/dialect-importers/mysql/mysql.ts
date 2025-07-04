@@ -417,8 +417,7 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                     colName
                                                             );
                                                         if (col) {
-                                                            col.primaryKey =
-                                                                true;
+                                                            col.primaryKey = true;
                                                         }
                                                     }
 
