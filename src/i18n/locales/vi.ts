@@ -268,6 +268,7 @@ export const vi: LanguageTranslation = {
             redo: 'Làm lại',
             reorder_diagram: 'Sắp xếp lại sơ đồ',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
+            colorize_lines: 'Tô màu các dòng',
         },
 
         new_diagram_dialog: {

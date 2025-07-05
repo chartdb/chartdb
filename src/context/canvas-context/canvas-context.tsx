@@ -12,11 +12,15 @@ export interface CanvasContext {
     }) => void;
     setOverlapGraph: (graph: Graph<string>) => void;
     overlapGraph: Graph<string>;
+    isColorizedLines: boolean;
+    toggleColorizeLines: () => void;
 }
 
 export const canvasContext = createContext<CanvasContext>({
     reorderTables: emptyFn,
     fitView: emptyFn,
     setOverlapGraph: emptyFn,
+    toggleColorizeLines: emptyFn,
     overlapGraph: createGraph(),
+    isColorizedLines: false,
 });

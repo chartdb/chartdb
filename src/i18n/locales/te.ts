@@ -270,6 +270,7 @@ export const te: LanguageTranslation = {
             redo: 'మరలా చేయు',
             reorder_diagram: 'చిత్రాన్ని పునఃసరిచేయండి',
             highlight_overlapping_tables: 'అవకాశించు పట్టికలను హైలైట్ చేయండి',
+            colorize_lines: 'లైన్లను రంగు చేయండి',
         },
 
         new_diagram_dialog: {

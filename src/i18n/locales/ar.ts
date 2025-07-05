@@ -269,6 +269,7 @@ export const ar: LanguageTranslation = {
             redo: 'إعادة',
             reorder_diagram: 'إعادة ترتيب الرسم البياني',
             highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
+            colorize_lines: 'تلوين الخطوط',
         },
 
         new_diagram_dialog: {

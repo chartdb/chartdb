@@ -267,6 +267,7 @@ export const uk: LanguageTranslation = {
             redo: 'Повторити',
             reorder_diagram: 'Перевпорядкувати діаграму',
             highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
+            colorize_lines: 'Розфарбувати лінії',
         },
 
         new_diagram_dialog: {

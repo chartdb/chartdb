@@ -257,6 +257,7 @@ export const fr: LanguageTranslation = {
             redo: 'Rétablir',
             reorder_diagram: 'Réorganiser le Diagramme',
             highlight_overlapping_tables: 'Surligner les tables chevauchées',
+            colorize_lines: 'Colorier les lignes',
         },
 
         new_diagram_dialog: {

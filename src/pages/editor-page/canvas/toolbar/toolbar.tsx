@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
-import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan } from 'lucide-react';
+import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan, Palette } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
@@ -16,6 +16,7 @@ import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useIsLostInCanvas } from '../hooks/use-is-lost-in-canvas';
+import { useCanvas } from '@/hooks/use-canvas';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -30,6 +31,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
     const { isLostInCanvas } = useIsLostInCanvas();
+    const { isColorizedLines, toggleColorizeLines } = useCanvas();
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -62,12 +64,35 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
         });
     }, [fitView]);
 
+    const toggleColorizeLine = useCallback(() => {
+        toggleColorizeLines();
+    }, [toggleColorizeLines]);
+
     return (
         <div className="px-1">
             <Card className="h-[44px] bg-secondary p-0 shadow-none">
                 <CardContent className="flex h-full flex-row items-center p-1">
                     {!readonly ? (
                         <>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        <ToolbarButton
+                                            variant={
+                                                isColorizedLines
+                                                    ? 'outline'
+                                                    : 'ghost'
+                                            }
+                                            onClick={toggleColorizeLine}
+                                        >
+                                            <Palette />
+                                        </ToolbarButton>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('toolbar.colorize_lines')}
+                                </TooltipContent>
+                            </Tooltip>
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>

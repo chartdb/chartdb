@@ -269,6 +269,7 @@ export const bn: LanguageTranslation = {
             redo: 'পুনরায় করুন',
             reorder_diagram: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
             highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
+            colorize_lines: 'লাইন রঙ করুন',
         },
 
         new_diagram_dialog: {
