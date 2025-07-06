@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.2](https://github.com/chartdb/chartdb/compare/v1.13.1...v1.13.2) (2025-07-06)
+
+
+### Bug Fixes
+
+* add DISABLE_ANALYTICS flag to opt-out of Fathom analytics ([#750](https://github.com/chartdb/chartdb/issues/750)) ([aa0b629](https://github.com/chartdb/chartdb/commit/aa0b629a3eaf8e8b60473ea3f28f769270c7714c))
+
 ## [1.13.1](https://github.com/chartdb/chartdb/compare/v1.13.0...v1.13.1) (2025-07-04)
 
 
