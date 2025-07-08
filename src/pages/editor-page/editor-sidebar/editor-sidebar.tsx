@@ -10,7 +10,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import { Twitter, BookOpen, Group, FileType } from 'lucide-react';
+import {
+    Twitter,
+    BookOpen,
+    Group,
+    FileType,
+    Plus,
+    FolderOpen,
+} from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +28,8 @@ import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { useDialog } from '@/hooks/use-dialog';
+import { Separator } from '@/components/separator/separator';
 
 export interface SidebarItem {
     title: string;
@@ -39,9 +48,32 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
     const { dependencies, databaseType } = useChartDB();
+    const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
 
-    const items: SidebarItem[] = useMemo(() => {
-        const baseItems = [
+    const diagramItems: SidebarItem[] = useMemo(
+        () => [
+            {
+                title: t('menu.file.new'),
+                icon: Plus,
+                onClick: () => {
+                    openCreateDiagramDialog();
+                },
+                active: false,
+            },
+            {
+                title: t('menu.file.open'),
+                icon: FolderOpen,
+                onClick: () => {
+                    openOpenDiagramDialog();
+                },
+                active: false,
+            },
+        ],
+        [t, openCreateDiagramDialog, openOpenDiagramDialog]
+    );
+
+    const baseItems: SidebarItem[] = useMemo(
+        () => [
             {
                 title: t('side_panel.tables_section.tables'),
                 icon: Table,
@@ -99,17 +131,16 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                       },
                   ]
                 : []),
-        ];
-
-        return baseItems;
-    }, [
-        selectSidebarSection,
-        selectedSidebarSection,
-        t,
-        showSidePanel,
-        dependencies,
-        databaseType,
-    ]);
+        ],
+        [
+            selectSidebarSection,
+            selectedSidebarSection,
+            t,
+            showSidePanel,
+            dependencies,
+            databaseType,
+        ]
+    );
 
     const footerItems: SidebarItem[] = useMemo(
         () => [
@@ -171,7 +202,25 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                     {/* <SidebarGroupLabel /> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
+                            {diagramItems.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton
+                                        className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                        isActive={item.active}
+                                        asChild
+                                        tooltip={item.title}
+                                    >
+                                        <button onClick={item.onClick}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                        <Separator className="my-2" />
+                        <SidebarMenu>
+                            {baseItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
                                         className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
