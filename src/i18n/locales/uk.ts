@@ -32,6 +32,7 @@ export const uk: LanguageTranslation = {
                 hide_dependencies: 'Приховати залежності',
                 show_minimap: 'Показати мінімапу',
                 hide_minimap: 'Приховати мінімапу',
+                colorize_lines: 'Розфарбувати лінії',
             },
             backup: {
                 backup: 'Резервне копіювання',

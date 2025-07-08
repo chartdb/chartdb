@@ -32,6 +32,7 @@ export const en = {
                 hide_dependencies: 'Hide Dependencies',
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'Colorize Lines',
             },
             backup: {
                 backup: 'Backup',

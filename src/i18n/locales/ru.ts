@@ -32,6 +32,7 @@ export const ru: LanguageTranslation = {
                 hide_dependencies: 'Скрыть зависимости',
                 show_minimap: 'Показать мини-карту',
                 hide_minimap: 'Скрыть мини-карту',
+                colorize_lines: 'Цветные линии',
             },
             backup: {
                 backup: 'Бэкап',

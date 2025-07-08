@@ -28,6 +28,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export interface MenuProps {}
 
@@ -66,6 +67,7 @@ export const Menu: React.FC<MenuProps> = () => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { exportImage } = useExportImage();
     const navigate = useNavigate();
+    const { toggleColorizeLines } = useCanvas();
 
     const handleDeleteDiagramAction = useCallback(() => {
         deleteDiagram();
@@ -144,6 +146,10 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideMiniMap = useCallback(() => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
+
+    const toggleColorizeLine = useCallback(() => {
+        toggleColorizeLines();
+    }, [toggleColorizeLines]);
 
     const emojiAI = '✨';
 
@@ -457,6 +463,12 @@ export const Menu: React.FC<MenuProps> = () => {
                                 {t('zoom.off')}
                             </MenubarCheckboxItem>
                         </MenubarSubContent>
+                    </MenubarSub>
+                    <MenubarSeparator />
+                    <MenubarSub>
+                        <MenubarItem onClick={toggleColorizeLine}>
+                            {t('menu.view.colorize_lines')}
+                        </MenubarItem>
                     </MenubarSub>
                     <MenubarSeparator />
                     <MenubarSub>

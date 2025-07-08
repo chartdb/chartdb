@@ -33,6 +33,7 @@ export const ar: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'تلوين الخطوط',
             },
             backup: {
                 backup: 'النسخ الاحتياطي',
