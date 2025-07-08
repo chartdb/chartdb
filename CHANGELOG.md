@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.3](https://github.com/chartdb/chartdb/compare/v1.13.2...v1.13.3) (2025-07-08)
+
+
+### Bug Fixes
+
+* add open and create diagram to side menu ([#757](https://github.com/chartdb/chartdb/issues/757)) ([67f5ac3](https://github.com/chartdb/chartdb/commit/67f5ac303ebf5ada97d5c80fb08a2815ca205a91))
+
 ## [1.13.2](https://github.com/chartdb/chartdb/compare/v1.13.1...v1.13.2) (2025-07-06)
 
 
