@@ -722,7 +722,9 @@ export async function fromPostgresImproved(
                                 string,
                                 unknown
                             >;
-                            let rawDataType = definition?.dataType || 'TEXT';
+                            let rawDataType = String(
+                                definition?.dataType || 'TEXT'
+                            );
 
                             // Workaround for parser bug: character(n) is incorrectly parsed as CHARACTER VARYING
                             // Check the original SQL to detect this case

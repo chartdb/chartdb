@@ -8,6 +8,7 @@ export interface ValidationResult {
     errors: ValidationError[];
     warnings: ValidationWarning[];
     fixedSQL?: string;
+    tableCount?: number;
 }
 
 export interface ValidationError {
@@ -32,8 +33,64 @@ export function validatePostgreSQLSyntax(sql: string): ValidationResult {
     const warnings: ValidationWarning[] = [];
     let fixedSQL = sql;
 
+    // First check if the SQL is empty or just whitespace
+    if (!sql || !sql.trim()) {
+        errors.push({
+            line: 1,
+            message: 'SQL script is empty',
+            type: 'syntax',
+            suggestion: 'Add CREATE TABLE statements to import',
+        });
+        return {
+            isValid: false,
+            errors,
+            warnings,
+            tableCount: 0,
+        };
+    }
+
+    // Check if the SQL contains any valid SQL keywords
+    const sqlKeywords =
+        /\b(CREATE|ALTER|DROP|INSERT|UPDATE|DELETE|SELECT|TABLE|INDEX|VIEW|TRIGGER|FUNCTION|PROCEDURE|GRANT|REVOKE)\b/i;
+    if (!sqlKeywords.test(sql)) {
+        errors.push({
+            line: 1,
+            message: 'No valid SQL statements found',
+            type: 'syntax',
+            suggestion:
+                'Ensure your SQL contains valid statements like CREATE TABLE',
+        });
+        return {
+            isValid: false,
+            errors,
+            warnings,
+            tableCount: 0,
+        };
+    }
+
     // Check for common PostgreSQL syntax errors
     const lines = sql.split('\n');
+
+    // Check for statements without proper termination
+    // Check if there are non-comment lines that don't end with semicolon
+    const nonCommentLines = lines.filter((line) => {
+        const trimmed = line.trim();
+        return (
+            trimmed && !trimmed.startsWith('--') && !trimmed.startsWith('/*')
+        );
+    });
+
+    if (nonCommentLines.length > 0) {
+        // Check if SQL has any complete statements (ending with semicolon)
+        const hasCompleteStatements =
+            /;\s*($|\n|--)/m.test(sql) || sql.trim().endsWith(';');
+        if (!hasCompleteStatements && !sql.match(/^\s*--/)) {
+            warnings.push({
+                message: 'SQL statements should end with semicolons (;)',
+                type: 'compatibility',
+            });
+        }
+    }
 
     // 1. Check for malformed cast operators (: : instead of ::)
     const castOperatorRegex = /:\s+:/g;
@@ -155,11 +212,21 @@ export function validatePostgreSQLSyntax(sql: string): ValidationResult {
         });
     }
 
+    // 9. Count CREATE TABLE statements
+    let tableCount = 0;
+    const createTableRegex =
+        /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?[^"\s.]+?"?\.)?["'`]?[^"'`\s.(]+["'`]?/gi;
+    const matches = sql.match(createTableRegex);
+    if (matches) {
+        tableCount = matches.length;
+    }
+
     return {
         isValid: errors.length === 0,
         errors,
         warnings,
         fixedSQL: hasAutoFixes && fixedSQL !== sql ? fixedSQL : undefined,
+        tableCount,
     };
 }
 

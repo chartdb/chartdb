@@ -9,8 +9,8 @@ import {
     validatePostgreSQLSyntax,
     type ValidationResult,
 } from './sql-validator';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/button/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
 
 interface SQLImportValidatorProps {
     sql: string;
@@ -70,9 +70,10 @@ export function SQLImportValidator({
         );
     }
 
-    const { errors, warnings, fixedSQL } = validationResult;
+    const { errors, warnings, fixedSQL, tableCount = 0 } = validationResult;
     const hasErrors = errors.length > 0;
     const hasWarnings = warnings.length > 0;
+    const hasTables = tableCount > 0;
 
     return (
         <div className="space-y-4 border-t p-4">
@@ -106,7 +107,7 @@ export function SQLImportValidator({
                 {hasWarnings && !hasErrors && (
                     <Alert>
                         <AlertTriangle className="size-4" />
-                        <AlertTitle>Import Warnings</AlertTitle>
+                        <AlertTitle>Import Info</AlertTitle>
                         <AlertDescription className="mt-2 space-y-1">
                             {warnings.map((warning, idx) => (
                                 <div key={idx} className="text-sm">
@@ -117,14 +118,25 @@ export function SQLImportValidator({
                     </Alert>
                 )}
 
-                {!hasErrors && !hasWarnings && (
+                {!hasErrors && !hasWarnings && hasTables && (
                     <Alert className="border-green-200 bg-green-50">
                         <CheckCircle className="size-4 text-green-600" />
                         <AlertTitle className="text-green-800">
                             SQL Validated Successfully
                         </AlertTitle>
                         <AlertDescription className="text-green-700">
-                            Your SQL is ready to import.
+                            Found {tableCount} table{tableCount > 1 ? 's' : ''}{' '}
+                            ready to import.
+                        </AlertDescription>
+                    </Alert>
+                )}
+
+                {!hasErrors && !hasWarnings && !hasTables && (
+                    <Alert>
+                        <AlertTriangle className="size-4" />
+                        <AlertTitle>No Tables Found</AlertTitle>
+                        <AlertDescription>
+                            No CREATE TABLE statements were found in the SQL.
                         </AlertDescription>
                     </Alert>
                 )}
@@ -149,7 +161,7 @@ export function SQLImportValidator({
                     Cancel
                 </Button>
 
-                {fixedSQL && (
+                {fixedSQL && hasTables && (
                     <Button
                         variant="default"
                         onClick={handleAutoFix}
@@ -159,7 +171,7 @@ export function SQLImportValidator({
                     </Button>
                 )}
 
-                {!hasErrors && (
+                {!hasErrors && hasTables && (
                     <Button
                         variant="default"
                         onClick={handleImport}

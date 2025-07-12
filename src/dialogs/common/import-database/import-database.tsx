@@ -35,7 +35,7 @@ import type { OnChange } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
-import type { editor } from 'monaco-editor';
+import type * as monaco from 'monaco-editor';
 import { waitFor } from '@/lib/utils';
 import {
     validatePostgreSQLSyntax,
@@ -45,27 +45,6 @@ import { SQLValidationStatus } from './sql-validation-status';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
-
-// Helper to remove problematic SQL comments while preserving safe ones
-const cleanSQLForFormatting = (sql: string): string => {
-    // First, fix multi-line issues where comments break column definitions
-    let cleaned = sql;
-
-    // Fix pattern: "description TEXT, -- comment\n\"string\""
-    cleaned = cleaned.replace(/,(\s*--[^\n]*)\n\s*"([^"]+)"/g, ', $1 "$2"');
-    cleaned = cleaned.replace(/,(\s*--[^\n]*)\n\s*'([^']+)'/g, ", $1 '$2'");
-
-    // Fix pattern: "day_of_week INTEGER NOT NULL, -- 1=Monday,\n7=Sunday"
-    cleaned = cleaned.replace(/,(\s*--[^\n]*,)\n\s*(\d+=[^\n]+)/g, ', $1 $2');
-
-    // Remove multi-line comments that span multiple lines
-    cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, ' ');
-
-    // Remove single-line comments that are on their own line (safe to remove)
-    cleaned = cleaned.replace(/^\s*--[^\n]*$/gm, '');
-
-    return cleaned;
-};
 
 // Helper to detect if content is likely SQL DDL or JSON
 const detectContentType = (content: string): 'query' | 'ddl' | null => {
@@ -143,8 +122,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 }) => {
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
-    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    const pasteDisposableRef = useRef<editor.IDisposable | null>(null);
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+    const pasteDisposableRef = useRef<monaco.IDisposable | null>(null);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -316,7 +295,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     }, []);
 
     const handleEditorDidMount = useCallback(
-        (editor: editor.IStandaloneCodeEditor) => {
+        (editor: monaco.editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
 
             // Cleanup previous disposable if it exists
@@ -338,79 +317,27 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     // Switch to the detected mode immediately
                     setImportMethod(detectedType);
 
-                    // If we're switching to DDL mode and content has comments, clean them
-                    if (
-                        detectedType === 'ddl' &&
-                        (content.includes('--') || content.includes('/*'))
-                    ) {
-                        // Store cursor position
-                        const position = editor.getPosition();
-
-                        // Clean the SQL for safe formatting
-                        const cleanedSQL = cleanSQLForFormatting(content);
-
-                        // Only update if content actually changed
-                        if (cleanedSQL !== content) {
-                            // Update the content
-                            model.setValue(cleanedSQL);
-
-                            // Restore cursor position
-                            if (position) {
-                                editor.setPosition(position);
-                            }
-
-                            // Format the document
-                            setTimeout(() => {
-                                editor
-                                    .getAction('editor.action.formatDocument')
-                                    ?.run();
-                            }, 50);
-                        }
-                    } else if (detectedType === 'query') {
-                        // For JSON mode, format immediately
+                    // Only format if it's JSON (query mode)
+                    if (detectedType === 'query') {
+                        // For JSON mode, format after a short delay
                         setTimeout(() => {
                             editor
                                 .getAction('editor.action.formatDocument')
                                 ?.run();
-                        }, 0);
+                        }, 100);
                     }
+                    // For DDL mode, do NOT format as it can break the SQL
                 } else {
                     // Content type didn't change, apply formatting based on current mode
-                    if (
-                        importMethod === 'ddl' &&
-                        (content.includes('--') || content.includes('/*'))
-                    ) {
-                        // Store cursor position
-                        const position = editor.getPosition();
-
-                        // Clean the SQL for safe formatting
-                        const cleanedSQL = cleanSQLForFormatting(content);
-
-                        // Only update if content actually changed
-                        if (cleanedSQL !== content) {
-                            // Update the content
-                            model.setValue(cleanedSQL);
-
-                            // Restore cursor position
-                            if (position) {
-                                editor.setPosition(position);
-                            }
-
-                            // Format the document
-                            setTimeout(() => {
-                                editor
-                                    .getAction('editor.action.formatDocument')
-                                    ?.run();
-                            }, 50);
-                        }
-                    } else if (importMethod === 'query') {
-                        // For JSON mode, format immediately
+                    if (importMethod === 'query') {
+                        // Only format JSON content
                         setTimeout(() => {
                             editor
                                 .getAction('editor.action.formatDocument')
                                 ?.run();
-                        }, 0);
+                        }, 100);
                     }
+                    // For DDL mode, do NOT format
                 }
             });
 
@@ -473,7 +400,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                     : 'dbml-light'
                             }
                             options={{
-                                formatOnPaste: importMethod === 'query', // Only format JSON on paste
+                                formatOnPaste: false, // Never format on paste - we handle it manually
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,

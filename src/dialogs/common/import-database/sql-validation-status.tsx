@@ -99,7 +99,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
                 <Alert>
                     <AlertTriangle className="size-4" />
                     <AlertDescription className="space-y-1 text-sm">
-                        <div className="font-medium">Import Warnings:</div>
+                        <div className="font-medium">Import Info:</div>
                         {validation.warnings.map((warning, idx) => (
                             <div key={idx} className="ml-2">
                                 • {warning.message}
@@ -110,7 +110,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
             )}
 
             {!hasErrors && !hasWarnings && !errorMessage && validation && (
-                <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+                <Alert className="flex border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950 [&>svg]:static [&>svg]:mr-2 [&>svg~*]:pl-0">
                     <CheckCircle className="size-4 text-green-600 dark:text-green-400" />
                     <AlertDescription className="text-sm text-green-700 dark:text-green-300">
                         SQL syntax validated successfully
