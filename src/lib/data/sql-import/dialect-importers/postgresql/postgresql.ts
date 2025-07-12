@@ -25,6 +25,7 @@ import {
     findTableWithSchemaSupport,
     getTableIdWithSchemaSupport,
 } from './postgresql-common';
+import { fromPostgresImproved } from './postgresql-improved';
 
 /**
  * Uses regular expressions to find foreign key relationships in PostgreSQL SQL content.
@@ -240,6 +241,36 @@ function getDefaultValueString(
 
 // PostgreSQL-specific parsing logic
 export async function fromPostgres(
+    sqlContent: string
+): Promise<SQLParserResult> {
+    // Check if the SQL contains unsupported statements
+    const upperSQL = sqlContent.toUpperCase();
+    const hasUnsupportedStatements =
+        upperSQL.includes('CREATE FUNCTION') ||
+        upperSQL.includes('CREATE OR REPLACE FUNCTION') ||
+        upperSQL.includes('CREATE POLICY') ||
+        upperSQL.includes('CREATE TRIGGER') ||
+        upperSQL.includes('ENABLE ROW LEVEL SECURITY') ||
+        upperSQL.includes('CREATE EXTENSION') ||
+        upperSQL.includes('CREATE TYPE');
+
+    // If SQL contains unsupported statements, use the improved parser
+    if (hasUnsupportedStatements) {
+        const result = await fromPostgresImproved(sqlContent);
+        // Return without warnings for backward compatibility
+        return {
+            tables: result.tables,
+            relationships: result.relationships,
+            enums: result.enums,
+        };
+    }
+
+    // Otherwise, use the original parser for backward compatibility
+    return fromPostgresOriginal(sqlContent);
+}
+
+// Original PostgreSQL parsing logic (renamed)
+async function fromPostgresOriginal(
     sqlContent: string
 ): Promise<SQLParserResult> {
     const tables: SQLTable[] = [];

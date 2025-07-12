@@ -1,7 +1,7 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
-import { fromPostgres } from './dialect-importers/postgresql/postgresql';
 import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
+import { fromPostgresImproved } from './dialect-importers/postgresql/postgresql-improved';
 
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import { fromSQLite } from './dialect-importers/sqlite/sqlite';
@@ -174,7 +174,7 @@ export async function sqlImportToDiagram({
     sqlContent: string;
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
-}): Promise<Diagram> {
+}): Promise<Diagram & { warnings?: string[] }> {
     // If source database type is GENERIC, try to auto-detect the type
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
@@ -194,7 +194,8 @@ export async function sqlImportToDiagram({
             if (isPgDumpFormat(sqlContent)) {
                 parserResult = await fromPostgresDump(sqlContent);
             } else {
-                parserResult = await fromPostgres(sqlContent);
+                // Use the improved parser that handles enums and better error recovery
+                parserResult = await fromPostgresImproved(sqlContent);
             }
             break;
         case DatabaseType.MYSQL:
@@ -237,6 +238,7 @@ export async function sqlImportToDiagram({
     return {
         ...diagram,
         tables: sortedTables,
+        warnings: parserResult.warnings,
     };
 }
 
@@ -266,7 +268,8 @@ export async function parseSQLError({
                 if (isPgDumpFormat(sqlContent)) {
                     await fromPostgresDump(sqlContent);
                 } else {
-                    await fromPostgres(sqlContent);
+                    // Use the improved parser for validation too
+                    await fromPostgresImproved(sqlContent);
                 }
                 break;
             case DatabaseType.MYSQL:

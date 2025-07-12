@@ -58,13 +58,16 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
 
     const importDatabase = useCallback(async () => {
         let diagram: Diagram | undefined;
+        let warnings: string[] | undefined;
 
         if (importMethod === 'ddl') {
-            diagram = await sqlImportToDiagram({
+            const result = await sqlImportToDiagram({
                 sqlContent: scriptResult,
                 sourceDatabaseType: databaseType,
                 targetDatabaseType: databaseType,
             });
+            diagram = result;
+            warnings = result.warnings;
         } else {
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
@@ -319,7 +322,38 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         resetRedoStack();
         resetUndoStack();
 
-        closeImportDatabaseDialog();
+        // Show warnings if any
+        if (warnings && warnings.length > 0) {
+            const warningContent = (
+                <div className="space-y-2">
+                    <div className="font-semibold">
+                        The following SQL statements were skipped:
+                    </div>
+                    <ul className="list-inside list-disc space-y-1">
+                        {warnings.map((warning, index) => (
+                            <li key={index} className="text-sm">
+                                {warning}
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="mt-3 text-sm text-muted-foreground">
+                        Only table definitions, indexes, and foreign key
+                        constraints are currently supported.
+                    </div>
+                </div>
+            );
+
+            showAlert({
+                title: 'Import completed with warnings',
+                content: warningContent,
+                actionLabel: 'OK',
+                onAction: () => {
+                    closeImportDatabaseDialog();
+                },
+            });
+        } else {
+            closeImportDatabaseDialog();
+        }
     }, [
         importMethod,
         databaseEdition,
