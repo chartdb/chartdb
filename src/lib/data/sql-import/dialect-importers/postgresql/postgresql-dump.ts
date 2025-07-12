@@ -146,13 +146,42 @@ function processForeignKeyConstraint(
 
         // Look up table IDs
         const sourceTableKey = `${sourceSchema ? sourceSchema + '.' : ''}${sourceTable}`;
-        const sourceTableId = tableMap[sourceTableKey];
+        let sourceTableId = tableMap[sourceTableKey];
 
         const targetTableKey = `${targetSchema ? targetSchema + '.' : ''}${targetTable}`;
-        const targetTableId = tableMap[targetTableKey];
+        let targetTableId = tableMap[targetTableKey];
 
         if (!sourceTableId || !targetTableId) {
-            return;
+            // Try without schema if not found
+            if (!sourceTableId && sourceSchema) {
+                sourceTableId = tableMap[sourceTable];
+            }
+            if (!targetTableId && targetSchema) {
+                targetTableId = tableMap[targetTable];
+            }
+
+            // If still not found, try with 'public' schema
+            if (!sourceTableId && !sourceSchema) {
+                sourceTableId = tableMap[`public.${sourceTable}`];
+            }
+            if (!targetTableId && !targetSchema) {
+                targetTableId = tableMap[`public.${targetTable}`];
+            }
+
+            // If we still can't find them, log and return
+            if (!sourceTableId || !targetTableId) {
+                if (!sourceTableId) {
+                    console.warn(
+                        `No table ID found for source table: ${sourceTable} (tried: ${sourceTableKey}, ${sourceTable}, public.${sourceTable})`
+                    );
+                }
+                if (!targetTableId) {
+                    console.warn(
+                        `No table ID found for target table: ${targetTable} (tried: ${targetTableKey}, ${targetTable}, public.${targetTable})`
+                    );
+                }
+                return;
+            }
         }
 
         // Create relationships for each column pair

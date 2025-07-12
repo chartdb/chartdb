@@ -3,10 +3,13 @@ import { generateDiagramId, generateId } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
+import type { DBIndex } from '@/lib/domain/db-index';
 import type { DataType } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
+import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
 // Common interfaces for SQL entities
 export interface SQLColumn {
@@ -62,6 +65,7 @@ export interface SQLParserResult {
     relationships: SQLForeignKey[];
     types?: SQLCustomType[];
     enums?: SQLEnumType[];
+    warnings?: string[];
 }
 
 // Define more specific types for SQL AST nodes
@@ -543,6 +547,18 @@ export function convertToChartDBDiagram(
             ) {
                 // Ensure integer types are preserved
                 mappedType = { id: 'integer', name: 'integer' };
+            } else if (
+                sourceDatabaseType === DatabaseType.POSTGRESQL &&
+                parserResult.enums &&
+                parserResult.enums.some(
+                    (e) => e.name.toLowerCase() === column.type.toLowerCase()
+                )
+            ) {
+                // If the column type matches a custom enum type, preserve it
+                mappedType = {
+                    id: column.type.toLowerCase(),
+                    name: column.type,
+                };
             } else {
                 // Use the standard mapping for other types
                 mappedType = mapSQLTypeToGenericType(
@@ -588,25 +604,38 @@ export function convertToChartDBDiagram(
         });
 
         // Create indexes
-        const indexes = table.indexes.map((sqlIndex) => {
-            const fieldIds = sqlIndex.columns.map((columnName) => {
-                const field = fields.find((f) => f.name === columnName);
-                if (!field) {
-                    throw new Error(
-                        `Index references non-existent column: ${columnName}`
-                    );
-                }
-                return field.id;
-            });
+        const indexes = table.indexes
+            .map((sqlIndex) => {
+                const fieldIds = sqlIndex.columns
+                    .map((columnName) => {
+                        const field = fields.find((f) => f.name === columnName);
+                        if (!field) {
+                            console.warn(
+                                `Index ${sqlIndex.name} references non-existent column: ${columnName} in table ${table.name}. Skipping this column.`
+                            );
+                            return null;
+                        }
+                        return field.id;
+                    })
+                    .filter((id): id is string => id !== null);
 
-            return {
-                id: generateId(),
-                name: sqlIndex.name,
-                fieldIds,
-                unique: sqlIndex.unique,
-                createdAt: Date.now(),
-            };
-        });
+                // Only create index if at least one column was found
+                if (fieldIds.length === 0) {
+                    console.warn(
+                        `Index ${sqlIndex.name} has no valid columns. Skipping index.`
+                    );
+                    return null;
+                }
+
+                return {
+                    id: generateId(),
+                    name: sqlIndex.name,
+                    fieldIds,
+                    unique: sqlIndex.unique,
+                    createdAt: Date.now(),
+                };
+            })
+            .filter((idx): idx is DBIndex => idx !== null);
 
         return {
             id: newId,
@@ -708,12 +737,29 @@ export function convertToChartDBDiagram(
         });
     });
 
+    // Convert SQL enum types to ChartDB custom types
+    const customTypes: DBCustomType[] = [];
+
+    if (parserResult.enums) {
+        parserResult.enums.forEach((enumType, index) => {
+            customTypes.push({
+                id: generateId(),
+                name: enumType.name,
+                schema: 'public', // Default to public schema for now
+                kind: DBCustomTypeKind.enum,
+                values: enumType.values,
+                order: index,
+            });
+        });
+    }
+
     const diagram = {
         id: generateDiagramId(),
         name: `SQL Import (${sourceDatabaseType})`,
         databaseType: targetDatabaseType,
         tables,
         relationships,
+        customTypes: customTypes.length > 0 ? customTypes : undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
     };
