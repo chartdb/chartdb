@@ -64,7 +64,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         return (
             <div
                 className={cn(
-                    'flex h-full flex-col rounded-md border-2 shadow-sm',
+                    'flex h-full min-h-[100px] flex-col rounded-md border-2 shadow-sm',
                     selected ? 'border-pink-600' : 'border-transparent'
                 )}
                 style={{
@@ -82,14 +82,16 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                     lineClassName="!border-4 !border-transparent"
                     handleClassName="!h-3 !w-3 !rounded-full !bg-pink-600"
                 />
-                {}
                 <div
                     // eslint-disable-next-line tailwindcss/no-custom-classname
-                    className="area-drag-handle group flex h-8 cursor-move items-center justify-between rounded-t-md px-2"
-                    style={{ backgroundColor: area.color }}
+                    className="area-drag-handle group flex h-10 cursor-move items-center justify-between rounded-t-md border-b px-3"
+                    style={{
+                        backgroundColor: `${area.color}40`,
+                        borderBottomColor: area.color,
+                    }}
                 >
                     <div className="flex w-full items-center gap-1">
-                        <GripVertical className="size-4 text-slate-700 opacity-60 dark:text-slate-300" />
+                        <GripVertical className="size-4 text-slate-700 dark:text-slate-300" />
 
                         {editMode && !readonly ? (
                             <div className="flex w-full items-center">
@@ -117,7 +119,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <div
-                                        className="text-editable max-w-[200px] cursor-text truncate px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300"
+                                        className="text-editable max-w-[200px] cursor-text truncate px-1 py-0.5 text-base font-semibold text-slate-800 dark:text-slate-200"
                                         onDoubleClick={enterEditMode}
                                     >
                                         {area.name}
@@ -128,7 +130,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                                 </TooltipContent>
                             </Tooltip>
                         ) : (
-                            <div className="truncate px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300">
+                            <div className="truncate px-1 py-0.5 text-base font-semibold text-slate-800 dark:text-slate-200">
                                 {area.name}
                             </div>
                         )}

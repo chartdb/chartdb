@@ -138,7 +138,7 @@ const areaToAreaNode = (area: Area): AreaNodeType => ({
     width: area.width,
     height: area.height,
     zIndex: -10,
-    // dragHandle: '.area-drag-handle', // Temporarily disabled to test dragging
+    // dragHandle: '.area-drag-handle', // Disabled to allow dragging from anywhere
 });
 
 export interface CanvasProps {
