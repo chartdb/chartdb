@@ -16,11 +16,18 @@ import {
     customTypeKindToLabel,
     DBCustomTypeKind,
 } from '@/lib/domain/db-custom-type';
-import { Trash2, Braces } from 'lucide-react';
-import React, { useCallback } from 'react';
+import { Trash2, Braces, Highlighter } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTypeEnumValues } from './enum-values/enum-values';
 import { CustomTypeCompositeFields } from './composite-fields/composite-fields';
+import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+    TooltipProvider,
+} from '@/components/tooltip/tooltip';
 
 export interface CustomTypeListItemContentProps {
     customType: DBCustomType;
@@ -29,7 +36,13 @@ export interface CustomTypeListItemContentProps {
 export const CustomTypeListItemContent: React.FC<
     CustomTypeListItemContentProps
 > = ({ customType }) => {
-    const { removeCustomType, updateCustomType } = useChartDB();
+    const {
+        removeCustomType,
+        updateCustomType,
+        highlightedCustomTypeId,
+        setHighlightedCustomTypeId,
+        isCustomTypeUsed,
+    } = useChartDB();
     const { t } = useTranslation();
 
     const deleteCustomTypeHandler = useCallback(() => {
@@ -92,6 +105,43 @@ export const CustomTypeListItemContent: React.FC<
         [customType.id, updateCustomType]
     );
 
+    const toggleHighlightCustomType = useCallback(() => {
+        setHighlightedCustomTypeId(customType.id);
+    }, [customType.id, setHighlightedCustomTypeId]);
+
+    const canHighlight = useMemo(
+        () => isCustomTypeUsed(customType.id),
+        [isCustomTypeUsed, customType.id]
+    );
+
+    const highlightButtonContent = (
+        <Button
+            variant="ghost"
+            disabled={!canHighlight}
+            className={cn(
+                'h-8 p-2 text-xs w-full flex justify-center items-center',
+                highlightedCustomTypeId === customType.id
+                    ? '!text-yellow-700 dark:!text-yellow-500'
+                    : ''
+            )}
+            onClick={toggleHighlightCustomType}
+        >
+            <Highlighter
+                className={cn(
+                    'mr-1 size-3.5',
+                    highlightedCustomTypeId === customType.id
+                        ? 'text-yellow-600'
+                        : canHighlight
+                          ? 'text-muted-foreground'
+                          : 'text-slate-400 dark:text-slate-600'
+                )}
+            />
+            {t(
+                'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
+            )}
+        </Button>
+    );
+
     return (
         <div className="my-1 flex flex-col rounded-b-md px-1">
             <div className="flex flex-col gap-6">
@@ -148,10 +198,30 @@ export const CustomTypeListItemContent: React.FC<
                     />
                 )}
             </div>
-            <div className="flex flex-1 items-center justify-center pt-2">
+            <div className="mt-4 flex flex-col items-center justify-center gap-2 pt-2">
+                {!canHighlight ? (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="w-full cursor-default">
+                                    {highlightButtonContent}
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>
+                                    {t(
+                                        'side_panel.custom_types_section.custom_type.no_fields_tooltip'
+                                    )}
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                ) : (
+                    highlightButtonContent
+                )}
                 <Button
                     variant="ghost"
-                    className="h-8 p-2 text-xs"
+                    className="flex h-8 w-full items-center justify-center p-2 text-xs"
                     onClick={deleteCustomTypeHandler}
                 >
                     <Trash2 className="mr-1 size-3.5 text-red-700" />

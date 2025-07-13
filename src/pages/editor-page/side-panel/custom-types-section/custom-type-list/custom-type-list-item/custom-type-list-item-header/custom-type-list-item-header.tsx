@@ -5,6 +5,7 @@ import {
     EllipsisVertical,
     Trash2,
     Check,
+    Highlighter,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { Input } from '@/components/input/input';
@@ -32,6 +33,7 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 import { Badge } from '@/components/badge/badge';
+import { cn } from '@/lib/utils';
 
 export interface CustomTypeListItemHeaderProps {
     customType: DBCustomType;
@@ -40,8 +42,15 @@ export interface CustomTypeListItemHeaderProps {
 export const CustomTypeListItemHeader: React.FC<
     CustomTypeListItemHeaderProps
 > = ({ customType }) => {
-    const { updateCustomType, removeCustomType, schemas, filteredSchemas } =
-        useChartDB();
+    const {
+        updateCustomType,
+        removeCustomType,
+        schemas,
+        filteredSchemas,
+        highlightedCustomTypeId,
+        setHighlightedCustomTypeId,
+        isCustomTypeUsed,
+    } = useChartDB();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
     const [customTypeName, setCustomTypeName] = React.useState(customType.name);
@@ -75,8 +84,13 @@ export const CustomTypeListItemHeader: React.FC<
         removeCustomType(customType.id);
     }, [customType.id, removeCustomType]);
 
-    const renderDropDownMenu = useCallback(
-        () => (
+    const toggleHighlightCustomType = useCallback(() => {
+        setHighlightedCustomTypeId(customType.id);
+    }, [customType.id, setHighlightedCustomTypeId]);
+
+    const renderDropDownMenu = useCallback(() => {
+        const isUsed = isCustomTypeUsed(customType.id);
+        return (
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <ListItemHeaderButton>
@@ -92,6 +106,30 @@ export const CustomTypeListItemHeader: React.FC<
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
+                            onClick={toggleHighlightCustomType}
+                            disabled={!isUsed}
+                            className={cn(
+                                'flex justify-between',
+                                highlightedCustomTypeId === customType.id
+                                    ? '!text-yellow-700 dark:!text-yellow-500'
+                                    : ''
+                            )}
+                        >
+                            {t(
+                                'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
+                            )}
+                            <Highlighter
+                                className={cn(
+                                    'size-3.5',
+                                    highlightedCustomTypeId === customType.id
+                                        ? 'text-yellow-600'
+                                        : isUsed
+                                          ? 'text-muted-foreground'
+                                          : 'text-slate-400 dark:text-slate-600'
+                                )}
+                            />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                             onClick={deleteCustomTypeHandler}
                             className="flex justify-between !text-red-700"
                         >
@@ -103,9 +141,15 @@ export const CustomTypeListItemHeader: React.FC<
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-        [deleteCustomTypeHandler, t]
-    );
+        );
+    }, [
+        deleteCustomTypeHandler,
+        t,
+        toggleHighlightCustomType,
+        customType.id,
+        highlightedCustomTypeId,
+        isCustomTypeUsed,
+    ]);
 
     let schemaToDisplay;
 

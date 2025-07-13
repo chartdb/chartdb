@@ -69,8 +69,14 @@ const arePropsEqual = (
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
     ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
-        const { removeField, relationships, readonly, updateField } =
-            useChartDB();
+        const {
+            removeField,
+            relationships,
+            readonly,
+            updateField,
+            highlightedCustomTypeId,
+            getCustomType,
+        } = useChartDB();
         const [editMode, setEditMode] = useState(false);
         const [fieldName, setFieldName] = useState(field.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
@@ -203,13 +209,23 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             setEditMode(true);
         }, []);
 
+        const isCustomTypeHighlighted = useMemo(() => {
+            if (!highlightedCustomTypeId) return false;
+            const highlightedType = getCustomType(highlightedCustomTypeId);
+            if (!highlightedType) return false;
+            return field.type.name === highlightedType.name;
+        }, [highlightedCustomTypeId, getCustomType, field.type.name]);
+
         return (
             <div
                 className={cn(
                     'group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800',
                     'transition-all duration-200 ease-in-out',
                     {
-                        'bg-pink-100 dark:bg-pink-900': highlighted,
+                        'bg-pink-100 dark:bg-pink-900':
+                            highlighted && !isCustomTypeHighlighted,
+                        'bg-yellow-100 dark:bg-yellow-900':
+                            isCustomTypeHighlighted,
                         'max-h-8 opacity-100': visible,
                         'z-0 max-h-0 overflow-hidden opacity-0': !visible,
                         'bg-sky-200 dark:bg-sky-800 hover:bg-sky-100 dark:hover:bg-sky-900 border-sky-300 dark:border-sky-700':
@@ -303,12 +319,6 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             </Button>
                         </>
                     ) : (
-                        // <span
-                        //     className="truncate"
-                        //     onClick={readonly ? undefined : enterEditMode}
-                        // >
-                        //     {field.name}
-                        // </span>
                         <span
                             className={cn('truncate', {
                                 'text-red-800 font-normal dark:text-red-200':
@@ -333,7 +343,6 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             )}
                         </span>
                     )}
-                    {/* <span className="truncate">{field.name}</span> */}
                     {field.comments && !editMode ? (
                         <Tooltip>
                             <TooltipTrigger asChild>
