@@ -84,9 +84,9 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                 />
                 <div
                     // eslint-disable-next-line tailwindcss/no-custom-classname
-                    className="area-drag-handle group flex h-10 cursor-move items-center justify-between rounded-t-md border-b px-3"
+                    className="area-drag-handle group flex h-10 cursor-move items-center justify-between rounded-t-md"
                     style={{
-                        backgroundColor: `${area.color}40`,
+                        backgroundColor: `${area.color}15`,
                         borderBottomColor: area.color,
                     }}
                 >
