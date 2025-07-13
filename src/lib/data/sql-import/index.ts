@@ -127,8 +127,17 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
         return DatabaseType.SQL_SERVER;
     }
 
-    // Check for MySQL dump format
+    // Check for MySQL/MariaDB dump format
     if (isMySQLFormat(sqlContent)) {
+        // Try to detect if it's specifically MariaDB
+        if (
+            sqlContent.includes('MariaDB dump') ||
+            sqlContent.includes('/*!100100') ||
+            sqlContent.includes('ENGINE=Aria') ||
+            sqlContent.includes('ENGINE=COLUMNSTORE')
+        ) {
+            return DatabaseType.MARIADB;
+        }
         return DatabaseType.MYSQL;
     }
 
@@ -199,9 +208,10 @@ export async function sqlImportToDiagram({
             }
             break;
         case DatabaseType.MYSQL:
-            // Check if the SQL is from MySQL dump and use the appropriate parser
+        case DatabaseType.MARIADB:
+            // Check if the SQL is from MySQL/MariaDB dump and use the appropriate parser
+            // MariaDB uses the same parser as MySQL due to high compatibility
             parserResult = await fromMySQL(sqlContent);
-
             break;
         case DatabaseType.SQL_SERVER:
             parserResult = await fromSQLServer(sqlContent);
@@ -273,8 +283,9 @@ export async function parseSQLError({
                 }
                 break;
             case DatabaseType.MYSQL:
+            case DatabaseType.MARIADB:
+                // MariaDB uses the same parser as MySQL
                 await fromMySQL(sqlContent);
-
                 break;
             case DatabaseType.SQL_SERVER:
                 // SQL Server validation
