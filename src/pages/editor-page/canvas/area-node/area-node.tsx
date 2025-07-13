@@ -82,7 +82,12 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                     lineClassName="!border-4 !border-transparent"
                     handleClassName="!h-3 !w-3 !rounded-full !bg-pink-600"
                 />
-                <div className="group flex h-8 items-center justify-between rounded-t-md px-2">
+                {}
+                <div
+                    // eslint-disable-next-line tailwindcss/no-custom-classname
+                    className="area-drag-handle group flex h-8 cursor-move items-center justify-between rounded-t-md px-2"
+                    style={{ backgroundColor: area.color }}
+                >
                     <div className="flex w-full items-center gap-1">
                         <GripVertical className="size-4 text-slate-700 opacity-60 dark:text-slate-300" />
 

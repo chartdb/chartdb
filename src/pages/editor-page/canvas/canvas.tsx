@@ -83,6 +83,7 @@ import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
+import { updateTablesParentAreas, getTablesInArea } from './area-utils';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -108,17 +109,26 @@ const initialEdges: EdgeType[] = [];
 const tableToTableNode = (
     table: DBTable,
     filteredSchemas?: string[]
-): TableNodeType => ({
-    id: table.id,
-    type: 'table',
-    position: { x: table.x, y: table.y },
-    data: {
-        table,
-        isOverlapping: false,
-    },
-    width: table.width ?? MIN_TABLE_SIZE,
-    hidden: !shouldShowTablesBySchemaFilter(table, filteredSchemas),
-});
+): TableNodeType => {
+    // Always use absolute position for now
+    const position = { x: table.x, y: table.y };
+
+    return {
+        id: table.id,
+        type: 'table',
+        position,
+        data: {
+            table,
+            isOverlapping: false,
+        },
+        width: table.width ?? MIN_TABLE_SIZE,
+        hidden: !shouldShowTablesBySchemaFilter(table, filteredSchemas),
+        // Temporarily disable parent-child relationship to avoid jumping
+        // ...(table.parentAreaId
+        //     ? { parentNode: table.parentAreaId, extent: 'parent' as const }
+        //     : {}),
+    };
+};
 
 const areaToAreaNode = (area: Area): AreaNodeType => ({
     id: area.id,
@@ -128,6 +138,7 @@ const areaToAreaNode = (area: Area): AreaNodeType => ({
     width: area.width,
     height: area.height,
     zIndex: -10,
+    // dragHandle: '.area-drag-handle', // Temporarily disabled to test dragging
 });
 
 export interface CanvasProps {
@@ -355,7 +366,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 ...tables.map((table) => {
                     const isOverlapping =
                         (overlapGraph.graph.get(table.id) ?? []).length > 0;
+
+                    // Find if this node already exists
+                    const existingNode = prevNodes.find(
+                        (n) => n.id === table.id
+                    ) as TableNodeType | undefined;
                     const node = tableToTableNode(table, filteredSchemas);
+
+                    // If parent has changed, we need to preserve visual position
+                    if (
+                        existingNode &&
+                        existingNode.parentNode !== node.parentNode
+                    ) {
+                        // Parent changed - keep the visual position the same
+                        if (!existingNode.parentNode && node.parentNode) {
+                            // Entering an area - position is already set correctly by tableToTableNode
+                        } else if (
+                            existingNode.parentNode &&
+                            !node.parentNode
+                        ) {
+                            // Leaving an area - position should already be absolute
+                        }
+                    }
 
                     return {
                         ...node,
@@ -405,6 +437,54 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             prevFilteredSchemas.current = filteredSchemas;
         }
     }, [filteredSchemas, fitView, tables, setOverlapGraph]);
+
+    // Handle parent area updates when tables move
+    const tablePositions = useMemo(
+        () => tables.map((t) => ({ id: t.id, x: t.x, y: t.y })),
+        [tables]
+    );
+
+    useEffect(() => {
+        const checkParentAreas = debounce(() => {
+            const updatedTables = updateTablesParentAreas(tables, areas);
+            const needsUpdate: Array<{
+                id: string;
+                parentAreaId: string | null;
+            }> = [];
+
+            updatedTables.forEach((newTable, index) => {
+                const oldTable = tables[index];
+                if (
+                    oldTable &&
+                    newTable.parentAreaId !== oldTable.parentAreaId
+                ) {
+                    needsUpdate.push({
+                        id: newTable.id,
+                        parentAreaId: newTable.parentAreaId,
+                    });
+                }
+            });
+
+            if (needsUpdate.length > 0) {
+                updateTablesState((currentTables) =>
+                    currentTables.map((table) => {
+                        const update = needsUpdate.find(
+                            (u) => u.id === table.id
+                        );
+                        if (update) {
+                            return {
+                                id: table.id,
+                                parentAreaId: update.parentAreaId,
+                            };
+                        }
+                        return table;
+                    })
+                );
+            }
+        }, 300);
+
+        checkParentAreas();
+    }, [tablePositions, areas, updateTablesState, tables]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -641,8 +721,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 removeChanges.length > 0 ||
                 sizeChanges.length > 0
             ) {
-                updateTablesState((currentTables) =>
-                    currentTables
+                updateTablesState((currentTables) => {
+                    // First update positions
+                    const updatedTables = currentTables
                         .map((currentTable) => {
                             const positionChange = positionChanges.find(
                                 (change) => change.id === currentTable.id
@@ -651,12 +732,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 (change) => change.id === currentTable.id
                             );
                             if (positionChange || sizeChange) {
+                                const x = positionChange?.position?.x;
+                                const y = positionChange?.position?.y;
+
                                 return {
-                                    id: currentTable.id,
-                                    ...(positionChange
+                                    ...currentTable,
+                                    ...(positionChange &&
+                                    x !== undefined &&
+                                    y !== undefined
                                         ? {
-                                              x: positionChange.position?.x,
-                                              y: positionChange.position?.y,
+                                              x,
+                                              y,
                                           }
                                         : {}),
                                     ...(sizeChange
@@ -676,8 +762,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 !removeChanges.some(
                                     (change) => change.id === table.id
                                 )
-                        )
-                );
+                        );
+
+                    return updatedTables;
+                });
             }
 
             updateOverlappingGraphOnChangesDebounced({
@@ -697,27 +785,72 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 areaRemoveChanges.length > 0 ||
                 areaSizeChanges.length > 0
             ) {
-                [...areaPositionChanges, ...areaSizeChanges].forEach(
-                    (change) => {
-                        const updateData: Partial<Area> = {};
+                // Handle area position changes and move child tables
+                areaPositionChanges.forEach((change) => {
+                    if (change.type === 'position' && change.position) {
+                        // Get the area's current position
+                        const currentArea = areas.find(
+                            (a) => a.id === change.id
+                        );
+                        if (currentArea) {
+                            // Calculate the delta
+                            const deltaX = change.position.x - currentArea.x;
+                            const deltaY = change.position.y - currentArea.y;
 
-                        if (change.type === 'position') {
-                            updateData.x = change.position?.x;
-                            updateData.y = change.position?.y;
+                            // Get all tables that are children of this area
+                            const childTables = getTablesInArea(
+                                change.id,
+                                tables
+                            );
+
+                            // Update child table positions
+                            if (childTables.length > 0) {
+                                updateTablesState((currentTables) =>
+                                    currentTables.map((table) => {
+                                        if (table.parentAreaId === change.id) {
+                                            return {
+                                                id: table.id,
+                                                x: table.x + deltaX,
+                                                y: table.y + deltaY,
+                                            };
+                                        }
+                                        return table;
+                                    })
+                                );
+                            }
                         }
 
-                        if (change.type === 'dimensions') {
-                            updateData.width = change.dimensions?.width;
-                            updateData.height = change.dimensions?.height;
-                        }
-
-                        if (Object.keys(updateData).length > 0) {
-                            updateArea(change.id, updateData);
-                        }
+                        // Update the area position
+                        updateArea(change.id, {
+                            x: change.position.x,
+                            y: change.position.y,
+                        });
                     }
-                );
+                });
+
+                // Handle area size changes
+                areaSizeChanges.forEach((change) => {
+                    if (change.type === 'dimensions' && change.dimensions) {
+                        updateArea(change.id, {
+                            width: change.dimensions.width,
+                            height: change.dimensions.height,
+                        });
+                    }
+                });
 
                 areaRemoveChanges.forEach((change) => {
+                    // Before removing the area, clear parentAreaId from child tables
+                    updateTablesState((currentTables) =>
+                        currentTables.map((table) => {
+                            if (table.parentAreaId === change.id) {
+                                return {
+                                    ...table,
+                                    parentAreaId: null,
+                                };
+                            }
+                            return table;
+                        })
+                    );
                     removeArea(change.id);
                 });
             }
@@ -732,6 +865,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             updateArea,
             removeArea,
             readonly,
+            tables,
+            areas,
         ]
     );
 

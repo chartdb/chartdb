@@ -47,6 +47,7 @@ export interface DBTable {
     comments?: string | null;
     order?: number | null;
     expanded?: boolean | null;
+    parentAreaId?: string | null;
 }
 
 export const dbTableSchema: z.ZodType<DBTable> = z.object({
@@ -65,6 +66,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     comments: z.string().or(z.null()).optional(),
     order: z.number().or(z.null()).optional(),
     expanded: z.boolean().or(z.null()).optional(),
+    parentAreaId: z.string().or(z.null()).optional(),
 });
 
 export const shouldShowTablesBySchemaFilter = (
