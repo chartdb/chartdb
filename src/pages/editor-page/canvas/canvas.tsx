@@ -376,15 +376,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     // If parent has changed, we need to preserve visual position
                     if (
                         existingNode &&
-                        existingNode.parentNode !== node.parentNode
+                        existingNode.parentId !== node.parentId
                     ) {
                         // Parent changed - keep the visual position the same
-                        if (!existingNode.parentNode && node.parentNode) {
+                        if (!existingNode.parentId && node.parentId) {
                             // Entering an area - position is already set correctly by tableToTableNode
-                        } else if (
-                            existingNode.parentNode &&
-                            !node.parentNode
-                        ) {
+                        } else if (existingNode.parentId && !node.parentId) {
                             // Leaving an area - position should already be absolute
                         }
                     }
@@ -460,7 +457,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 ) {
                     needsUpdate.push({
                         id: newTable.id,
-                        parentAreaId: newTable.parentAreaId,
+                        parentAreaId: newTable.parentAreaId || null,
                     });
                 }
             });
