@@ -10,19 +10,6 @@ import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
 import { fromMySQL, isMySQLFormat } from './dialect-importers/mysql/mysql';
 
-// Export new unified functions
-export { validateSQL, validatePostgreSQLSyntax } from './sql-validator';
-export {
-    importSQLWithValidation,
-    importPostgreSQLWithValidation,
-} from './sql-importer';
-export type {
-    ValidationResult,
-    ValidationError,
-    ValidationWarning,
-} from './sql-validator';
-export type { ImportResult } from './sql-importer';
-
 /**
  * Detect if SQL content is from pg_dump format
  * @param sqlContent SQL content as string
@@ -187,7 +174,7 @@ export async function sqlImportToDiagram({
     sqlContent: string;
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
-}): Promise<{ diagram: Diagram; warnings?: string[] }> {
+}): Promise<Diagram> {
     // If source database type is GENERIC, try to auto-detect the type
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
@@ -207,7 +194,6 @@ export async function sqlImportToDiagram({
             if (isPgDumpFormat(sqlContent)) {
                 parserResult = await fromPostgresDump(sqlContent);
             } else {
-                // Use the parser that handles enums and better error recovery
                 parserResult = await fromPostgres(sqlContent);
             }
             break;
@@ -250,11 +236,8 @@ export async function sqlImportToDiagram({
     });
 
     return {
-        diagram: {
-            ...diagram,
-            tables: sortedTables,
-        },
-        warnings: parserResult.warnings,
+        ...diagram,
+        tables: sortedTables,
     };
 }
 

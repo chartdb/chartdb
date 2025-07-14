@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { importPostgreSQLWithValidation } from './utils';
+import { DatabaseType } from '@/lib/domain';
+import { validateSQL } from '../../../sql-validator';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Import - Split DECIMAL Handling', () => {
     it('should successfully import tables with split DECIMAL declarations using auto-fix', async () => {
@@ -23,14 +25,15 @@ CREATE TABLE market_data (
 );
 `;
 
-        const result = await importPostgreSQLWithValidation(sql);
+        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const diagramResult = await fromPostgres(sql);
 
-        expect(result.success).toBe(true);
-        expect(result.data).toBeDefined();
-        expect(result.data?.tables).toHaveLength(2);
+        expect(validationResult.isValid).toBe(true);
+        expect(diagramResult).toBeDefined();
+        expect(diagramResult?.tables).toHaveLength(2);
 
         // Check first table
-        const financialTable = result.data?.tables.find(
+        const financialTable = diagramResult?.tables.find(
             (t) => t.name === 'financial_records'
         );
         expect(financialTable).toBeDefined();
@@ -48,17 +51,17 @@ CREATE TABLE market_data (
         expect(interestColumn?.type).toMatch(/DECIMAL|NUMERIC/i);
 
         // Check second table
-        const marketTable = result.data?.tables.find(
+        const marketTable = diagramResult?.tables.find(
             (t) => t.name === 'market_data'
         );
         expect(marketTable).toBeDefined();
         expect(marketTable?.columns).toHaveLength(3);
 
         // Verify warnings about auto-fix
-        expect(result.data?.warnings).toBeDefined();
+        expect(validationResult.warnings).toBeDefined();
         expect(
-            result.data?.warnings?.some((w) =>
-                w.includes('Auto-fixed split DECIMAL/NUMERIC')
+            validationResult.warnings?.some((w) =>
+                w.message.includes('Auto-fixed split DECIMAL/NUMERIC')
             )
         ).toBe(true);
     });
@@ -90,28 +93,29 @@ CREATE TABLE transactions (
 );
 `;
 
-        const result = await importPostgreSQLWithValidation(sql);
+        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const diagramResult = await fromPostgres(sql);
 
-        expect(result.success).toBe(true);
-        expect(result.data).toBeDefined();
-        expect(result.data?.tables).toHaveLength(2);
+        expect(validationResult.isValid).toBe(true);
+        expect(diagramResult).toBeDefined();
+        expect(diagramResult?.tables).toHaveLength(2);
 
         // Verify both types of fixes were applied
-        expect(result.data?.warnings).toBeDefined();
+        expect(validationResult?.warnings).toBeDefined();
         expect(
-            result.data?.warnings?.some((w) =>
-                w.includes('Auto-fixed cast operator')
+            validationResult?.warnings?.some((w) =>
+                w.message.includes('Auto-fixed cast operator')
             )
         ).toBe(true);
         expect(
-            result.data?.warnings?.some((w) =>
-                w.includes('Auto-fixed split DECIMAL/NUMERIC')
+            validationResult?.warnings?.some((w) =>
+                w.message.includes('Auto-fixed split DECIMAL/NUMERIC')
             )
         ).toBe(true);
 
         // Check foreign key relationship was preserved
-        expect(result.data?.relationships).toHaveLength(1);
-        const fk = result.data?.relationships[0];
+        expect(diagramResult?.relationships).toHaveLength(1);
+        const fk = diagramResult?.relationships[0];
         expect(fk?.sourceTable).toBe('transactions');
         expect(fk?.targetTable).toBe('accounts');
     });
@@ -129,13 +133,14 @@ CREATE TABLE complex_table (
 );
 `;
 
-        const result = await importPostgreSQLWithValidation(sql);
+        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const diagramResult = await fromPostgres(sql);
 
         // Even if parser fails, should still import with regex fallback
-        expect(result.success).toBe(true);
-        expect(result.data?.tables).toHaveLength(1);
+        expect(validationResult.isValid).toBe(true);
+        expect(diagramResult?.tables).toHaveLength(1);
 
-        const table = result.data?.tables[0];
+        const table = diagramResult?.tables[0];
         expect(table?.name).toBe('complex_table');
         expect(table?.columns.length).toBeGreaterThanOrEqual(3);
     });
