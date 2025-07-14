@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Junction Table Parsing - Spell Plans Database', () => {
     it('should parse all 3 tables (spell_plans, spells, plan_sample_spells) and 2 relationships', async () => {
@@ -38,7 +38,7 @@ CREATE TABLE plan_sample_spells (
     PRIMARY KEY (spell_plan_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Parsing results:');
         console.log(
@@ -84,7 +84,7 @@ CREATE TABLE grimoire_sample_spells (
     PRIMARY KEY (grimoire_plan_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('grimoire_sample_spells');

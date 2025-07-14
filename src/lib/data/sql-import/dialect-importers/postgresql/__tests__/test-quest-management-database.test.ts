@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Quest Management Database', () => {
     it('should parse the magical quest management database', async () => {
@@ -181,7 +181,7 @@ CREATE TABLE guild_master_actions (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should parse tables despite extensions and custom types
         expect(result.tables.length).toBeGreaterThan(0);

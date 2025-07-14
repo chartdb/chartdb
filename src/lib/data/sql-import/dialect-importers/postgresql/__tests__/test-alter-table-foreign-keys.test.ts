@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('ALTER TABLE FOREIGN KEY parsing with fallback', () => {
     it('should parse foreign keys from ALTER TABLE ONLY statements with DEFERRABLE', async () => {
@@ -20,7 +20,7 @@ CREATE TABLE "public"."spellbook" (
 ALTER TABLE ONLY "public"."spellbook" ADD CONSTRAINT "spellbook_wizard_id_fk" FOREIGN KEY (wizard_id) REFERENCES wizard(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);
@@ -50,7 +50,7 @@ CREATE TABLE dragon_rider (
 ALTER TABLE dragon_rider ADD CONSTRAINT dragon_rider_dragon_fk FOREIGN KEY (dragon_id) REFERENCES dragon(id);
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);
@@ -83,7 +83,7 @@ CREATE TABLE "public"."apprentice" (
 ALTER TABLE ONLY "public"."apprentice" ADD CONSTRAINT "apprentice_instructor_fk" FOREIGN KEY (instructor_id) REFERENCES "magic_school"."instructor"(id) ON DELETE CASCADE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);
@@ -121,7 +121,7 @@ ALTER TABLE potion_ingredient ADD CONSTRAINT potion_ingredient_potion_fk FOREIGN
 ALTER TABLE ONLY potion_ingredient ADD CONSTRAINT potion_ingredient_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES ingredient(id) DEFERRABLE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.relationships).toHaveLength(2);
@@ -161,7 +161,7 @@ ALTER TABLE wizard_resident ADD CONSTRAINT wizard_tower_fk FOREIGN KEY (tower_id
 ALTER TABLE ONLY "wizard_resident" ADD CONSTRAINT "wizard_tower_fk2" FOREIGN KEY ("tower_id") REFERENCES "wizard_tower"("id") ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED DEFERRABLE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Relationships found:', result.relationships.length);
         result.relationships.forEach((rel, i) => {
@@ -203,7 +203,7 @@ CREATE TABLE "public"."account_emailaddress" (
 ALTER TABLE ONLY "public"."account_emailaddress" ADD CONSTRAINT "account_emailaddress_user_id_2c513194_fk_users_user_id" FOREIGN KEY (user_id) REFERENCES users_user(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Warnings:', result.warnings);
         console.log('Relationships:', result.relationships);
@@ -245,7 +245,7 @@ ALTER TABLE city ADD CONSTRAINT city_region_fk FOREIGN KEY (region_id) REFERENCE
 ALTER TABLE ONLY "public"."city" ADD CONSTRAINT "city_realm_fk" FOREIGN KEY ("realm_id") REFERENCES "public"."realm"("id");
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.relationships).toHaveLength(3);
@@ -283,7 +283,7 @@ CREATE TABLE enchantment (
 ALTER TABLE ONLY enchantment ADD CONSTRAINT enchantment_item_fk FOREIGN KEY (item_id) REFERENCES magical_item(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED DEFERRABLE;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should find the foreign key even if parser fails
         expect(result.relationships).toHaveLength(1);

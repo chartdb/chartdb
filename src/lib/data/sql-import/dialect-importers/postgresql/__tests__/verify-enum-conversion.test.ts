@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 import { convertToChartDBDiagram } from '../../../common';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
@@ -23,7 +23,7 @@ CREATE TABLE spellbooks (
 );`;
 
         // Parse SQL
-        const parserResult = await fromPostgresImproved(sql);
+        const parserResult = await fromPostgres(sql);
 
         // Convert to diagram
         const diagram = convertToChartDBDiagram(
@@ -114,7 +114,7 @@ CREATE TABLE dragons (
     mood dragon_mood NOT NULL
 );`;
 
-        const parserResult = await fromPostgresImproved(sql);
+        const parserResult = await fromPostgres(sql);
         const diagram = convertToChartDBDiagram(
             parserResult,
             DatabaseType.POSTGRESQL,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Comment removal before formatting', () => {
     it('should remove single-line comments', async () => {
@@ -10,7 +10,7 @@ CREATE TABLE magic_items (
     spell_power VARCHAR(100) -- mystical energy level
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('magic_items');
@@ -29,7 +29,7 @@ CREATE TABLE wizard_inventory (
     artifact_name VARCHAR(100)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizard_inventory');
@@ -44,7 +44,7 @@ CREATE TABLE potion_recipes (
     instructions TEXT DEFAULT '/* mix carefully */'
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].columns).toHaveLength(4);
@@ -73,7 +73,7 @@ CREATE TABLE dragon_battles (
     PRIMARY KEY (dragon_id, knight_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         const tableNames = result.tables.map((t) => t.name).sort();
@@ -101,7 +101,7 @@ CREATE TABLE book_spells (
     PRIMARY KEY (book_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.tables.map((t) => t.name).sort()).toEqual([

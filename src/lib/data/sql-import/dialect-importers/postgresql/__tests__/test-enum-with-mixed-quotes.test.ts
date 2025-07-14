@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Diagnostic tests for magical spell parsing cases', () => {
     it('should correctly parse spells table with Ancient Fire Blast descriptions', async () => {
@@ -10,7 +10,7 @@ CREATE TABLE spells (
     category VARCHAR(50) NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Spells table result:', {
             tableCount: result.tables.length,
@@ -36,7 +36,7 @@ CREATE TABLE spells (
     it('should handle magical enum types with mixed quotes', async () => {
         const sql = `CREATE TYPE quote_test AS ENUM ('single', "double", 'mixed"quotes');`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Enum result:', {
             enumCount: result.enums?.length || 0,

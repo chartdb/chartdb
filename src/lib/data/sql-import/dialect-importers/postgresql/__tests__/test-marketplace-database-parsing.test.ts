@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Complex Database - Enchanted Bazaar', () => {
     it('should parse the complete magical marketplace database', async () => {
@@ -243,7 +243,7 @@ CREATE TABLE audit_logs (
 
         console.log('Parsing SQL...');
         const startTime = Date.now();
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
         const parseTime = Date.now() - startTime;
 
         console.log(`Parse completed in ${parseTime}ms`);

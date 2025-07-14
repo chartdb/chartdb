@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Dragon Status Enum Test', () => {
     it('should parse dragon_status enum specifically', async () => {
@@ -11,7 +11,7 @@ CREATE TABLE dragons (
     status dragon_status DEFAULT 'sleeping'
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Check that the enum was parsed
         expect(result.enums).toBeDefined();
@@ -47,7 +47,7 @@ CREATE TABLE dragons (
     breath_element magic_element NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log(
             'Parsed enums:',

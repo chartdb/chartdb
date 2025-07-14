@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('junction table parsing fix', () => {
     it('should parse table with single-line comment before CREATE TABLE', async () => {
@@ -11,7 +11,7 @@ CREATE TABLE wizard_spellbook (
     PRIMARY KEY (wizard_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizard_spellbook');
@@ -43,7 +43,7 @@ CREATE TABLE enchantments (
     id UUID PRIMARY KEY
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(4);
         const tableNames = result.tables.map((t) => t.name).sort();
@@ -78,7 +78,7 @@ CREATE TABLE artifact_enchantments (
     enchantment_id INTEGER
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(2);
         const tableNames = result.tables.map((t) => t.name).sort();
@@ -110,7 +110,7 @@ CREATE TABLE spell_categorization (
     PRIMARY KEY (category_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         const tableNames = result.tables.map((t) => t.name).sort();

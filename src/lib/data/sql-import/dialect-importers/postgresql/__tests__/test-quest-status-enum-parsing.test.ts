@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Missing quest_status Bug - Magical Quest Management System', () => {
     it('should parse all 5 magical enums including quest_status for adventurer tracking', async () => {
@@ -17,8 +17,8 @@ CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 `;
 
-        console.log('Testing with fromPostgresImproved...');
-        const result = await fromPostgresImproved(sql);
+        console.log('Testing with fromPostgres...');
+        const result = await fromPostgres(sql);
 
         console.log(
             'Enums found:',
@@ -52,7 +52,7 @@ CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Table with Comment Before CREATE TABLE', () => {
     it('should parse table with single-line comment before CREATE TABLE', async () => {
@@ -11,7 +11,7 @@ CREATE TABLE crystal_enchantments (
     PRIMARY KEY (crystal_id, enchantment_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('\nDebug info:');
         console.log('Tables found:', result.tables.length);
@@ -52,7 +52,7 @@ CREATE TABLE spell_schools (
     id INTEGER PRIMARY KEY
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(4);
         const tableNames = result.tables.map((t) => t.name).sort();
@@ -76,7 +76,7 @@ CREATE TABLE ancient_tome (
 
 -- Another standalone comment`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('ancient_tome');

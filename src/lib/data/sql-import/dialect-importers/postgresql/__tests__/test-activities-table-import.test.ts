@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Activities table import - PostgreSQL specific types', () => {
     it('should correctly parse the activities table with PostgreSQL-specific types', async () => {
@@ -16,7 +16,7 @@ CREATE TABLE public.activities (
   CONSTRAINT activities_pkey PRIMARY KEY (id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
 
@@ -102,7 +102,7 @@ CREATE TABLE type_test (
     jsonb_col jsonb
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
         const table = result.tables[0];
         const cols = table.columns;
 

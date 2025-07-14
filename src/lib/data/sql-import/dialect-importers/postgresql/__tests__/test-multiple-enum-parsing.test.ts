@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Test All Five Enums', () => {
     it('should find all 5 enums from the exact SQL in the file', async () => {
@@ -13,7 +13,7 @@ CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Check we got all 5
         expect(result.enums).toBeDefined();
@@ -38,7 +38,7 @@ CREATE TYPE magic_time AS ENUM ('dawn', 'dusk', 'both');
 CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed', 'skipped');
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);

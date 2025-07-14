@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Real-world PostgreSQL import examples', () => {
     it('should successfully parse a complex real-world schema with enums', async () => {
@@ -53,7 +53,7 @@ CREATE UNIQUE INDEX "mages_rank_email_idx" ON "mages" ("rank", "email");
 CREATE INDEX "grimoires_category_idx" ON "grimoires" ("category");
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Verify enum parsing
         console.log('\n=== IMPORT RESULTS ===');
@@ -118,7 +118,7 @@ CREATE TABLE "potions" (
     "power" integer DEFAULT 50
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Enum should still be parsed
         expect(result.enums).toHaveLength(1);

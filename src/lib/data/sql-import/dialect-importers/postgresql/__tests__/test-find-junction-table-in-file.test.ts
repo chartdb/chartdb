@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Debug Missing Junction Table', () => {
     it('should find quest_sample_rewards junction table in the quest management system', async () => {
@@ -153,7 +153,7 @@ CREATE TABLE guild_master_actions (
         }
 
         // Now parse
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('\nParsing results:');
         console.log('- Total tables:', result.tables.length);

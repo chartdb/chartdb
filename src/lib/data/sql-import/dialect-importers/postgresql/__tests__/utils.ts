@@ -1,5 +1,5 @@
 import { validatePostgreSQLSyntax } from '../../../sql-validator';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 import type { SQLParserResult } from '../../../common';
 
 export interface ImportResult {
@@ -49,7 +49,7 @@ export async function importPostgreSQLWithValidation(
         }
 
         // Step 2: Attempt to parse
-        const result = await fromPostgresImproved(sqlToImport);
+        const result = await fromPostgres(sqlToImport);
 
         // Step 3: Check if we got meaningful results
         if (!result.tables || result.tables.length === 0) {

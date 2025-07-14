@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Full Database Import - Quest Management System', () => {
     it('should parse all 20 tables including quest_sample_rewards', async () => {
@@ -178,7 +178,7 @@ CREATE TABLE rewards (
     value INTEGER NOT NULL,
     claimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('\nParsing results:');
         console.log(`- Tables found: ${result.tables.length}`);

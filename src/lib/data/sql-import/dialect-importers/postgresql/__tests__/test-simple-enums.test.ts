@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Simple Enum Test', () => {
     it('should parse 5 simple enum types', async () => {
@@ -12,7 +12,7 @@ CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Result enums:', result.enums?.length || 0);
         if (result.enums) {
@@ -46,7 +46,7 @@ CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
         ];
 
         for (const enumDef of enums) {
-            const result = await fromPostgresImproved(enumDef.sql);
+            const result = await fromPostgres(enumDef.sql);
 
             console.log(`\nTesting ${enumDef.name}:`);
             console.log(`  Found enums: ${result.enums?.length || 0}`);

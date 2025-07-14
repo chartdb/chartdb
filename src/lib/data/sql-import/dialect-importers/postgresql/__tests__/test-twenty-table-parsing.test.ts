@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Full database import - 20 tables verification', () => {
     it('should parse all 20 tables from quest management system', async () => {
@@ -201,7 +201,7 @@ CREATE TABLE guild_master_actions (
             'guild_master_actions',
         ];
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('\n=== PARSING RESULTS ===');
         console.log(`Tables parsed: ${result.tables.length}`);

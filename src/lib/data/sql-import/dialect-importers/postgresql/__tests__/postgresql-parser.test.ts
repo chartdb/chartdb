@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Parser', () => {
     describe('Basic Table Parsing', () => {
@@ -13,7 +13,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].name).toBe('wizards');
@@ -37,7 +37,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(2);
             expect(result.tables.map((t) => t.name).sort()).toEqual([
@@ -57,7 +57,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].name).toBe('potions');
@@ -77,7 +77,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             const columns = result.tables[0].columns;
@@ -96,7 +96,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             const columns = result.tables[0].columns;
@@ -115,7 +115,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns).toHaveLength(3);
@@ -132,7 +132,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.relationships).toHaveLength(1);
             expect(result.relationships[0].sourceTable).toBe('sanctuaries');
@@ -151,7 +151,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.relationships).toHaveLength(1);
             expect(result.relationships[0].sourceTable).toBe(
@@ -180,7 +180,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(3);
             // Composite foreign keys are not fully supported
@@ -198,7 +198,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.relationships).toHaveLength(1);
             // ON DELETE/UPDATE clauses are not preserved in output
@@ -216,7 +216,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             const columns = result.tables[0].columns;
@@ -235,7 +235,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns).toHaveLength(3);
@@ -251,7 +251,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             const columns = result.tables[0].columns;
@@ -268,7 +268,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns[0].increment).toBe(true);
@@ -282,7 +282,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns[0].increment).toBe(true);
@@ -298,7 +298,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns).toHaveLength(4);
@@ -323,7 +323,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(2);
             expect(result.warnings).toBeDefined();
@@ -342,7 +342,7 @@ describe('PostgreSQL Parser', () => {
                 EXECUTE FUNCTION spell_audit_function();
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.warnings).toBeDefined();
@@ -361,7 +361,7 @@ describe('PostgreSQL Parser', () => {
                 USING (true);
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.warnings).toBeDefined();
@@ -376,7 +376,7 @@ describe('PostgreSQL Parser', () => {
                 ALTER TABLE enchanted_vault ENABLE ROW LEVEL SECURITY;
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.warnings).toBeDefined();
@@ -406,7 +406,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(2);
             expect(result.tables.map((t) => t.name).sort()).toEqual([
@@ -417,11 +417,11 @@ describe('PostgreSQL Parser', () => {
         });
 
         it('should handle empty or null input', async () => {
-            const result1 = await fromPostgresImproved('');
+            const result1 = await fromPostgres('');
             expect(result1.tables).toHaveLength(0);
             expect(result1.relationships).toHaveLength(0);
 
-            const result2 = await fromPostgresImproved('   \n   ');
+            const result2 = await fromPostgres('   \n   ');
             expect(result2.tables).toHaveLength(0);
             expect(result2.relationships).toHaveLength(0);
         });
@@ -438,7 +438,7 @@ describe('PostgreSQL Parser', () => {
                 -- Another comment
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].name).toBe('wizards');
@@ -454,7 +454,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(1);
             expect(result.tables[0].columns).toHaveLength(3);
@@ -481,7 +481,7 @@ describe('PostgreSQL Parser', () => {
                 );
             `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             expect(result.tables).toHaveLength(3);
             // Should find foreign keys even if mystical_formula fails to parse

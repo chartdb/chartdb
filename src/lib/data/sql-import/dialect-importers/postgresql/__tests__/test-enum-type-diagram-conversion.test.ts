@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 import { convertToChartDBDiagram } from '../../../common';
 import { DatabaseType } from '@/lib/domain/database-type';
 
@@ -20,7 +20,7 @@ CREATE TABLE spellbooks (
 );`;
 
         // Parse SQL
-        const parserResult = await fromPostgresImproved(sql);
+        const parserResult = await fromPostgres(sql);
 
         // Should find all 3 enums
         expect(parserResult.enums).toHaveLength(3);

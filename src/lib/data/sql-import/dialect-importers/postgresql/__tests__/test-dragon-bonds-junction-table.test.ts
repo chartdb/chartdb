@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Minimal junction table test', () => {
     it('should parse junction table with exact SQL structure', async () => {
@@ -13,7 +13,7 @@ CREATE TABLE dragon_bonds (
 
         console.log('Testing with SQL:', sql);
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Result:', {
             tableCount: result.tables.length,
@@ -35,7 +35,7 @@ CREATE TABLE dragon_bonds (
     PRIMARY KEY (dragon_master_id, dragon_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('dragon_bonds');
@@ -58,7 +58,7 @@ CREATE TABLE dragon_bonds (
     PRIMARY KEY (dragon_master_id, dragon_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('With dependencies:', {
             tableCount: result.tables.length,

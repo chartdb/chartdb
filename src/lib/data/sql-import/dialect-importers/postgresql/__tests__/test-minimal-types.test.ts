@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Minimal Type Test', () => {
     it('should handle CREATE EXTENSION, CREATE TYPE, and multi-line comments', async () => {
@@ -20,7 +20,7 @@ CREATE TABLE rituals (
     cast_time spell_time NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should parse tables
         expect(result.tables).toHaveLength(2);

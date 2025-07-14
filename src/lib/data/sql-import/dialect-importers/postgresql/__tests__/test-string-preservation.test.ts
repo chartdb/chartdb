@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('String preservation during comment removal', () => {
     it('should preserve strings containing -- pattern', async () => {
@@ -9,7 +9,7 @@ CREATE TABLE spell_ingredients (
     preparation_note VARCHAR(100) DEFAULT '--grind finely'
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('String preservation result:', {
             tableCount: result.tables.length,
@@ -37,7 +37,7 @@ CREATE TABLE artifact_sources (
     origin_url VARCHAR(200) DEFAULT 'https://ancient-library.realm'
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables[0].columns).toHaveLength(2);
         const urlCol = result.tables[0].columns.find(

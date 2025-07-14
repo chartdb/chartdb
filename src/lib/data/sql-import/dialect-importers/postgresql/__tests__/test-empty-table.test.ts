@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Empty table parsing', () => {
     it('should parse empty tables', async () => {
         const sql = `CREATE TABLE empty_table ();`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('empty_table');
@@ -24,7 +24,7 @@ CREATE TABLE another_table (
     name VARCHAR(100)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         const tableNames = result.tables.map((t) => t.name).sort();

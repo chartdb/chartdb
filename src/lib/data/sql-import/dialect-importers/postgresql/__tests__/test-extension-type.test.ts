@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL parser - CREATE EXTENSION and CREATE TYPE', () => {
     it('should handle CREATE EXTENSION and CREATE TYPE statements', async () => {
@@ -37,7 +37,7 @@ CREATE TABLE creature_abilities (
         );
 
         try {
-            const result = await fromPostgresImproved(testSQL);
+            const result = await fromPostgres(testSQL);
 
             console.log('Parse successful!');
             console.log('\nTables found:', result.tables.length);

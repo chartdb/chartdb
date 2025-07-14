@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Magical junction table parsing for wizard spell associations', () => {
     it('should parse the wizard-spell junction table for tracking spell knowledge', async () => {
@@ -12,7 +12,7 @@ CREATE TABLE wizard_spells (
     PRIMARY KEY (wizard_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Test results:', {
             tableCount: result.tables.length,
@@ -226,7 +226,7 @@ CREATE TABLE guild_master_actions (
         );
 
         // Parse the file
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log(`\nParsed ${result.tables.length} tables`);
         console.log(

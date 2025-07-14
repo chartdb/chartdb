@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Exact forth example reproduction - Spell Plans Database', () => {
     it('should parse the exact SQL from forth example with spell plans and magical components', async () => {
@@ -46,7 +46,7 @@ CREATE TABLE plan_sample_spells (
 
         console.log('Testing exact SQL from forth example...');
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Results:', {
             tables: result.tables.length,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Test All 5 Enums', () => {
     it('should parse all 5 enum types', async () => {
@@ -20,7 +20,7 @@ CREATE TABLE spellbooks (
 );
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Debug output
         console.log('Enums found:', result.enums?.length || 0);

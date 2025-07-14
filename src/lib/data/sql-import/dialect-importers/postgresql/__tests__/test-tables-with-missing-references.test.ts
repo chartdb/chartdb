@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Tables with undefined magical references', () => {
     it('should parse tables even with references to non-existent magical entities', async () => {
@@ -19,7 +19,7 @@ CREATE TABLE table3 (
     PRIMARY KEY (table1_id, table2_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Test results:', {
             tableCount: result.tables.length,
@@ -53,7 +53,7 @@ CREATE TABLE plan_sample_spells (
     PRIMARY KEY (spell_plan_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.tables.map((t) => t.name).sort()).toEqual([

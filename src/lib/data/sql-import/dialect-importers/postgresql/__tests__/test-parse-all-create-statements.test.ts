@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Table Count Validation', () => {
     it('should parse all CREATE TABLE statements without missing any', async () => {
@@ -24,7 +24,7 @@ CREATE TABLE "quoted_table" (id INTEGER PRIMARY KEY);
 
 CREATE TABLE schema1.table_with_schema (id INTEGER PRIMARY KEY);`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Count CREATE TABLE statements in the SQL
         const createTableCount = (sql.match(/CREATE TABLE/gi) || []).length;
@@ -78,7 +78,7 @@ CREATE TABLE complex_constraints (
     CONSTRAINT chk_positive CHECK (id > 0)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         const createTableCount = (sql.match(/CREATE TABLE/gi) || []).length;
 

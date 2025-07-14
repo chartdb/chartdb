@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Complex enum scenarios from real files', () => {
     it('should handle multiple schema-qualified enums with various syntax issues', async () => {
@@ -60,7 +60,7 @@ ALTER TABLE "spells" ADD CONSTRAINT "spells_wizard_id_wizard_id_fk"
     FOREIGN KEY ("wizard_id") REFERENCES "public"."wizard"("id") ON DELETE cascade ON UPDATE no action;
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Check enum parsing
         console.log('\n=== ENUMS FOUND ===');
@@ -144,7 +144,7 @@ CREATE TABLE "dragons" (
     "metadata" jsonb DEFAULT '{}'::jsonb
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Enum should be parsed
         expect(result.enums).toHaveLength(1);

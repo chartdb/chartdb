@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Core Parser Tests', () => {
     it('should parse basic tables', async () => {
@@ -10,7 +10,7 @@ describe('PostgreSQL Core Parser Tests', () => {
             );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizards');
@@ -26,7 +26,7 @@ describe('PostgreSQL Core Parser Tests', () => {
             );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);
@@ -45,7 +45,7 @@ describe('PostgreSQL Core Parser Tests', () => {
             $$ LANGUAGE plpgsql;
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.warnings).toBeDefined();
@@ -69,7 +69,7 @@ describe('PostgreSQL Core Parser Tests', () => {
             );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should find all 3 tables even if complex_table fails to parse
         expect(result.tables).toHaveLength(3);
@@ -360,7 +360,7 @@ CREATE TRIGGER arcane_audit_wizards AFTER INSERT OR UPDATE OR DELETE ON wizards
 CREATE TRIGGER arcane_audit_apprentices AFTER INSERT OR UPDATE OR DELETE ON apprentices
     FOR EACH ROW EXECUTE FUNCTION arcane_audit_trigger();`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should find all 16 tables
         expect(result.tables).toHaveLength(16);
@@ -418,7 +418,7 @@ CREATE TRIGGER arcane_audit_apprentices AFTER INSERT OR UPDATE OR DELETE ON appr
             ALTER TABLE secure_table ENABLE ROW LEVEL SECURITY;
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.warnings).toBeDefined();
@@ -443,7 +443,7 @@ CREATE TRIGGER arcane_audit_apprentices AFTER INSERT OR UPDATE OR DELETE ON appr
             2) -- Missing closing paren will cause parse failure
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should still create the table entry
         expect(result.tables.map((t) => t.name)).toContain('malformed');

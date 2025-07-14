@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Parser Regression Tests', () => {
     it('should parse all 16 tables from the magical academy example', async () => {
@@ -67,7 +67,7 @@ CREATE TABLE spell_logs(
 );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should find all 6 tables
         expect(result.tables).toHaveLength(6);
@@ -117,7 +117,7 @@ CREATE TABLE another_table (
 );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should find all 3 tables even if complex_table fails to parse
         expect(result.tables).toHaveLength(3);
@@ -182,7 +182,7 @@ CREATE TABLE patients(
 );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Count expected relationships:
         // branches: 1 (tenant_id -> tenants)

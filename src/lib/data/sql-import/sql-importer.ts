@@ -5,7 +5,7 @@
 
 import { DatabaseType } from '@/lib/domain/database-type';
 import { validateSQL } from './sql-validator';
-import { fromPostgresImproved } from './dialect-importers/postgresql/postgresql-improved';
+import { fromPostgres } from './dialect-importers/postgresql/postgresql';
 import { fromMySQL } from './dialect-importers/mysql/mysql';
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import { fromSQLite } from './dialect-importers/sqlite/sqlite';
@@ -66,7 +66,7 @@ export async function importSQLWithValidation(
 
         switch (databaseType) {
             case DatabaseType.POSTGRESQL:
-                result = await fromPostgresImproved(sqlToImport);
+                result = await fromPostgres(sqlToImport);
                 break;
 
             case DatabaseType.MYSQL:

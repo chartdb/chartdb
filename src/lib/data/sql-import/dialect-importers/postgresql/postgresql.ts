@@ -557,7 +557,7 @@ function extractForeignKeysFromCreateTable(
 /**
  * Parse PostgreSQL SQL with improved error handling and statement filtering
  */
-export async function fromPostgresImproved(
+export async function fromPostgres(
     sqlContent: string
 ): Promise<SQLParserResult & { warnings?: string[] }> {
     const tables: SQLTable[] = [];

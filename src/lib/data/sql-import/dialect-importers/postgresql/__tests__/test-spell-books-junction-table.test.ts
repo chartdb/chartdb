@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Junction Table Parsing', () => {
     it('should parse junction table with composite primary key', async () => {
@@ -21,7 +21,7 @@ CREATE TABLE book_spells (
     PRIMARY KEY (spell_book_id, spell_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should parse all 3 tables
         expect(result.tables).toHaveLength(3);
@@ -79,7 +79,7 @@ CREATE TABLE potion_ingredients (
     CONSTRAINT pk_potion_ingredients PRIMARY KEY (potion_id, ingredient_id)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
 

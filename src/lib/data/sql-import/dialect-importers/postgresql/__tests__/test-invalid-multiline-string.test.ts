@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Invalid multi-line string in SQL', () => {
     it('should handle SQL with orphaned string literal', async () => {
@@ -12,7 +12,7 @@ CREATE TABLE test_table (
     name VARCHAR(100)
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Even with syntax error, it should try to parse what it can
         console.log('Result:', {
@@ -41,7 +41,7 @@ CREATE TABLE table3 (
     id UUID PRIMARY KEY
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Multi-table result:', {
             tableCount: result.tables.length,

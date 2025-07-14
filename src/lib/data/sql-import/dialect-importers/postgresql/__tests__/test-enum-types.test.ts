@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Enum Type Parsing', () => {
     it('should parse CREATE TYPE ENUM statements', async () => {
@@ -19,7 +19,7 @@ CREATE TABLE quests (
     difficulty difficulty_level NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Check that enum types were parsed
         expect(result.enums).toBeDefined();
@@ -69,7 +69,7 @@ CREATE TYPE quote_test AS ENUM ('single', "double", 'mixed"quotes');
 CREATE TYPE number_status AS ENUM ('1', '2', '3-inactive');
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(2);
@@ -91,7 +91,7 @@ CREATE TYPE spell_status AS ENUM ('learning', 'mastered', 'forgotten', 'partiall
 CREATE TYPE portal_status AS ENUM ('inactive', 'charging', 'active', 'unstable', 'collapsed');
 `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(2);
@@ -120,7 +120,7 @@ CREATE TABLE creatures (
     status creature_status
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // With the updated parser, enum types don't generate warnings
         // Only non-enum custom types generate warnings

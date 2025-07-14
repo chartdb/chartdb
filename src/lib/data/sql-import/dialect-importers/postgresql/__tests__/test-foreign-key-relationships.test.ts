@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Relationships Debug', () => {
     it('should parse simple foreign key', async () => {
@@ -13,7 +13,7 @@ CREATE TABLE towers (
     wizard_id UUID NOT NULL REFERENCES wizards(id) ON DELETE CASCADE
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log(
             'Tables:',
@@ -41,7 +41,7 @@ CREATE TABLE quests (
     status quest_status DEFAULT 'active'
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log(
             'Tables:',

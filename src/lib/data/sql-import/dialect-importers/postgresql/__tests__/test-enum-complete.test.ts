@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 import { convertToChartDBDiagram } from '../../../common';
 import { DatabaseType } from '@/lib/domain/database-type';
 
@@ -34,7 +34,7 @@ CREATE TABLE dragon_quests (
         `;
 
         // Parse the SQL
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Check enums
         console.log('\nEnum parsing results:');

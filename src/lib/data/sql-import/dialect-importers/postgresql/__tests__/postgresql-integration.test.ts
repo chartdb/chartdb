@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Parser Integration', () => {
     it('should parse simple SQL', async () => {
@@ -10,7 +10,7 @@ describe('PostgreSQL Parser Integration', () => {
             );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizards');
@@ -27,7 +27,7 @@ describe('PostgreSQL Parser Integration', () => {
             $$ LANGUAGE plpgsql;
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizards');
@@ -42,7 +42,7 @@ describe('PostgreSQL Parser Integration', () => {
                 USING (true);
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
     });
@@ -53,7 +53,7 @@ describe('PostgreSQL Parser Integration', () => {
             ALTER TABLE enchanted_vault ENABLE ROW LEVEL SECURITY;
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
     });
@@ -68,7 +68,7 @@ describe('PostgreSQL Parser Integration', () => {
                 EXECUTE FUNCTION spell_func();
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(1);
     });
@@ -91,7 +91,7 @@ describe('PostgreSQL Parser Integration', () => {
             );
         `;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.relationships).toHaveLength(3);

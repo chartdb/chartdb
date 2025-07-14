@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('Schema-qualified enum parsing', () => {
     it('should parse enums with schema prefix', async () => {
@@ -14,7 +14,7 @@ CREATE TABLE "wizards" (
     "primary_school" "spell_school" NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         console.log('Enums found:', result.enums?.length || 0);
         if (result.enums) {
@@ -58,7 +58,7 @@ CREATE TABLE "dragons" (
     "type""dragon_type" DEFAULT 'fire' NOT NULL
 );`;
 
-        const result = await fromPostgresImproved(sql);
+        const result = await fromPostgres(sql);
 
         // Should still parse the enum
         expect(result.enums).toHaveLength(1);

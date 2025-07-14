@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgresImproved } from '../postgresql-improved';
+import { fromPostgres } from '../postgresql';
 
 describe('PostgreSQL Real-World Examples', () => {
     describe('Magical Academy Example', () => {
@@ -152,7 +152,7 @@ describe('PostgreSQL Real-World Examples', () => {
                         USING (school_id = current_setting('app.current_school')::uuid);
                 `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             // Should find all 16 tables
             const expectedTables = [
@@ -272,7 +272,7 @@ describe('PostgreSQL Real-World Examples', () => {
                         EXECUTE FUNCTION consume_charges();
                 `;
 
-            const result = await fromPostgresImproved(sql);
+            const result = await fromPostgres(sql);
 
             // Should parse all tables despite functions, policies, and triggers
             expect(result.tables.length).toBeGreaterThanOrEqual(4);
