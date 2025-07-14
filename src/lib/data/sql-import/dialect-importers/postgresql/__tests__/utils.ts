@@ -1,6 +1,6 @@
-import { validatePostgreSQLSyntax } from './sql-validator';
-import { fromPostgresImproved } from './dialect-importers/postgresql/postgresql-improved';
-import type { SQLParserResult } from './common';
+import { validatePostgreSQLSyntax } from '../../../sql-validator';
+import { fromPostgresImproved } from '../postgresql-improved';
+import type { SQLParserResult } from '../../../common';
 
 export interface ImportResult {
     success: boolean;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { importPostgreSQLWithValidation } from '../../../import-with-validation';
+import { importPostgreSQLWithValidation } from './utils';
 
 describe('PostgreSQL Import - Split DECIMAL Handling', () => {
     it('should successfully import tables with split DECIMAL declarations using auto-fix', async () => {
