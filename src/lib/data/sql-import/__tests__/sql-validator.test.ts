@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { validatePostgreSQLSyntax } from '../sql-validator';
+import { validateSQL } from '../sql-validator';
+import { DatabaseType } from '@/lib/domain';
 
 describe('SQL Validator', () => {
     it('should detect cast operator errors (: :)', () => {
@@ -14,7 +15,7 @@ SELECT id: :text FROM wizards;
 SELECT COUNT(*): :integer FROM wizards;
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toHaveLength(2);
@@ -33,7 +34,7 @@ CREATE TABLE potions (
     2) NOT NULL
 );`;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(
@@ -50,7 +51,7 @@ CREATE EXTENSION postgis;
 CREATE TABLE dragons (id UUID PRIMARY KEY);
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(
             result.warnings.some((w) => w.message.includes('CREATE EXTENSION'))
@@ -72,7 +73,7 @@ BEFORE UPDATE ON wizards
 FOR EACH ROW EXECUTE FUNCTION update_timestamp();
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(
             result.warnings.some((w) =>
@@ -102,7 +103,7 @@ CREATE TABLE spells (
 );
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
@@ -127,7 +128,7 @@ SELECT
 FROM towers t;
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         // Should find multiple cast operator errors

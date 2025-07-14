@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { validatePostgreSQLSyntax } from '../sql-validator';
+import { validateSQL } from '../sql-validator';
+import { DatabaseType } from '@/lib/domain';
 
 describe('SQL Validator Auto-fix', () => {
     it('should provide auto-fix for cast operator errors', () => {
@@ -14,7 +15,7 @@ SELECT id: :text FROM dragons;
 SELECT ST_X(lair_location: :geometry) AS longitude FROM dragons;
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         // Should detect errors
         expect(result.isValid).toBe(false);
@@ -38,7 +39,7 @@ SELECT AVG(power_level): :DECIMAL(3,
 2) FROM enchantments;
         `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.fixedSQL).toBeDefined();
@@ -56,7 +57,7 @@ CREATE TABLE potions (
     3) DEFAULT 0.000
 );`;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
@@ -92,7 +93,7 @@ SELECT AVG(power_level): :DECIMAL(3,
 2) FROM enchantments;
 `;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.fixedSQL).toBeDefined();
@@ -122,7 +123,7 @@ CREATE TABLE wizards (
     name VARCHAR(100)
 );`;
 
-        const result = validatePostgreSQLSyntax(sql);
+        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);

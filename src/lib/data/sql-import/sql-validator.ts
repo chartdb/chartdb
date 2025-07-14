@@ -58,11 +58,3 @@ export function validateSQL(
             };
     }
 }
-
-/**
- * Legacy function name for backward compatibility
- * @deprecated Use validateSQL with DatabaseType.POSTGRESQL instead
- */
-export function validatePostgreSQLSyntax(sql: string): ValidationResult {
-    return validateSQL(sql, DatabaseType.POSTGRESQL);
-}
