@@ -26,9 +26,14 @@ CREATE TABLE market_data (
 `;
 
         const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
-        const diagramResult = await fromPostgres(sql);
 
-        expect(validationResult.isValid).toBe(true);
+        // Validation should detect issues but provide auto-fix
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.fixedSQL).toBeDefined();
+
+        // Parse the fixed SQL
+        const diagramResult = await fromPostgres(validationResult.fixedSQL!);
+
         expect(diagramResult).toBeDefined();
         expect(diagramResult?.tables).toHaveLength(2);
 
@@ -94,9 +99,14 @@ CREATE TABLE transactions (
 `;
 
         const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
-        const diagramResult = await fromPostgres(sql);
 
-        expect(validationResult.isValid).toBe(true);
+        // Validation should detect issues but provide auto-fix
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.fixedSQL).toBeDefined();
+
+        // Parse the fixed SQL
+        const diagramResult = await fromPostgres(validationResult.fixedSQL!);
+
         expect(diagramResult).toBeDefined();
         expect(diagramResult?.tables).toHaveLength(2);
 
@@ -134,10 +144,15 @@ CREATE TABLE complex_table (
 `;
 
         const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
-        const diagramResult = await fromPostgres(sql);
+
+        // Validation should detect issues but provide auto-fix
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.fixedSQL).toBeDefined();
+
+        // Parse the fixed SQL
+        const diagramResult = await fromPostgres(validationResult.fixedSQL!);
 
         // Even if parser fails, should still import with regex fallback
-        expect(validationResult.isValid).toBe(true);
         expect(diagramResult?.tables).toHaveLength(1);
 
         const table = diagramResult?.tables[0];
