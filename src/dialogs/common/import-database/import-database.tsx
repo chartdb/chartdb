@@ -222,6 +222,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (sqlValidation?.fixedSQL) {
             setIsAutoFixing(true);
             setShowAutoFixButton(false);
+            setErrorMessage('');
 
             // Apply the fix with a delay so user sees the fixing message
             setTimeout(() => {
