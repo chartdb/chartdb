@@ -1,7 +1,7 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
-import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
 import { fromPostgres } from './dialect-importers/postgresql/postgresql';
+import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
 
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import { fromSQLite } from './dialect-importers/sqlite/sqlite';
@@ -267,7 +267,6 @@ export async function parseSQLError({
                 if (isPgDumpFormat(sqlContent)) {
                     await fromPostgresDump(sqlContent);
                 } else {
-                    // Use the parser for validation too
                     await fromPostgres(sqlContent);
                 }
                 break;
