@@ -187,7 +187,7 @@ export async function sqlImportToDiagram({
     sqlContent: string;
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
-}): Promise<Diagram & { warnings?: string[] }> {
+}): Promise<{ diagram: Diagram; warnings?: string[] }> {
     // If source database type is GENERIC, try to auto-detect the type
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
@@ -250,8 +250,10 @@ export async function sqlImportToDiagram({
     });
 
     return {
-        ...diagram,
-        tables: sortedTables,
+        diagram: {
+            ...diagram,
+            tables: sortedTables,
+        },
         warnings: parserResult.warnings,
     };
 }

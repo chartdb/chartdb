@@ -66,7 +66,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                 sourceDatabaseType: databaseType,
                 targetDatabaseType: databaseType,
             });
-            diagram = result;
+            diagram = result.diagram;
             warnings = result.warnings;
         } else {
             const databaseMetadata: DatabaseMetadata =
