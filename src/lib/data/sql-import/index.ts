@@ -198,6 +198,7 @@ export async function sqlImportToDiagram({
             }
             break;
         case DatabaseType.MYSQL:
+        case DatabaseType.MARIADB:
             // Check if the SQL is from MySQL dump and use the appropriate parser
             parserResult = await fromMySQL(sqlContent);
 
@@ -270,6 +271,7 @@ export async function parseSQLError({
                 }
                 break;
             case DatabaseType.MYSQL:
+            case DatabaseType.MARIADB:
                 await fromMySQL(sqlContent);
 
                 break;

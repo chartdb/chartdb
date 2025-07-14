@@ -35,8 +35,13 @@ import type { OnChange } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
-import type { editor } from 'monaco-editor';
+import type { editor, IDisposable } from 'monaco-editor';
 import { waitFor } from '@/lib/utils';
+import {
+    validateSQL,
+    type ValidationResult,
+} from '@/lib/data/sql-import/sql-validator';
+import { SQLValidationStatus } from './sql-validation-status';
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
@@ -118,6 +123,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const pasteDisposableRef = useRef<IDisposable | null>(null);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -125,6 +131,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
     const [isCheckingJson, setIsCheckingJson] = useState(false);
     const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
+    const [sqlValidation, setSqlValidation] = useState<ValidationResult | null>(
+        null
+    );
+    const [isAutoFixing, setIsAutoFixing] = useState(false);
+    const [showAutoFixButton, setShowAutoFixButton] = useState(false);
 
     useEffect(() => {
         setScriptResult('');
@@ -135,11 +146,33 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     // Check if the ddl is valid
     useEffect(() => {
         if (importMethod !== 'ddl') {
+            setSqlValidation(null);
+            setShowAutoFixButton(false);
             return;
         }
 
-        if (!scriptResult.trim()) return;
+        if (!scriptResult.trim()) {
+            setSqlValidation(null);
+            setShowAutoFixButton(false);
+            return;
+        }
 
+        // First run our validation based on database type
+        const validation = validateSQL(scriptResult, databaseType);
+        setSqlValidation(validation);
+
+        // If we have auto-fixable errors, show the auto-fix button
+        if (validation.fixedSQL && validation.errors.length > 0) {
+            setShowAutoFixButton(true);
+            // Don't try to parse invalid SQL
+            setErrorMessage('SQL contains syntax errors');
+            return;
+        }
+
+        // Hide auto-fix button if no fixes available
+        setShowAutoFixButton(false);
+
+        // Validate the SQL (either original or already fixed)
         parseSQLError({
             sqlContent: scriptResult,
             sourceDatabaseType: databaseType,
@@ -185,6 +218,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
     }, [errorMessage.length, onImport, scriptResult]);
 
+    const handleAutoFix = useCallback(() => {
+        if (sqlValidation?.fixedSQL) {
+            setIsAutoFixing(true);
+            setShowAutoFixButton(false);
+
+            // Apply the fix with a delay so user sees the fixing message
+            setTimeout(() => {
+                setScriptResult(sqlValidation.fixedSQL!);
+
+                setTimeout(() => {
+                    setIsAutoFixing(false);
+                }, 100);
+            }, 1000);
+        }
+    }, [sqlValidation, setScriptResult]);
+
+    const handleErrorClick = useCallback((line: number) => {
+        if (editorRef.current) {
+            // Set cursor to the error line
+            editorRef.current.setPosition({ lineNumber: line, column: 1 });
+            editorRef.current.revealLineInCenter(line);
+            editorRef.current.focus();
+        }
+    }, []);
+
     const formatEditor = useCallback(() => {
         if (editorRef.current) {
             setTimeout(() => {
@@ -229,37 +287,66 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setIsCheckingJson(false);
     }, [scriptResult, setScriptResult, formatEditor]);
 
-    const detectAndSetImportMethod = useCallback(() => {
-        const content = editorRef.current?.getValue();
-        if (content && content.trim()) {
-            const detectedType = detectContentType(content);
-            if (detectedType && detectedType !== importMethod) {
-                setImportMethod(detectedType);
-            }
-        }
-    }, [setImportMethod, importMethod]);
-
-    const [editorDidMount, setEditorDidMount] = useState(false);
-
     useEffect(() => {
-        if (editorRef.current && editorDidMount) {
-            editorRef.current.onDidPaste(() => {
-                setTimeout(() => {
-                    editorRef.current
-                        ?.getAction('editor.action.formatDocument')
-                        ?.run();
-                }, 0);
-                setTimeout(detectAndSetImportMethod, 0);
-            });
-        }
-    }, [detectAndSetImportMethod, editorDidMount]);
+        // Cleanup paste handler on unmount
+        return () => {
+            if (pasteDisposableRef.current) {
+                pasteDisposableRef.current.dispose();
+                pasteDisposableRef.current = null;
+            }
+        };
+    }, []);
 
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
-            setEditorDidMount(true);
+
+            // Cleanup previous disposable if it exists
+            if (pasteDisposableRef.current) {
+                pasteDisposableRef.current.dispose();
+                pasteDisposableRef.current = null;
+            }
+
+            // Add paste handler for all modes
+            const disposable = editor.onDidPaste(() => {
+                const model = editor.getModel();
+                if (!model) return;
+
+                const content = model.getValue();
+
+                // First, detect content type to determine if we should switch modes
+                const detectedType = detectContentType(content);
+                if (detectedType && detectedType !== importMethod) {
+                    // Switch to the detected mode immediately
+                    setImportMethod(detectedType);
+
+                    // Only format if it's JSON (query mode)
+                    if (detectedType === 'query') {
+                        // For JSON mode, format after a short delay
+                        setTimeout(() => {
+                            editor
+                                .getAction('editor.action.formatDocument')
+                                ?.run();
+                        }, 100);
+                    }
+                    // For DDL mode, do NOT format as it can break the SQL
+                } else {
+                    // Content type didn't change, apply formatting based on current mode
+                    if (importMethod === 'query') {
+                        // Only format JSON content
+                        setTimeout(() => {
+                            editor
+                                .getAction('editor.action.formatDocument')
+                                ?.run();
+                        }, 100);
+                    }
+                    // For DDL mode, do NOT format
+                }
+            });
+
+            pasteDisposableRef.current = disposable;
         },
-        []
+        [importMethod, setImportMethod]
     );
 
     const renderHeader = useCallback(() => {
@@ -316,7 +403,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                     : 'dbml-light'
                             }
                             options={{
-                                formatOnPaste: true,
+                                formatOnPaste: false, // Never format on paste - we handle it manually
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,
@@ -345,10 +432,13 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     </Suspense>
                 </div>
 
-                {errorMessage ? (
-                    <div className="mt-2 flex shrink-0 items-center gap-2">
-                        <p className="text-xs text-red-700">{errorMessage}</p>
-                    </div>
+                {errorMessage || (importMethod === 'ddl' && sqlValidation) ? (
+                    <SQLValidationStatus
+                        validation={sqlValidation}
+                        errorMessage={errorMessage}
+                        isAutoFixing={isAutoFixing}
+                        onErrorClick={handleErrorClick}
+                    />
                 ) : null}
             </div>
         ),
@@ -359,6 +449,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             effectiveTheme,
             debouncedHandleInputChange,
             handleEditorDidMount,
+            sqlValidation,
+            isAutoFixing,
+            handleErrorClick,
         ]
     );
 
@@ -444,13 +537,28 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 )
                             )}
                         </Button>
+                    ) : showAutoFixButton && importMethod === 'ddl' ? (
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={handleAutoFix}
+                            disabled={isAutoFixing}
+                            className="bg-sky-600 text-white hover:bg-sky-700"
+                        >
+                            {isAutoFixing ? (
+                                <Spinner size="small" />
+                            ) : (
+                                'Try auto-fix'
+                            )}
+                        </Button>
                     ) : keepDialogAfterImport ? (
                         <Button
                             type="button"
                             variant="default"
                             disabled={
                                 scriptResult.trim().length === 0 ||
-                                errorMessage.length > 0
+                                errorMessage.length > 0 ||
+                                isAutoFixing
                             }
                             onClick={handleImport}
                         >
@@ -463,7 +571,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 variant="default"
                                 disabled={
                                     scriptResult.trim().length === 0 ||
-                                    errorMessage.length > 0
+                                    errorMessage.length > 0 ||
+                                    isAutoFixing
                                 }
                                 onClick={handleImport}
                             >
@@ -496,6 +605,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         handleCheckJson,
         goBack,
         t,
+        importMethod,
+        isAutoFixing,
+        showAutoFixButton,
+        handleAutoFix,
     ]);
 
     return (
