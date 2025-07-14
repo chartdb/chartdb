@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fromPostgres } from '../postgresql';
+import { fromPostgresImproved } from '../postgresql-improved';
 import { convertToChartDBDiagram } from '../../../common';
 import { DatabaseType } from '@/lib/domain/database-type';
 
@@ -59,8 +59,8 @@ CREATE TABLE rewards (
     value INTEGER NOT NULL
 );`;
 
-        // Use the main entry point
-        const parserResult = await fromPostgres(sql);
+        // Use the improved parser
+        const parserResult = await fromPostgresImproved(sql);
 
         console.log('\nParser Result:');
         console.log('- Enums found:', parserResult.enums?.length || 0);

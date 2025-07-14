@@ -10,6 +10,19 @@ import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
 import { fromMySQL, isMySQLFormat } from './dialect-importers/mysql/mysql';
 
+// Export new unified functions
+export { validateSQL, validatePostgreSQLSyntax } from './sql-validator';
+export {
+    importSQLWithValidation,
+    importPostgreSQLWithValidation,
+} from './sql-importer';
+export type {
+    ValidationResult,
+    ValidationError,
+    ValidationWarning,
+} from './sql-validator';
+export type { ImportResult } from './sql-importer';
+
 /**
  * Detect if SQL content is from pg_dump format
  * @param sqlContent SQL content as string

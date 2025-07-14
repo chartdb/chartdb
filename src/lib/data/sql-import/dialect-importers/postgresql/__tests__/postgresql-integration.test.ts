@@ -1,19 +1,8 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { fromPostgres } from '../postgresql';
-import * as improvedModule from '../postgresql-improved';
-
-// Spy on the improved parser
-const fromPostgresImprovedSpy = vi.spyOn(
-    improvedModule,
-    'fromPostgresImproved'
-);
+import { describe, it, expect } from 'vitest';
+import { fromPostgresImproved } from '../postgresql-improved';
 
 describe('PostgreSQL Parser Integration', () => {
-    afterEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it('should use standard parser for simple SQL', async () => {
+    it('should parse simple SQL', async () => {
         const sql = `
             CREATE TABLE wizards (
                 id INTEGER PRIMARY KEY,
@@ -21,16 +10,13 @@ describe('PostgreSQL Parser Integration', () => {
             );
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizards');
-
-        // Should NOT use improved parser for simple SQL
-        expect(fromPostgresImprovedSpy).not.toHaveBeenCalled();
     });
 
-    it('should fall back to improved parser when functions are present', async () => {
+    it('should handle functions correctly', async () => {
         const sql = `
             CREATE TABLE wizards (id INTEGER PRIMARY KEY);
             
@@ -41,16 +27,13 @@ describe('PostgreSQL Parser Integration', () => {
             $$ LANGUAGE plpgsql;
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizards');
-
-        // Should use improved parser when functions are detected
-        expect(fromPostgresImprovedSpy).toHaveBeenCalledWith(sql);
     });
 
-    it('should fall back to improved parser when policies are present', async () => {
+    it('should handle policies correctly', async () => {
         const sql = `
             CREATE TABLE ancient_scrolls (id INTEGER PRIMARY KEY);
             
@@ -59,29 +42,23 @@ describe('PostgreSQL Parser Integration', () => {
                 USING (true);
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(1);
-
-        // Should use improved parser when policies are detected
-        expect(fromPostgresImprovedSpy).toHaveBeenCalledWith(sql);
     });
 
-    it('should fall back to improved parser when RLS is present', async () => {
+    it('should handle RLS correctly', async () => {
         const sql = `
             CREATE TABLE enchanted_vault (id INTEGER PRIMARY KEY);
             ALTER TABLE enchanted_vault ENABLE ROW LEVEL SECURITY;
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(1);
-
-        // Should use improved parser when RLS is detected
-        expect(fromPostgresImprovedSpy).toHaveBeenCalledWith(sql);
     });
 
-    it('should fall back to improved parser when triggers are present', async () => {
+    it('should handle triggers correctly', async () => {
         const sql = `
             CREATE TABLE spell_log (id INTEGER PRIMARY KEY);
             
@@ -91,15 +68,12 @@ describe('PostgreSQL Parser Integration', () => {
                 EXECUTE FUNCTION spell_func();
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(1);
-
-        // Should use improved parser when triggers are detected
-        expect(fromPostgresImprovedSpy).toHaveBeenCalledWith(sql);
     });
 
-    it('should preserve all relationships when using improved parser', async () => {
+    it('should preserve all relationships', async () => {
         const sql = `
             CREATE TABLE guilds (id INTEGER PRIMARY KEY);
             CREATE TABLE wizards (
@@ -117,7 +91,7 @@ describe('PostgreSQL Parser Integration', () => {
             );
         `;
 
-        const result = await fromPostgres(sql);
+        const result = await fromPostgresImproved(sql);
 
         expect(result.tables).toHaveLength(3);
         expect(result.relationships).toHaveLength(3);
@@ -138,8 +112,5 @@ describe('PostgreSQL Parser Integration', () => {
                 (r) => r.sourceTable === 'quests' && r.targetTable === 'guilds'
             )
         ).toBe(true);
-
-        // Should have used improved parser
-        expect(fromPostgresImprovedSpy).toHaveBeenCalled();
     });
 });

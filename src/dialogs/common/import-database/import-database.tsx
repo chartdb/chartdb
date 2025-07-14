@@ -38,7 +38,7 @@ import { parseSQLError } from '@/lib/data/sql-import';
 import type { editor, IDisposable } from 'monaco-editor';
 import { waitFor } from '@/lib/utils';
 import {
-    validatePostgreSQLSyntax,
+    validateSQL,
     type ValidationResult,
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
@@ -157,8 +157,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             return;
         }
 
-        // First run our validation
-        const validation = validatePostgreSQLSyntax(scriptResult);
+        // First run our validation based on database type
+        const validation = validateSQL(scriptResult, databaseType);
         setSqlValidation(validation);
 
         // If we have auto-fixable errors, show the auto-fix button
