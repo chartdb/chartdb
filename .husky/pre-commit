@@ -1,13 +1,2 @@
 #!/bin/sh
-
-# Run linting first
 npm run lint || { echo "lint failed, please run \"npm run lint:fix\" to fix the errors." ; exit 1; }
-
-# Check if tests should be skipped
-if [ -f .husky/.skip-tests ]; then
-    echo "⚠️  Tests skipped (remove .husky/.skip-tests to enable)"
-    exit 0
-fi
-
-# Run smart test runner for SQL import related changes
-.husky/smart-test-runner.sh || exit 1

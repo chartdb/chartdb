@@ -11,6 +11,7 @@
         "preview": "vite preview",
         "prepare": "husky",
         "test": "vitest",
+        "test:ci": "vitest run --reporter=verbose --bail=1",
         "test:ui": "vitest --ui",
         "test:coverage": "vitest --coverage"
     },

@@ -35,7 +35,7 @@ import type { OnChange } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
-import type * as monaco from 'monaco-editor';
+import type { editor, IDisposable } from 'monaco-editor';
 import { waitFor } from '@/lib/utils';
 import {
     validatePostgreSQLSyntax,
@@ -122,8 +122,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 }) => {
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
-    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-    const pasteDisposableRef = useRef<monaco.IDisposable | null>(null);
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const pasteDisposableRef = useRef<IDisposable | null>(null);
 
     const { t } = useTranslation();
     const { isSm: isDesktop } = useBreakpoint('sm');
@@ -226,7 +226,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             // Apply the fix with a delay so user sees the fixing message
             setTimeout(() => {
                 setScriptResult(sqlValidation.fixedSQL!);
-                setIsAutoFixing(false);
+
+                setTimeout(() => {
+                    setIsAutoFixing(false);
+                }, 100);
             }, 1000);
         }
     }, [sqlValidation, setScriptResult]);
@@ -295,7 +298,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     }, []);
 
     const handleEditorDidMount = useCallback(
-        (editor: monaco.editor.IStandaloneCodeEditor) => {
+        (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
 
             // Cleanup previous disposable if it exists
@@ -430,20 +433,12 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 </div>
 
                 {errorMessage || (importMethod === 'ddl' && sqlValidation) ? (
-                    importMethod === 'ddl' ? (
-                        <SQLValidationStatus
-                            validation={sqlValidation}
-                            errorMessage={errorMessage}
-                            isAutoFixing={isAutoFixing}
-                            onErrorClick={handleErrorClick}
-                        />
-                    ) : (
-                        <div className="mt-2 flex shrink-0 items-center gap-2">
-                            <p className="text-xs text-red-700">
-                                {errorMessage}
-                            </p>
-                        </div>
-                    )
+                    <SQLValidationStatus
+                        validation={sqlValidation}
+                        errorMessage={errorMessage}
+                        isAutoFixing={isAutoFixing}
+                        onErrorClick={handleErrorClick}
+                    />
                 ) : null}
             </div>
         ),
@@ -548,7 +543,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             variant="secondary"
                             onClick={handleAutoFix}
                             disabled={isAutoFixing}
-                            className="bg-blue-600 text-white hover:bg-blue-700"
+                            className="bg-sky-600 text-white hover:bg-sky-700"
                         >
                             {isAutoFixing ? (
                                 <Spinner size="small" />
