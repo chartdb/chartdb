@@ -1,5 +1,6 @@
 import {
     exportFieldComment,
+    formatTableComment,
     isFunction,
     isKeyword,
     strHasQuotes,
@@ -195,7 +196,7 @@ export function exportSQLite(diagram: Diagram): string {
                     primaryKeyFields[0].type.name.toLowerCase() === 'int');
 
             return `${schemaComment}${
-                table.comments ? `-- ${table.comments}\n` : ''
+                table.comments ? formatTableComment(table.comments) : ''
             }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
                 .map((field: DBField) => {
                     const fieldName = `"${field.name}"`;

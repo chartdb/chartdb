@@ -285,13 +285,13 @@ export const exportBaseSQL = ({
 
         // Add table comment
         if (table.comments) {
-            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments}';\n`;
+            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments.replace(/'/g, "''")}';\n`;
         }
 
         table.fields.forEach((field) => {
             // Add column comment
             if (field.comments) {
-                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments}';\n`;
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments.replace(/'/g, "''")}';\n`;
             }
         });
 
