@@ -739,8 +739,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 removeChanges.length > 0 ||
                 sizeChanges.length > 0
             ) {
-                updateTablesState((currentTables) =>
-                    currentTables
+                updateTablesState((currentTables) => {
+                    // First update positions
+                    const updatedTables = currentTables
                         .map((currentTable) => {
                             const positionChange = positionChanges.find(
                                 (change) => change.id === currentTable.id
@@ -749,12 +750,19 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 (change) => change.id === currentTable.id
                             );
                             if (positionChange || sizeChange) {
+                                const x = positionChange?.position?.x;
+                                const y = positionChange?.position?.y;
+
                                 return {
-                                    id: currentTable.id,
-                                    ...(positionChange
+                                    ...currentTable,
+                                    ...(positionChange &&
+                                    x !== undefined &&
+                                    y !== undefined &&
+                                    !isNaN(x) &&
+                                    !isNaN(y)
                                         ? {
-                                              x: positionChange.position?.x,
-                                              y: positionChange.position?.y,
+                                              x,
+                                              y,
                                           }
                                         : {}),
                                     ...(sizeChange
@@ -774,8 +782,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 !removeChanges.some(
                                     (change) => change.id === table.id
                                 )
-                        )
-                );
+                        );
+
+                    return updatedTables;
+                });
             }
 
             updateOverlappingGraphOnChangesDebounced({
@@ -797,7 +807,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             ) {
                 // Handle area position changes and move child tables (only when drag ends)
                 areaPositionChanges.forEach((change) => {
-                    if (change.type === 'position' && change.position) {
+                    if (
+                        change.type === 'position' &&
+                        change.position &&
+                        areaSizeChanges.length === 0
+                    ) {
                         const currentArea = areas.find(
                             (a) => a.id === change.id
                         );
