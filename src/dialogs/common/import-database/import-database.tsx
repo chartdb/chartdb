@@ -42,6 +42,13 @@ import {
     type ValidationResult,
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
+import { Parser } from '@dbml/core';
+import { preprocessDBML, sanitizeDBML } from '@/lib/dbml/dbml-import/dbml-import';
+import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import {
+    validateDBML,
+    autoFixDBML,
+} from '@/lib/data/dbml-import/dbml-validator';
 
 const calculateContentSizeMB = (content: string): number => {
     return content.length / (1024 * 1024); // Convert to MB
@@ -55,9 +62,29 @@ const calculateIsLargeFile = (content: string): boolean => {
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
 
-// Helper to detect if content is likely SQL DDL or JSON
-const detectContentType = (content: string): 'query' | 'ddl' | null => {
+// Helper to detect if content is likely SQL DDL, JSON, or DBML
+const detectContentType = (
+    content: string
+): 'query' | 'ddl' | 'dbml' | null => {
     if (!content || content.trim().length === 0) return null;
+
+    const upperContent = content.toUpperCase();
+
+    // Check for DBML patterns first (case sensitive)
+    const dbmlPatterns = [
+        /^Table\s+\w+\s*{/m,
+        /^Ref:\s*\w+/m,
+        /^Enum\s+\w+\s*{/m,
+        /^TableGroup\s+/m,
+        /^Note\s+\w+\s*{/m,
+        /\[pk\]/,
+        /\[ref:\s*[<>-]/,
+    ];
+
+    const hasDBMLPatterns = dbmlPatterns.some((pattern) =>
+        pattern.test(content)
+    );
+    if (hasDBMLPatterns) return 'dbml';
 
     // Common SQL DDL keywords
     const ddlKeywords = [
@@ -71,8 +98,6 @@ const detectContentType = (content: string): 'query' | 'ddl' | null => {
         'CREATE SCHEMA',
         'CREATE DATABASE',
     ];
-
-    const upperContent = content.toUpperCase();
 
     // Check for SQL DDL patterns
     const hasDDLKeywords = ddlKeywords.some((keyword) =>
@@ -100,7 +125,7 @@ const detectContentType = (content: string): 'query' | 'ddl' | null => {
 
 export interface ImportDatabaseProps {
     goBack?: () => void;
-    onImport: () => void;
+    onImport: (dbmlTableNotes?: Map<string, string>) => void | Promise<void>;
     onCreateEmptyDiagram?: () => void;
     scriptResult: string;
     setScriptResult: React.Dispatch<React.SetStateAction<string>>;
@@ -111,8 +136,8 @@ export interface ImportDatabaseProps {
     >;
     keepDialogAfterImport?: boolean;
     title: string;
-    importMethod: 'query' | 'ddl';
-    setImportMethod: (method: 'query' | 'ddl') => void;
+    importMethod: 'query' | 'ddl' | 'dbml';
+    setImportMethod: (method: 'query' | 'ddl' | 'dbml') => void;
 }
 
 export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
@@ -145,16 +170,20 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     );
     const [isAutoFixing, setIsAutoFixing] = useState(false);
     const [showAutoFixButton, setShowAutoFixButton] = useState(false);
+    const [dbmlTableNotes, setDbmlTableNotes] = useState<
+        Map<string, string> | undefined
+    >();
 
     useEffect(() => {
         setScriptResult('');
         setErrorMessage('');
         setShowCheckJsonButton(false);
+        setDbmlTableNotes(undefined);
     }, [importMethod, setScriptResult]);
 
-    // Check if the ddl is valid
+    // Check if the ddl or dbml is valid
     useEffect(() => {
-        if (importMethod !== 'ddl') {
+        if (importMethod === 'query') {
             setSqlValidation(null);
             setShowAutoFixButton(false);
             return;
@@ -163,9 +192,117 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (!scriptResult.trim()) {
             setSqlValidation(null);
             setShowAutoFixButton(false);
+            setErrorMessage('');
             return;
         }
 
+        if (importMethod === 'dbml') {
+            // Validate DBML using the new validator
+            const dbmlValidation = validateDBML(scriptResult);
+
+            // Store table notes if available
+            // Use a functional update to ensure we don't lose notes
+            setDbmlTableNotes((prevNotes) => {
+                // If we found new notes in validation, use them
+                if (
+                    dbmlValidation.tableNotes &&
+                    dbmlValidation.tableNotes.size > 0
+                ) {
+                    return dbmlValidation.tableNotes;
+                }
+                // If this is the first validation and we have fixes available,
+                // extract notes from the original content
+                else if (!prevNotes && dbmlValidation.fixedDBML) {
+                    const fixResult = autoFixDBML(scriptResult);
+                    if (fixResult.tableNotes.size > 0) {
+                        return fixResult.tableNotes;
+                    }
+                }
+                // Otherwise keep existing notes
+                return prevNotes;
+            });
+
+            if (dbmlValidation.isValid) {
+                // Even if valid, we might have fixes available
+                if (dbmlValidation.fixedDBML) {
+                    // Has formatting issues that can be fixed
+                    setSqlValidation({
+                        isValid: true,
+                        errors: [],
+                        warnings: dbmlValidation.warnings,
+                        fixedSQL: dbmlValidation.fixedDBML,
+                    });
+                    setErrorMessage('');
+                } else {
+                    // Try to parse it to double-check
+                    try {
+                        const preprocessedContent =
+                            preprocessDBML(scriptResult);
+                        const sanitizedContent =
+                            sanitizeDBML(preprocessedContent);
+                        const parser = new Parser();
+                        parser.parse(sanitizedContent, 'dbml');
+                        setErrorMessage('');
+                        setSqlValidation({
+                            isValid: true,
+                            errors: [],
+                            warnings: dbmlValidation.warnings,
+                        });
+                    } catch (e) {
+                        // Parser failed, use error from parser
+                        let errorMsg = 'Invalid DBML syntax';
+                        let line: number | undefined;
+
+                        if (e && typeof e === 'object' && 'diags' in e) {
+                            const error = e as {
+                                diags: Array<{
+                                    message: string;
+                                    location?: { start?: { line: number } };
+                                }>;
+                            };
+                            if (error.diags && error.diags[0]) {
+                                errorMsg = error.diags[0].message;
+                                line = error.diags[0].location?.start?.line;
+                            }
+                        }
+
+                        setSqlValidation({
+                            isValid: false,
+                            errors: [
+                                {
+                                    message: errorMsg,
+                                    line: line || 1,
+                                    type: 'syntax' as const,
+                                },
+                            ],
+                            warnings: [],
+                        });
+                        setErrorMessage(errorMsg);
+                    }
+                }
+            } else {
+                // Validation failed
+                setSqlValidation({
+                    isValid: false,
+                    errors: dbmlValidation.errors.map((e) => ({
+                        message: e.message,
+                        line: e.line || 1,
+                        type: e.type,
+                    })),
+                    warnings: dbmlValidation.warnings,
+                    fixedSQL: dbmlValidation.fixedDBML,
+                });
+                setErrorMessage(
+                    dbmlValidation.errors[0]?.message || 'Invalid DBML syntax'
+                );
+            }
+
+            // Show auto-fix button if fixes are available
+            setShowAutoFixButton(!!dbmlValidation.fixedDBML);
+            return;
+        }
+
+        // SQL validation
         // First run our validation based on database type
         const validation = validateSQL(scriptResult, databaseType);
         setSqlValidation(validation);
@@ -223,9 +360,19 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const handleImport = useCallback(() => {
         if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
-            onImport();
+            if (importMethod === 'dbml') {
+                onImport(dbmlTableNotes);
+            } else {
+                onImport();
+            }
         }
-    }, [errorMessage.length, onImport, scriptResult]);
+    }, [
+        errorMessage.length,
+        onImport,
+        scriptResult,
+        importMethod,
+        dbmlTableNotes,
+    ]);
 
     const handleAutoFix = useCallback(() => {
         if (sqlValidation?.fixedSQL) {
@@ -352,7 +499,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode, do NOT format as it can break the SQL
+                    // For DDL and DBML modes, do NOT format as it can break the syntax
                 } else {
                     // Content type didn't change, apply formatting based on current mode
                     if (importMethod === 'query' && !isLargeFile) {
@@ -363,7 +510,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode or large files, do NOT format
+                    // For DDL and DBML modes or large files, do NOT format
                 }
             });
 
@@ -410,16 +557,29 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 <div className="w-full text-center text-xs text-muted-foreground">
                     {importMethod === 'query'
                         ? 'Smart Query Output'
-                        : 'SQL Script'}
+                        : importMethod === 'dbml'
+                          ? 'DBML Script'
+                          : 'SQL Script'}
                 </div>
                 <div className="flex-1 overflow-hidden">
                     <Suspense fallback={<Spinner />}>
                         <Editor
                             value={scriptResult}
                             onChange={debouncedHandleInputChange}
-                            language={importMethod === 'query' ? 'json' : 'sql'}
+                            language={
+                                importMethod === 'query'
+                                    ? 'json'
+                                    : importMethod === 'dbml'
+                                      ? 'dbml'
+                                      : 'sql'
+                            }
                             loading={<Spinner />}
                             onMount={handleEditorDidMount}
+                            beforeMount={
+                                importMethod === 'dbml'
+                                    ? setupDBMLLanguage
+                                    : undefined
+                            }
                             theme={
                                 effectiveTheme === 'dark'
                                     ? 'dbml-dark'
@@ -455,7 +615,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     </Suspense>
                 </div>
 
-                {errorMessage || (importMethod === 'ddl' && sqlValidation) ? (
+                {errorMessage ||
+                ((importMethod === 'ddl' || importMethod === 'dbml') &&
+                    sqlValidation) ? (
                     <SQLValidationStatus
                         validation={sqlValidation}
                         errorMessage={errorMessage}
@@ -560,7 +722,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 )
                             )}
                         </Button>
-                    ) : showAutoFixButton && importMethod === 'ddl' ? (
+                    ) : showAutoFixButton &&
+                      (importMethod === 'ddl' || importMethod === 'dbml') ? (
                         <Button
                             type="button"
                             variant="secondary"
