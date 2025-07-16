@@ -851,7 +851,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
                 // Handle area size changes
                 areaSizeChanges.forEach((change) => {
-                    if (change.type === 'dimensions' && change.dimensions) {
+                    if (
+                        change.type === 'dimensions' &&
+                        change.dimensions &&
+                        !change.resizing
+                    ) {
                         updateArea(change.id, {
                             width: change.dimensions.width,
                             height: change.dimensions.height,
