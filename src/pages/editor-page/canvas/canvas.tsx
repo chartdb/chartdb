@@ -123,10 +123,6 @@ const tableToTableNode = (
         },
         width: table.width ?? MIN_TABLE_SIZE,
         hidden: !shouldShowTablesBySchemaFilter(table, filteredSchemas),
-        // Temporarily disable parent-child relationship to avoid jumping
-        // ...(table.parentAreaId
-        //     ? { parentNode: table.parentAreaId, extent: 'parent' as const }
-        //     : {}),
     };
 };
 
@@ -138,7 +134,6 @@ const areaToAreaNode = (area: Area): AreaNodeType => ({
     width: area.width,
     height: area.height,
     zIndex: -10,
-    // dragHandle: '.area-drag-handle', // Disabled to allow dragging from anywhere
 });
 
 export interface CanvasProps {
@@ -366,25 +361,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 ...tables.map((table) => {
                     const isOverlapping =
                         (overlapGraph.graph.get(table.id) ?? []).length > 0;
-
-                    // Find if this node already exists
-                    const existingNode = prevNodes.find(
-                        (n) => n.id === table.id
-                    ) as TableNodeType | undefined;
                     const node = tableToTableNode(table, filteredSchemas);
-
-                    // If parent has changed, we need to preserve visual position
-                    if (
-                        existingNode &&
-                        existingNode.parentId !== node.parentId
-                    ) {
-                        // Parent changed - keep the visual position the same
-                        if (!existingNode.parentId && node.parentId) {
-                            // Entering an area - position is already set correctly by tableToTableNode
-                        } else if (existingNode.parentId && !node.parentId) {
-                            // Leaving an area - position should already be absolute
-                        }
-                    }
 
                     return {
                         ...node,
@@ -658,7 +635,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         (changes: NodeChange<NodeType>[], type: NodeType['type']) => {
             const relevantChanges = changes.filter((change) => {
                 if (
-                    change.type === 'position' ||
+                    (change.type === 'position' && !change.dragging) ||
                     change.type === 'dimensions' ||
                     change.type === 'remove'
                 ) {
@@ -709,7 +686,51 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
             }
 
-            // Handle table changes
+            // Handle area drag changes - add child table movements for visual feedback only
+            const areaDragChanges = changesToApply.filter((change) => {
+                if (change.type === 'position') {
+                    const node = getNode(change.id);
+                    return node?.type === 'area' && change.dragging;
+                }
+                return false;
+            }) as NodePositionChange[];
+
+            // Add visual position changes for child tables during area dragging
+            if (areaDragChanges.length > 0) {
+                const additionalChanges: NodePositionChange[] = [];
+
+                areaDragChanges.forEach((areaChange) => {
+                    const currentArea = areas.find(
+                        (a) => a.id === areaChange.id
+                    );
+                    if (currentArea && areaChange.position) {
+                        const deltaX = areaChange.position.x - currentArea.x;
+                        const deltaY = areaChange.position.y - currentArea.y;
+
+                        // Find child tables and create visual position changes
+                        const childTables = tables.filter(
+                            (table) => table.parentAreaId === areaChange.id
+                        );
+
+                        childTables.forEach((table) => {
+                            additionalChanges.push({
+                                id: table.id,
+                                type: 'position',
+                                position: {
+                                    x: table.x + deltaX,
+                                    y: table.y + deltaY,
+                                },
+                                dragging: true,
+                            });
+                        });
+                    }
+                });
+
+                // Add visual changes to React Flow
+                changesToApply = [...changesToApply, ...additionalChanges];
+            }
+
+            // Handle table changes - only update storage when NOT dragging
             const { positionChanges, removeChanges, sizeChanges } =
                 findRelevantNodesChanges(changesToApply, 'table');
 
@@ -718,9 +739,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 removeChanges.length > 0 ||
                 sizeChanges.length > 0
             ) {
-                updateTablesState((currentTables) => {
-                    // First update positions
-                    const updatedTables = currentTables
+                updateTablesState((currentTables) =>
+                    currentTables
                         .map((currentTable) => {
                             const positionChange = positionChanges.find(
                                 (change) => change.id === currentTable.id
@@ -729,17 +749,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 (change) => change.id === currentTable.id
                             );
                             if (positionChange || sizeChange) {
-                                const x = positionChange?.position?.x;
-                                const y = positionChange?.position?.y;
-
                                 return {
-                                    ...currentTable,
-                                    ...(positionChange &&
-                                    x !== undefined &&
-                                    y !== undefined
+                                    id: currentTable.id,
+                                    ...(positionChange
                                         ? {
-                                              x,
-                                              y,
+                                              x: positionChange.position?.x,
+                                              y: positionChange.position?.y,
                                           }
                                         : {}),
                                     ...(sizeChange
@@ -759,10 +774,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                 !removeChanges.some(
                                     (change) => change.id === table.id
                                 )
-                        );
-
-                    return updatedTables;
-                });
+                        )
+                );
             }
 
             updateOverlappingGraphOnChangesDebounced({
@@ -782,25 +795,22 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 areaRemoveChanges.length > 0 ||
                 areaSizeChanges.length > 0
             ) {
-                // Handle area position changes and move child tables
+                // Handle area position changes and move child tables (only when drag ends)
                 areaPositionChanges.forEach((change) => {
                     if (change.type === 'position' && change.position) {
-                        // Get the area's current position
                         const currentArea = areas.find(
                             (a) => a.id === change.id
                         );
                         if (currentArea) {
-                            // Calculate the delta
                             const deltaX = change.position.x - currentArea.x;
                             const deltaY = change.position.y - currentArea.y;
 
-                            // Get all tables that are children of this area
                             const childTables = getTablesInArea(
                                 change.id,
                                 tables
                             );
 
-                            // Update child table positions
+                            // Update child table positions in storage
                             if (childTables.length > 0) {
                                 updateTablesState((currentTables) =>
                                     currentTables.map((table) => {
@@ -817,7 +827,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             }
                         }
 
-                        // Update the area position
+                        // Update the area position in storage
                         updateArea(change.id, {
                             x: change.position.x,
                             y: change.position.y,
@@ -836,7 +846,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 });
 
                 areaRemoveChanges.forEach((change) => {
-                    // Before removing the area, clear parentAreaId from child tables
                     updateTablesState((currentTables) =>
                         currentTables.map((table) => {
                             if (table.parentAreaId === change.id) {
@@ -864,6 +873,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             readonly,
             tables,
             areas,
+            getNode,
         ]
     );
 
