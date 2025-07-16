@@ -110,7 +110,7 @@ Note note_test {
             expect(diagram.tables).toHaveLength(2);
             expect(diagram.relationships).toHaveLength(1);
 
-            const usersTable = diagram.tables.find((t) => t.name === 'users');
+            const usersTable = diagram.tables?.find((t) => t.name === 'users');
             expect(usersTable).toBeDefined();
             expect(usersTable?.fields).toHaveLength(5);
 

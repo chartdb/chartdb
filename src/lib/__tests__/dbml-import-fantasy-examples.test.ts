@@ -153,7 +153,7 @@ Table ranks {
             // Verify tables
             expect(diagram.tables).toHaveLength(8);
 
-            const tableNames = diagram.tables.map((t) => t.name).sort();
+            const tableNames = diagram.tables?.map((t) => t.name).sort() ?? [];
             expect(tableNames).toEqual([
                 'apprentices',
                 'grimoire_spells',
@@ -169,7 +169,7 @@ Table ranks {
             expect(diagram.relationships).toHaveLength(10);
 
             // Check specific table structure
-            const wizardsTable = diagram.tables.find(
+            const wizardsTable = diagram.tables?.find(
                 (t) => t.name === 'wizards'
             );
             expect(wizardsTable).toBeDefined();
@@ -190,13 +190,13 @@ Table ranks {
             expect(emailField?.nullable).toBe(false);
 
             // Check relationships cardinality
-            const mentorRelationship = diagram.relationships.find(
+            const mentorRelationship = diagram.relationships?.find(
                 (r) =>
                     r.sourceTableId ===
-                        diagram.tables.find((t) => t.name === 'apprentices')
+                        diagram.tables?.find((t) => t.name === 'apprentices')
                             ?.id &&
                     r.targetTableId ===
-                        diagram.tables.find((t) => t.name === 'wizards')?.id
+                        diagram.tables?.find((t) => t.name === 'wizards')?.id
             );
             expect(mentorRelationship?.sourceCardinality).toBe('many');
             expect(mentorRelationship?.targetCardinality).toBe('one');
@@ -371,14 +371,14 @@ Note marketplace_note {
             expect(diagram.tables).toHaveLength(7);
 
             // Verify that table header colors were removed but tables imported correctly
-            const merchantsTable = diagram.tables.find(
+            const merchantsTable = diagram.tables?.find(
                 (t) => t.name === 'merchants'
             );
             expect(merchantsTable).toBeDefined();
             expect(merchantsTable?.fields).toHaveLength(12);
 
             // Check that enum type was converted
-            const artifactsTable = diagram.tables.find(
+            const artifactsTable = diagram.tables?.find(
                 (t) => t.name === 'artifacts'
             );
             const typeField = artifactsTable?.fields.find(
@@ -387,7 +387,7 @@ Note marketplace_note {
             expect(typeField?.type.id).toBe('varchar');
 
             // Check array type conversion
-            const tradeOffersTable = diagram.tables.find(
+            const tradeOffersTable = diagram.tables?.find(
                 (t) => t.name === 'trade_offers'
             );
             const offeredItemsField = tradeOffersTable?.fields.find(
@@ -399,7 +399,7 @@ Note marketplace_note {
             expect(diagram.relationships).toHaveLength(10);
 
             // Check composite unique index
-            const inventoryTable = diagram.tables.find(
+            const inventoryTable = diagram.tables?.find(
                 (t) => t.name === 'merchant_inventory'
             );
             const compositeIndex = inventoryTable?.indexes.find(
@@ -572,7 +572,9 @@ Note quest_system_note {
             expect(diagram.tables).toHaveLength(7);
 
             // Check enum conversion
-            const questsTable = diagram.tables.find((t) => t.name === 'quests');
+            const questsTable = diagram.tables?.find(
+                (t) => t.name === 'quests'
+            );
             const difficultyField = questsTable?.fields.find(
                 (f) => f.name === 'difficulty'
             );
@@ -589,18 +591,19 @@ Note quest_system_note {
             // Check self-referential relationship
             // quest_prerequisites has quest_id and required_quest_id, both pointing to quests table
             // This creates 2 separate relationships
-            const questPrereqTable = diagram.tables.find(
+            const questPrereqTable = diagram.tables?.find(
                 (t) => t.name === 'quest_prerequisites'
             );
-            const relationshipsToQuests = diagram.relationships.filter(
-                (r) =>
-                    r.targetTableId === questsTable?.id &&
-                    r.sourceTableId === questPrereqTable?.id
-            );
+            const relationshipsToQuests =
+                diagram.relationships?.filter(
+                    (r) =>
+                        r.targetTableId === questsTable?.id &&
+                        r.sourceTableId === questPrereqTable?.id
+                ) ?? [];
             expect(relationshipsToQuests).toHaveLength(2); // quest_prerequisites creates 2 relationships to quests
 
             // Check composite indexes
-            const assignmentsTable = diagram.tables.find(
+            const assignmentsTable = diagram.tables?.find(
                 (t) => t.name === 'quest_assignments'
             );
             const uniqueAssignmentIndex = assignmentsTable?.indexes.find(
@@ -670,7 +673,7 @@ Note dragon_note {
             expect(diagram.tables).toHaveLength(2);
 
             // Check array type conversion
-            const hoardsTable = diagram.tables.find(
+            const hoardsTable = diagram.tables?.find(
                 (t) => t.name === 'dragon_hoards'
             );
             const manifestField = hoardsTable?.fields.find(
@@ -701,9 +704,9 @@ Note dragon_note {
 
             // Check relationship
             expect(diagram.relationships).toHaveLength(1);
-            const relationship = diagram.relationships[0];
-            expect(relationship.sourceCardinality).toBe('many');
-            expect(relationship.targetCardinality).toBe('one');
+            const relationship = diagram.relationships?.[0];
+            expect(relationship?.sourceCardinality).toBe('many');
+            expect(relationship?.targetCardinality).toBe('one');
         });
 
         it('should handle empty DBML gracefully', async () => {
@@ -735,8 +738,8 @@ Table empty_table {
             const diagram = await importDBMLToDiagram(minimalDBML);
 
             expect(diagram.tables).toHaveLength(1);
-            expect(diagram.tables[0].fields).toHaveLength(1);
-            expect(diagram.tables[0].name).toBe('empty_table');
+            expect(diagram.tables?.[0]?.fields).toHaveLength(1);
+            expect(diagram.tables?.[0]?.name).toBe('empty_table');
         });
     });
 });
