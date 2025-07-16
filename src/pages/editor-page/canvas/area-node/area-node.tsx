@@ -80,11 +80,13 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                 <NodeResizer
                     isVisible={focused}
                     lineClassName="!border-4 !border-transparent"
-                    handleClassName="!h-3 !w-3 !rounded-full !bg-pink-600"
+                    handleClassName="!h-[18px] !w-[18px] !rounded-full !bg-pink-600"
+                    minHeight={100}
+                    minWidth={100}
                 />
                 <div className="group flex h-8 items-center justify-between rounded-t-md px-2">
                     <div className="flex w-full items-center gap-1">
-                        <GripVertical className="size-4 text-slate-700 opacity-60 dark:text-slate-300" />
+                        <GripVertical className="size-4 shrink-0 text-slate-700 opacity-60 dark:text-slate-300" />
 
                         {editMode && !readonly ? (
                             <div className="flex w-full items-center">
