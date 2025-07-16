@@ -9,6 +9,37 @@ import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 
+// Preprocess DBML to handle unsupported features
+export const preprocessDBML = (content: string): string => {
+    let processed = content;
+
+    // Remove TableGroup blocks (not supported by parser)
+    processed = processed.replace(/TableGroup\s+[^{]*\{[^}]*\}/gs, '');
+
+    // Remove Note blocks
+    processed = processed.replace(/Note\s+\w+\s*\{[^}]*\}/gs, '');
+
+    // Remove enum definitions (blocks)
+    processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
+
+    // Handle array types by converting them to text
+    processed = processed.replace(/(\w+)\[\]/g, 'text');
+
+    // Handle inline enum types without values by converting to varchar
+    processed = processed.replace(
+        /^\s*(\w+)\s+enum\s*(?:\/\/.*)?$/gm,
+        '$1 varchar'
+    );
+
+    // Handle Table headers with color attributes
+    processed = processed.replace(
+        /Table\s+(\w+)\s*\[[^\]]*\]\s*\{/g,
+        'Table $1 {'
+    );
+
+    return processed;
+};
+
 // Simple function to replace Spanish special characters
 export const sanitizeDBML = (content: string): string => {
     return content
@@ -126,11 +157,52 @@ export const importDBMLToDiagram = async (
     dbmlContent: string
 ): Promise<Diagram> => {
     try {
+        // Handle empty content
+        if (!dbmlContent.trim()) {
+            return {
+                id: generateDiagramId(),
+                name: 'DBML Import',
+                databaseType: DatabaseType.GENERIC,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+        }
+
         const parser = new Parser();
-        // Sanitize DBML content to remove special characters
-        const sanitizedContent = sanitizeDBML(dbmlContent);
+        // Preprocess and sanitize DBML content
+        const preprocessedContent = preprocessDBML(dbmlContent);
+        const sanitizedContent = sanitizeDBML(preprocessedContent);
+
+        // Handle content that becomes empty after preprocessing
+        if (!sanitizedContent.trim()) {
+            return {
+                id: generateDiagramId(),
+                name: 'DBML Import',
+                databaseType: DatabaseType.GENERIC,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+        }
+
         const parsedData = parser.parse(sanitizedContent, 'dbml');
         const dbmlData = parsedData.schemas[0];
+
+        // Handle case where no schema is found
+        if (!dbmlData || !dbmlData.tables) {
+            return {
+                id: generateDiagramId(),
+                name: 'DBML Import',
+                databaseType: DatabaseType.GENERIC,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+        }
 
         // Extract only the necessary data from the parsed DBML
         const extractedData = {
