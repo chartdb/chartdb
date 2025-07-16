@@ -1,5 +1,7 @@
 import {
     exportFieldComment,
+    escapeSQLComment,
+    formatTableComment,
     isFunction,
     isKeyword,
     strHasQuotes,
@@ -215,7 +217,7 @@ export function exportMySQL(diagram: Diagram): string {
             const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
 
             return `${
-                table.comments ? `-- ${table.comments}\n` : ''
+                table.comments ? formatTableComment(table.comments) : ''
             }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
                 .map((field: DBField) => {
                     const fieldName = `\`${field.name}\``;
@@ -289,7 +291,7 @@ export function exportMySQL(diagram: Diagram): string {
 
                     // MySQL supports inline comments
                     const comment = field.comments
-                        ? ` COMMENT '${field.comments.replace(/'/g, "''")}'`
+                        ? ` COMMENT '${escapeSQLComment(field.comments)}'`
                         : '';
 
                     return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${autoIncrement}${unique}${defaultValue}${comment}`;
@@ -304,7 +306,7 @@ export function exportMySQL(diagram: Diagram): string {
             }\n)${
                 // MySQL supports table comments
                 table.comments
-                    ? ` COMMENT='${table.comments.replace(/'/g, "''")}'`
+                    ? ` COMMENT='${escapeSQLComment(table.comments)}'`
                     : ''
             };\n\n${
                 // Add indexes - MySQL creates them separately from the table definition

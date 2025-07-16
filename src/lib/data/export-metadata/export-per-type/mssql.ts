@@ -1,5 +1,6 @@
 import {
     exportFieldComment,
+    formatMSSQLTableComment,
     isFunction,
     isKeyword,
     strHasQuotes,
@@ -108,7 +109,7 @@ export function exportMSSQL(diagram: Diagram): string {
                 : `[${table.name}]`;
 
             return `${
-                table.comments ? `/**\n${table.comments}\n*/\n` : ''
+                table.comments ? formatMSSQLTableComment(table.comments) : ''
             }CREATE TABLE ${tableName} (\n${table.fields
                 .map((field: DBField) => {
                     const fieldName = `[${field.name}]`;

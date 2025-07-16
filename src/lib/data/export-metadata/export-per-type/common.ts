@@ -48,6 +48,50 @@ export function exportFieldComment(comment: string): string {
         .join('');
 }
 
+export function escapeSQLComment(comment: string): string {
+    if (!comment) {
+        return '';
+    }
+
+    // Escape single quotes by doubling them
+    let escaped = comment.replace(/'/g, "''");
+
+    // Replace newlines with spaces to prevent breaking SQL syntax
+    // Some databases support multi-line comments with specific syntax,
+    // but for maximum compatibility, we'll replace newlines with spaces
+    escaped = escaped.replace(/[\r\n]+/g, ' ');
+
+    // Trim any excessive whitespace
+    escaped = escaped.replace(/\s+/g, ' ').trim();
+
+    return escaped;
+}
+
+export function formatTableComment(comment: string): string {
+    if (!comment) {
+        return '';
+    }
+
+    // Split by newlines and add -- to each line
+    return (
+        comment
+            .split('\n')
+            .map((line) => `-- ${line}`)
+            .join('\n') + '\n'
+    );
+}
+
+export function formatMSSQLTableComment(comment: string): string {
+    if (!comment) {
+        return '';
+    }
+
+    // For MSSQL, we use multi-line comment syntax
+    // Escape */ to prevent breaking the comment block
+    const escaped = comment.replace(/\*\//g, '* /');
+    return `/**\n${escaped}\n*/\n`;
+}
+
 export function getInlineFK(table: DBTable, diagram: Diagram): string {
     if (!diagram.relationships) {
         return '';

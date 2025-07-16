@@ -1,5 +1,7 @@
 import {
     exportFieldComment,
+    escapeSQLComment,
+    formatTableComment,
     isFunction,
     isKeyword,
     strHasQuotes,
@@ -216,7 +218,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
             const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
 
             return `${
-                table.comments ? `-- ${table.comments}\n` : ''
+                table.comments ? formatTableComment(table.comments) : ''
             }CREATE TABLE ${tableName} (\n${table.fields
                 .map((field: DBField) => {
                     const fieldName = `"${field.name}"`;
@@ -311,7 +313,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
             }\n);\n\n${
                 // Add table comments
                 table.comments
-                    ? `COMMENT ON TABLE ${tableName} IS '${table.comments.replace(/'/g, "''")}';\n\n`
+                    ? `COMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';\n\n`
                     : ''
             }${
                 // Add column comments
@@ -319,7 +321,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
                     .filter((f) => f.comments)
                     .map(
                         (f) =>
-                            `COMMENT ON COLUMN ${tableName}."${f.name}" IS '${f.comments?.replace(/'/g, "''")}';\n`
+                            `COMMENT ON COLUMN ${tableName}."${f.name}" IS '${escapeSQLComment(f.comments || '')}';\n`
                     )
                     .join('')
             }\n${
