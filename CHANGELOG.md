@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.14.0](https://github.com/chartdb/chartdb/compare/v1.13.2...v1.14.0) (2025-07-17)
+
+
+### Features
+
+* implement area grouping with parent-child relationships ([#762](https://github.com/chartdb/chartdb/issues/762)) ([b35e175](https://github.com/chartdb/chartdb/commit/b35e17526b3c9b918928ae5f3f89711ea7b2529c))
+
+
+### Bug Fixes
+
+* add open and create diagram to side menu ([#757](https://github.com/chartdb/chartdb/issues/757)) ([67f5ac3](https://github.com/chartdb/chartdb/commit/67f5ac303ebf5ada97d5c80fb08a2815ca205a91))
+* add PostgreSQL tests and fix parsing SQL ([#760](https://github.com/chartdb/chartdb/issues/760)) ([5d33740](https://github.com/chartdb/chartdb/commit/5d337409d64d1078b538350016982a98e684c06c))
+* **area:** redo/undo after dragging an area with tables ([#767](https://github.com/chartdb/chartdb/issues/767)) ([6af94af](https://github.com/chartdb/chartdb/commit/6af94afc56cf8987b8fc9e3f0a9bfa966de35408))
+* remove error lag after autofix ([#764](https://github.com/chartdb/chartdb/issues/764)) ([bf32c08](https://github.com/chartdb/chartdb/commit/bf32c08d37c02ee6d7946a41633bb97b2271fcb7))
+* **sql-export:** escape newlines and quotes in multi-line comments ([#765](https://github.com/chartdb/chartdb/issues/765)) ([f7f9290](https://github.com/chartdb/chartdb/commit/f7f92903def84a94ac0c66f625f96a6681383945))
+
 ## [1.13.2](https://github.com/chartdb/chartdb/compare/v1.13.1...v1.13.2) (2025-07-06)
 
 
