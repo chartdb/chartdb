@@ -35,6 +35,10 @@ import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-lang
 import { useToast } from '@/components/toast/use-toast';
 import { Spinner } from '@/components/spinner/spinner';
 import { debounce } from '@/lib/utils';
+import {
+    validateDBML as validateDBMLContent,
+    autoFixDBML,
+} from '@/lib/data/dbml-import/dbml-validator';
 
 interface DBMLError {
     message: string;
@@ -117,6 +121,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
     const [dbmlContent, setDBMLContent] = useState<string>(initialDBML);
     const { closeImportDBMLDialog } = useDialog();
     const [errorMessage, setErrorMessage] = useState<string | undefined>();
+    const [tableNotes, setTableNotes] = useState<
+        Map<string, string> | undefined
+    >();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
     const {
@@ -190,7 +197,28 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             setErrorMessage(undefined);
             clearDecorations();
 
-            if (!content.trim()) return;
+            if (!content.trim()) {
+                setTableNotes(undefined);
+                return;
+            }
+
+            // First, validate using the new validator to extract table notes
+            const validation = validateDBMLContent(content);
+
+            // Store table notes if found
+            setTableNotes((prevNotes) => {
+                if (validation.tableNotes && validation.tableNotes.size > 0) {
+                    return validation.tableNotes;
+                }
+                // If no notes in validation but we have fixes, extract from original
+                else if (!prevNotes && validation.fixedDBML) {
+                    const fixResult = autoFixDBML(content);
+                    if (fixResult.tableNotes.size > 0) {
+                        return fixResult.tableNotes;
+                    }
+                }
+                return prevNotes;
+            });
 
             try {
                 const preprocessedContent = preprocessDBML(content);
@@ -240,6 +268,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             setErrorMessage(undefined);
             clearDecorations();
             setDBMLContent(initialDBML);
+            setTableNotes(undefined);
         }
     }, [dialog.open, initialDBML, clearDecorations]);
 
@@ -247,8 +276,11 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            // Import DBML content (preprocessing and sanitization handled internally)
-            const importedDiagram = await importDBMLToDiagram(dbmlContent);
+            // Import DBML content with table notes
+            const importedDiagram = await importDBMLToDiagram(
+                dbmlContent,
+                tableNotes
+            );
             const tableIdsToRemove = tables
                 .filter((table) =>
                     importedDiagram.tables?.some(
@@ -325,6 +357,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         toast,
         setReorder,
         t,
+        tableNotes,
     ]);
 
     return (

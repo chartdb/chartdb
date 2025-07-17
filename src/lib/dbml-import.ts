@@ -8,6 +8,7 @@ import type { DataType } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { adjustTablePositions } from '@/lib/domain/db-table';
 
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
@@ -154,7 +155,8 @@ const determineCardinality = (
 };
 
 export const importDBMLToDiagram = async (
-    dbmlContent: string
+    dbmlContent: string,
+    tableNotes?: Map<string, string>
 ): Promise<Diagram> => {
     try {
         // Handle empty content
@@ -273,10 +275,6 @@ export const importDBMLToDiagram = async (
 
         // Convert DBML tables to ChartDB table objects
         const tables: DBTable[] = extractedData.tables.map((table, index) => {
-            const row = Math.floor(index / 4);
-            const col = index % 4;
-            const tableSpacing = 300;
-
             // Create fields first so we have their IDs
             const fields = table.fields.map((field) => ({
                 id: generateId(),
@@ -312,9 +310,12 @@ export const importDBMLToDiagram = async (
                     };
                 }) || [];
 
+            const tableName = table.name.replace(/['"]/g, '');
+            const tableComment = tableNotes?.get(tableName);
+
             return {
                 id: generateId(),
-                name: table.name.replace(/['"]/g, ''),
+                name: tableName,
                 schema:
                     typeof table.schema === 'string'
                         ? table.schema
@@ -322,11 +323,12 @@ export const importDBMLToDiagram = async (
                 order: index,
                 fields,
                 indexes,
-                x: col * tableSpacing,
-                y: row * tableSpacing,
+                x: 0, // Will be positioned by adjustTablePositions
+                y: 0, // Will be positioned by adjustTablePositions
                 color: randomColor(),
                 isView: false,
                 createdAt: Date.now(),
+                ...(tableComment && { comments: tableComment }),
             };
         });
 
@@ -381,11 +383,28 @@ export const importDBMLToDiagram = async (
             }
         );
 
+        // Apply automatic table positioning
+        const adjustedTables = adjustTablePositions({
+            tables,
+            relationships,
+            mode: 'perSchema',
+        });
+
+        // Sort tables: non-views first, then views, alphabetically within each group
+        const sortedTables = adjustedTables.sort((a, b) => {
+            if (a.isView === b.isView) {
+                // Both are either tables or views, so sort alphabetically by name
+                return a.name.localeCompare(b.name);
+            }
+            // If one is a view and the other is not, put tables first
+            return a.isView ? 1 : -1;
+        });
+
         return {
             id: generateDiagramId(),
             name: 'DBML Import',
             databaseType: DatabaseType.GENERIC,
-            tables,
+            tables: sortedTables,
             relationships,
             createdAt: new Date(),
             updatedAt: new Date(),
