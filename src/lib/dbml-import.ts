@@ -5,6 +5,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataType } from '@/lib/data/data-types/data-types';
+import { dataTypeMap } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -77,6 +78,7 @@ interface DBMLField {
     pk?: boolean;
     not_null?: boolean;
     increment?: boolean;
+    note?: string;
 }
 
 interface DBMLIndexColumn {
@@ -109,15 +111,77 @@ interface DBMLRef {
     endpoints: [DBMLEndpoint, DBMLEndpoint];
 }
 
-const mapDBMLTypeToGenericType = (dbmlType: string): DataType => {
+const mapDBMLTypeToDataType = (
+    dbmlType: string,
+    databaseType: DatabaseType
+): DataType => {
     const normalizedType = dbmlType.toLowerCase().replace(/\(.*\)/, '');
-    const matchedType = genericDataTypes.find((t) => t.id === normalizedType);
-    if (matchedType) return matchedType;
+    const targetDataTypes = dataTypeMap[databaseType] || genericDataTypes;
+
+    // Database-specific type mappings
+    const databaseSpecificMappings: Record<
+        DatabaseType,
+        Record<string, string>
+    > = {
+        [DatabaseType.POSTGRESQL]: {
+            int: 'integer',
+            bool: 'boolean',
+            number: 'numeric',
+        },
+        [DatabaseType.MYSQL]: {
+            // MySQL uses 'int' directly
+            bool: 'boolean',
+            number: 'decimal',
+        },
+        [DatabaseType.SQL_SERVER]: {
+            int: 'int',
+            bool: 'bit',
+            number: 'decimal',
+        },
+        [DatabaseType.SQLITE]: {
+            int: 'integer',
+            bool: 'boolean',
+            number: 'real',
+        },
+        [DatabaseType.MARIADB]: {
+            int: 'int',
+            bool: 'boolean',
+            number: 'decimal',
+        },
+        [DatabaseType.CLICKHOUSE]: {},
+        [DatabaseType.COCKROACHDB]: {
+            int: 'integer',
+            bool: 'boolean',
+            number: 'numeric',
+        },
+        [DatabaseType.ORACLE]: {
+            int: 'number',
+            bool: 'number',
+            varchar: 'varchar2',
+        },
+        [DatabaseType.GENERIC]: {
+            // For generic, prefer common type names
+            int: 'int',
+            bool: 'boolean',
+            number: 'numeric',
+        },
+    };
+
+    // Check database-specific mapping first
+    const dbSpecificMap = databaseSpecificMappings[databaseType] || {};
+    const specificMapping = dbSpecificMap[normalizedType];
+    if (specificMapping) {
+        const foundType = targetDataTypes.find((t) => t.id === specificMapping);
+        if (foundType) return { id: foundType.id, name: foundType.name };
+    }
+
+    // Then try to find exact match in target database types
+    const exactMatch = targetDataTypes.find((t) => t.id === normalizedType);
+    if (exactMatch) return { id: exactMatch.id, name: exactMatch.name };
+
+    // Common DBML to database type mappings (fallback)
     const typeMap: Record<string, string> = {
-        int: 'integer',
         varchar: 'varchar',
-        bool: 'boolean',
-        number: 'numeric',
         string: 'varchar',
         text: 'text',
         timestamp: 'timestamp',
@@ -128,13 +192,21 @@ const mapDBMLTypeToGenericType = (dbmlType: string): DataType => {
         bigint: 'bigint',
         smallint: 'smallint',
         char: 'char',
+        uuid: 'uuid',
     };
+
     const mappedType = typeMap[normalizedType];
     if (mappedType) {
-        const foundType = genericDataTypes.find((t) => t.id === mappedType);
-        if (foundType) return foundType;
+        const foundType = targetDataTypes.find((t) => t.id === mappedType);
+        if (foundType) return { id: foundType.id, name: foundType.name };
     }
-    return genericDataTypes.find((t) => t.id === 'varchar')!;
+
+    // Default to varchar if type not found
+    const defaultType =
+        targetDataTypes.find((t) => t.id === 'varchar') ||
+        targetDataTypes.find((t) => t.id === 'text') ||
+        targetDataTypes[0];
+    return { id: defaultType.id, name: defaultType.name };
 };
 
 const determineCardinality = (
@@ -156,7 +228,8 @@ const determineCardinality = (
 
 export const importDBMLToDiagram = async (
     dbmlContent: string,
-    tableNotes?: Map<string, string>
+    tableNotes?: Map<string, string>,
+    targetDatabaseType: DatabaseType = DatabaseType.GENERIC
 ): Promise<Diagram> => {
     try {
         // Handle empty content
@@ -173,8 +246,32 @@ export const importDBMLToDiagram = async (
         }
 
         const parser = new Parser();
-        // Preprocess and sanitize DBML content
+        // Preprocess DBML content first
         const preprocessedContent = preprocessDBML(dbmlContent);
+
+        // Parse the preprocessed content (without sanitization) to preserve notes
+        const parsedDataWithNotes = parser.parse(preprocessedContent, 'dbml');
+        const dbmlDataWithNotes = parsedDataWithNotes.schemas[0];
+
+        // Extract field notes before sanitization
+        const fieldNotesMap = new Map<string, Map<string, string>>();
+        if (dbmlDataWithNotes?.tables) {
+            (dbmlDataWithNotes.tables as unknown as DBMLTable[]).forEach(
+                (table) => {
+                    const tableFieldNotes = new Map<string, string>();
+                    table.fields.forEach((field: DBMLField) => {
+                        if (field.note) {
+                            tableFieldNotes.set(field.name, field.note);
+                        }
+                    });
+                    if (tableFieldNotes.size > 0) {
+                        fieldNotesMap.set(table.name, tableFieldNotes);
+                    }
+                }
+            );
+        }
+
+        // Now sanitize for parsing table/field names
         const sanitizedContent = sanitizeDBML(preprocessedContent);
 
         // Handle content that becomes empty after preprocessing
@@ -275,16 +372,28 @@ export const importDBMLToDiagram = async (
 
         // Convert DBML tables to ChartDB table objects
         const tables: DBTable[] = extractedData.tables.map((table, index) => {
+            const tableName = table.name.replace(/['"]/g, '');
+            const tableFieldNotes = fieldNotesMap.get(table.name);
+
             // Create fields first so we have their IDs
-            const fields = table.fields.map((field) => ({
-                id: generateId(),
-                name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToGenericType(field.type.type_name),
-                nullable: !field.not_null,
-                primaryKey: field.pk || false,
-                unique: field.unique || false,
-                createdAt: Date.now(),
-            }));
+            const fields = table.fields.map((field) => {
+                const fieldName = field.name.replace(/['"]/g, '');
+                const fieldNote = tableFieldNotes?.get(field.name);
+
+                return {
+                    id: generateId(),
+                    name: fieldName,
+                    type: mapDBMLTypeToDataType(
+                        field.type.type_name,
+                        targetDatabaseType
+                    ),
+                    nullable: !field.not_null,
+                    primaryKey: field.pk || false,
+                    unique: field.unique || false,
+                    createdAt: Date.now(),
+                    ...(fieldNote && { comments: fieldNote }),
+                };
+            });
 
             // Convert DBML indexes to ChartDB indexes
             const indexes =
@@ -310,7 +419,6 @@ export const importDBMLToDiagram = async (
                     };
                 }) || [];
 
-            const tableName = table.name.replace(/['"]/g, '');
             const tableComment = tableNotes?.get(tableName);
 
             return {
@@ -403,7 +511,7 @@ export const importDBMLToDiagram = async (
         return {
             id: generateDiagramId(),
             name: 'DBML Import',
-            databaseType: DatabaseType.GENERIC,
+            databaseType: targetDatabaseType,
             tables: sortedTables,
             relationships,
             createdAt: new Date(),

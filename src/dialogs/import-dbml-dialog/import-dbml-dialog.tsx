@@ -133,6 +133,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         relationships,
         removeTables,
         removeRelationships,
+        databaseType,
     } = useChartDB();
     const { reorderTables } = useCanvas();
     const [reorder, setReorder] = useState(false);
@@ -279,7 +280,8 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             // Import DBML content with table notes
             const importedDiagram = await importDBMLToDiagram(
                 dbmlContent,
-                tableNotes
+                tableNotes,
+                databaseType
             );
             const tableIdsToRemove = tables
                 .filter((table) =>
@@ -358,6 +360,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         setReorder,
         t,
         tableNotes,
+        databaseType,
     ]);
 
     return (

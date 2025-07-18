@@ -112,6 +112,53 @@ Table property {
         );
     });
 
+    it('should import field notes as field comments', async () => {
+        const dbmlWithFieldNotes = `Table property {
+  id uuid [pk, note: 'Identificador único de la propiedad']
+  owner_person_id uuid [not null, note: 'Referencia al propietario legal del inmueble']
+  bedrooms int [note: 'Cantidad de dormitorios']
+  bathrooms decimal(3,1) [note: 'Cantidad de baños (ej: 2.5 para 2 baños y 1 toilette)']
+  description text [note: 'Descripción general y permanente de la propiedad']
+}`;
+
+        const diagram = await importDBMLToDiagram(dbmlWithFieldNotes);
+
+        const propertyTable = diagram.tables?.find(
+            (t) => t.name === 'property'
+        );
+        expect(propertyTable).toBeDefined();
+
+        // Check that field comments are imported
+        const idField = propertyTable?.fields.find((f) => f.name === 'id');
+        expect(idField?.comments).toBe('Identificador único de la propiedad');
+
+        const ownerField = propertyTable?.fields.find(
+            (f) => f.name === 'owner_person_id'
+        );
+        expect(ownerField?.comments).toBe(
+            'Referencia al propietario legal del inmueble'
+        );
+
+        const bedroomsField = propertyTable?.fields.find(
+            (f) => f.name === 'bedrooms'
+        );
+        expect(bedroomsField?.comments).toBe('Cantidad de dormitorios');
+
+        const bathroomsField = propertyTable?.fields.find(
+            (f) => f.name === 'bathrooms'
+        );
+        expect(bathroomsField?.comments).toBe(
+            'Cantidad de baños (ej: 2.5 para 2 baños y 1 toilette)'
+        );
+
+        const descriptionField = propertyTable?.fields.find(
+            (f) => f.name === 'description'
+        );
+        expect(descriptionField?.comments).toBe(
+            'Descripción general y permanente de la propiedad'
+        );
+    });
+
     it('should handle complex Spanish property example', async () => {
         const complexDBML = `Table person {
   id uuid [pk]
@@ -187,5 +234,48 @@ Table property {
         const addressTable = diagram.tables?.find((t) => t.name === 'address');
         expect(personTable).toBeDefined();
         expect(addressTable).toBeDefined();
+    });
+
+    it('should handle both table notes and field notes together', async () => {
+        const dbmlWithBothNotes = `Table property {
+  
+  Note: 'Main property table representing real estate assets'
+  id uuid [pk, note: 'Unique identifier']
+  address varchar [not null, note: 'Property address']
+  price decimal(10,2) [note: 'Current market price']
+}`;
+
+        // First validate to extract table notes
+        const validation = validateDBML(dbmlWithBothNotes);
+        // Use the fixed DBML if available, otherwise use original
+        const dbmlToImport = validation.fixedDBML || dbmlWithBothNotes;
+        const diagram = await importDBMLToDiagram(
+            dbmlToImport,
+            validation.tableNotes
+        );
+
+        const propertyTable = diagram.tables?.find(
+            (t) => t.name === 'property'
+        );
+        expect(propertyTable).toBeDefined();
+
+        // Check table comment
+        expect(propertyTable?.comments).toBe(
+            'Main property table representing real estate assets'
+        );
+
+        // Check field comments
+        const idField = propertyTable?.fields.find((f) => f.name === 'id');
+        expect(idField?.comments).toBe('Unique identifier');
+
+        const addressField = propertyTable?.fields.find(
+            (f) => f.name === 'address'
+        );
+        expect(addressField?.comments).toBe('Property address');
+
+        const priceField = propertyTable?.fields.find(
+            (f) => f.name === 'price'
+        );
+        expect(priceField?.comments).toBe('Current market price');
     });
 });

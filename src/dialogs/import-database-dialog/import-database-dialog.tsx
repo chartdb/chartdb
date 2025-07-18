@@ -72,12 +72,11 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             } else if (importMethod === 'dbml') {
                 diagram = await importDBMLToDiagram(
                     scriptResult,
-                    dbmlTableNotes
+                    dbmlTableNotes,
+                    databaseType
                 );
                 // Keep the existing diagram name
                 diagram.name = diagramName;
-                // Set the database type from the dialog selection
-                diagram.databaseType = databaseType;
             } else {
                 const databaseMetadata: DatabaseMetadata =
                     loadDatabaseMetadata(scriptResult);
