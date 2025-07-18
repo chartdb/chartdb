@@ -33,6 +33,7 @@ export const mr: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'ओळी रंगवा',
             },
             backup: {
                 // TODO: Add translations

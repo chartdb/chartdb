@@ -33,6 +33,7 @@ export const pt_BR: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: 'Colorir Linhas',
             },
             // TODO: Translate
             backup: {

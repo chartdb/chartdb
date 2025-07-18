@@ -33,6 +33,7 @@ export const zh_TW: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: '著色線條',
             },
             backup: {
                 backup: '備份',

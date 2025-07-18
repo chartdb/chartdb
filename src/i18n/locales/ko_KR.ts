@@ -33,6 +33,7 @@ export const ko_KR: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                colorize_lines: '선 색칠하기',
             },
             backup: {
                 backup: '백업',
