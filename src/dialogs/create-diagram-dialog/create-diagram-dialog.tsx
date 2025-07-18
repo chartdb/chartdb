@@ -18,6 +18,7 @@ import { ImportDatabase } from '../common/import-database/import-database';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
+import { importDBMLToDiagram } from '@/lib/dbml-import';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -26,7 +27,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
-    const [importMethod, setImportMethod] = useState<'query' | 'ddl'>('query');
+    const [importMethod, setImportMethod] = useState<'query' | 'ddl' | 'dbml'>(
+        'query'
+    );
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -66,45 +69,58 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
-    const importNewDiagram = useCallback(async () => {
-        let diagram: Diagram | undefined;
+    const importNewDiagram = useCallback(
+        async (dbmlTableNotes?: Map<string, string>) => {
+            let diagram: Diagram | undefined;
 
-        if (importMethod === 'ddl') {
-            diagram = await sqlImportToDiagram({
-                sqlContent: scriptResult,
-                sourceDatabaseType: databaseType,
-                targetDatabaseType: databaseType,
-            });
-        } else {
-            const databaseMetadata: DatabaseMetadata =
-                loadDatabaseMetadata(scriptResult);
+            if (importMethod === 'ddl') {
+                diagram = await sqlImportToDiagram({
+                    sqlContent: scriptResult,
+                    sourceDatabaseType: databaseType,
+                    targetDatabaseType: databaseType,
+                });
+            } else if (importMethod === 'dbml') {
+                diagram = await importDBMLToDiagram(
+                    scriptResult,
+                    dbmlTableNotes,
+                    databaseType
+                );
+                // Update the diagram name if it's the default
+                if (diagram.name === 'DBML Import') {
+                    diagram.name = `Diagram ${diagramNumber}`;
+                }
+            } else {
+                const databaseMetadata: DatabaseMetadata =
+                    loadDatabaseMetadata(scriptResult);
 
-            diagram = await loadFromDatabaseMetadata({
-                databaseType,
-                databaseMetadata,
-                diagramNumber,
-                databaseEdition:
-                    databaseEdition?.trim().length === 0
-                        ? undefined
-                        : databaseEdition,
-            });
-        }
+                diagram = await loadFromDatabaseMetadata({
+                    databaseType,
+                    databaseMetadata,
+                    diagramNumber,
+                    databaseEdition:
+                        databaseEdition?.trim().length === 0
+                            ? undefined
+                            : databaseEdition,
+                });
+            }
 
-        await addDiagram({ diagram });
-        await updateConfig({ config: { defaultDiagramId: diagram.id } });
-        closeCreateDiagramDialog();
-        navigate(`/diagrams/${diagram.id}`);
-    }, [
-        importMethod,
-        databaseType,
-        addDiagram,
-        databaseEdition,
-        closeCreateDiagramDialog,
-        navigate,
-        updateConfig,
-        scriptResult,
-        diagramNumber,
-    ]);
+            await addDiagram({ diagram });
+            await updateConfig({ config: { defaultDiagramId: diagram.id } });
+            closeCreateDiagramDialog();
+            navigate(`/diagrams/${diagram.id}`);
+        },
+        [
+            importMethod,
+            databaseType,
+            addDiagram,
+            databaseEdition,
+            closeCreateDiagramDialog,
+            navigate,
+            updateConfig,
+            scriptResult,
+            diagramNumber,
+        ]
+    );
 
     const createEmptyDiagram = useCallback(async () => {
         const diagram: Diagram = {
