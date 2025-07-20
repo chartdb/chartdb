@@ -250,8 +250,10 @@ export const ko_KR: LanguageTranslation = {
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
+                    no_fields_tooltip: 'No fields defined for this custom type',
                     custom_type_actions: {
                         title: 'Actions',
+                        highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
@@ -267,7 +269,11 @@ export const ko_KR: LanguageTranslation = {
             undo: '실행 취소',
             redo: '다시 실행',
             reorder_diagram: '다이어그램 재정렬',
-            highlight_overlapping_tables: '겹치는 테이블 강조 표시',
+            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
+            clear_highlight: 'Clear highlight',
+            custom_type_highlight_tooltip:
+                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
         },
 
         new_diagram_dialog: {

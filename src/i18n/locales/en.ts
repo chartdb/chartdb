@@ -265,6 +265,10 @@ export const en = {
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
+            clear_highlight: 'Clear highlight',
+            custom_type_highlight_tooltip:
+                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
         },
 
         new_diagram_dialog: {

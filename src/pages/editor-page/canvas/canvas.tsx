@@ -40,7 +40,13 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid, AlertTriangle, Magnet } from 'lucide-react';
+import {
+    Pencil,
+    LayoutGrid,
+    AlertTriangle,
+    Magnet,
+    Highlighter,
+} from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -165,6 +171,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         readonly,
         removeArea,
         updateArea,
+        highlightedCustomTypeId,
+        setHighlightedCustomTypeId,
+        getCustomType,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -173,6 +182,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
+        useState(false);
+    const [highlightCustomTypeTables, setHighlightCustomTypeTables] =
         useState(false);
     const { reorderTables, fitView, setOverlapGraph, overlapGraph } =
         useCanvas();
@@ -363,12 +374,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         (overlapGraph.graph.get(table.id) ?? []).length > 0;
                     const node = tableToTableNode(table, filteredSchemas);
 
+                    // Check if table uses the highlighted custom type
+                    let hasHighlightedCustomType = false;
+                    if (highlightedCustomTypeId) {
+                        const highlightedType = getCustomType(
+                            highlightedCustomTypeId
+                        );
+                        if (highlightedType) {
+                            hasHighlightedCustomType = table.fields.some(
+                                (field) =>
+                                    field.type.name === highlightedType.name
+                            );
+                        }
+                    }
+
                     return {
                         ...node,
                         data: {
                             ...node.data,
                             isOverlapping,
                             highlightOverlappingTables,
+                            hasHighlightedCustomType,
+                            highlightCustomTypeTables,
                         },
                     };
                 }),
@@ -390,6 +417,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
+        highlightedCustomTypeId,
+        getCustomType,
+        highlightCustomTypeTables,
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
@@ -1037,6 +1067,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
+    const pulseCustomTypeTables = useCallback(() => {
+        setHighlightCustomTypeTables(true);
+        setTimeout(() => setHighlightCustomTypeTables(false), 600);
+    }, []);
+
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
@@ -1127,6 +1162,47 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                             })}
                                         </TooltipContent>
                                     </Tooltip>
+                                    {highlightedCustomTypeId && (
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <span>
+                                                    <Button
+                                                        variant="secondary"
+                                                        className="size-8 bg-yellow-500 p-1 text-white shadow-none hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700"
+                                                        onClick={
+                                                            pulseCustomTypeTables
+                                                        }
+                                                        onDoubleClick={() =>
+                                                            setHighlightedCustomTypeId(
+                                                                null
+                                                            )
+                                                        }
+                                                    >
+                                                        <Highlighter className="size-4" />
+                                                    </Button>
+                                                </span>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                {(() => {
+                                                    const customType =
+                                                        getCustomType(
+                                                            highlightedCustomTypeId
+                                                        );
+                                                    return customType
+                                                        ? t(
+                                                              'toolbar.custom_type_highlight_tooltip',
+                                                              {
+                                                                  typeName:
+                                                                      customType.name,
+                                                              }
+                                                          )
+                                                        : t(
+                                                              'toolbar.clear_highlight'
+                                                          );
+                                                })()}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    )}
                                 </>
                             ) : null}
 

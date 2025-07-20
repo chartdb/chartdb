@@ -53,6 +53,8 @@ export type TableNodeType = Node<
         table: DBTable;
         isOverlapping: boolean;
         highlightOverlappingTables?: boolean;
+        hasHighlightedCustomType?: boolean;
+        highlightCustomTypeTables?: boolean;
     },
     'table'
 >;
@@ -62,7 +64,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         selected,
         dragging,
         id,
-        data: { table, isOverlapping, highlightOverlappingTables },
+        data: {
+            table,
+            isOverlapping,
+            highlightOverlappingTables,
+            hasHighlightedCustomType,
+            highlightCustomTypeTables,
+        },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
@@ -303,6 +311,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     highlightOverlappingTables && isOverlapping
                         ? 'animate-scale-2'
                         : '',
+                    hasHighlightedCustomType
+                        ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2'
+                        : '',
+                    !highlightCustomTypeTables && hasHighlightedCustomType
+                        ? 'animate-scale'
+                        : '',
+                    highlightCustomTypeTables && hasHighlightedCustomType
+                        ? 'animate-scale-2'
+                        : '',
                     isDiffTableChanged && !isDiffNewTable && !isDiffTableRemoved
                         ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
                         : '',
@@ -317,6 +334,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 selected,
                 isOverlapping,
                 highlightOverlappingTables,
+                hasHighlightedCustomType,
+                highlightCustomTypeTables,
                 isDiffTableChanged,
                 isDiffNewTable,
                 isDiffTableRemoved,
