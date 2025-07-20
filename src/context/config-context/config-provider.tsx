@@ -44,8 +44,86 @@ export const ConfigProvider: React.FC<React.PropsWithChildren> = ({
         return promise;
     };
 
+    const getHiddenTablesForDiagram = (diagramId: string): string[] => {
+        return config?.hiddenTablesByDiagram?.[diagramId] ?? [];
+    };
+
+    const setHiddenTablesForDiagram = async (
+        diagramId: string,
+        hiddenTableIds: string[]
+    ): Promise<void> => {
+        return updateConfig({
+            updateFn: (currentConfig) => ({
+                ...currentConfig,
+                hiddenTablesByDiagram: {
+                    ...currentConfig.hiddenTablesByDiagram,
+                    [diagramId]: hiddenTableIds,
+                },
+            }),
+        });
+    };
+
+    const hideTableForDiagram = async (
+        diagramId: string,
+        tableId: string
+    ): Promise<void> => {
+        return updateConfig({
+            updateFn: (currentConfig) => {
+                const currentHiddenTables =
+                    currentConfig.hiddenTablesByDiagram?.[diagramId] ?? [];
+                if (currentHiddenTables.includes(tableId)) {
+                    return currentConfig; // Already hidden, no change needed
+                }
+
+                return {
+                    ...currentConfig,
+                    hiddenTablesByDiagram: {
+                        ...currentConfig.hiddenTablesByDiagram,
+                        [diagramId]: [...currentHiddenTables, tableId],
+                    },
+                };
+            },
+        });
+    };
+
+    const unhideTableForDiagram = async (
+        diagramId: string,
+        tableId: string
+    ): Promise<void> => {
+        return updateConfig({
+            updateFn: (currentConfig) => {
+                const currentHiddenTables =
+                    currentConfig.hiddenTablesByDiagram?.[diagramId] ?? [];
+                const filteredTables = currentHiddenTables.filter(
+                    (id) => id !== tableId
+                );
+
+                if (filteredTables.length === currentHiddenTables.length) {
+                    return currentConfig; // Not hidden, no change needed
+                }
+
+                return {
+                    ...currentConfig,
+                    hiddenTablesByDiagram: {
+                        ...currentConfig.hiddenTablesByDiagram,
+                        [diagramId]: filteredTables,
+                    },
+                };
+            },
+        });
+    };
+
     return (
-        <ConfigContext.Provider value={{ config, updateConfig }}>
+        <ConfigContext.Provider
+            value={{
+                config,
+                updateConfig,
+                getHiddenTablesForDiagram,
+                setHiddenTablesForDiagram,
+                hideTableForDiagram,
+                unhideTableForDiagram,
+            }}
+        >
             {children}
         </ConfigContext.Provider>
     );

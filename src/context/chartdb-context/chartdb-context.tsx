@@ -277,6 +277,11 @@ export interface ChartDBContext {
         customType: Partial<DBCustomType>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+
+    // Filters
+    hiddenTableIds?: string[];
+    addHiddenTableId: (tableId: string) => Promise<void>;
+    removeHiddenTableId: (tableId: string) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -372,4 +377,9 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeCustomType: emptyFn,
     removeCustomTypes: emptyFn,
     updateCustomType: emptyFn,
+
+    // Filters
+    hiddenTableIds: [],
+    addHiddenTableId: emptyFn,
+    removeHiddenTableId: emptyFn,
 });
