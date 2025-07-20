@@ -271,6 +271,8 @@ export const tr: LanguageTranslation = {
             redo: 'Yinele',
             reorder_diagram: 'Diyagramı Yeniden Sırala',
             highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
         new_diagram_dialog: {
             database_selection: {

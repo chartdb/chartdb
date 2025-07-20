@@ -271,6 +271,8 @@ export const ar: LanguageTranslation = {
             redo: 'إعادة',
             reorder_diagram: 'إعادة ترتيب الرسم البياني',
             highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

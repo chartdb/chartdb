@@ -276,6 +276,8 @@ export const mr: LanguageTranslation = {
             redo: 'पुन्हा करा',
             reorder_diagram: 'आरेख पुनःक्रमित करा',
             highlight_overlapping_tables: 'ओव्हरलॅपिंग टेबल्स हायलाइट करा',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

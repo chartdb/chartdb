@@ -273,6 +273,8 @@ export const gu: LanguageTranslation = {
             redo: 'રીડુ',
             reorder_diagram: 'ડાયાગ્રામ ફરીથી વ્યવસ્થિત કરો',
             highlight_overlapping_tables: 'ઓવરલેપ કરતો ટેબલ હાઇલાઇટ કરો',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

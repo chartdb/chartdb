@@ -271,6 +271,8 @@ export const id_ID: LanguageTranslation = {
             redo: 'Redo',
             reorder_diagram: 'Atur Ulang Diagram',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

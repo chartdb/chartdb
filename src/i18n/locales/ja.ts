@@ -278,6 +278,8 @@ export const ja: LanguageTranslation = {
             reorder_diagram: 'ダイアグラムを並べ替え',
             // TODO: Translate
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

@@ -270,6 +270,8 @@ export const uk: LanguageTranslation = {
             redo: 'Повторити',
             reorder_diagram: 'Перевпорядкувати діаграму',
             highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

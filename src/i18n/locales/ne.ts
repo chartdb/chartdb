@@ -274,6 +274,8 @@ export const ne: LanguageTranslation = {
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
             highlight_overlapping_tables:
                 'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

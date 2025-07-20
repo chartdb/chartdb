@@ -271,6 +271,8 @@ export const vi: LanguageTranslation = {
             redo: 'Làm lại',
             reorder_diagram: 'Sắp xếp lại sơ đồ',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

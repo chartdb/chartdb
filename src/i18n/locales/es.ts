@@ -262,6 +262,8 @@ export const es: LanguageTranslation = {
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
