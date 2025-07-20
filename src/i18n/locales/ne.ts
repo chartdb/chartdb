@@ -151,6 +151,9 @@ export const ne: LanguageTranslation = {
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

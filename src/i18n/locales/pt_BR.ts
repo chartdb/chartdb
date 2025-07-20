@@ -151,6 +151,9 @@ export const pt_BR: LanguageTranslation = {
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

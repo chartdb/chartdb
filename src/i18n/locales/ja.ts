@@ -154,6 +154,9 @@ export const ja: LanguageTranslation = {
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

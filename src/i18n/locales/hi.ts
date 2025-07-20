@@ -151,6 +151,9 @@ export const hi: LanguageTranslation = {
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

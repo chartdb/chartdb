@@ -141,6 +141,9 @@ export const es: LanguageTranslation = {
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

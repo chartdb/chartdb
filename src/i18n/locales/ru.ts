@@ -147,6 +147,9 @@ export const ru: LanguageTranslation = {
                         comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         character_length: 'Макс. длина',
                     },
                     index_actions: {

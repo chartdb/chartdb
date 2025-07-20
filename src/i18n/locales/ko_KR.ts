@@ -150,6 +150,9 @@ export const ko_KR: LanguageTranslation = {
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

@@ -146,6 +146,8 @@ export const en = {
                         character_length: 'Max Length',
                         comments: 'Comments',
                         no_comments: 'No comments',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         delete_field: 'Delete Field',
                     },
                     index_actions: {

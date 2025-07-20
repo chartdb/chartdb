@@ -149,6 +149,9 @@ export const uk: LanguageTranslation = {
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

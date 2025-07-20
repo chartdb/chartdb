@@ -152,6 +152,9 @@ export const de: LanguageTranslation = {
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

@@ -151,6 +151,8 @@ export const ar: LanguageTranslation = {
                         delete_field: 'حذف الحقل',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                     },
                     index_actions: {
                         title: 'خصائص الفهرس',
