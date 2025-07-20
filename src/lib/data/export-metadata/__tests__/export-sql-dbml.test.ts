@@ -2,6 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { exportBaseSQL } from '../export-sql-script';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { DBField } from '@/lib/domain/db-field';
 
 // Mock the dbml/core importer
 vi.mock('@dbml/core', () => ({
@@ -14,9 +16,50 @@ vi.mock('@dbml/core', () => ({
 }));
 
 describe('DBML Export - SQL Generation Tests', () => {
-    // Helper to generate test IDs
+    // Helper to generate test IDs and timestamps
     let idCounter = 0;
     const testId = () => `test-id-${++idCounter}`;
+    const testTime = Date.now();
+
+    // Helper to create a field with all required properties
+    const createField = (overrides: Partial<DBField>): DBField =>
+        ({
+            id: testId(),
+            name: 'field',
+            type: { id: 'text', name: 'text' },
+            primaryKey: false,
+            nullable: true,
+            unique: false,
+            createdAt: testTime,
+            ...overrides,
+        }) as DBField;
+
+    // Helper to create a table with all required properties
+    const createTable = (overrides: Partial<DBTable>): DBTable =>
+        ({
+            id: testId(),
+            name: 'table',
+            fields: [],
+            indexes: [],
+            createdAt: testTime,
+            x: 0,
+            y: 0,
+            width: 200,
+            ...overrides,
+        }) as DBTable;
+
+    // Helper to create a diagram with all required properties
+    const createDiagram = (overrides: Partial<Diagram>): Diagram =>
+        ({
+            id: testId(),
+            name: 'diagram',
+            databaseType: DatabaseType.GENERIC,
+            tables: [],
+            relationships: [],
+            createdAt: testTime,
+            updatedAt: testTime,
+            ...overrides,
+        }) as Diagram;
 
     describe('Composite Primary Keys', () => {
         it('should handle tables with composite primary keys correctly', () => {
@@ -24,32 +67,32 @@ describe('DBML Export - SQL Generation Tests', () => {
             const field1Id = testId();
             const field2Id = testId();
 
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Enchanted Library',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: tableId,
                         name: 'spell_components',
                         fields: [
-                            {
+                            createField({
                                 id: field1Id,
                                 name: 'spell_id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: field2Id,
                                 name: 'component_id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'quantity',
                                 type: { id: 'integer', name: 'integer' },
@@ -57,18 +100,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: false,
                                 unique: false,
                                 default: '1',
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FFD700',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -86,42 +125,38 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle single primary keys inline', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Wizard Academy',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'wizards',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'name',
                                 type: { id: 'varchar', name: 'varchar' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#9370DB',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -138,24 +173,24 @@ describe('DBML Export - SQL Generation Tests', () => {
 
     describe('Default Value Handling', () => {
         it('should skip invalid default values like "has default"', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Potion Shop',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'potions',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'is_active',
                                 type: { id: 'boolean', name: 'boolean' },
@@ -163,8 +198,8 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: 'has default',
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'stock_count',
                                 type: { id: 'integer', name: 'integer' },
@@ -172,18 +207,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: false,
                                 unique: false,
                                 default: 'DEFAULT has default',
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#98FB98',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -200,24 +231,24 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle valid default values correctly', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Treasure Vault',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'treasures',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'gold_value',
                                 type: { id: 'numeric', name: 'numeric' },
@@ -225,10 +256,10 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: false,
                                 unique: false,
                                 default: '100.50',
-                                precision: '10',
-                                scale: '2',
-                            },
-                            {
+                                precision: 10,
+                                scale: 2,
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'created_at',
                                 type: { id: 'timestamp', name: 'timestamp' },
@@ -236,8 +267,8 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: 'now()',
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'currency',
                                 type: { id: 'char', name: 'char' },
@@ -246,18 +277,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: false,
                                 unique: false,
                                 default: 'EUR',
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FFD700',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -272,24 +299,24 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle NOW and similar default values', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Quest Log',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'quests',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'created_at',
                                 type: { id: 'timestamp', name: 'timestamp' },
@@ -297,8 +324,8 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: 'NOW',
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'updated_at',
                                 type: { id: 'timestamp', name: 'timestamp' },
@@ -306,18 +333,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: "('now')",
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#4169E1',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -333,24 +356,24 @@ describe('DBML Export - SQL Generation Tests', () => {
 
     describe('Character Type Handling', () => {
         it('should handle char types with and without length correctly', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Dragon Registry',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'dragons',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'element_code',
                                 type: { id: 'char', name: 'char' },
@@ -358,26 +381,22 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'status',
                                 type: { id: 'char', name: 'char' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FF6347',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -392,24 +411,24 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should not have spaces between char and parentheses', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Rune Inscriptions',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'runes',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'integer', name: 'integer' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'symbol',
                                 type: { id: 'char', name: 'char' },
@@ -417,18 +436,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 primaryKey: false,
                                 nullable: false,
                                 unique: true,
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#8B4513',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -444,40 +459,40 @@ describe('DBML Export - SQL Generation Tests', () => {
 
     describe('Complex Table Structures', () => {
         it('should handle tables with no primary key', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Alchemy Log',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'experiment_logs',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'experiment_id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'alchemist_id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'result',
                                 type: { id: 'text', name: 'text' },
                                 primaryKey: false,
                                 nullable: true,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'logged_at',
                                 type: { id: 'timestamp', name: 'timestamp' },
@@ -485,18 +500,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: false,
                                 unique: false,
                                 default: 'now()',
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#32CD32',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -515,76 +526,74 @@ describe('DBML Export - SQL Generation Tests', () => {
             const guildIdFieldId = testId();
             const memberGuildIdFieldId = testId();
 
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Adventurer Guild System',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: guildTableId,
                         name: 'guilds',
                         fields: [
-                            {
+                            createField({
                                 id: guildIdFieldId,
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'name',
                                 type: { id: 'varchar', name: 'varchar' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: true,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'founded_year',
                                 type: { id: 'integer', name: 'integer' },
                                 primaryKey: false,
                                 nullable: true,
                                 unique: false,
-                            },
+                            }),
                         ],
                         indexes: [],
                         x: 0,
                         y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#4169E1',
-                    },
-                    {
+                    }),
+                    createTable({
                         id: memberTableId,
                         name: 'guild_members',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: memberGuildIdFieldId,
                                 name: 'guild_id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'member_name',
                                 type: { id: 'varchar', name: 'varchar' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'rank',
                                 type: { id: 'varchar', name: 'varchar' },
@@ -592,15 +601,13 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: "'Novice'",
-                            },
+                            }),
                         ],
                         indexes: [],
                         x: 250,
                         y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FFD700',
-                    },
+                    }),
                 ],
                 relationships: [
                     {
@@ -612,9 +619,10 @@ describe('DBML Export - SQL Generation Tests', () => {
                         targetFieldId: guildIdFieldId,
                         sourceCardinality: 'many',
                         targetCardinality: 'one',
+                        createdAt: testTime,
                     },
                 ],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -634,72 +642,66 @@ describe('DBML Export - SQL Generation Tests', () => {
 
     describe('Schema Support', () => {
         it('should handle tables with schemas correctly', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Multi-Realm Database',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'portals',
                         schema: 'transportation',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'destination',
                                 type: { id: 'varchar', name: 'varchar' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#9370DB',
-                    },
-                    {
+                    }),
+                    createTable({
                         id: testId(),
                         name: 'spells',
                         schema: 'magic',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'integer', name: 'integer' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'name',
                                 type: { id: 'varchar', name: 'varchar' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: true,
-                            },
+                            }),
                         ],
                         indexes: [],
                         x: 250,
                         y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FF1493',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -718,13 +720,13 @@ describe('DBML Export - SQL Generation Tests', () => {
 
     describe('Edge Cases', () => {
         it('should handle empty tables array', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Empty Realm',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -736,25 +738,21 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle tables with empty fields', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Void Space',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'empty_table',
                         fields: [],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#000000',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -768,24 +766,24 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle special characters in default values', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Mystic Scrolls',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'scrolls',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'uuid', name: 'uuid' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'inscription',
                                 type: { id: 'text', name: 'text' },
@@ -793,18 +791,14 @@ describe('DBML Export - SQL Generation Tests', () => {
                                 nullable: true,
                                 unique: false,
                                 default: "'Ancient\\'s Wisdom'",
-                            },
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#8B4513',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
@@ -817,53 +811,49 @@ describe('DBML Export - SQL Generation Tests', () => {
         });
 
         it('should handle numeric precision and scale', () => {
-            const diagram: Diagram = {
+            const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Treasury',
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
-                    {
+                    createTable({
                         id: testId(),
                         name: 'gold_reserves',
                         fields: [
-                            {
+                            createField({
                                 id: testId(),
                                 name: 'id',
                                 type: { id: 'integer', name: 'integer' },
                                 primaryKey: true,
                                 nullable: false,
                                 unique: false,
-                            },
-                            {
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'amount',
                                 type: { id: 'numeric', name: 'numeric' },
                                 primaryKey: false,
                                 nullable: false,
                                 unique: false,
-                                precision: '15',
-                                scale: '2',
-                            },
-                            {
+                                precision: 15,
+                                scale: 2,
+                            }),
+                            createField({
                                 id: testId(),
                                 name: 'interest_rate',
                                 type: { id: 'numeric', name: 'numeric' },
                                 primaryKey: false,
                                 nullable: true,
                                 unique: false,
-                                precision: '5',
-                            },
+                                precision: 5,
+                            }),
                         ],
                         indexes: [],
-                        x: 0,
-                        y: 0,
-                        width: 200,
-                        height: 100,
                         color: '#FFD700',
-                    },
+                    }),
                 ],
                 relationships: [],
-            };
+            });
 
             const sql = exportBaseSQL({
                 diagram,
