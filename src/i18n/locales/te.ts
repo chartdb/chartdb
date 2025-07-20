@@ -75,8 +75,7 @@ export const te: LanguageTranslation = {
             title: 'బహుళ స్కీమాలు',
             description:
                 '{{schemasCount}} స్కీమాలు ఈ చిత్రంలో ఉన్నాయి. ప్రస్తుత స్కీమాలు: {{formattedSchemas}}.',
-            dont_show_again: 'మరలా చూపించవద్దు',
-            change_schema: 'మార్చు',
+            show_me: 'Show me',
             none: 'ఎదరికాదు',
         },
 

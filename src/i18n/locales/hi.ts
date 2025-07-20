@@ -74,8 +74,7 @@ export const hi: LanguageTranslation = {
             title: 'एकाधिक स्कीमा',
             description:
                 '{{schemasCount}} स्कीमा इस आरेख में हैं। वर्तमान में प्रदर्शित: {{formattedSchemas}}।',
-            dont_show_again: 'फिर से न दिखाएँ',
-            change_schema: 'बदलें',
+            show_me: 'Show me',
             none: 'कोई नहीं',
         },
 

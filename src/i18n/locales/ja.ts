@@ -76,8 +76,7 @@ export const ja: LanguageTranslation = {
             title: '複数のスキーマ',
             description:
                 'このダイアグラムには{{schemasCount}}個のスキーマがあります。現在表示中: {{formattedSchemas}}。',
-            dont_show_again: '再表示しない',
-            change_schema: '変更',
+            show_me: 'Show me',
             none: 'なし',
         },
 
