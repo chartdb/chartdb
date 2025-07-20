@@ -200,6 +200,24 @@ const sanitizeSQLforDBML = (sql: string): string => {
         }
     );
 
+    // Fix char type with space before parenthesis
+    sanitized = sanitized.replace(/char\s+\(/g, 'char(');
+    sanitized = sanitized.replace(/character\s+\(/g, 'character(');
+
+    // Fix DEFAULT EUR and similar cases by quoting them
+    sanitized = sanitized.replace(
+        /DEFAULT\s+([A-Z]{3})(?=\s|,|$)/g,
+        "DEFAULT '$1'"
+    );
+    // Also handle single letter defaults
+    sanitized = sanitized.replace(
+        /DEFAULT\s+([A-Z])(?=\s|,|$)/g,
+        "DEFAULT '$1'"
+    );
+
+    // Fix DEFAULT NOW by replacing with NOW()
+    sanitized = sanitized.replace(/DEFAULT\s+NOW(?=\s|,|$)/gi, 'DEFAULT NOW()');
+
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
 
@@ -401,9 +419,11 @@ const appendRenameComments = (
 const normalizeCharTypeFormat = (dbml: string): string => {
     // Replace "char (N)" with "char(N)" to match varchar's formatting
     return dbml
-        .replace(/"char "/g, 'char')
-        .replace(/"char \(([0-9]+)\)"/g, 'char($1)')
-        .replace(/"character \(([0-9]+)\)"/g, 'character($1)');
+        .replace(/"char "/g, '"char"')
+        .replace(/char \(([0-9]+)\)/g, 'char($1)')
+        .replace(/"char \(([0-9]+)\)"/g, '"char($1)"')
+        .replace(/"character \(([0-9]+)\)"/g, '"character($1)"')
+        .replace(/character \(([0-9]+)\)/g, 'character($1)');
 };
 
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
