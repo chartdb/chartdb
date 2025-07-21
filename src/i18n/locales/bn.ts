@@ -75,6 +75,7 @@ export const bn: LanguageTranslation = {
             title: 'বহু স্কিমা',
             description:
                 '{{schemasCount}} স্কিমা এই ডায়াগ্রামে রয়েছে। বর্তমানে প্রদর্শিত: {{formattedSchemas}}।',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'কিছুই না',
         },

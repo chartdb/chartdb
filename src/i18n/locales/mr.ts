@@ -75,6 +75,7 @@ export const mr: LanguageTranslation = {
             title: 'एकाधिक स्कीमा',
             description:
                 '{{schemasCount}} स्कीमा या आरेखात आहेत. सध्या दाखवत आहोत: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'काहीही नाही',
         },

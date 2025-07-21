@@ -71,6 +71,7 @@ export const zh_CN: LanguageTranslation = {
             title: '多个模式',
             description:
                 '此关系图中有 {{schemasCount}} 个模式，当前显示：{{formattedSchemas}}。',
+            // TODO: Translate
             show_me: 'Show me',
             none: '无',
         },

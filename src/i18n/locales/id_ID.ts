@@ -74,6 +74,7 @@ export const id_ID: LanguageTranslation = {
             title: 'Schema Lebih dari satu',
             description:
                 '{{schemasCount}} schema di diagram ini. Sedang ditampilkan: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'Tidak ada',
         },

@@ -73,6 +73,7 @@ export const uk: LanguageTranslation = {
             title: 'Кілька схем',
             description:
                 '{{schemasCount}} схеми на цій діаграмі. Зараз відображається: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'немає',
         },

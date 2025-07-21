@@ -73,6 +73,7 @@ export const ru: LanguageTranslation = {
             title: 'Множественные схемы',
             description:
                 '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'никто',
         },

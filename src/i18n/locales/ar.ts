@@ -74,6 +74,7 @@ export const ar: LanguageTranslation = {
             title: 'مخططات متعددة',
             description:
                 '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'لا شيء',
         },

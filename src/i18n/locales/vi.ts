@@ -74,6 +74,7 @@ export const vi: LanguageTranslation = {
             title: 'Có nhiều lược đồ',
             description:
                 'Có {{schemasCount}} lược đồ trong sơ đồ này. Hiện đang hiển thị: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'không có',
         },

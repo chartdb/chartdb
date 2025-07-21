@@ -75,6 +75,7 @@ export const ne: LanguageTranslation = {
             title: 'विविध स्कीमहरू',
             description:
                 '{{schemasCount}} डायाग्राममा स्कीमहरू। हालको रूपमा देखाइएको छ: {{formattedSchemas}}।',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'कुनै पनि छैन',
         },

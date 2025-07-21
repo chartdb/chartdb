@@ -75,6 +75,7 @@ export const gu: LanguageTranslation = {
             title: 'કઈંક વધારે સ્કીમા',
             description:
                 '{{schemasCount}} સ્કીમા આ ડાયાગ્રામમાં છે. હાલમાં દર્શાવેલ છે: {{formattedSchemas}}.',
+            // TODO: Translate
             show_me: 'Show me',
             none: 'કઈ નહીં',
         },
