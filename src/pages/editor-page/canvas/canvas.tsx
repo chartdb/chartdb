@@ -1070,6 +1070,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         },
         {
             preventDefault: true,
+            enableOnFormTags: true,
         },
         []
     );
