@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, {
+    useMemo,
+    useState,
+    useCallback,
+    useEffect,
+    useRef,
+} from 'react';
 import { X, Search, Eye, EyeOff, Database, Table, Funnel } from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +55,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
     const [isFilterVisible, setIsFilterVisible] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Extract only the properties needed for tree data
     const relevantTableData = useMemo<RelevantTableData[]>(
@@ -345,9 +352,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         [focusOnTable, filteredSchemas]
     );
 
-    // Animate in on mount
+    // Animate in on mount and focus search input
     useEffect(() => {
         setIsFilterVisible(true);
+        // Focus the search input after a short delay to ensure the component is fully rendered
+        setTimeout(() => {
+            searchInputRef.current?.focus();
+        }, 300);
     }, []);
 
     return (
@@ -381,6 +392,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 <div className="relative h-9">
                     <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
+                        ref={searchInputRef}
                         placeholder={t(
                             'canvas_filter.search_placeholder',
                             'Search tables...'
