@@ -348,8 +348,8 @@ export const fr: LanguageTranslation = {
             title: 'Schémas Multiples',
             description:
                 '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
-            dont_show_again: 'Ne plus afficher',
-            change_schema: 'Changer',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Aucun',
         },
 

@@ -75,8 +75,8 @@ export const de: LanguageTranslation = {
             title: 'Mehrere Schemas',
             description:
                 '{{schemasCount}} Schemas in diesem Diagramm. Derzeit angezeigt: {{formattedSchemas}}.',
-            dont_show_again: 'Nicht erneut anzeigen',
-            change_schema: 'Schema ändern',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Keine',
         },
 

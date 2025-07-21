@@ -75,8 +75,8 @@ export const pt_BR: LanguageTranslation = {
             title: 'Múltiplos Esquemas',
             description:
                 '{{schemasCount}} esquemas neste diagrama. Atualmente exibindo: {{formattedSchemas}}.',
-            dont_show_again: 'Não mostrar novamente',
-            change_schema: 'Alterar',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'nenhum',
         },
 

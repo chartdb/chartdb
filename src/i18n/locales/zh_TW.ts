@@ -71,8 +71,8 @@ export const zh_TW: LanguageTranslation = {
             title: '多重 Schema',
             description:
                 '此圖表中包含 {{schemasCount}} 個 Schema，目前顯示：{{formattedSchemas}}。',
-            dont_show_again: '不再顯示',
-            change_schema: '變更',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '無',
         },
 

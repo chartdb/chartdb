@@ -75,8 +75,8 @@ export const tr: LanguageTranslation = {
             title: 'Birden Fazla Şema',
             description:
                 'Bu diyagramda {{schemasCount}} şema var. Şu anda görüntülenen: {{formattedSchemas}}.',
-            dont_show_again: 'Tekrar gösterme',
-            change_schema: 'Değiştir',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'yok',
         },
 

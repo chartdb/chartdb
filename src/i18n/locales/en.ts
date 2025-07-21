@@ -73,8 +73,7 @@ export const en = {
             title: 'Multiple Schemas',
             description:
                 '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: "Don't show again",
-            change_schema: 'Change',
+            show_me: 'Show me',
             none: 'none',
         },
 
