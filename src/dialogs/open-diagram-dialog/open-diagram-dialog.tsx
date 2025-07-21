@@ -55,7 +55,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             const diagrams = await listDiagrams({ includeTables: true });
             setDiagrams(
                 diagrams.sort(
-                    (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+                    (a, b) =>
+                        new Date(b.updatedAt).getTime() -
+                        new Date(a.updatedAt).getTime()
                 )
             );
         };
