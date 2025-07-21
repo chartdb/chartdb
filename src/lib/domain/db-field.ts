@@ -54,30 +54,39 @@ export const createFieldsFromMetadata = ({
     primaryKeys: PrimaryKeyInfo[];
     aggregatedIndexes: AggregatedIndexInfo[];
 }) => {
-    const uniqueColumns = columns
-        .filter(
-            (col) =>
-                schemaNameToDomainSchemaName(col.schema) === tableSchema &&
-                col.table === tableInfo.table
-        )
-        .reduce((acc, col) => {
-            if (!acc.has(col.name)) {
-                acc.set(col.name, col);
-            }
-            return acc;
-        }, new Map<string, ColumnInfo>());
+    // If columns are already pre-filtered, use them directly
+    const tableColumns =
+        columns.length > 0 && columns[0].table === tableInfo.table
+            ? columns
+            : columns.filter(
+                  (col) =>
+                      schemaNameToDomainSchemaName(col.schema) ===
+                          tableSchema && col.table === tableInfo.table
+              );
+
+    const uniqueColumns = tableColumns.reduce((acc, col) => {
+        if (!acc.has(col.name)) {
+            acc.set(col.name, col);
+        }
+        return acc;
+    }, new Map<string, ColumnInfo>());
 
     const sortedColumns = Array.from(uniqueColumns.values()).sort(
         (a, b) => a.ordinal_position - b.ordinal_position
     );
 
-    const tablePrimaryKeys = primaryKeys
-        .filter(
-            (pk) =>
-                pk.table === tableInfo.table &&
-                schemaNameToDomainSchemaName(pk.schema) === tableSchema
-        )
-        .map((pk) => pk.column.trim());
+    // If primary keys are already pre-filtered, use them directly
+    const tablePrimaryKeys =
+        primaryKeys.length > 0 && primaryKeys[0].table === tableInfo.table
+            ? primaryKeys.map((pk) => pk.column.trim())
+            : primaryKeys
+                  .filter(
+                      (pk) =>
+                          pk.table === tableInfo.table &&
+                          schemaNameToDomainSchemaName(pk.schema) ===
+                              tableSchema
+                  )
+                  .map((pk) => pk.column.trim());
 
     return sortedColumns.map(
         (col: ColumnInfo): DBField => ({

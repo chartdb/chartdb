@@ -136,11 +136,13 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     );
     const [isAutoFixing, setIsAutoFixing] = useState(false);
     const [showAutoFixButton, setShowAutoFixButton] = useState(false);
+    const [isLargeFile, setIsLargeFile] = useState(false);
 
     useEffect(() => {
         setScriptResult('');
         setErrorMessage('');
         setShowCheckJsonButton(false);
+        setIsLargeFile(false);
     }, [importMethod, setScriptResult]);
 
     // Check if the ddl is valid
@@ -246,6 +248,17 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const formatEditor = useCallback(() => {
         if (editorRef.current) {
+            const model = editorRef.current.getModel();
+            if (model) {
+                const content = model.getValue();
+                const contentSizeMB = content.length / (1024 * 1024);
+
+                // Skip formatting for large files (> 2MB)
+                if (contentSizeMB > 2) {
+                    return;
+                }
+            }
+
             setTimeout(() => {
                 editorRef.current
                     ?.getAction('editor.action.formatDocument')
@@ -257,6 +270,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const handleInputChange: OnChange = useCallback(
         (inputValue) => {
             setScriptResult(inputValue ?? '');
+
+            // Check if it's a large file
+            const contentSizeMB = (inputValue ?? '').length / (1024 * 1024);
+            setIsLargeFile(contentSizeMB > 2);
 
             // Automatically open SSMS info when input length is exactly 65535
             if ((inputValue ?? '').length === 65535) {
@@ -314,6 +331,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 if (!model) return;
 
                 const content = model.getValue();
+                const contentSizeMB = content.length / (1024 * 1024);
+
+                // Skip formatting for large files (> 2MB) to prevent browser freezing
+                const shouldFormat = contentSizeMB <= 2;
+                setIsLargeFile(!shouldFormat);
 
                 // First, detect content type to determine if we should switch modes
                 const detectedType = detectContentType(content);
@@ -321,8 +343,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     // Switch to the detected mode immediately
                     setImportMethod(detectedType);
 
-                    // Only format if it's JSON (query mode)
-                    if (detectedType === 'query') {
+                    // Only format if it's JSON (query mode) AND file is not too large
+                    if (detectedType === 'query' && shouldFormat) {
                         // For JSON mode, format after a short delay
                         setTimeout(() => {
                             editor
@@ -333,15 +355,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     // For DDL mode, do NOT format as it can break the SQL
                 } else {
                     // Content type didn't change, apply formatting based on current mode
-                    if (importMethod === 'query') {
-                        // Only format JSON content
+                    if (importMethod === 'query' && shouldFormat) {
+                        // Only format JSON content if not too large
                         setTimeout(() => {
                             editor
                                 .getAction('editor.action.formatDocument')
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode, do NOT format
+                    // For DDL mode or large files, do NOT format
                 }
             });
 
@@ -385,10 +407,17 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const renderOutputTextArea = useCallback(
         () => (
             <div className="flex size-full flex-col gap-1 overflow-hidden rounded-md border p-1">
-                <div className="w-full text-center text-xs text-muted-foreground">
-                    {importMethod === 'query'
-                        ? 'Smart Query Output'
-                        : 'SQL Script'}
+                <div className="flex w-full items-center justify-center gap-2 text-xs text-muted-foreground">
+                    <span>
+                        {importMethod === 'query'
+                            ? 'Smart Query Output'
+                            : 'SQL Script'}
+                    </span>
+                    {isLargeFile && (
+                        <span className="text-yellow-600 dark:text-yellow-400">
+                            (Large file - formatting disabled)
+                        </span>
+                    )}
                 </div>
                 <div className="flex-1 overflow-hidden">
                     <Suspense fallback={<Spinner />}>
@@ -453,6 +482,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             sqlValidation,
             isAutoFixing,
             handleErrorClick,
+            isLargeFile,
         ]
     );
 

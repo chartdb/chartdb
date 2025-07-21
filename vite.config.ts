@@ -6,6 +6,9 @@ import UnpluginInjectPreload from 'unplugin-inject-preload/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    optimizeDeps: {
+        exclude: [],
+    },
     plugins: [
         react(),
         visualizer({

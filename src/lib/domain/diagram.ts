@@ -81,11 +81,15 @@ export const loadFromDatabaseMetadata = async ({
         tables,
     });
 
-    const dependencies = await createDependenciesFromMetadata({
-        views,
-        tables,
-        databaseType,
-    });
+    // Skip dependency creation if there are no views
+    const dependencies =
+        views && views.length > 0
+            ? await createDependenciesFromMetadata({
+                  views,
+                  tables,
+                  databaseType,
+              })
+            : [];
 
     const dbCustomTypes = customTypes
         ? createCustomTypesFromMetadata({
@@ -108,7 +112,7 @@ export const loadFromDatabaseMetadata = async ({
         return a.isView ? 1 : -1;
     });
 
-    return {
+    const diagram = {
         id: generateDiagramId(),
         name: databaseMetadata.database_name
             ? `${databaseMetadata.database_name}-db`
@@ -124,4 +128,6 @@ export const loadFromDatabaseMetadata = async ({
         createdAt: new Date(),
         updatedAt: new Date(),
     };
+
+    return diagram;
 };

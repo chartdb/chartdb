@@ -41,11 +41,18 @@ export const createAggregatedIndexes = ({
     indexes: IndexInfo[];
     tableSchema?: string;
 }): AggregatedIndexInfo[] => {
-    const tableIndexes = indexes.filter((idx) => {
-        const indexSchema = schemaNameToDomainSchemaName(idx.schema);
-
-        return idx.table === tableInfo.table && indexSchema === tableSchema;
-    });
+    // If indexes is already pre-filtered, use them directly
+    // Otherwise filter them
+    const tableIndexes =
+        indexes.length > 0 && indexes[0].table === tableInfo.table
+            ? indexes
+            : indexes.filter((idx) => {
+                  const indexSchema = schemaNameToDomainSchemaName(idx.schema);
+                  return (
+                      idx.table === tableInfo.table &&
+                      indexSchema === tableSchema
+                  );
+              });
 
     return Object.values(
         tableIndexes.reduce(
