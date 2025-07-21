@@ -4,7 +4,6 @@ import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-i
 import type { AggregatedIndexInfo } from '../data/import-metadata/metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../data/import-metadata/metadata-types/primary-key-info';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
-import { schemaNameToDomainSchemaName } from './db-schema';
 import { generateId } from '../utils';
 
 export interface DBField {
@@ -42,28 +41,16 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
 });
 
 export const createFieldsFromMetadata = ({
-    columns,
-    tableSchema,
-    tableInfo,
-    primaryKeys,
+    tableColumns,
+    tablePrimaryKeys,
     aggregatedIndexes,
 }: {
-    columns: ColumnInfo[];
+    tableColumns: ColumnInfo[];
     tableSchema?: string;
     tableInfo: TableInfo;
-    primaryKeys: PrimaryKeyInfo[];
+    tablePrimaryKeys: PrimaryKeyInfo[];
     aggregatedIndexes: AggregatedIndexInfo[];
 }) => {
-    // If columns are already pre-filtered, use them directly
-    const tableColumns =
-        columns.length > 0 && columns[0].table === tableInfo.table
-            ? columns
-            : columns.filter(
-                  (col) =>
-                      schemaNameToDomainSchemaName(col.schema) ===
-                          tableSchema && col.table === tableInfo.table
-              );
-
     const uniqueColumns = tableColumns.reduce((acc, col) => {
         if (!acc.has(col.name)) {
             acc.set(col.name, col);
@@ -75,18 +62,9 @@ export const createFieldsFromMetadata = ({
         (a, b) => a.ordinal_position - b.ordinal_position
     );
 
-    // If primary keys are already pre-filtered, use them directly
-    const tablePrimaryKeys =
-        primaryKeys.length > 0 && primaryKeys[0].table === tableInfo.table
-            ? primaryKeys.map((pk) => pk.column.trim())
-            : primaryKeys
-                  .filter(
-                      (pk) =>
-                          pk.table === tableInfo.table &&
-                          schemaNameToDomainSchemaName(pk.schema) ===
-                              tableSchema
-                  )
-                  .map((pk) => pk.column.trim());
+    const tablePrimaryKeysColumns = tablePrimaryKeys.map((pk) =>
+        pk.column.trim()
+    );
 
     return sortedColumns.map(
         (col: ColumnInfo): DBField => ({
@@ -96,7 +74,7 @@ export const createFieldsFromMetadata = ({
                 id: col.type.split(' ').join('_').toLowerCase(),
                 name: col.type.toLowerCase(),
             },
-            primaryKey: tablePrimaryKeys.includes(col.name),
+            primaryKey: tablePrimaryKeysColumns.includes(col.name),
             unique: Object.values(aggregatedIndexes).some(
                 (idx) =>
                     idx.unique &&

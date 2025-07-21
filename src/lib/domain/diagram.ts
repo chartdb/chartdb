@@ -81,15 +81,11 @@ export const loadFromDatabaseMetadata = async ({
         tables,
     });
 
-    // Skip dependency creation if there are no views
-    const dependencies =
-        views && views.length > 0
-            ? await createDependenciesFromMetadata({
-                  views,
-                  tables,
-                  databaseType,
-              })
-            : [];
+    const dependencies = await createDependenciesFromMetadata({
+        views,
+        tables,
+        databaseType,
+    });
 
     const dbCustomTypes = customTypes
         ? createCustomTypesFromMetadata({

@@ -69,6 +69,14 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     parentAreaId: z.string().or(z.null()).optional(),
 });
 
+const generateTableKey = ({
+    schemaName,
+    tableName,
+}: {
+    schemaName: string | null | undefined;
+    tableName: string;
+}) => `${schemaNameToDomainSchemaName(schemaName) ?? ''}.${tableName}`;
+
 export const shouldShowTableSchemaBySchemaFilter = ({
     filteredSchemas,
     tableSchema,
@@ -128,7 +136,10 @@ export const createTablesFromMetadata = ({
 
     if (views && views.length > 0) {
         views.forEach((view) => {
-            const key = `${schemaNameToDomainSchemaName(view.schema)}.${view.view_name}`;
+            const key = generateTableKey({
+                schemaName: view.schema,
+                tableName: view.view_name,
+            });
             viewNamesSet.add(key);
 
             if (
@@ -149,7 +160,10 @@ export const createTablesFromMetadata = ({
 
     // Group columns by table
     columns.forEach((col) => {
-        const key = `${col.schema}.${col.table}`;
+        const key = generateTableKey({
+            schemaName: col.schema,
+            tableName: col.table,
+        });
         if (!columnsByTable.has(key)) {
             columnsByTable.set(key, []);
         }
@@ -158,7 +172,10 @@ export const createTablesFromMetadata = ({
 
     // Group indexes by table
     indexes.forEach((idx) => {
-        const key = `${idx.schema}.${idx.table}`;
+        const key = generateTableKey({
+            schemaName: idx.schema,
+            tableName: idx.table,
+        });
         if (!indexesByTable.has(key)) {
             indexesByTable.set(key, []);
         }
@@ -167,7 +184,10 @@ export const createTablesFromMetadata = ({
 
     // Group primary keys by table
     primaryKeys.forEach((pk) => {
-        const key = `${pk.schema}.${pk.table}`;
+        const key = generateTableKey({
+            schemaName: pk.schema,
+            tableName: pk.table,
+        });
         if (!primaryKeysByTable.has(key)) {
             primaryKeysByTable.set(key, []);
         }
@@ -176,7 +196,10 @@ export const createTablesFromMetadata = ({
 
     const result = tableInfos.map((tableInfo: TableInfo) => {
         const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
-        const tableKey = `${tableInfo.schema}.${tableInfo.table}`;
+        const tableKey = generateTableKey({
+            schemaName: tableInfo.schema,
+            tableName: tableInfo.table,
+        });
 
         // Use pre-computed lookups instead of filtering entire arrays
         const tableIndexes = indexesByTable.get(tableKey) || [];
@@ -187,13 +210,13 @@ export const createTablesFromMetadata = ({
         const aggregatedIndexes = createAggregatedIndexes({
             tableInfo,
             tableSchema,
-            indexes: tableIndexes,
+            tableIndexes,
         });
 
         const fields = createFieldsFromMetadata({
             aggregatedIndexes,
-            columns: tableColumns,
-            primaryKeys: tablePrimaryKeys,
+            tableColumns,
+            tablePrimaryKeys,
             tableInfo,
             tableSchema,
         });
@@ -204,7 +227,10 @@ export const createTablesFromMetadata = ({
         });
 
         // Determine if the current table is a view by checking against pre-computed sets
-        const viewKey = `${tableSchema}.${tableInfo.table}`;
+        const viewKey = generateTableKey({
+            schemaName: tableSchema,
+            tableName: tableInfo.table,
+        });
         const isView = viewNamesSet.has(viewKey);
         const isMaterializedView = materializedViewNamesSet.has(viewKey);
 
