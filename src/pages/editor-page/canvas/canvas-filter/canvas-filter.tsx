@@ -4,7 +4,8 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
-import type { DBTable } from '@/lib/domain/db-table';
+import { shouldShowTableSchemaBySchemaFilter } from '@/lib/domain/db-table';
+import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useReactFlow } from '@xyflow/react';
 import { TreeView } from '@/components/tree-view/tree-view';
@@ -17,7 +18,10 @@ export interface CanvasFilterProps {
 type NodeType = 'schema' | 'table';
 
 type SchemaContext = { name: string };
-type TableContext = { table: DBTable; hidden: boolean };
+type TableContext = {
+    tableSchema?: string | null;
+    hidden: boolean;
+};
 
 type NodeContext = {
     schema: SchemaContext;
@@ -32,11 +36,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         hiddenTableIds,
         addHiddenTableId,
         removeHiddenTableId,
+        filteredSchemas,
+        filterSchemas,
     } = useChartDB();
     const { fitView, setNodes } = useReactFlow();
     const [searchQuery, setSearchQuery] = useState('');
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-    const [isVisible, setIsVisible] = useState(false);
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     // Extract only the properties needed for tree data
     const relevantTableData = useMemo(
@@ -75,6 +81,10 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         const nodes: TreeNode<NodeType, NodeContext>[] = [];
 
         tablesBySchema.forEach((schemaTables, schemaName) => {
+            const schemaId = schemaNameToSchemaId(schemaName);
+            const schemaHidden = filteredSchemas
+                ? !filteredSchemas.includes(schemaId)
+                : false;
             const schemaNode: TreeNode<NodeType, NodeContext> = {
                 id: `schema-${schemaName}`,
                 name: `${schemaName} (${schemaTables.length})`,
@@ -82,14 +92,17 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 isFolder: true,
                 icon: Database,
                 context: { name: schemaName },
+                className: schemaHidden ? 'opacity-50' : '',
                 children: schemaTables.map(
                     (table): TreeNode<NodeType, NodeContext> => {
-                        const hidden =
+                        const tableHidden =
                             hiddenTableIds?.includes(table.id) ?? false;
-                        // Find the full table object when needed
-                        const fullTable = tables.find(
-                            (t) => t.id === table.id
-                        )!;
+                        const visibleBySchema =
+                            shouldShowTableSchemaBySchemaFilter({
+                                tableSchema: table.schema,
+                                filteredSchemas,
+                            });
+                        const hidden = tableHidden || !visibleBySchema;
 
                         return {
                             id: table.id,
@@ -98,8 +111,8 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                             isFolder: false,
                             icon: Table,
                             context: {
-                                table: fullTable,
-                                hidden,
+                                tableSchema: table.schema,
+                                hidden: tableHidden,
                             },
                             className: hidden ? 'opacity-50' : '',
                         };
@@ -110,7 +123,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         });
 
         return nodes;
-    }, [relevantTableData, databaseType, hiddenTableIds, tables]);
+    }, [relevantTableData, databaseType, hiddenTableIds, filteredSchemas]);
 
     // Initialize expanded state with all schemas expanded
     useMemo(() => {
@@ -193,33 +206,123 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     );
 
     // Render component that's always visible (eye indicator)
-    const renderAlwaysVisibleActions = useCallback(
+    const renderActions = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
-            if (node.type !== 'table') return null;
+            if (node.type === 'schema') {
+                const schemaContext = node.context as SchemaContext;
+                const schemaId = schemaNameToSchemaId(schemaContext.name);
+                const schemaHidden = filteredSchemas
+                    ? !filteredSchemas.includes(schemaId)
+                    : false;
 
-            const tableId = node.id;
-            const tableContext = node.context as TableContext;
-            const hidden = tableContext.hidden;
+                return (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 p-0"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            // unhide all tables in this schema
+                            node.children?.forEach((child) => {
+                                if (
+                                    child.type === 'table' &&
+                                    hiddenTableIds?.includes(child.id)
+                                ) {
+                                    removeHiddenTableId(child.id);
+                                }
+                            });
+                            if (schemaHidden) {
+                                filterSchemas([
+                                    ...(filteredSchemas ?? []),
+                                    schemaId,
+                                ]);
+                            } else {
+                                filterSchemas(
+                                    filteredSchemas?.filter(
+                                        (s) => s !== schemaId
+                                    ) ?? []
+                                );
+                            }
+                        }}
+                    >
+                        {schemaHidden ? (
+                            <EyeOff className="size-3.5 text-muted-foreground" />
+                        ) : (
+                            <Eye className="size-3.5" />
+                        )}
+                    </Button>
+                );
+            }
 
-            return (
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="size-7 p-0"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggleTableVisibility(tableId, !hidden);
-                    }}
-                >
-                    {hidden ? (
-                        <EyeOff className="size-3.5 text-muted-foreground" />
-                    ) : (
-                        <Eye className="size-3.5" />
-                    )}
-                </Button>
-            );
+            if (node.type === 'table') {
+                const tableId = node.id;
+                const tableContext = node.context as TableContext;
+                const hidden = tableContext.hidden;
+                const tableSchema = tableContext.tableSchema;
+
+                const visibleBySchema = shouldShowTableSchemaBySchemaFilter({
+                    tableSchema,
+                    filteredSchemas,
+                });
+
+                return (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 p-0"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!visibleBySchema && tableSchema) {
+                                // Unhide schema and hide all other tables
+                                const schemaId =
+                                    schemaNameToSchemaId(tableSchema);
+                                filterSchemas([
+                                    ...(filteredSchemas ?? []),
+                                    schemaId,
+                                ]);
+                                const schemaNode = treeData.find(
+                                    (s) =>
+                                        (s.context as SchemaContext).name ===
+                                        tableSchema
+                                );
+                                if (schemaNode) {
+                                    schemaNode.children?.forEach((child) => {
+                                        if (
+                                            child.id !== tableId &&
+                                            !hiddenTableIds?.includes(child.id)
+                                        ) {
+                                            addHiddenTableId(child.id);
+                                        }
+                                    });
+                                }
+                                if (hidden) {
+                                    removeHiddenTableId(tableId);
+                                }
+                            } else {
+                                toggleTableVisibility(tableId, !hidden);
+                            }
+                        }}
+                    >
+                        {hidden || !visibleBySchema ? (
+                            <EyeOff className="size-3.5 text-muted-foreground" />
+                        ) : (
+                            <Eye className="size-3.5" />
+                        )}
+                    </Button>
+                );
+            }
+
+            return null;
         },
-        [toggleTableVisibility]
+        [
+            toggleTableVisibility,
+            filteredSchemas,
+            filterSchemas,
+            treeData,
+            hiddenTableIds,
+            addHiddenTableId,
+            removeHiddenTableId,
+        ]
     );
 
     // Handle node click
@@ -227,23 +330,30 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'table') {
                 const tableContext = node.context as TableContext;
-                if (!tableContext.hidden) {
+                const tableSchema = tableContext.tableSchema;
+                const visibleBySchema = shouldShowTableSchemaBySchemaFilter({
+                    tableSchema,
+                    filteredSchemas,
+                });
+
+                // Only focus if neither table is hidden nor filtered by schema
+                if (!tableContext.hidden && visibleBySchema) {
                     focusOnTable(node.id);
                 }
             }
         },
-        [focusOnTable]
+        [focusOnTable, filteredSchemas]
     );
 
     // Animate in on mount
     useEffect(() => {
-        setIsVisible(true);
+        setIsFilterVisible(true);
     }, []);
 
     return (
         <div
             className={`absolute right-2 top-2 z-10 flex flex-col rounded-lg border bg-background/85 shadow-lg backdrop-blur-sm transition-all duration-300 md:right-4 md:top-4 ${
-                isVisible
+                isFilterVisible
                     ? 'translate-x-0 opacity-100'
                     : 'translate-x-full opacity-0'
             } size-[calc(100%-1rem)] max-w-sm md:h-[calc(100%-2rem)] md:w-80`}
@@ -287,7 +397,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 <TreeView
                     data={filteredTreeData}
                     onNodeClick={handleNodeClick}
-                    renderActionsComponent={renderAlwaysVisibleActions}
+                    renderActionsComponent={renderActions}
                     defaultFolderIcon={Database}
                     defaultIcon={Table}
                     expanded={expanded}
