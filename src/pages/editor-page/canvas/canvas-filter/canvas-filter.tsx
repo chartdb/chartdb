@@ -229,7 +229,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="size-7 p-0"
+                        className="size-7 h-fit p-0"
                         onClick={(e) => {
                             e.stopPropagation();
                             // unhide all tables in this schema
@@ -279,7 +279,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="size-7 p-0"
+                        className="size-7 h-fit p-0"
                         onClick={(e) => {
                             e.stopPropagation();
                             if (!visibleBySchema && tableSchema) {
