@@ -16,8 +16,6 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { getOperatingSystem } from '@/lib/utils';
 
 export interface RelationshipsSectionProps {}
 
@@ -48,19 +46,6 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
         setFilterText('');
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog, setFilterText]);
-
-    const operatingSystem = useMemo(() => getOperatingSystem(), []);
-
-    useHotkeys(
-        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
-        () => {
-            filterInputRef.current?.focus();
-        },
-        {
-            preventDefault: true,
-        },
-        [filterInputRef]
-    );
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">
