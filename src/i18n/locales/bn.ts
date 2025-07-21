@@ -272,6 +272,8 @@ export const bn: LanguageTranslation = {
             redo: 'পুনরায় করুন',
             reorder_diagram: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
             highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

@@ -273,6 +273,8 @@ export const hi: LanguageTranslation = {
             redo: 'पुनः करें',
             reorder_diagram: 'आरेख पुनः व्यवस्थित करें',
             highlight_overlapping_tables: 'ओवरलैपिंग तालिकाओं को हाइलाइट करें',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

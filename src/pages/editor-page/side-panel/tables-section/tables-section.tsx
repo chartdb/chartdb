@@ -98,16 +98,16 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
 
     const operatingSystem = useMemo(() => getOperatingSystem(), []);
 
-    useHotkeys(
-        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
-        () => {
-            filterInputRef.current?.focus();
-        },
-        {
-            preventDefault: true,
-        },
-        [filterInputRef]
-    );
+    // useHotkeys(
+    //     operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
+    //     () => {
+    //         filterInputRef.current?.focus();
+    //     },
+    //     {
+    //         preventDefault: true,
+    //     },
+    //     [filterInputRef]
+    // );
 
     useHotkeys(
         operatingSystem === 'mac' ? 'meta+p' : 'ctrl+p',

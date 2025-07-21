@@ -69,13 +69,25 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     parentAreaId: z.string().or(z.null()).optional(),
 });
 
+export const shouldShowTableSchemaBySchemaFilter = ({
+    filteredSchemas,
+    tableSchema,
+}: {
+    tableSchema?: string | null;
+    filteredSchemas?: string[];
+}): boolean =>
+    !filteredSchemas ||
+    !tableSchema ||
+    filteredSchemas.includes(schemaNameToSchemaId(tableSchema));
+
 export const shouldShowTablesBySchemaFilter = (
     table: DBTable,
     filteredSchemas?: string[]
 ): boolean =>
-    !filteredSchemas ||
-    !table.schema ||
-    filteredSchemas.includes(schemaNameToSchemaId(table.schema));
+    shouldShowTableSchemaBySchemaFilter({
+        filteredSchemas,
+        tableSchema: table?.schema,
+    });
 
 export const decodeViewDefinition = (
     databaseType: DatabaseType,

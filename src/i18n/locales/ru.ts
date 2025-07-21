@@ -269,6 +269,8 @@ export const ru: LanguageTranslation = {
             redo: 'Вернуть',
             reorder_diagram: 'Переупорядочить диаграмму',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

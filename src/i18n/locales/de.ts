@@ -274,6 +274,8 @@ export const de: LanguageTranslation = {
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
             highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

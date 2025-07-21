@@ -264,6 +264,7 @@ export const en = {
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

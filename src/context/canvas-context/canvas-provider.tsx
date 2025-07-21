@@ -21,6 +21,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
 
+    const [showFilter, setShowFilter] = useState(false);
+
     const reorderTables = useCallback(
         (
             options: { updateHistory?: boolean } = {
@@ -77,6 +79,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 fitView,
                 setOverlapGraph,
                 overlapGraph,
+                setShowFilter,
+                showFilter,
             }}
         >
             {children}
