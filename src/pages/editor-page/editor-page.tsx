@@ -123,16 +123,19 @@ const EditorPageComponent: React.FC = () => {
                 className:
                     'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4',
                 action: (
-                    <ToastAction
-                        onClick={() => {
-                            handleChangeSchema();
-                            setHideMultiSchemaNotification(true);
-                        }}
-                        altText="Show me the schemas"
-                        className="border border-pink-600 bg-pink-600 text-white hover:bg-pink-500"
-                    >
-                        {t('multiple_schemas_alert.show_me')}
-                    </ToastAction>
+                    <div className="flex justify-between gap-1">
+                        <div />
+                        <ToastAction
+                            onClick={() => {
+                                handleChangeSchema();
+                                setHideMultiSchemaNotification(true);
+                            }}
+                            altText="Show me the schemas"
+                            className="border border-pink-600 bg-pink-600 text-white hover:bg-pink-500"
+                        >
+                            {t('multiple_schemas_alert.show_me')}
+                        </ToastAction>
+                    </div>
                 ),
             });
         }
