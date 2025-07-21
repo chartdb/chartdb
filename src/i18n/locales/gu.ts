@@ -152,6 +152,9 @@ export const gu: LanguageTranslation = {
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

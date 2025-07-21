@@ -150,6 +150,9 @@ export const tr: LanguageTranslation = {
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

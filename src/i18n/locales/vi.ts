@@ -150,6 +150,9 @@ export const vi: LanguageTranslation = {
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

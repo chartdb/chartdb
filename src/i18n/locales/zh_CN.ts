@@ -147,6 +147,9 @@ export const zh_CN: LanguageTranslation = {
                         no_comments: '空',
                         delete_field: '删除字段',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {

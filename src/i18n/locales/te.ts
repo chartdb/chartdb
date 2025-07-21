@@ -151,6 +151,9 @@ export const te: LanguageTranslation = {
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {
