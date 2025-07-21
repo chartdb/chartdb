@@ -74,8 +74,8 @@ export const ar: LanguageTranslation = {
             title: 'مخططات متعددة',
             description:
                 '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
-            dont_show_again: 'لا تظهره مجدداً',
-            change_schema: 'تغيير',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'لا شيء',
         },
 
@@ -151,6 +151,8 @@ export const ar: LanguageTranslation = {
                         delete_field: 'حذف الحقل',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                     },
                     index_actions: {
                         title: 'خصائص الفهرس',
@@ -269,6 +271,8 @@ export const ar: LanguageTranslation = {
             redo: 'إعادة',
             reorder_diagram: 'إعادة ترتيب الرسم البياني',
             highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

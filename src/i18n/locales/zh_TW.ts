@@ -71,8 +71,8 @@ export const zh_TW: LanguageTranslation = {
             title: '多重 Schema',
             description:
                 '此圖表中包含 {{schemasCount}} 個 Schema，目前顯示：{{formattedSchemas}}。',
-            dont_show_again: '不再顯示',
-            change_schema: '變更',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '無',
         },
 
@@ -146,6 +146,9 @@ export const zh_TW: LanguageTranslation = {
                         comments: '註解',
                         no_comments: '無註解',
                         delete_field: '刪除欄位',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -265,6 +268,8 @@ export const zh_TW: LanguageTranslation = {
             redo: '重做',
             reorder_diagram: '重新排列圖表',
             highlight_overlapping_tables: '突出顯示重疊表格',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

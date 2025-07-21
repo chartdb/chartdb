@@ -73,8 +73,7 @@ export const en = {
             title: 'Multiple Schemas',
             description:
                 '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: "Don't show again",
-            change_schema: 'Change',
+            show_me: 'Show me',
             none: 'none',
         },
 
@@ -146,6 +145,8 @@ export const en = {
                         character_length: 'Max Length',
                         comments: 'Comments',
                         no_comments: 'No comments',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         delete_field: 'Delete Field',
                     },
                     index_actions: {
@@ -263,6 +264,7 @@ export const en = {
             redo: 'Redo',
             reorder_diagram: 'Reorder Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

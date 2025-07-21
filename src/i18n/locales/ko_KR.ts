@@ -74,8 +74,8 @@ export const ko_KR: LanguageTranslation = {
             title: '다중 스키마',
             description:
                 '현재 다이어그램에 {{schemasCount}}개의 스키마가 있습니다. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: '다시 보여주지 마세요',
-            change_schema: '변경',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '없음',
         },
 
@@ -149,6 +149,9 @@ export const ko_KR: LanguageTranslation = {
                         comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -268,6 +271,8 @@ export const ko_KR: LanguageTranslation = {
             redo: '다시 실행',
             reorder_diagram: '다이어그램 재정렬',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

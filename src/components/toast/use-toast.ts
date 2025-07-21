@@ -12,6 +12,7 @@ type ToasterToast = ToastProps & {
     description?: React.ReactNode;
     action?: ToastActionElement;
     layout?: 'row' | 'column';
+    hideCloseButton?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
-import { ZoomIn, ZoomOut, Save, Redo, Undo, Scan } from 'lucide-react';
+import { ZoomIn, ZoomOut, Funnel, Redo, Undo, Scan } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
-import { useChartDB } from '@/hooks/use-chartdb';
 import { useOnViewportChange, useReactFlow } from '@xyflow/react';
 import {
     Tooltip,
@@ -16,6 +15,9 @@ import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useIsLostInCanvas } from '../hooks/use-is-lost-in-canvas';
+import { useCanvas } from '@/hooks/use-canvas';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { cn } from '@/lib/utils';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -23,13 +25,18 @@ export interface ToolbarProps {
     readonly?: boolean;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
-    const { updateDiagramUpdatedAt } = useChartDB();
+export const Toolbar: React.FC<ToolbarProps> = () => {
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
     const { isLostInCanvas } = useIsLostInCanvas();
+    const { setShowFilter } = useCanvas();
+    const { hiddenTableIds } = useChartDB();
+
+    const toggleFilter = useCallback(() => {
+        setShowFilter((prev) => !prev);
+    }, [setShowFilter]);
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -66,33 +73,36 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
         <div className="px-1">
             <Card className="h-[44px] bg-secondary p-0 shadow-none">
                 <CardContent className="flex h-full flex-row items-center p-1">
-                    {!readonly ? (
-                        <>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <span>
-                                        <ToolbarButton
-                                            onClick={updateDiagramUpdatedAt}
-                                        >
-                                            <Save />
-                                        </ToolbarButton>
-                                    </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {t('toolbar.save')}
-                                    <span className="ml-2 text-muted-foreground">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <ToolbarButton
+                                    onClick={toggleFilter}
+                                    className={cn(
+                                        'transition-all duration-200',
                                         {
-                                            keyboardShortcutsForOS[
-                                                KeyboardShortcutAction
-                                                    .SAVE_DIAGRAM
-                                            ].keyCombinationLabel
+                                            'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
+                                                (hiddenTableIds ?? []).length >
+                                                0,
                                         }
-                                    </span>
-                                </TooltipContent>
-                            </Tooltip>
-                            <Separator orientation="vertical" />
-                        </>
-                    ) : null}
+                                    )}
+                                >
+                                    <Funnel />
+                                </ToolbarButton>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('toolbar.filter')}
+                            <span className="ml-2 text-muted-foreground">
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.TOGGLE_FILTER
+                                    ].keyCombinationLabel
+                                }
+                            </span>
+                        </TooltipContent>
+                    </Tooltip>
+                    <Separator orientation="vertical" />
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

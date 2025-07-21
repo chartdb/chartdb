@@ -71,8 +71,8 @@ export const zh_CN: LanguageTranslation = {
             title: '多个模式',
             description:
                 '此关系图中有 {{schemasCount}} 个模式，当前显示：{{formattedSchemas}}。',
-            dont_show_again: '不再展示',
-            change_schema: '更改',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '无',
         },
 
@@ -146,6 +146,9 @@ export const zh_CN: LanguageTranslation = {
                         comments: '注释',
                         no_comments: '空',
                         delete_field: '删除字段',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -265,6 +268,8 @@ export const zh_CN: LanguageTranslation = {
             redo: '重做',
             reorder_diagram: '重新排列关系图',
             highlight_overlapping_tables: '突出显示重叠的表',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

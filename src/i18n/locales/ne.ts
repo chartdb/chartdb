@@ -75,8 +75,8 @@ export const ne: LanguageTranslation = {
             title: 'विविध स्कीमहरू',
             description:
                 '{{schemasCount}} डायाग्राममा स्कीमहरू। हालको रूपमा देखाइएको छ: {{formattedSchemas}}।',
-            dont_show_again: 'फेरि देखाउन नदिनुहोस्',
-            change_schema: 'स्कीम परिवर्तन गर्नुहोस्',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'कुनै पनि छैन',
         },
 
@@ -150,6 +150,9 @@ export const ne: LanguageTranslation = {
                         comments: 'टिप्पणीहरू',
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -271,6 +274,8 @@ export const ne: LanguageTranslation = {
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
             highlight_overlapping_tables:
                 'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

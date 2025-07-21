@@ -73,8 +73,8 @@ export const uk: LanguageTranslation = {
             title: 'Кілька схем',
             description:
                 '{{schemasCount}} схеми на цій діаграмі. Зараз відображається: {{formattedSchemas}}.',
-            dont_show_again: 'Більше не показувати',
-            change_schema: 'Зміна',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'немає',
         },
 
@@ -148,6 +148,9 @@ export const uk: LanguageTranslation = {
                         comments: 'Коментарі',
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -267,6 +270,8 @@ export const uk: LanguageTranslation = {
             redo: 'Повторити',
             reorder_diagram: 'Перевпорядкувати діаграму',
             highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

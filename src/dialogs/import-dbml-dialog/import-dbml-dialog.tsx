@@ -23,11 +23,16 @@ import { useTranslation } from 'react-i18next';
 import { Editor } from '@/components/code-snippet/code-snippet';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
-import { importDBMLToDiagram, sanitizeDBML } from '@/lib/dbml-import';
+import {
+    importDBMLToDiagram,
+    sanitizeDBML,
+    preprocessDBML,
+} from '@/lib/dbml/dbml-import/dbml-import';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Parser } from '@dbml/core';
 import { useCanvas } from '@/hooks/use-canvas';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import type { DBTable } from '@/lib/domain/db-table';
 import { useToast } from '@/components/toast/use-toast';
 import { Spinner } from '@/components/spinner/spinner';
 import { debounce } from '@/lib/utils';
@@ -189,7 +194,8 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             if (!content.trim()) return;
 
             try {
-                const sanitizedContent = sanitizeDBML(content);
+                const preprocessedContent = preprocessDBML(content);
+                const sanitizedContent = sanitizeDBML(preprocessedContent);
                 const parser = new Parser();
                 parser.parse(sanitizedContent, 'dbml');
             } catch (e) {
@@ -242,13 +248,11 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            // Sanitize DBML content before importing
-            const sanitizedContent = sanitizeDBML(dbmlContent);
-            const importedDiagram = await importDBMLToDiagram(sanitizedContent);
+            const importedDiagram = await importDBMLToDiagram(dbmlContent);
             const tableIdsToRemove = tables
                 .filter((table) =>
                     importedDiagram.tables?.some(
-                        (t) =>
+                        (t: DBTable) =>
                             t.name === table.name && t.schema === table.schema
                     )
                 )
@@ -257,19 +261,21 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             const relationshipIdsToRemove = relationships
                 .filter((relationship) => {
                     const sourceTable = tables.find(
-                        (table) => table.id === relationship.sourceTableId
+                        (table: DBTable) =>
+                            table.id === relationship.sourceTableId
                     );
                     const targetTable = tables.find(
-                        (table) => table.id === relationship.targetTableId
+                        (table: DBTable) =>
+                            table.id === relationship.targetTableId
                     );
                     if (!sourceTable || !targetTable) return true;
                     const replacementSourceTable = importedDiagram.tables?.find(
-                        (table) =>
+                        (table: DBTable) =>
                             table.name === sourceTable.name &&
                             table.schema === sourceTable.schema
                     );
                     const replacementTargetTable = importedDiagram.tables?.find(
-                        (table) =>
+                        (table: DBTable) =>
                             table.name === targetTable.name &&
                             table.schema === targetTable.schema
                     );

@@ -74,8 +74,8 @@ export const hi: LanguageTranslation = {
             title: 'एकाधिक स्कीमा',
             description:
                 '{{schemasCount}} स्कीमा इस आरेख में हैं। वर्तमान में प्रदर्शित: {{formattedSchemas}}।',
-            dont_show_again: 'फिर से न दिखाएँ',
-            change_schema: 'बदलें',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'कोई नहीं',
         },
 
@@ -150,6 +150,9 @@ export const hi: LanguageTranslation = {
                         comments: 'टिप्पणियाँ',
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -270,6 +273,8 @@ export const hi: LanguageTranslation = {
             redo: 'पुनः करें',
             reorder_diagram: 'आरेख पुनः व्यवस्थित करें',
             highlight_overlapping_tables: 'ओवरलैपिंग तालिकाओं को हाइलाइट करें',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

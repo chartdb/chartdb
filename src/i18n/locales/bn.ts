@@ -75,8 +75,8 @@ export const bn: LanguageTranslation = {
             title: 'বহু স্কিমা',
             description:
                 '{{schemasCount}} স্কিমা এই ডায়াগ্রামে রয়েছে। বর্তমানে প্রদর্শিত: {{formattedSchemas}}।',
-            dont_show_again: 'পুনরায় দেখাবেন না',
-            change_schema: 'পরিবর্তন করুন',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'কিছুই না',
         },
 
@@ -150,6 +150,9 @@ export const bn: LanguageTranslation = {
                         comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -269,6 +272,8 @@ export const bn: LanguageTranslation = {
             redo: 'পুনরায় করুন',
             reorder_diagram: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
             highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

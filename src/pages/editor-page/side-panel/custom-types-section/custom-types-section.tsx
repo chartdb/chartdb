@@ -6,8 +6,6 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { getOperatingSystem } from '@/lib/utils';
 import { CustomTypeList } from './custom-type-list/custom-type-list';
 import { DatabaseType } from '@/lib/domain/database-type';
 
@@ -36,19 +34,6 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
     const handleCreateCustomType = useCallback(async () => {
         await createCustomType();
     }, [createCustomType]);
-
-    const operatingSystem = useMemo(() => getOperatingSystem(), []);
-
-    useHotkeys(
-        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
-        () => {
-            filterInputRef.current?.focus();
-        },
-        {
-            preventDefault: true,
-        },
-        [filterInputRef]
-    );
 
     return (
         <section

@@ -10,8 +10,6 @@ import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import { useViewport } from '@xyflow/react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { getOperatingSystem } from '@/lib/utils';
 
 export interface AreasSectionProps {}
 
@@ -58,19 +56,6 @@ export const AreasSection: React.FC<AreasSectionProps> = () => {
     const handleClearFilter = useCallback(() => {
         setFilterText('');
     }, []);
-
-    const operatingSystem = useMemo(() => getOperatingSystem(), []);
-
-    useHotkeys(
-        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
-        () => {
-            filterInputRef.current?.focus();
-        },
-        {
-            preventDefault: true,
-        },
-        [filterInputRef]
-    );
 
     return (
         <section

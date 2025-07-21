@@ -75,8 +75,8 @@ export const gu: LanguageTranslation = {
             title: 'કઈંક વધારે સ્કીમા',
             description:
                 '{{schemasCount}} સ્કીમા આ ડાયાગ્રામમાં છે. હાલમાં દર્શાવેલ છે: {{formattedSchemas}}.',
-            dont_show_again: 'ફરીથી ન બતાવો',
-            change_schema: 'બદલો',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'કઈ નહીં',
         },
 
@@ -151,6 +151,9 @@ export const gu: LanguageTranslation = {
                         comments: 'ટિપ્પણીઓ',
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -270,6 +273,8 @@ export const gu: LanguageTranslation = {
             redo: 'રીડુ',
             reorder_diagram: 'ડાયાગ્રામ ફરીથી વ્યવસ્થિત કરો',
             highlight_overlapping_tables: 'ઓવરલેપ કરતો ટેબલ હાઇલાઇટ કરો',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

@@ -139,6 +139,9 @@ export const fr: LanguageTranslation = {
                         no_comments: 'Pas de commentaires',
                         delete_field: 'Supprimer le Champ',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                     },
                     index_actions: {
@@ -257,6 +260,8 @@ export const fr: LanguageTranslation = {
             redo: 'Rétablir',
             reorder_diagram: 'Réorganiser le Diagramme',
             highlight_overlapping_tables: 'Surligner les tables chevauchées',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
@@ -345,8 +350,8 @@ export const fr: LanguageTranslation = {
             title: 'Schémas Multiples',
             description:
                 '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
-            dont_show_again: 'Ne plus afficher',
-            change_schema: 'Changer',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Aucun',
         },
 

@@ -75,8 +75,8 @@ export const te: LanguageTranslation = {
             title: 'బహుళ స్కీమాలు',
             description:
                 '{{schemasCount}} స్కీమాలు ఈ చిత్రంలో ఉన్నాయి. ప్రస్తుత స్కీమాలు: {{formattedSchemas}}.',
-            dont_show_again: 'మరలా చూపించవద్దు',
-            change_schema: 'మార్చు',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'ఎదరికాదు',
         },
 
@@ -150,6 +150,9 @@ export const te: LanguageTranslation = {
                         comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -270,6 +273,8 @@ export const te: LanguageTranslation = {
             redo: 'మరలా చేయు',
             reorder_diagram: 'చిత్రాన్ని పునఃసరిచేయండి',
             highlight_overlapping_tables: 'అవకాశించు పట్టికలను హైలైట్ చేయండి',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

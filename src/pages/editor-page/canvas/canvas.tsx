@@ -84,6 +84,8 @@ import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
 import { updateTablesParentAreas, getTablesInArea } from './area-utils';
+import { CanvasFilter } from './canvas-filter/canvas-filter';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -108,7 +110,13 @@ const initialEdges: EdgeType[] = [];
 
 const tableToTableNode = (
     table: DBTable,
-    filteredSchemas?: string[]
+    {
+        filteredSchemas,
+        hiddenTableIds,
+    }: {
+        filteredSchemas?: string[];
+        hiddenTableIds?: string[];
+    }
 ): TableNodeType => {
     // Always use absolute position for now
     const position = { x: table.x, y: table.y };
@@ -122,7 +130,9 @@ const tableToTableNode = (
             isOverlapping: false,
         },
         width: table.width ?? MIN_TABLE_SIZE,
-        hidden: !shouldShowTablesBySchemaFilter(table, filteredSchemas),
+        hidden:
+            !shouldShowTablesBySchemaFilter(table, filteredSchemas) ||
+            (hiddenTableIds?.includes(table.id) ?? false),
     };
 };
 
@@ -165,6 +175,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         readonly,
         removeArea,
         updateArea,
+        hiddenTableIds,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -174,13 +185,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
-    const { reorderTables, fitView, setOverlapGraph, overlapGraph } =
-        useCanvas();
+    const {
+        reorderTables,
+        fitView,
+        setOverlapGraph,
+        overlapGraph,
+        showFilter,
+        setShowFilter,
+    } = useCanvas();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
-        initialTables.map((table) => tableToTableNode(table, filteredSchemas))
+        initialTables.map((table) =>
+            tableToTableNode(table, { filteredSchemas, hiddenTableIds })
+        )
     );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
@@ -193,12 +212,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const initialNodes = initialTables.map((table) =>
-            tableToTableNode(table, filteredSchemas)
+            tableToTableNode(table, { filteredSchemas, hiddenTableIds })
         );
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
-    }, [initialTables, nodes, filteredSchemas]);
+    }, [initialTables, nodes, filteredSchemas, hiddenTableIds]);
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
@@ -361,7 +380,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 ...tables.map((table) => {
                     const isOverlapping =
                         (overlapGraph.graph.get(table.id) ?? []).length > 0;
-                    const node = tableToTableNode(table, filteredSchemas);
+                    const node = tableToTableNode(table, {
+                        filteredSchemas,
+                        hiddenTableIds,
+                    });
 
                     return {
                         ...node,
@@ -387,6 +409,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         areas,
         setNodes,
         filteredSchemas,
+        hiddenTableIds,
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
@@ -1040,6 +1063,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
+    useHotkeys(
+        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
+        () => {
+            setShowFilter((prev) => !prev);
+        },
+        {
+            preventDefault: true,
+        },
+        []
+    );
+
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full" id="canvas">
@@ -1216,6 +1250,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         gap={16}
                         size={1}
                     />
+                    {showFilter ? (
+                        <CanvasFilter onClose={() => setShowFilter(false)} />
+                    ) : null}
                 </ReactFlow>
                 <MarkerDefinitions />
             </div>

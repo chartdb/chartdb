@@ -53,6 +53,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                 comments: localField.comments,
                 characterMaximumLength: localField.characterMaximumLength,
                 unique: localField.unique,
+                default: localField.default,
             });
         }
         prevFieldRef.current = localField;
@@ -100,6 +101,26 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         unique: !!value,
                                     }))
                                 }
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="default" className="text-subtitle">
+                                {t(
+                                    'side_panel.tables_section.table.field_actions.default_value'
+                                )}
+                            </Label>
+                            <Input
+                                value={localField.default ?? ''}
+                                onChange={(e) =>
+                                    setLocalField((current) => ({
+                                        ...current,
+                                        default: e.target.value || null,
+                                    }))
+                                }
+                                placeholder={t(
+                                    'side_panel.tables_section.table.field_actions.no_default'
+                                )}
+                                className="w-full rounded-md bg-muted text-sm"
                             />
                         </div>
                         {findDataTypeDataById(field.type.id)

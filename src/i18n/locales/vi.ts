@@ -74,8 +74,8 @@ export const vi: LanguageTranslation = {
             title: 'Có nhiều lược đồ',
             description:
                 'Có {{schemasCount}} lược đồ trong sơ đồ này. Hiện đang hiển thị: {{formattedSchemas}}.',
-            dont_show_again: 'Không hiển thị lại',
-            change_schema: 'Thay đổi',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'không có',
         },
 
@@ -149,6 +149,9 @@ export const vi: LanguageTranslation = {
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                     },
@@ -268,6 +271,8 @@ export const vi: LanguageTranslation = {
             redo: 'Làm lại',
             reorder_diagram: 'Sắp xếp lại sơ đồ',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
