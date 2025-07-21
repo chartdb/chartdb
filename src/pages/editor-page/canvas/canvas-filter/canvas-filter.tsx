@@ -28,6 +28,12 @@ type NodeContext = {
     table: TableContext;
 };
 
+type RelevantTableData = {
+    id: string;
+    name: string;
+    schema?: string | null;
+};
+
 export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const {
@@ -45,7 +51,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     // Extract only the properties needed for tree data
-    const relevantTableData = useMemo(
+    const relevantTableData = useMemo<RelevantTableData[]>(
         () =>
             tables.map((table) => ({
                 id: table.id,
@@ -58,14 +64,11 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     // Convert tables to tree nodes
     const treeData = useMemo(() => {
         // Group tables by schema
-        const tablesBySchema = new Map<
-            string,
-            (typeof relevantTableData)[0][]
-        >();
+        const tablesBySchema = new Map<string, RelevantTableData[]>();
 
         relevantTableData.forEach((table) => {
             const schema =
-                table.schema || defaultSchemas[databaseType] || 'default';
+                table.schema ?? defaultSchemas[databaseType] ?? 'default';
             if (!tablesBySchema.has(schema)) {
                 tablesBySchema.set(schema, []);
             }
@@ -294,9 +297,6 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                             addHiddenTableId(child.id);
                                         }
                                     });
-                                }
-                                if (hidden) {
-                                    removeHiddenTableId(tableId);
                                 }
                             } else {
                                 toggleTableVisibility(tableId, !hidden);
