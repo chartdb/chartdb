@@ -15,12 +15,13 @@ import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import { SelectDatabase } from './select-database/select-database';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { ImportDatabase } from '../common/import-database/import-database';
-import { SelectTables } from './select-tables/select-tables';
+import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
+import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -45,8 +46,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { listDiagrams, addDiagram } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
-    const [parsedMetadata, setParsedMetadata] =
-        useState<DatabaseMetadata | null>(null);
+    const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
     const [isParsingMetadata, setIsParsingMetadata] = useState(false);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseEdition(undefined);
         setScriptResult('');
         setImportMethod('query');
-        setParsedMetadata(null);
+        setParsedMetadata(undefined);
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
@@ -167,7 +167,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         openImportDBMLDialog,
     ]);
 
-    const importNewDiagramIfPossible = useCallback(async () => {
+    const importNewDiagramOrFilterTables = useCallback(async () => {
         try {
             setIsParsingMetadata(true);
 
@@ -195,7 +195,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 setParsedMetadata(metadata);
 
                 // Check if it's a large database that needs table selection
-                if (totalTablesAndViews > 50) {
+                if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
                     setStep(CreateDiagramDialogStep.SELECT_TABLES);
                 } else {
                     await importNewDiagram({
@@ -244,7 +244,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     />
                 ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
                     <ImportDatabase
-                        onImport={importNewDiagramIfPossible}
+                        onImport={importNewDiagramOrFilterTables}
                         onCreateEmptyDiagram={createEmptyDiagram}
                         databaseEdition={databaseEdition}
                         databaseType={databaseType}
@@ -260,24 +260,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         keepDialogAfterImport={true}
                     />
                 ) : step === CreateDiagramDialogStep.SELECT_TABLES ? (
-                    isParsingMetadata ? (
-                        <div className="flex h-[400px] items-center justify-center">
-                            <div className="text-center">
-                                <div className="mb-4 inline-block size-8 animate-spin rounded-full border-b-2 border-primary"></div>
-                                <p className="text-sm text-muted-foreground">
-                                    Parsing database metadata...
-                                </p>
-                            </div>
-                        </div>
-                    ) : parsedMetadata ? (
-                        <SelectTables
-                            databaseMetadata={parsedMetadata}
-                            onConfirm={importNewDiagram}
-                            onBack={() =>
-                                setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
-                            }
-                        />
-                    ) : null
+                    <SelectTables
+                        isLoading={isParsingMetadata || !parsedMetadata}
+                        databaseMetadata={parsedMetadata}
+                        onImport={importNewDiagram}
+                        onBack={() =>
+                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
+                        }
+                    />
                 ) : null}
             </DialogContent>
         </Dialog>

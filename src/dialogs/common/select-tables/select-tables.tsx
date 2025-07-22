@@ -1,16 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
-import {
-    ChevronLeft,
-    ChevronRight,
-    Search,
-    AlertCircle,
-    Database,
-    Check,
-    X,
-    Eye,
-} from 'lucide-react';
+import { Search, AlertCircle, Check, X, View, Table } from 'lucide-react';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { schemaNameToDomainSchemaName } from '@/lib/domain/db-schema';
@@ -24,10 +15,21 @@ import {
 } from '@/components/dialog/dialog';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { generateTableKey } from '@/lib/domain';
+import { Spinner } from '@/components/spinner/spinner';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationPrevious,
+    PaginationNext,
+} from '@/components/pagination/pagination';
+import { MAX_TABLES_IN_DIAGRAM } from './constants';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useTranslation } from 'react-i18next';
 
 export interface SelectTablesProps {
-    databaseMetadata: DatabaseMetadata;
-    onConfirm: ({
+    databaseMetadata?: DatabaseMetadata;
+    onImport: ({
         selectedTables,
         databaseMetadata,
     }: {
@@ -35,9 +37,9 @@ export interface SelectTablesProps {
         databaseMetadata?: DatabaseMetadata;
     }) => Promise<void>;
     onBack: () => void;
+    isLoading?: boolean;
 }
 
-const MAX_TABLES = 350;
 const TABLES_PER_PAGE = 10;
 
 interface TableInfo {
@@ -50,20 +52,22 @@ interface TableInfo {
 
 export const SelectTables: React.FC<SelectTablesProps> = ({
     databaseMetadata,
-    onConfirm,
+    onImport,
     onBack,
+    isLoading = false,
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [showTables, setShowTables] = useState(true);
     const [showViews, setShowViews] = useState(false);
+    const { t } = useTranslation();
 
     // Prepare all tables and views with their metadata
     const allTables = useMemo(() => {
         const tables: TableInfo[] = [];
 
         // Add regular tables
-        databaseMetadata.tables.forEach((table) => {
+        databaseMetadata?.tables.forEach((table) => {
             const schema = schemaNameToDomainSchemaName(table.schema);
             const tableName = table.table;
 
@@ -79,7 +83,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         });
 
         // Add views
-        databaseMetadata.views?.forEach((view) => {
+        databaseMetadata?.views?.forEach((view) => {
             const schema = schemaNameToDomainSchemaName(view.schema);
             const viewName = view.view_name;
 
@@ -103,7 +107,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         });
 
         return tables.sort((a, b) => a.fullName.localeCompare(b.fullName));
-    }, [databaseMetadata.tables, databaseMetadata.views]);
+    }, [databaseMetadata?.tables, databaseMetadata?.views]);
 
     // Count tables and views separately
     const tableCount = useMemo(
@@ -118,7 +122,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
     // Initialize selectedTables with all tables (not views) if less than 100 tables
     const [selectedTables, setSelectedTables] = useState<Set<string>>(() => {
         const tables = allTables.filter((t) => t.type === 'table');
-        if (tables.length < 150) {
+        if (tables.length < MAX_TABLES_IN_DIAGRAM) {
             return new Set(tables.map((t) => t.key));
         }
         return new Set();
@@ -151,7 +155,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
 
     // Calculate pagination
     const totalPages = useMemo(
-        () => Math.ceil(filteredTables.length / TABLES_PER_PAGE),
+        () => Math.max(1, Math.ceil(filteredTables.length / TABLES_PER_PAGE)),
         [filteredTables.length]
     );
 
@@ -167,7 +171,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
     }, [paginatedTables, selectedTables]);
 
     const canAddMore = useMemo(
-        () => selectedTables.size < MAX_TABLES,
+        () => selectedTables.size < MAX_TABLES_IN_DIAGRAM,
         [selectedTables.size]
     );
     const hasSearchResults = useMemo(
@@ -199,7 +203,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
 
             if (newSelected.has(tableKey)) {
                 newSelected.delete(tableKey);
-            } else if (selectedTables.size < MAX_TABLES) {
+            } else if (selectedTables.size < MAX_TABLES_IN_DIAGRAM) {
                 newSelected.add(tableKey);
             }
 
@@ -219,7 +223,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         } else {
             // Select all on current page
             for (const table of paginatedTables) {
-                if (newSelected.size >= MAX_TABLES) break;
+                if (newSelected.size >= MAX_TABLES_IN_DIAGRAM) break;
                 newSelected.add(table.key);
             }
         }
@@ -231,7 +235,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         const newSelected = new Set(selectedTables);
 
         for (const table of filteredTables) {
-            if (newSelected.size >= MAX_TABLES) break;
+            if (newSelected.size >= MAX_TABLES_IN_DIAGRAM) break;
             newSelected.add(table.key);
         }
 
@@ -268,40 +272,101 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
             })
             .filter((t): t is SelectedTable => t !== null);
 
-        onConfirm({ selectedTables: selectedTableObjects, databaseMetadata });
-    }, [selectedTables, allTables, onConfirm, databaseMetadata]);
+        onImport({ selectedTables: selectedTableObjects, databaseMetadata });
+    }, [selectedTables, allTables, onImport, databaseMetadata]);
+
+    const { isMd: isDesktop } = useBreakpoint('md');
+
+    const renderPagination = useCallback(
+        () => (
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            onClick={handlePrevPage}
+                            className={cn(
+                                'cursor-pointer',
+                                currentPage === 1 &&
+                                    'pointer-events-none opacity-50'
+                            )}
+                        />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <span className="px-3 text-sm text-muted-foreground">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext
+                            onClick={handleNextPage}
+                            className={cn(
+                                'cursor-pointer',
+                                (currentPage >= totalPages ||
+                                    filteredTables.length === 0) &&
+                                    'pointer-events-none opacity-50'
+                            )}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        ),
+        [
+            currentPage,
+            totalPages,
+            handlePrevPage,
+            handleNextPage,
+            filteredTables.length,
+        ]
+    );
+
+    if (isLoading) {
+        return (
+            <div className="flex h-[400px] items-center justify-center">
+                <div className="text-center">
+                    <Spinner className="mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                        Parsing database metadata...
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
             <DialogHeader>
                 <DialogTitle>Select Tables to Import</DialogTitle>
                 <DialogDescription>
-                    Your database contains {tableCount} table
-                    {tableCount !== 1 ? 's' : ''}
-                    {viewCount > 0 &&
-                        ` and ${viewCount} view${viewCount !== 1 ? 's' : ''}`}
-                    . Select which to import (maximum {MAX_TABLES}).
+                    {tableCount} {tableCount === 1 ? 'table' : 'tables'}
+                    {viewCount > 0 && (
+                        <>
+                            {' and '}
+                            {viewCount} {viewCount === 1 ? 'view' : 'views'}
+                        </>
+                    )}
+                    {' found. '}
+                    {allTables.length > MAX_TABLES_IN_DIAGRAM
+                        ? `Select up to ${MAX_TABLES_IN_DIAGRAM} to import.`
+                        : 'Choose which ones to import.'}
                 </DialogDescription>
             </DialogHeader>
             <DialogInternalContent>
                 <div className="flex h-full flex-col space-y-4">
                     {/* Warning/Info Banner */}
-                    <div
-                        className={cn(
-                            'flex items-center gap-2 rounded-lg p-3 text-sm',
-                            allTables.length > MAX_TABLES
-                                ? 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200'
-                                : 'bg-blue-50 text-blue-800 dark:bg-blue-950 dark:text-blue-200'
-                        )}
-                    >
-                        <AlertCircle className="size-4 shrink-0" />
-                        <span>
-                            {allTables.length > MAX_TABLES
-                                ? `Due to performance limitations, you can import a maximum of ${MAX_TABLES} tables.`
-                                : 'All tables can be imported.'}
-                        </span>
-                    </div>
-
+                    {allTables.length > MAX_TABLES_IN_DIAGRAM ? (
+                        <div
+                            className={cn(
+                                'flex items-center gap-2 rounded-lg p-3 text-sm',
+                                'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200'
+                            )}
+                        >
+                            <AlertCircle className="size-4 shrink-0" />
+                            <span>
+                                Due to performance limitations, you can import a
+                                maximum of {MAX_TABLES_IN_DIAGRAM} tables.
+                            </span>
+                        </div>
+                    ) : null}
                     {/* Search Input */}
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -321,17 +386,23 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                         )}
                     </div>
 
-                    {/* Selection Status and Actions - All in one line */}
-                    <div className="flex items-center justify-between gap-4">
+                    {/* Selection Status and Actions - Responsive layout */}
+                    <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                         {/* Left side: selection count -> checkboxes -> results found */}
-                        <div className="flex items-center gap-4 text-sm">
-                            <span className="font-medium">
-                                {selectedTables.size} / {MAX_TABLES} tables
-                                selected
-                            </span>
+                        <div className="flex flex-col items-center gap-3 text-sm sm:flex-row sm:items-center sm:gap-4">
+                            <div className="flex flex-col items-center gap-1 sm:flex-row sm:items-center sm:gap-4">
+                                <span className="text-center font-medium">
+                                    {selectedTables.size} /{' '}
+                                    {Math.min(
+                                        MAX_TABLES_IN_DIAGRAM,
+                                        allTables.length
+                                    )}{' '}
+                                    items selected
+                                </span>
+                            </div>
 
-                            <div className="flex items-center gap-3 border-x px-4">
-                                <label className="flex cursor-pointer items-center gap-2">
+                            <div className="flex items-center gap-3 sm:border-x sm:px-4">
+                                <div className="flex cursor-pointer items-center gap-2">
                                     <Checkbox
                                         checked={showTables}
                                         onCheckedChange={(checked) => {
@@ -340,10 +411,13 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                             setShowTables(!!checked);
                                         }}
                                     />
-                                    <Database className="size-4 text-muted-foreground" />
+                                    <Table
+                                        className="size-4"
+                                        strokeWidth={1.5}
+                                    />
                                     <span>tables</span>
-                                </label>
-                                <label className="flex cursor-pointer items-center gap-2">
+                                </div>
+                                <div className="flex cursor-pointer items-center gap-2">
                                     <Checkbox
                                         checked={showViews}
                                         onCheckedChange={(checked) => {
@@ -352,12 +426,15 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                             setShowViews(!!checked);
                                         }}
                                     />
-                                    <Eye className="size-4 text-muted-foreground" />
+                                    <View
+                                        className="size-4"
+                                        strokeWidth={1.5}
+                                    />
                                     <span>views</span>
-                                </label>
+                                </div>
                             </div>
 
-                            <span className="text-muted-foreground">
+                            <span className="hidden text-muted-foreground sm:inline">
                                 {filteredTables.length}{' '}
                                 {filteredTables.length === 1
                                     ? 'result'
@@ -367,7 +444,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                         </div>
 
                         {/* Right side: action buttons */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
                             {hasSearchResults && (
                                 <>
                                     {/* Show page selection button when not searching and no selection */}
@@ -408,13 +485,13 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                                                 )
                                                         ).length;
                                                     const remainingCapacity =
-                                                        MAX_TABLES -
+                                                        MAX_TABLES_IN_DIAGRAM -
                                                         selectedTables.size;
                                                     if (
                                                         unselectedCount >
                                                         remainingCapacity
                                                     ) {
-                                                        return `Can only select ${remainingCapacity} more tables (350 max limit)`;
+                                                        return `Can only select ${remainingCapacity} more tables (${MAX_TABLES_IN_DIAGRAM} max limit)`;
                                                     }
                                                     return undefined;
                                                 })()}
@@ -428,7 +505,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                                                 )
                                                         ).length;
                                                     const remainingCapacity =
-                                                        MAX_TABLES -
+                                                        MAX_TABLES_IN_DIAGRAM -
                                                         selectedTables.size;
                                                     if (
                                                         unselectedCount >
@@ -474,7 +551,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                 <div className="flex min-h-[400px] flex-1 flex-col">
                     {hasSearchResults ? (
                         <>
-                            <div className="min-h-[400px] flex-1 py-4">
+                            <div className="flex-1 py-4">
                                 <div className="space-y-1">
                                     {paginatedTables.map((table) => {
                                         const isSelected = selectedTables.has(
@@ -482,18 +559,24 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                         );
                                         const isDisabled =
                                             !isSelected &&
-                                            selectedTables.size >= MAX_TABLES;
+                                            selectedTables.size >=
+                                                MAX_TABLES_IN_DIAGRAM;
 
                                         return (
-                                            <label
+                                            <div
                                                 key={table.key}
                                                 className={cn(
-                                                    'flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
-                                                    isDisabled &&
-                                                        'cursor-not-allowed opacity-50',
-                                                    isSelected
-                                                        ? 'bg-primary/10 hover:bg-primary/15'
-                                                        : 'hover:bg-accent'
+                                                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                                                    {
+                                                        'cursor-not-allowed':
+                                                            isDisabled,
+
+                                                        'bg-muted hover:bg-muted/80':
+                                                            isSelected,
+                                                        'hover:bg-accent':
+                                                            !isSelected &&
+                                                            !isDisabled,
+                                                    }
                                                 )}
                                             >
                                                 <Checkbox
@@ -506,17 +589,22 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                                     }
                                                 />
                                                 {table.type === 'view' ? (
-                                                    <Eye className="size-4 text-muted-foreground" />
+                                                    <View
+                                                        className="size-4"
+                                                        strokeWidth={1.5}
+                                                    />
                                                 ) : (
-                                                    <Database className="size-4 text-muted-foreground" />
+                                                    <Table
+                                                        className="size-4"
+                                                        strokeWidth={1.5}
+                                                    />
                                                 )}
                                                 <span className="flex-1">
-                                                    {table.schema !==
-                                                        'default' && (
+                                                    {table.schema ? (
                                                         <span className="text-muted-foreground">
                                                             {table.schema}.
                                                         </span>
-                                                    )}
+                                                    ) : null}
                                                     <span className="font-medium">
                                                         {table.tableName}
                                                     </span>
@@ -527,16 +615,16 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                                     )}
                                                 </span>
                                                 {isSelected && (
-                                                    <Check className="size-4 text-primary" />
+                                                    <Check className="size-4 text-pink-600" />
                                                 )}
-                                            </label>
+                                            </div>
                                         );
                                     })}
                                 </div>
                             </div>
                         </>
                     ) : (
-                        <div className="flex h-full items-center justify-center">
+                        <div className="flex h-full items-center justify-center py-4">
                             <p className="text-sm text-muted-foreground">
                                 {searchTerm
                                     ? 'No tables found matching your search.'
@@ -545,36 +633,22 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                         </div>
                     )}
                 </div>
+                {isDesktop ? renderPagination() : null}
             </DialogInternalContent>
-            <DialogFooter className="flex items-center justify-between">
-                <Button variant="ghost" onClick={onBack} className="gap-1">
-                    <ChevronLeft className="size-4" />
-                    Back
+            <DialogFooter
+                // className={cn(
+                //     'gap-2',
+                //     isDesktop
+                //         ? 'flex items-center justify-between'
+                //         : 'flex flex-col'
+                // )}
+                className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2 md:justify-between md:gap-0"
+            >
+                {/* Desktop layout */}
+
+                <Button type="button" variant="secondary" onClick={onBack}>
+                    {t('new_diagram_dialog.back')}
                 </Button>
-
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handlePrevPage}
-                        disabled={currentPage === 1}
-                    >
-                        <ChevronLeft className="size-4" />
-                    </Button>
-
-                    <span className="px-3 text-sm text-muted-foreground">
-                        Page {currentPage} of {totalPages}
-                    </span>
-
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleNextPage}
-                        disabled={currentPage === totalPages}
-                    >
-                        <ChevronRight className="size-4" />
-                    </Button>
-                </div>
 
                 <Button
                     onClick={handleConfirm}
@@ -583,6 +657,8 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                 >
                     Import {selectedTables.size} Tables
                 </Button>
+
+                {!isDesktop ? renderPagination() : null}
             </DialogFooter>
         </>
     );
