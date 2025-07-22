@@ -37,6 +37,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { cloneTable } from '@/lib/clone';
+import type { DBSchema } from '@/lib/domain';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -126,8 +127,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     }, [table.id, removeTable]);
 
     const updateTableSchema = useCallback(
-        (schema: string) => {
-            updateTable(table.id, { schema });
+        ({ schema }: { schema: DBSchema }) => {
+            updateTable(table.id, { schema: schema.name });
         },
         [table.id, updateTable]
     );

@@ -548,7 +548,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                 </div>
 
                 {/* Table List */}
-                <div className="flex min-h-[400px] flex-1 flex-col">
+                <div className="flex min-h-[428px] flex-1 flex-col">
                     {hasSearchResults ? (
                         <>
                             <div className="flex-1 py-4">
