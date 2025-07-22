@@ -402,7 +402,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                             </div>
 
                             <div className="flex items-center gap-3 sm:border-x sm:px-4">
-                                <div className="flex cursor-pointer items-center gap-2">
+                                <div className="flex items-center gap-2">
                                     <Checkbox
                                         checked={showTables}
                                         onCheckedChange={(checked) => {
@@ -417,7 +417,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                                     />
                                     <span>tables</span>
                                 </div>
-                                <div className="flex cursor-pointer items-center gap-2">
+                                <div className="flex items-center gap-2">
                                     <Checkbox
                                         checked={showViews}
                                         onCheckedChange={(checked) => {
