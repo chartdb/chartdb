@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useStorage } from '@/hooks/use-storage';
@@ -15,10 +15,11 @@ import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import { SelectDatabase } from './select-database/select-database';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { ImportDatabase } from '../common/import-database/import-database';
-import { SelectTables } from './select-tables';
+import { SelectTables } from './select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
+import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
@@ -41,17 +42,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
-
     const { listDiagrams, addDiagram } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] =
         useState<DatabaseMetadata | null>(null);
-    const [selectedTables, setSelectedTables] = useState<string[]>([]);
     const [isParsingMetadata, setIsParsingMetadata] = useState(false);
-    const importNewDiagramRef =
-        useRef<(tablesToImport?: string[]) => Promise<void>>();
-    const prevDialogOpen = useRef(dialog.open);
 
     useEffect(() => {
         setDatabaseEdition(undefined);
@@ -67,30 +63,24 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [listDiagrams, setDiagramNumber, dialog.open]);
 
     useEffect(() => {
-        // Only reset when dialog is opening (transitioning from closed to open)
-        if (dialog.open && !prevDialogOpen.current) {
-            setStep(CreateDiagramDialogStep.SELECT_DATABASE);
-            setDatabaseType(DatabaseType.GENERIC);
-            setDatabaseEdition(undefined);
-            setScriptResult('');
-            setImportMethod('query');
-            setParsedMetadata(null);
-            setSelectedTables([]);
-        }
-        prevDialogOpen.current = dialog.open;
+        setStep(CreateDiagramDialogStep.SELECT_DATABASE);
+        setDatabaseType(DatabaseType.GENERIC);
+        setDatabaseEdition(undefined);
+        setScriptResult('');
+        setImportMethod('query');
+        setParsedMetadata(null);
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
 
-    const handleTableSelection = useCallback((tables: string[]) => {
-        setSelectedTables(tables);
-        if (importNewDiagramRef.current) {
-            importNewDiagramRef.current(tables);
-        }
-    }, []);
-
     const importNewDiagram = useCallback(
-        async (tablesToImport?: string[]) => {
+        async ({
+            selectedTables,
+            databaseMetadata,
+        }: {
+            selectedTables?: SelectedTable[];
+            databaseMetadata?: DatabaseMetadata;
+        } = {}) => {
             let diagram: Diagram | undefined;
 
             if (importMethod === 'ddl') {
@@ -100,21 +90,22 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     targetDatabaseType: databaseType,
                 });
             } else {
-                let databaseMetadata: DatabaseMetadata =
-                    parsedMetadata || loadDatabaseMetadata(scriptResult);
+                let metadata: DatabaseMetadata | undefined = databaseMetadata;
 
-                // If tables were selected, filter the metadata
-                const tables = tablesToImport || selectedTables;
-                if (tables && tables.length > 0) {
-                    databaseMetadata = filterMetadataByTables(
-                        databaseMetadata,
-                        tables
-                    );
+                if (!metadata) {
+                    metadata = loadDatabaseMetadata(scriptResult);
+                }
+
+                if (selectedTables && selectedTables.length > 0) {
+                    metadata = filterMetadataByTables({
+                        metadata,
+                        selectedTables,
+                    });
                 }
 
                 diagram = await loadFromDatabaseMetadata({
                     databaseType,
-                    databaseMetadata,
+                    databaseMetadata: metadata,
                     diagramNumber,
                     databaseEdition:
                         databaseEdition?.trim().length === 0
@@ -141,15 +132,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updateConfig,
             scriptResult,
             diagramNumber,
-            parsedMetadata,
-            selectedTables,
         ]
     );
-
-    // Store the function in the ref so handleTableSelection can access it
-    useEffect(() => {
-        importNewDiagramRef.current = importNewDiagram;
-    }, [importNewDiagram]);
 
     const createEmptyDiagram = useCallback(async () => {
         const diagram: Diagram = {
@@ -183,12 +167,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         openImportDBMLDialog,
     ]);
 
-    const parseMetadata = useCallback(async () => {
+    const importNewDiagramIfPossible = useCallback(async () => {
         try {
             setIsParsingMetadata(true);
 
             if (importMethod === 'ddl') {
-                // For DDL imports, we can't pre-parse, so go directly to import
                 await importNewDiagram();
             } else {
                 // Parse metadata asynchronously to avoid blocking the UI
@@ -209,21 +192,17 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 const totalTablesAndViews =
                     metadata.tables.length + (metadata.views?.length || 0);
 
+                setParsedMetadata(metadata);
+
                 // Check if it's a large database that needs table selection
                 if (totalTablesAndViews > 50) {
-                    setParsedMetadata(metadata);
                     setStep(CreateDiagramDialogStep.SELECT_TABLES);
-                    // Don't call importNewDiagram here, wait for user selection
                 } else {
-                    // Small database, import all tables and views directly
-                    setParsedMetadata(metadata);
-                    await importNewDiagram();
+                    await importNewDiagram({
+                        databaseMetadata: metadata,
+                    });
                 }
             }
-        } catch {
-            alert(
-                'Failed to parse database metadata. Please check the format and try again.'
-            );
         } finally {
             setIsParsingMetadata(false);
         }
@@ -250,14 +229,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             <DialogContent
                 className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
                 showClose={hasExistingDiagram}
-                onInteractOutside={(e) => {
-                    // Prevent closing by clicking outside
-                    e.preventDefault();
-                }}
-                onEscapeKeyDown={(e) => {
-                    // Prevent closing by pressing Escape
-                    e.preventDefault();
-                }}
+                onInteractOutside={(e) => e.preventDefault()}
+                onEscapeKeyDown={(e) => e.preventDefault()}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
                     <SelectDatabase
@@ -271,7 +244,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     />
                 ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
                     <ImportDatabase
-                        onImport={parseMetadata}
+                        onImport={importNewDiagramIfPossible}
                         onCreateEmptyDiagram={createEmptyDiagram}
                         databaseEdition={databaseEdition}
                         databaseType={databaseType}
@@ -299,7 +272,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     ) : parsedMetadata ? (
                         <SelectTables
                             databaseMetadata={parsedMetadata}
-                            onConfirm={handleTableSelection}
+                            onConfirm={importNewDiagram}
                             onBack={() =>
                                 setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                             }

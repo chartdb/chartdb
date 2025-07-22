@@ -69,7 +69,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     parentAreaId: z.string().or(z.null()).optional(),
 });
 
-const generateTableKey = ({
+export const generateTableKey = ({
     schemaName,
     tableName,
 }: {

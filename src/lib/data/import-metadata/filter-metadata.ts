@@ -1,26 +1,43 @@
 import type { DatabaseMetadata } from './metadata-types/database-metadata';
 import { schemaNameToDomainSchemaName } from '@/lib/domain/db-schema';
 
-/**
- * Filters database metadata to include only the specified tables and their related data
- * @param metadata - The complete database metadata
- * @param selectedTables - Array of table identifiers in format "schema.table"
- * @returns Filtered database metadata
- */
-export function filterMetadataByTables(
-    metadata: DatabaseMetadata,
-    selectedTables: string[]
-): DatabaseMetadata {
-    // Remove type prefixes (table: or view:) and create a set for faster lookup
-    const cleanedTables = selectedTables.map((tableId) => {
-        // Remove "table:" or "view:" prefix if present
-        return tableId.replace(/^(table:|view:)/, '');
+export interface SelectedTable {
+    schema?: string | null;
+    table: string;
+    type: 'table' | 'view';
+}
+
+export function filterMetadataByTables({
+    metadata,
+    selectedTables: inputSelectedTables,
+}: {
+    metadata: DatabaseMetadata;
+    selectedTables: SelectedTable[];
+}): DatabaseMetadata {
+    const selectedTables = inputSelectedTables.map((st) => {
+        // Normalize schema names to ensure consistent filtering
+        const schema = schemaNameToDomainSchemaName(st.schema) ?? '';
+        return {
+            ...st,
+            schema,
+        };
     });
-    const selectedTableSet = new Set(cleanedTables);
+
+    // Create sets for faster lookup
+    const selectedTableSet = new Set(
+        selectedTables
+            .filter((st) => st.type === 'table')
+            .map((st) => `${st.schema}.${st.table}`)
+    );
+    const selectedViewSet = new Set(
+        selectedTables
+            .filter((st) => st.type === 'view')
+            .map((st) => `${st.schema}.${st.table}`)
+    );
 
     // Filter tables
     const filteredTables = metadata.tables.filter((table) => {
-        const schema = schemaNameToDomainSchemaName(table.schema) || 'default';
+        const schema = schemaNameToDomainSchemaName(table.schema) ?? '';
         const tableId = `${schema}.${table.table}`;
         return selectedTableSet.has(tableId);
     });
@@ -28,48 +45,35 @@ export function filterMetadataByTables(
     // Filter views - include views that were explicitly selected
     const filteredViews =
         metadata.views?.filter((view) => {
-            const schema =
-                schemaNameToDomainSchemaName(view.schema) || 'default';
-            const viewName = view.view_name || '';
+            const schema = schemaNameToDomainSchemaName(view.schema) ?? '';
+            const viewName = view.view_name ?? '';
             const viewId = `${schema}.${viewName}`;
-            return selectedTableSet.has(viewId);
+            return selectedViewSet.has(viewId);
         }) || [];
-
-    // Get the raw schema.table combinations for filtering other metadata
-    const rawTablePairs = filteredTables.map((table) => ({
-        schema: table.schema,
-        table: table.table,
-    }));
-
-    // Get the raw schema.view combinations for filtering metadata
-    const rawViewPairs = filteredViews.map((view) => ({
-        schema: view.schema,
-        view: view.view_name || '',
-    }));
 
     // Filter columns - include columns from both tables and views
     const filteredColumns = metadata.columns.filter((col) => {
-        const fromTable = rawTablePairs.some(
-            (pair) => pair.schema === col.schema && pair.table === col.table
+        const fromTable = filteredTables.some(
+            (tb) => tb.schema === col.schema && tb.table === col.table
         );
         // For views, the column.table field might contain the view name
-        const fromView = rawViewPairs.some(
-            (pair) => pair.schema === col.schema && pair.view === col.table
+        const fromView = filteredViews.some(
+            (view) => view.schema === col.schema && view.view_name === col.table
         );
         return fromTable || fromView;
     });
 
     // Filter primary keys
     const filteredPrimaryKeys = metadata.pk_info.filter((pk) =>
-        rawTablePairs.some(
-            (pair) => pair.schema === pk.schema && pair.table === pk.table
+        filteredTables.some(
+            (tb) => tb.schema === pk.schema && tb.table === pk.table
         )
     );
 
     // Filter indexes
     const filteredIndexes = metadata.indexes.filter((idx) =>
-        rawTablePairs.some(
-            (pair) => pair.schema === idx.schema && pair.table === idx.table
+        filteredTables.some(
+            (tb) => tb.schema === idx.schema && tb.table === idx.table
         )
     );
 
@@ -80,34 +84,31 @@ export function filterMetadataByTables(
         const targetSchema = fk.reference_schema;
         const targetTable = (fk.reference_table || '').replace(/^"+|"+$/g, ''); // Remove extra quotes
 
-        const sourceIncluded = rawTablePairs.some(
-            (pair) => pair.schema === fk.schema && pair.table === fk.table
+        const sourceIncluded = filteredTables.some(
+            (tb) => tb.schema === fk.schema && tb.table === fk.table
         );
-        const targetIncluded = rawTablePairs.some(
-            (pair) => pair.schema === targetSchema && pair.table === targetTable
+        const targetIncluded = filteredTables.some(
+            (tb) => tb.schema === targetSchema && tb.table === targetTable
         );
         return sourceIncluded || targetIncluded;
     });
 
+    const schemasWithTables = new Set(filteredTables.map((tb) => tb.schema));
+    const schemasWithViews = new Set(filteredViews.map((view) => view.schema));
+
     // Filter custom types if they exist
     const filteredCustomTypes =
-        metadata.custom_types?.filter((type) => {
-            // Include custom types from schemas that have selected tables or views
-            const schemasWithTables = new Set(
-                rawTablePairs.map((pair) => pair.schema)
-            );
-            const schemasWithViews = new Set(
-                rawViewPairs.map((pair) => pair.schema)
-            );
-
+        metadata.custom_types?.filter((customType) => {
             // Also check if the type is used by any of the selected tables' columns
             const typeUsedInColumns = filteredColumns.some(
-                (col) => col.type === type.type || col.type.includes(type.type) // Handle array types like "custom_type[]"
+                (col) =>
+                    col.type === customType.type ||
+                    col.type.includes(customType.type) // Handle array types like "custom_type[]"
             );
 
             return (
-                schemasWithTables.has(type.schema) ||
-                schemasWithViews.has(type.schema) ||
+                schemasWithTables.has(customType.schema) ||
+                schemasWithViews.has(customType.schema) ||
                 typeUsedInColumns
             );
         }) || [];

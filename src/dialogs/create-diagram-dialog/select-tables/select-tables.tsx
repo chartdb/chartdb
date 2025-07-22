@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
 import {
@@ -22,10 +22,18 @@ import {
     DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
+import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
+import { generateTableKey } from '@/lib/domain';
 
 export interface SelectTablesProps {
     databaseMetadata: DatabaseMetadata;
-    onConfirm: (selectedTables: string[]) => void;
+    onConfirm: ({
+        selectedTables,
+        databaseMetadata,
+    }: {
+        selectedTables?: SelectedTable[];
+        databaseMetadata?: DatabaseMetadata;
+    }) => Promise<void>;
     onBack: () => void;
 }
 
@@ -34,7 +42,7 @@ const TABLES_PER_PAGE = 10;
 
 interface TableInfo {
     key: string;
-    schema: string;
+    schema?: string;
     tableName: string;
     fullName: string;
     type: 'table' | 'view';
@@ -56,33 +64,33 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
 
         // Add regular tables
         databaseMetadata.tables.forEach((table) => {
-            const schema =
-                schemaNameToDomainSchemaName(table.schema) || 'default';
+            const schema = schemaNameToDomainSchemaName(table.schema);
             const tableName = table.table;
-            const key = `table:${schema}.${tableName}`;
+
+            const key = `table:${generateTableKey({ tableName, schemaName: schema })}`;
 
             tables.push({
                 key,
                 schema,
                 tableName,
-                fullName:
-                    schema === 'default' ? tableName : `${schema}.${tableName}`,
+                fullName: schema ? `${schema}.${tableName}` : tableName,
                 type: 'table',
             });
         });
 
         // Add views
         databaseMetadata.views?.forEach((view) => {
-            const schema =
-                schemaNameToDomainSchemaName(view.schema) || 'default';
-            const viewName = view.view_name || ''; // Use view_name property
+            const schema = schemaNameToDomainSchemaName(view.schema);
+            const viewName = view.view_name;
 
-            // Skip if view name is empty
             if (!viewName) {
                 return;
             }
 
-            const key = `view:${schema}.${viewName}`;
+            const key = `view:${generateTableKey({
+                tableName: viewName,
+                schemaName: schema,
+            })}`;
 
             tables.push({
                 key,
@@ -133,7 +141,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
             filtered = filtered.filter(
                 (table) =>
                     table.tableName.toLowerCase().includes(searchLower) ||
-                    table.schema.toLowerCase().includes(searchLower) ||
+                    table.schema?.toLowerCase().includes(searchLower) ||
                     table.fullName.toLowerCase().includes(searchLower)
             );
         }
@@ -142,7 +150,11 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
     }, [allTables, searchTerm, showTables, showViews]);
 
     // Calculate pagination
-    const totalPages = Math.ceil(filteredTables.length / TABLES_PER_PAGE);
+    const totalPages = useMemo(
+        () => Math.ceil(filteredTables.length / TABLES_PER_PAGE),
+        [filteredTables.length]
+    );
+
     const paginatedTables = useMemo(() => {
         const startIndex = (currentPage - 1) * TABLES_PER_PAGE;
         const endIndex = startIndex + TABLES_PER_PAGE;
@@ -154,24 +166,49 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         return paginatedTables.filter((table) => selectedTables.has(table.key));
     }, [paginatedTables, selectedTables]);
 
+    const canAddMore = useMemo(
+        () => selectedTables.size < MAX_TABLES,
+        [selectedTables.size]
+    );
+    const hasSearchResults = useMemo(
+        () => filteredTables.length > 0,
+        [filteredTables.length]
+    );
+    const allVisibleSelected = useMemo(
+        () =>
+            visibleSelectedTables.length === paginatedTables.length &&
+            paginatedTables.length > 0,
+        [visibleSelectedTables.length, paginatedTables.length]
+    );
+    const canSelectAllFiltered = useMemo(
+        () =>
+            filteredTables.length > 0 &&
+            filteredTables.some((table) => !selectedTables.has(table.key)) &&
+            canAddMore,
+        [filteredTables, selectedTables, canAddMore]
+    );
+
     // Reset to first page when search changes
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm]);
 
-    const handleTableToggle = (tableKey: string) => {
-        const newSelected = new Set(selectedTables);
+    const handleTableToggle = useCallback(
+        (tableKey: string) => {
+            const newSelected = new Set(selectedTables);
 
-        if (newSelected.has(tableKey)) {
-            newSelected.delete(tableKey);
-        } else if (selectedTables.size < MAX_TABLES) {
-            newSelected.add(tableKey);
-        }
+            if (newSelected.has(tableKey)) {
+                newSelected.delete(tableKey);
+            } else if (selectedTables.size < MAX_TABLES) {
+                newSelected.add(tableKey);
+            }
 
-        setSelectedTables(newSelected);
-    };
+            setSelectedTables(newSelected);
+        },
+        [selectedTables]
+    );
 
-    const handleTogglePageSelection = () => {
+    const handleTogglePageSelection = useCallback(() => {
         const newSelected = new Set(selectedTables);
 
         if (allVisibleSelected) {
@@ -188,9 +225,9 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         }
 
         setSelectedTables(newSelected);
-    };
+    }, [allVisibleSelected, paginatedTables, selectedTables]);
 
-    const handleSelectAllFiltered = () => {
+    const handleSelectAllFiltered = useCallback(() => {
         const newSelected = new Set(selectedTables);
 
         for (const table of filteredTables) {
@@ -199,38 +236,40 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         }
 
         setSelectedTables(newSelected);
-    };
+    }, [filteredTables, selectedTables]);
 
-    const handleNextPage = () => {
+    const handleNextPage = useCallback(() => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
-    };
+    }, [currentPage, totalPages]);
 
-    const handlePrevPage = () => {
+    const handlePrevPage = useCallback(() => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
-    };
+    }, [currentPage]);
 
-    const handleClearSelection = () => {
+    const handleClearSelection = useCallback(() => {
         setSelectedTables(new Set());
-    };
+    }, []);
 
-    const handleConfirm = () => {
-        const tablesToImport = Array.from(selectedTables);
-        onConfirm(tablesToImport);
-    };
+    const handleConfirm = useCallback(() => {
+        const selectedTableObjects: SelectedTable[] = Array.from(selectedTables)
+            .map((key): SelectedTable | null => {
+                const table = allTables.find((t) => t.key === key);
+                if (!table) return null;
 
-    const canAddMore = selectedTables.size < MAX_TABLES;
-    const hasSearchResults = filteredTables.length > 0;
-    const allVisibleSelected =
-        visibleSelectedTables.length === paginatedTables.length &&
-        paginatedTables.length > 0;
-    const canSelectAllFiltered =
-        filteredTables.length > 0 &&
-        filteredTables.some((table) => !selectedTables.has(table.key)) &&
-        canAddMore;
+                return {
+                    schema: table.schema,
+                    table: table.tableName,
+                    type: table.type,
+                } satisfies SelectedTable;
+            })
+            .filter((t): t is SelectedTable => t !== null);
+
+        onConfirm({ selectedTables: selectedTableObjects, databaseMetadata });
+    }, [selectedTables, allTables, onConfirm, databaseMetadata]);
 
     return (
         <>
