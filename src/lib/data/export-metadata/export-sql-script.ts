@@ -367,7 +367,7 @@ export const exportBaseSQL = ({
         });
     });
 
-    if (nonViewTables.length > 0 && relationships?.length > 0) {
+    if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
         sqlScript += '\n';
     }
 
