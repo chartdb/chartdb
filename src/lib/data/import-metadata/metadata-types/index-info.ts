@@ -1,4 +1,3 @@
-import { schemaNameToDomainSchemaName } from '@/lib/domain/db-schema';
 import type { TableInfo } from './table-info';
 import { z } from 'zod';
 
@@ -33,20 +32,12 @@ export type AggregatedIndexInfo = Omit<IndexInfo, 'column'> & {
 };
 
 export const createAggregatedIndexes = ({
-    tableInfo,
-    tableSchema,
-    indexes,
+    tableIndexes,
 }: {
     tableInfo: TableInfo;
-    indexes: IndexInfo[];
+    tableIndexes: IndexInfo[];
     tableSchema?: string;
 }): AggregatedIndexInfo[] => {
-    const tableIndexes = indexes.filter((idx) => {
-        const indexSchema = schemaNameToDomainSchemaName(idx.schema);
-
-        return idx.table === tableInfo.table && indexSchema === tableSchema;
-    });
-
     return Object.values(
         tableIndexes.reduce(
             (acc, idx) => {

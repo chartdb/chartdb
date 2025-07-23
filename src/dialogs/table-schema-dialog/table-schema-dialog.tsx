@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 export interface TableSchemaDialogProps extends BaseDialogProps {
     table?: DBTable;
     schemas: DBSchema[];
-    onConfirm: (schema: string) => void;
+    onConfirm: ({ schema }: { schema: DBSchema }) => void;
 }
 
 export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
@@ -31,7 +31,7 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
     onConfirm,
 }) => {
     const { t } = useTranslation();
-    const [selectedSchema, setSelectedSchema] = React.useState<string>(
+    const [selectedSchemaId, setSelectedSchemaId] = React.useState<string>(
         table?.schema
             ? schemaNameToSchemaId(table.schema)
             : (schemas?.[0]?.id ?? '')
@@ -39,7 +39,7 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
 
     useEffect(() => {
         if (!dialog.open) return;
-        setSelectedSchema(
+        setSelectedSchemaId(
             table?.schema
                 ? schemaNameToSchemaId(table.schema)
                 : (schemas?.[0]?.id ?? '')
@@ -48,8 +48,11 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
     const { closeTableSchemaDialog } = useDialog();
 
     const handleConfirm = useCallback(() => {
-        onConfirm(selectedSchema);
-    }, [onConfirm, selectedSchema]);
+        const schema = schemas.find((s) => s.id === selectedSchemaId);
+        if (!schema) return;
+
+        onConfirm({ schema });
+    }, [onConfirm, selectedSchemaId, schemas]);
 
     const schemaOptions: SelectBoxOption[] = useMemo(
         () =>
@@ -89,9 +92,9 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
                         <SelectBox
                             options={schemaOptions}
                             multiple={false}
-                            value={selectedSchema}
+                            value={selectedSchemaId}
                             onChange={(value) =>
-                                setSelectedSchema(value as string)
+                                setSelectedSchemaId(value as string)
                             }
                         />
                     </div>
