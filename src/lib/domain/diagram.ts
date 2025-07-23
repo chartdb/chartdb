@@ -108,7 +108,7 @@ export const loadFromDatabaseMetadata = async ({
         return a.isView ? 1 : -1;
     });
 
-    const diagram = {
+    const diagram: Diagram = {
         id: generateDiagramId(),
         name: databaseMetadata.database_name
             ? `${databaseMetadata.database_name}-db`
