@@ -347,8 +347,44 @@ export function exportSQLite(diagram: Diagram): string {
                 return;
             }
 
+            // Determine which table should have the foreign key based on cardinality
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetField;
+                refTable = sourceTable;
+                refField = sourceField;
+            } else if (
+                r.sourceCardinality === 'many' &&
+                r.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return;
+            }
+
             // Create commented out version of what would be ALTER TABLE statement
-            sqlScript += `-- ALTER TABLE "${sourceTable.name}" ADD CONSTRAINT "fk_${sourceTable.name}_${sourceField.name}" FOREIGN KEY("${sourceField.name}") REFERENCES "${targetTable.name}"("${targetField.name}");\n`;
+            sqlScript += `-- ALTER TABLE "${fkTable.name}" ADD CONSTRAINT "fk_${fkTable.name}_${fkField.name}" FOREIGN KEY("${fkField.name}") REFERENCES "${refTable.name}"("${refField.name}");\n`;
         });
     }
 

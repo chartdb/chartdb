@@ -417,17 +417,53 @@ export function exportPostgreSQL(diagram: Diagram): string {
                 return '';
             }
 
-            const sourceTableName = sourceTable.schema
-                ? `"${sourceTable.schema}"."${sourceTable.name}"`
-                : `"${sourceTable.name}"`;
-            const targetTableName = targetTable.schema
-                ? `"${targetTable.schema}"."${targetTable.name}"`
-                : `"${targetTable.name}"`;
+            // Determine which table should have the foreign key based on cardinality
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetField;
+                refTable = sourceTable;
+                refField = sourceField;
+            } else if (
+                r.sourceCardinality === 'many' &&
+                r.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return '';
+            }
+
+            const fkTableName = fkTable.schema
+                ? `"${fkTable.schema}"."${fkTable.name}"`
+                : `"${fkTable.name}"`;
+            const refTableName = refTable.schema
+                ? `"${refTable.schema}"."${refTable.name}"`
+                : `"${refTable.name}"`;
 
             // Create a unique constraint name by combining table and field names
             // Ensure it stays within PostgreSQL's 63-character limit for identifiers
             // and doesn't get truncated in a way that breaks SQL syntax
-            const baseName = `fk_${sourceTable.name}_${sourceField.name}_${targetTable.name}_${targetField.name}`;
+            const baseName = `fk_${fkTable.name}_${fkField.name}_${refTable.name}_${refField.name}`;
             // Limit to 60 chars (63 minus quotes) to ensure the whole identifier stays within limits
             const safeConstraintName =
                 baseName.length > 60
@@ -436,7 +472,7 @@ export function exportPostgreSQL(diagram: Diagram): string {
 
             const constraintName = `"${safeConstraintName}"`;
 
-            return `ALTER TABLE ${sourceTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY("${sourceField.name}") REFERENCES ${targetTableName}("${targetField.name}");\n`;
+            return `ALTER TABLE ${fkTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY("${fkField.name}") REFERENCES ${refTableName}("${refField.name}");\n`;
         })
         .filter(Boolean) // Remove empty strings
         .join('\n')}`;
