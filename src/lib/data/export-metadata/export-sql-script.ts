@@ -131,7 +131,23 @@ export const exportBaseSQL = ({
                 }
             }
         });
-        sqlScript += '\n'; // Add a newline if custom types were processed
+        if (
+            diagram.customTypes.some(
+                (ct) =>
+                    (ct.kind === 'enum' &&
+                        ct.values &&
+                        ct.values.length > 0 &&
+                        targetDatabaseType === DatabaseType.POSTGRESQL &&
+                        !isDBMLFlow) ||
+                    (ct.kind === 'composite' &&
+                        ct.fields &&
+                        ct.fields.length > 0 &&
+                        (targetDatabaseType === DatabaseType.POSTGRESQL ||
+                            isDBMLFlow))
+            )
+        ) {
+            sqlScript += '\n';
+        }
     }
 
     // Add CREATE SEQUENCE statements
@@ -154,7 +170,9 @@ export const exportBaseSQL = ({
     sequences.forEach((sequence) => {
         sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
     });
-    sqlScript += '\n';
+    if (sequences.size > 0) {
+        sqlScript += '\n';
+    }
 
     // Loop through each non-view table to generate the SQL statements
     nonViewTables.forEach((table) => {
@@ -316,7 +334,7 @@ export const exportBaseSQL = ({
             sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
         }
 
-        sqlScript += '\n);\n\n';
+        sqlScript += '\n);\n';
 
         // Add table comment
         if (table.comments) {
@@ -347,9 +365,11 @@ export const exportBaseSQL = ({
                 sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });
-
-        sqlScript += '\n';
     });
+
+    if (nonViewTables.length > 0 && relationships?.length > 0) {
+        sqlScript += '\n';
+    }
 
     // Handle relationships (foreign keys)
     relationships?.forEach((relationship) => {
