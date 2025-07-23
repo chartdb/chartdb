@@ -61,6 +61,7 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
     const [showTables, setShowTables] = useState(true);
     const [showViews, setShowViews] = useState(false);
     const { t } = useTranslation();
+    const [isImporting, setIsImporting] = useState(false);
 
     // Prepare all tables and views with their metadata
     const allTables = useMemo(() => {
@@ -258,22 +259,37 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
         setSelectedTables(new Set());
     }, []);
 
-    const handleConfirm = useCallback(() => {
-        const selectedTableObjects: SelectedTable[] = Array.from(selectedTables)
-            .map((key): SelectedTable | null => {
-                const table = allTables.find((t) => t.key === key);
-                if (!table) return null;
+    const handleConfirm = useCallback(async () => {
+        if (isImporting) {
+            return;
+        }
 
-                return {
-                    schema: table.schema,
-                    table: table.tableName,
-                    type: table.type,
-                } satisfies SelectedTable;
-            })
-            .filter((t): t is SelectedTable => t !== null);
+        setIsImporting(true);
 
-        onImport({ selectedTables: selectedTableObjects, databaseMetadata });
-    }, [selectedTables, allTables, onImport, databaseMetadata]);
+        try {
+            const selectedTableObjects: SelectedTable[] = Array.from(
+                selectedTables
+            )
+                .map((key): SelectedTable | null => {
+                    const table = allTables.find((t) => t.key === key);
+                    if (!table) return null;
+
+                    return {
+                        schema: table.schema,
+                        table: table.tableName,
+                        type: table.type,
+                    } satisfies SelectedTable;
+                })
+                .filter((t): t is SelectedTable => t !== null);
+
+            await onImport({
+                selectedTables: selectedTableObjects,
+                databaseMetadata,
+            });
+        } finally {
+            setIsImporting(false);
+        }
+    }, [selectedTables, allTables, onImport, databaseMetadata, isImporting]);
 
     const { isMd: isDesktop } = useBreakpoint('md');
 
@@ -635,27 +651,29 @@ export const SelectTables: React.FC<SelectTablesProps> = ({
                 </div>
                 {isDesktop ? renderPagination() : null}
             </DialogInternalContent>
-            <DialogFooter
-                // className={cn(
-                //     'gap-2',
-                //     isDesktop
-                //         ? 'flex items-center justify-between'
-                //         : 'flex flex-col'
-                // )}
-                className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2 md:justify-between md:gap-0"
-            >
-                {/* Desktop layout */}
-
-                <Button type="button" variant="secondary" onClick={onBack}>
+            <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2 md:justify-between md:gap-0">
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={onBack}
+                    disabled={isImporting}
+                >
                     {t('new_diagram_dialog.back')}
                 </Button>
 
                 <Button
                     onClick={handleConfirm}
-                    disabled={selectedTables.size === 0}
+                    disabled={selectedTables.size === 0 || isImporting}
                     className="bg-pink-500 text-white hover:bg-pink-600"
                 >
-                    Import {selectedTables.size} Tables
+                    {isImporting ? (
+                        <>
+                            <Spinner className="mr-2 size-4 text-white" />
+                            Importing...
+                        </>
+                    ) : (
+                        `Import ${selectedTables.size} Tables`
+                    )}
                 </Button>
 
                 {!isDesktop ? renderPagination() : null}
