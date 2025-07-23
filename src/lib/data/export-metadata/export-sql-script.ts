@@ -373,13 +373,52 @@ export const exportBaseSQL = ({
             sourceTableField &&
             targetTableField
         ) {
-            const sourceTableName = sourceTable.schema
-                ? `${sourceTable.schema}.${sourceTable.name}`
-                : sourceTable.name;
-            const targetTableName = targetTable.schema
-                ? `${targetTable.schema}.${targetTable.name}`
-                : targetTable.name;
-            sqlScript += `ALTER TABLE ${sourceTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${sourceTableField.name}) REFERENCES ${targetTableName} (${targetTableField.name});\n`;
+            // Determine which table should have the foreign key based on cardinality
+            // In a 1:many relationship, the foreign key goes on the "many" side
+            // If source is "one" and target is "many", FK goes on target table
+            // If source is "many" and target is "one", FK goes on source table
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetTableField;
+                refTable = sourceTable;
+                refField = sourceTableField;
+            } else if (
+                relationship.sourceCardinality === 'many' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return;
+            }
+
+            const fkTableName = fkTable.schema
+                ? `${fkTable.schema}.${fkTable.name}`
+                : fkTable.name;
+            const refTableName = refTable.schema
+                ? `${refTable.schema}.${refTable.name}`
+                : refTable.name;
+            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${fkField.name}) REFERENCES ${refTableName} (${refField.name});\n`;
         }
     });
 

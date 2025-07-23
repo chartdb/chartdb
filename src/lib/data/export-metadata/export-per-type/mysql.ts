@@ -425,18 +425,54 @@ export function exportMySQL(diagram: Diagram): string {
                     return '';
                 }
 
-                const sourceTableName = sourceTable.schema
-                    ? `\`${sourceTable.schema}\`.\`${sourceTable.name}\``
-                    : `\`${sourceTable.name}\``;
-                const targetTableName = targetTable.schema
-                    ? `\`${targetTable.schema}\`.\`${targetTable.name}\``
-                    : `\`${targetTable.name}\``;
+                // Determine which table should have the foreign key based on cardinality
+                let fkTable, fkField, refTable, refField;
+
+                if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'many'
+                ) {
+                    // FK goes on target table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
+                } else if (
+                    r.sourceCardinality === 'many' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // FK goes on source table
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                    // We'll keep the current behavior for 1:1
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else {
+                    // Many-to-many relationships need a junction table, skip for now
+                    return '';
+                }
+
+                const fkTableName = fkTable.schema
+                    ? `\`${fkTable.schema}\`.\`${fkTable.name}\``
+                    : `\`${fkTable.name}\``;
+                const refTableName = refTable.schema
+                    ? `\`${refTable.schema}\`.\`${refTable.name}\``
+                    : `\`${refTable.name}\``;
 
                 // Create a descriptive constraint name
-                const constraintName = `\`fk_${sourceTable.name}_${sourceField.name}\``;
+                const constraintName = `\`fk_${fkTable.name}_${fkField.name}\``;
 
                 // MySQL supports ON DELETE and ON UPDATE actions
-                return `ALTER TABLE ${sourceTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY(\`${sourceField.name}\`) REFERENCES ${targetTableName}(\`${targetField.name}\`)\nON UPDATE CASCADE ON DELETE RESTRICT;\n`;
+                return `ALTER TABLE ${fkTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY(\`${fkField.name}\`) REFERENCES ${refTableName}(\`${refField.name}\`)\nON UPDATE CASCADE ON DELETE RESTRICT;\n`;
             })
             .filter(Boolean) // Remove empty strings
             .join('\n');
