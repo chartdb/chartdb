@@ -77,8 +77,8 @@ export const tr: LanguageTranslation = {
             title: 'Birden Fazla Şema',
             description:
                 'Bu diyagramda {{schemasCount}} şema var. Şu anda görüntülenen: {{formattedSchemas}}.',
-            dont_show_again: 'Tekrar gösterme',
-            change_schema: 'Değiştir',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'yok',
         },
 
@@ -151,6 +151,9 @@ export const tr: LanguageTranslation = {
                         comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Hassasiyet',
@@ -272,6 +275,8 @@ export const tr: LanguageTranslation = {
             redo: 'Yinele',
             reorder_diagram: 'Diyagramı Yeniden Sırala',
             highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
         new_diagram_dialog: {
             database_selection: {

@@ -76,8 +76,8 @@ export const id_ID: LanguageTranslation = {
             title: 'Schema Lebih dari satu',
             description:
                 '{{schemasCount}} schema di diagram ini. Sedang ditampilkan: {{formattedSchemas}}.',
-            dont_show_again: 'Jangan tampilkan lagi',
-            change_schema: 'Ubah',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Tidak ada',
         },
 
@@ -151,6 +151,9 @@ export const id_ID: LanguageTranslation = {
                         comments: 'Komentar',
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Presisi',
@@ -272,6 +275,8 @@ export const id_ID: LanguageTranslation = {
             redo: 'Redo',
             reorder_diagram: 'Atur Ulang Diagram',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

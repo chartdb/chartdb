@@ -75,8 +75,8 @@ export const ru: LanguageTranslation = {
             title: 'Множественные схемы',
             description:
                 '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
-            dont_show_again: 'Больше не показывать',
-            change_schema: 'Изменить',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'никто',
         },
 
@@ -149,6 +149,9 @@ export const ru: LanguageTranslation = {
                         comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         character_length: 'Макс. длина',
                         precision: 'Точность',
                         scale: 'Масштаб',
@@ -270,6 +273,8 @@ export const ru: LanguageTranslation = {
             redo: 'Вернуть',
             reorder_diagram: 'Переупорядочить диаграмму',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

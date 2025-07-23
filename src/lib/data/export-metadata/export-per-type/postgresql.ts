@@ -142,7 +142,7 @@ function exportCustomTypes(customTypes: DBCustomType[]): string {
         }
     });
 
-    return typesSql + '\n';
+    return typesSql ? typesSql + '\n' : '';
 }
 
 export function exportPostgreSQL(diagram: Diagram): string {
@@ -175,7 +175,9 @@ export function exportPostgreSQL(diagram: Diagram): string {
     schemas.forEach((schema) => {
         sqlScript += `CREATE SCHEMA IF NOT EXISTS "${schema}";\n`;
     });
-    sqlScript += '\n';
+    if (schemas.size > 0) {
+        sqlScript += '\n';
+    }
 
     // Add custom types (enums and composite types)
     sqlScript += exportCustomTypes(customTypes);
@@ -200,7 +202,9 @@ export function exportPostgreSQL(diagram: Diagram): string {
     sequences.forEach((sequence) => {
         sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
     });
-    sqlScript += '\n';
+    if (sequences.size > 0) {
+        sqlScript += '\n';
+    }
 
     // Generate table creation SQL
     sqlScript += tables
@@ -311,10 +315,10 @@ export function exportPostgreSQL(diagram: Diagram): string {
                           .map((f) => `"${f.name}"`)
                           .join(', ')})`
                     : ''
-            }\n);\n\n${
+            }\n);${
                 // Add table comments
                 table.comments
-                    ? `COMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';\n\n`
+                    ? `\nCOMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';`
                     : ''
             }${
                 // Add column comments
@@ -322,125 +326,211 @@ export function exportPostgreSQL(diagram: Diagram): string {
                     .filter((f) => f.comments)
                     .map(
                         (f) =>
-                            `COMMENT ON COLUMN ${tableName}."${f.name}" IS '${escapeSQLComment(f.comments || '')}';\n`
+                            `\nCOMMENT ON COLUMN ${tableName}."${f.name}" IS '${escapeSQLComment(f.comments || '')}';`
                     )
                     .join('')
-            }\n${
+            }${
                 // Add indexes only for non-primary key fields or composite indexes
                 // This avoids duplicate indexes on primary key columns
-                table.indexes
-                    .map((index) => {
-                        // Get the list of fields for this index
-                        const indexFields = index.fieldIds
-                            .map((fieldId) => {
-                                const field = table.fields.find(
-                                    (f) => f.id === fieldId
-                                );
-                                return field ? field : null;
-                            })
-                            .filter(Boolean);
+                (() => {
+                    const validIndexes = table.indexes
+                        .map((index) => {
+                            // Get the list of fields for this index
+                            const indexFields = index.fieldIds
+                                .map((fieldId) => {
+                                    const field = table.fields.find(
+                                        (f) => f.id === fieldId
+                                    );
+                                    return field ? field : null;
+                                })
+                                .filter(Boolean);
 
-                        // Skip if this index exactly matches the primary key fields
-                        // This prevents creating redundant indexes
-                        if (
-                            primaryKeyFields.length === indexFields.length &&
-                            primaryKeyFields.every((pk) =>
-                                indexFields.some(
-                                    (field) => field && field.id === pk.id
+                            // Skip if this index exactly matches the primary key fields
+                            // This prevents creating redundant indexes
+                            if (
+                                primaryKeyFields.length ===
+                                    indexFields.length &&
+                                primaryKeyFields.every((pk) =>
+                                    indexFields.some(
+                                        (field) => field && field.id === pk.id
+                                    )
                                 )
-                            )
-                        ) {
-                            return '';
-                        }
+                            ) {
+                                return '';
+                            }
 
-                        // Create unique index name using table name and index name
-                        // This ensures index names are unique across the database
-                        const safeTableName = table.name.replace(
-                            /[^a-zA-Z0-9_]/g,
-                            '_'
-                        );
-                        const safeIndexName = index.name.replace(
-                            /[^a-zA-Z0-9_]/g,
-                            '_'
-                        );
+                            // Create unique index name using table name and index name
+                            // This ensures index names are unique across the database
+                            const safeTableName = table.name.replace(
+                                /[^a-zA-Z0-9_]/g,
+                                '_'
+                            );
+                            const safeIndexName = index.name.replace(
+                                /[^a-zA-Z0-9_]/g,
+                                '_'
+                            );
 
-                        // Limit index name length to avoid PostgreSQL's 63-character identifier limit
-                        let combinedName = `${safeTableName}_${safeIndexName}`;
-                        if (combinedName.length > 60) {
-                            // If too long, use just the index name or a truncated version
-                            combinedName =
-                                safeIndexName.length > 60
-                                    ? safeIndexName.substring(0, 60)
-                                    : safeIndexName;
-                        }
+                            // Limit index name length to avoid PostgreSQL's 63-character identifier limit
+                            let combinedName = `${safeTableName}_${safeIndexName}`;
+                            if (combinedName.length > 60) {
+                                // If too long, use just the index name or a truncated version
+                                combinedName =
+                                    safeIndexName.length > 60
+                                        ? safeIndexName.substring(0, 60)
+                                        : safeIndexName;
+                            }
 
-                        const indexName = `"${combinedName}"`;
+                            const indexName = `"${combinedName}"`;
 
-                        // Get the properly quoted field names
-                        const indexFieldNames = indexFields
-                            .map((field) => (field ? `"${field.name}"` : ''))
-                            .filter(Boolean);
+                            // Get the properly quoted field names
+                            const indexFieldNames = indexFields
+                                .map((field) =>
+                                    field ? `"${field.name}"` : ''
+                                )
+                                .filter(Boolean);
 
-                        return indexFieldNames.length > 0
-                            ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFieldNames.join(', ')});\n\n`
-                            : '';
-                    })
-                    .filter(Boolean)
-                    .join('')
-            }`;
+                            return indexFieldNames.length > 0
+                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldNames.join(', ')});`
+                                : '';
+                        })
+                        .filter(Boolean);
+
+                    return validIndexes.length > 0
+                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                        : '';
+                })()
+            }\n`;
         })
         .filter(Boolean) // Remove empty strings (views)
         .join('\n');
 
     // Generate foreign keys
-    sqlScript += `\n${relationships
-        .map((r: DBRelationship) => {
-            const sourceTable = tables.find((t) => t.id === r.sourceTableId);
-            const targetTable = tables.find((t) => t.id === r.targetTableId);
+    if (relationships.length > 0) {
+        sqlScript += '\n-- Foreign key constraints\n';
 
-            if (
-                !sourceTable ||
-                !targetTable ||
-                sourceTable.isView ||
-                targetTable.isView
-            ) {
-                return '';
-            }
+        // Process all relationships and create FK objects with schema info
+        const foreignKeys = relationships
+            .map((r: DBRelationship) => {
+                const sourceTable = tables.find(
+                    (t) => t.id === r.sourceTableId
+                );
+                const targetTable = tables.find(
+                    (t) => t.id === r.targetTableId
+                );
 
-            const sourceField = sourceTable.fields.find(
-                (f) => f.id === r.sourceFieldId
-            );
-            const targetField = targetTable.fields.find(
-                (f) => f.id === r.targetFieldId
-            );
+                if (
+                    !sourceTable ||
+                    !targetTable ||
+                    sourceTable.isView ||
+                    targetTable.isView
+                ) {
+                    return '';
+                }
 
-            if (!sourceField || !targetField) {
-                return '';
-            }
+                const sourceField = sourceTable.fields.find(
+                    (f) => f.id === r.sourceFieldId
+                );
+                const targetField = targetTable.fields.find(
+                    (f) => f.id === r.targetFieldId
+                );
 
-            const sourceTableName = sourceTable.schema
-                ? `"${sourceTable.schema}"."${sourceTable.name}"`
-                : `"${sourceTable.name}"`;
-            const targetTableName = targetTable.schema
-                ? `"${targetTable.schema}"."${targetTable.name}"`
-                : `"${targetTable.name}"`;
+                if (!sourceField || !targetField) {
+                    return '';
+                }
 
-            // Create a unique constraint name by combining table and field names
-            // Ensure it stays within PostgreSQL's 63-character limit for identifiers
-            // and doesn't get truncated in a way that breaks SQL syntax
-            const baseName = `fk_${sourceTable.name}_${sourceField.name}_${targetTable.name}_${targetField.name}`;
-            // Limit to 60 chars (63 minus quotes) to ensure the whole identifier stays within limits
-            const safeConstraintName =
-                baseName.length > 60
-                    ? baseName.substring(0, 60).replace(/[^a-zA-Z0-9_]/g, '_')
-                    : baseName.replace(/[^a-zA-Z0-9_]/g, '_');
+                // Determine which table should have the foreign key based on cardinality
+                let fkTable, fkField, refTable, refField;
 
-            const constraintName = `"${safeConstraintName}"`;
+                if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'many'
+                ) {
+                    // FK goes on target table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
+                } else if (
+                    r.sourceCardinality === 'many' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // FK goes on source table
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                    // We'll keep the current behavior for 1:1
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else {
+                    // Many-to-many relationships need a junction table, skip for now
+                    return '';
+                }
 
-            return `ALTER TABLE ${sourceTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY("${sourceField.name}") REFERENCES ${targetTableName}("${targetField.name}");\n`;
-        })
-        .filter(Boolean) // Remove empty strings
-        .join('\n')}`;
+                const fkTableName = fkTable.schema
+                    ? `"${fkTable.schema}"."${fkTable.name}"`
+                    : `"${fkTable.name}"`;
+                const refTableName = refTable.schema
+                    ? `"${refTable.schema}"."${refTable.name}"`
+                    : `"${refTable.name}"`;
+
+                // Create a unique constraint name by combining table and field names
+                // Ensure it stays within PostgreSQL's 63-character limit for identifiers
+                // and doesn't get truncated in a way that breaks SQL syntax
+                const baseName = `fk_${fkTable.name}_${fkField.name}_${refTable.name}_${refField.name}`;
+                // Limit to 60 chars (63 minus quotes) to ensure the whole identifier stays within limits
+                const safeConstraintName =
+                    baseName.length > 60
+                        ? baseName
+                              .substring(0, 60)
+                              .replace(/[^a-zA-Z0-9_]/g, '_')
+                        : baseName.replace(/[^a-zA-Z0-9_]/g, '_');
+
+                const constraintName = `"${safeConstraintName}"`;
+
+                return {
+                    schema: fkTable.schema || 'public',
+                    sql: `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${constraintName} FOREIGN KEY("${fkField.name}") REFERENCES ${refTableName}("${refField.name}");`,
+                };
+            })
+            .filter(Boolean); // Remove empty objects
+
+        // Group foreign keys by schema
+        const fksBySchema = foreignKeys.reduce(
+            (acc, fk) => {
+                if (!fk) return acc;
+                const schema = fk.schema;
+                if (!acc[schema]) {
+                    acc[schema] = [];
+                }
+                acc[schema].push(fk.sql);
+                return acc;
+            },
+            {} as Record<string, string[]>
+        );
+
+        // Sort schemas and generate SQL with separators
+        const sortedSchemas = Object.keys(fksBySchema).sort();
+        const fkSql = sortedSchemas
+            .map((schema, index) => {
+                const schemaFks = fksBySchema[schema].join('\n');
+                if (index === 0) {
+                    return `-- Schema: ${schema}\n${schemaFks}`;
+                } else {
+                    return `\n-- Schema: ${schema}\n${schemaFks}`;
+                }
+            })
+            .join('\n');
+
+        sqlScript += fkSql;
+    }
 
     return sqlScript;
 }

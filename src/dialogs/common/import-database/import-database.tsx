@@ -43,6 +43,15 @@ import {
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
 
+const calculateContentSizeMB = (content: string): number => {
+    return content.length / (1024 * 1024); // Convert to MB
+};
+
+const calculateIsLargeFile = (content: string): boolean => {
+    const contentSizeMB = calculateContentSizeMB(content);
+    return contentSizeMB > 2; // Consider large if over 2MB
+};
+
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
 
@@ -246,6 +255,16 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const formatEditor = useCallback(() => {
         if (editorRef.current) {
+            const model = editorRef.current.getModel();
+            if (model) {
+                const content = model.getValue();
+
+                // Skip formatting for large files (> 2MB)
+                if (calculateIsLargeFile(content)) {
+                    return;
+                }
+            }
+
             setTimeout(() => {
                 editorRef.current
                     ?.getAction('editor.action.formatDocument')
@@ -315,14 +334,17 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
                 const content = model.getValue();
 
+                // Skip formatting for large files (> 2MB) to prevent browser freezing
+                const isLargeFile = calculateIsLargeFile(content);
+
                 // First, detect content type to determine if we should switch modes
                 const detectedType = detectContentType(content);
                 if (detectedType && detectedType !== importMethod) {
                     // Switch to the detected mode immediately
                     setImportMethod(detectedType);
 
-                    // Only format if it's JSON (query mode)
-                    if (detectedType === 'query') {
+                    // Only format if it's JSON (query mode) AND file is not too large
+                    if (detectedType === 'query' && !isLargeFile) {
                         // For JSON mode, format after a short delay
                         setTimeout(() => {
                             editor
@@ -333,15 +355,15 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     // For DDL mode, do NOT format as it can break the SQL
                 } else {
                     // Content type didn't change, apply formatting based on current mode
-                    if (importMethod === 'query') {
-                        // Only format JSON content
+                    if (importMethod === 'query' && !isLargeFile) {
+                        // Only format JSON content if not too large
                         setTimeout(() => {
                             editor
                                 .getAction('editor.action.formatDocument')
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode, do NOT format
+                    // For DDL mode or large files, do NOT format
                 }
             });
 

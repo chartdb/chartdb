@@ -77,8 +77,8 @@ export const de: LanguageTranslation = {
             title: 'Mehrere Schemas',
             description:
                 '{{schemasCount}} Schemas in diesem Diagramm. Derzeit angezeigt: {{formattedSchemas}}.',
-            dont_show_again: 'Nicht erneut anzeigen',
-            change_schema: 'Schema ändern',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Keine',
         },
 
@@ -153,6 +153,9 @@ export const de: LanguageTranslation = {
                         comments: 'Kommentare',
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Präzision',
@@ -275,6 +278,8 @@ export const de: LanguageTranslation = {
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
             highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

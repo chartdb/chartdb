@@ -20,6 +20,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { TableDBML } from './table-dbml/table-dbml';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getOperatingSystem } from '@/lib/utils';
+import type { DBSchema } from '@/lib/domain';
 
 export interface TablesSectionProps {}
 
@@ -45,7 +46,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tables, filterText, filteredSchemas]);
 
     const createTableWithLocation = useCallback(
-        async (schema?: string) => {
+        async ({ schema }: { schema?: DBSchema }) => {
             const padding = 80;
             const centerX =
                 -viewport.x / viewport.zoom + padding / viewport.zoom;
@@ -54,7 +55,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             const table = await createTable({
                 x: centerX,
                 y: centerY,
-                schema,
+                schema: schema?.name,
             });
             openTableFromSidebar(table.id);
         },
@@ -80,9 +81,9 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         } else {
             const schema =
                 filteredSchemas?.length === 1
-                    ? schemas.find((s) => s.id === filteredSchemas[0])?.name
+                    ? schemas.find((s) => s.id === filteredSchemas[0])
                     : undefined;
-            createTableWithLocation(schema);
+            createTableWithLocation({ schema });
         }
     }, [
         createTableWithLocation,
@@ -97,17 +98,6 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, []);
 
     const operatingSystem = useMemo(() => getOperatingSystem(), []);
-
-    useHotkeys(
-        operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
-        () => {
-            filterInputRef.current?.focus();
-        },
-        {
-            preventDefault: true,
-        },
-        [filterInputRef]
-    );
 
     useHotkeys(
         operatingSystem === 'mac' ? 'meta+p' : 'ctrl+p',

@@ -131,7 +131,23 @@ export const exportBaseSQL = ({
                 }
             }
         });
-        sqlScript += '\n'; // Add a newline if custom types were processed
+        if (
+            diagram.customTypes.some(
+                (ct) =>
+                    (ct.kind === 'enum' &&
+                        ct.values &&
+                        ct.values.length > 0 &&
+                        targetDatabaseType === DatabaseType.POSTGRESQL &&
+                        !isDBMLFlow) ||
+                    (ct.kind === 'composite' &&
+                        ct.fields &&
+                        ct.fields.length > 0 &&
+                        (targetDatabaseType === DatabaseType.POSTGRESQL ||
+                            isDBMLFlow))
+            )
+        ) {
+            sqlScript += '\n';
+        }
     }
 
     // Add CREATE SEQUENCE statements
@@ -154,7 +170,9 @@ export const exportBaseSQL = ({
     sequences.forEach((sequence) => {
         sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
     });
-    sqlScript += '\n';
+    if (sequences.size > 0) {
+        sqlScript += '\n';
+    }
 
     // Loop through each non-view table to generate the SQL statements
     nonViewTables.forEach((table) => {
@@ -162,6 +180,12 @@ export const exportBaseSQL = ({
             ? `${table.schema}.${table.name}`
             : table.name;
         sqlScript += `CREATE TABLE ${tableName} (\n`;
+
+        // Check for composite primary keys
+        const primaryKeyFields = table.fields.filter(
+            (field) => field.primaryKey
+        );
+        const hasCompositePrimaryKey = primaryKeyFields.length > 1;
 
         table.fields.forEach((field, index) => {
             let typeName = simplifyDataType(field.type.name);
@@ -214,6 +238,15 @@ export const exportBaseSQL = ({
                 typeName = 'text[]';
             }
 
+            // Handle special types
+            if (
+                typeName.toLowerCase() === 'char' &&
+                !field.characterMaximumLength
+            ) {
+                // Default char without length to char(1)
+                typeName = 'char';
+            }
+
             sqlScript += `  ${field.name} ${typeName}`;
 
             // Add size for character types
@@ -226,6 +259,12 @@ export const exportBaseSQL = ({
             } else if (field.type.name.toLowerCase().includes('varchar')) {
                 // Keep varchar sizing, but don't apply to TEXT (previously enum)
                 sqlScript += `(500)`;
+            } else if (
+                typeName.toLowerCase() === 'char' &&
+                !field.characterMaximumLength
+            ) {
+                // Default char without explicit length to char(1) for compatibility
+                sqlScript += `(1)`;
             }
 
             // Add precision and scale for numeric types
@@ -250,39 +289,53 @@ export const exportBaseSQL = ({
                 // Temp remove default user-define value when it have it
                 let fieldDefault = field.default;
 
-                // Remove the type cast part after :: if it exists
-                if (fieldDefault.includes('::')) {
-                    const endedWithParentheses = fieldDefault.endsWith(')');
-                    fieldDefault = fieldDefault.split('::')[0];
+                // Skip invalid default values for DBML export
+                if (
+                    fieldDefault === 'has default' ||
+                    fieldDefault === 'DEFAULT has default'
+                ) {
+                    // Skip this default value as it's invalid SQL
+                } else {
+                    // Remove the type cast part after :: if it exists
+                    if (fieldDefault.includes('::')) {
+                        const endedWithParentheses = fieldDefault.endsWith(')');
+                        fieldDefault = fieldDefault.split('::')[0];
 
-                    if (
-                        (fieldDefault.startsWith('(') &&
-                            !fieldDefault.endsWith(')')) ||
-                        endedWithParentheses
-                    ) {
-                        fieldDefault += ')';
+                        if (
+                            (fieldDefault.startsWith('(') &&
+                                !fieldDefault.endsWith(')')) ||
+                            endedWithParentheses
+                        ) {
+                            fieldDefault += ')';
+                        }
                     }
-                }
 
-                if (fieldDefault === `('now')`) {
-                    fieldDefault = `now()`;
-                }
+                    if (fieldDefault === `('now')`) {
+                        fieldDefault = `now()`;
+                    }
 
-                sqlScript += ` DEFAULT ${fieldDefault}`;
+                    sqlScript += ` DEFAULT ${fieldDefault}`;
+                }
             }
 
-            // Handle PRIMARY KEY constraint
-            if (field.primaryKey) {
+            // Handle PRIMARY KEY constraint - only add inline if not composite
+            if (field.primaryKey && !hasCompositePrimaryKey) {
                 sqlScript += ' PRIMARY KEY';
             }
 
-            // Add a comma after each field except the last one
-            if (index < table.fields.length - 1) {
+            // Add a comma after each field except the last one (or before composite primary key)
+            if (index < table.fields.length - 1 || hasCompositePrimaryKey) {
                 sqlScript += ',\n';
             }
         });
 
-        sqlScript += '\n);\n\n';
+        // Add composite primary key constraint if needed
+        if (hasCompositePrimaryKey) {
+            const pkFieldNames = primaryKeyFields.map((f) => f.name).join(', ');
+            sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
+        }
+
+        sqlScript += '\n);\n';
 
         // Add table comment
         if (table.comments) {
@@ -313,9 +366,11 @@ export const exportBaseSQL = ({
                 sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });
-
-        sqlScript += '\n';
     });
+
+    if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
+        sqlScript += '\n';
+    }
 
     // Handle relationships (foreign keys)
     relationships?.forEach((relationship) => {
@@ -339,13 +394,52 @@ export const exportBaseSQL = ({
             sourceTableField &&
             targetTableField
         ) {
-            const sourceTableName = sourceTable.schema
-                ? `${sourceTable.schema}.${sourceTable.name}`
-                : sourceTable.name;
-            const targetTableName = targetTable.schema
-                ? `${targetTable.schema}.${targetTable.name}`
-                : targetTable.name;
-            sqlScript += `ALTER TABLE ${sourceTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${sourceTableField.name}) REFERENCES ${targetTableName} (${targetTableField.name});\n`;
+            // Determine which table should have the foreign key based on cardinality
+            // In a 1:many relationship, the foreign key goes on the "many" side
+            // If source is "one" and target is "many", FK goes on target table
+            // If source is "many" and target is "one", FK goes on source table
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetTableField;
+                refTable = sourceTable;
+                refField = sourceTableField;
+            } else if (
+                relationship.sourceCardinality === 'many' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return;
+            }
+
+            const fkTableName = fkTable.schema
+                ? `${fkTable.schema}.${fkTable.name}`
+                : fkTable.name;
+            const refTableName = refTable.schema
+                ? `${refTable.schema}.${refTable.name}`
+                : refTable.name;
+            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${fkField.name}) REFERENCES ${refTableName} (${refField.name});\n`;
         }
     });
 

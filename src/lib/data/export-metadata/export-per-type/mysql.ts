@@ -179,10 +179,10 @@ export function exportMySQL(diagram: Diagram): string {
     const relationships = diagram.relationships;
 
     // Start SQL script
-    let sqlScript = '-- MySQL database export\n\n';
+    let sqlScript = '-- MySQL database export\n';
 
     // MySQL doesn't really use transactions for DDL statements but we'll add it for consistency
-    sqlScript += 'START TRANSACTION;\n\n';
+    sqlScript += 'START TRANSACTION;\n';
 
     // Create databases (schemas) if they don't exist
     const schemas = new Set<string>();
@@ -218,7 +218,7 @@ export function exportMySQL(diagram: Diagram): string {
 
             return `${
                 table.comments ? formatTableComment(table.comments) : ''
-            }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
+            }\nCREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
                 .map((field: DBField) => {
                     const fieldName = `\`${field.name}\``;
 
@@ -309,95 +309,105 @@ export function exportMySQL(diagram: Diagram): string {
                 table.comments
                     ? ` COMMENT='${escapeSQLComment(table.comments)}'`
                     : ''
-            };\n\n${
+            };\n${
                 // Add indexes - MySQL creates them separately from the table definition
-                table.indexes
-                    .map((index) => {
-                        // Get the list of fields for this index
-                        const indexFields = index.fieldIds
-                            .map((fieldId) => {
-                                const field = table.fields.find(
-                                    (f) => f.id === fieldId
-                                );
-                                return field ? field : null;
-                            })
-                            .filter(Boolean);
+                (() => {
+                    const validIndexes = table.indexes
+                        .map((index) => {
+                            // Get the list of fields for this index
+                            const indexFields = index.fieldIds
+                                .map((fieldId) => {
+                                    const field = table.fields.find(
+                                        (f) => f.id === fieldId
+                                    );
+                                    return field ? field : null;
+                                })
+                                .filter(Boolean);
 
-                        // Skip if this index exactly matches the primary key fields
-                        if (
-                            primaryKeyFields.length === indexFields.length &&
-                            primaryKeyFields.every((pk) =>
-                                indexFields.some(
-                                    (field) => field && field.id === pk.id
+                            // Skip if this index exactly matches the primary key fields
+                            if (
+                                primaryKeyFields.length ===
+                                    indexFields.length &&
+                                primaryKeyFields.every((pk) =>
+                                    indexFields.some(
+                                        (field) => field && field.id === pk.id
+                                    )
                                 )
-                            )
-                        ) {
-                            return '';
-                        }
+                            ) {
+                                return '';
+                            }
 
-                        // Create a unique index name by combining table name, field names, and a unique/non-unique indicator
-                        const fieldNamesForIndex = indexFields
-                            .map((field) => field?.name || '')
-                            .join('_');
-                        const uniqueIndicator = index.unique ? '_unique' : '';
-                        const indexName = `\`idx_${table.name}_${fieldNamesForIndex}${uniqueIndicator}\``;
+                            // Create a unique index name by combining table name, field names, and a unique/non-unique indicator
+                            const fieldNamesForIndex = indexFields
+                                .map((field) => field?.name || '')
+                                .join('_');
+                            const uniqueIndicator = index.unique
+                                ? '_unique'
+                                : '';
+                            const indexName = `\`idx_${table.name}_${fieldNamesForIndex}${uniqueIndicator}\``;
 
-                        // Get the properly quoted field names
-                        const indexFieldNames = indexFields
-                            .map((field) => (field ? `\`${field.name}\`` : ''))
-                            .filter(Boolean);
+                            // Get the properly quoted field names
+                            const indexFieldNames = indexFields
+                                .map((field) =>
+                                    field ? `\`${field.name}\`` : ''
+                                )
+                                .filter(Boolean);
 
-                        // Check for text/blob fields that need special handling
-                        const hasTextOrBlob = indexFields.some((field) => {
-                            const typeName =
-                                field?.type.name.toLowerCase() || '';
-                            return (
-                                typeName === 'text' ||
-                                typeName === 'mediumtext' ||
-                                typeName === 'longtext' ||
-                                typeName === 'blob'
-                            );
-                        });
+                            // Check for text/blob fields that need special handling
+                            const hasTextOrBlob = indexFields.some((field) => {
+                                const typeName =
+                                    field?.type.name.toLowerCase() || '';
+                                return (
+                                    typeName === 'text' ||
+                                    typeName === 'mediumtext' ||
+                                    typeName === 'longtext' ||
+                                    typeName === 'blob'
+                                );
+                            });
 
-                        // If there are TEXT/BLOB fields, need to add prefix length
-                        const indexFieldsWithPrefix = hasTextOrBlob
-                            ? indexFieldNames.map((name) => {
-                                  const field = indexFields.find(
-                                      (f) => `\`${f?.name}\`` === name
-                                  );
-                                  if (!field) return name;
+                            // If there are TEXT/BLOB fields, need to add prefix length
+                            const indexFieldsWithPrefix = hasTextOrBlob
+                                ? indexFieldNames.map((name) => {
+                                      const field = indexFields.find(
+                                          (f) => `\`${f?.name}\`` === name
+                                      );
+                                      if (!field) return name;
 
-                                  const typeName =
-                                      field.type.name.toLowerCase();
-                                  if (
-                                      typeName === 'text' ||
-                                      typeName === 'mediumtext' ||
-                                      typeName === 'longtext' ||
-                                      typeName === 'blob'
-                                  ) {
-                                      // Add a prefix length for TEXT/BLOB fields (required in MySQL)
-                                      return `${name}(255)`;
-                                  }
-                                  return name;
-                              })
-                            : indexFieldNames;
+                                      const typeName =
+                                          field.type.name.toLowerCase();
+                                      if (
+                                          typeName === 'text' ||
+                                          typeName === 'mediumtext' ||
+                                          typeName === 'longtext' ||
+                                          typeName === 'blob'
+                                      ) {
+                                          // Add a prefix length for TEXT/BLOB fields (required in MySQL)
+                                          return `${name}(255)`;
+                                      }
+                                      return name;
+                                  })
+                                : indexFieldNames;
 
-                        return indexFieldNames.length > 0
-                            ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFieldsWithPrefix.join(', ')});\n`
-                            : '';
-                    })
-                    .filter(Boolean)
-                    .join('\n')
-            }`;
+                            return indexFieldNames.length > 0
+                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldsWithPrefix.join(', ')});`
+                                : '';
+                        })
+                        .filter(Boolean);
+
+                    return validIndexes.length > 0
+                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                        : '';
+                })()
+            }\n`;
         })
         .filter(Boolean) // Remove empty strings (views)
         .join('\n');
 
     // Generate foreign keys
     if (relationships.length > 0) {
-        sqlScript += '\n-- Foreign key constraints\n\n';
+        sqlScript += '\n-- Foreign key constraints\n';
 
-        sqlScript += relationships
+        const foreignKeys = relationships
             .map((r: DBRelationship) => {
                 const sourceTable = tables.find(
                     (t) => t.id === r.sourceTableId
@@ -426,25 +436,62 @@ export function exportMySQL(diagram: Diagram): string {
                     return '';
                 }
 
-                const sourceTableName = sourceTable.schema
-                    ? `\`${sourceTable.schema}\`.\`${sourceTable.name}\``
-                    : `\`${sourceTable.name}\``;
-                const targetTableName = targetTable.schema
-                    ? `\`${targetTable.schema}\`.\`${targetTable.name}\``
-                    : `\`${targetTable.name}\``;
+                // Determine which table should have the foreign key based on cardinality
+                let fkTable, fkField, refTable, refField;
+
+                if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'many'
+                ) {
+                    // FK goes on target table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
+                } else if (
+                    r.sourceCardinality === 'many' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // FK goes on source table
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                    // We'll keep the current behavior for 1:1
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else {
+                    // Many-to-many relationships need a junction table, skip for now
+                    return '';
+                }
+
+                const fkTableName = fkTable.schema
+                    ? `\`${fkTable.schema}\`.\`${fkTable.name}\``
+                    : `\`${fkTable.name}\``;
+                const refTableName = refTable.schema
+                    ? `\`${refTable.schema}\`.\`${refTable.name}\``
+                    : `\`${refTable.name}\``;
 
                 // Create a descriptive constraint name
-                const constraintName = `\`fk_${sourceTable.name}_${sourceField.name}\``;
+                const constraintName = `\`fk_${fkTable.name}_${fkField.name}\``;
 
                 // MySQL supports ON DELETE and ON UPDATE actions
-                return `ALTER TABLE ${sourceTableName}\nADD CONSTRAINT ${constraintName} FOREIGN KEY(\`${sourceField.name}\`) REFERENCES ${targetTableName}(\`${targetField.name}\`)\nON UPDATE CASCADE ON DELETE RESTRICT;\n`;
+                return `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${constraintName} FOREIGN KEY(\`${fkField.name}\`) REFERENCES ${refTableName}(\`${refField.name}\`);`;
             })
-            .filter(Boolean) // Remove empty strings
-            .join('\n');
+            .filter(Boolean); // Remove empty strings
+
+        sqlScript += foreignKeys.join('\n');
     }
 
     // Commit transaction
-    sqlScript += '\nCOMMIT;\n';
+    sqlScript += '\n\nCOMMIT;\n';
 
     return sqlScript;
 }

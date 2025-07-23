@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
@@ -29,6 +29,7 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
+import { useConfig } from '@/hooks/use-config';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -44,6 +45,11 @@ export const ChartDBProvider: React.FC<
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
+    const {
+        getHiddenTablesForDiagram,
+        hideTableForDiagram,
+        unhideTableForDiagram,
+    } = useConfig();
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
@@ -65,6 +71,7 @@ export const ChartDBProvider: React.FC<
     const [customTypes, setCustomTypes] = useState<DBCustomType[]>(
         diagram?.customTypes ?? []
     );
+    const [hiddenTableIds, setHiddenTableIds] = useState<string[]>([]);
     const { events: diffEvents } = useDiff();
 
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
@@ -84,6 +91,14 @@ export const ChartDBProvider: React.FC<
     }, []);
 
     diffEvents.useSubscription(diffCalculatedHandler);
+
+    // Sync hiddenTableIds with config
+    useEffect(() => {
+        if (diagramId) {
+            const hiddenTables = getHiddenTablesForDiagram(diagramId);
+            setHiddenTableIds(hiddenTables);
+        }
+    }, [diagramId, getHiddenTablesForDiagram]);
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -1712,6 +1727,29 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    const addHiddenTableId: ChartDBContext['addHiddenTableId'] = useCallback(
+        async (tableId: string) => {
+            if (!hiddenTableIds.includes(tableId)) {
+                setHiddenTableIds((prev) => [...prev, tableId]);
+                await hideTableForDiagram(diagramId, tableId);
+            }
+        },
+        [hiddenTableIds, diagramId, hideTableForDiagram]
+    );
+
+    const removeHiddenTableId: ChartDBContext['removeHiddenTableId'] =
+        useCallback(
+            async (tableId: string) => {
+                if (hiddenTableIds.includes(tableId)) {
+                    setHiddenTableIds((prev) =>
+                        prev.filter((id) => id !== tableId)
+                    );
+                    await unhideTableForDiagram(diagramId, tableId);
+                }
+            },
+            [hiddenTableIds, diagramId, unhideTableForDiagram]
+        );
+
     return (
         <chartDBContext.Provider
             value={{
@@ -1784,6 +1822,9 @@ export const ChartDBProvider: React.FC<
                 removeCustomType,
                 removeCustomTypes,
                 updateCustomType,
+                hiddenTableIds,
+                addHiddenTableId,
+                removeHiddenTableId,
             }}
         >
             {children}

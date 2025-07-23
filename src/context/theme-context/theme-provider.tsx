@@ -48,6 +48,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
         handleThemeToggle,
         {
             preventDefault: true,
+            enableOnFormTags: true,
         },
         [handleThemeToggle]
     );

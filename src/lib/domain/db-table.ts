@@ -69,13 +69,33 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     parentAreaId: z.string().or(z.null()).optional(),
 });
 
+export const generateTableKey = ({
+    schemaName,
+    tableName,
+}: {
+    schemaName: string | null | undefined;
+    tableName: string;
+}) => `${schemaNameToDomainSchemaName(schemaName) ?? ''}.${tableName}`;
+
+export const shouldShowTableSchemaBySchemaFilter = ({
+    filteredSchemas,
+    tableSchema,
+}: {
+    tableSchema?: string | null;
+    filteredSchemas?: string[];
+}): boolean =>
+    !filteredSchemas ||
+    !tableSchema ||
+    filteredSchemas.includes(schemaNameToSchemaId(tableSchema));
+
 export const shouldShowTablesBySchemaFilter = (
     table: DBTable,
     filteredSchemas?: string[]
 ): boolean =>
-    !filteredSchemas ||
-    !table.schema ||
-    filteredSchemas.includes(schemaNameToSchemaId(table.schema));
+    shouldShowTableSchemaBySchemaFilter({
+        filteredSchemas,
+        tableSchema: table?.schema,
+    });
 
 export const decodeViewDefinition = (
     databaseType: DatabaseType,
@@ -110,20 +130,93 @@ export const createTablesFromMetadata = ({
         views: views,
     } = databaseMetadata;
 
-    return tableInfos.map((tableInfo: TableInfo) => {
+    // Pre-compute view names for faster lookup if there are views
+    const viewNamesSet = new Set<string>();
+    const materializedViewNamesSet = new Set<string>();
+
+    if (views && views.length > 0) {
+        views.forEach((view) => {
+            const key = generateTableKey({
+                schemaName: view.schema,
+                tableName: view.view_name,
+            });
+            viewNamesSet.add(key);
+
+            if (
+                view.view_definition &&
+                decodeViewDefinition(databaseType, view.view_definition)
+                    .toLowerCase()
+                    .includes('materialized')
+            ) {
+                materializedViewNamesSet.add(key);
+            }
+        });
+    }
+
+    // Pre-compute lookup maps for better performance
+    const columnsByTable = new Map<string, (typeof columns)[0][]>();
+    const indexesByTable = new Map<string, (typeof indexes)[0][]>();
+    const primaryKeysByTable = new Map<string, (typeof primaryKeys)[0][]>();
+
+    // Group columns by table
+    columns.forEach((col) => {
+        const key = generateTableKey({
+            schemaName: col.schema,
+            tableName: col.table,
+        });
+        if (!columnsByTable.has(key)) {
+            columnsByTable.set(key, []);
+        }
+        columnsByTable.get(key)!.push(col);
+    });
+
+    // Group indexes by table
+    indexes.forEach((idx) => {
+        const key = generateTableKey({
+            schemaName: idx.schema,
+            tableName: idx.table,
+        });
+        if (!indexesByTable.has(key)) {
+            indexesByTable.set(key, []);
+        }
+        indexesByTable.get(key)!.push(idx);
+    });
+
+    // Group primary keys by table
+    primaryKeys.forEach((pk) => {
+        const key = generateTableKey({
+            schemaName: pk.schema,
+            tableName: pk.table,
+        });
+        if (!primaryKeysByTable.has(key)) {
+            primaryKeysByTable.set(key, []);
+        }
+        primaryKeysByTable.get(key)!.push(pk);
+    });
+
+    const result = tableInfos.map((tableInfo: TableInfo) => {
         const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
+        const tableKey = generateTableKey({
+            schemaName: tableInfo.schema,
+            tableName: tableInfo.table,
+        });
+
+        // Use pre-computed lookups instead of filtering entire arrays
+        const tableIndexes = indexesByTable.get(tableKey) || [];
+        const tablePrimaryKeys = primaryKeysByTable.get(tableKey) || [];
+        const tableColumns = columnsByTable.get(tableKey) || [];
 
         // Aggregate indexes with multiple columns
         const aggregatedIndexes = createAggregatedIndexes({
             tableInfo,
             tableSchema,
-            indexes,
+            tableIndexes,
         });
 
         const fields = createFieldsFromMetadata({
             aggregatedIndexes,
-            columns,
-            primaryKeys,
+            tableColumns,
+            tablePrimaryKeys,
             tableInfo,
             tableSchema,
         });
@@ -133,21 +226,13 @@ export const createTablesFromMetadata = ({
             fields,
         });
 
-        // Determine if the current table is a view by checking against viewInfo
-        const isView = views.some(
-            (view) =>
-                schemaNameToDomainSchemaName(view.schema) === tableSchema &&
-                view.view_name === tableInfo.table
-        );
-
-        const isMaterializedView = views.some(
-            (view) =>
-                schemaNameToDomainSchemaName(view.schema) === tableSchema &&
-                view.view_name === tableInfo.table &&
-                decodeViewDefinition(databaseType, view.view_definition)
-                    .toLowerCase()
-                    .includes('materialized')
-        );
+        // Determine if the current table is a view by checking against pre-computed sets
+        const viewKey = generateTableKey({
+            schemaName: tableSchema,
+            tableName: tableInfo.table,
+        });
+        const isView = viewNamesSet.has(viewKey);
+        const isMaterializedView = materializedViewNamesSet.has(viewKey);
 
         // Initial random positions; these will be adjusted later
         return {
@@ -169,6 +254,72 @@ export const createTablesFromMetadata = ({
             comments: tableInfo.comment ? tableInfo.comment : undefined,
         };
     });
+
+    return result;
+};
+
+// Simple grid-based positioning for large databases
+const adjustTablePositionsSimple = (
+    tables: DBTable[],
+    mode: 'all' | 'perSchema' = 'all'
+): DBTable[] => {
+    const TABLES_PER_ROW = 20;
+    const TABLE_WIDTH = 250;
+    const TABLE_HEIGHT = 350;
+    const GAP_X = 50;
+    const GAP_Y = 50;
+    const START_X = 100;
+    const START_Y = 100;
+
+    if (mode === 'perSchema') {
+        // Group tables by schema for better organization
+        const tablesBySchema = new Map<string, DBTable[]>();
+        tables.forEach((table) => {
+            const schema = table.schema || 'default';
+            if (!tablesBySchema.has(schema)) {
+                tablesBySchema.set(schema, []);
+            }
+            tablesBySchema.get(schema)!.push(table);
+        });
+
+        const result: DBTable[] = [];
+        let currentSchemaOffset = 0;
+
+        // Position each schema's tables in its own section
+        tablesBySchema.forEach((schemaTables) => {
+            schemaTables.forEach((table, index) => {
+                const row = Math.floor(index / TABLES_PER_ROW);
+                const col = index % TABLES_PER_ROW;
+
+                result.push({
+                    ...table,
+                    x: START_X + col * (TABLE_WIDTH + GAP_X),
+                    y:
+                        START_Y +
+                        currentSchemaOffset +
+                        row * (TABLE_HEIGHT + GAP_Y),
+                });
+            });
+
+            // Add extra spacing between schemas
+            const schemaRows = Math.ceil(schemaTables.length / TABLES_PER_ROW);
+            currentSchemaOffset += schemaRows * (TABLE_HEIGHT + GAP_Y) + 200;
+        });
+
+        return result;
+    }
+
+    // Simple mode - just arrange all tables in a grid
+    return tables.map((table, index) => {
+        const row = Math.floor(index / TABLES_PER_ROW);
+        const col = index % TABLES_PER_ROW;
+
+        return {
+            ...table,
+            x: START_X + col * (TABLE_WIDTH + GAP_X),
+            y: START_Y + row * (TABLE_HEIGHT + GAP_Y),
+        };
+    });
 };
 
 export const adjustTablePositions = ({
@@ -180,6 +331,13 @@ export const adjustTablePositions = ({
     relationships: DBRelationship[];
     mode?: 'all' | 'perSchema';
 }): DBTable[] => {
+    // For large databases, use simple grid layout for better performance
+    if (inputTables.length > 200) {
+        const result = adjustTablePositionsSimple(inputTables, mode);
+        return result;
+    }
+
+    // For smaller databases, use the existing complex algorithm
     const tables = deepCopy(inputTables);
     const relationships = deepCopy(inputRelationships);
 

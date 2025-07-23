@@ -8,6 +8,7 @@ export enum KeyboardShortcutAction {
     TOGGLE_SIDE_PANEL = 'toggle_side_panel',
     SHOW_ALL = 'show_all',
     TOGGLE_THEME = 'toggle_theme',
+    TOGGLE_FILTER = 'toggle_filter',
 }
 
 export interface KeyboardShortcut {
@@ -70,6 +71,13 @@ export const keyboardShortcuts: Record<
         keyCombinationLabelWin: 'Ctrl+M',
         keyCombinationMac: 'meta+m',
         keyCombinationWin: 'ctrl+m',
+    },
+    [KeyboardShortcutAction.TOGGLE_FILTER]: {
+        action: KeyboardShortcutAction.TOGGLE_FILTER,
+        keyCombinationLabelMac: '⌘F',
+        keyCombinationLabelWin: 'Ctrl+F',
+        keyCombinationMac: 'meta+f',
+        keyCombinationWin: 'ctrl+f',
     },
 };
 

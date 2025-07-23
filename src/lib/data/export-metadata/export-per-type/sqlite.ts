@@ -149,10 +149,10 @@ export function exportSQLite(diagram: Diagram): string {
     const relationships = diagram.relationships;
 
     // Start SQL script - SQLite doesn't use schemas, so we skip schema creation
-    let sqlScript = '-- SQLite database export\n\n';
+    let sqlScript = '-- SQLite database export\n';
 
     // Begin transaction for faster import
-    sqlScript += 'BEGIN TRANSACTION;\n\n';
+    sqlScript += 'BEGIN TRANSACTION;\n';
 
     // SQLite doesn't have sequences, so we skip sequence creation
 
@@ -264,49 +264,57 @@ export function exportSQLite(diagram: Diagram): string {
                           .map((f) => `"${f.name}"`)
                           .join(', ')})`
                     : ''
-            }\n);\n\n${
+            }\n);\n${
                 // Add indexes - SQLite doesn't support indexes in CREATE TABLE
-                table.indexes
-                    .map((index) => {
-                        // Skip indexes that exactly match the primary key
-                        const indexFields = index.fieldIds
-                            .map((fieldId) => {
-                                const field = table.fields.find(
-                                    (f) => f.id === fieldId
-                                );
-                                return field ? field : null;
-                            })
-                            .filter(Boolean);
+                (() => {
+                    const validIndexes = table.indexes
+                        .map((index) => {
+                            // Skip indexes that exactly match the primary key
+                            const indexFields = index.fieldIds
+                                .map((fieldId) => {
+                                    const field = table.fields.find(
+                                        (f) => f.id === fieldId
+                                    );
+                                    return field ? field : null;
+                                })
+                                .filter(Boolean);
 
-                        // Get the properly quoted field names
-                        const indexFieldNames = indexFields
-                            .map((field) => (field ? `"${field.name}"` : ''))
-                            .filter(Boolean);
-
-                        // Skip if this index exactly matches the primary key fields
-                        if (
-                            primaryKeyFields.length === indexFields.length &&
-                            primaryKeyFields.every((pk) =>
-                                indexFields.some(
-                                    (field) => field && field.id === pk.id
+                            // Get the properly quoted field names
+                            const indexFieldNames = indexFields
+                                .map((field) =>
+                                    field ? `"${field.name}"` : ''
                                 )
-                            )
-                        ) {
-                            return '';
-                        }
+                                .filter(Boolean);
 
-                        // Create safe index name
-                        const safeIndexName = `${table.name}_${index.name}`
-                            .replace(/[^a-zA-Z0-9_]/g, '_')
-                            .substring(0, 60);
+                            // Skip if this index exactly matches the primary key fields
+                            if (
+                                primaryKeyFields.length ===
+                                    indexFields.length &&
+                                primaryKeyFields.every((pk) =>
+                                    indexFields.some(
+                                        (field) => field && field.id === pk.id
+                                    )
+                                )
+                            ) {
+                                return '';
+                            }
 
-                        return indexFieldNames.length > 0
-                            ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});\n`
-                            : '';
-                    })
-                    .filter(Boolean)
-                    .join('\n')
-            }`;
+                            // Create safe index name
+                            const safeIndexName = `${table.name}_${index.name}`
+                                .replace(/[^a-zA-Z0-9_]/g, '_')
+                                .substring(0, 60);
+
+                            return indexFieldNames.length > 0
+                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});`
+                                : '';
+                        })
+                        .filter(Boolean);
+
+                    return validIndexes.length > 0
+                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                        : '';
+                })()
+            }\n`;
         })
         .filter(Boolean) // Remove empty strings (views)
         .join('\n');
@@ -319,7 +327,7 @@ export function exportSQLite(diagram: Diagram): string {
         sqlScript += '\n-- Foreign key constraints\n';
         sqlScript +=
             '-- Note: SQLite requires foreign_keys pragma to be enabled:\n';
-        sqlScript += '-- PRAGMA foreign_keys = ON;\n\n';
+        sqlScript += '-- PRAGMA foreign_keys = ON;\n';
 
         relationships.forEach((r: DBRelationship) => {
             const sourceTable = tables.find((t) => t.id === r.sourceTableId);
@@ -347,8 +355,44 @@ export function exportSQLite(diagram: Diagram): string {
                 return;
             }
 
+            // Determine which table should have the foreign key based on cardinality
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetField;
+                refTable = sourceTable;
+                refField = sourceField;
+            } else if (
+                r.sourceCardinality === 'many' &&
+                r.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else if (
+                r.sourceCardinality === 'one' &&
+                r.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceField;
+                refTable = targetTable;
+                refField = targetField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return;
+            }
+
             // Create commented out version of what would be ALTER TABLE statement
-            sqlScript += `-- ALTER TABLE "${sourceTable.name}" ADD CONSTRAINT "fk_${sourceTable.name}_${sourceField.name}" FOREIGN KEY("${sourceField.name}") REFERENCES "${targetTable.name}"("${targetField.name}");\n`;
+            sqlScript += `-- ALTER TABLE "${fkTable.name}" ADD CONSTRAINT "fk_${fkTable.name}_${fkField.name}" FOREIGN KEY("${fkField.name}") REFERENCES "${refTable.name}"("${refField.name}");\n`;
         });
     }
 

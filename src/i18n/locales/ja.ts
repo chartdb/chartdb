@@ -78,8 +78,8 @@ export const ja: LanguageTranslation = {
             title: '複数のスキーマ',
             description:
                 'このダイアグラムには{{schemasCount}}個のスキーマがあります。現在表示中: {{formattedSchemas}}。',
-            dont_show_again: '再表示しない',
-            change_schema: '変更',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'なし',
         },
 
@@ -155,6 +155,9 @@ export const ja: LanguageTranslation = {
                         comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
                         precision: '精度',
@@ -279,6 +282,8 @@ export const ja: LanguageTranslation = {
             reorder_diagram: 'ダイアグラムを並べ替え',
             // TODO: Translate
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

@@ -143,6 +143,9 @@ export const es: LanguageTranslation = {
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Precisión',
                         scale: 'Escala',
@@ -263,6 +266,8 @@ export const es: LanguageTranslation = {
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
@@ -409,8 +414,8 @@ export const es: LanguageTranslation = {
             title: 'Múltiples Esquemas',
             description:
                 '{{schemasCount}} esquemas en este diagrama. Actualmente mostrando: {{formattedSchemas}}.',
-            dont_show_again: 'No mostrar de nuevo',
-            change_schema: 'Cambiar',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'nada',
         },
         // TODO: Translate
