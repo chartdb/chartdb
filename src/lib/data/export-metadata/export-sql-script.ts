@@ -131,7 +131,23 @@ export const exportBaseSQL = ({
                 }
             }
         });
-        sqlScript += '\n'; // Add a newline if custom types were processed
+        if (
+            diagram.customTypes.some(
+                (ct) =>
+                    (ct.kind === 'enum' &&
+                        ct.values &&
+                        ct.values.length > 0 &&
+                        targetDatabaseType === DatabaseType.POSTGRESQL &&
+                        !isDBMLFlow) ||
+                    (ct.kind === 'composite' &&
+                        ct.fields &&
+                        ct.fields.length > 0 &&
+                        (targetDatabaseType === DatabaseType.POSTGRESQL ||
+                            isDBMLFlow))
+            )
+        ) {
+            sqlScript += '\n';
+        }
     }
 
     // Add CREATE SEQUENCE statements
@@ -154,7 +170,9 @@ export const exportBaseSQL = ({
     sequences.forEach((sequence) => {
         sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
     });
-    sqlScript += '\n';
+    if (sequences.size > 0) {
+        sqlScript += '\n';
+    }
 
     // Loop through each non-view table to generate the SQL statements
     nonViewTables.forEach((table) => {
@@ -316,7 +334,7 @@ export const exportBaseSQL = ({
             sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
         }
 
-        sqlScript += '\n);\n\n';
+        sqlScript += '\n);\n';
 
         // Add table comment
         if (table.comments) {
@@ -347,9 +365,11 @@ export const exportBaseSQL = ({
                 sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });
-
-        sqlScript += '\n';
     });
+
+    if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
+        sqlScript += '\n';
+    }
 
     // Handle relationships (foreign keys)
     relationships?.forEach((relationship) => {
@@ -373,13 +393,52 @@ export const exportBaseSQL = ({
             sourceTableField &&
             targetTableField
         ) {
-            const sourceTableName = sourceTable.schema
-                ? `${sourceTable.schema}.${sourceTable.name}`
-                : sourceTable.name;
-            const targetTableName = targetTable.schema
-                ? `${targetTable.schema}.${targetTable.name}`
-                : targetTable.name;
-            sqlScript += `ALTER TABLE ${sourceTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${sourceTableField.name}) REFERENCES ${targetTableName} (${targetTableField.name});\n`;
+            // Determine which table should have the foreign key based on cardinality
+            // In a 1:many relationship, the foreign key goes on the "many" side
+            // If source is "one" and target is "many", FK goes on target table
+            // If source is "many" and target is "one", FK goes on source table
+            let fkTable, fkField, refTable, refField;
+
+            if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'many'
+            ) {
+                // FK goes on target table
+                fkTable = targetTable;
+                fkField = targetTableField;
+                refTable = sourceTable;
+                refField = sourceTableField;
+            } else if (
+                relationship.sourceCardinality === 'many' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // FK goes on source table
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else if (
+                relationship.sourceCardinality === 'one' &&
+                relationship.targetCardinality === 'one'
+            ) {
+                // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                // We'll keep the current behavior for 1:1
+                fkTable = sourceTable;
+                fkField = sourceTableField;
+                refTable = targetTable;
+                refField = targetTableField;
+            } else {
+                // Many-to-many relationships need a junction table, skip for now
+                return;
+            }
+
+            const fkTableName = fkTable.schema
+                ? `${fkTable.schema}.${fkTable.name}`
+                : fkTable.name;
+            const refTableName = refTable.schema
+                ? `${refTable.schema}.${refTable.name}`
+                : refTable.name;
+            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${fkField.name}) REFERENCES ${refTableName} (${refField.name});\n`;
         }
     });
 
