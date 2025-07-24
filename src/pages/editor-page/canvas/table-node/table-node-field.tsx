@@ -317,7 +317,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         //     {field.name}
                         // </span>
                         <span
-                            className={cn('truncate min-w-0 flex-1', {
+                            className={cn('truncate min-w-0', {
                                 'text-red-800 font-normal dark:text-red-200':
                                     isDiffFieldRemoved,
                                 'text-green-800 font-normal dark:text-green-200':
