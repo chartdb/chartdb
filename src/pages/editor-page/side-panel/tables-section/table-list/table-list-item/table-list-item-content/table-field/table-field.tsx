@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
-import type { DBField } from '@/lib/domain/db-field';
+import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import {
     dataTypeDataToDataType,
@@ -200,50 +200,14 @@ export const TableField: React.FC<TableFieldProps> = ({
                                     'side_panel.tables_section.table.field_type'
                                 )}
                                 value={field.type.id}
-                                valueSuffix={
-                                    field.precision &&
-                                    ((typeof field.scale == 'number' &&
-                                        !Number.isNaN(field.scale)) ||
-                                        field.scale === 0)
-                                        ? `(${field.precision}, ${field.scale})`
-                                        : field.characterMaximumLength
-                                          ? `(${field.characterMaximumLength})`
-                                          : ''
+                                valueSuffix={generateDBFieldSuffix(field)}
+                                optionSuffix={(option) =>
+                                    generateDBFieldSuffix(field, {
+                                        databaseType,
+                                        forceExtended: true,
+                                        typeId: option.value,
+                                    })
                                 }
-                                optionSuffix={(option) => {
-                                    const type = sortedDataTypeMap[
-                                        databaseType
-                                    ].find((v) => v.id === option.value);
-
-                                    if (!type) {
-                                        return '';
-                                    }
-
-                                    if (
-                                        type.fieldAttributes?.hasCharMaxLength
-                                    ) {
-                                        return `(${!field.characterMaximumLength ? 'n' : field.characterMaximumLength})`;
-                                    }
-
-                                    if (
-                                        type.fieldAttributes?.precision &&
-                                        type.fieldAttributes?.scale
-                                    ) {
-                                        if (field.precision && field.scale) {
-                                            return `(${field.precision}, ${field.scale})`;
-                                        } else if (field.precision) {
-                                            return `(${field.precision})`;
-                                        }
-
-                                        return '(p, s)';
-                                    }
-
-                                    if (type.fieldAttributes?.precision) {
-                                        return `(${field.precision ?? 'p'})`;
-                                    }
-
-                                    return '';
-                                }}
                                 onChange={onChangeDataType}
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'

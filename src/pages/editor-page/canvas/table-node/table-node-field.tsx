@@ -21,7 +21,7 @@ import {
     SquarePlus,
     Trash2,
 } from 'lucide-react';
-import type { DBField } from '@/lib/domain/db-field';
+import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
 import {
@@ -400,21 +400,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     </span>{' '}
                                     {fieldDiffChangedType.name.split(' ')[0]}
                                 </>
-                            ) : showFieldAttributes ? (
-                                field.precision &&
-                                ((typeof field.scale == 'number' &&
-                                    !Number.isNaN(field.scale)) ||
-                                    field.scale === 0) ? (
-                                    field.type.name.split(' ')[0] +
-                                    `(${field.precision}, ${field.scale})`
-                                ) : field.characterMaximumLength ? (
-                                    field.type.name.split(' ')[0] +
-                                    `(${field.characterMaximumLength})`
-                                ) : (
-                                    field.type.name.split(' ')[0]
-                                )
                             ) : (
-                                field.type.name.split(' ')[0]
+                                `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
                             )}
                             {field.nullable ? '?' : ''}
                         </div>
