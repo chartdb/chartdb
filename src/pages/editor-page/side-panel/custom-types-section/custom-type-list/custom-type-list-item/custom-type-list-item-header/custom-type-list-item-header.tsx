@@ -47,9 +47,9 @@ export const CustomTypeListItemHeader: React.FC<
         removeCustomType,
         schemas,
         filteredSchemas,
-        highlightedCustomTypeId,
-        setHighlightedCustomTypeId,
-        isCustomTypeUsed,
+        highlightedCustomType,
+        highlightCustomTypeId,
+        checkIfCustomTypeUsed,
     } = useChartDB();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
@@ -85,11 +85,15 @@ export const CustomTypeListItemHeader: React.FC<
     }, [customType.id, removeCustomType]);
 
     const toggleHighlightCustomType = useCallback(() => {
-        setHighlightedCustomTypeId(customType.id);
-    }, [customType.id, setHighlightedCustomTypeId]);
+        if (highlightedCustomType?.id === customType.id) {
+            highlightCustomTypeId(undefined);
+        } else {
+            highlightCustomTypeId(customType.id);
+        }
+    }, [customType.id, highlightCustomTypeId, highlightedCustomType?.id]);
 
     const renderDropDownMenu = useCallback(() => {
-        const isUsed = isCustomTypeUsed(customType.id);
+        const isUsed = checkIfCustomTypeUsed(customType);
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger>
@@ -110,7 +114,7 @@ export const CustomTypeListItemHeader: React.FC<
                             disabled={!isUsed}
                             className={cn(
                                 'flex justify-between',
-                                highlightedCustomTypeId === customType.id
+                                highlightedCustomType?.id === customType.id
                                     ? '!text-yellow-700 dark:!text-yellow-500'
                                     : ''
                             )}
@@ -121,7 +125,7 @@ export const CustomTypeListItemHeader: React.FC<
                             <Highlighter
                                 className={cn(
                                     'size-3.5',
-                                    highlightedCustomTypeId === customType.id
+                                    highlightedCustomType?.id === customType.id
                                         ? 'text-yellow-600'
                                         : isUsed
                                           ? 'text-muted-foreground'
@@ -143,12 +147,12 @@ export const CustomTypeListItemHeader: React.FC<
             </DropdownMenu>
         );
     }, [
+        highlightedCustomType,
         deleteCustomTypeHandler,
         t,
         toggleHighlightCustomType,
-        customType.id,
-        highlightedCustomTypeId,
-        isCustomTypeUsed,
+        customType,
+        checkIfCustomTypeUsed,
     ]);
 
     let schemaToDisplay;

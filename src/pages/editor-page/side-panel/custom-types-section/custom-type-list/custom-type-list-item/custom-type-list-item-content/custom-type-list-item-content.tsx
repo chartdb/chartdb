@@ -39,9 +39,9 @@ export const CustomTypeListItemContent: React.FC<
     const {
         removeCustomType,
         updateCustomType,
-        highlightedCustomTypeId,
-        setHighlightedCustomTypeId,
-        isCustomTypeUsed,
+        highlightedCustomType,
+        highlightCustomTypeId,
+        checkIfCustomTypeUsed,
     } = useChartDB();
     const { t } = useTranslation();
 
@@ -106,12 +106,16 @@ export const CustomTypeListItemContent: React.FC<
     );
 
     const toggleHighlightCustomType = useCallback(() => {
-        setHighlightedCustomTypeId(customType.id);
-    }, [customType.id, setHighlightedCustomTypeId]);
+        if (highlightedCustomType?.id === customType.id) {
+            highlightCustomTypeId(undefined);
+        } else {
+            highlightCustomTypeId(customType.id);
+        }
+    }, [customType.id, highlightCustomTypeId, highlightedCustomType?.id]);
 
     const canHighlight = useMemo(
-        () => isCustomTypeUsed(customType.id),
-        [isCustomTypeUsed, customType.id]
+        () => checkIfCustomTypeUsed(customType),
+        [checkIfCustomTypeUsed, customType]
     );
 
     const highlightButtonContent = (
@@ -120,7 +124,7 @@ export const CustomTypeListItemContent: React.FC<
             disabled={!canHighlight}
             className={cn(
                 'h-8 p-2 text-xs w-full flex justify-center items-center',
-                highlightedCustomTypeId === customType.id
+                highlightedCustomType?.id === customType.id
                     ? '!text-yellow-700 dark:!text-yellow-500'
                     : ''
             )}
@@ -129,7 +133,7 @@ export const CustomTypeListItemContent: React.FC<
             <Highlighter
                 className={cn(
                     'mr-1 size-3.5',
-                    highlightedCustomTypeId === customType.id
+                    highlightedCustomType?.id === customType.id
                         ? 'text-yellow-600'
                         : canHighlight
                           ? 'text-muted-foreground'

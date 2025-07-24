@@ -181,8 +181,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         readonly,
         removeArea,
         updateArea,
-        highlightedCustomTypeId,
-        setHighlightedCustomTypeId,
+        highlightedCustomType,
+        highlightCustomTypeId,
         getCustomType,
         hiddenTableIds,
     } = useChartDB();
@@ -193,8 +193,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
-        useState(false);
-    const [highlightCustomTypeTables, setHighlightCustomTypeTables] =
         useState(false);
     const {
         reorderTables,
@@ -398,16 +396,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
                     // Check if table uses the highlighted custom type
                     let hasHighlightedCustomType = false;
-                    if (highlightedCustomTypeId) {
-                        const highlightedType = getCustomType(
-                            highlightedCustomTypeId
+                    if (highlightedCustomType) {
+                        hasHighlightedCustomType = table.fields.some(
+                            (field) =>
+                                field.type.name === highlightedCustomType.name
                         );
-                        if (highlightedType) {
-                            hasHighlightedCustomType = table.fields.some(
-                                (field) =>
-                                    field.type.name === highlightedType.name
-                            );
-                        }
                     }
 
                     return {
@@ -417,7 +410,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             isOverlapping,
                             highlightOverlappingTables,
                             hasHighlightedCustomType,
-                            highlightCustomTypeTables,
                         },
                     };
                 }),
@@ -440,9 +432,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
-        highlightedCustomTypeId,
+        highlightedCustomType,
         getCustomType,
-        highlightCustomTypeTables,
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
@@ -1090,11 +1081,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
-    const pulseCustomTypeTables = useCallback(() => {
-        setHighlightCustomTypeTables(true);
-        setTimeout(() => setHighlightCustomTypeTables(false), 600);
-    }, []);
-
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
@@ -1197,19 +1183,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                             })}
                                         </TooltipContent>
                                     </Tooltip>
-                                    {highlightedCustomTypeId && (
+                                    {highlightedCustomType && (
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <span>
                                                     <Button
                                                         variant="secondary"
                                                         className="size-8 bg-yellow-500 p-1 text-white shadow-none hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700"
-                                                        onClick={
-                                                            pulseCustomTypeTables
-                                                        }
-                                                        onDoubleClick={() =>
-                                                            setHighlightedCustomTypeId(
-                                                                null
+                                                        onClick={() =>
+                                                            highlightCustomTypeId(
+                                                                undefined
                                                             )
                                                         }
                                                     >
@@ -1219,16 +1202,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 {(() => {
-                                                    const customType =
-                                                        getCustomType(
-                                                            highlightedCustomTypeId
-                                                        );
-                                                    return customType
+                                                    return highlightedCustomType
                                                         ? t(
                                                               'toolbar.custom_type_highlight_tooltip',
                                                               {
                                                                   typeName:
-                                                                      customType.name,
+                                                                      highlightedCustomType.name,
                                                               }
                                                           )
                                                         : t(

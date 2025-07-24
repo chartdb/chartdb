@@ -75,18 +75,13 @@ export const ChartDBProvider: React.FC<
     const { events: diffEvents } = useDiff();
 
     // New state for highlighted custom type ID
-    const [highlightedCustomTypeId, setHighlightedCustomTypeIdState] = useState<
-        string | null
-    >(null);
+    const [highlightedCustomTypeId, setHighlightedCustomTypeId] =
+        useState<string>();
 
     // Function to check if a custom type is used by any field
-    const isCustomTypeUsed = useCallback(
-        (customTypeIdToCheck: string): boolean => {
-            const typeToFind = customTypes.find(
-                (ct) => ct.id === customTypeIdToCheck
-            );
-            if (!typeToFind) return false;
-            const typeNameToFind = typeToFind.name;
+    const checkIfCustomTypeUsed = useCallback(
+        (customType: DBCustomType): boolean => {
+            const typeNameToFind = customType.name;
 
             for (const table of tables) {
                 for (const field of table.fields) {
@@ -97,7 +92,7 @@ export const ChartDBProvider: React.FC<
             }
             return false;
         },
-        [tables, customTypes]
+        [tables]
     );
 
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
@@ -1557,15 +1552,16 @@ export const ChartDBProvider: React.FC<
         [db, diagramId, setAreas, getArea, addUndoAction, resetRedoStack]
     );
 
-    // New function to set/toggle the highlighted custom type ID
-    const setHighlightedCustomTypeId = useCallback(
-        (id: string | null) => {
-            setHighlightedCustomTypeIdState((currentId) =>
-                currentId === id ? null : id
-            );
-        },
-        [setHighlightedCustomTypeIdState]
+    const highlightCustomTypeId = useCallback(
+        (id?: string) => setHighlightedCustomTypeId(id),
+        [setHighlightedCustomTypeId]
     );
+
+    const highlightedCustomType = useMemo(() => {
+        return highlightedCustomTypeId
+            ? customTypes.find((type) => type.id === highlightedCustomTypeId)
+            : undefined;
+    }, [highlightedCustomTypeId, customTypes]);
 
     const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
         useCallback(
@@ -1581,7 +1577,7 @@ export const ChartDBProvider: React.FC<
                 setCustomTypes(diagram.customTypes ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
-                setHighlightedCustomTypeIdState(null);
+                setHighlightedCustomTypeId(undefined);
 
                 events.emit({ action: 'load_diagram', data: { diagram } });
 
@@ -1600,7 +1596,7 @@ export const ChartDBProvider: React.FC<
                 setCustomTypes,
                 setDiagramCreatedAt,
                 setDiagramUpdatedAt,
-                setHighlightedCustomTypeIdState,
+                setHighlightedCustomTypeId,
                 events,
                 resetRedoStack,
                 resetUndoStack,
@@ -1868,9 +1864,9 @@ export const ChartDBProvider: React.FC<
                 hiddenTableIds,
                 addHiddenTableId,
                 removeHiddenTableId,
-                highlightedCustomTypeId,
-                setHighlightedCustomTypeId,
-                isCustomTypeUsed,
+                highlightCustomTypeId,
+                highlightedCustomType,
+                checkIfCustomTypeUsed,
             }}
         >
             {children}

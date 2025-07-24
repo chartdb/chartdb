@@ -78,9 +78,9 @@ export interface ChartDBContext {
     events: EventEmitter<ChartDBEvent>;
     readonly?: boolean;
 
-    highlightedCustomTypeId: string | null;
-    setHighlightedCustomTypeId: (id: string | null) => void;
-    isCustomTypeUsed: (customTypeId: string) => boolean;
+    highlightedCustomType?: DBCustomType;
+    highlightCustomTypeId: (id?: string) => void;
+    checkIfCustomTypeUsed: (customType: DBCustomType) => boolean;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
@@ -298,9 +298,8 @@ export const chartDBContext = createContext<ChartDBContext>({
     areas: [],
     customTypes: [],
     schemas: [],
-    highlightedCustomTypeId: null,
-    setHighlightedCustomTypeId: emptyFn,
-    isCustomTypeUsed: () => false,
+    highlightCustomTypeId: emptyFn,
+    checkIfCustomTypeUsed: emptyFn,
     filteredSchemas: [],
     filterSchemas: emptyFn,
     currentDiagram: {

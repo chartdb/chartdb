@@ -79,8 +79,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             relationships,
             readonly,
             updateField,
-            highlightedCustomTypeId,
-            getCustomType,
+            highlightedCustomType,
         } = useChartDB();
         const [editMode, setEditMode] = useState(false);
         const [fieldName, setFieldName] = useState(field.name);
@@ -215,11 +214,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         }, []);
 
         const isCustomTypeHighlighted = useMemo(() => {
-            if (!highlightedCustomTypeId) return false;
-            const highlightedType = getCustomType(highlightedCustomTypeId);
-            if (!highlightedType) return false;
-            return field.type.name === highlightedType.name;
-        }, [highlightedCustomTypeId, getCustomType, field.type.name]);
+            if (!highlightedCustomType) return false;
+            return field.type.name === highlightedCustomType.name;
+        }, [highlightedCustomType, field.type.name]);
         const { showFieldAttributes } = useLocalConfig();
 
         return (
