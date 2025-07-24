@@ -21,13 +21,6 @@ export interface FieldAttributeRange {
 }
 
 interface FieldAttributes {
-    [key: string]:
-        | FieldAttributeRange
-        | boolean
-        | number
-        | string
-        | null
-        | undefined;
     hasCharMaxLength?: boolean;
     precision?: FieldAttributeRange;
     scale?: FieldAttributeRange;

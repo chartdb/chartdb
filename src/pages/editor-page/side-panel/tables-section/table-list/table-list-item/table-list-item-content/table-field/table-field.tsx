@@ -48,10 +48,20 @@ export const TableField: React.FC<TableFieldProps> = ({
             value: type.id,
             regex: type.fieldAttributes?.hasCharMaxLength
                 ? `^${type.name}\\(\\d+\\)$`
-                : undefined,
+                : type.fieldAttributes?.precision && type.fieldAttributes?.scale
+                  ? `^${type.name}\\s*\\(\\s*\\d+\\s*(?:,\\s*\\d+\\s*)?\\)$`
+                  : type.fieldAttributes?.precision
+                    ? `^${type.name}\\s*\\(\\s*\\d+\\s*\\)$`
+                    : undefined,
             extractRegex: type.fieldAttributes?.hasCharMaxLength
                 ? /\((\d+)\)/
-                : undefined,
+                : type.fieldAttributes?.precision && type.fieldAttributes?.scale
+                  ? new RegExp(
+                        `${type.name}\\s*\\(\\s*(\\d+)\\s*(?:,\\s*(\\d+)\\s*)?\\)`
+                    )
+                  : type.fieldAttributes?.precision
+                    ? /\((\d+)\)/
+                    : undefined,
             group: customTypes?.length ? 'Standard Types' : undefined,
         }));
 
@@ -85,21 +95,44 @@ export const TableField: React.FC<TableFieldProps> = ({
             };
 
             let characterMaximumLength: string | undefined = undefined;
+            let precision: number | undefined = undefined;
+            let scale: number | undefined = undefined;
 
-            if (
-                regexMatches?.length &&
-                dataType?.fieldAttributes?.hasCharMaxLength
-            ) {
-                characterMaximumLength = regexMatches[1];
-            } else if (
-                field.characterMaximumLength &&
-                dataType?.fieldAttributes?.hasCharMaxLength
-            ) {
-                characterMaximumLength = field.characterMaximumLength;
+            if (regexMatches?.length) {
+                if (dataType?.fieldAttributes?.hasCharMaxLength) {
+                    characterMaximumLength = regexMatches[1];
+                } else if (
+                    dataType?.fieldAttributes?.precision &&
+                    dataType?.fieldAttributes?.scale
+                ) {
+                    precision = parseInt(regexMatches[1]);
+                    scale = regexMatches[2]
+                        ? parseInt(regexMatches[2])
+                        : undefined;
+                } else if (dataType?.fieldAttributes?.precision) {
+                    precision = parseInt(regexMatches[1]);
+                }
+            } else {
+                if (
+                    dataType?.fieldAttributes?.hasCharMaxLength &&
+                    field.characterMaximumLength
+                ) {
+                    characterMaximumLength = field.characterMaximumLength;
+                }
+
+                if (dataType?.fieldAttributes?.precision && field.precision) {
+                    precision = field.precision;
+                }
+
+                if (dataType?.fieldAttributes?.scale && field.scale) {
+                    scale = field.scale;
+                }
             }
 
             updateField({
                 characterMaximumLength,
+                precision,
+                scale,
                 type: dataTypeDataToDataType(
                     dataType ?? {
                         id: value as string,
@@ -108,7 +141,13 @@ export const TableField: React.FC<TableFieldProps> = ({
                 ),
             });
         },
-        [updateField, databaseType, field.characterMaximumLength]
+        [
+            updateField,
+            databaseType,
+            field.characterMaximumLength,
+            field.precision,
+            field.scale,
+        ]
     );
 
     const style = {
@@ -184,6 +223,20 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         type.fieldAttributes?.hasCharMaxLength
                                     ) {
                                         return `(${!field.characterMaximumLength ? 'n' : field.characterMaximumLength})`;
+                                    }
+
+                                    if (
+                                        type.fieldAttributes?.precision &&
+                                        type.fieldAttributes?.scale
+                                    ) {
+                                        const precisionValue =
+                                            field.precision ?? 'p';
+                                        const scaleValue = field.scale ?? 's';
+                                        return `(${precisionValue}, ${scaleValue})`;
+                                    }
+
+                                    if (type.fieldAttributes?.precision) {
+                                        return `(${field.precision || 'p'})`;
                                     }
 
                                     return '';
