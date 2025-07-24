@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
@@ -17,15 +17,18 @@ import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
+import type { DatabaseType } from '@/lib/domain';
 
 export interface TableFieldPopoverProps {
     field: DBField;
+    databaseType: DatabaseType;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
 }
 
 export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     field,
+    databaseType,
     updateField,
     removeField,
 }) => {
@@ -61,6 +64,11 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         }
         prevFieldRef.current = localField;
     }, [localField, debouncedUpdateField, isOpen]);
+
+    const dataFieldType = useMemo(
+        () => findDataTypeDataById(field.type.id, databaseType),
+        [field.type.id, databaseType]
+    );
 
     return (
         <Popover
@@ -125,9 +133,8 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 )}
                                 className="w-full rounded-md bg-muted text-sm"
                             />
-                        </div>{' '}
-                        {findDataTypeDataById(field.type.id)?.fieldAttributes
-                            ?.hasCharMaxLength ? (
+                        </div>
+                        {dataFieldType?.fieldAttributes?.hasCharMaxLength ? (
                             <div className="flex flex-col gap-2">
                                 <Label
                                     htmlFor="width"
@@ -153,10 +160,8 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 />
                             </div>
                         ) : null}
-                        {findDataTypeDataById(field.type.id)?.fieldAttributes
-                            ?.precision ||
-                        findDataTypeDataById(field.type.id)?.fieldAttributes
-                            ?.scale ? (
+                        {dataFieldType?.fieldAttributes?.precision ||
+                        dataFieldType?.fieldAttributes?.scale ? (
                             <div className="flex gap-2">
                                 <div className="flex flex-1 flex-col gap-2">
                                     <Label
@@ -171,31 +176,29 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         value={localField.precision ?? ''}
                                         type="number"
                                         max={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.precision
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
                                                 ? (
-                                                      findDataTypeDataById(
-                                                          field.type.id
-                                                      )?.fieldAttributes
+                                                      dataFieldType
+                                                          ?.fieldAttributes
                                                           ?.precision as FieldAttributeRange
                                                   ).max
                                                 : undefined
                                         }
                                         min={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.precision
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
                                                 ? (
-                                                      findDataTypeDataById(
-                                                          field.type.id
-                                                      )?.fieldAttributes
+                                                      dataFieldType
+                                                          ?.fieldAttributes
                                                           ?.precision as FieldAttributeRange
                                                   ).min
                                                 : undefined
                                         }
                                         placeholder={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.precision
-                                                ? `${(findDataTypeDataById(field.type.id)?.fieldAttributes?.precision as FieldAttributeRange).default}`
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
+                                                ? `${(dataFieldType?.fieldAttributes?.precision as FieldAttributeRange).default}`
                                                 : 'Optional'
                                         }
                                         onChange={(e) =>
@@ -221,19 +224,18 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     <Input
                                         value={localField.scale ?? ''}
                                         max={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.scale
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
                                                 ? (
-                                                      findDataTypeDataById(
-                                                          field.type.id
-                                                      )?.fieldAttributes
+                                                      dataFieldType
+                                                          ?.fieldAttributes
                                                           ?.scale as FieldAttributeRange
                                                   ).max
                                                 : undefined
                                         }
                                         min={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.scale
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
                                                 ? (
                                                       findDataTypeDataById(
                                                           field.type.id
@@ -243,9 +245,9 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                                 : undefined
                                         }
                                         placeholder={
-                                            findDataTypeDataById(field.type.id)
-                                                ?.fieldAttributes?.scale
-                                                ? `${(findDataTypeDataById(field.type.id)?.fieldAttributes?.scale as FieldAttributeRange).default}`
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
+                                                ? `${(dataFieldType?.fieldAttributes?.scale as FieldAttributeRange).default}`
                                                 : 'Optional'
                                         }
                                         type="number"

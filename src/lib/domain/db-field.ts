@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {
     dataTypeSchema,
-    sortedDataTypeMap,
+    findDataTypeDataById,
     type DataType,
 } from '../data/data-types/data-types';
 import type { ColumnInfo } from '../data/import-metadata/metadata-types/column-info';
@@ -127,9 +127,7 @@ const generateExtendedSuffix = (
     databaseType: DatabaseType,
     typeId: string
 ): string => {
-    const type = sortedDataTypeMap[databaseType]?.find(
-        (dataType) => dataType.id === typeId
-    );
+    const type = findDataTypeDataById(typeId, databaseType);
 
     if (!type?.fieldAttributes) {
         return '';

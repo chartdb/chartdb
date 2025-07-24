@@ -267,6 +267,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     field={field}
                     updateField={updateField}
                     removeField={removeField}
+                    databaseType={databaseType}
                 />
             </div>
         </div>
