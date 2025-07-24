@@ -248,8 +248,10 @@ export const es: LanguageTranslation = {
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
+                    no_fields_tooltip: 'No fields defined for this custom type',
                     custom_type_actions: {
                         title: 'Actions',
+                        highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
@@ -265,6 +267,11 @@ export const es: LanguageTranslation = {
             undo: 'Deshacer',
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
+            // TODO: Translate
+            clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
+            clear_highlight: 'Clear highlight',
+            custom_type_highlight_tooltip:
+                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
             // TODO: Translate
             filter: 'Filter Tables',

@@ -5,6 +5,7 @@ import {
     EllipsisVertical,
     Trash2,
     Check,
+    Highlighter,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { Input } from '@/components/input/input';
@@ -32,6 +33,7 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 import { Badge } from '@/components/badge/badge';
+import { cn } from '@/lib/utils';
 
 export interface CustomTypeListItemHeaderProps {
     customType: DBCustomType;
@@ -40,8 +42,15 @@ export interface CustomTypeListItemHeaderProps {
 export const CustomTypeListItemHeader: React.FC<
     CustomTypeListItemHeaderProps
 > = ({ customType }) => {
-    const { updateCustomType, removeCustomType, schemas, filteredSchemas } =
-        useChartDB();
+    const {
+        updateCustomType,
+        removeCustomType,
+        schemas,
+        filteredSchemas,
+        highlightedCustomType,
+        highlightCustomTypeId,
+        checkIfCustomTypeUsed,
+    } = useChartDB();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
     const [customTypeName, setCustomTypeName] = React.useState(customType.name);
@@ -75,8 +84,17 @@ export const CustomTypeListItemHeader: React.FC<
         removeCustomType(customType.id);
     }, [customType.id, removeCustomType]);
 
-    const renderDropDownMenu = useCallback(
-        () => (
+    const toggleHighlightCustomType = useCallback(() => {
+        if (highlightedCustomType?.id === customType.id) {
+            highlightCustomTypeId(undefined);
+        } else {
+            highlightCustomTypeId(customType.id);
+        }
+    }, [customType.id, highlightCustomTypeId, highlightedCustomType?.id]);
+
+    const renderDropDownMenu = useCallback(() => {
+        const isUsed = checkIfCustomTypeUsed(customType);
+        return (
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <ListItemHeaderButton>
@@ -92,6 +110,30 @@ export const CustomTypeListItemHeader: React.FC<
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
+                            onClick={toggleHighlightCustomType}
+                            disabled={!isUsed}
+                            className={cn(
+                                'flex justify-between',
+                                highlightedCustomType?.id === customType.id
+                                    ? '!text-yellow-700 dark:!text-yellow-500'
+                                    : ''
+                            )}
+                        >
+                            {t(
+                                'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
+                            )}
+                            <Highlighter
+                                className={cn(
+                                    'size-3.5',
+                                    highlightedCustomType?.id === customType.id
+                                        ? 'text-yellow-600'
+                                        : isUsed
+                                          ? 'text-muted-foreground'
+                                          : 'text-slate-400 dark:text-slate-600'
+                                )}
+                            />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                             onClick={deleteCustomTypeHandler}
                             className="flex justify-between !text-red-700"
                         >
@@ -103,9 +145,15 @@ export const CustomTypeListItemHeader: React.FC<
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-        [deleteCustomTypeHandler, t]
-    );
+        );
+    }, [
+        highlightedCustomType,
+        deleteCustomTypeHandler,
+        t,
+        toggleHighlightCustomType,
+        customType,
+        checkIfCustomTypeUsed,
+    ]);
 
     let schemaToDisplay;
 

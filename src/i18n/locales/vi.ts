@@ -257,8 +257,10 @@ export const vi: LanguageTranslation = {
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
+                    no_fields_tooltip: 'No fields defined for this custom type',
                     custom_type_actions: {
                         title: 'Actions',
+                        highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
@@ -274,6 +276,11 @@ export const vi: LanguageTranslation = {
             undo: 'Hoàn tác',
             redo: 'Làm lại',
             reorder_diagram: 'Sắp xếp lại sơ đồ',
+            // TODO: Translate
+            clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
+            clear_highlight: 'Clear highlight',
+            custom_type_highlight_tooltip:
+                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
             // TODO: Translate
             filter: 'Filter Tables',

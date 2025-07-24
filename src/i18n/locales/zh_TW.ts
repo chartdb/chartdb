@@ -254,8 +254,10 @@ export const zh_TW: LanguageTranslation = {
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
+                    no_fields_tooltip: 'No fields defined for this custom type',
                     custom_type_actions: {
                         title: 'Actions',
+                        highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
@@ -271,6 +273,11 @@ export const zh_TW: LanguageTranslation = {
             undo: '復原',
             redo: '重做',
             reorder_diagram: '重新排列圖表',
+            // TODO: Translate
+            clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
+            clear_highlight: 'Clear highlight',
+            custom_type_highlight_tooltip:
+                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
             highlight_overlapping_tables: '突出顯示重疊表格',
             // TODO: Translate
             filter: 'Filter Tables',
