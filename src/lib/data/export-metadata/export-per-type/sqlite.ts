@@ -140,7 +140,13 @@ function mapSQLiteType(typeName: string, isPrimaryKey: boolean): string {
     return typeName;
 }
 
-export function exportSQLite(diagram: Diagram): string {
+export function exportSQLite({
+    diagram,
+    onlyRelationships = false,
+}: {
+    diagram: Diagram;
+    onlyRelationships?: boolean;
+}): string {
     if (!diagram.tables || !diagram.relationships) {
         return '';
     }
@@ -166,159 +172,167 @@ export function exportSQLite(diagram: Diagram): string {
         'sqlite_master',
     ];
 
-    // Generate table creation SQL
-    sqlScript += tables
-        .map((table: DBTable) => {
-            // Skip views
-            if (table.isView) {
-                return '';
-            }
+    if (!onlyRelationships) {
+        // Generate table creation SQL
+        sqlScript += tables
+            .map((table: DBTable) => {
+                // Skip views
+                if (table.isView) {
+                    return '';
+                }
 
-            // Skip SQLite system tables
-            if (sqliteSystemTables.includes(table.name.toLowerCase())) {
-                return `-- Skipping SQLite system table: "${table.name}"\n`;
-            }
+                // Skip SQLite system tables
+                if (sqliteSystemTables.includes(table.name.toLowerCase())) {
+                    return `-- Skipping SQLite system table: "${table.name}"\n`;
+                }
 
-            // SQLite doesn't use schema prefixes, so we use just the table name
-            // Include the schema in a comment if it exists
-            const schemaComment = table.schema
-                ? `-- Original schema: ${table.schema}\n`
-                : '';
-            const tableName = `"${table.name}"`;
+                // SQLite doesn't use schema prefixes, so we use just the table name
+                // Include the schema in a comment if it exists
+                const schemaComment = table.schema
+                    ? `-- Original schema: ${table.schema}\n`
+                    : '';
+                const tableName = `"${table.name}"`;
 
-            // Get primary key fields
-            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
+                // Get primary key fields
+                const primaryKeyFields = table.fields.filter(
+                    (f) => f.primaryKey
+                );
 
-            // Check if this is a single-column INTEGER PRIMARY KEY (for AUTOINCREMENT)
-            const singleIntegerPrimaryKey =
-                primaryKeyFields.length === 1 &&
-                (primaryKeyFields[0].type.name.toLowerCase() === 'integer' ||
-                    primaryKeyFields[0].type.name.toLowerCase() === 'int');
+                // Check if this is a single-column INTEGER PRIMARY KEY (for AUTOINCREMENT)
+                const singleIntegerPrimaryKey =
+                    primaryKeyFields.length === 1 &&
+                    (primaryKeyFields[0].type.name.toLowerCase() ===
+                        'integer' ||
+                        primaryKeyFields[0].type.name.toLowerCase() === 'int');
 
-            return `${schemaComment}${
-                table.comments ? formatTableComment(table.comments) : ''
-            }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
-                .map((field: DBField) => {
-                    const fieldName = `"${field.name}"`;
+                return `${schemaComment}${
+                    table.comments ? formatTableComment(table.comments) : ''
+                }CREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
+                    .map((field: DBField) => {
+                        const fieldName = `"${field.name}"`;
 
-                    // Handle type name - map to SQLite compatible types
-                    const typeName = mapSQLiteType(
-                        field.type.name,
-                        field.primaryKey
-                    );
+                        // Handle type name - map to SQLite compatible types
+                        const typeName = mapSQLiteType(
+                            field.type.name,
+                            field.primaryKey
+                        );
 
-                    // SQLite ignores length specifiers, so we don't add them
-                    // We'll keep this simple without size info
-                    const typeWithoutSize = typeName;
+                        // SQLite ignores length specifiers, so we don't add them
+                        // We'll keep this simple without size info
+                        const typeWithoutSize = typeName;
 
-                    const notNull = field.nullable ? '' : ' NOT NULL';
+                        const notNull = field.nullable ? '' : ' NOT NULL';
 
-                    // Handle autoincrement - only works with INTEGER PRIMARY KEY
-                    let autoIncrement = '';
-                    if (
-                        field.primaryKey &&
-                        singleIntegerPrimaryKey &&
-                        (field.default?.toLowerCase().includes('identity') ||
-                            field.default
+                        // Handle autoincrement - only works with INTEGER PRIMARY KEY
+                        let autoIncrement = '';
+                        if (
+                            field.primaryKey &&
+                            singleIntegerPrimaryKey &&
+                            (field.default
                                 ?.toLowerCase()
-                                .includes('autoincrement') ||
-                            field.default?.includes('nextval'))
-                    ) {
-                        autoIncrement = ' AUTOINCREMENT';
-                    }
-
-                    // Only add UNIQUE constraint if the field is not part of the primary key
-                    const unique =
-                        !field.primaryKey && field.unique ? ' UNIQUE' : '';
-
-                    // Handle default value - Special handling for datetime() function
-                    let defaultValue = '';
-                    if (
-                        field.default &&
-                        !field.default.toLowerCase().includes('identity') &&
-                        !field.default
-                            .toLowerCase()
-                            .includes('autoincrement') &&
-                        !field.default.includes('nextval')
-                    ) {
-                        // Special handling for quoted functions like 'datetime(\'\'now\'\')' - remove extra quotes
-                        if (field.default.includes("datetime(''now'')")) {
-                            defaultValue = ' DEFAULT CURRENT_TIMESTAMP';
-                        } else {
-                            defaultValue = ` DEFAULT ${parseSQLiteDefault(field)}`;
+                                .includes('identity') ||
+                                field.default
+                                    ?.toLowerCase()
+                                    .includes('autoincrement') ||
+                                field.default?.includes('nextval'))
+                        ) {
+                            autoIncrement = ' AUTOINCREMENT';
                         }
-                    }
 
-                    // Add PRIMARY KEY inline only for single INTEGER primary key
-                    const primaryKey =
-                        field.primaryKey && singleIntegerPrimaryKey
-                            ? ' PRIMARY KEY' + autoIncrement
-                            : '';
+                        // Only add UNIQUE constraint if the field is not part of the primary key
+                        const unique =
+                            !field.primaryKey && field.unique ? ' UNIQUE' : '';
 
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithoutSize}${primaryKey}${notNull}${unique}${defaultValue}`;
-                })
-                .join(',\n')}${
-                // Add PRIMARY KEY as table constraint for composite primary keys or non-INTEGER primary keys
-                primaryKeyFields.length > 0 && !singleIntegerPrimaryKey
-                    ? `,\n    PRIMARY KEY (${primaryKeyFields
-                          .map((f) => `"${f.name}"`)
-                          .join(', ')})`
-                    : ''
-            }\n);\n${
-                // Add indexes - SQLite doesn't support indexes in CREATE TABLE
-                (() => {
-                    const validIndexes = table.indexes
-                        .map((index) => {
-                            // Skip indexes that exactly match the primary key
-                            const indexFields = index.fieldIds
-                                .map((fieldId) => {
-                                    const field = table.fields.find(
-                                        (f) => f.id === fieldId
-                                    );
-                                    return field ? field : null;
-                                })
-                                .filter(Boolean);
-
-                            // Get the properly quoted field names
-                            const indexFieldNames = indexFields
-                                .map((field) =>
-                                    field ? `"${field.name}"` : ''
-                                )
-                                .filter(Boolean);
-
-                            // Skip if this index exactly matches the primary key fields
-                            if (
-                                primaryKeyFields.length ===
-                                    indexFields.length &&
-                                primaryKeyFields.every((pk) =>
-                                    indexFields.some(
-                                        (field) => field && field.id === pk.id
-                                    )
-                                )
-                            ) {
-                                return '';
+                        // Handle default value - Special handling for datetime() function
+                        let defaultValue = '';
+                        if (
+                            field.default &&
+                            !field.default.toLowerCase().includes('identity') &&
+                            !field.default
+                                .toLowerCase()
+                                .includes('autoincrement') &&
+                            !field.default.includes('nextval')
+                        ) {
+                            // Special handling for quoted functions like 'datetime(\'\'now\'\')' - remove extra quotes
+                            if (field.default.includes("datetime(''now'')")) {
+                                defaultValue = ' DEFAULT CURRENT_TIMESTAMP';
+                            } else {
+                                defaultValue = ` DEFAULT ${parseSQLiteDefault(field)}`;
                             }
+                        }
 
-                            // Create safe index name
-                            const safeIndexName = `${table.name}_${index.name}`
-                                .replace(/[^a-zA-Z0-9_]/g, '_')
-                                .substring(0, 60);
-
-                            return indexFieldNames.length > 0
-                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});`
+                        // Add PRIMARY KEY inline only for single INTEGER primary key
+                        const primaryKey =
+                            field.primaryKey && singleIntegerPrimaryKey
+                                ? ' PRIMARY KEY' + autoIncrement
                                 : '';
-                        })
-                        .filter(Boolean);
 
-                    return validIndexes.length > 0
-                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
-                        : '';
-                })()
-            }\n`;
-        })
-        .filter(Boolean) // Remove empty strings (views)
-        .join('\n');
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithoutSize}${primaryKey}${notNull}${unique}${defaultValue}`;
+                    })
+                    .join(',\n')}${
+                    // Add PRIMARY KEY as table constraint for composite primary keys or non-INTEGER primary keys
+                    primaryKeyFields.length > 0 && !singleIntegerPrimaryKey
+                        ? `,\n    PRIMARY KEY (${primaryKeyFields
+                              .map((f) => `"${f.name}"`)
+                              .join(', ')})`
+                        : ''
+                }\n);\n${
+                    // Add indexes - SQLite doesn't support indexes in CREATE TABLE
+                    (() => {
+                        const validIndexes = table.indexes
+                            .map((index) => {
+                                // Skip indexes that exactly match the primary key
+                                const indexFields = index.fieldIds
+                                    .map((fieldId) => {
+                                        const field = table.fields.find(
+                                            (f) => f.id === fieldId
+                                        );
+                                        return field ? field : null;
+                                    })
+                                    .filter(Boolean);
 
+                                // Get the properly quoted field names
+                                const indexFieldNames = indexFields
+                                    .map((field) =>
+                                        field ? `"${field.name}"` : ''
+                                    )
+                                    .filter(Boolean);
+
+                                // Skip if this index exactly matches the primary key fields
+                                if (
+                                    primaryKeyFields.length ===
+                                        indexFields.length &&
+                                    primaryKeyFields.every((pk) =>
+                                        indexFields.some(
+                                            (field) =>
+                                                field && field.id === pk.id
+                                        )
+                                    )
+                                ) {
+                                    return '';
+                                }
+
+                                // Create safe index name
+                                const safeIndexName =
+                                    `${table.name}_${index.name}`
+                                        .replace(/[^a-zA-Z0-9_]/g, '_')
+                                        .substring(0, 60);
+
+                                return indexFieldNames.length > 0
+                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});`
+                                    : '';
+                            })
+                            .filter(Boolean);
+
+                        return validIndexes.length > 0
+                            ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                            : '';
+                    })()
+                }\n`;
+            })
+            .filter(Boolean) // Remove empty strings (views)
+            .join('\n');
+    }
     // Generate table constraints and triggers for foreign keys
     // SQLite handles foreign keys differently - we'll add them with CREATE TABLE statements
     // But we'll also provide individual ALTER TABLE statements as comments for reference

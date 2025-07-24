@@ -36,10 +36,12 @@ export const exportBaseSQL = ({
     diagram,
     targetDatabaseType,
     isDBMLFlow = false,
+    onlyRelationships = false,
 }: {
     diagram: Diagram;
     targetDatabaseType: DatabaseType;
     isDBMLFlow?: boolean;
+    onlyRelationships?: boolean;
 }): string => {
     const { tables, relationships } = diagram;
 
@@ -50,16 +52,16 @@ export const exportBaseSQL = ({
     if (!isDBMLFlow && diagram.databaseType === targetDatabaseType) {
         switch (diagram.databaseType) {
             case DatabaseType.SQL_SERVER:
-                return exportMSSQL(diagram);
+                return exportMSSQL({ diagram, onlyRelationships });
             case DatabaseType.POSTGRESQL:
-                return exportPostgreSQL(diagram);
+                return exportPostgreSQL({ diagram, onlyRelationships });
             case DatabaseType.SQLITE:
-                return exportSQLite(diagram);
+                return exportSQLite({ diagram, onlyRelationships });
             case DatabaseType.MYSQL:
             case DatabaseType.MARIADB:
-                return exportMySQL(diagram);
+                return exportMySQL({ diagram, onlyRelationships });
             default:
-                return exportPostgreSQL(diagram);
+                return exportPostgreSQL({ diagram, onlyRelationships });
         }
     }
 

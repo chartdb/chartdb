@@ -145,7 +145,13 @@ function exportCustomTypes(customTypes: DBCustomType[]): string {
     return typesSql ? typesSql + '\n' : '';
 }
 
-export function exportPostgreSQL(diagram: Diagram): string {
+export function exportPostgreSQL({
+    diagram,
+    onlyRelationships = false,
+}: {
+    diagram: Diagram;
+    onlyRelationships?: boolean;
+}): string {
     if (!diagram.tables || !diagram.relationships) {
         return '';
     }
@@ -156,253 +162,263 @@ export function exportPostgreSQL(diagram: Diagram): string {
 
     // Create CREATE SCHEMA statements for all schemas
     let sqlScript = '';
-    const schemas = new Set<string>();
+    if (!onlyRelationships) {
+        const schemas = new Set<string>();
 
-    tables.forEach((table) => {
-        if (table.schema) {
-            schemas.add(table.schema);
-        }
-    });
-
-    // Also collect schemas from custom types
-    customTypes.forEach((customType) => {
-        if (customType.schema) {
-            schemas.add(customType.schema);
-        }
-    });
-
-    // Add schema creation statements
-    schemas.forEach((schema) => {
-        sqlScript += `CREATE SCHEMA IF NOT EXISTS "${schema}";\n`;
-    });
-    if (schemas.size > 0) {
-        sqlScript += '\n';
-    }
-
-    // Add custom types (enums and composite types)
-    sqlScript += exportCustomTypes(customTypes);
-
-    // Add sequence creation statements
-    const sequences = new Set<string>();
-
-    tables.forEach((table) => {
-        table.fields.forEach((field) => {
-            if (field.default) {
-                // Match nextval('schema.sequence_name') or nextval('sequence_name')
-                const match = field.default.match(
-                    /nextval\('([^']+)'(?:::[^)]+)?\)/
-                );
-                if (match) {
-                    sequences.add(match[1]);
-                }
+        tables.forEach((table) => {
+            if (table.schema) {
+                schemas.add(table.schema);
             }
         });
-    });
 
-    sequences.forEach((sequence) => {
-        sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
-    });
-    if (sequences.size > 0) {
-        sqlScript += '\n';
-    }
-
-    // Generate table creation SQL
-    sqlScript += tables
-        .map((table: DBTable) => {
-            // Skip views
-            if (table.isView) {
-                return '';
+        // Also collect schemas from custom types
+        customTypes.forEach((customType) => {
+            if (customType.schema) {
+                schemas.add(customType.schema);
             }
+        });
 
-            const tableName = table.schema
-                ? `"${table.schema}"."${table.name}"`
-                : `"${table.name}"`;
+        // Add schema creation statements
+        schemas.forEach((schema) => {
+            sqlScript += `CREATE SCHEMA IF NOT EXISTS "${schema}";\n`;
+        });
+        if (schemas.size > 0) {
+            sqlScript += '\n';
+        }
 
-            // Get primary key fields
-            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
+        // Add custom types (enums and composite types)
+        sqlScript += exportCustomTypes(customTypes);
 
-            return `${
-                table.comments ? formatTableComment(table.comments) : ''
-            }CREATE TABLE ${tableName} (\n${table.fields
-                .map((field: DBField) => {
-                    const fieldName = `"${field.name}"`;
+        // Add sequence creation statements
+        const sequences = new Set<string>();
 
-                    // Handle type name - map problematic types to PostgreSQL compatible types
-                    const typeName = mapPostgresType(
-                        field.type.name,
-                        field.name
+        tables.forEach((table) => {
+            table.fields.forEach((field) => {
+                if (field.default) {
+                    // Match nextval('schema.sequence_name') or nextval('sequence_name')
+                    const match = field.default.match(
+                        /nextval\('([^']+)'(?:::[^)]+)?\)/
                     );
-
-                    // Handle PostgreSQL specific type formatting
-                    let typeWithSize = typeName;
-                    let serialType = null;
-
-                    if (field.increment && !field.nullable) {
-                        if (
-                            typeName.toLowerCase() === 'integer' ||
-                            typeName.toLowerCase() === 'int'
-                        ) {
-                            serialType = 'SERIAL';
-                        } else if (typeName.toLowerCase() === 'bigint') {
-                            serialType = 'BIGSERIAL';
-                        } else if (typeName.toLowerCase() === 'smallint') {
-                            serialType = 'SMALLSERIAL';
-                        }
+                    if (match) {
+                        sequences.add(match[1]);
                     }
+                }
+            });
+        });
 
-                    if (field.characterMaximumLength) {
-                        if (
-                            typeName.toLowerCase() === 'varchar' ||
-                            typeName.toLowerCase() === 'character varying' ||
-                            typeName.toLowerCase() === 'char' ||
-                            typeName.toLowerCase() === 'character'
-                        ) {
-                            typeWithSize = `${typeName}(${field.characterMaximumLength})`;
-                        }
-                    }
-                    if (field.precision && field.scale) {
-                        if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
-                        ) {
-                            typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
-                        }
-                    } else if (field.precision) {
-                        if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
-                        ) {
-                            typeWithSize = `${typeName}(${field.precision})`;
-                        }
-                    }
+        sequences.forEach((sequence) => {
+            sqlScript += `CREATE SEQUENCE IF NOT EXISTS ${sequence};\n`;
+        });
+        if (sequences.size > 0) {
+            sqlScript += '\n';
+        }
 
-                    // Handle array types (check if the type name ends with '[]')
-                    if (typeName.endsWith('[]')) {
-                        typeWithSize = typeWithSize.replace('[]', '') + '[]';
-                    }
+        // Generate table creation SQL
+        sqlScript += tables
+            .map((table: DBTable) => {
+                // Skip views
+                if (table.isView) {
+                    return '';
+                }
 
-                    const notNull = field.nullable ? '' : ' NOT NULL';
+                const tableName = table.schema
+                    ? `"${table.schema}"."${table.name}"`
+                    : `"${table.name}"`;
 
-                    // Handle identity generation
-                    let identity = '';
-                    if (field.default && field.default.includes('nextval')) {
-                        // PostgreSQL already handles this with DEFAULT nextval()
-                    } else if (
-                        field.default &&
-                        field.default.toLowerCase().includes('identity')
-                    ) {
-                        identity = ' GENERATED BY DEFAULT AS IDENTITY';
-                    }
+                // Get primary key fields
+                const primaryKeyFields = table.fields.filter(
+                    (f) => f.primaryKey
+                );
 
-                    // Only add UNIQUE constraint if the field is not part of the primary key
-                    // This avoids redundant uniqueness constraints
-                    const unique =
-                        !field.primaryKey && field.unique ? ' UNIQUE' : '';
+                return `${
+                    table.comments ? formatTableComment(table.comments) : ''
+                }CREATE TABLE ${tableName} (\n${table.fields
+                    .map((field: DBField) => {
+                        const fieldName = `"${field.name}"`;
 
-                    // Handle default value using PostgreSQL specific parser
-                    const defaultValue =
-                        field.default &&
-                        !field.default.toLowerCase().includes('identity')
-                            ? ` DEFAULT ${parsePostgresDefault(field)}`
-                            : '';
+                        // Handle type name - map problematic types to PostgreSQL compatible types
+                        const typeName = mapPostgresType(
+                            field.type.name,
+                            field.name
+                        );
 
-                    // Do not add PRIMARY KEY as a column constraint - will add as table constraint
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${serialType || typeWithSize}${serialType ? '' : notNull}${identity}${unique}${defaultValue}`;
-                })
-                .join(',\n')}${
-                primaryKeyFields.length > 0
-                    ? `,\n    PRIMARY KEY (${primaryKeyFields
-                          .map((f) => `"${f.name}"`)
-                          .join(', ')})`
-                    : ''
-            }\n);${
-                // Add table comments
-                table.comments
-                    ? `\nCOMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';`
-                    : ''
-            }${
-                // Add column comments
-                table.fields
-                    .filter((f) => f.comments)
-                    .map(
-                        (f) =>
-                            `\nCOMMENT ON COLUMN ${tableName}."${f.name}" IS '${escapeSQLComment(f.comments || '')}';`
-                    )
-                    .join('')
-            }${
-                // Add indexes only for non-primary key fields or composite indexes
-                // This avoids duplicate indexes on primary key columns
-                (() => {
-                    const validIndexes = table.indexes
-                        .map((index) => {
-                            // Get the list of fields for this index
-                            const indexFields = index.fieldIds
-                                .map((fieldId) => {
-                                    const field = table.fields.find(
-                                        (f) => f.id === fieldId
-                                    );
-                                    return field ? field : null;
-                                })
-                                .filter(Boolean);
+                        // Handle PostgreSQL specific type formatting
+                        let typeWithSize = typeName;
+                        let serialType = null;
 
-                            // Skip if this index exactly matches the primary key fields
-                            // This prevents creating redundant indexes
+                        if (field.increment && !field.nullable) {
                             if (
-                                primaryKeyFields.length ===
-                                    indexFields.length &&
-                                primaryKeyFields.every((pk) =>
-                                    indexFields.some(
-                                        (field) => field && field.id === pk.id
-                                    )
-                                )
+                                typeName.toLowerCase() === 'integer' ||
+                                typeName.toLowerCase() === 'int'
                             ) {
-                                return '';
+                                serialType = 'SERIAL';
+                            } else if (typeName.toLowerCase() === 'bigint') {
+                                serialType = 'BIGSERIAL';
+                            } else if (typeName.toLowerCase() === 'smallint') {
+                                serialType = 'SMALLSERIAL';
                             }
+                        }
 
-                            // Create unique index name using table name and index name
-                            // This ensures index names are unique across the database
-                            const safeTableName = table.name.replace(
-                                /[^a-zA-Z0-9_]/g,
-                                '_'
-                            );
-                            const safeIndexName = index.name.replace(
-                                /[^a-zA-Z0-9_]/g,
-                                '_'
-                            );
-
-                            // Limit index name length to avoid PostgreSQL's 63-character identifier limit
-                            let combinedName = `${safeTableName}_${safeIndexName}`;
-                            if (combinedName.length > 60) {
-                                // If too long, use just the index name or a truncated version
-                                combinedName =
-                                    safeIndexName.length > 60
-                                        ? safeIndexName.substring(0, 60)
-                                        : safeIndexName;
+                        if (field.characterMaximumLength) {
+                            if (
+                                typeName.toLowerCase() === 'varchar' ||
+                                typeName.toLowerCase() ===
+                                    'character varying' ||
+                                typeName.toLowerCase() === 'char' ||
+                                typeName.toLowerCase() === 'character'
+                            ) {
+                                typeWithSize = `${typeName}(${field.characterMaximumLength})`;
                             }
+                        }
+                        if (field.precision && field.scale) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
+                            }
+                        } else if (field.precision) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision})`;
+                            }
+                        }
 
-                            const indexName = `"${combinedName}"`;
+                        // Handle array types (check if the type name ends with '[]')
+                        if (typeName.endsWith('[]')) {
+                            typeWithSize =
+                                typeWithSize.replace('[]', '') + '[]';
+                        }
 
-                            // Get the properly quoted field names
-                            const indexFieldNames = indexFields
-                                .map((field) =>
-                                    field ? `"${field.name}"` : ''
-                                )
-                                .filter(Boolean);
+                        const notNull = field.nullable ? '' : ' NOT NULL';
 
-                            return indexFieldNames.length > 0
-                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldNames.join(', ')});`
+                        // Handle identity generation
+                        let identity = '';
+                        if (
+                            field.default &&
+                            field.default.includes('nextval')
+                        ) {
+                            // PostgreSQL already handles this with DEFAULT nextval()
+                        } else if (
+                            field.default &&
+                            field.default.toLowerCase().includes('identity')
+                        ) {
+                            identity = ' GENERATED BY DEFAULT AS IDENTITY';
+                        }
+
+                        // Only add UNIQUE constraint if the field is not part of the primary key
+                        // This avoids redundant uniqueness constraints
+                        const unique =
+                            !field.primaryKey && field.unique ? ' UNIQUE' : '';
+
+                        // Handle default value using PostgreSQL specific parser
+                        const defaultValue =
+                            field.default &&
+                            !field.default.toLowerCase().includes('identity')
+                                ? ` DEFAULT ${parsePostgresDefault(field)}`
                                 : '';
-                        })
-                        .filter(Boolean);
 
-                    return validIndexes.length > 0
-                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
-                        : '';
-                })()
-            }\n`;
-        })
-        .filter(Boolean) // Remove empty strings (views)
-        .join('\n');
+                        // Do not add PRIMARY KEY as a column constraint - will add as table constraint
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${serialType || typeWithSize}${serialType ? '' : notNull}${identity}${unique}${defaultValue}`;
+                    })
+                    .join(',\n')}${
+                    primaryKeyFields.length > 0
+                        ? `,\n    PRIMARY KEY (${primaryKeyFields
+                              .map((f) => `"${f.name}"`)
+                              .join(', ')})`
+                        : ''
+                }\n);${
+                    // Add table comments
+                    table.comments
+                        ? `\nCOMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';`
+                        : ''
+                }${
+                    // Add column comments
+                    table.fields
+                        .filter((f) => f.comments)
+                        .map(
+                            (f) =>
+                                `\nCOMMENT ON COLUMN ${tableName}."${f.name}" IS '${escapeSQLComment(f.comments || '')}';`
+                        )
+                        .join('')
+                }${
+                    // Add indexes only for non-primary key fields or composite indexes
+                    // This avoids duplicate indexes on primary key columns
+                    (() => {
+                        const validIndexes = table.indexes
+                            .map((index) => {
+                                // Get the list of fields for this index
+                                const indexFields = index.fieldIds
+                                    .map((fieldId) => {
+                                        const field = table.fields.find(
+                                            (f) => f.id === fieldId
+                                        );
+                                        return field ? field : null;
+                                    })
+                                    .filter(Boolean);
+
+                                // Skip if this index exactly matches the primary key fields
+                                // This prevents creating redundant indexes
+                                if (
+                                    primaryKeyFields.length ===
+                                        indexFields.length &&
+                                    primaryKeyFields.every((pk) =>
+                                        indexFields.some(
+                                            (field) =>
+                                                field && field.id === pk.id
+                                        )
+                                    )
+                                ) {
+                                    return '';
+                                }
+
+                                // Create unique index name using table name and index name
+                                // This ensures index names are unique across the database
+                                const safeTableName = table.name.replace(
+                                    /[^a-zA-Z0-9_]/g,
+                                    '_'
+                                );
+                                const safeIndexName = index.name.replace(
+                                    /[^a-zA-Z0-9_]/g,
+                                    '_'
+                                );
+
+                                // Limit index name length to avoid PostgreSQL's 63-character identifier limit
+                                let combinedName = `${safeTableName}_${safeIndexName}`;
+                                if (combinedName.length > 60) {
+                                    // If too long, use just the index name or a truncated version
+                                    combinedName =
+                                        safeIndexName.length > 60
+                                            ? safeIndexName.substring(0, 60)
+                                            : safeIndexName;
+                                }
+
+                                const indexName = `"${combinedName}"`;
+
+                                // Get the properly quoted field names
+                                const indexFieldNames = indexFields
+                                    .map((field) =>
+                                        field ? `"${field.name}"` : ''
+                                    )
+                                    .filter(Boolean);
+
+                                return indexFieldNames.length > 0
+                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldNames.join(', ')});`
+                                    : '';
+                            })
+                            .filter(Boolean);
+
+                        return validIndexes.length > 0
+                            ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                            : '';
+                    })()
+                }\n`;
+            })
+            .filter(Boolean) // Remove empty strings (views)
+            .join('\n');
+    }
 
     // Generate foreign keys
     if (relationships.length > 0) {

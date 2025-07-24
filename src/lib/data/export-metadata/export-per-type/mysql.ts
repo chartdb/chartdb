@@ -170,7 +170,13 @@ function mapMySQLType(typeName: string): string {
     return typeName;
 }
 
-export function exportMySQL(diagram: Diagram): string {
+export function exportMySQL({
+    diagram,
+    onlyRelationships = false,
+}: {
+    diagram: Diagram;
+    onlyRelationships?: boolean;
+}): string {
     if (!diagram.tables || !diagram.relationships) {
         return '';
     }
@@ -181,227 +187,237 @@ export function exportMySQL(diagram: Diagram): string {
     // Start SQL script
     let sqlScript = '-- MySQL database export\n';
 
-    // MySQL doesn't really use transactions for DDL statements but we'll add it for consistency
-    sqlScript += 'START TRANSACTION;\n';
+    if (!onlyRelationships) {
+        // MySQL doesn't really use transactions for DDL statements but we'll add it for consistency
+        sqlScript += 'START TRANSACTION;\n';
 
-    // Create databases (schemas) if they don't exist
-    const schemas = new Set<string>();
-    tables.forEach((table) => {
-        if (table.schema) {
-            schemas.add(table.schema);
-        }
-    });
-
-    schemas.forEach((schema) => {
-        sqlScript += `CREATE DATABASE IF NOT EXISTS \`${schema}\`;\n`;
-    });
-
-    if (schemas.size > 0) {
-        sqlScript += '\n';
-    }
-
-    // Generate table creation SQL
-    sqlScript += tables
-        .map((table: DBTable) => {
-            // Skip views
-            if (table.isView) {
-                return '';
+        // Create databases (schemas) if they don't exist
+        const schemas = new Set<string>();
+        tables.forEach((table) => {
+            if (table.schema) {
+                schemas.add(table.schema);
             }
+        });
 
-            // Use schema prefix if available
-            const tableName = table.schema
-                ? `\`${table.schema}\`.\`${table.name}\``
-                : `\`${table.name}\``;
+        schemas.forEach((schema) => {
+            sqlScript += `CREATE DATABASE IF NOT EXISTS \`${schema}\`;\n`;
+        });
 
-            // Get primary key fields
-            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
+        if (schemas.size > 0) {
+            sqlScript += '\n';
+        }
 
-            return `${
-                table.comments ? formatTableComment(table.comments) : ''
-            }\nCREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
-                .map((field: DBField) => {
-                    const fieldName = `\`${field.name}\``;
+        // Generate table creation SQL
+        sqlScript += tables
+            .map((table: DBTable) => {
+                // Skip views
+                if (table.isView) {
+                    return '';
+                }
 
-                    // Handle type name - map to MySQL compatible types
-                    const typeName = mapMySQLType(field.type.name);
+                // Use schema prefix if available
+                const tableName = table.schema
+                    ? `\`${table.schema}\`.\`${table.name}\``
+                    : `\`${table.name}\``;
 
-                    // Handle MySQL specific type formatting
-                    let typeWithSize = typeName;
-                    if (field.characterMaximumLength) {
-                        if (
-                            typeName.toLowerCase() === 'varchar' ||
-                            typeName.toLowerCase() === 'char' ||
-                            typeName.toLowerCase() === 'varbinary'
-                        ) {
-                            typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                // Get primary key fields
+                const primaryKeyFields = table.fields.filter(
+                    (f) => f.primaryKey
+                );
+
+                return `${
+                    table.comments ? formatTableComment(table.comments) : ''
+                }\nCREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
+                    .map((field: DBField) => {
+                        const fieldName = `\`${field.name}\``;
+
+                        // Handle type name - map to MySQL compatible types
+                        const typeName = mapMySQLType(field.type.name);
+
+                        // Handle MySQL specific type formatting
+                        let typeWithSize = typeName;
+                        if (field.characterMaximumLength) {
+                            if (
+                                typeName.toLowerCase() === 'varchar' ||
+                                typeName.toLowerCase() === 'char' ||
+                                typeName.toLowerCase() === 'varbinary'
+                            ) {
+                                typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                            }
                         }
-                    }
-                    if (field.precision && field.scale) {
-                        if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
-                        ) {
-                            typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
+                        if (field.precision && field.scale) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
+                            }
+                        } else if (field.precision) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision})`;
+                            }
                         }
-                    } else if (field.precision) {
+
+                        // Set a default size for VARCHAR columns if not specified
                         if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
+                            typeName.toLowerCase() === 'varchar' &&
+                            !field.characterMaximumLength
                         ) {
-                            typeWithSize = `${typeName}(${field.precision})`;
+                            typeWithSize = `${typeName}(255)`;
                         }
-                    }
 
-                    // Set a default size for VARCHAR columns if not specified
-                    if (
-                        typeName.toLowerCase() === 'varchar' &&
-                        !field.characterMaximumLength
-                    ) {
-                        typeWithSize = `${typeName}(255)`;
-                    }
+                        const notNull = field.nullable ? '' : ' NOT NULL';
 
-                    const notNull = field.nullable ? '' : ' NOT NULL';
-
-                    // Handle auto_increment - MySQL uses AUTO_INCREMENT keyword
-                    let autoIncrement = '';
-                    if (
-                        field.primaryKey &&
-                        (field.default?.toLowerCase().includes('identity') ||
-                            field.default
+                        // Handle auto_increment - MySQL uses AUTO_INCREMENT keyword
+                        let autoIncrement = '';
+                        if (
+                            field.primaryKey &&
+                            (field.default
                                 ?.toLowerCase()
-                                .includes('autoincrement') ||
-                            field.default?.includes('nextval'))
-                    ) {
-                        autoIncrement = ' AUTO_INCREMENT';
-                    }
+                                .includes('identity') ||
+                                field.default
+                                    ?.toLowerCase()
+                                    .includes('autoincrement') ||
+                                field.default?.includes('nextval'))
+                        ) {
+                            autoIncrement = ' AUTO_INCREMENT';
+                        }
 
-                    // Only add UNIQUE constraint if the field is not part of the primary key
-                    const unique =
-                        !field.primaryKey && field.unique ? ' UNIQUE' : '';
+                        // Only add UNIQUE constraint if the field is not part of the primary key
+                        const unique =
+                            !field.primaryKey && field.unique ? ' UNIQUE' : '';
 
-                    // Handle default value
-                    const defaultValue =
-                        field.default &&
-                        !field.default.toLowerCase().includes('identity') &&
-                        !field.default
-                            .toLowerCase()
-                            .includes('autoincrement') &&
-                        !field.default.includes('nextval')
-                            ? ` DEFAULT ${parseMySQLDefault(field)}`
+                        // Handle default value
+                        const defaultValue =
+                            field.default &&
+                            !field.default.toLowerCase().includes('identity') &&
+                            !field.default
+                                .toLowerCase()
+                                .includes('autoincrement') &&
+                            !field.default.includes('nextval')
+                                ? ` DEFAULT ${parseMySQLDefault(field)}`
+                                : '';
+
+                        // MySQL supports inline comments
+                        const comment = field.comments
+                            ? ` COMMENT '${escapeSQLComment(field.comments)}'`
                             : '';
 
-                    // MySQL supports inline comments
-                    const comment = field.comments
-                        ? ` COMMENT '${escapeSQLComment(field.comments)}'`
-                        : '';
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${autoIncrement}${unique}${defaultValue}${comment}`;
+                    })
+                    .join(',\n')}${
+                    // Add PRIMARY KEY as table constraint
+                    primaryKeyFields.length > 0
+                        ? `,\n    PRIMARY KEY (${primaryKeyFields
+                              .map((f) => `\`${f.name}\``)
+                              .join(', ')})`
+                        : ''
+                }\n)${
+                    // MySQL supports table comments
+                    table.comments
+                        ? ` COMMENT='${escapeSQLComment(table.comments)}'`
+                        : ''
+                };\n${
+                    // Add indexes - MySQL creates them separately from the table definition
+                    (() => {
+                        const validIndexes = table.indexes
+                            .map((index) => {
+                                // Get the list of fields for this index
+                                const indexFields = index.fieldIds
+                                    .map((fieldId) => {
+                                        const field = table.fields.find(
+                                            (f) => f.id === fieldId
+                                        );
+                                        return field ? field : null;
+                                    })
+                                    .filter(Boolean);
 
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${autoIncrement}${unique}${defaultValue}${comment}`;
-                })
-                .join(',\n')}${
-                // Add PRIMARY KEY as table constraint
-                primaryKeyFields.length > 0
-                    ? `,\n    PRIMARY KEY (${primaryKeyFields
-                          .map((f) => `\`${f.name}\``)
-                          .join(', ')})`
-                    : ''
-            }\n)${
-                // MySQL supports table comments
-                table.comments
-                    ? ` COMMENT='${escapeSQLComment(table.comments)}'`
-                    : ''
-            };\n${
-                // Add indexes - MySQL creates them separately from the table definition
-                (() => {
-                    const validIndexes = table.indexes
-                        .map((index) => {
-                            // Get the list of fields for this index
-                            const indexFields = index.fieldIds
-                                .map((fieldId) => {
-                                    const field = table.fields.find(
-                                        (f) => f.id === fieldId
-                                    );
-                                    return field ? field : null;
-                                })
-                                .filter(Boolean);
-
-                            // Skip if this index exactly matches the primary key fields
-                            if (
-                                primaryKeyFields.length ===
-                                    indexFields.length &&
-                                primaryKeyFields.every((pk) =>
-                                    indexFields.some(
-                                        (field) => field && field.id === pk.id
+                                // Skip if this index exactly matches the primary key fields
+                                if (
+                                    primaryKeyFields.length ===
+                                        indexFields.length &&
+                                    primaryKeyFields.every((pk) =>
+                                        indexFields.some(
+                                            (field) =>
+                                                field && field.id === pk.id
+                                        )
                                     )
-                                )
-                            ) {
-                                return '';
-                            }
+                                ) {
+                                    return '';
+                                }
 
-                            // Create a unique index name by combining table name, field names, and a unique/non-unique indicator
-                            const fieldNamesForIndex = indexFields
-                                .map((field) => field?.name || '')
-                                .join('_');
-                            const uniqueIndicator = index.unique
-                                ? '_unique'
-                                : '';
-                            const indexName = `\`idx_${table.name}_${fieldNamesForIndex}${uniqueIndicator}\``;
+                                // Create a unique index name by combining table name, field names, and a unique/non-unique indicator
+                                const fieldNamesForIndex = indexFields
+                                    .map((field) => field?.name || '')
+                                    .join('_');
+                                const uniqueIndicator = index.unique
+                                    ? '_unique'
+                                    : '';
+                                const indexName = `\`idx_${table.name}_${fieldNamesForIndex}${uniqueIndicator}\``;
 
-                            // Get the properly quoted field names
-                            const indexFieldNames = indexFields
-                                .map((field) =>
-                                    field ? `\`${field.name}\`` : ''
-                                )
-                                .filter(Boolean);
+                                // Get the properly quoted field names
+                                const indexFieldNames = indexFields
+                                    .map((field) =>
+                                        field ? `\`${field.name}\`` : ''
+                                    )
+                                    .filter(Boolean);
 
-                            // Check for text/blob fields that need special handling
-                            const hasTextOrBlob = indexFields.some((field) => {
-                                const typeName =
-                                    field?.type.name.toLowerCase() || '';
-                                return (
-                                    typeName === 'text' ||
-                                    typeName === 'mediumtext' ||
-                                    typeName === 'longtext' ||
-                                    typeName === 'blob'
+                                // Check for text/blob fields that need special handling
+                                const hasTextOrBlob = indexFields.some(
+                                    (field) => {
+                                        const typeName =
+                                            field?.type.name.toLowerCase() ||
+                                            '';
+                                        return (
+                                            typeName === 'text' ||
+                                            typeName === 'mediumtext' ||
+                                            typeName === 'longtext' ||
+                                            typeName === 'blob'
+                                        );
+                                    }
                                 );
-                            });
 
-                            // If there are TEXT/BLOB fields, need to add prefix length
-                            const indexFieldsWithPrefix = hasTextOrBlob
-                                ? indexFieldNames.map((name) => {
-                                      const field = indexFields.find(
-                                          (f) => `\`${f?.name}\`` === name
-                                      );
-                                      if (!field) return name;
+                                // If there are TEXT/BLOB fields, need to add prefix length
+                                const indexFieldsWithPrefix = hasTextOrBlob
+                                    ? indexFieldNames.map((name) => {
+                                          const field = indexFields.find(
+                                              (f) => `\`${f?.name}\`` === name
+                                          );
+                                          if (!field) return name;
 
-                                      const typeName =
-                                          field.type.name.toLowerCase();
-                                      if (
-                                          typeName === 'text' ||
-                                          typeName === 'mediumtext' ||
-                                          typeName === 'longtext' ||
-                                          typeName === 'blob'
-                                      ) {
-                                          // Add a prefix length for TEXT/BLOB fields (required in MySQL)
-                                          return `${name}(255)`;
-                                      }
-                                      return name;
-                                  })
-                                : indexFieldNames;
+                                          const typeName =
+                                              field.type.name.toLowerCase();
+                                          if (
+                                              typeName === 'text' ||
+                                              typeName === 'mediumtext' ||
+                                              typeName === 'longtext' ||
+                                              typeName === 'blob'
+                                          ) {
+                                              // Add a prefix length for TEXT/BLOB fields (required in MySQL)
+                                              return `${name}(255)`;
+                                          }
+                                          return name;
+                                      })
+                                    : indexFieldNames;
 
-                            return indexFieldNames.length > 0
-                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldsWithPrefix.join(', ')});`
-                                : '';
-                        })
-                        .filter(Boolean);
+                                return indexFieldNames.length > 0
+                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldsWithPrefix.join(', ')});`
+                                    : '';
+                            })
+                            .filter(Boolean);
 
-                    return validIndexes.length > 0
-                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
-                        : '';
-                })()
-            }\n`;
-        })
-        .filter(Boolean) // Remove empty strings (views)
-        .join('\n');
+                        return validIndexes.length > 0
+                            ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                            : '';
+                    })()
+                }\n`;
+            })
+            .filter(Boolean) // Remove empty strings (views)
+            .join('\n');
+    }
 
     // Generate foreign keys
     if (relationships.length > 0) {
