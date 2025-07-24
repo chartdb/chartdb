@@ -60,6 +60,10 @@ const arePropsEqual = (
         prevProps.field.unique === nextProps.field.unique &&
         prevProps.field.type.id === nextProps.field.type.id &&
         prevProps.field.type.name === nextProps.field.type.name &&
+        prevProps.field.characterMaximumLength ===
+            nextProps.field.characterMaximumLength &&
+        prevProps.field.precision === nextProps.field.precision &&
+        prevProps.field.scale === nextProps.field.scale &&
         prevProps.focused === nextProps.focused &&
         prevProps.highlighted === nextProps.highlighted &&
         prevProps.visible === nextProps.visible &&

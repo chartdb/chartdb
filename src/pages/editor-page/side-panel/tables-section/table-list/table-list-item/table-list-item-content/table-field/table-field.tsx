@@ -229,14 +229,17 @@ export const TableField: React.FC<TableFieldProps> = ({
                                         type.fieldAttributes?.precision &&
                                         type.fieldAttributes?.scale
                                     ) {
-                                        const precisionValue =
-                                            field.precision ?? 'p';
-                                        const scaleValue = field.scale ?? 's';
-                                        return `(${precisionValue}, ${scaleValue})`;
+                                        if (field.precision && field.scale) {
+                                            return `(${field.precision}, ${field.scale})`;
+                                        } else if (field.precision) {
+                                            return `(${field.precision})`;
+                                        }
+
+                                        return '(p, s)';
                                     }
 
                                     if (type.fieldAttributes?.precision) {
-                                        return `(${field.precision || 'p'})`;
+                                        return `(${field.precision ?? 'p'})`;
                                     }
 
                                     return '';
