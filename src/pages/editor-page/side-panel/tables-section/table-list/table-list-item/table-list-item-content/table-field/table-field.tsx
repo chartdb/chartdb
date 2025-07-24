@@ -157,12 +157,12 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     return (
         <div
-            className="flex flex-1 touch-none flex-row justify-between p-1"
+            className="flex flex-1 touch-none flex-row justify-between gap-2 p-1"
             ref={setNodeRef}
             style={style}
             {...attributes}
         >
-            <div className="flex w-8/12 items-center justify-start gap-1 overflow-hidden">
+            <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">
                 <div
                     className="flex w-4 shrink-0 cursor-move items-center justify-center"
                     {...listeners}
@@ -171,7 +171,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <span className="w-5/12">
+                        <span className="min-w-0 flex-1">
                             <Input
                                 className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
@@ -190,7 +190,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <TooltipContent>{field.name}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                    <TooltipTrigger className="flex h-8 !w-5/12" asChild>
+                    <TooltipTrigger className="flex h-8 min-w-0 flex-1" asChild>
                         <span>
                             <SelectBox
                                 className="flex h-8 min-h-8 w-full"
@@ -223,7 +223,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     </TooltipContent>
                 </Tooltip>
             </div>
-            <div className="flex w-4/12 justify-end gap-1 overflow-hidden">
+            <div className="flex shrink-0 items-center justify-end gap-1">
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
