@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
-import { useIsLostInCanvas } from '../hooks/use-is-lost-in-canvas';
 import { useCanvas } from '@/hooks/use-canvas';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
@@ -30,7 +29,6 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
-    const { isLostInCanvas } = useIsLostInCanvas();
     const { setShowFilter } = useCanvas();
     const { hiddenTableIds } = useChartDB();
 
@@ -106,14 +104,7 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>
-                                <ToolbarButton
-                                    onClick={showAll}
-                                    className={
-                                        isLostInCanvas
-                                            ? 'bg-pink-500 text-white hover:bg-pink-600 hover:text-white'
-                                            : ''
-                                    }
-                                >
+                                <ToolbarButton onClick={showAll}>
                                     <Scan />
                                 </ToolbarButton>
                             </span>
