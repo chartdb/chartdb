@@ -26,6 +26,8 @@ export const ko_KR: LanguageTranslation = {
                 hide_sidebar: '사이드바 숨기기',
                 hide_cardinality: '카디널리티 숨기기',
                 show_cardinality: '카디널리티 보이기',
+                hide_field_attributes: '필드 속성 숨기기',
+                show_field_attributes: '필드 속성 보이기',
                 zoom_on_scroll: '스크롤 시 확대',
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
@@ -74,8 +76,8 @@ export const ko_KR: LanguageTranslation = {
             title: '다중 스키마',
             description:
                 '현재 다이어그램에 {{schemasCount}}개의 스키마가 있습니다. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: '다시 보여주지 마세요',
-            change_schema: '변경',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '없음',
         },
 
@@ -150,7 +152,12 @@ export const ko_KR: LanguageTranslation = {
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '정밀도',
+                        scale: '소수점 자릿수',
                     },
                     index_actions: {
                         title: '인덱스 속성',
@@ -269,11 +276,14 @@ export const ko_KR: LanguageTranslation = {
             undo: '실행 취소',
             redo: '다시 실행',
             reorder_diagram: '다이어그램 재정렬',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: '겹치는 테이블 강조 표시',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

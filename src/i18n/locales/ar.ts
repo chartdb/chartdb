@@ -26,6 +26,8 @@ export const ar: LanguageTranslation = {
                 hide_sidebar: 'إخفاء الشريط الجانبي',
                 hide_cardinality: 'إخفاء الكاردينالية',
                 show_cardinality: 'إظهار الكاردينالية',
+                hide_field_attributes: 'إخفاء خصائص الحقل',
+                show_field_attributes: 'إظهار خصائص الحقل',
                 zoom_on_scroll: 'تكبير/تصغير عند التمرير',
                 theme: 'المظهر',
                 show_dependencies: 'إظهار الاعتمادات',
@@ -74,8 +76,8 @@ export const ar: LanguageTranslation = {
             title: 'مخططات متعددة',
             description:
                 '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
-            dont_show_again: 'لا تظهره مجدداً',
-            change_schema: 'تغيير',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'لا شيء',
         },
 
@@ -151,6 +153,10 @@ export const ar: LanguageTranslation = {
                         delete_field: 'حذف الحقل',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'الدقة',
+                        scale: 'النطاق',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                     },
                     index_actions: {
                         title: 'خصائص الفهرس',
@@ -270,7 +276,9 @@ export const ar: LanguageTranslation = {
             undo: 'تراجع',
             redo: 'إعادة',
             reorder_diagram: 'إعادة ترتيب الرسم البياني',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
+            // TODO: Translate
+            filter: 'Filter Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:

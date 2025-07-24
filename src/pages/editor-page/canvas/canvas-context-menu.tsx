@@ -32,11 +32,11 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
             if ((filteredSchemas?.length ?? 0) > 1) {
                 openTableSchemaDialog({
-                    onConfirm: (schema) =>
+                    onConfirm: ({ schema }) =>
                         createTable({
                             x: position.x,
                             y: position.y,
-                            schema,
+                            schema: schema.name,
                         }),
                     schemas: schemas.filter((schema) =>
                         filteredSchemas?.includes(schema.id)

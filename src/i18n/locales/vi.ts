@@ -26,6 +26,8 @@ export const vi: LanguageTranslation = {
                 hide_sidebar: 'Ẩn thanh bên',
                 hide_cardinality: 'Ẩn số lượng',
                 show_cardinality: 'Hiển thị số lượng',
+                show_field_attributes: 'Hiển thị thuộc tính trường',
+                hide_field_attributes: 'Ẩn thuộc tính trường',
                 zoom_on_scroll: 'Thu phóng khi cuộn',
                 theme: 'Chủ đề',
                 show_dependencies: 'Hiển thị các phụ thuộc',
@@ -74,8 +76,8 @@ export const vi: LanguageTranslation = {
             title: 'Có nhiều lược đồ',
             description:
                 'Có {{schemasCount}} lược đồ trong sơ đồ này. Hiện đang hiển thị: {{formattedSchemas}}.',
-            dont_show_again: 'Không hiển thị lại',
-            change_schema: 'Thay đổi',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'không có',
         },
 
@@ -150,7 +152,12 @@ export const vi: LanguageTranslation = {
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Độ chính xác',
+                        scale: 'Tỷ lệ',
                     },
                     index_actions: {
                         title: 'Thuộc tính chỉ mục',
@@ -269,11 +276,14 @@ export const vi: LanguageTranslation = {
             undo: 'Hoàn tác',
             redo: 'Làm lại',
             reorder_diagram: 'Sắp xếp lại sơ đồ',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

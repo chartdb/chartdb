@@ -73,7 +73,13 @@ function parseMSSQLDefault(field: DBField): string {
     return `'${defaultValue}'`;
 }
 
-export function exportMSSQL(diagram: Diagram): string {
+export function exportMSSQL({
+    diagram,
+    onlyRelationships = false,
+}: {
+    diagram: Diagram;
+    onlyRelationships?: boolean;
+}): string {
     if (!diagram.tables || !diagram.relationships) {
         return '';
     }
@@ -83,166 +89,254 @@ export function exportMSSQL(diagram: Diagram): string {
 
     // Create CREATE SCHEMA statements for all schemas
     let sqlScript = '';
-    const schemas = new Set<string>();
 
-    tables.forEach((table) => {
-        if (table.schema) {
-            schemas.add(table.schema);
-        }
-    });
+    if (!onlyRelationships) {
+        const schemas = new Set<string>();
 
-    // Add schema creation statements
-    schemas.forEach((schema) => {
-        sqlScript += `IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '${schema}')\nBEGIN\n    EXEC('CREATE SCHEMA [${schema}]');\nEND;\n\n`;
-    });
-
-    // Generate table creation SQL
-    sqlScript += tables
-        .map((table: DBTable) => {
-            // Skip views
-            if (table.isView) {
-                return '';
+        tables.forEach((table) => {
+            if (table.schema) {
+                schemas.add(table.schema);
             }
+        });
 
-            const tableName = table.schema
-                ? `[${table.schema}].[${table.name}]`
-                : `[${table.name}]`;
+        // Add schema creation statements
+        schemas.forEach((schema) => {
+            sqlScript += `IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '${schema}')\nBEGIN\n    EXEC('CREATE SCHEMA [${schema}]');\nEND;\n`;
+        });
 
-            return `${
-                table.comments ? formatMSSQLTableComment(table.comments) : ''
-            }CREATE TABLE ${tableName} (\n${table.fields
-                .map((field: DBField) => {
-                    const fieldName = `[${field.name}]`;
-                    const typeName = field.type.name;
+        // Generate table creation SQL
+        sqlScript += tables
+            .map((table: DBTable) => {
+                // Skip views
+                if (table.isView) {
+                    return '';
+                }
 
-                    // Handle SQL Server specific type formatting
-                    let typeWithSize = typeName;
-                    if (field.characterMaximumLength) {
-                        if (
-                            typeName.toLowerCase() === 'varchar' ||
-                            typeName.toLowerCase() === 'nvarchar' ||
-                            typeName.toLowerCase() === 'char' ||
-                            typeName.toLowerCase() === 'nchar'
-                        ) {
-                            typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                const tableName = table.schema
+                    ? `[${table.schema}].[${table.name}]`
+                    : `[${table.name}]`;
+
+                return `${
+                    table.comments
+                        ? formatMSSQLTableComment(table.comments)
+                        : ''
+                }CREATE TABLE ${tableName} (\n${table.fields
+                    .map((field: DBField) => {
+                        const fieldName = `[${field.name}]`;
+                        const typeName = field.type.name;
+
+                        // Handle SQL Server specific type formatting
+                        let typeWithSize = typeName;
+                        if (field.characterMaximumLength) {
+                            if (
+                                typeName.toLowerCase() === 'varchar' ||
+                                typeName.toLowerCase() === 'nvarchar' ||
+                                typeName.toLowerCase() === 'char' ||
+                                typeName.toLowerCase() === 'nchar'
+                            ) {
+                                typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                            }
                         }
-                    } else if (field.precision && field.scale) {
-                        if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
-                        ) {
-                            typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
+                        if (field.precision && field.scale) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision}, ${field.scale})`;
+                            }
+                        } else if (field.precision) {
+                            if (
+                                typeName.toLowerCase() === 'decimal' ||
+                                typeName.toLowerCase() === 'numeric'
+                            ) {
+                                typeWithSize = `${typeName}(${field.precision})`;
+                            }
                         }
-                    } else if (field.precision) {
-                        if (
-                            typeName.toLowerCase() === 'decimal' ||
-                            typeName.toLowerCase() === 'numeric'
-                        ) {
-                            typeWithSize = `${typeName}(${field.precision})`;
-                        }
-                    }
 
-                    const notNull = field.nullable ? '' : ' NOT NULL';
+                        const notNull = field.nullable ? '' : ' NOT NULL';
 
-                    // Check if identity column
-                    const identity = field.default
-                        ?.toLowerCase()
-                        .includes('identity')
-                        ? ' IDENTITY(1,1)'
-                        : '';
-
-                    const unique =
-                        !field.primaryKey && field.unique ? ' UNIQUE' : '';
-
-                    // Handle default value using SQL Server specific parser
-                    const defaultValue =
-                        field.default &&
-                        !field.default.toLowerCase().includes('identity')
-                            ? ` DEFAULT ${parseMSSQLDefault(field)}`
+                        // Check if identity column
+                        const identity = field.default
+                            ?.toLowerCase()
+                            .includes('identity')
+                            ? ' IDENTITY(1,1)'
                             : '';
 
-                    // Do not add PRIMARY KEY as a column constraint - will add as table constraint
-                    return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${identity}${unique}${defaultValue}`;
-                })
-                .join(',\n')}${
-                table.fields.filter((f) => f.primaryKey).length > 0
-                    ? `,\n    PRIMARY KEY (${table.fields
-                          .filter((f) => f.primaryKey)
-                          .map((f) => `[${f.name}]`)
-                          .join(', ')})`
-                    : ''
-            }\n);\n\n${table.indexes
-                .map((index) => {
-                    const indexName = table.schema
-                        ? `[${table.schema}_${index.name}]`
-                        : `[${index.name}]`;
-                    const indexFields = index.fieldIds
-                        .map((fieldId) => {
-                            const field = table.fields.find(
-                                (f) => f.id === fieldId
-                            );
-                            return field ? `[${field.name}]` : '';
+                        const unique =
+                            !field.primaryKey && field.unique ? ' UNIQUE' : '';
+
+                        // Handle default value using SQL Server specific parser
+                        const defaultValue =
+                            field.default &&
+                            !field.default.toLowerCase().includes('identity')
+                                ? ` DEFAULT ${parseMSSQLDefault(field)}`
+                                : '';
+
+                        // Do not add PRIMARY KEY as a column constraint - will add as table constraint
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithSize}${notNull}${identity}${unique}${defaultValue}`;
+                    })
+                    .join(',\n')}${
+                    table.fields.filter((f) => f.primaryKey).length > 0
+                        ? `,\n    PRIMARY KEY (${table.fields
+                              .filter((f) => f.primaryKey)
+                              .map((f) => `[${f.name}]`)
+                              .join(', ')})`
+                        : ''
+                }\n);\n${(() => {
+                    const validIndexes = table.indexes
+                        .map((index) => {
+                            const indexName = table.schema
+                                ? `[${table.schema}_${index.name}]`
+                                : `[${index.name}]`;
+                            const indexFields = index.fieldIds
+                                .map((fieldId) => {
+                                    const field = table.fields.find(
+                                        (f) => f.id === fieldId
+                                    );
+                                    return field ? `[${field.name}]` : '';
+                                })
+                                .filter(Boolean);
+
+                            // SQL Server has a limit of 32 columns in an index
+                            if (indexFields.length > 32) {
+                                const warningComment = `/* WARNING: This index originally had ${indexFields.length} columns. It has been truncated to 32 columns due to SQL Server's index column limit. */\n`;
+                                console.warn(
+                                    `Warning: Index ${indexName} on table ${tableName} has ${indexFields.length} columns. SQL Server limits indexes to 32 columns. The index will be truncated.`
+                                );
+                                indexFields.length = 32;
+                                return indexFields.length > 0
+                                    ? `${warningComment}CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});`
+                                    : '';
+                            }
+
+                            return indexFields.length > 0
+                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});`
+                                : '';
                         })
                         .filter(Boolean);
 
-                    // SQL Server has a limit of 32 columns in an index
-                    if (indexFields.length > 32) {
-                        const warningComment = `/* WARNING: This index originally had ${indexFields.length} columns. It has been truncated to 32 columns due to SQL Server's index column limit. */\n`;
-                        console.warn(
-                            `Warning: Index ${indexName} on table ${tableName} has ${indexFields.length} columns. SQL Server limits indexes to 32 columns. The index will be truncated.`
-                        );
-                        indexFields.length = 32;
-                        return indexFields.length > 0
-                            ? `${warningComment}CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});\n\n`
-                            : '';
-                    }
-
-                    return indexFields.length > 0
-                        ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});\n\n`
+                    return validIndexes.length > 0
+                        ? `\n-- Indexes\n${validIndexes.join('\n')}`
                         : '';
-                })
-                .join('')}`;
-        })
-        .filter(Boolean) // Remove empty strings (views)
-        .join('\n');
+                })()}\n`;
+            })
+            .filter(Boolean) // Remove empty strings (views)
+            .join('\n');
+    }
 
     // Generate foreign keys
-    sqlScript += `\n${relationships
-        .map((r: DBRelationship) => {
-            const sourceTable = tables.find((t) => t.id === r.sourceTableId);
-            const targetTable = tables.find((t) => t.id === r.targetTableId);
+    if (relationships.length > 0) {
+        sqlScript += '\n-- Foreign key constraints\n';
 
-            if (
-                !sourceTable ||
-                !targetTable ||
-                sourceTable.isView ||
-                targetTable.isView
-            ) {
-                return '';
-            }
+        // Process all relationships and create FK objects with schema info
+        const foreignKeys = relationships
+            .map((r: DBRelationship) => {
+                const sourceTable = tables.find(
+                    (t) => t.id === r.sourceTableId
+                );
+                const targetTable = tables.find(
+                    (t) => t.id === r.targetTableId
+                );
 
-            const sourceField = sourceTable.fields.find(
-                (f) => f.id === r.sourceFieldId
-            );
-            const targetField = targetTable.fields.find(
-                (f) => f.id === r.targetFieldId
-            );
+                if (
+                    !sourceTable ||
+                    !targetTable ||
+                    sourceTable.isView ||
+                    targetTable.isView
+                ) {
+                    return '';
+                }
 
-            if (!sourceField || !targetField) {
-                return '';
-            }
+                const sourceField = sourceTable.fields.find(
+                    (f) => f.id === r.sourceFieldId
+                );
+                const targetField = targetTable.fields.find(
+                    (f) => f.id === r.targetFieldId
+                );
 
-            const sourceTableName = sourceTable.schema
-                ? `[${sourceTable.schema}].[${sourceTable.name}]`
-                : `[${sourceTable.name}]`;
-            const targetTableName = targetTable.schema
-                ? `[${targetTable.schema}].[${targetTable.name}]`
-                : `[${targetTable.name}]`;
+                if (!sourceField || !targetField) {
+                    return '';
+                }
 
-            return `ALTER TABLE ${sourceTableName}\nADD CONSTRAINT [${r.name}] FOREIGN KEY([${sourceField.name}]) REFERENCES ${targetTableName}([${targetField.name}]);\n`;
-        })
-        .filter(Boolean) // Remove empty strings
-        .join('\n')}`;
+                // Determine which table should have the foreign key based on cardinality
+                let fkTable, fkField, refTable, refField;
+
+                if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'many'
+                ) {
+                    // FK goes on target table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
+                } else if (
+                    r.sourceCardinality === 'many' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // FK goes on source table
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else if (
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'one'
+                ) {
+                    // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                    // We'll keep the current behavior for 1:1
+                    fkTable = sourceTable;
+                    fkField = sourceField;
+                    refTable = targetTable;
+                    refField = targetField;
+                } else {
+                    // Many-to-many relationships need a junction table, skip for now
+                    return '';
+                }
+
+                const fkTableName = fkTable.schema
+                    ? `[${fkTable.schema}].[${fkTable.name}]`
+                    : `[${fkTable.name}]`;
+                const refTableName = refTable.schema
+                    ? `[${refTable.schema}].[${refTable.name}]`
+                    : `[${refTable.name}]`;
+
+                return {
+                    schema: fkTable.schema || 'dbo',
+                    sql: `ALTER TABLE ${fkTableName} ADD CONSTRAINT [${r.name}] FOREIGN KEY([${fkField.name}]) REFERENCES ${refTableName}([${refField.name}]);`,
+                };
+            })
+            .filter(Boolean); // Remove empty objects
+
+        // Group foreign keys by schema
+        const fksBySchema = foreignKeys.reduce(
+            (acc, fk) => {
+                if (!fk) return acc;
+                const schema = fk.schema;
+                if (!acc[schema]) {
+                    acc[schema] = [];
+                }
+                acc[schema].push(fk.sql);
+                return acc;
+            },
+            {} as Record<string, string[]>
+        );
+
+        // Sort schemas and generate SQL with separators
+        const sortedSchemas = Object.keys(fksBySchema).sort();
+        const fkSql = sortedSchemas
+            .map((schema, index) => {
+                const schemaFks = fksBySchema[schema].join('\n');
+                if (index === 0) {
+                    return `-- Schema: ${schema}\n${schemaFks}`;
+                } else {
+                    return `\n-- Schema: ${schema}\n${schemaFks}`;
+                }
+            })
+            .join('\n');
+
+        sqlScript += fkSql;
+    }
 
     return sqlScript;
 }

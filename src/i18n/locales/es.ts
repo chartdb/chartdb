@@ -24,6 +24,8 @@ export const es: LanguageTranslation = {
                 view: 'Ver',
                 hide_cardinality: 'Ocultar Cardinalidad',
                 show_cardinality: 'Mostrar Cardinalidad',
+                show_field_attributes: 'Mostrar Atributos de Campo',
+                hide_field_attributes: 'Ocultar Atributos de Campo',
                 show_sidebar: 'Mostrar Barra Lateral',
                 hide_sidebar: 'Ocultar Barra Lateral',
                 zoom_on_scroll: 'Zoom al Desplazarse',
@@ -141,7 +143,12 @@ export const es: LanguageTranslation = {
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Precisión',
+                        scale: 'Escala',
                     },
                     index_actions: {
                         title: 'Atributos del Índice',
@@ -260,11 +267,14 @@ export const es: LanguageTranslation = {
             undo: 'Deshacer',
             redo: 'Rehacer',
             reorder_diagram: 'Reordenar Diagrama',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Resaltar tablas superpuestas',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
@@ -411,8 +421,8 @@ export const es: LanguageTranslation = {
             title: 'Múltiples Esquemas',
             description:
                 '{{schemasCount}} esquemas en este diagrama. Actualmente mostrando: {{formattedSchemas}}.',
-            dont_show_again: 'No mostrar de nuevo',
-            change_schema: 'Cambiar',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'nada',
         },
         // TODO: Translate

@@ -26,6 +26,8 @@ export const gu: LanguageTranslation = {
                 hide_sidebar: 'સાઇડબાર છુપાવો',
                 hide_cardinality: 'કાર્ડિનાલિટી છુપાવો',
                 show_cardinality: 'કાર્ડિનાલિટી બતાવો',
+                hide_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ છુપાવો',
+                show_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ બતાવો',
                 zoom_on_scroll: 'સ્ક્રોલ પર ઝૂમ કરો',
                 theme: 'થિમ',
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',
@@ -75,8 +77,8 @@ export const gu: LanguageTranslation = {
             title: 'કઈંક વધારે સ્કીમા',
             description:
                 '{{schemasCount}} સ્કીમા આ ડાયાગ્રામમાં છે. હાલમાં દર્શાવેલ છે: {{formattedSchemas}}.',
-            dont_show_again: 'ફરીથી ન બતાવો',
-            change_schema: 'બદલો',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'કઈ નહીં',
         },
 
@@ -152,7 +154,12 @@ export const gu: LanguageTranslation = {
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'ચોકસાઈ',
+                        scale: 'માપ',
                     },
                     index_actions: {
                         title: 'ઇન્ડેક્સ લક્ષણો',
@@ -271,11 +278,14 @@ export const gu: LanguageTranslation = {
             undo: 'અનડુ',
             redo: 'રીડુ',
             reorder_diagram: 'ડાયાગ્રામ ફરીથી વ્યવસ્થિત કરો',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'ઓવરલેપ કરતો ટેબલ હાઇલાઇટ કરો',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

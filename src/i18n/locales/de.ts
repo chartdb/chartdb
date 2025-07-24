@@ -26,6 +26,8 @@ export const de: LanguageTranslation = {
                 hide_sidebar: 'Seitenleiste ausblenden',
                 hide_cardinality: 'Kardinalität ausblenden',
                 show_cardinality: 'Kardinalität anzeigen',
+                hide_field_attributes: 'Feldattribute ausblenden',
+                show_field_attributes: 'Feldattribute anzeigen',
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
                 show_dependencies: 'Abhängigkeiten anzeigen',
@@ -75,8 +77,8 @@ export const de: LanguageTranslation = {
             title: 'Mehrere Schemas',
             description:
                 '{{schemasCount}} Schemas in diesem Diagramm. Derzeit angezeigt: {{formattedSchemas}}.',
-            dont_show_again: 'Nicht erneut anzeigen',
-            change_schema: 'Schema ändern',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Keine',
         },
 
@@ -152,7 +154,12 @@ export const de: LanguageTranslation = {
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Präzision',
+                        scale: 'Skalierung',
                     },
                     index_actions: {
                         title: 'Indexattribute',
@@ -272,11 +279,15 @@ export const de: LanguageTranslation = {
             undo: 'Rückgängig',
             redo: 'Wiederholen',
             reorder_diagram: 'Diagramm neu anordnen',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

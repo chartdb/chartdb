@@ -26,6 +26,8 @@ export const ru: LanguageTranslation = {
                 hide_sidebar: 'Скрыть боковую панель',
                 hide_cardinality: 'Скрыть виды связи',
                 show_cardinality: 'Показать виды связи',
+                show_field_attributes: 'Показать атрибуты поля',
+                hide_field_attributes: 'Скрыть атрибуты поля',
                 zoom_on_scroll: 'Увеличение при прокрутке',
                 theme: 'Тема',
                 show_dependencies: 'Показать зависимости',
@@ -73,8 +75,8 @@ export const ru: LanguageTranslation = {
             title: 'Множественные схемы',
             description:
                 '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
-            dont_show_again: 'Больше не показывать',
-            change_schema: 'Изменить',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'никто',
         },
 
@@ -147,7 +149,12 @@ export const ru: LanguageTranslation = {
                         comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
+                        // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         character_length: 'Макс. длина',
+                        precision: 'Точность',
+                        scale: 'Масштаб',
                     },
                     index_actions: {
                         title: 'Атрибуты индекса',
@@ -267,11 +274,14 @@ export const ru: LanguageTranslation = {
             undo: 'Отменить',
             redo: 'Вернуть',
             reorder_diagram: 'Переупорядочить диаграмму',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

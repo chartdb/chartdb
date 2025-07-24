@@ -26,6 +26,8 @@ export const en = {
                 hide_sidebar: 'Hide Sidebar',
                 hide_cardinality: 'Hide Cardinality',
                 show_cardinality: 'Show Cardinality',
+                hide_field_attributes: 'Hide Field Attributes',
+                show_field_attributes: 'Show Field Attributes',
                 zoom_on_scroll: 'Zoom on Scroll',
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
@@ -73,8 +75,7 @@ export const en = {
             title: 'Multiple Schemas',
             description:
                 '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            dont_show_again: "Don't show again",
-            change_schema: 'Change',
+            show_me: 'Show me',
             none: 'none',
         },
 
@@ -144,8 +145,12 @@ export const en = {
                         title: 'Field Attributes',
                         unique: 'Unique',
                         character_length: 'Max Length',
+                        precision: 'Precision',
+                        scale: 'Scale',
                         comments: 'Comments',
                         no_comments: 'No comments',
+                        default_value: 'Default Value',
+                        no_default: 'No default',
                         delete_field: 'Delete Field',
                     },
                     index_actions: {
@@ -269,6 +274,7 @@ export const en = {
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

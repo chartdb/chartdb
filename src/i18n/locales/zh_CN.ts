@@ -26,6 +26,8 @@ export const zh_CN: LanguageTranslation = {
                 hide_sidebar: '隐藏侧边栏',
                 hide_cardinality: '隐藏基数',
                 show_cardinality: '展示基数',
+                show_field_attributes: '展示字段属性',
+                hide_field_attributes: '隐藏字段属性',
                 zoom_on_scroll: '滚动缩放',
                 theme: '主题',
                 show_dependencies: '展示依赖',
@@ -71,8 +73,8 @@ export const zh_CN: LanguageTranslation = {
             title: '多个模式',
             description:
                 '此关系图中有 {{schemasCount}} 个模式，当前显示：{{formattedSchemas}}。',
-            dont_show_again: '不再展示',
-            change_schema: '更改',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '无',
         },
 
@@ -147,7 +149,12 @@ export const zh_CN: LanguageTranslation = {
                         no_comments: '空',
                         delete_field: '删除字段',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小数位',
                     },
                     index_actions: {
                         title: '索引属性',
@@ -266,11 +273,14 @@ export const zh_CN: LanguageTranslation = {
             undo: '撤销',
             redo: '重做',
             reorder_diagram: '重新排列关系图',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: '突出显示重叠的表',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

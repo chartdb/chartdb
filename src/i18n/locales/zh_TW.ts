@@ -26,6 +26,8 @@ export const zh_TW: LanguageTranslation = {
                 hide_sidebar: '隱藏側邊欄',
                 hide_cardinality: '隱藏基數',
                 show_cardinality: '顯示基數',
+                hide_field_attributes: '隱藏欄位屬性',
+                show_field_attributes: '顯示欄位屬性',
                 zoom_on_scroll: '滾動縮放',
                 theme: '主題',
                 show_dependencies: '顯示相依性',
@@ -71,8 +73,8 @@ export const zh_TW: LanguageTranslation = {
             title: '多重 Schema',
             description:
                 '此圖表中包含 {{schemasCount}} 個 Schema，目前顯示：{{formattedSchemas}}。',
-            dont_show_again: '不再顯示',
-            change_schema: '變更',
+            // TODO: Translate
+            show_me: 'Show me',
             none: '無',
         },
 
@@ -147,7 +149,12 @@ export const zh_TW: LanguageTranslation = {
                         no_comments: '無註解',
                         delete_field: '刪除欄位',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小數位',
                     },
                     index_actions: {
                         title: '索引屬性',
@@ -266,11 +273,14 @@ export const zh_TW: LanguageTranslation = {
             undo: '復原',
             redo: '重做',
             reorder_diagram: '重新排列圖表',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: '突出顯示重疊表格',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

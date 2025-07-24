@@ -26,6 +26,8 @@ export const tr: LanguageTranslation = {
                 hide_sidebar: 'Kenar Çubuğunu Gizle',
                 hide_cardinality: 'Kardinaliteyi Gizle',
                 show_cardinality: 'Kardinaliteyi Göster',
+                show_field_attributes: 'Alan Özelliklerini Göster',
+                hide_field_attributes: 'Alan Özelliklerini Gizle',
                 zoom_on_scroll: 'Kaydırarak Yakınlaştır',
                 theme: 'Tema',
                 show_dependencies: 'Bağımlılıkları Göster',
@@ -75,8 +77,8 @@ export const tr: LanguageTranslation = {
             title: 'Birden Fazla Şema',
             description:
                 'Bu diyagramda {{schemasCount}} şema var. Şu anda görüntülenen: {{formattedSchemas}}.',
-            dont_show_again: 'Tekrar gösterme',
-            change_schema: 'Değiştir',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'yok',
         },
 
@@ -150,7 +152,12 @@ export const tr: LanguageTranslation = {
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Hassasiyet',
+                        scale: 'Ölçek',
                     },
                     index_actions: {
                         title: 'İndeks Özellikleri',
@@ -269,11 +276,14 @@ export const tr: LanguageTranslation = {
             undo: 'Geri Al',
             redo: 'Yinele',
             reorder_diagram: 'Diyagramı Yeniden Sırala',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
         new_diagram_dialog: {
             database_selection: {

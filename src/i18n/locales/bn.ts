@@ -26,6 +26,8 @@ export const bn: LanguageTranslation = {
                 hide_sidebar: 'সাইডবার লুকান',
                 hide_cardinality: 'কার্ডিনালিটি লুকান',
                 show_cardinality: 'কার্ডিনালিটি দেখান',
+                hide_field_attributes: 'ফিল্ড অ্যাট্রিবিউট লুকান',
+                show_field_attributes: 'ফিল্ড অ্যাট্রিবিউট দেখান',
                 zoom_on_scroll: 'স্ক্রলে জুম করুন',
                 theme: 'থিম',
                 show_dependencies: 'নির্ভরতাগুলি দেখান',
@@ -75,8 +77,8 @@ export const bn: LanguageTranslation = {
             title: 'বহু স্কিমা',
             description:
                 '{{schemasCount}} স্কিমা এই ডায়াগ্রামে রয়েছে। বর্তমানে প্রদর্শিত: {{formattedSchemas}}।',
-            dont_show_again: 'পুনরায় দেখাবেন না',
-            change_schema: 'পরিবর্তন করুন',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'কিছুই না',
         },
 
@@ -151,7 +153,12 @@ export const bn: LanguageTranslation = {
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'নির্ভুলতা',
+                        scale: 'স্কেল',
                     },
                     index_actions: {
                         title: 'ইনডেক্স কর্ম',
@@ -270,11 +277,14 @@ export const bn: LanguageTranslation = {
             undo: 'পূর্বাবস্থায় ফিরুন',
             redo: 'পুনরায় করুন',
             reorder_diagram: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
+
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

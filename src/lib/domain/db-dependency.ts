@@ -60,6 +60,10 @@ export const createDependenciesFromMetadata = async ({
     tables: DBTable[];
     databaseType: DatabaseType;
 }): Promise<DBDependency[]> => {
+    if (!views || views.length === 0) {
+        return [];
+    }
+
     const { Parser } = await import('node-sql-parser');
     const parser = new Parser();
 

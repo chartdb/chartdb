@@ -20,6 +20,7 @@ export function Toaster() {
                 description,
                 action,
                 layout = 'row',
+                hideCloseButton = false,
                 ...props
             }) {
                 return (
@@ -38,7 +39,7 @@ export function Toaster() {
                             ) : null}
                         </div>
                         {layout === 'row' ? action : null}
-                        <ToastClose />
+                        {!hideCloseButton ? <ToastClose /> : null}
                     </Toast>
                 );
             })}

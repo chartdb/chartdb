@@ -26,6 +26,8 @@ export const uk: LanguageTranslation = {
                 hide_sidebar: 'Приховати бічну панель',
                 hide_cardinality: 'Приховати потужність',
                 show_cardinality: 'Показати кардинальність',
+                show_field_attributes: 'Показати атрибути полів',
+                hide_field_attributes: 'Приховати атрибути полів',
                 zoom_on_scroll: 'Масштабувати прокручуванням',
                 theme: 'Тема',
                 show_dependencies: 'Показати залежності',
@@ -73,8 +75,8 @@ export const uk: LanguageTranslation = {
             title: 'Кілька схем',
             description:
                 '{{schemasCount}} схеми на цій діаграмі. Зараз відображається: {{formattedSchemas}}.',
-            dont_show_again: 'Більше не показувати',
-            change_schema: 'Зміна',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'немає',
         },
 
@@ -149,7 +151,12 @@ export const uk: LanguageTranslation = {
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Точність',
+                        scale: 'Масштаб',
                     },
                     index_actions: {
                         title: 'Атрибути індексу',
@@ -268,11 +275,14 @@ export const uk: LanguageTranslation = {
             undo: 'Скасувати',
             redo: 'Повторити',
             reorder_diagram: 'Перевпорядкувати діаграму',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

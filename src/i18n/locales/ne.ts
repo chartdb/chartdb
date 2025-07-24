@@ -26,6 +26,8 @@ export const ne: LanguageTranslation = {
                 hide_sidebar: 'साइडबार लुकाउनुहोस्',
                 hide_cardinality: 'कार्डिन्यालिटी लुकाउनुहोस्',
                 show_cardinality: 'कार्डिन्यालिटी देखाउनुहोस्',
+                hide_field_attributes: 'फिल्ड विशेषताहरू लुकाउनुहोस्',
+                show_field_attributes: 'फिल्ड विशेषताहरू देखाउनुहोस्',
                 zoom_on_scroll: 'स्क्रोलमा जुम गर्नुहोस्',
                 theme: 'थिम',
                 show_dependencies: 'डिपेन्डेन्सीहरू देखाउनुहोस्',
@@ -75,8 +77,8 @@ export const ne: LanguageTranslation = {
             title: 'विविध स्कीमहरू',
             description:
                 '{{schemasCount}} डायाग्राममा स्कीमहरू। हालको रूपमा देखाइएको छ: {{formattedSchemas}}।',
-            dont_show_again: 'फेरि देखाउन नदिनुहोस्',
-            change_schema: 'स्कीम परिवर्तन गर्नुहोस्',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'कुनै पनि छैन',
         },
 
@@ -151,7 +153,12 @@ export const ne: LanguageTranslation = {
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'परिशुद्धता',
+                        scale: 'स्केल',
                     },
                     index_actions: {
                         title: 'सूचक विशेषताहरू',
@@ -271,11 +278,15 @@ export const ne: LanguageTranslation = {
             undo: 'पूर्ववत',
             redo: 'पुनः गर्नुहोस्',
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables:
+                'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

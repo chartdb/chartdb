@@ -227,7 +227,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         onSelect={() =>
                             handleSelect(
                                 option.value,
-                                matches?.map((match) => match.toString())
+                                matches?.map((match) => match?.toString())
                             )
                         }
                     >

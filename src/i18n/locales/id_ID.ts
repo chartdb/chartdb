@@ -26,6 +26,8 @@ export const id_ID: LanguageTranslation = {
                 hide_sidebar: 'Sembunyikan Sidebar',
                 hide_cardinality: 'Sembunyikan Kardinalitas',
                 show_cardinality: 'Tampilkan Kardinalitas',
+                hide_field_attributes: 'Sembunyikan Atribut Kolom',
+                show_field_attributes: 'Tampilkan Atribut Kolom',
                 zoom_on_scroll: 'Perbesar saat Scroll',
                 theme: 'Tema',
                 show_dependencies: 'Tampilkan Dependensi',
@@ -74,8 +76,8 @@ export const id_ID: LanguageTranslation = {
             title: 'Schema Lebih dari satu',
             description:
                 '{{schemasCount}} schema di diagram ini. Sedang ditampilkan: {{formattedSchemas}}.',
-            dont_show_again: 'Jangan tampilkan lagi',
-            change_schema: 'Ubah',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Tidak ada',
         },
 
@@ -150,7 +152,12 @@ export const id_ID: LanguageTranslation = {
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Presisi',
+                        scale: 'Skala',
                     },
                     index_actions: {
                         title: 'Atribut Indeks',
@@ -269,11 +276,14 @@ export const id_ID: LanguageTranslation = {
             undo: 'Undo',
             redo: 'Redo',
             reorder_diagram: 'Atur Ulang Diagram',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

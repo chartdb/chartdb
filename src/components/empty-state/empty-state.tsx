@@ -52,7 +52,7 @@ export const EmptyState = forwardRef<
                 </Label>
                 <Label
                     className={cn(
-                        'text-sm font-normal text-muted-foreground',
+                        'text-sm text-center font-normal text-muted-foreground',
                         descriptionClassName
                     )}
                 >

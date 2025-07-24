@@ -26,6 +26,8 @@ export const fr: LanguageTranslation = {
                 hide_sidebar: 'Cacher la Barre Latérale',
                 hide_cardinality: 'Cacher la Cardinalité',
                 show_cardinality: 'Afficher la Cardinalité',
+                hide_field_attributes: 'Masquer les Attributs de Champ',
+                show_field_attributes: 'Afficher les Attributs de Champ',
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
                 show_dependencies: 'Afficher les Dépendances',
@@ -139,7 +141,12 @@ export const fr: LanguageTranslation = {
                         no_comments: 'Pas de commentaires',
                         delete_field: 'Supprimer le Champ',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Précision',
+                        scale: 'Échelle',
                     },
                     index_actions: {
                         title: "Attributs de l'Index",
@@ -258,11 +265,14 @@ export const fr: LanguageTranslation = {
             undo: 'Annuler',
             redo: 'Rétablir',
             reorder_diagram: 'Réorganiser le Diagramme',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'Surligner les tables chevauchées',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {
@@ -351,8 +361,8 @@ export const fr: LanguageTranslation = {
             title: 'Schémas Multiples',
             description:
                 '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
-            dont_show_again: 'Ne plus afficher',
-            change_schema: 'Changer',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'Aucun',
         },
 

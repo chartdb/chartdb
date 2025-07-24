@@ -108,7 +108,7 @@ export const loadFromDatabaseMetadata = async ({
         return a.isView ? 1 : -1;
     });
 
-    return {
+    const diagram: Diagram = {
         id: generateDiagramId(),
         name: databaseMetadata.database_name
             ? `${databaseMetadata.database_name}-db`
@@ -124,4 +124,6 @@ export const loadFromDatabaseMetadata = async ({
         createdAt: new Date(),
         updatedAt: new Date(),
     };
+
+    return diagram;
 };

@@ -26,6 +26,8 @@ export const ja: LanguageTranslation = {
                 hide_sidebar: 'サイドバーを非表示',
                 hide_cardinality: 'カーディナリティを非表示',
                 show_cardinality: 'カーディナリティを表示',
+                hide_field_attributes: 'フィールド属性を非表示',
+                show_field_attributes: 'フィールド属性を表示',
                 zoom_on_scroll: 'スクロールでズーム',
                 theme: 'テーマ',
                 // TODO: Translate
@@ -76,8 +78,8 @@ export const ja: LanguageTranslation = {
             title: '複数のスキーマ',
             description:
                 'このダイアグラムには{{schemasCount}}個のスキーマがあります。現在表示中: {{formattedSchemas}}。',
-            dont_show_again: '再表示しない',
-            change_schema: '変更',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'なし',
         },
 
@@ -154,7 +156,12 @@ export const ja: LanguageTranslation = {
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '精度',
+                        scale: '小数点以下桁数',
                     },
                     index_actions: {
                         title: 'インデックス属性',
@@ -281,6 +288,8 @@ export const ja: LanguageTranslation = {
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

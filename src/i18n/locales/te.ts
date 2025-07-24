@@ -26,6 +26,8 @@ export const te: LanguageTranslation = {
                 hide_sidebar: 'సైడ్‌బార్ దాచండి',
                 hide_cardinality: 'కార్డినాలిటీని దాచండి',
                 show_cardinality: 'కార్డినాలిటీని చూపించండి',
+                show_field_attributes: 'ఫీల్డ్ గుణాలను చూపించు',
+                hide_field_attributes: 'ఫీల్డ్ గుణాలను దాచండి',
                 zoom_on_scroll: 'స్క్రోల్‌పై జూమ్',
                 theme: 'థీమ్',
                 show_dependencies: 'ఆధారాలు చూపించండి',
@@ -75,8 +77,8 @@ export const te: LanguageTranslation = {
             title: 'బహుళ స్కీమాలు',
             description:
                 '{{schemasCount}} స్కీమాలు ఈ చిత్రంలో ఉన్నాయి. ప్రస్తుత స్కీమాలు: {{formattedSchemas}}.',
-            dont_show_again: 'మరలా చూపించవద్దు',
-            change_schema: 'మార్చు',
+            // TODO: Translate
+            show_me: 'Show me',
             none: 'ఎదరికాదు',
         },
 
@@ -151,7 +153,12 @@ export const te: LanguageTranslation = {
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
                         // TODO: Translate
+                        default_value: 'Default Value',
+                        no_default: 'No default',
+                        // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'సూక్ష్మత',
+                        scale: 'స్కేల్',
                     },
                     index_actions: {
                         title: 'ఇండెక్స్ గుణాలు',
@@ -271,11 +278,14 @@ export const te: LanguageTranslation = {
             undo: 'తిరిగి చేయు',
             redo: 'మరలా చేయు',
             reorder_diagram: 'చిత్రాన్ని పునఃసరిచేయండి',
-            highlight_overlapping_tables: 'Highlight Overlapping Tables',
+            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+            highlight_overlapping_tables: 'అవకాశించు పట్టికలను హైలైట్ చేయండి',
+            // TODO: Translate
+            filter: 'Filter Tables',
         },
 
         new_diagram_dialog: {

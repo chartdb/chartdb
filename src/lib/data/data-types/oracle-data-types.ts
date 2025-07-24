@@ -2,15 +2,30 @@ import type { DataTypeData } from './data-types';
 
 export const oracleDataTypes: readonly DataTypeData[] = [
     // Character types
-    { name: 'VARCHAR2', id: 'varchar2', usageLevel: 1, hasCharMaxLength: true },
+    {
+        name: 'VARCHAR2',
+        id: 'varchar2',
+        usageLevel: 1,
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     {
         name: 'NVARCHAR2',
         id: 'nvarchar2',
         usageLevel: 1,
-        hasCharMaxLength: true,
+        fieldAttributes: { hasCharMaxLength: true },
     },
-    { name: 'CHAR', id: 'char', usageLevel: 2, hasCharMaxLength: true },
-    { name: 'NCHAR', id: 'nchar', usageLevel: 2, hasCharMaxLength: true },
+    {
+        name: 'CHAR',
+        id: 'char',
+        usageLevel: 2,
+        fieldAttributes: { hasCharMaxLength: true },
+    },
+    {
+        name: 'NCHAR',
+        id: 'nchar',
+        usageLevel: 2,
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     { name: 'CLOB', id: 'clob', usageLevel: 2 },
     { name: 'NCLOB', id: 'nclob', usageLevel: 2 },
 
@@ -49,7 +64,12 @@ export const oracleDataTypes: readonly DataTypeData[] = [
     { name: 'BFILE', id: 'bfile', usageLevel: 2 },
 
     // Other types
-    { name: 'RAW', id: 'raw', usageLevel: 2, hasCharMaxLength: true },
+    {
+        name: 'RAW',
+        id: 'raw',
+        usageLevel: 2,
+        fieldAttributes: { hasCharMaxLength: true },
+    },
     { name: 'LONG RAW', id: 'long_raw', usageLevel: 2 },
     { name: 'ROWID', id: 'rowid', usageLevel: 2 },
     { name: 'UROWID', id: 'urowid', usageLevel: 2 },
