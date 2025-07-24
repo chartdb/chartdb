@@ -274,7 +274,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 )}
                 <div
                     className={cn(
-                        'flex items-center gap-1 truncate text-left',
+                        'flex items-center gap-1 min-w-0 flex-1 text-left',
                         {
                             'font-semibold': field.primaryKey || field.unique,
                             'w-full': editMode,
@@ -317,7 +317,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         //     {field.name}
                         // </span>
                         <span
-                            className={cn('truncate', {
+                            className={cn('truncate min-w-0 flex-1', {
                                 'text-red-800 font-normal dark:text-red-200':
                                     isDiffFieldRemoved,
                                 'text-green-800 font-normal dark:text-green-200':
@@ -353,7 +353,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     ) : null}
                 </div>
                 {editMode ? null : (
-                    <div className="flex max-w-[35%] justify-end gap-1.5 truncate hover:shrink-0">
+                    <div className="ml-2 flex shrink-0 items-center justify-end gap-1.5">
                         {field.primaryKey ? (
                             <div
                                 className={cn(
@@ -378,7 +378,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
                         <div
                             className={cn(
-                                'content-center truncate text-right text-xs text-muted-foreground',
+                                'content-center text-right text-xs text-muted-foreground overflow-hidden min-w-[3rem] max-w-[8rem]',
                                 !readonly ? 'group-hover:hidden' : '',
                                 isDiffFieldRemoved
                                     ? 'text-red-800 dark:text-red-200'
@@ -393,17 +393,23 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     : ''
                             )}
                         >
-                            {fieldDiffChangedType ? (
-                                <>
-                                    <span className="line-through">
-                                        {field.type.name.split(' ')[0]}
-                                    </span>{' '}
-                                    {fieldDiffChangedType.name.split(' ')[0]}
-                                </>
-                            ) : (
-                                `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
-                            )}
-                            {field.nullable ? '?' : ''}
+                            <span className="block truncate">
+                                {fieldDiffChangedType ? (
+                                    <>
+                                        <span className="line-through">
+                                            {field.type.name.split(' ')[0]}
+                                        </span>{' '}
+                                        {
+                                            fieldDiffChangedType.name.split(
+                                                ' '
+                                            )[0]
+                                        }
+                                    </>
+                                ) : (
+                                    `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
+                                )}
+                                {field.nullable ? '?' : ''}
+                            </span>
                         </div>
                         {readonly ? null : (
                             <div className="hidden flex-row group-hover:flex">
