@@ -26,6 +26,8 @@ export const fr: LanguageTranslation = {
                 hide_sidebar: 'Cacher la Barre Latérale',
                 hide_cardinality: 'Cacher la Cardinalité',
                 show_cardinality: 'Afficher la Cardinalité',
+                hide_field_attributes: 'Masquer les Attributs de Champ',
+                show_field_attributes: 'Afficher les Attributs de Champ',
                 zoom_on_scroll: 'Zoom sur le Défilement',
                 theme: 'Thème',
                 show_dependencies: 'Afficher les Dépendances',
@@ -143,6 +145,8 @@ export const fr: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Précision',
+                        scale: 'Échelle',
                     },
                     index_actions: {
                         title: "Attributs de l'Index",

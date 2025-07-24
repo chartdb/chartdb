@@ -26,6 +26,8 @@ export const ko_KR: LanguageTranslation = {
                 hide_sidebar: '사이드바 숨기기',
                 hide_cardinality: '카디널리티 숨기기',
                 show_cardinality: '카디널리티 보이기',
+                hide_field_attributes: '필드 속성 숨기기',
+                show_field_attributes: '필드 속성 보이기',
                 zoom_on_scroll: '스크롤 시 확대',
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
@@ -154,6 +156,8 @@ export const ko_KR: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: '정밀도',
+                        scale: '소수점 자릿수',
                     },
                     index_actions: {
                         title: '인덱스 속성',

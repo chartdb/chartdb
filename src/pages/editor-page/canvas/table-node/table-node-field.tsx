@@ -21,7 +21,7 @@ import {
     SquarePlus,
     Trash2,
 } from 'lucide-react';
-import type { DBField } from '@/lib/domain/db-field';
+import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
 import {
@@ -32,6 +32,7 @@ import {
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import { Input } from '@/components/input/input';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -59,6 +60,10 @@ const arePropsEqual = (
         prevProps.field.unique === nextProps.field.unique &&
         prevProps.field.type.id === nextProps.field.type.id &&
         prevProps.field.type.name === nextProps.field.type.name &&
+        prevProps.field.characterMaximumLength ===
+            nextProps.field.characterMaximumLength &&
+        prevProps.field.precision === nextProps.field.precision &&
+        prevProps.field.scale === nextProps.field.scale &&
         prevProps.focused === nextProps.focused &&
         prevProps.highlighted === nextProps.highlighted &&
         prevProps.visible === nextProps.visible &&
@@ -202,6 +207,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             e.stopPropagation();
             setEditMode(true);
         }, []);
+
+        const { showFieldAttributes } = useLocalConfig();
 
         return (
             <div
@@ -394,7 +401,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     {fieldDiffChangedType.name.split(' ')[0]}
                                 </>
                             ) : (
-                                field.type.name.split(' ')[0]
+                                `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
                             )}
                             {field.nullable ? '?' : ''}
                         </div>

@@ -26,6 +26,8 @@ export const bn: LanguageTranslation = {
                 hide_sidebar: 'সাইডবার লুকান',
                 hide_cardinality: 'কার্ডিনালিটি লুকান',
                 show_cardinality: 'কার্ডিনালিটি দেখান',
+                hide_field_attributes: 'ফিল্ড অ্যাট্রিবিউট লুকান',
+                show_field_attributes: 'ফিল্ড অ্যাট্রিবিউট দেখান',
                 zoom_on_scroll: 'স্ক্রলে জুম করুন',
                 theme: 'থিম',
                 show_dependencies: 'নির্ভরতাগুলি দেখান',
@@ -155,6 +157,8 @@ export const bn: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'নির্ভুলতা',
+                        scale: 'স্কেল',
                     },
                     index_actions: {
                         title: 'ইনডেক্স কর্ম',

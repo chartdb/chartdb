@@ -26,6 +26,8 @@ export const de: LanguageTranslation = {
                 hide_sidebar: 'Seitenleiste ausblenden',
                 hide_cardinality: 'Kardinalität ausblenden',
                 show_cardinality: 'Kardinalität anzeigen',
+                hide_field_attributes: 'Feldattribute ausblenden',
+                show_field_attributes: 'Feldattribute anzeigen',
                 zoom_on_scroll: 'Zoom beim Scrollen',
                 theme: 'Stil',
                 show_dependencies: 'Abhängigkeiten anzeigen',
@@ -156,6 +158,8 @@ export const de: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Präzision',
+                        scale: 'Skalierung',
                     },
                     index_actions: {
                         title: 'Indexattribute',

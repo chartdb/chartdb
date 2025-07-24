@@ -26,6 +26,8 @@ export const tr: LanguageTranslation = {
                 hide_sidebar: 'Kenar Çubuğunu Gizle',
                 hide_cardinality: 'Kardinaliteyi Gizle',
                 show_cardinality: 'Kardinaliteyi Göster',
+                show_field_attributes: 'Alan Özelliklerini Göster',
+                hide_field_attributes: 'Alan Özelliklerini Gizle',
                 zoom_on_scroll: 'Kaydırarak Yakınlaştır',
                 theme: 'Tema',
                 show_dependencies: 'Bağımlılıkları Göster',
@@ -154,6 +156,8 @@ export const tr: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'Hassasiyet',
+                        scale: 'Ölçek',
                     },
                     index_actions: {
                         title: 'İndeks Özellikleri',

@@ -26,6 +26,8 @@ export const ne: LanguageTranslation = {
                 hide_sidebar: 'साइडबार लुकाउनुहोस्',
                 hide_cardinality: 'कार्डिन्यालिटी लुकाउनुहोस्',
                 show_cardinality: 'कार्डिन्यालिटी देखाउनुहोस्',
+                hide_field_attributes: 'फिल्ड विशेषताहरू लुकाउनुहोस्',
+                show_field_attributes: 'फिल्ड विशेषताहरू देखाउनुहोस्',
                 zoom_on_scroll: 'स्क्रोलमा जुम गर्नुहोस्',
                 theme: 'थिम',
                 show_dependencies: 'डिपेन्डेन्सीहरू देखाउनुहोस्',
@@ -155,6 +157,8 @@ export const ne: LanguageTranslation = {
                         no_default: 'No default',
                         // TODO: Translate
                         character_length: 'Max Length',
+                        precision: 'परिशुद्धता',
+                        scale: 'स्केल',
                     },
                     index_actions: {
                         title: 'सूचक विशेषताहरू',

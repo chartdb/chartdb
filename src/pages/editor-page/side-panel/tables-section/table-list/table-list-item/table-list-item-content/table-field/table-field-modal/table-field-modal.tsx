@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import { Ellipsis, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
 import type { DBField } from '@/lib/domain/db-field';
+import type { FieldAttributeRange } from '@/lib/data/data-types/data-types';
 import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import {
     Popover,
@@ -16,15 +17,18 @@ import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
+import type { DatabaseType } from '@/lib/domain';
 
 export interface TableFieldPopoverProps {
     field: DBField;
+    databaseType: DatabaseType;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
 }
 
 export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     field,
+    databaseType,
     updateField,
     removeField,
 }) => {
@@ -52,12 +56,19 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
             debouncedUpdateField({
                 comments: localField.comments,
                 characterMaximumLength: localField.characterMaximumLength,
+                precision: localField.precision,
+                scale: localField.scale,
                 unique: localField.unique,
                 default: localField.default,
             });
         }
         prevFieldRef.current = localField;
     }, [localField, debouncedUpdateField, isOpen]);
+
+    const dataFieldType = useMemo(
+        () => findDataTypeDataById(field.type.id, databaseType),
+        [field.type.id, databaseType]
+    );
 
     return (
         <Popover
@@ -123,8 +134,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 className="w-full rounded-md bg-muted text-sm"
                             />
                         </div>
-                        {findDataTypeDataById(field.type.id)
-                            ?.hasCharMaxLength ? (
+                        {dataFieldType?.fieldAttributes?.hasCharMaxLength ? (
                             <div className="flex flex-col gap-2">
                                 <Label
                                     htmlFor="width"
@@ -148,6 +158,110 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     }
                                     className="w-full rounded-md bg-muted text-sm"
                                 />
+                            </div>
+                        ) : null}
+                        {dataFieldType?.fieldAttributes?.precision ||
+                        dataFieldType?.fieldAttributes?.scale ? (
+                            <div className="flex gap-2">
+                                <div className="flex flex-1 flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.precision'
+                                        )}
+                                    </Label>
+                                    <Input
+                                        value={localField.precision ?? ''}
+                                        type="number"
+                                        max={
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
+                                                ? (
+                                                      dataFieldType
+                                                          ?.fieldAttributes
+                                                          ?.precision as FieldAttributeRange
+                                                  ).max
+                                                : undefined
+                                        }
+                                        min={
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
+                                                ? (
+                                                      dataFieldType
+                                                          ?.fieldAttributes
+                                                          ?.precision as FieldAttributeRange
+                                                  ).min
+                                                : undefined
+                                        }
+                                        placeholder={
+                                            dataFieldType?.fieldAttributes
+                                                ?.precision
+                                                ? `${(dataFieldType?.fieldAttributes?.precision as FieldAttributeRange).default}`
+                                                : 'Optional'
+                                        }
+                                        onChange={(e) =>
+                                            setLocalField((current) => ({
+                                                ...current,
+                                                precision: e.target.value
+                                                    ? parseInt(e.target.value)
+                                                    : undefined,
+                                            }))
+                                        }
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                </div>
+                                <div className="flex flex-1 flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.field_actions.scale'
+                                        )}
+                                    </Label>
+                                    <Input
+                                        value={localField.scale ?? ''}
+                                        max={
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
+                                                ? (
+                                                      dataFieldType
+                                                          ?.fieldAttributes
+                                                          ?.scale as FieldAttributeRange
+                                                  ).max
+                                                : undefined
+                                        }
+                                        min={
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
+                                                ? (
+                                                      findDataTypeDataById(
+                                                          field.type.id
+                                                      )?.fieldAttributes
+                                                          ?.scale as FieldAttributeRange
+                                                  ).min
+                                                : undefined
+                                        }
+                                        placeholder={
+                                            dataFieldType?.fieldAttributes
+                                                ?.scale
+                                                ? `${(dataFieldType?.fieldAttributes?.scale as FieldAttributeRange).default}`
+                                                : 'Optional'
+                                        }
+                                        type="number"
+                                        onChange={(e) =>
+                                            setLocalField((current) => ({
+                                                ...current,
+                                                scale: e.target.value
+                                                    ? parseInt(e.target.value)
+                                                    : undefined,
+                                            }))
+                                        }
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                </div>
                             </div>
                         ) : null}
                         <div className="flex flex-col gap-2">
