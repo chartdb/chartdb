@@ -7,13 +7,21 @@ export const sqlServerDataTypes: readonly DataTypeData[] = [
     {
         name: 'varchar',
         id: 'varchar',
-        fieldAttributes: { hasCharMaxLength: true },
+        fieldAttributes: {
+            hasCharMaxLength: true,
+            hasCharMaxLengthOption: true,
+            maxLength: 8000,
+        },
         usageLevel: 1,
     },
     {
         name: 'nvarchar',
         id: 'nvarchar',
-        fieldAttributes: { hasCharMaxLength: true },
+        fieldAttributes: {
+            hasCharMaxLength: true,
+            hasCharMaxLengthOption: true,
+            maxLength: 4000,
+        },
         usageLevel: 1,
     },
     { name: 'text', id: 'text', usageLevel: 1 },
@@ -77,7 +85,11 @@ export const sqlServerDataTypes: readonly DataTypeData[] = [
     {
         name: 'varbinary',
         id: 'varbinary',
-        fieldAttributes: { hasCharMaxLength: true },
+        fieldAttributes: {
+            hasCharMaxLength: true,
+            hasCharMaxLengthOption: true,
+            maxLength: 8000,
+        },
     },
     { name: 'image', id: 'image' },
     { name: 'datetimeoffset', id: 'datetimeoffset' },

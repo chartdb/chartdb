@@ -18,7 +18,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
 import type { DatabaseType } from '@/lib/domain';
-import { DatabaseType as DatabaseTypeEnum } from '@/lib/domain/database-type';
+
 import {
     Select,
     SelectContent,
@@ -152,11 +152,8 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         'side_panel.tables_section.table.field_actions.character_length'
                                     )}
                                 </Label>
-                                {/* For SQL Server varchar/nvarchar/varbinary types, show option for 'max' */}
-                                {databaseType === DatabaseTypeEnum.SQL_SERVER &&
-                                (field.type.id === 'varchar' ||
-                                    field.type.id === 'nvarchar' ||
-                                    field.type.id === 'varbinary') ? (
+                                {dataFieldType?.fieldAttributes
+                                    ?.hasCharMaxLengthOption ? (
                                     <div className="flex gap-2">
                                         <Select
                                             value={
@@ -220,9 +217,9 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                                 type="number"
                                                 min="1"
                                                 max={
-                                                    field.type.id === 'nvarchar'
-                                                        ? '4000'
-                                                        : '8000'
+                                                    dataFieldType
+                                                        ?.fieldAttributes
+                                                        ?.maxLength || undefined
                                                 }
                                                 onChange={(e) =>
                                                     setLocalField(
