@@ -22,8 +22,10 @@ export interface FieldAttributeRange {
 
 interface FieldAttributes {
     hasCharMaxLength?: boolean;
+    hasCharMaxLengthOption?: boolean;
     precision?: FieldAttributeRange;
     scale?: FieldAttributeRange;
+    maxLength?: number;
 }
 
 export interface DataTypeData extends DataType {
