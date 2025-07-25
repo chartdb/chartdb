@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { fromSQLServer } from '../sqlserver';
-import { readFileSync } from 'fs';
 
 describe('SQL Server Foreign Key Relationship Tests', () => {
     it('should properly link foreign key relationships with correct table IDs', async () => {
@@ -80,64 +79,158 @@ describe('SQL Server Foreign Key Relationship Tests', () => {
         expect(rel.targetTableId).toBe(accountsTable!.id);
     });
 
-    it('should parse foreign keys from the novi_myscal2dbdev.sql file with proper table IDs', async () => {
-        const sql = readFileSync(
-            '/Users/jonathanfishner/Downloads/novi_myscal2dbdev.sql',
-            'utf-16le'
-        ).toString();
+    it('should parse complex foreign keys from magical realm database with proper table IDs', async () => {
+        // Fantasy-themed SQL with multiple schemas and relationships
+        const sql = `
+            -- Spell casting schema
+            CREATE SCHEMA [spellcasting];
+            GO
+            
+            -- Create spell table
+            CREATE TABLE [spellcasting].[Spell] (
+                [Id] [uniqueidentifier] NOT NULL,
+                [Name] [nvarchar](255) NOT NULL,
+                [School] [nvarchar](100) NOT NULL,
+                [Level] [int] NOT NULL,
+                [Description] [nvarchar](max) NOT NULL,
+                CONSTRAINT [PK_Spell] PRIMARY KEY CLUSTERED ([Id] ASC)
+            );
+            GO
+            
+            -- Create spell casting process table
+            CREATE TABLE [spellcasting].[SpellCastingProcess] (
+                [Id] [uniqueidentifier] NOT NULL,
+                [SpellId] [uniqueidentifier] NOT NULL,
+                [WizardId] [uniqueidentifier] NOT NULL,
+                [CastingDate] [datetime2](7) NOT NULL,
+                [SuccessRate] [decimal](18, 2) NOT NULL,
+                [ManaCost] [int] NOT NULL,
+                [Notes] [nvarchar](max) NULL,
+                CONSTRAINT [PK_SpellCastingProcess] PRIMARY KEY CLUSTERED ([Id] ASC)
+            );
+            GO
+            
+            -- Wizards schema
+            CREATE SCHEMA [wizards];
+            GO
+            
+            -- Create wizard table
+            CREATE TABLE [wizards].[Wizard] (
+                [Id] [uniqueidentifier] NOT NULL,
+                [Name] [nvarchar](255) NOT NULL,
+                [Title] [nvarchar](100) NULL,
+                [Level] [int] NOT NULL,
+                [Specialization] [nvarchar](100) NULL,
+                CONSTRAINT [PK_Wizard] PRIMARY KEY CLUSTERED ([Id] ASC)
+            );
+            GO
+            
+            -- Create wizard apprentice table
+            CREATE TABLE [wizards].[Apprentice] (
+                [Id] [uniqueidentifier] NOT NULL,
+                [WizardId] [uniqueidentifier] NOT NULL,
+                [MentorId] [uniqueidentifier] NOT NULL,
+                [StartDate] [datetime2](7) NOT NULL,
+                [EndDate] [datetime2](7) NULL,
+                CONSTRAINT [PK_Apprentice] PRIMARY KEY CLUSTERED ([Id] ASC)
+            );
+            GO
+            
+            -- Add foreign key constraints
+            ALTER TABLE [spellcasting].[SpellCastingProcess] 
+                ADD CONSTRAINT [FK_SpellCastingProcess_Spell] 
+                FOREIGN KEY ([SpellId]) 
+                REFERENCES [spellcasting].[Spell]([Id]);
+            GO
+            
+            ALTER TABLE [spellcasting].[SpellCastingProcess] 
+                ADD CONSTRAINT [FK_SpellCastingProcess_Wizard] 
+                FOREIGN KEY ([WizardId]) 
+                REFERENCES [wizards].[Wizard]([Id]);
+            GO
+            
+            ALTER TABLE [wizards].[Apprentice] 
+                ADD CONSTRAINT [FK_Apprentice_Wizard] 
+                FOREIGN KEY ([WizardId]) 
+                REFERENCES [wizards].[Wizard]([Id]);
+            GO
+            
+            ALTER TABLE [wizards].[Apprentice] 
+                ADD CONSTRAINT [FK_Apprentice_Mentor] 
+                FOREIGN KEY ([MentorId]) 
+                REFERENCES [wizards].[Wizard]([Id]);
+            GO
+        `;
+
         const result = await fromSQLServer(sql);
 
         // Debug output
         console.log('Total tables:', result.tables.length);
         console.log('Total relationships:', result.relationships.length);
 
-        // Check if we have relationships
-        expect(result.relationships.length).toBeGreaterThan(0);
+        // Check if we have the expected number of tables and relationships
+        expect(result.tables).toHaveLength(4);
+        expect(result.relationships).toHaveLength(4);
 
         // Check a specific relationship we know should exist
-        const calibrationProcessRel = result.relationships.find(
+        const spellCastingRel = result.relationships.find(
             (r) =>
-                r.sourceTable === 'CalibrationProcess' &&
-                r.targetTable === 'Calibration' &&
-                r.sourceColumn === 'CalibrationId'
+                r.sourceTable === 'SpellCastingProcess' &&
+                r.targetTable === 'Spell' &&
+                r.sourceColumn === 'SpellId'
         );
 
-        expect(calibrationProcessRel).toBeDefined();
+        expect(spellCastingRel).toBeDefined();
 
-        if (calibrationProcessRel) {
+        if (spellCastingRel) {
             // Find the corresponding tables
-            const calibrationTable = result.tables.find(
-                (t) => t.name === 'Calibration' && t.schema === 'calibration'
+            const spellTable = result.tables.find(
+                (t) => t.name === 'Spell' && t.schema === 'spellcasting'
             );
-            const calibrationProcessTable = result.tables.find(
+            const spellCastingProcessTable = result.tables.find(
                 (t) =>
-                    t.name === 'CalibrationProcess' &&
-                    t.schema === 'calibration'
+                    t.name === 'SpellCastingProcess' &&
+                    t.schema === 'spellcasting'
             );
 
-            console.log('CalibrationProcess relationship:', {
-                sourceTableId: calibrationProcessRel.sourceTableId,
-                targetTableId: calibrationProcessRel.targetTableId,
-                calibrationProcessTableId: calibrationProcessTable?.id,
-                calibrationTableId: calibrationTable?.id,
+            console.log('SpellCastingProcess relationship:', {
+                sourceTableId: spellCastingRel.sourceTableId,
+                targetTableId: spellCastingRel.targetTableId,
+                spellCastingProcessTableId: spellCastingProcessTable?.id,
+                spellTableId: spellTable?.id,
                 isSourceIdValid:
-                    calibrationProcessRel.sourceTableId ===
-                    calibrationProcessTable?.id,
+                    spellCastingRel.sourceTableId ===
+                    spellCastingProcessTable?.id,
                 isTargetIdValid:
-                    calibrationProcessRel.targetTableId ===
-                    calibrationTable?.id,
+                    spellCastingRel.targetTableId === spellTable?.id,
             });
 
             // Verify the IDs are properly linked
-            expect(calibrationProcessRel.sourceTableId).toBeTruthy();
-            expect(calibrationProcessRel.targetTableId).toBeTruthy();
-            expect(calibrationProcessRel.sourceTableId).toBe(
-                calibrationProcessTable!.id
+            expect(spellCastingRel.sourceTableId).toBeTruthy();
+            expect(spellCastingRel.targetTableId).toBeTruthy();
+            expect(spellCastingRel.sourceTableId).toBe(
+                spellCastingProcessTable!.id
             );
-            expect(calibrationProcessRel.targetTableId).toBe(
-                calibrationTable!.id
-            );
+            expect(spellCastingRel.targetTableId).toBe(spellTable!.id);
         }
+
+        // Check the apprentice self-referencing relationships
+        const apprenticeWizardRel = result.relationships.find(
+            (r) =>
+                r.sourceTable === 'Apprentice' &&
+                r.targetTable === 'Wizard' &&
+                r.sourceColumn === 'WizardId'
+        );
+
+        const apprenticeMentorRel = result.relationships.find(
+            (r) =>
+                r.sourceTable === 'Apprentice' &&
+                r.targetTable === 'Wizard' &&
+                r.sourceColumn === 'MentorId'
+        );
+
+        expect(apprenticeWizardRel).toBeDefined();
+        expect(apprenticeMentorRel).toBeDefined();
 
         // Check that all relationships have valid table IDs
         const relationshipsWithMissingIds = result.relationships.filter(
