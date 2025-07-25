@@ -22,6 +22,7 @@ import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -30,7 +31,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
-    const [importMethod, setImportMethod] = useState<'query' | 'ddl'>('query');
+    const [importMethod, setImportMethod] = useState<'query' | 'ddl' | 'dbml'>(
+        'query'
+    );
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -77,9 +80,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         async ({
             selectedTables,
             databaseMetadata,
+            dbmlTableNotes,
         }: {
             selectedTables?: SelectedTable[];
             databaseMetadata?: DatabaseMetadata;
+            dbmlTableNotes?: Map<string, string>;
         } = {}) => {
             let diagram: Diagram | undefined;
 
@@ -89,6 +94,16 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     sourceDatabaseType: databaseType,
                     targetDatabaseType: databaseType,
                 });
+            } else if (importMethod === 'dbml') {
+                diagram = await importDBMLToDiagram(
+                    scriptResult,
+                    dbmlTableNotes,
+                    databaseType
+                );
+                // Update the diagram name if it's the default
+                if (diagram.name === 'DBML Import') {
+                    diagram.name = `Diagram ${diagramNumber}`;
+                }
             } else {
                 let metadata: DatabaseMetadata | undefined = databaseMetadata;
 
@@ -167,46 +182,51 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         openImportDBMLDialog,
     ]);
 
-    const importNewDiagramOrFilterTables = useCallback(async () => {
-        try {
-            setIsParsingMetadata(true);
+    const importNewDiagramOrFilterTables = useCallback(
+        async (dbmlTableNotes?: Map<string, string>) => {
+            try {
+                setIsParsingMetadata(true);
 
-            if (importMethod === 'ddl') {
-                await importNewDiagram();
-            } else {
-                // Parse metadata asynchronously to avoid blocking the UI
-                const metadata = await new Promise<DatabaseMetadata>(
-                    (resolve, reject) => {
-                        setTimeout(() => {
-                            try {
-                                const result =
-                                    loadDatabaseMetadata(scriptResult);
-                                resolve(result);
-                            } catch (err) {
-                                reject(err);
-                            }
-                        }, 0);
-                    }
-                );
-
-                const totalTablesAndViews =
-                    metadata.tables.length + (metadata.views?.length || 0);
-
-                setParsedMetadata(metadata);
-
-                // Check if it's a large database that needs table selection
-                if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
-                    setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                if (importMethod === 'ddl' || importMethod === 'dbml') {
+                    await importNewDiagram({ dbmlTableNotes });
                 } else {
-                    await importNewDiagram({
-                        databaseMetadata: metadata,
-                    });
+                    // Parse metadata asynchronously to avoid blocking the UI
+                    const metadata = await new Promise<DatabaseMetadata>(
+                        (resolve, reject) => {
+                            setTimeout(() => {
+                                try {
+                                    const result =
+                                        loadDatabaseMetadata(scriptResult);
+                                    resolve(result);
+                                } catch (err) {
+                                    reject(err);
+                                }
+                            }, 0);
+                        }
+                    );
+
+                    const totalTablesAndViews =
+                        metadata.tables.length + (metadata.views?.length || 0);
+
+                    setParsedMetadata(metadata);
+
+                    // Check if it's a large database that needs table selection
+                    if (
+                        totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER
+                    ) {
+                        setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                    } else {
+                        await importNewDiagram({
+                            databaseMetadata: metadata,
+                        });
+                    }
                 }
+            } finally {
+                setIsParsingMetadata(false);
             }
-        } finally {
-            setIsParsingMetadata(false);
-        }
-    }, [importMethod, scriptResult, importNewDiagram]);
+        },
+        [importMethod, scriptResult, importNewDiagram]
+    );
 
     return (
         <Dialog
