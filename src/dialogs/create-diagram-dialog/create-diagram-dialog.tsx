@@ -182,46 +182,51 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         openImportDBMLDialog,
     ]);
 
-    const importNewDiagramOrFilterTables = useCallback(async () => {
-        try {
-            setIsParsingMetadata(true);
+    const importNewDiagramOrFilterTables = useCallback(
+        async (dbmlTableNotes?: Map<string, string>) => {
+            try {
+                setIsParsingMetadata(true);
 
-            if (importMethod === 'ddl') {
-                await importNewDiagram();
-            } else {
-                // Parse metadata asynchronously to avoid blocking the UI
-                const metadata = await new Promise<DatabaseMetadata>(
-                    (resolve, reject) => {
-                        setTimeout(() => {
-                            try {
-                                const result =
-                                    loadDatabaseMetadata(scriptResult);
-                                resolve(result);
-                            } catch (err) {
-                                reject(err);
-                            }
-                        }, 0);
-                    }
-                );
-
-                const totalTablesAndViews =
-                    metadata.tables.length + (metadata.views?.length || 0);
-
-                setParsedMetadata(metadata);
-
-                // Check if it's a large database that needs table selection
-                if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
-                    setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                if (importMethod === 'ddl' || importMethod === 'dbml') {
+                    await importNewDiagram({ dbmlTableNotes });
                 } else {
-                    await importNewDiagram({
-                        databaseMetadata: metadata,
-                    });
+                    // Parse metadata asynchronously to avoid blocking the UI
+                    const metadata = await new Promise<DatabaseMetadata>(
+                        (resolve, reject) => {
+                            setTimeout(() => {
+                                try {
+                                    const result =
+                                        loadDatabaseMetadata(scriptResult);
+                                    resolve(result);
+                                } catch (err) {
+                                    reject(err);
+                                }
+                            }, 0);
+                        }
+                    );
+
+                    const totalTablesAndViews =
+                        metadata.tables.length + (metadata.views?.length || 0);
+
+                    setParsedMetadata(metadata);
+
+                    // Check if it's a large database that needs table selection
+                    if (
+                        totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER
+                    ) {
+                        setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                    } else {
+                        await importNewDiagram({
+                            databaseMetadata: metadata,
+                        });
+                    }
                 }
+            } finally {
+                setIsParsingMetadata(false);
             }
-        } finally {
-            setIsParsingMetadata(false);
-        }
-    }, [importMethod, scriptResult, importNewDiagram]);
+        },
+        [importMethod, scriptResult, importNewDiagram]
+    );
 
     return (
         <Dialog

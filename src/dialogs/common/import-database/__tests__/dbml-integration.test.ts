@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { importDBMLToDiagram } from '@/lib/dbml-import';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 
 // This test verifies the DBML integration without UI components
 describe('DBML Integration Tests', () => {

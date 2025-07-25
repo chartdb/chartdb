@@ -15,7 +15,7 @@ import { useReactFlow } from '@xyflow/react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
-import { importDBMLToDiagram } from '@/lib/dbml-import';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;

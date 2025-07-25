@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { importDBMLToDiagram } from '../dbml-import';
+import { importDBMLToDiagram } from '../dbml/dbml-import/dbml-import';
 
 describe('DBML Import - Fantasy Examples', () => {
     describe('Magical Academy System', () => {

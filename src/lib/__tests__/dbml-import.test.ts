@@ -3,7 +3,7 @@ import {
     preprocessDBML,
     sanitizeDBML,
     importDBMLToDiagram,
-} from '../dbml-import';
+} from '../dbml/dbml-import/dbml-import';
 import { Parser } from '@dbml/core';
 
 describe('DBML Import', () => {

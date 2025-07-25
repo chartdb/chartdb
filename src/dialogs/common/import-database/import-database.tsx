@@ -43,7 +43,10 @@ import {
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
 import { Parser } from '@dbml/core';
-import { preprocessDBML, sanitizeDBML } from '@/lib/dbml/dbml-import/dbml-import';
+import {
+    preprocessDBML,
+    sanitizeDBML,
+} from '@/lib/dbml/dbml-import/dbml-import';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import {
     validateDBML,
