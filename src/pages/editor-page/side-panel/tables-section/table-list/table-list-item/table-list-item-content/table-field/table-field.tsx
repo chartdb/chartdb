@@ -3,8 +3,8 @@ import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
+import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import {
-    DataTypeData,
     dataTypeDataToDataType,
     sortedDataTypeMap,
 } from '@/lib/data/data-types/data-types';
@@ -30,7 +30,12 @@ export interface TableFieldProps {
     removeField: () => void;
 }
 
-const generateFieldRegexPatterns = (dataType: DataTypeData) => {
+const generateFieldRegexPatterns = (
+    dataType: DataTypeData
+): {
+    regex?: string;
+    extractRegex?: RegExp;
+} => {
     if (!dataType.fieldAttributes) {
         return { regex: undefined, extractRegex: undefined };
     }
