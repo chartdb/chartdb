@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.14.0](https://github.com/chartdb/chartdb/compare/v1.13.2...v1.14.0) (2025-07-26)
+
+
+### Features
+
+* add table selection for large database imports ([#776](https://github.com/chartdb/chartdb/issues/776)) ([0d9f57a](https://github.com/chartdb/chartdb/commit/0d9f57a9c969a67e350d6bf25e07c3a9ef5bba39))
+* **canvas:** Add filter tables on canvas ([#774](https://github.com/chartdb/chartdb/issues/774)) ([dfbcf05](https://github.com/chartdb/chartdb/commit/dfbcf05b2f595f5b7b77dd61abf77e6e07acaf8f))
+* **datatypes:** Add decimal / numeric attribute support + organize field row ([#715](https://github.com/chartdb/chartdb/issues/715)) ([778f85d](https://github.com/chartdb/chartdb/commit/778f85d49214232a39710e47bb5d4ec41b75d427))
+* **default value:** add default value option to table field settings ([#770](https://github.com/chartdb/chartdb/issues/770)) ([c9ea7da](https://github.com/chartdb/chartdb/commit/c9ea7da0923ff991cb936235674d9a52b8186137))
+* implement area grouping with parent-child relationships ([#762](https://github.com/chartdb/chartdb/issues/762)) ([b35e175](https://github.com/chartdb/chartdb/commit/b35e17526b3c9b918928ae5f3f89711ea7b2529c))
+
+
+### Bug Fixes
+
+* add open and create diagram to side menu ([#757](https://github.com/chartdb/chartdb/issues/757)) ([67f5ac3](https://github.com/chartdb/chartdb/commit/67f5ac303ebf5ada97d5c80fb08a2815ca205a91))
+* add PostgreSQL tests and fix parsing SQL ([#760](https://github.com/chartdb/chartdb/issues/760)) ([5d33740](https://github.com/chartdb/chartdb/commit/5d337409d64d1078b538350016982a98e684c06c))
+* **area:** redo/undo after dragging an area with tables ([#767](https://github.com/chartdb/chartdb/issues/767)) ([6af94af](https://github.com/chartdb/chartdb/commit/6af94afc56cf8987b8fc9e3f0a9bfa966de35408))
+* **canvas:** fix filter eye button ([#780](https://github.com/chartdb/chartdb/issues/780)) ([b7dbe54](https://github.com/chartdb/chartdb/commit/b7dbe54c83c75cfe3c556f7a162055dcfe2de23d))
+* **dbml-export:** merge field attributes into single brackets and fix schema syntax ([#790](https://github.com/chartdb/chartdb/issues/790)) ([309ee9c](https://github.com/chartdb/chartdb/commit/309ee9cb0ff1f5a68ed183e3919e1a11a8410909))
+* **dbml-import:** handle unsupported DBML features and add comprehensive tests ([#766](https://github.com/chartdb/chartdb/issues/766)) ([22d46e1](https://github.com/chartdb/chartdb/commit/22d46e1e90729730cc25dd6961bfe8c3d2ae0c98))
+* fix hotkeys on form elements ([#778](https://github.com/chartdb/chartdb/issues/778)) ([43d1dff](https://github.com/chartdb/chartdb/commit/43d1dfff71f2b960358a79b0112b78d11df91fb7))
+* improve SQL export formatting and add schema-aware FK grouping ([#783](https://github.com/chartdb/chartdb/issues/783)) ([6df588f](https://github.com/chartdb/chartdb/commit/6df588f40e6e7066da6125413b94466429d48767))
+* remove error lag after autofix ([#764](https://github.com/chartdb/chartdb/issues/764)) ([bf32c08](https://github.com/chartdb/chartdb/commit/bf32c08d37c02ee6d7946a41633bb97b2271fcb7))
+* set focus on filter search ([#775](https://github.com/chartdb/chartdb/issues/775)) ([9949a46](https://github.com/chartdb/chartdb/commit/9949a46ee3ba7f46a2ea7f2c0d7101cc9336df4f))
+* **sql-export:** escape newlines and quotes in multi-line comments ([#765](https://github.com/chartdb/chartdb/issues/765)) ([f7f9290](https://github.com/chartdb/chartdb/commit/f7f92903def84a94ac0c66f625f96a6681383945))
+* **sql-server:** improvment for sql-server import via sql script ([#789](https://github.com/chartdb/chartdb/issues/789)) ([79b8855](https://github.com/chartdb/chartdb/commit/79b885502e3385e996a52093a3ccd5f6e469993a))
+* **table-node:** fix comment icon on field ([#786](https://github.com/chartdb/chartdb/issues/786)) ([745bdee](https://github.com/chartdb/chartdb/commit/745bdee86d07f1e9c3a2d24237c48c25b9a8eeea))
+* **table-node:** improve field spacing ([#785](https://github.com/chartdb/chartdb/issues/785)) ([08eb9cc](https://github.com/chartdb/chartdb/commit/08eb9cc55f0077f53afea6f9ce720341e1a583c2))
+* **table-select:** add loading indication for import ([#782](https://github.com/chartdb/chartdb/issues/782)) ([b46ed58](https://github.com/chartdb/chartdb/commit/b46ed58dff1ec74579fb1544dba46b0f77730c52))
+* update multiple schemas toast to require user action ([#771](https://github.com/chartdb/chartdb/issues/771)) ([f56fab9](https://github.com/chartdb/chartdb/commit/f56fab9876fb9fc46c6c708231324a90d8a7851d))
+
 ## [1.13.2](https://github.com/chartdb/chartdb/compare/v1.13.1...v1.13.2) (2025-07-06)
 
 
