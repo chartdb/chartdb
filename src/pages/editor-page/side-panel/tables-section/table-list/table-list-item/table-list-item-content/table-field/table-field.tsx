@@ -3,6 +3,7 @@ import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
+import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import {
     dataTypeDataToDataType,
     sortedDataTypeMap,
@@ -29,6 +30,51 @@ export interface TableFieldProps {
     removeField: () => void;
 }
 
+const generateFieldRegexPatterns = (
+    dataType: DataTypeData
+): {
+    regex?: string;
+    extractRegex?: RegExp;
+} => {
+    if (!dataType.fieldAttributes) {
+        return { regex: undefined, extractRegex: undefined };
+    }
+
+    const typeName = dataType.name;
+    const fieldAttributes = dataType.fieldAttributes;
+
+    if (fieldAttributes.hasCharMaxLength) {
+        if (fieldAttributes.hasCharMaxLengthOption) {
+            return {
+                regex: `^${typeName}\\((\\d+|[mM][aA][xX])\\)$`,
+                extractRegex: /\((\d+|max)\)/i,
+            };
+        }
+        return {
+            regex: `^${typeName}\\(\\d+\\)$`,
+            extractRegex: /\((\d+)\)/,
+        };
+    }
+
+    if (fieldAttributes.precision && fieldAttributes.scale) {
+        return {
+            regex: `^${typeName}\\s*\\(\\s*\\d+\\s*(?:,\\s*\\d+\\s*)?\\)$`,
+            extractRegex: new RegExp(
+                `${typeName}\\s*\\(\\s*(\\d+)\\s*(?:,\\s*(\\d+)\\s*)?\\)`
+            ),
+        };
+    }
+
+    if (fieldAttributes.precision) {
+        return {
+            regex: `^${typeName}\\s*\\(\\s*\\d+\\s*\\)$`,
+            extractRegex: /\((\d+)\)/,
+        };
+    }
+
+    return { regex: undefined, extractRegex: undefined };
+};
+
 export const TableField: React.FC<TableFieldProps> = ({
     field,
     updateField,
@@ -43,27 +89,17 @@ export const TableField: React.FC<TableFieldProps> = ({
     const dataFieldOptions = useMemo(() => {
         const standardTypes: SelectBoxOption[] = sortedDataTypeMap[
             databaseType
-        ].map((type) => ({
-            label: type.name,
-            value: type.id,
-            regex: type.fieldAttributes?.hasCharMaxLength
-                ? `^${type.name}\\(\\d+\\)$`
-                : type.fieldAttributes?.precision && type.fieldAttributes?.scale
-                  ? `^${type.name}\\s*\\(\\s*\\d+\\s*(?:,\\s*\\d+\\s*)?\\)$`
-                  : type.fieldAttributes?.precision
-                    ? `^${type.name}\\s*\\(\\s*\\d+\\s*\\)$`
-                    : undefined,
-            extractRegex: type.fieldAttributes?.hasCharMaxLength
-                ? /\((\d+)\)/
-                : type.fieldAttributes?.precision && type.fieldAttributes?.scale
-                  ? new RegExp(
-                        `${type.name}\\s*\\(\\s*(\\d+)\\s*(?:,\\s*(\\d+)\\s*)?\\)`
-                    )
-                  : type.fieldAttributes?.precision
-                    ? /\((\d+)\)/
-                    : undefined,
-            group: customTypes?.length ? 'Standard Types' : undefined,
-        }));
+        ].map((type) => {
+            const regexPatterns = generateFieldRegexPatterns(type);
+
+            return {
+                label: type.name,
+                value: type.id,
+                regex: regexPatterns.regex,
+                extractRegex: regexPatterns.extractRegex,
+                group: customTypes?.length ? 'Standard Types' : undefined,
+            };
+        });
 
         if (!customTypes?.length) {
             return standardTypes;
@@ -100,7 +136,7 @@ export const TableField: React.FC<TableFieldProps> = ({
 
             if (regexMatches?.length) {
                 if (dataType?.fieldAttributes?.hasCharMaxLength) {
-                    characterMaximumLength = regexMatches[1];
+                    characterMaximumLength = regexMatches[1]?.toLowerCase();
                 } else if (
                     dataType?.fieldAttributes?.precision &&
                     dataType?.fieldAttributes?.scale

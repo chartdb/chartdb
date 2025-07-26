@@ -18,11 +18,14 @@ export interface SQLColumn {
     nullable: boolean;
     primaryKey: boolean;
     unique: boolean;
-    typeArgs?: {
-        length?: number;
-        precision?: number;
-        scale?: number;
-    };
+    typeArgs?:
+        | {
+              length?: number;
+              precision?: number;
+              scale?: number;
+          }
+        | number[]
+        | string;
     comment?: string;
     default?: string;
     increment?: boolean;
@@ -559,6 +562,38 @@ export function convertToChartDBDiagram(
                     id: column.type.toLowerCase(),
                     name: column.type,
                 };
+            }
+            // Handle SQL Server types specifically
+            else if (
+                sourceDatabaseType === DatabaseType.SQL_SERVER &&
+                targetDatabaseType === DatabaseType.SQL_SERVER
+            ) {
+                const normalizedType = column.type.toLowerCase();
+
+                // Preserve SQL Server specific types when target is also SQL Server
+                if (
+                    normalizedType === 'nvarchar' ||
+                    normalizedType === 'nchar' ||
+                    normalizedType === 'ntext' ||
+                    normalizedType === 'uniqueidentifier' ||
+                    normalizedType === 'datetime2' ||
+                    normalizedType === 'datetimeoffset' ||
+                    normalizedType === 'money' ||
+                    normalizedType === 'smallmoney' ||
+                    normalizedType === 'bit' ||
+                    normalizedType === 'xml' ||
+                    normalizedType === 'hierarchyid' ||
+                    normalizedType === 'geography' ||
+                    normalizedType === 'geometry'
+                ) {
+                    mappedType = { id: normalizedType, name: normalizedType };
+                } else {
+                    // Use the standard mapping for other types
+                    mappedType = mapSQLTypeToGenericType(
+                        column.type,
+                        sourceDatabaseType
+                    );
+                }
             } else {
                 // Use the standard mapping for other types
                 mappedType = mapSQLTypeToGenericType(
@@ -581,22 +616,68 @@ export function convertToChartDBDiagram(
 
             // Add type arguments if present
             if (column.typeArgs) {
-                // Transfer length for varchar/char types
-                if (
-                    column.typeArgs.length !== undefined &&
-                    (field.type.id === 'varchar' || field.type.id === 'char')
-                ) {
-                    field.characterMaximumLength =
-                        column.typeArgs.length.toString();
+                // Handle string typeArgs (e.g., 'max' for varchar(max))
+                if (typeof column.typeArgs === 'string') {
+                    if (
+                        (field.type.id === 'varchar' ||
+                            field.type.id === 'nvarchar') &&
+                        column.typeArgs === 'max'
+                    ) {
+                        field.characterMaximumLength = 'max';
+                    }
                 }
-
-                // Transfer precision/scale for numeric types
-                if (
-                    column.typeArgs.precision !== undefined &&
-                    (field.type.id === 'numeric' || field.type.id === 'decimal')
+                // Handle array typeArgs (SQL Server format)
+                else if (
+                    Array.isArray(column.typeArgs) &&
+                    column.typeArgs.length > 0
                 ) {
-                    field.precision = column.typeArgs.precision;
-                    field.scale = column.typeArgs.scale;
+                    if (
+                        field.type.id === 'varchar' ||
+                        field.type.id === 'nvarchar' ||
+                        field.type.id === 'char' ||
+                        field.type.id === 'nchar'
+                    ) {
+                        field.characterMaximumLength =
+                            column.typeArgs[0].toString();
+                    } else if (
+                        (field.type.id === 'numeric' ||
+                            field.type.id === 'decimal') &&
+                        column.typeArgs.length >= 2
+                    ) {
+                        field.precision = column.typeArgs[0];
+                        field.scale = column.typeArgs[1];
+                    }
+                }
+                // Handle object typeArgs (standard format)
+                else if (
+                    typeof column.typeArgs === 'object' &&
+                    !Array.isArray(column.typeArgs)
+                ) {
+                    const typeArgsObj = column.typeArgs as {
+                        length?: number;
+                        precision?: number;
+                        scale?: number;
+                    };
+
+                    // Transfer length for varchar/char types
+                    if (
+                        typeArgsObj.length !== undefined &&
+                        (field.type.id === 'varchar' ||
+                            field.type.id === 'char')
+                    ) {
+                        field.characterMaximumLength =
+                            typeArgsObj.length.toString();
+                    }
+
+                    // Transfer precision/scale for numeric types
+                    if (
+                        typeArgsObj.precision !== undefined &&
+                        (field.type.id === 'numeric' ||
+                            field.type.id === 'decimal')
+                    ) {
+                        field.precision = typeArgsObj.precision;
+                        field.scale = typeArgsObj.scale;
+                    }
                 }
             }
 
