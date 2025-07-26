@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/button/button';
-import { Info } from 'lucide-react';
+import { Info, Scan } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface FloatingShowAllButtonProps {
@@ -21,7 +21,20 @@ export const FloatingShowAllButton: React.FC<FloatingShowAllButtonProps> = ({
                     : 'pointer-events-none translate-y-4 opacity-0'
             )}
         >
-            <div className="flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 shadow-lg">
+            {/* Mobile version - compact button only */}
+            <div className="sm:hidden">
+                <Button
+                    onClick={onClick}
+                    size="sm"
+                    className="rounded-full bg-gray-900 px-3 py-2 text-xs text-white shadow-lg hover:bg-gray-800"
+                >
+                    <Scan className="mr-1 size-3" />
+                    Show All
+                </Button>
+            </div>
+
+            {/* Desktop version - full info card */}
+            <div className="hidden items-center gap-2 rounded-full bg-gray-900 px-4 py-2 shadow-lg sm:flex">
                 <div className="flex size-6 items-center justify-center rounded-full bg-blue-500">
                     <Info className="size-4 text-white" />
                 </div>
