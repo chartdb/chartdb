@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
@@ -76,12 +76,15 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     }, [currentDiagram, filteredTables, toast]);
 
     // Determine which DBML string to display
-    const dbmlToDisplay = dbmlFormat === 'inline' ? inlineDbml : standardDbml;
+    const dbmlToDisplay = useMemo(
+        () => (dbmlFormat === 'inline' ? inlineDbml : standardDbml),
+        [dbmlFormat, inlineDbml, standardDbml]
+    );
 
     // Toggle function
-    const toggleFormat = () => {
+    const toggleFormat = useCallback(() => {
         setDbmlFormat((prev) => (prev === 'inline' ? 'standard' : 'inline'));
-    };
+    }, []);
 
     return (
         <CodeSnippet
