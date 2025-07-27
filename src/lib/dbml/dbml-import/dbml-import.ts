@@ -133,7 +133,12 @@ const mapDBMLTypeToGenericType = (dbmlType: string): DataType => {
         const foundType = genericDataTypes.find((t) => t.id === mappedType);
         if (foundType) return foundType;
     }
-    return genericDataTypes.find((t) => t.id === 'varchar')!;
+    const type = genericDataTypes.find((t) => t.id === 'varchar')!;
+
+    return {
+        id: type.id,
+        name: type.name,
+    };
 };
 
 const determineCardinality = (

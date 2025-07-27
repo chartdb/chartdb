@@ -19,6 +19,14 @@ import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
 import type { DatabaseType } from '@/lib/domain';
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/select/select';
+
 export interface TableFieldPopoverProps {
     field: DBField;
     databaseType: DatabaseType;
@@ -144,20 +152,105 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         'side_panel.tables_section.table.field_actions.character_length'
                                     )}
                                 </Label>
-                                <Input
-                                    value={
-                                        localField.characterMaximumLength ?? ''
-                                    }
-                                    type="number"
-                                    onChange={(e) =>
-                                        setLocalField((current) => ({
-                                            ...current,
-                                            characterMaximumLength:
-                                                e.target.value,
-                                        }))
-                                    }
-                                    className="w-full rounded-md bg-muted text-sm"
-                                />
+                                {dataFieldType?.fieldAttributes
+                                    ?.hasCharMaxLengthOption ? (
+                                    <div className="flex gap-2">
+                                        <Select
+                                            value={
+                                                localField.characterMaximumLength ===
+                                                'max'
+                                                    ? 'max'
+                                                    : localField.characterMaximumLength
+                                                      ? 'custom'
+                                                      : 'none'
+                                            }
+                                            onValueChange={(value) => {
+                                                if (value === 'max') {
+                                                    setLocalField(
+                                                        (current) => ({
+                                                            ...current,
+                                                            characterMaximumLength:
+                                                                'max',
+                                                        })
+                                                    );
+                                                } else if (value === 'custom') {
+                                                    setLocalField(
+                                                        (current) => ({
+                                                            ...current,
+                                                            characterMaximumLength:
+                                                                '255',
+                                                        })
+                                                    );
+                                                } else {
+                                                    setLocalField(
+                                                        (current) => ({
+                                                            ...current,
+                                                            characterMaximumLength:
+                                                                null,
+                                                        })
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-full bg-muted">
+                                                <SelectValue placeholder="Select length" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="none">
+                                                    No length
+                                                </SelectItem>
+                                                <SelectItem value="max">
+                                                    MAX
+                                                </SelectItem>
+                                                <SelectItem value="custom">
+                                                    Custom
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {localField.characterMaximumLength &&
+                                        localField.characterMaximumLength !==
+                                            'max' ? (
+                                            <Input
+                                                value={
+                                                    localField.characterMaximumLength
+                                                }
+                                                type="number"
+                                                min="1"
+                                                max={
+                                                    dataFieldType
+                                                        ?.fieldAttributes
+                                                        ?.maxLength || undefined
+                                                }
+                                                onChange={(e) =>
+                                                    setLocalField(
+                                                        (current) => ({
+                                                            ...current,
+                                                            characterMaximumLength:
+                                                                e.target.value,
+                                                        })
+                                                    )
+                                                }
+                                                className="w-24 rounded-md bg-muted text-sm"
+                                            />
+                                        ) : null}
+                                    </div>
+                                ) : (
+                                    <Input
+                                        value={
+                                            localField.characterMaximumLength ??
+                                            ''
+                                        }
+                                        type="number"
+                                        onChange={(e) =>
+                                            setLocalField((current) => ({
+                                                ...current,
+                                                characterMaximumLength:
+                                                    e.target.value,
+                                            }))
+                                        }
+                                        className="w-full rounded-md bg-muted text-sm"
+                                    />
+                                )}
                             </div>
                         ) : null}
                         {dataFieldType?.fieldAttributes?.precision ||

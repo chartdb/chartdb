@@ -210,14 +210,17 @@ export const sanitizeSQLforDBML = (sql: string): string => {
 
 // Post-process DBML to convert separate Ref statements to inline refs
 const convertToInlineRefs = (dbml: string): string => {
-    // Extract all Ref statements - Corrected pattern
+    // Extract all Ref statements - Updated pattern to handle schema.table.field format
+    // Matches both "table"."field" and "schema"."table"."field" formats
     const refPattern =
-        /Ref\s+"([^"]+)"\s*:\s*"([^"]+)"\."([^"]+)"\s*([<>*])\s*"([^"]+)"\."([^"]+)"/g;
+        /Ref\s+"([^"]+)"\s*:\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"\s*([<>*])\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"/g;
     const refs: Array<{
         refName: string;
+        sourceSchema?: string;
         sourceTable: string;
         sourceField: string;
         direction: string;
+        targetSchema?: string;
         targetTable: string;
         targetField: string;
     }> = [];
@@ -226,27 +229,52 @@ const convertToInlineRefs = (dbml: string): string => {
     while ((match = refPattern.exec(dbml)) !== null) {
         refs.push({
             refName: match[1], // Reference name
-            sourceTable: match[2], // Source table
-            sourceField: match[3], // Source field
-            direction: match[4], // Direction (<, >)
-            targetTable: match[5], // Target table
-            targetField: match[6], // Target field
+            sourceSchema: match[2] || undefined, // Source schema (optional)
+            sourceTable: match[3], // Source table
+            sourceField: match[4], // Source field
+            direction: match[5], // Direction (<, >)
+            targetSchema: match[6] || undefined, // Target schema (optional)
+            targetTable: match[7], // Target table
+            targetField: match[8], // Target field
         });
     }
 
-    // Extract all table definitions - Corrected pattern and handling
+    // Extract all table definitions - Support both quoted and bracketed table names
     const tables: {
-        [key: string]: { start: number; end: number; content: string };
+        [key: string]: {
+            start: number;
+            end: number;
+            content: string;
+            fullMatch: string;
+        };
     } = {};
-    const tablePattern = /Table\s+"([^"]+)"\s*{([^}]*)}/g; // Simpler pattern, assuming content doesn't have {}
+    // Updated pattern to handle various table name formats including schema.table
+    const tablePattern =
+        /Table\s+(?:"([^"]+)"(?:\."([^"]+)")?|(\[?[^\s[]+\]?\.\[?[^\s\]]+\]?)|(\[?[^\s[{]+\]?))\s*{([^}]*)}/g;
 
     let tableMatch;
     while ((tableMatch = tablePattern.exec(dbml)) !== null) {
-        const tableName = tableMatch[1];
-        tables[tableName] = {
+        // Extract table name - handle schema.table format
+        let tableName;
+        if (tableMatch[1] && tableMatch[2]) {
+            // Format: "schema"."table"
+            tableName = `${tableMatch[1]}.${tableMatch[2]}`;
+        } else if (tableMatch[1]) {
+            // Format: "table" (no schema)
+            tableName = tableMatch[1];
+        } else {
+            // Other formats
+            tableName = tableMatch[3] || tableMatch[4];
+        }
+
+        // Clean up any bracket syntax from table names
+        const cleanTableName = tableName.replace(/\[([^\]]+)\]/g, '$1');
+
+        tables[cleanTableName] = {
             start: tableMatch.index,
             end: tableMatch.index + tableMatch[0].length,
-            content: tableMatch[2],
+            content: tableMatch[5],
+            fullMatch: tableMatch[0],
         };
     }
 
@@ -262,38 +290,66 @@ const convertToInlineRefs = (dbml: string): string => {
         let targetTableName, fieldNameToModify, inlineRefSyntax;
 
         if (ref.direction === '<') {
-            targetTableName = ref.targetTable;
+            targetTableName = ref.targetSchema
+                ? `${ref.targetSchema}.${ref.targetTable}`
+                : ref.targetTable;
             fieldNameToModify = ref.targetField;
-            inlineRefSyntax = `[ref: < "${ref.sourceTable}"."${ref.sourceField}"]`;
+            const sourceRef = ref.sourceSchema
+                ? `"${ref.sourceSchema}"."${ref.sourceTable}"."${ref.sourceField}"`
+                : `"${ref.sourceTable}"."${ref.sourceField}"`;
+            inlineRefSyntax = `ref: < ${sourceRef}`;
         } else {
-            targetTableName = ref.sourceTable;
+            targetTableName = ref.sourceSchema
+                ? `${ref.sourceSchema}.${ref.sourceTable}`
+                : ref.sourceTable;
             fieldNameToModify = ref.sourceField;
-            inlineRefSyntax = `[ref: > "${ref.targetTable}"."${ref.targetField}"]`;
+            const targetRef = ref.targetSchema
+                ? `"${ref.targetSchema}"."${ref.targetTable}"."${ref.targetField}"`
+                : `"${ref.targetTable}"."${ref.targetField}"`;
+            inlineRefSyntax = `ref: > ${targetRef}`;
         }
 
         const tableData = tableMap.get(targetTableName);
         if (tableData) {
+            // Updated pattern to capture field definition and all existing attributes in brackets
             const fieldPattern = new RegExp(
-                `("(${fieldNameToModify})"[^\n]*?)([ \t]*[[].*?[]])?([ \t]*//.*)?$`,
-                'm'
+                `^([ \t]*"${fieldNameToModify}"[^\\n]*?)(?:\\s*(\\[[^\\]]*\\]))*\\s*(//.*)?$`,
+                'gm'
             );
             let newContent = tableData.content;
 
             newContent = newContent.replace(
                 fieldPattern,
-                (
-                    lineMatch,
-                    fieldPart,
-                    _fieldName,
-                    existingAttributes,
-                    commentPart
-                ) => {
+                (lineMatch, fieldPart, existingBrackets, commentPart) => {
                     // Avoid adding duplicate refs
-                    if (lineMatch.includes('[ref:')) {
+                    if (lineMatch.includes('ref:')) {
                         return lineMatch;
                     }
 
-                    return `${fieldPart.trim()} ${inlineRefSyntax}${existingAttributes || ''}${commentPart || ''}`;
+                    // Collect all attributes from existing brackets
+                    const allAttributes: string[] = [];
+                    if (existingBrackets) {
+                        // Extract all bracket contents
+                        const bracketPattern = /\[([^\]]*)\]/g;
+                        let bracketMatch;
+                        while (
+                            (bracketMatch = bracketPattern.exec(lineMatch)) !==
+                            null
+                        ) {
+                            const content = bracketMatch[1].trim();
+                            if (content) {
+                                allAttributes.push(content);
+                            }
+                        }
+                    }
+
+                    // Add the new ref
+                    allAttributes.push(inlineRefSyntax);
+
+                    // Combine all attributes into a single bracket
+                    const combinedAttributes = allAttributes.join(', ');
+
+                    return `${fieldPart.trim()} [${combinedAttributes}]${commentPart || ''}`;
                 }
             );
 
@@ -312,9 +368,15 @@ const convertToInlineRefs = (dbml: string): string => {
         ([, a], [, b]) => a.start - b.start
     );
 
-    for (const [tableName, tableData] of sortedTables) {
+    for (const [, tableData] of sortedTables) {
         reconstructedDbml += dbml.substring(lastIndex, tableData.start);
-        reconstructedDbml += `Table "${tableName}" {${tableData.content}}`;
+        // Preserve the original table definition format but with updated content
+        const originalTableDef = tableData.fullMatch;
+        const updatedTableDef = originalTableDef.replace(
+            /{[^}]*}/,
+            `{${tableData.content}}`
+        );
+        reconstructedDbml += updatedTableDef;
         lastIndex = tableData.end;
     }
     reconstructedDbml += dbml.substring(lastIndex);
@@ -408,6 +470,64 @@ const normalizeCharTypeFormat = (dbml: string): string => {
         .replace(/"char \(([0-9]+)\)"/g, '"char($1)"')
         .replace(/"character \(([0-9]+)\)"/g, '"character($1)"')
         .replace(/character \(([0-9]+)\)/g, 'character($1)');
+};
+
+// Fix table definitions with incorrect bracket syntax
+const fixTableBracketSyntax = (dbml: string): string => {
+    // Fix patterns like Table [schema].[table] to Table "schema"."table"
+    return dbml.replace(
+        /Table\s+\[([^\]]+)\]\.\[([^\]]+)\]/g,
+        'Table "$1"."$2"'
+    );
+};
+
+// Restore schema information that may have been stripped by the DBML importer
+const restoreTableSchemas = (dbml: string, diagram: Diagram): string => {
+    if (!diagram.tables) return dbml;
+
+    let result = dbml;
+
+    // For each table with a schema, restore it in the DBML
+    diagram.tables.forEach((table) => {
+        if (table.schema) {
+            // Match table definition without schema (e.g., Table "users" {)
+            const tablePattern = new RegExp(
+                `Table\\s+"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s*{`,
+                'g'
+            );
+            const schemaTableName = `Table "${table.schema}"."${table.name}" {`;
+            result = result.replace(tablePattern, schemaTableName);
+
+            // Update references in Ref statements more carefully
+            // Match patterns like: Ref "name":"tablename"."field" or < "tablename"."field"
+            const escapedTableName = table.name.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                '\\$&'
+            );
+
+            // Pattern 1: In Ref definitions - :"tablename"."field"
+            const refDefPattern = new RegExp(
+                `(Ref\\s+"[^"]+")\\s*:\\s*"${escapedTableName}"\\."([^"]+)"`,
+                'g'
+            );
+            result = result.replace(
+                refDefPattern,
+                `$1:"${table.schema}"."${table.name}"."$2"`
+            );
+
+            // Pattern 2: In Ref targets - [<>] "tablename"."field"
+            const refTargetPattern = new RegExp(
+                `([<>])\\s*"${escapedTableName}"\\."([^"]+)"`,
+                'g'
+            );
+            result = result.replace(
+                refTargetPattern,
+                `$1 "${table.schema}"."${table.name}"."$2"`
+            );
+        }
+    });
+
+    return result;
 };
 
 export interface DBMLExportResult {
@@ -577,11 +697,16 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         }
 
         standard = normalizeCharTypeFormat(
-            importer.import(
-                baseScript,
-                databaseTypeToImportFormat(diagram.databaseType)
+            fixTableBracketSyntax(
+                importer.import(
+                    baseScript,
+                    databaseTypeToImportFormat(diagram.databaseType)
+                )
             )
         );
+
+        // Restore schema information that may have been stripped by DBML importer
+        standard = restoreTableSchemas(standard, diagram);
 
         // Prepend Enum DBML to the standard output
         standard = enumsDBML + '\n' + standard;
