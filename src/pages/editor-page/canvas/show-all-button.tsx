@@ -13,7 +13,7 @@ export const ShowAllButton: React.FC<ShowAllButtonProps> = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setVisible(true);
-        }, 0);
+        }, 300);
 
         return () => clearTimeout(timer);
     }, []);
