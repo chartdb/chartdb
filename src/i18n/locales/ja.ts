@@ -285,10 +285,8 @@ export const ja: LanguageTranslation = {
             // TODO: Translate
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
-            // TODO: Translate
+                'Highlighting "{{typeName}}" - Click to clear', // TODO: Translate
             filter: 'Filter Tables',
         },
 

@@ -278,9 +278,8 @@ export const ko_KR: LanguageTranslation = {
             reorder_diagram: '다이어그램 재정렬',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
             // TODO: Translate
             filter: 'Filter Tables',

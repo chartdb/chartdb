@@ -275,9 +275,8 @@ export const zh_TW: LanguageTranslation = {
             reorder_diagram: '重新排列圖表',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '突出顯示重疊表格',
             // TODO: Translate
             filter: 'Filter Tables',

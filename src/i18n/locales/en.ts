@@ -254,6 +254,7 @@ export const en = {
                     custom_type_actions: {
                         title: 'Actions',
                         highlight_fields: 'Highlight Fields',
+                        clear_field_highlight: 'Clear Highlight',
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
@@ -271,9 +272,8 @@ export const en = {
             reorder_diagram: 'Reorder Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             filter: 'Filter Tables',
         },
 

@@ -280,9 +280,8 @@ export const ne: LanguageTranslation = {
             reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables:
                 'अतिरिक्त तालिकाहरू हाइलाइट गर्नुहोस्',
             // TODO: Translate

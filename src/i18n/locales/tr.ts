@@ -278,9 +278,8 @@ export const tr: LanguageTranslation = {
             reorder_diagram: 'Diyagramı Yeniden Sırala',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
             // TODO: Translate
             filter: 'Filter Tables',

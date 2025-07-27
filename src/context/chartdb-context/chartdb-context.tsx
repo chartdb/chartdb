@@ -80,7 +80,6 @@ export interface ChartDBContext {
 
     highlightedCustomType?: DBCustomType;
     highlightCustomTypeId: (id?: string) => void;
-    checkIfCustomTypeUsed: (customType: DBCustomType) => boolean;
 
     filteredSchemas?: string[];
     filterSchemas: (schemaIds: string[]) => void;
@@ -299,7 +298,6 @@ export const chartDBContext = createContext<ChartDBContext>({
     customTypes: [],
     schemas: [],
     highlightCustomTypeId: emptyFn,
-    checkIfCustomTypeUsed: emptyFn,
     filteredSchemas: [],
     filterSchemas: emptyFn,
     currentDiagram: {

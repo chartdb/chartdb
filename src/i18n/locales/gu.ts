@@ -280,9 +280,8 @@ export const gu: LanguageTranslation = {
             reorder_diagram: 'ડાયાગ્રામ ફરીથી વ્યવસ્થિત કરો',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'ઓવરલેપ કરતો ટેબલ હાઇલાઇટ કરો',
             // TODO: Translate
             filter: 'Filter Tables',

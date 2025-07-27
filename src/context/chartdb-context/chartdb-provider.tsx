@@ -74,26 +74,8 @@ export const ChartDBProvider: React.FC<
     const [hiddenTableIds, setHiddenTableIds] = useState<string[]>([]);
     const { events: diffEvents } = useDiff();
 
-    // New state for highlighted custom type ID
     const [highlightedCustomTypeId, setHighlightedCustomTypeId] =
         useState<string>();
-
-    // Function to check if a custom type is used by any field
-    const checkIfCustomTypeUsed = useCallback(
-        (customType: DBCustomType): boolean => {
-            const typeNameToFind = customType.name;
-
-            for (const table of tables) {
-                for (const field of table.fields) {
-                    if (field.type.name === typeNameToFind) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
-        [tables]
-    );
 
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
         const { tablesAdded, fieldsAdded, relationshipsAdded } = event.data;
@@ -1866,7 +1848,6 @@ export const ChartDBProvider: React.FC<
                 removeHiddenTableId,
                 highlightCustomTypeId,
                 highlightedCustomType,
-                checkIfCustomTypeUsed,
             }}
         >
             {children}

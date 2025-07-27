@@ -1183,13 +1183,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                             })}
                                         </TooltipContent>
                                     </Tooltip>
-                                    {highlightedCustomType && (
+                                    {highlightedCustomType ? (
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <span>
                                                     <Button
                                                         variant="secondary"
-                                                        className="size-8 bg-yellow-500 p-1 text-white shadow-none hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700"
+                                                        className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
                                                         onClick={() =>
                                                             highlightCustomTypeId(
                                                                 undefined
@@ -1201,22 +1201,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                                 </span>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                {(() => {
-                                                    return highlightedCustomType
-                                                        ? t(
-                                                              'toolbar.custom_type_highlight_tooltip',
-                                                              {
-                                                                  typeName:
-                                                                      highlightedCustomType.name,
-                                                              }
-                                                          )
-                                                        : t(
-                                                              'toolbar.clear_highlight'
-                                                          );
-                                                })()}
+                                                {t(
+                                                    'toolbar.custom_type_highlight_tooltip',
+                                                    {
+                                                        typeName:
+                                                            highlightedCustomType.name,
+                                                    }
+                                                )}
                                             </TooltipContent>
                                         </Tooltip>
-                                    )}
+                                    ) : null}
                                 </>
                             ) : null}
 

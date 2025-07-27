@@ -267,9 +267,8 @@ export const fr: LanguageTranslation = {
             reorder_diagram: 'Réorganiser le Diagramme',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Surligner les tables chevauchées',
             // TODO: Translate
             filter: 'Filter Tables',

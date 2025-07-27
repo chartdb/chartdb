@@ -21,13 +21,12 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTypeEnumValues } from './enum-values/enum-values';
 import { CustomTypeCompositeFields } from './composite-fields/composite-fields';
-import { cn } from '@/lib/utils';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
-    TooltipProvider,
 } from '@/components/tooltip/tooltip';
+import { checkIfCustomTypeUsed } from '../utils';
 
 export interface CustomTypeListItemContentProps {
     customType: DBCustomType;
@@ -41,7 +40,7 @@ export const CustomTypeListItemContent: React.FC<
         updateCustomType,
         highlightedCustomType,
         highlightCustomTypeId,
-        checkIfCustomTypeUsed,
+        tables,
     } = useChartDB();
     const { t } = useTranslation();
 
@@ -114,36 +113,32 @@ export const CustomTypeListItemContent: React.FC<
     }, [customType.id, highlightCustomTypeId, highlightedCustomType?.id]);
 
     const canHighlight = useMemo(
-        () => checkIfCustomTypeUsed(customType),
-        [checkIfCustomTypeUsed, customType]
+        () => checkIfCustomTypeUsed({ customType, tables }),
+        [customType, tables]
     );
 
-    const highlightButtonContent = (
-        <Button
-            variant="ghost"
-            disabled={!canHighlight}
-            className={cn(
-                'h-8 p-2 text-xs w-full flex justify-center items-center',
-                highlightedCustomType?.id === customType.id
-                    ? '!text-yellow-700 dark:!text-yellow-500'
-                    : ''
-            )}
-            onClick={toggleHighlightCustomType}
-        >
-            <Highlighter
-                className={cn(
-                    'mr-1 size-3.5',
-                    highlightedCustomType?.id === customType.id
-                        ? 'text-yellow-600'
-                        : canHighlight
-                          ? 'text-muted-foreground'
-                          : 'text-slate-400 dark:text-slate-600'
+    const isHighlighted = useMemo(
+        () => highlightedCustomType?.id === customType.id,
+        [highlightedCustomType, customType.id]
+    );
+
+    const renderHighlightButton = useCallback(
+        () => (
+            <Button
+                variant="ghost"
+                disabled={!canHighlight}
+                className="flex h-8 w-full items-center justify-center p-2 text-xs"
+                onClick={toggleHighlightCustomType}
+            >
+                <Highlighter className="mr-1 size-3.5" />
+                {t(
+                    isHighlighted
+                        ? 'side_panel.custom_types_section.custom_type.custom_type_actions.clear_field_highlight'
+                        : 'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
                 )}
-            />
-            {t(
-                'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
-            )}
-        </Button>
+            </Button>
+        ),
+        [isHighlighted, canHighlight, toggleHighlightCustomType, t]
     );
 
     return (
@@ -202,26 +197,20 @@ export const CustomTypeListItemContent: React.FC<
                     />
                 )}
             </div>
-            <div className="mt-4 flex flex-col items-center justify-center gap-2 pt-2">
+            <div className="flex flex-col items-center justify-center pt-2">
                 {!canHighlight ? (
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div className="w-full cursor-default">
-                                    {highlightButtonContent}
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>
-                                    {t(
-                                        'side_panel.custom_types_section.custom_type.no_fields_tooltip'
-                                    )}
-                                </p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>{renderHighlightButton()}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t(
+                                'side_panel.custom_types_section.custom_type.no_fields_tooltip'
+                            )}
+                        </TooltipContent>
+                    </Tooltip>
                 ) : (
-                    highlightButtonContent
+                    renderHighlightButton()
                 )}
                 <Button
                     variant="ghost"

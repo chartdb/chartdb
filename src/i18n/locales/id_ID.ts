@@ -278,9 +278,8 @@ export const id_ID: LanguageTranslation = {
             reorder_diagram: 'Atur Ulang Diagram',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
-            clear_highlight: 'Clear highlight',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to pulse tables, double-click to clear',
+                'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
             // TODO: Translate
             filter: 'Filter Tables',
