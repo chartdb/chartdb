@@ -148,7 +148,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                             </Button>
                                         </span>
                                     </TooltipTrigger>
-                                    <TooltipContent>
+                                    <TooltipContent side="right">
                                         {t(
                                             isCopied
                                                 ? 'copied'
@@ -174,7 +174,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                                     </Button>
                                                 </span>
                                             </TooltipTrigger>
-                                            <TooltipContent>
+                                            <TooltipContent side="right">
                                                 {action.label}
                                             </TooltipContent>
                                         </Tooltip>
