@@ -92,6 +92,8 @@ import type { Area } from '@/lib/domain/area';
 import { updateTablesParentAreas, getTablesInArea } from './area-utils';
 import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { ShowAllButton } from './show-all-button';
+import { useIsLostInCanvas } from './hooks/use-is-lost-in-canvas';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -164,6 +166,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     >([]);
     const { toast } = useToast();
     const { t } = useTranslation();
+    const { isLostInCanvas } = useIsLostInCanvas();
     const {
         tables,
         areas,
@@ -1273,6 +1276,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             >
                                 <Pencil />
                             </Button>
+                        </Controls>
+                    ) : null}
+                    {isLostInCanvas ? (
+                        <Controls
+                            position={
+                                isDesktop ? 'bottom-center' : 'top-center'
+                            }
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                            style={{
+                                [isDesktop ? 'bottom' : 'top']: isDesktop
+                                    ? '70px'
+                                    : '70px',
+                            }}
+                        >
+                            <ShowAllButton />
                         </Controls>
                     ) : null}
                     <Controls
