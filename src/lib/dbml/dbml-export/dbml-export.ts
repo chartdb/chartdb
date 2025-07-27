@@ -603,26 +603,40 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
     const processTable = (table: DBTable) => {
         const originalName = table.name;
-        let safeTableName = originalName.replace(/[^\w]/g, '_');
+        let safeTableName = originalName;
+
+        // If name contains spaces or special characters, wrap in quotes
+        if (/[^\w]/.test(originalName)) {
+            safeTableName = `"${originalName.replace(/"/g, '\\"')}"`;
+        }
 
         // Rename table if SQL keyword (PostgreSQL only)
-        if (shouldRenameKeywords && isSQLKeyword(safeTableName)) {
-            const newName = `${safeTableName}_table`;
+        if (shouldRenameKeywords && isSQLKeyword(originalName)) {
+            const newName = `${originalName}_table`;
             sqlRenamedTables.set(newName, originalName);
-            safeTableName = newName;
+            safeTableName = /[^\w]/.test(newName)
+                ? `"${newName.replace(/"/g, '\\"')}"`
+                : newName;
         }
 
         const fieldNameCounts = new Map<string, number>();
         const processedFields = table.fields.map((field) => {
-            const originalSafeName = field.name.replace(/[^\w]/g, '_');
-            let finalSafeName = originalSafeName;
+            let finalSafeName = field.name;
+
+            // If field name contains spaces or special characters, wrap in quotes
+            if (/[^\w]/.test(field.name)) {
+                finalSafeName = `"${field.name.replace(/"/g, '\\"')}"`;
+            }
 
             // Handle duplicate field names
-            const count = fieldNameCounts.get(originalSafeName) || 0;
+            const count = fieldNameCounts.get(field.name) || 0;
             if (count > 0) {
-                finalSafeName = `${originalSafeName}_${count + 1}`;
+                const newName = `${field.name}_${count + 1}`;
+                finalSafeName = /[^\w]/.test(newName)
+                    ? `"${newName.replace(/"/g, '\\"')}"`
+                    : newName;
             }
-            fieldNameCounts.set(originalSafeName, count + 1);
+            fieldNameCounts.set(field.name, count + 1);
 
             // Create sanitized field
             const sanitizedField: DBField = {
@@ -632,14 +646,16 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             delete sanitizedField.comments;
 
             // Rename field if SQL keyword (PostgreSQL only)
-            if (shouldRenameKeywords && isSQLKeyword(finalSafeName)) {
-                const newFieldName = `${finalSafeName}_field`;
+            if (shouldRenameKeywords && isSQLKeyword(field.name)) {
+                const newFieldName = `${field.name}_field`;
                 fieldRenames.push({
                     table: safeTableName,
-                    originalName: finalSafeName,
+                    originalName: field.name,
                     newName: newFieldName,
                 });
-                sanitizedField.name = newFieldName;
+                sanitizedField.name = /[^\w]/.test(newFieldName)
+                    ? `"${newFieldName.replace(/"/g, '\\"')}"`
+                    : newFieldName;
             }
 
             return sanitizedField;
@@ -652,7 +668,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             indexes: (table.indexes || []).map((index) => ({
                 ...index,
                 name: index.name
-                    ? index.name.replace(/[^\w]/g, '_')
+                    ? /[^\w]/.test(index.name)
+                        ? `"${index.name.replace(/"/g, '\\"')}"`
+                        : index.name
                     : `idx_${Math.random().toString(36).substring(2, 8)}`,
             })),
         };
@@ -662,10 +680,15 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         ...cleanDiagram,
         tables: cleanDiagram.tables?.map(processTable) ?? [],
         relationships:
-            cleanDiagram.relationships?.map((rel, index) => ({
-                ...rel,
-                name: `fk_${index}_${rel.name ? rel.name.replace(/[^\w]/g, '_') : Math.random().toString(36).substring(2, 8)}`,
-            })) ?? [],
+            cleanDiagram.relationships?.map((rel, index) => {
+                const safeName = rel.name
+                    ? rel.name.replace(/[^\w]/g, '_')
+                    : Math.random().toString(36).substring(2, 8);
+                return {
+                    ...rel,
+                    name: `fk_${index}_${safeName}`,
+                };
+            }) ?? [],
     } as Diagram);
 
     let standard = '';
