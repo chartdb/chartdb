@@ -2,7 +2,8 @@ const withExtras = false;
 const withDefault = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
 const withoutDefault = `""`;
 
-export const mariaDBQuery = `SELECT CAST(CONCAT(
+export const mariaDBQuery = `SET SESSION group_concat_max_len = 10000000;
+SELECT CAST(CONCAT(
     '{"fk_info": [',
     IFNULL((SELECT GROUP_CONCAT(
         CONCAT('{"schema":"', cast(fk.table_schema as CHAR),
