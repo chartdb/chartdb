@@ -92,7 +92,7 @@ import type { Area } from '@/lib/domain/area';
 import { updateTablesParentAreas, getTablesInArea } from './area-utils';
 import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { FloatingShowAllButton } from './floating-show-all-button';
+import { ShowAllButton } from './show-all-button';
 import { useIsLostInCanvas } from './hooks/use-is-lost-in-canvas';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
@@ -1097,14 +1097,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         []
     );
 
-    const handleShowAll = useCallback(() => {
-        fitView({
-            duration: 500,
-            padding: 0.1,
-            maxZoom: 0.8,
-        });
-    }, [fitView]);
-
     return (
         <CanvasContextMenu>
             <div className="relative flex h-full" id="canvas">
@@ -1286,7 +1278,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </Button>
                         </Controls>
                     ) : null}
-                    {isLostInCanvas && (
+                    {isLostInCanvas ? (
                         <Controls
                             position={
                                 isDesktop ? 'bottom-center' : 'top-center'
@@ -1302,12 +1294,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                     : '70px',
                             }}
                         >
-                            <FloatingShowAllButton
-                                onClick={handleShowAll}
-                                visible={isLostInCanvas}
-                            />
+                            <ShowAllButton />
                         </Controls>
-                    )}
+                    ) : null}
                     <Controls
                         position={isDesktop ? 'bottom-center' : 'top-center'}
                         orientation="horizontal"
