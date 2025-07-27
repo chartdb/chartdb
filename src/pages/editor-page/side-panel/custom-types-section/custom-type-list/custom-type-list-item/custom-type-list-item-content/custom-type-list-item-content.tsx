@@ -16,11 +16,17 @@ import {
     customTypeKindToLabel,
     DBCustomTypeKind,
 } from '@/lib/domain/db-custom-type';
-import { Trash2, Braces } from 'lucide-react';
-import React, { useCallback } from 'react';
+import { Trash2, Braces, Highlighter } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTypeEnumValues } from './enum-values/enum-values';
 import { CustomTypeCompositeFields } from './composite-fields/composite-fields';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+import { checkIfCustomTypeUsed } from '../utils';
 
 export interface CustomTypeListItemContentProps {
     customType: DBCustomType;
@@ -29,7 +35,13 @@ export interface CustomTypeListItemContentProps {
 export const CustomTypeListItemContent: React.FC<
     CustomTypeListItemContentProps
 > = ({ customType }) => {
-    const { removeCustomType, updateCustomType } = useChartDB();
+    const {
+        removeCustomType,
+        updateCustomType,
+        highlightedCustomType,
+        highlightCustomTypeId,
+        tables,
+    } = useChartDB();
     const { t } = useTranslation();
 
     const deleteCustomTypeHandler = useCallback(() => {
@@ -92,6 +104,43 @@ export const CustomTypeListItemContent: React.FC<
         [customType.id, updateCustomType]
     );
 
+    const toggleHighlightCustomType = useCallback(() => {
+        if (highlightedCustomType?.id === customType.id) {
+            highlightCustomTypeId(undefined);
+        } else {
+            highlightCustomTypeId(customType.id);
+        }
+    }, [customType.id, highlightCustomTypeId, highlightedCustomType?.id]);
+
+    const canHighlight = useMemo(
+        () => checkIfCustomTypeUsed({ customType, tables }),
+        [customType, tables]
+    );
+
+    const isHighlighted = useMemo(
+        () => highlightedCustomType?.id === customType.id,
+        [highlightedCustomType, customType.id]
+    );
+
+    const renderHighlightButton = useCallback(
+        () => (
+            <Button
+                variant="ghost"
+                disabled={!canHighlight}
+                className="flex h-8 w-full items-center justify-center p-2 text-xs"
+                onClick={toggleHighlightCustomType}
+            >
+                <Highlighter className="mr-1 size-3.5" />
+                {t(
+                    isHighlighted
+                        ? 'side_panel.custom_types_section.custom_type.custom_type_actions.clear_field_highlight'
+                        : 'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
+                )}
+            </Button>
+        ),
+        [isHighlighted, canHighlight, toggleHighlightCustomType, t]
+    );
+
     return (
         <div className="my-1 flex flex-col rounded-b-md px-1">
             <div className="flex flex-col gap-6">
@@ -148,10 +197,24 @@ export const CustomTypeListItemContent: React.FC<
                     />
                 )}
             </div>
-            <div className="flex flex-1 items-center justify-center pt-2">
+            <div className="flex flex-col items-center justify-center pt-2">
+                {!canHighlight ? (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>{renderHighlightButton()}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t(
+                                'side_panel.custom_types_section.custom_type.no_fields_tooltip'
+                            )}
+                        </TooltipContent>
+                    </Tooltip>
+                ) : (
+                    renderHighlightButton()
+                )}
                 <Button
                     variant="ghost"
-                    className="h-8 p-2 text-xs"
+                    className="flex h-8 w-full items-center justify-center p-2 text-xs"
                     onClick={deleteCustomTypeHandler}
                 >
                     <Trash2 className="mr-1 size-3.5 text-red-700" />

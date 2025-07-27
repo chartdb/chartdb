@@ -40,7 +40,13 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, LayoutGrid, AlertTriangle, Magnet } from 'lucide-react';
+import {
+    Pencil,
+    LayoutGrid,
+    AlertTriangle,
+    Magnet,
+    Highlighter,
+} from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -175,6 +181,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         readonly,
         removeArea,
         updateArea,
+        highlightedCustomType,
+        highlightCustomTypeId,
+        getCustomType,
         hiddenTableIds,
     } = useChartDB();
     const { showSidePanel } = useLayout();
@@ -385,12 +394,22 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         hiddenTableIds,
                     });
 
+                    // Check if table uses the highlighted custom type
+                    let hasHighlightedCustomType = false;
+                    if (highlightedCustomType) {
+                        hasHighlightedCustomType = table.fields.some(
+                            (field) =>
+                                field.type.name === highlightedCustomType.name
+                        );
+                    }
+
                     return {
                         ...node,
                         data: {
                             ...node.data,
                             isOverlapping,
                             highlightOverlappingTables,
+                            hasHighlightedCustomType,
                         },
                     };
                 }),
@@ -413,6 +432,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
+        highlightedCustomType,
+        getCustomType,
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
@@ -1162,6 +1183,34 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                                             })}
                                         </TooltipContent>
                                     </Tooltip>
+                                    {highlightedCustomType ? (
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <span>
+                                                    <Button
+                                                        variant="secondary"
+                                                        className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
+                                                        onClick={() =>
+                                                            highlightCustomTypeId(
+                                                                undefined
+                                                            )
+                                                        }
+                                                    >
+                                                        <Highlighter className="size-4" />
+                                                    </Button>
+                                                </span>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                {t(
+                                                    'toolbar.custom_type_highlight_tooltip',
+                                                    {
+                                                        typeName:
+                                                            highlightedCustomType.name,
+                                                    }
+                                                )}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    ) : null}
                                 </>
                             ) : null}
 

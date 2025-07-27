@@ -74,6 +74,9 @@ export const ChartDBProvider: React.FC<
     const [hiddenTableIds, setHiddenTableIds] = useState<string[]>([]);
     const { events: diffEvents } = useDiff();
 
+    const [highlightedCustomTypeId, setHighlightedCustomTypeId] =
+        useState<string>();
+
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
         const { tablesAdded, fieldsAdded, relationshipsAdded } = event.data;
         setTables((tables) =>
@@ -1531,22 +1534,37 @@ export const ChartDBProvider: React.FC<
         [db, diagramId, setAreas, getArea, addUndoAction, resetRedoStack]
     );
 
+    const highlightCustomTypeId = useCallback(
+        (id?: string) => setHighlightedCustomTypeId(id),
+        [setHighlightedCustomTypeId]
+    );
+
+    const highlightedCustomType = useMemo(() => {
+        return highlightedCustomTypeId
+            ? customTypes.find((type) => type.id === highlightedCustomTypeId)
+            : undefined;
+    }, [highlightedCustomTypeId, customTypes]);
+
     const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
         useCallback(
-            async (diagram) => {
+            (diagram) => {
                 setDiagramId(diagram.id);
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
                 setDatabaseEdition(diagram.databaseEdition);
-                setTables(diagram?.tables ?? []);
-                setRelationships(diagram?.relationships ?? []);
-                setDependencies(diagram?.dependencies ?? []);
-                setAreas(diagram?.areas ?? []);
-                setCustomTypes(diagram?.customTypes ?? []);
+                setTables(diagram.tables ?? []);
+                setRelationships(diagram.relationships ?? []);
+                setDependencies(diagram.dependencies ?? []);
+                setAreas(diagram.areas ?? []);
+                setCustomTypes(diagram.customTypes ?? []);
                 setDiagramCreatedAt(diagram.createdAt);
                 setDiagramUpdatedAt(diagram.updatedAt);
+                setHighlightedCustomTypeId(undefined);
 
                 events.emit({ action: 'load_diagram', data: { diagram } });
+
+                resetRedoStack();
+                resetUndoStack();
             },
             [
                 setDiagramId,
@@ -1560,7 +1578,10 @@ export const ChartDBProvider: React.FC<
                 setCustomTypes,
                 setDiagramCreatedAt,
                 setDiagramUpdatedAt,
+                setHighlightedCustomTypeId,
                 events,
+                resetRedoStack,
+                resetUndoStack,
             ]
         );
 
@@ -1825,6 +1846,8 @@ export const ChartDBProvider: React.FC<
                 hiddenTableIds,
                 addHiddenTableId,
                 removeHiddenTableId,
+                highlightCustomTypeId,
+                highlightedCustomType,
             }}
         >
             {children}
