@@ -43,11 +43,18 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
             root: [
                 [/\b(Table|Ref|Indexes)\b/, 'keyword'],
                 [/\[.*?\]/, 'annotation'],
+                [/'''/, 'string', '@tripleQuoteString'],
                 [/".*?"/, 'string'],
                 [/'.*?'/, 'string'],
+                [/`.*?`/, 'string'],
                 [/[{}]/, 'delimiter'],
                 [/[<>]/, 'operator'],
                 [new RegExp(`\\b(${datatypePattern})\\b`, 'i'), 'type'], // Added 'i' flag for case-insensitive matching
+            ],
+            tripleQuoteString: [
+                [/[^']+/, 'string'],
+                [/'''/, 'string', '@pop'],
+                [/'/, 'string'],
             ],
         },
     });

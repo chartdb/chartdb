@@ -348,4 +348,174 @@ describe('DBML Export - Issue Fixes', () => {
             '"user id" bigint [not null, ref: < "user profile"."user id"]'
         );
     });
+
+    it('should export table and field comments to DBML', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'users',
+                    comments: 'Stores user information',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            comments: 'Unique identifier for the user',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'email',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: true,
+                            comments: 'User email address',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '255',
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field3',
+                            name: 'created_at',
+                            type: { id: 'timestamp', name: 'timestamp' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table2',
+                    name: 'posts',
+                    comments: 'Blog posts created by users',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field4',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field5',
+                            name: 'user_id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            comments:
+                                'Reference to the user who created the post',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field6',
+                            name: 'title',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '500',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel1',
+                    name: 'fk_posts_user',
+                    sourceTableId: 'table2',
+                    sourceFieldId: 'field5',
+                    targetTableId: 'table1',
+                    targetFieldId: 'field1',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+            ],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check table comments in standard DBML
+        expect(result.standardDbml).toContain('Table "users" {');
+        expect(result.standardDbml).toContain(
+            "Note: 'Stores user information'"
+        );
+        expect(result.standardDbml).toContain('Table "posts" {');
+        expect(result.standardDbml).toContain(
+            "Note: 'Blog posts created by users'"
+        );
+
+        // Check field comments in both inline and standard DBML
+        // In inline DBML, comments should appear after field definitions
+        expect(result.inlineDbml).toContain(
+            '"id" bigint [pk, not null, note: \'Unique identifier for the user\']'
+        );
+        expect(result.inlineDbml).toContain(
+            '"email" varchar(255) [unique, not null, note: \'User email address\']'
+        );
+        expect(result.inlineDbml).toContain(
+            '"user_id" bigint [not null, note: \'Reference to the user who created the post\', ref: < "users"."id"]'
+        );
+
+        // In standard DBML, field comments should use the note attribute syntax
+        expect(result.standardDbml).toContain(
+            '"id" bigint [pk, not null, note: \'Unique identifier for the user\']'
+        );
+        expect(result.standardDbml).toContain(
+            '"email" varchar(255) [unique, not null, note: \'User email address\']'
+        );
+        expect(result.standardDbml).toContain(
+            '"user_id" bigint [not null, note: \'Reference to the user who created the post\']'
+        );
+
+        // Verify fields without comments don't have note attribute
+        expect(result.standardDbml).not.toContain(
+            '"created_at" timestamp [not null, note:'
+        );
+        expect(result.standardDbml).not.toContain(
+            '"title" varchar(500) [not null, note:'
+        );
+    });
 });
