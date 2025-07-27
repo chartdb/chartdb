@@ -183,7 +183,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         updateArea,
         highlightedCustomType,
         highlightCustomTypeId,
-        getCustomType,
         hiddenTableIds,
     } = useChartDB();
     const { showSidePanel } = useLayout();
@@ -433,7 +432,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph.graph,
         highlightOverlappingTables,
         highlightedCustomType,
-        getCustomType,
     ]);
 
     const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
