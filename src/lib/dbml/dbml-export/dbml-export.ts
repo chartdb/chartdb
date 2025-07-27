@@ -643,7 +643,6 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
                 ...field,
                 name: finalSafeName,
             };
-            delete sanitizedField.comments;
 
             // Rename field if SQL keyword (PostgreSQL only)
             if (shouldRenameKeywords && isSQLKeyword(field.name)) {
