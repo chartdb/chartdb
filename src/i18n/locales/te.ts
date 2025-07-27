@@ -264,6 +264,7 @@ export const te: LanguageTranslation = {
                         title: 'Actions',
                         highlight_fields: 'Highlight Fields',
                         delete_custom_type: 'Delete',
+                        clear_field_highlight: 'Clear Highlight',
                     },
                     delete_custom_type: 'Delete Type',
                 },
