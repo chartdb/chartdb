@@ -310,7 +310,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         ? 'animate-scale-2'
                         : '',
                     hasHighlightedCustomType
-                        ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2 animate-scale-2'
+                        ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2 animate-scale'
                         : '',
                     isDiffTableChanged && !isDiffNewTable && !isDiffTableRemoved
                         ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
