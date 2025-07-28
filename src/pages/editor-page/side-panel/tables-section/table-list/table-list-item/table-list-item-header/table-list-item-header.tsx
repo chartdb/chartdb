@@ -48,6 +48,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 }) => {
     const {
         updateTable,
+        updateTablesState,
         removeTable,
         createIndex,
         createField,
@@ -128,9 +129,15 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     const updateTableSchema = useCallback(
         ({ schema }: { schema: DBSchema }) => {
-            updateTable(table.id, { schema: schema.name });
+            updateTablesState((currentTables) =>
+                currentTables.map((t) =>
+                    t.id === table.id || !t.schema
+                        ? { ...t, schema: schema.name }
+                        : t
+                )
+            );
         },
-        [table.id, updateTable]
+        [table.id, updateTablesState]
     );
 
     const changeSchema = useCallback(() => {
