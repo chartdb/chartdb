@@ -43,6 +43,7 @@ export interface CodeSnippetProps {
     isComplete?: boolean;
     editorProps?: React.ComponentProps<EditorType>;
     actions?: CodeSnippetAction[];
+    actionsTooltipSide?: 'top' | 'right' | 'bottom' | 'left';
 }
 
 export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
@@ -56,6 +57,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         isComplete = true,
         editorProps,
         actions,
+        actionsTooltipSide,
     }) => {
         const { t } = useTranslation();
         const monaco = useMonaco();
@@ -148,7 +150,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                             </Button>
                                         </span>
                                     </TooltipTrigger>
-                                    <TooltipContent side="right">
+                                    <TooltipContent side={actionsTooltipSide}>
                                         {t(
                                             isCopied
                                                 ? 'copied'
@@ -174,7 +176,9 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                                     </Button>
                                                 </span>
                                             </TooltipTrigger>
-                                            <TooltipContent side="right">
+                                            <TooltipContent
+                                                side={actionsTooltipSide}
+                                            >
                                                 {action.label}
                                             </TooltipContent>
                                         </Tooltip>
