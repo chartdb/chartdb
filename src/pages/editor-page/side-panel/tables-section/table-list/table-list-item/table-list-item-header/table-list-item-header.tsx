@@ -138,6 +138,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             table,
             schemas,
             onConfirm: updateTableSchema,
+            allowSchemaCreation: true,
         });
     }, [openTableSchemaDialog, table, schemas, updateTableSchema]);
 
@@ -170,25 +171,21 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         )}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {schemas.length > 0 ? (
-                        <>
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem
-                                    className="flex justify-between gap-4"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        changeSchema();
-                                    }}
-                                >
-                                    {t(
-                                        'side_panel.tables_section.table.table_actions.change_schema'
-                                    )}
-                                    <Group className="size-3.5" />
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
-                        </>
-                    ) : null}
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            className="flex justify-between gap-4"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                changeSchema();
+                            }}
+                        >
+                            {t(
+                                'side_panel.tables_section.table.table_actions.change_schema'
+                            )}
+                            <Group className="size-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             className="flex justify-between gap-4"
@@ -250,7 +247,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             duplicateTableHandler,
             t,
             changeSchema,
-            schemas.length,
         ]
     );
 

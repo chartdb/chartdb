@@ -408,6 +408,14 @@ export const tr: LanguageTranslation = {
             cancel: 'İptal',
             confirm: 'Değiştir',
         },
+
+        create_table_schema_dialog: {
+            title: 'Yeni Şema Oluştur',
+            description:
+                'Henüz hiç şema mevcut değil. Tablolarınızı düzenlemek için ilk şemanızı oluşturun.',
+            create: 'Oluştur',
+            cancel: 'İptal',
+        },
         star_us_dialog: {
             title: 'Bize yardım et!',
             description:

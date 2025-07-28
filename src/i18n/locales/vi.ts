@@ -415,6 +415,14 @@ export const vi: LanguageTranslation = {
             confirm: 'Xác nhận',
         },
 
+        create_table_schema_dialog: {
+            title: 'Tạo lược đồ mới',
+            description:
+                'Chưa có lược đồ nào. Tạo lược đồ đầu tiên của bạn để tổ chức các bảng.',
+            create: 'Tạo',
+            cancel: 'Hủy',
+        },
+
         star_us_dialog: {
             title: 'Hãy giúp chúng tôi cải thiện!',
             description:

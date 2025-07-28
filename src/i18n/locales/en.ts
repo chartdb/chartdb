@@ -406,6 +406,14 @@ export const en = {
             confirm: 'Change',
         },
 
+        create_table_schema_dialog: {
+            title: 'Create New Schema',
+            description:
+                'No schemas exist yet. Create your first schema to organize your tables.',
+            create: 'Create',
+            cancel: 'Cancel',
+        },
+
         star_us_dialog: {
             title: 'Help us improve!',
             description:

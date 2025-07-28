@@ -422,6 +422,14 @@ export const ja: LanguageTranslation = {
             confirm: '変更',
         },
 
+        create_table_schema_dialog: {
+            title: '新しいスキーマを作成',
+            description:
+                'スキーマがまだ存在しません。テーブルを整理するために最初のスキーマを作成してください。',
+            create: '作成',
+            cancel: 'キャンセル',
+        },
+
         star_us_dialog: {
             title: '改善をサポートしてください！',
             description:

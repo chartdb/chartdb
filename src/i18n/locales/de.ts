@@ -420,6 +420,13 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
             confirm: 'Ändern',
         },
+        create_table_schema_dialog: {
+            title: 'Neues Schema erstellen',
+            description:
+                'Es existieren noch keine Schemas. Erstellen Sie Ihr erstes Schema, um Ihre Tabellen zu organisieren.',
+            create: 'Erstellen',
+            cancel: 'Abbrechen',
+        },
 
         star_us_dialog: {
             title: 'Hilf uns, uns zu verbessern!',

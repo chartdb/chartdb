@@ -415,6 +415,14 @@ export const id_ID: LanguageTranslation = {
             confirm: 'Ubah',
         },
 
+        create_table_schema_dialog: {
+            title: 'Buat Skema Baru',
+            description:
+                'Belum ada skema yang tersedia. Buat skema pertama Anda untuk mengatur tabel-tabel Anda.',
+            create: 'Buat',
+            cancel: 'Batal',
+        },
+
         star_us_dialog: {
             title: 'Bantu kami meningkatkan!',
             description:

@@ -388,6 +388,13 @@ export const fr: LanguageTranslation = {
             cancel: 'Annuler',
             confirm: 'Modifier',
         },
+        create_table_schema_dialog: {
+            title: 'Créer un Nouveau Schéma',
+            description:
+                "Aucun schéma n'existe encore. Créez votre premier schéma pour organiser vos tables.",
+            create: 'Créer',
+            cancel: 'Annuler',
+        },
 
         create_relationship_dialog: {
             title: 'Créer une Relation',

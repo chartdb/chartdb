@@ -420,6 +420,14 @@ export const ne: LanguageTranslation = {
             confirm: 'परिवर्तन गर्नुहोस्',
         },
 
+        create_table_schema_dialog: {
+            title: 'नयाँ स्कीम सिर्जना गर्नुहोस्',
+            description:
+                'अहिलेसम्म कुनै स्कीम अस्तित्वमा छैन। आफ्ना तालिकाहरू व्यवस्थित गर्न आफ्नो पहिलो स्कीम सिर्जना गर्नुहोस्।',
+            create: 'सिर्जना गर्नुहोस्',
+            cancel: 'रद्द गर्नुहोस्',
+        },
+
         star_us_dialog: {
             title: 'हामीलाई अझ राम्रो हुन मदत गर्नुहोस!',
             description:

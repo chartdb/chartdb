@@ -417,6 +417,14 @@ export const gu: LanguageTranslation = {
             confirm: 'બદલો',
         },
 
+        create_table_schema_dialog: {
+            title: 'નવું સ્કીમા બનાવો',
+            description:
+                'હજી સુધી કોઈ સ્કીમા અસ્તિત્વમાં નથી. તમારા ટેબલ્સ ને વ્યવસ્થિત કરવા માટે તમારું પહેલું સ્કીમા બનાવો.',
+            create: 'બનાવો',
+            cancel: 'રદ કરો',
+        },
+
         star_us_dialog: {
             title: 'અમને સુધારવામાં મદદ કરો!',
             description:

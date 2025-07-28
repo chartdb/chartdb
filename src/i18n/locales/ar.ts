@@ -414,6 +414,13 @@ export const ar: LanguageTranslation = {
             cancel: 'إلغاء',
             confirm: 'تغيير',
         },
+        create_table_schema_dialog: {
+            title: 'إنشاء مخطط جديد',
+            description:
+                'لا توجد مخططات حتى الآن. قم بإنشاء أول مخطط لتنظيم جداولك.',
+            create: 'إنشاء',
+            cancel: 'إلغاء',
+        },
 
         star_us_dialog: {
             title: '!ساعدنا على التحسن',
