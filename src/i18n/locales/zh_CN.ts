@@ -411,6 +411,13 @@ export const zh_CN: LanguageTranslation = {
             confirm: '更改',
         },
 
+        create_table_schema_dialog: {
+            title: '创建新模式',
+            description: '尚未存在任何模式。创建您的第一个模式来组织您的表。',
+            create: '创建',
+            cancel: '取消',
+        },
+
         star_us_dialog: {
             title: '帮助我们改进！',
             description: '您想在 GitHub 上为我们加注星标吗？只需点击一下即可！',

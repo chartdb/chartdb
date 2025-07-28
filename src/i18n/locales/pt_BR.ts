@@ -418,6 +418,14 @@ export const pt_BR: LanguageTranslation = {
             confirm: 'Alterar',
         },
 
+        create_table_schema_dialog: {
+            title: 'Criar Novo Esquema',
+            description:
+                'Ainda não existem esquemas. Crie seu primeiro esquema para organizar suas tabelas.',
+            create: 'Criar',
+            cancel: 'Cancelar',
+        },
+
         star_us_dialog: {
             title: 'Ajude-nos a melhorar!',
             description:

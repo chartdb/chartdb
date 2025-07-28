@@ -415,6 +415,14 @@ export const ko_KR: LanguageTranslation = {
             confirm: '변경',
         },
 
+        create_table_schema_dialog: {
+            title: '새 스키마 생성',
+            description:
+                '아직 스키마가 없습니다. 테이블을 정리하기 위해 첫 번째 스키마를 생성하세요.',
+            create: '생성',
+            cancel: '취소',
+        },
+
         star_us_dialog: {
             title: '개선할 수 있도록 도와주세요!',
             description:

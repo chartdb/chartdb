@@ -420,6 +420,14 @@ export const hi: LanguageTranslation = {
             confirm: 'बदलें',
         },
 
+        create_table_schema_dialog: {
+            title: 'नया स्कीमा बनाएं',
+            description:
+                'अभी तक कोई स्कीमा मौजूद नहीं है। अपनी तालिकाओं को व्यवस्थित करने के लिए अपना पहला स्कीमा बनाएं।',
+            create: 'बनाएं',
+            cancel: 'रद्द करें',
+        },
+
         star_us_dialog: {
             title: 'हमें सुधारने में मदद करें!',
             description:

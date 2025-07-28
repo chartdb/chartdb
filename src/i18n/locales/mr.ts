@@ -423,6 +423,14 @@ export const mr: LanguageTranslation = {
             confirm: 'बदला',
         },
 
+        create_table_schema_dialog: {
+            title: 'नवीन स्कीमा तयार करा',
+            description:
+                'अजून कोणतीही स्कीमा अस्तित्वात नाही. आपल्या टेबल्स व्यवस्थित करण्यासाठी आपली पहिली स्कीमा तयार करा.',
+            create: 'तयार करा',
+            cancel: 'रद्द करा',
+        },
+
         star_us_dialog: {
             title: 'आम्हाला सुधारण्यास मदत करा!',
             description:

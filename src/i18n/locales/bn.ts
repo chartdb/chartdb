@@ -416,6 +416,13 @@ export const bn: LanguageTranslation = {
             cancel: 'বাতিল করুন',
             confirm: 'পরিবর্তন করুন',
         },
+        create_table_schema_dialog: {
+            title: 'নতুন স্কিমা তৈরি করুন',
+            description:
+                'এখনও কোনো স্কিমা নেই। আপনার টেবিলগুলি সংগঠিত করতে আপনার প্রথম স্কিমা তৈরি করুন।',
+            create: 'তৈরি করুন',
+            cancel: 'বাতিল করুন',
+        },
 
         star_us_dialog: {
             title: 'আমাদের উন্নত করতে সাহায্য করুন!',

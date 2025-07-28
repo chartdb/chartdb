@@ -415,6 +415,14 @@ export const ru: LanguageTranslation = {
             confirm: 'Изменить',
         },
 
+        create_table_schema_dialog: {
+            title: 'Создать новую схему',
+            description:
+                'Схемы еще не существуют. Создайте вашу первую схему, чтобы организовать таблицы.',
+            create: 'Создать',
+            cancel: 'Отменить',
+        },
+
         star_us_dialog: {
             title: 'Помогите нам стать лучше!',
             description:

@@ -419,6 +419,14 @@ export const te: LanguageTranslation = {
             confirm: 'మార్చు',
         },
 
+        create_table_schema_dialog: {
+            title: 'కొత్త స్కీమా సృష్టించండి',
+            description:
+                'ఇంకా ఏ స్కీమాలు లేవు. మీ పట్టికలను వ్యవస్థీకరించడానికి మీ మొదటి స్కీమాను సృష్టించండి.',
+            create: 'సృష్టించు',
+            cancel: 'రద్దు',
+        },
+
         star_us_dialog: {
             title: 'మా సహాయంతో మెరుగుపరచండి!',
             description:

@@ -416,6 +416,14 @@ export const uk: LanguageTranslation = {
             confirm: 'Змінити',
         },
 
+        create_table_schema_dialog: {
+            title: 'Створити нову схему',
+            description:
+                'Поки що не існує жодної схеми. Створіть свою першу схему, щоб організувати ваші таблиці.',
+            create: 'Створити',
+            cancel: 'Скасувати',
+        },
+
         star_us_dialog: {
             title: 'Допоможіть нам покращитися!',
             description: 'Поставне на зірку на GitHub? Це лише один клік!',

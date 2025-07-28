@@ -408,6 +408,13 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             confirm: 'Cambiar',
         },
+        create_table_schema_dialog: {
+            title: 'Crear Nuevo Esquema',
+            description:
+                'Aún no existen esquemas. Crea tu primer esquema para organizar tus tablas.',
+            create: 'Crear',
+            cancel: 'Cancelar',
+        },
 
         star_us_dialog: {
             title: '¡Ayúdanos a mejorar!',

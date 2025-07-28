@@ -410,6 +410,14 @@ export const zh_TW: LanguageTranslation = {
             confirm: '變更',
         },
 
+        create_table_schema_dialog: {
+            title: '建立新 Schema',
+            description:
+                '尚未存在任何 Schema。建立您的第一個 Schema 來組織您的表格。',
+            create: '建立',
+            cancel: '取消',
+        },
+
         star_us_dialog: {
             title: '協助我們改善！',
             description: '請在 GitHub 上給我們一顆星，只需點擊一下！',
