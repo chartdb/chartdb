@@ -16,6 +16,7 @@ import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useReactFlow } from '@xyflow/react';
 import { TreeView } from '@/components/tree-view/tree-view';
 import type { TreeNode } from '@/components/tree-view/tree';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 
 export interface CanvasFilterProps {
     onClose: () => void;
@@ -405,7 +406,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             </div>
 
             {/* Table Tree */}
-            <div className="flex-1 overflow-y-auto rounded-b-lg">
+            <ScrollArea className="flex-1 rounded-b-lg" type="auto">
                 <TreeView
                     data={filteredTreeData}
                     onNodeClick={handleNodeClick}
@@ -416,7 +417,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     setExpanded={setExpanded}
                     className="py-2"
                 />
-            </div>
+            </ScrollArea>
         </div>
     );
 };
