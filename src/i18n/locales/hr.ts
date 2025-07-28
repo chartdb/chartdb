@@ -292,9 +292,9 @@ export const hr = {
 
             import_database: {
                 title: 'Uvezite svoju bazu podataka',
-                database_edition: 'Izdanje baze podataka:',
+                database_edition: 'Verzija baze podataka:',
                 step_1: 'Pokrenite ovu skriptu u svojoj bazi podataka:',
-                step_2: 'Zalijepite rezultat skripte u ovaj modal →',
+                step_2: 'Zalijepite rezultat skripte u ovaj dio →',
                 script_results_placeholder: 'Rezultati skripte ovdje...',
                 ssms_instructions: {
                     button_text: 'SSMS upute',
@@ -345,7 +345,7 @@ export const hr = {
         },
 
         create_relationship_dialog: {
-            title: 'Stvori vezu',
+            title: 'Kreiraj vezu',
             primary_table: 'Primarna tablica',
             primary_field: 'Primarno polje',
             referenced_table: 'Referentna tablica',
@@ -356,7 +356,7 @@ export const hr = {
             referenced_field_placeholder: 'Odaberi polje',
             no_tables_found: 'Nema pronađenih tablica',
             no_fields_found: 'Nema pronađenih polja',
-            create: 'Stvori',
+            create: 'Kreiraj',
             cancel: 'Odustani',
         },
 
@@ -381,7 +381,7 @@ export const hr = {
 
         export_image_dialog: {
             title: 'Izvezi sliku',
-            description: 'Odaberite faktor skaliranja za izvoz:',
+            description: 'Odaberite faktor veličine za izvoz:',
             scale_1x: '1x Obično',
             scale_2x: '2x (Preporučeno)',
             scale_3x: '3x',
@@ -458,9 +458,9 @@ export const hr = {
         },
         relationship_type: {
             one_to_one: 'Jedan na jedan',
-            one_to_many: 'Jedan na mnogo',
-            many_to_one: 'Mnogo na jedan',
-            many_to_many: 'Mnogo na mnogo',
+            one_to_many: 'Jedan na više',
+            many_to_one: 'Više na jedan',
+            many_to_many: 'Više na više',
         },
 
         canvas_context_menu: {
