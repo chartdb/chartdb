@@ -70,6 +70,8 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
                 if (!open) {
                     closeTableSchemaDialog();
                 }
+
+                setTimeout(() => (document.body.style.pointerEvents = ''), 500);
             }}
         >
             <DialogContent className="flex flex-col" showClose>
