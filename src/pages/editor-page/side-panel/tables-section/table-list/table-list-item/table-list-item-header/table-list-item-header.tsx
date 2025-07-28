@@ -38,6 +38,7 @@ import {
 } from '@/components/tooltip/tooltip';
 import { cloneTable } from '@/lib/clone';
 import type { DBSchema } from '@/lib/domain';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -55,6 +56,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         createTable,
         schemas,
         filteredSchemas,
+        databaseType,
     } = useChartDB();
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
@@ -178,21 +180,25 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         )}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            className="flex justify-between gap-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                changeSchema();
-                            }}
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.change_schema'
-                            )}
-                            <Group className="size-3.5" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
+                    {schemas.length > 0 || defaultSchemas?.[databaseType] ? (
+                        <>
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    className="flex justify-between gap-4"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        changeSchema();
+                                    }}
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.table_actions.change_schema'
+                                    )}
+                                    <Group className="size-3.5" />
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+                        </>
+                    ) : null}
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             className="flex justify-between gap-4"
@@ -254,6 +260,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             duplicateTableHandler,
             t,
             changeSchema,
+            schemas.length,
+            databaseType,
         ]
     );
 
