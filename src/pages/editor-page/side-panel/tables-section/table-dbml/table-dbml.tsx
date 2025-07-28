@@ -89,6 +89,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     return (
         <CodeSnippet
             code={dbmlToDisplay}
+            actionsTooltipSide="right"
             className="my-0.5"
             actions={[
                 {
