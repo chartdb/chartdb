@@ -410,6 +410,14 @@ export const hr: LanguageTranslation = {
             confirm: 'Promijeni',
         },
 
+        create_table_schema_dialog: {
+            title: 'Stvori novu shemu',
+            description:
+                'Još ne postoje sheme. Stvorite svoju prvu shemu za organiziranje tablica.',
+            create: 'Stvori',
+            cancel: 'Odustani',
+        },
+
         star_us_dialog: {
             title: 'Pomozite nam da se poboljšamo!',
             description:
