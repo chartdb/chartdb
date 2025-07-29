@@ -6,6 +6,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { type DBField } from '@/lib/domain/db-field';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 // Use DBCustomType for generating Enum DBML
 const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
@@ -485,45 +486,112 @@ const fixTableBracketSyntax = (dbml: string): string => {
 const restoreTableSchemas = (dbml: string, diagram: Diagram): string => {
     if (!diagram.tables) return dbml;
 
+    // Group tables by name to handle duplicates
+    const tablesByName = new Map<
+        string,
+        Array<{ table: (typeof diagram.tables)[0]; index: number }>
+    >();
+    diagram.tables.forEach((table, index) => {
+        const existing = tablesByName.get(table.name) || [];
+        existing.push({ table, index });
+        tablesByName.set(table.name, existing);
+    });
+
     let result = dbml;
 
-    // For each table with a schema, restore it in the DBML
-    diagram.tables.forEach((table) => {
-        if (table.schema) {
-            // Match table definition without schema (e.g., Table "users" {)
-            const tablePattern = new RegExp(
-                `Table\\s+"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s*{`,
-                'g'
-            );
-            const schemaTableName = `Table "${table.schema}"."${table.name}" {`;
-            result = result.replace(tablePattern, schemaTableName);
+    // Process each group of tables with the same name
+    tablesByName.forEach((tablesGroup, tableName) => {
+        if (tablesGroup.length === 1) {
+            // Single table with this name - simple case
+            const table = tablesGroup[0].table;
+            if (table.schema) {
+                // Match table definition without schema (e.g., Table "users" {)
+                const tablePattern = new RegExp(
+                    `Table\\s+"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s*{`,
+                    'g'
+                );
+                const schemaTableName = `Table "${table.schema}"."${table.name}" {`;
+                result = result.replace(tablePattern, schemaTableName);
 
-            // Update references in Ref statements more carefully
-            // Match patterns like: Ref "name":"tablename"."field" or < "tablename"."field"
-            const escapedTableName = table.name.replace(
+                // Update references in Ref statements
+                const escapedTableName = table.name.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    '\\$&'
+                );
+
+                // Pattern 1: In Ref definitions - :"tablename"."field"
+                const refDefPattern = new RegExp(
+                    `(Ref\\s+"[^"]+")\\s*:\\s*"${escapedTableName}"\\."([^"]+)"`,
+                    'g'
+                );
+                result = result.replace(
+                    refDefPattern,
+                    `$1:"${table.schema}"."${table.name}"."$2"`
+                );
+
+                // Pattern 2: In Ref targets - [<>] "tablename"."field"
+                const refTargetPattern = new RegExp(
+                    `([<>])\\s*"${escapedTableName}"\\."([^"]+)"`,
+                    'g'
+                );
+                result = result.replace(
+                    refTargetPattern,
+                    `$1 "${table.schema}"."${table.name}"."$2"`
+                );
+            }
+        } else {
+            // Multiple tables with the same name - need to be more careful
+            const defaultSchema = defaultSchemas[diagram.databaseType];
+
+            // Separate tables by whether they have the default schema or not
+            const defaultSchemaTable = tablesGroup.find(
+                ({ table }) => table.schema === defaultSchema
+            );
+            const nonDefaultSchemaTables = tablesGroup.filter(
+                ({ table }) => table.schema && table.schema !== defaultSchema
+            );
+
+            // Find all table definitions for this name
+            const escapedTableName = tableName.replace(
                 /[.*+?^${}()|[\]\\]/g,
                 '\\$&'
             );
 
-            // Pattern 1: In Ref definitions - :"tablename"."field"
-            const refDefPattern = new RegExp(
-                `(Ref\\s+"[^"]+")\\s*:\\s*"${escapedTableName}"\\."([^"]+)"`,
+            // First, handle tables that already have schema in DBML
+            const schemaTablePattern = new RegExp(
+                `Table\\s+"[^"]+"\\.\\s*"${escapedTableName}"\\s*{`,
                 'g'
             );
-            result = result.replace(
-                refDefPattern,
-                `$1:"${table.schema}"."${table.name}"."$2"`
+            result = result.replace(schemaTablePattern, (match) => {
+                // This table already has a schema, keep it as is
+                return match;
+            });
+
+            // Then handle tables without schema in DBML
+            const noSchemaTablePattern = new RegExp(
+                `Table\\s+"${escapedTableName}"\\s*{`,
+                'g'
             );
 
-            // Pattern 2: In Ref targets - [<>] "tablename"."field"
-            const refTargetPattern = new RegExp(
-                `([<>])\\s*"${escapedTableName}"\\."([^"]+)"`,
-                'g'
-            );
-            result = result.replace(
-                refTargetPattern,
-                `$1 "${table.schema}"."${table.name}"."$2"`
-            );
+            let noSchemaMatchIndex = 0;
+            result = result.replace(noSchemaTablePattern, (match) => {
+                // If we have a table with the default schema and this is the first match without schema,
+                // it should be the default schema table
+                if (noSchemaMatchIndex === 0 && defaultSchemaTable) {
+                    noSchemaMatchIndex++;
+                    return `Table "${defaultSchema}"."${tableName}" {`;
+                }
+                // Otherwise, try to match with non-default schema tables
+                const remainingNonDefault =
+                    nonDefaultSchemaTables[
+                        noSchemaMatchIndex - (defaultSchemaTable ? 1 : 0)
+                    ];
+                if (remainingNonDefault) {
+                    noSchemaMatchIndex++;
+                    return `Table "${remainingNonDefault.table.schema}"."${tableName}" {`;
+                }
+                return match;
+            });
         }
     });
 
