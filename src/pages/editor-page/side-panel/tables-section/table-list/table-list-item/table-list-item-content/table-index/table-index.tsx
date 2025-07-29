@@ -20,6 +20,8 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -35,14 +37,26 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     removeIndex,
 }) => {
     const { t } = useTranslation();
+    const { databaseType } = useChartDB();
     const fieldOptions = fields.map((field) => ({
         label: field.name,
         value: field.id,
     }));
     const updateIndexFields = (fieldIds: string | string[]) => {
         const ids = Array.isArray(fieldIds) ? fieldIds : [fieldIds];
-        updateIndex({ fieldIds: ids });
+
+        // For hash indexes, only keep the last selected field
+        if (index.type === 'hash' && ids.length > 0) {
+            updateIndex({ fieldIds: [ids[ids.length - 1]] });
+        } else {
+            updateIndex({ fieldIds: ids });
+        }
     };
+
+    const indexTypeOptions = [
+        { label: 'B-tree (default)', value: 'btree' },
+        { label: 'Hash', value: 'hash' },
+    ];
     return (
         <div className="flex flex-1 flex-row justify-between gap-2 p-1">
             <SelectBox
@@ -135,6 +149,38 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     }
                                 />
                             </div>
+                            {databaseType === DatabaseType.POSTGRESQL && (
+                                <div className="mt-2 flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="indexType"
+                                        className="text-subtitle"
+                                    >
+                                        Index Type
+                                    </Label>
+                                    <SelectBox
+                                        options={indexTypeOptions}
+                                        value={index.type || 'btree'}
+                                        onChange={(value) => {
+                                            const newType =
+                                                value as DBIndex['type'];
+                                            // If switching to hash and multiple fields are selected, keep only the first
+                                            if (
+                                                newType === 'hash' &&
+                                                index.fieldIds.length > 1
+                                            ) {
+                                                updateIndex({
+                                                    type: newType,
+                                                    fieldIds: [
+                                                        index.fieldIds[0],
+                                                    ],
+                                                });
+                                            } else {
+                                                updateIndex({ type: newType });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            )}
                             <Separator orientation="horizontal" />
                             <Button
                                 variant="outline"
