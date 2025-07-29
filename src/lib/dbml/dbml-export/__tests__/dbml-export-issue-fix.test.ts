@@ -845,4 +845,118 @@ describe('DBML Export - Issue Fixes', () => {
         // The duplicate store.products (table3) should be removed
         expect(result.standardDbml).not.toContain('duplicate_field');
     });
+
+    it('should export index names correctly in DBML', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'users',
+                    schema: 'public',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'email',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '255',
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field3',
+                            name: 'created_at',
+                            type: { id: 'timestamp', name: 'timestamp' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [
+                        {
+                            id: 'idx1',
+                            name: 'idx_email',
+                            unique: true,
+                            fieldIds: ['field2'],
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'idx2',
+                            name: 'idx_created_at',
+                            unique: false,
+                            fieldIds: ['field3'],
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'idx3',
+                            name: 'idx_email_created',
+                            unique: false,
+                            fieldIds: ['field2', 'field3'],
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check that table is properly formatted with schema
+        expect(result.standardDbml).toContain('Table "public"."users"');
+
+        // Check that indexes are properly formatted with names
+        // Note: When a table has a schema, index names are prefixed with the schema
+        expect(result.standardDbml).toContain(
+            'email [unique, name: "public_idx_email"]'
+        );
+        expect(result.standardDbml).toContain(
+            'created_at [name: "public_idx_created_at"]'
+        );
+        expect(result.standardDbml).toContain(
+            '(email, created_at) [name: "public_idx_email_created"]'
+        );
+
+        // Verify proper index syntax in the table
+        const indexSection = result.standardDbml.match(/Indexes \{[\s\S]*?\}/);
+        expect(indexSection).toBeTruthy();
+        expect(indexSection![0]).toContain(
+            'email [unique, name: "public_idx_email"]'
+        );
+        expect(indexSection![0]).toContain(
+            'created_at [name: "public_idx_created_at"]'
+        );
+        expect(indexSection![0]).toContain(
+            '(email, created_at) [name: "public_idx_email_created"]'
+        );
+    });
 });
