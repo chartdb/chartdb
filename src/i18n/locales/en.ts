@@ -476,6 +476,11 @@ export const en = {
             add_relationship: 'Add Relationship',
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Edit Area Name',
+            delete_area: 'Delete Area',
+        },
+
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         tool_tips: {

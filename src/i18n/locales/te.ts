@@ -493,6 +493,11 @@ export const te: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'ప్రాంత పేరును సవరించు',
+            delete_area: 'ప్రాంతాన్ని తొలగించు',
+        },
+
         // TODO: Translate
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 

@@ -485,6 +485,11 @@ export const vi: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Chỉnh sửa tên khu vực',
+            delete_area: 'Xóa khu vực',
+        },
+
         snap_to_grid_tooltip: 'Căn lưới (Giữ phím {{key}})',
 
         tool_tips: {

@@ -491,6 +491,11 @@ export const de: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Bereichsname bearbeiten',
+            delete_area: 'Bereich löschen',
+        },
+
         // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
