@@ -8,6 +8,7 @@ export const ja: LanguageTranslation = {
                 new: '新規',
                 open: '開く',
                 save: '保存',
+                duplicate: '複製',
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',

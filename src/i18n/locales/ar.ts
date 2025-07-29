@@ -8,6 +8,7 @@ export const ar: LanguageTranslation = {
                 new: 'جديد',
                 open: 'فتح',
                 save: 'حفظ',
+                duplicate: 'تكرار',
                 import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',

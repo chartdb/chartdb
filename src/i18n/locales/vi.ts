@@ -8,6 +8,7 @@ export const vi: LanguageTranslation = {
                 new: 'Tạo mới',
                 open: 'Mở',
                 save: 'Lưu',
+                duplicate: 'Nhân đôi',
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
