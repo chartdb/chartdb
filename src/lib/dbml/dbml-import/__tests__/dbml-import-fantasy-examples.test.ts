@@ -695,12 +695,33 @@ Note dragon_note {
             // Check that table header color was removed
             expect(hoardsTable).toBeDefined();
 
+            // Verify all indexes are imported correctly
+            expect(hoardsTable?.indexes).toHaveLength(3); // Should have 3 indexes as defined in DBML
+
             // Verify named indexes
             const uniqueDragonIndex = hoardsTable?.indexes.find(
                 (idx) => idx.name === 'idx_unique_dragon'
             );
+            expect(uniqueDragonIndex).toBeDefined();
+            expect(uniqueDragonIndex?.name).toBe('idx_unique_dragon'); // Verify exact name from DBML
             expect(uniqueDragonIndex?.unique).toBe(true);
             expect(uniqueDragonIndex?.fieldIds).toHaveLength(1);
+
+            const hoardValueIndex = hoardsTable?.indexes.find(
+                (idx) => idx.name === 'idx_hoard_value'
+            );
+            expect(hoardValueIndex).toBeDefined();
+            expect(hoardValueIndex?.name).toBe('idx_hoard_value'); // Verify exact name from DBML
+            expect(hoardValueIndex?.unique).toBe(false);
+            expect(hoardValueIndex?.fieldIds).toHaveLength(1);
+
+            const dragonActiveIndex = hoardsTable?.indexes.find(
+                (idx) => idx.name === 'idx_dragon_active'
+            );
+            expect(dragonActiveIndex).toBeDefined();
+            expect(dragonActiveIndex?.name).toBe('idx_dragon_active'); // Verify exact name from DBML
+            expect(dragonActiveIndex?.unique).toBe(false);
+            expect(dragonActiveIndex?.fieldIds).toHaveLength(2);
 
             // Check relationship
             expect(diagram.relationships).toHaveLength(1);
@@ -880,6 +901,7 @@ Table "public_3"."comments" {
                 (idx) => idx.name === 'public_2_content_user_id_idx'
             );
             expect(compositeIndex).toBeDefined();
+            expect(compositeIndex?.name).toBe('public_2_content_user_id_idx'); // Verify exact name from DBML
             expect(compositeIndex?.unique).toBe(true);
             expect(compositeIndex?.fieldIds).toHaveLength(2);
             // Verify it includes the correct fields
@@ -897,6 +919,7 @@ Table "public_3"."comments" {
                 (idx) => idx.name === 'public_2_index_2'
             );
             expect(singleIndex).toBeDefined();
+            expect(singleIndex?.name).toBe('public_2_index_2'); // Verify exact name from DBML
             expect(singleIndex?.unique).toBe(false);
             expect(singleIndex?.fieldIds).toHaveLength(1);
             const createdAtFieldId = postsTable?.fields.find(
@@ -913,6 +936,7 @@ Table "public_3"."comments" {
                 (idx) => idx.name === 'public_3_index_1'
             );
             expect(idIndex).toBeDefined();
+            expect(idIndex?.name).toBe('public_3_index_1'); // Verify exact name from DBML
             expect(idIndex?.unique).toBe(true);
             expect(idIndex?.fieldIds).toHaveLength(1);
             const idFieldId = commentsTable?.fields.find(
