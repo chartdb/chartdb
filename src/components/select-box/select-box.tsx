@@ -94,6 +94,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                 setOpen?.(isOpen);
                 setIsOpen(isOpen);
 
+                if (isOpen) {
+                    setSearchTerm('');
+                }
+
                 setTimeout(() => (document.body.style.pointerEvents = ''), 500);
             },
             [setOpen]
@@ -225,6 +229,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     <CommandItem
                         className="flex items-center"
                         key={option.value}
+                        value={option.label}
                         keywords={option.regex ? [option.regex] : undefined}
                         onSelect={() =>
                             handleSelect(
@@ -276,7 +281,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         return (
-            <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
+            <Popover open={isOpen} onOpenChange={onOpenChange}>
                 <PopoverTrigger asChild tabIndex={0} onKeyDown={handleKeyDown}>
                     <div
                         className={cn(
@@ -350,6 +355,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         popoverClassName
                     )}
                     align="center"
+                    container={null}
                 >
                     <Command
                         filter={(value, search, keywords) => {
@@ -417,25 +423,30 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         <CommandEmpty>
                             {emptyPlaceholder ?? 'No results found.'}
                         </CommandEmpty>
-
                         <ScrollArea>
-                            <div className="max-h-64 w-full">
-                                <CommandList className="max-h-fit w-full">
-                                    {hasGroups
-                                        ? Object.entries(groups).map(
-                                              ([groupName, groupOptions]) => (
-                                                  <CommandGroup
-                                                      key={groupName}
-                                                      heading={groupName}
-                                                  >
-                                                      {groupOptions.map(
-                                                          renderOption
-                                                      )}
-                                                  </CommandGroup>
-                                              )
-                                          )
-                                        : options.map(renderOption)}
-                                </CommandList>
+                            <div className="max-h-64">
+                                {hasGroups ? (
+                                    Object.entries(groups).map(
+                                        ([groupName, groupOptions]) => (
+                                            <CommandGroup
+                                                key={groupName}
+                                                heading={groupName}
+                                            >
+                                                <CommandList>
+                                                    {groupOptions.map(
+                                                        renderOption
+                                                    )}
+                                                </CommandList>
+                                            </CommandGroup>
+                                        )
+                                    )
+                                ) : (
+                                    <CommandGroup>
+                                        <CommandList>
+                                            {options.map(renderOption)}
+                                        </CommandList>
+                                    </CommandGroup>
+                                )}
                             </div>
                         </ScrollArea>
                     </Command>
