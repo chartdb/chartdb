@@ -97,6 +97,7 @@ interface DBMLTable {
     schema?: string | { name: string };
     fields: DBMLField[];
     indexes?: DBMLIndex[];
+    note?: string | { value: string } | null;
 }
 
 interface DBMLEndpoint {
@@ -228,6 +229,7 @@ export const importDBMLToDiagram = async (
                     allTables.push({
                         name: table.name,
                         schema: schemaName,
+                        note: table.note,
                         fields: table.fields.map(
                             (field) =>
                                 ({
@@ -364,6 +366,19 @@ export const importDBMLToDiagram = async (
                     };
                 }) || [];
 
+            // Extract table note/comment
+            let tableComment: string | undefined;
+            if (table.note) {
+                if (typeof table.note === 'string') {
+                    tableComment = table.note;
+                } else if (
+                    typeof table.note === 'object' &&
+                    'value' in table.note
+                ) {
+                    tableComment = table.note.value;
+                }
+            }
+
             return {
                 id: generateId(),
                 name: table.name.replace(/['"]/g, ''),
@@ -379,6 +394,7 @@ export const importDBMLToDiagram = async (
                 color: randomColor(),
                 isView: false,
                 createdAt: Date.now(),
+                comments: tableComment,
             };
         });
 

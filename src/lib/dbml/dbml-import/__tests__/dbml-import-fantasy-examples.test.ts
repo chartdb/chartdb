@@ -779,5 +779,222 @@ Table "bb"."users" {
             expect(bbUsersTable?.fields[0].type.id).toBe('int');
             expect(bbUsersTable?.fields[0].primaryKey).toBe(true);
         });
+
+        it('should import complex multi-schema DBML with inline refs and various indexes', async () => {
+            // This test validates:
+            // - 3 tables across different schemas (public, public_2, public_3)
+            // - Table-level notes (Note: 'my comment' on users table)
+            // - 3 indexes:
+            //   * Composite unique index: (content, user_id) on posts table
+            //   * Single non-unique index: created_at on posts table
+            //   * Single unique index: id on comments table
+            // - 3 inline foreign key relationships:
+            //   * posts.user_id -> users.id
+            //   * comments.post_id -> posts.id
+            //   * comments.user_id -> users.id
+            // - Quoted identifiers for all table and field names
+
+            const dbml = `
+Table "public"."users" {
+  "id" varchar(500) [pk]
+  "name" varchar(500)
+  "email" varchar(500)
+  Note: 'my comment'
+}
+
+Table "public_2"."posts" {
+  "id" varchar(500) [pk]
+  "title" varchar(500)
+  "content" text
+  "user_id" varchar(500) [ref: < "public"."users"."id"]
+  "created_at" timestamp
+
+  Indexes {
+    (content, user_id) [unique, name: "public_2_content_user_id_idx"]
+    created_at [name: "public_2_index_2"]
+  }
+}
+
+Table "public_3"."comments" {
+  "id" varchar(500) [pk]
+  "content" text
+  "post_id" varchar(500) [ref: < "public_2"."posts"."id"]
+  "user_id" varchar(500) [ref: < "public"."users"."id"]
+  "created_at" timestamp
+
+  Indexes {
+    id [unique, name: "public_3_index_1"]
+  }
+}`;
+            const diagram = await importDBMLToDiagram(dbml);
+
+            // Verify tables
+            expect(diagram.tables).toHaveLength(3);
+
+            const usersTable = diagram.tables?.find(
+                (t) => t.name === 'users' && t.schema === 'public'
+            );
+            const postsTable = diagram.tables?.find(
+                (t) => t.name === 'posts' && t.schema === 'public_2'
+            );
+            const commentsTable = diagram.tables?.find(
+                (t) => t.name === 'comments' && t.schema === 'public_3'
+            );
+
+            expect(usersTable).toBeDefined();
+            expect(postsTable).toBeDefined();
+            expect(commentsTable).toBeDefined();
+
+            // Check users table
+            expect(usersTable?.fields).toHaveLength(3);
+            expect(
+                usersTable?.fields.find((f) => f.name === 'id')?.primaryKey
+            ).toBe(true);
+            expect(
+                usersTable?.fields.find((f) => f.name === 'id')?.type.id
+            ).toBe('varchar');
+            expect(
+                usersTable?.fields.find((f) => f.name === 'name')?.type.id
+            ).toBe('varchar');
+            expect(
+                usersTable?.fields.find((f) => f.name === 'email')?.type.id
+            ).toBe('varchar');
+
+            // Check if table note is preserved
+            expect(usersTable?.comments).toBe('my comment');
+
+            // Check posts table
+            expect(postsTable?.fields).toHaveLength(5);
+            expect(
+                postsTable?.fields.find((f) => f.name === 'content')?.type.id
+            ).toBe('text');
+            expect(
+                postsTable?.fields.find((f) => f.name === 'created_at')?.type.id
+            ).toBe('timestamp');
+
+            // Check posts indexes thoroughly
+            expect(postsTable?.indexes).toHaveLength(2);
+
+            // Index 1: Composite unique index on (content, user_id)
+            const compositeIndex = postsTable?.indexes.find(
+                (idx) => idx.name === 'public_2_content_user_id_idx'
+            );
+            expect(compositeIndex).toBeDefined();
+            expect(compositeIndex?.unique).toBe(true);
+            expect(compositeIndex?.fieldIds).toHaveLength(2);
+            // Verify it includes the correct fields
+            const contentFieldId = postsTable?.fields.find(
+                (f) => f.name === 'content'
+            )?.id;
+            const userIdFieldId = postsTable?.fields.find(
+                (f) => f.name === 'user_id'
+            )?.id;
+            expect(compositeIndex?.fieldIds).toContain(contentFieldId);
+            expect(compositeIndex?.fieldIds).toContain(userIdFieldId);
+
+            // Index 2: Non-unique index on created_at
+            const singleIndex = postsTable?.indexes.find(
+                (idx) => idx.name === 'public_2_index_2'
+            );
+            expect(singleIndex).toBeDefined();
+            expect(singleIndex?.unique).toBe(false);
+            expect(singleIndex?.fieldIds).toHaveLength(1);
+            const createdAtFieldId = postsTable?.fields.find(
+                (f) => f.name === 'created_at'
+            )?.id;
+            expect(singleIndex?.fieldIds[0]).toBe(createdAtFieldId);
+
+            // Check comments table
+            expect(commentsTable?.fields).toHaveLength(5);
+            expect(commentsTable?.indexes).toHaveLength(1);
+
+            // Index: Unique index on id
+            const idIndex = commentsTable?.indexes.find(
+                (idx) => idx.name === 'public_3_index_1'
+            );
+            expect(idIndex).toBeDefined();
+            expect(idIndex?.unique).toBe(true);
+            expect(idIndex?.fieldIds).toHaveLength(1);
+            const idFieldId = commentsTable?.fields.find(
+                (f) => f.name === 'id'
+            )?.id;
+            expect(idIndex?.fieldIds[0]).toBe(idFieldId);
+
+            // Verify relationships (inline refs should create relationships)
+            // From DBML:
+            // 1. posts.user_id -> users.id
+            // 2. comments.post_id -> posts.id
+            // 3. comments.user_id -> users.id
+            expect(diagram.relationships).toHaveLength(3);
+
+            // Find relationships - check the actual field references
+            const findRelationshipByFields = (
+                sourceTableId: string,
+                sourceFieldName: string,
+                targetTableId: string,
+                targetFieldName: string
+            ) => {
+                const sourceField = diagram.tables
+                    ?.find((t) => t.id === sourceTableId)
+                    ?.fields.find((f) => f.name === sourceFieldName);
+                const targetField = diagram.tables
+                    ?.find((t) => t.id === targetTableId)
+                    ?.fields.find((f) => f.name === targetFieldName);
+
+                return diagram.relationships?.find(
+                    (r) =>
+                        (r.sourceFieldId === sourceField?.id &&
+                            r.targetFieldId === targetField?.id) ||
+                        (r.sourceFieldId === targetField?.id &&
+                            r.targetFieldId === sourceField?.id)
+                );
+            };
+
+            // Relationship 1: posts.user_id -> users.id
+            const postsUsersRel = findRelationshipByFields(
+                postsTable!.id,
+                'user_id',
+                usersTable!.id,
+                'id'
+            );
+            expect(postsUsersRel).toBeDefined();
+            expect(postsUsersRel?.sourceSchema).toBeDefined();
+            expect(postsUsersRel?.targetSchema).toBeDefined();
+
+            // Relationship 2: comments.post_id -> posts.id
+            const commentsPostsRel = findRelationshipByFields(
+                commentsTable!.id,
+                'post_id',
+                postsTable!.id,
+                'id'
+            );
+            expect(commentsPostsRel).toBeDefined();
+
+            // Relationship 3: comments.user_id -> users.id
+            const commentsUsersRel = findRelationshipByFields(
+                commentsTable!.id,
+                'user_id',
+                usersTable!.id,
+                'id'
+            );
+            expect(commentsUsersRel).toBeDefined();
+
+            // Verify all relationships have the expected cardinality
+            // In DBML, inline refs create relationships where the referenced table (with PK)
+            // is the "one" side and the referencing table (with FK) is the "many" side
+            const allOneToMany = diagram.relationships?.every(
+                (r) =>
+                    r.sourceCardinality === 'one' &&
+                    r.targetCardinality === 'many'
+            );
+            expect(allOneToMany).toBe(true);
+
+            // Verify schemas are preserved in relationships
+            const relationshipsHaveSchemas = diagram.relationships?.every(
+                (r) =>
+                    r.sourceSchema !== undefined && r.targetSchema !== undefined
+            );
+            expect(relationshipsHaveSchemas).toBe(true);
+        });
     });
 });
