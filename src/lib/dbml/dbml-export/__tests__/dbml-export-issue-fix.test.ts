@@ -657,6 +657,87 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.standardDbml).not.toContain('duplicate_id');
     });
 
+    it('should correctly handle categories tables with public and public_2 schemas', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+
+            tables: [
+                {
+                    id: 'ifi3bjrzp9mnml0l0cfhn753b',
+                    name: 'table_1',
+                    x: 32.625000000000085,
+                    y: 169.125,
+                    fields: [
+                        {
+                            id: 'agxg8ahs72urfqlprmt9dilxq',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753793771079,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#8eb7ff',
+                    createdAt: 1753793771079,
+                    isView: false,
+                    order: 0,
+                    schema: 'public_2',
+                    parentAreaId: null,
+                },
+                {
+                    id: '3htgpyhl8elxx6jczuhbpjtla',
+                    name: 'table_1',
+                    x: -405.99999999999983,
+                    y: -155.24999999999997,
+                    fields: [
+                        {
+                            id: 'xxefc0h5dje2a183qdj6p6rzz',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753793805822,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753793805822,
+                    isView: false,
+                    order: 1,
+                    schema: 'public',
+                    parentAreaId: null,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Should have both tables with correct schemas
+        expect(result.standardDbml).toContain('Table "public"."table_1"');
+        expect(result.standardDbml).toContain('Table "public_2"."table_1"');
+
+        // Should not have both tables with the same schema
+        const publicMatches = result.standardDbml.match(
+            /Table "public"."table_1" \{/g
+        );
+        const public2Matches = result.standardDbml.match(
+            /Table "public_2"."table_1" \{/g
+        );
+
+        expect(publicMatches).toHaveLength(1);
+        expect(public2Matches).toHaveLength(1);
+    });
+
     it('should only remove tables with both same schema AND same name', () => {
         const diagram: Diagram = {
             id: 'test-diagram',
