@@ -9,6 +9,7 @@ export interface DBIndex {
     unique: boolean;
     fieldIds: string[];
     createdAt: number;
+    type?: 'btree' | 'hash' | 'gist' | 'gin' | 'spgist' | 'brin';
 }
 
 export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
@@ -17,6 +18,7 @@ export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
     unique: z.boolean(),
     fieldIds: z.array(z.string()),
     createdAt: z.number(),
+    type: z.enum(['btree', 'hash', 'gist', 'gin', 'spgist', 'brin']).optional(),
 });
 
 export const createIndexesFromMetadata = ({
@@ -36,5 +38,6 @@ export const createIndexesFromMetadata = ({
                 .map((c) => fields.find((f) => f.name === c.name)?.id)
                 .filter((id): id is string => id !== undefined),
             createdAt: Date.now(),
+            type: idx.index_type?.toLowerCase() as DBIndex['type'],
         })
     );
