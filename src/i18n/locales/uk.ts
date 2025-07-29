@@ -488,6 +488,11 @@ export const uk: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Редагувати назву області',
+            delete_area: 'Видалити область',
+        },
+
         snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',
 
         tool_tips: {

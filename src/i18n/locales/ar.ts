@@ -486,6 +486,11 @@ export const ar: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'تعديل اسم المنطقة',
+            delete_area: 'حذف المنطقة',
+        },
+
         snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',
 
         tool_tips: {
