@@ -549,13 +549,18 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             };
         }) ?? [];
 
-    // Remove duplicate tables (keep first occurrence by table name)
-    const seenTableNames = new Set<string>();
+    // Remove duplicate tables (consider both schema and table name)
+    const seenTableIdentifiers = new Set<string>();
     const uniqueTables = sanitizedTables.filter((table) => {
-        if (seenTableNames.has(table.name)) {
+        // Create a unique identifier combining schema and table name
+        const tableIdentifier = table.schema
+            ? `${table.schema}.${table.name}`
+            : table.name;
+
+        if (seenTableIdentifiers.has(tableIdentifier)) {
             return false; // Skip duplicate
         }
-        seenTableNames.add(table.name);
+        seenTableIdentifiers.add(tableIdentifier);
         return true; // Keep unique table
     });
 

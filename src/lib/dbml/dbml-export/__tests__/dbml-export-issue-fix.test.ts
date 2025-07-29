@@ -518,4 +518,250 @@ describe('DBML Export - Issue Fixes', () => {
             '"title" varchar(500) [not null, note:'
         );
     });
+
+    it('should preserve tables with same name but different schemas', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'users',
+                    schema: 'public',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'email',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: true,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '255',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table2',
+                    name: 'users',
+                    schema: 'auth',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field3',
+                            name: 'id',
+                            type: { id: 'uuid', name: 'uuid' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field4',
+                            name: 'username',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: true,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '100',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'green',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table3',
+                    name: 'users',
+                    schema: 'public',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field5',
+                            name: 'duplicate_id',
+                            type: { id: 'int', name: 'int' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'red',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Both public.users and auth.users should be present
+        expect(result.standardDbml).toContain('Table "public"."users"');
+        expect(result.standardDbml).toContain('Table "auth"."users"');
+
+        // Check that public.users table has email field (from table1)
+        expect(result.standardDbml).toMatch(
+            /Table "public"."users" \{[\s\S]*?"email" varchar\(255\)[\s\S]*?\}/
+        );
+
+        // Check that auth.users table has username field (from table2)
+        expect(result.standardDbml).toMatch(
+            /Table "auth"."users" \{[\s\S]*?"username" varchar\(100\)[\s\S]*?\}/
+        );
+
+        // The duplicate public.users (table3) should be removed
+        // We should only see one occurrence of public.users table definition
+        const publicUsersMatches = result.standardDbml.match(
+            /Table "public"."users" \{/g
+        );
+        expect(publicUsersMatches).toHaveLength(1);
+
+        // Verify that table3's field (duplicate_id) is not present
+        expect(result.standardDbml).not.toContain('duplicate_id');
+    });
+
+    it('should only remove tables with both same schema AND same name', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'products',
+                    schema: 'store',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'int', name: 'int' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table2',
+                    name: 'products',
+                    schema: 'warehouse',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field2',
+                            name: 'id',
+                            type: { id: 'uuid', name: 'uuid' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'green',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table3',
+                    name: 'products',
+                    schema: 'store',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field3',
+                            name: 'duplicate_field',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '50',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'red',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Both store.products and warehouse.products should be present
+        expect(result.standardDbml).toContain('Table "store"."products"');
+        expect(result.standardDbml).toContain('Table "warehouse"."products"');
+
+        // Count occurrences - should have exactly one of each
+        const storeProductsMatches = result.standardDbml.match(
+            /Table "store"."products" \{/g
+        );
+        const warehouseProductsMatches = result.standardDbml.match(
+            /Table "warehouse"."products" \{/g
+        );
+
+        expect(storeProductsMatches).toHaveLength(1);
+        expect(warehouseProductsMatches).toHaveLength(1);
+
+        // The duplicate store.products (table3) should be removed
+        expect(result.standardDbml).not.toContain('duplicate_field');
+    });
 });
