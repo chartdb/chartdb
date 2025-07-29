@@ -741,5 +741,43 @@ Table empty_table {
             expect(diagram.tables?.[0]?.fields).toHaveLength(1);
             expect(diagram.tables?.[0]?.name).toBe('empty_table');
         });
+
+        it('should import tables with same name but different schemas', async () => {
+            const dbml = `
+Table "aa"."users" {
+  id integer [primary key]
+}
+
+Table "bb"."users" {
+  id integer [primary key]
+}`;
+            const diagram = await importDBMLToDiagram(dbml);
+
+            expect(diagram.tables).toHaveLength(2);
+
+            const aaUsersTable = diagram.tables?.find(
+                (t) => t.name === 'users' && t.schema === 'aa'
+            );
+            const bbUsersTable = diagram.tables?.find(
+                (t) => t.name === 'users' && t.schema === 'bb'
+            );
+
+            expect(aaUsersTable).toBeDefined();
+            expect(bbUsersTable).toBeDefined();
+
+            expect(aaUsersTable?.schema).toBe('aa');
+            expect(bbUsersTable?.schema).toBe('bb');
+
+            expect(aaUsersTable?.fields).toHaveLength(1);
+            expect(bbUsersTable?.fields).toHaveLength(1);
+
+            expect(aaUsersTable?.fields[0].name).toBe('id');
+            expect(aaUsersTable?.fields[0].type.id).toBe('int');
+            expect(aaUsersTable?.fields[0].primaryKey).toBe(true);
+
+            expect(bbUsersTable?.fields[0].name).toBe('id');
+            expect(bbUsersTable?.fields[0].type.id).toBe('int');
+            expect(bbUsersTable?.fields[0].primaryKey).toBe(true);
+        });
     });
 });
