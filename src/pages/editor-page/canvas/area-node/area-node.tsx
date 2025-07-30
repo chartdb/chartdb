@@ -109,7 +109,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                             <GripVertical className="size-4 shrink-0 text-slate-700 opacity-60 dark:text-slate-300" />
 
                             {editMode && !readonly ? (
-                                <div className="flex items-center">
+                                <div className="flex min-w-0 flex-1 items-center">
                                     <Input
                                         ref={inputRef}
                                         autoFocus
@@ -126,23 +126,35 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                                                 areaName.length * 8 + 20,
                                                 80
                                             )}px`,
+                                            maxWidth: '100%',
                                         }}
                                     />
                                     <Button
                                         variant="ghost"
-                                        className="ml-1 size-6 p-0 hover:bg-white/20"
+                                        className="ml-1 size-6 shrink-0 p-0 hover:bg-white/20"
                                         onClick={editAreaName}
                                     >
                                         <Check className="size-3.5 text-slate-700 dark:text-slate-300" />
                                     </Button>
                                 </div>
                             ) : !readonly ? (
-                                <div className="flex items-center">
+                                <div className="flex min-w-0 flex-1 items-center">
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <div
                                                 className="text-editable cursor-text px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300"
                                                 onDoubleClick={enterEditMode}
+                                                style={{
+                                                    width: `${Math.max(
+                                                        area.name.length * 8 +
+                                                            20,
+                                                        80
+                                                    )}px`,
+                                                    maxWidth: '100%',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                }}
                                             >
                                                 {area.name}
                                             </div>
@@ -155,14 +167,26 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                                     </Tooltip>
                                     <Button
                                         variant="ghost"
-                                        className="ml-1 size-5 p-0 opacity-0 transition-opacity hover:bg-white/20 group-hover:opacity-100"
+                                        className="ml-1 size-5 shrink-0 p-0 opacity-0 transition-opacity hover:bg-white/20 group-hover:opacity-100"
                                         onClick={enterEditMode}
                                     >
                                         <Pencil className="size-3 text-slate-700 dark:text-slate-300" />
                                     </Button>
                                 </div>
                             ) : (
-                                <div className="truncate px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300">
+                                <div
+                                    className="px-1 py-0.5 text-base font-semibold text-slate-700 dark:text-slate-300"
+                                    style={{
+                                        width: `${Math.max(
+                                            area.name.length * 8 + 20,
+                                            80
+                                        )}px`,
+                                        maxWidth: '100%',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                    }}
+                                >
                                     {area.name}
                                 </div>
                             )}
