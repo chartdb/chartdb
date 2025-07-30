@@ -294,6 +294,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setEdges,
         showDependenciesOnCanvas,
         databaseType,
+        tables, // Add tables to force edge recreation when table properties change
     ]);
 
     useEffect(() => {
@@ -997,6 +998,19 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     width: event.data.table.width,
                 };
 
+                // Trigger a dimension change to force React Flow to update the node
+                onNodesChangeHandler([
+                    {
+                        id: event.data.id,
+                        type: 'dimensions',
+                        dimensions: {
+                            width: event.data.table.width,
+                            height: node.measured?.height || 0,
+                        },
+                        resizing: true, // Set resizing flag to ensure the change is processed
+                    } as NodeDimensionChange,
+                ]);
+
                 newOverlappingGraph = findTableOverlapping(
                     {
                         node: {
@@ -1051,7 +1065,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 setOverlapGraph(overlappingTablesInDiagram);
             }
         },
-        [overlapGraph, setOverlapGraph, getNode, nodes, filteredSchemas]
+        [
+            overlapGraph,
+            setOverlapGraph,
+            getNode,
+            nodes,
+            filteredSchemas,
+            onNodesChangeHandler,
+        ]
     );
 
     events.useSubscription(eventConsumer);
