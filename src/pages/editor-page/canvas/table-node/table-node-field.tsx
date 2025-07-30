@@ -16,6 +16,7 @@ import {
     Check,
     KeyRound,
     MessageCircleMore,
+    Pencil,
     SquareDot,
     SquareMinus,
     SquarePlus,
@@ -322,29 +323,40 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             </Button>
                         </>
                     ) : (
-                        <span
-                            className={cn('truncate min-w-0', {
-                                'text-red-800 font-normal dark:text-red-200':
-                                    isDiffFieldRemoved,
-                                'text-green-800 font-normal dark:text-green-200':
-                                    isDiffNewField,
-                                'text-sky-800 font-normal dark:text-sky-200':
-                                    isDiffFieldChanged &&
-                                    !isDiffFieldRemoved &&
-                                    !isDiffNewField,
-                            })}
-                            onDoubleClick={enterEditMode}
-                        >
-                            {fieldDiffChangedName ? (
-                                <>
-                                    {field.name}{' '}
-                                    <span className="font-medium">→</span>{' '}
-                                    {fieldDiffChangedName}
-                                </>
-                            ) : (
-                                field.name
-                            )}
-                        </span>
+                        <>
+                            <span
+                                className={cn('truncate min-w-0', {
+                                    'text-red-800 font-normal dark:text-red-200':
+                                        isDiffFieldRemoved,
+                                    'text-green-800 font-normal dark:text-green-200':
+                                        isDiffNewField,
+                                    'text-sky-800 font-normal dark:text-sky-200':
+                                        isDiffFieldChanged &&
+                                        !isDiffFieldRemoved &&
+                                        !isDiffNewField,
+                                })}
+                                onDoubleClick={enterEditMode}
+                            >
+                                {fieldDiffChangedName ? (
+                                    <>
+                                        {field.name}{' '}
+                                        <span className="font-medium">→</span>{' '}
+                                        {fieldDiffChangedName}
+                                    </>
+                                ) : (
+                                    field.name
+                                )}
+                            </span>
+                            {!readonly ? (
+                                <Button
+                                    variant="ghost"
+                                    className="size-5 p-0 text-slate-500 opacity-0 transition-opacity hover:bg-primary-foreground hover:text-slate-700 group-hover:opacity-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                    onClick={enterEditMode}
+                                >
+                                    <Pencil className="size-3" />
+                                </Button>
+                            ) : null}
+                        </>
                     )}
                     {field.comments && !editMode ? (
                         <Tooltip>
@@ -383,7 +395,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
                         <div
                             className={cn(
-                                'content-center text-right text-xs text-muted-foreground overflow-hidden min-w-[3rem] max-w-[8rem]',
+                                'content-center text-right text-xs text-muted-foreground overflow-hidden max-w-[8rem]',
                                 !readonly ? 'group-hover:hidden' : '',
                                 isDiffFieldRemoved
                                     ? 'text-red-800 dark:text-red-200'
