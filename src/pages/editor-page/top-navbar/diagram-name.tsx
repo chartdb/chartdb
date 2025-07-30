@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/button/button';
-import { Check } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useClickAway, useKeyPressEvent } from 'react-use';
@@ -42,12 +42,28 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     useClickAway(inputRef, editDiagramName);
     useKeyPressEvent('Enter', editDiagramName);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLHeadingElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
-        setEditMode(true);
-    };
+    useEffect(() => {
+        if (editMode) {
+            // Small delay to ensure the input is rendered
+            const timeoutId = setTimeout(() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                    inputRef.current.select();
+                }
+            }, 50); // Slightly longer delay to ensure DOM is ready
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [editMode]);
+
+    const enterEditMode = useCallback(
+        (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+            event.stopPropagation();
+            setEditedDiagramName(diagramName);
+            setEditMode(true);
+        },
+        [diagramName]
+    );
 
     return (
         <div className="group">
@@ -69,7 +85,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                 />
                 <div className="flex flex-row items-center gap-1">
                     {editMode ? (
-                        <>
+                        <div className="flex items-center">
                             <Input
                                 ref={inputRef}
                                 autoFocus
@@ -81,15 +97,21 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                                     setEditedDiagramName(e.target.value)
                                 }
                                 className="ml-1 h-7 focus-visible:ring-0"
+                                style={{
+                                    width: `${Math.max(
+                                        editedDiagramName.length * 8 + 20,
+                                        100
+                                    )}px`,
+                                }}
                             />
                             <Button
                                 variant="ghost"
-                                className="flex size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                                className="ml-1 flex size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
                                 onClick={editDiagramName}
                             >
                                 <Check />
                             </Button>
-                        </>
+                        </div>
                     ) : (
                         <>
                             <Tooltip>
@@ -110,6 +132,13 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                                     {t('tool_tips.double_click_to_edit')}
                                 </TooltipContent>
                             </Tooltip>
+                            <Button
+                                variant="ghost"
+                                className="ml-1 size-5 p-0 opacity-0 transition-opacity hover:bg-primary-foreground group-hover:opacity-100"
+                                onClick={enterEditMode}
+                            >
+                                <Pencil className="size-3 text-slate-500 dark:text-slate-400" />
+                            </Button>
                         </>
                     )}
                 </div>
