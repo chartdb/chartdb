@@ -937,26 +937,24 @@ describe('DBML Export - Issue Fixes', () => {
         // Check that indexes are properly formatted with names
         // Note: When a table has a schema, index names are prefixed with the schema
         expect(result.standardDbml).toContain(
-            'email [unique, name: "public_idx_email"]'
+            'email [unique, name: "idx_email"]'
         );
         expect(result.standardDbml).toContain(
-            'created_at [name: "public_idx_created_at"]'
+            'created_at [name: "idx_created_at"]'
         );
         expect(result.standardDbml).toContain(
-            '(email, created_at) [name: "public_idx_email_created"]'
+            '(email, created_at) [name: "idx_email_created"]'
         );
 
         // Verify proper index syntax in the table
         const indexSection = result.standardDbml.match(/Indexes \{[\s\S]*?\}/);
         expect(indexSection).toBeTruthy();
+        expect(indexSection![0]).toContain('email [unique, name: "idx_email"]');
         expect(indexSection![0]).toContain(
-            'email [unique, name: "public_idx_email"]'
+            'created_at [name: "idx_created_at"]'
         );
         expect(indexSection![0]).toContain(
-            'created_at [name: "public_idx_created_at"]'
-        );
-        expect(indexSection![0]).toContain(
-            '(email, created_at) [name: "public_idx_email_created"]'
+            '(email, created_at) [name: "idx_email_created"]'
         );
     });
 });

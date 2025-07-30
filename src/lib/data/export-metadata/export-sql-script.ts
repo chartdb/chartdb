@@ -362,9 +362,10 @@ export const exportBaseSQL = ({
                 .join(', ');
 
             if (fieldNames) {
-                const indexName = table.schema
-                    ? `${table.schema}_${index.name}`
-                    : index.name;
+                const indexName =
+                    table.schema && !isDBMLFlow
+                        ? `${table.schema}_${index.name}`
+                        : index.name;
                 sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });
