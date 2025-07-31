@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, {
+    useMemo,
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+} from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
@@ -7,8 +13,22 @@ import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useToast } from '@/components/toast/use-toast';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
-import { ArrowLeftRight } from 'lucide-react';
+import {
+    AlertCircle,
+    ArrowLeftRight,
+    Pencil,
+    PencilOff,
+    X,
+} from 'lucide-react';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
+import { useDiff } from '@/context/diff-context/use-diff';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
+import { applyDBMLChanges } from '@/lib/dbml/apply-dbml/apply-dbml';
+import { useDebounce } from '@/hooks/use-debounce';
+import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
+import { highlightErrorLine } from '@/components/code-snippet/dbml/utils';
+import type * as monaco from 'monaco-editor';
+import { useTranslation } from 'react-i18next';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -25,9 +45,48 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
         'inline'
     );
+    const [isLoading, setIsLoading] = useState(true);
+    const [standardDbml, setStandardDbml] = useState('');
+    const [inlineDbml, setInlineDbml] = useState('');
 
-    // --- Effect for handling empty field name warnings ---
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+    const decorationsCollection =
+        useRef<monaco.editor.IEditorDecorationsCollection>();
+
+    const handleEditorDidMount = useCallback(
+        (editor: monaco.editor.IStandaloneCodeEditor) => {
+            editorRef.current = editor;
+            decorationsCollection.current =
+                editor.createDecorationsCollection();
+        },
+        []
+    );
+
+    // Determine which DBML string to display
+    const dbmlToDisplay = useMemo(
+        () => (dbmlFormat === 'inline' ? inlineDbml : standardDbml),
+        [dbmlFormat, inlineDbml, standardDbml]
+    );
+
+    // Toggle function
+    const toggleFormat = useCallback(() => {
+        setDbmlFormat((prev) => (prev === 'inline' ? 'standard' : 'inline'));
+    }, []);
+
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editedDbml, setEditedDbml] = useState<string>('');
+    const lastDBMLChange = useRef(editedDbml);
+    const { calculateDiff, originalDiagram, resetDiff } = useDiff();
+    const { loadDiagramFromData } = useChartDB();
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const [warningMessage, setWarningMessage] = useState<string>();
+    const { t } = useTranslation();
+
+    // --- Check for empty field name warnings only on mount ---
     useEffect(() => {
+        // Only check when not in edit mode
+        if (isEditMode) return;
+
         let foundInvalidFields = false;
         const invalidTableNames = new Set<string>();
 
@@ -42,74 +101,224 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
 
         if (foundInvalidFields) {
             const tableNamesString = Array.from(invalidTableNames).join(', ');
-            toast({
-                title: 'Warning',
-                description: `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`,
-                variant: 'default',
-            });
+            setWarningMessage(
+                `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`
+            );
         }
-    }, [filteredTables, toast]); // Depend on filteredTables and toast
+    }, [filteredTables, t, isEditMode]);
 
-    // Generate both standard and inline DBML formats
-    const { standardDbml, inlineDbml } = useMemo(() => {
-        // Create a filtered diagram with only the selected tables
-        const filteredDiagram: Diagram = {
-            ...currentDiagram,
-            tables: filteredTables,
-        };
-
-        const result = generateDBMLFromDiagram(filteredDiagram);
-
-        // Handle errors
-        if (result.error) {
-            toast({
-                title: 'DBML Export Error',
-                description: `Could not generate DBML: ${result.error.substring(0, 100)}${result.error.length > 100 ? '...' : ''}`,
-                variant: 'destructive',
-            });
+    // Generate DBML asynchronously
+    useEffect(() => {
+        if (isEditMode) {
+            setIsLoading(false);
+            return;
         }
 
-        return {
-            standardDbml: result.standardDbml,
-            inlineDbml: result.inlineDbml,
-        };
-    }, [currentDiagram, filteredTables, toast]);
+        const generateDBML = async () => {
+            setIsLoading(true);
 
-    // Determine which DBML string to display
-    const dbmlToDisplay = useMemo(
-        () => (dbmlFormat === 'inline' ? inlineDbml : standardDbml),
-        [dbmlFormat, inlineDbml, standardDbml]
+            // Create a filtered diagram with only the selected tables
+            const filteredDiagram: Diagram = {
+                ...currentDiagram,
+                tables: filteredTables,
+            };
+
+            const result = generateDBMLFromDiagram(filteredDiagram);
+
+            // Handle errors
+            if (result.error) {
+                toast({
+                    title: 'DBML Export Error',
+                    description: `Could not generate DBML: ${result.error.substring(0, 100)}${result.error.length > 100 ? '...' : ''}`,
+                    variant: 'destructive',
+                });
+            }
+
+            setStandardDbml(result.standardDbml);
+            setInlineDbml(result.inlineDbml);
+            setIsLoading(false);
+        };
+
+        setTimeout(() => generateDBML(), 0);
+    }, [currentDiagram, filteredTables, toast, isEditMode]);
+
+    // Update editedDbml when dbmlToDisplay changes
+    useEffect(() => {
+        if (!isLoading && dbmlToDisplay && !isEditMode) {
+            setEditedDbml(dbmlToDisplay);
+            lastDBMLChange.current = dbmlToDisplay;
+        }
+    }, [dbmlToDisplay, isLoading, isEditMode]);
+
+    // Create the showDiff function
+    const showDiff = useCallback(
+        async (dbmlContent: string) => {
+            try {
+                const diagramFromDBML: Diagram =
+                    await importDBMLToDiagram(dbmlContent);
+
+                const sourceDiagram: Diagram =
+                    originalDiagram ?? currentDiagram;
+
+                const targetDiagram: Diagram = {
+                    ...sourceDiagram,
+                    tables: diagramFromDBML.tables,
+                    relationships: diagramFromDBML.relationships,
+                    customTypes: diagramFromDBML.customTypes,
+                };
+
+                console.log({ sourceDiagram, targetDiagram });
+
+                const newDiagram = applyDBMLChanges({
+                    sourceDiagram,
+                    targetDiagram,
+                });
+
+                console.log({ newDiagram });
+
+                console.log('New Diagram from DBML:', newDiagram);
+
+                if (originalDiagram) {
+                    resetDiff();
+                    loadDiagramFromData(originalDiagram);
+                }
+
+                calculateDiff({
+                    diagram: sourceDiagram,
+                    newDiagram,
+                    options: { summaryOnly: true },
+                });
+            } catch (error) {
+                const dbmlError = parseDBMLError(error);
+
+                if (dbmlError) {
+                    highlightErrorLine({
+                        error: dbmlError,
+                        model: editorRef.current?.getModel(),
+                        editorDecorationsCollection:
+                            decorationsCollection.current,
+                    });
+
+                    setErrorMessage(
+                        t('import_dbml_dialog.error.description') +
+                            ` (1 error found - in line ${dbmlError.line})`
+                    );
+                }
+            }
+        },
+        [
+            t,
+            originalDiagram,
+            currentDiagram,
+            resetDiff,
+            loadDiagramFromData,
+            calculateDiff,
+        ]
     );
 
-    // Toggle function
-    const toggleFormat = useCallback(() => {
-        setDbmlFormat((prev) => (prev === 'inline' ? 'standard' : 'inline'));
-    }, []);
+    // Create debounced version of showDiff
+    const debouncedShowDiff = useDebounce(showDiff, 1000);
+
+    useEffect(() => {
+        if (!isEditMode || !editedDbml) {
+            return;
+        }
+
+        // Only calculate diff if the DBML has changed
+        if (editedDbml === lastDBMLChange.current) {
+            return;
+        }
+
+        lastDBMLChange.current = editedDbml;
+
+        debouncedShowDiff(editedDbml);
+    }, [editedDbml, isEditMode, debouncedShowDiff]);
 
     return (
-        <CodeSnippet
-            code={dbmlToDisplay}
-            actionsTooltipSide="right"
-            className="my-0.5"
-            actions={[
-                {
-                    label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
-                    icon: ArrowLeftRight,
-                    onClick: toggleFormat,
-                },
-            ]}
-            editorProps={{
-                height: '100%',
-                defaultLanguage: 'dbml',
-                beforeMount: setupDBMLLanguage,
-                loading: false,
-                theme: getEditorTheme(effectiveTheme),
-                options: {
-                    wordWrap: 'off',
-                    mouseWheelZoom: false,
-                    domReadOnly: true,
-                },
-            }}
-        />
+        <>
+            <CodeSnippet
+                code={editedDbml}
+                loading={isLoading}
+                actionsTooltipSide="right"
+                className="my-0.5"
+                allowCopy={!isEditMode}
+                actions={
+                    isEditMode
+                        ? [
+                              {
+                                  label: 'View',
+                                  icon: PencilOff,
+                                  onClick: () => setIsEditMode((prev) => !prev),
+                              },
+                          ]
+                        : [
+                              {
+                                  label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
+                                  icon: ArrowLeftRight,
+                                  onClick: toggleFormat,
+                              },
+                              {
+                                  label: 'Edit',
+                                  icon: Pencil,
+                                  onClick: () => setIsEditMode((prev) => !prev),
+                              },
+                          ]
+                }
+                editorProps={{
+                    height: '100%',
+                    defaultLanguage: 'dbml',
+                    beforeMount: setupDBMLLanguage,
+                    theme: getEditorTheme(effectiveTheme),
+                    onMount: handleEditorDidMount,
+                    options: {
+                        wordWrap: 'off',
+                        mouseWheelZoom: false,
+                        domReadOnly: true,
+                        readOnly: !isEditMode,
+                    },
+                    onChange: (value) => {
+                        setEditedDbml(value ?? '');
+                    },
+                }}
+            />
+            {warningMessage ? (
+                <div className="my-2 rounded-md border border-blue-200 bg-blue-50 p-3 dark:border-blue-900/50 dark:bg-blue-950/20">
+                    <div className="flex items-start gap-2">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                                Warning
+                            </p>
+                            <p className="mt-0.5 text-xs text-blue-700 dark:text-blue-300">
+                                {warningMessage}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setWarningMessage(undefined)}
+                            className="rounded p-0.5 text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                            aria-label="Close warning"
+                        >
+                            <X className="size-3.5" />
+                        </button>
+                    </div>
+                </div>
+            ) : null}
+            {errorMessage ? (
+                <div className="my-2 rounded-md border border-orange-200 bg-orange-50 p-3 dark:border-orange-900/50 dark:bg-orange-950/20">
+                    <div className="flex gap-2">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0 text-orange-600 dark:text-orange-400" />
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-orange-800 dark:text-orange-200">
+                                Syntax Error
+                            </p>
+                            <p className="mt-0.5 text-xs text-orange-700 dark:text-orange-300">
+                                {errorMessage ||
+                                    t('import_dbml_dialog.error.description')}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+        </>
     );
 };
