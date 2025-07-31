@@ -560,14 +560,6 @@ const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
                 '\\$&'
             );
 
-            // Count how many tables already have schema in DBML
-            const schemaTablePattern = new RegExp(
-                `Table\\s+"[^"]+"\\.\\s*"${escapedTableName}"\\s*{`,
-                'g'
-            );
-            const existingSchemaMatches =
-                result.match(schemaTablePattern) || [];
-
             // Get tables that need schema restoration (those without schema in DBML)
             const tablesNeedingSchema = tablesGroup.filter(({ table }) => {
                 // Check if this table's schema is already in the DBML

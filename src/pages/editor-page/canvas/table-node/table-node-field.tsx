@@ -152,7 +152,10 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             checkIfNewField,
             getFieldNewName,
             getFieldNewType,
+            getFieldNewNullable,
+            getFieldNewPrimaryKey,
             checkIfFieldHasChange,
+            isSummaryOnly,
         } = useDiff();
 
         const [diffState, setDiffState] = useState<{
@@ -160,12 +163,16 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             isDiffNewField: boolean;
             fieldDiffChangedName: string | null;
             fieldDiffChangedType: DBField['type'] | null;
+            fieldDiffChangedNullable: boolean | null;
+            fieldDiffChangedPrimaryKey: boolean | null;
             isDiffFieldChanged: boolean;
         }>({
             isDiffFieldRemoved: false,
             isDiffNewField: false,
             fieldDiffChangedName: null,
             fieldDiffChangedType: null,
+            fieldDiffChangedNullable: null,
+            fieldDiffChangedPrimaryKey: null,
             isDiffFieldChanged: false,
         });
 
@@ -183,6 +190,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     fieldDiffChangedType: getFieldNewType({
                         fieldId: field.id,
                     }),
+                    fieldDiffChangedNullable: getFieldNewNullable({
+                        fieldId: field.id,
+                    }),
+                    fieldDiffChangedPrimaryKey: getFieldNewPrimaryKey({
+                        fieldId: field.id,
+                    }),
                     isDiffFieldChanged: checkIfFieldHasChange({
                         fieldId: field.id,
                         tableId: tableNodeId,
@@ -195,6 +208,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             checkIfNewField,
             getFieldNewName,
             getFieldNewType,
+            getFieldNewPrimaryKey,
+            getFieldNewNullable,
             checkIfFieldHasChange,
             field.id,
             tableNodeId,
@@ -206,6 +221,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedName,
             fieldDiffChangedType,
             isDiffFieldChanged,
+            fieldDiffChangedNullable,
+            fieldDiffChangedPrimaryKey,
         } = diffState;
 
         const enterEditMode = useCallback((e: React.MouseEvent) => {
@@ -233,6 +250,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         'z-0 max-h-0 overflow-hidden opacity-0': !visible,
                         'bg-sky-200 dark:bg-sky-800 hover:bg-sky-100 dark:hover:bg-sky-900 border-sky-300 dark:border-sky-700':
                             isDiffFieldChanged &&
+                            !isSummaryOnly &&
                             !isDiffFieldRemoved &&
                             !isDiffNewField,
                         'bg-red-200 dark:bg-red-800 hover:bg-red-100 dark:hover:bg-red-900 border-red-300 dark:border-red-700':
@@ -297,7 +315,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         <SquareMinus className="size-3.5 text-red-800 dark:text-red-200" />
                     ) : isDiffNewField ? (
                         <SquarePlus className="size-3.5 text-green-800 dark:text-green-200" />
-                    ) : isDiffFieldChanged ? (
+                    ) : isDiffFieldChanged && !isSummaryOnly ? (
                         <SquareDot className="size-3.5 shrink-0 text-sky-800 dark:text-sky-200" />
                     ) : null}
                     {editMode && !readonly ? (
@@ -330,6 +348,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     isDiffNewField,
                                 'text-sky-800 font-normal dark:text-sky-200':
                                     isDiffFieldChanged &&
+                                    !isSummaryOnly &&
                                     !isDiffFieldRemoved &&
                                     !isDiffNewField,
                             })}
@@ -359,7 +378,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 </div>
                 {editMode ? null : (
                     <div className="ml-2 flex shrink-0 items-center justify-end gap-1.5">
-                        {field.primaryKey ? (
+                        {(field.primaryKey &&
+                            fieldDiffChangedPrimaryKey === null) ||
+                        fieldDiffChangedPrimaryKey ? (
                             <div
                                 className={cn(
                                     'text-muted-foreground',
@@ -371,6 +392,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                         ? 'text-green-800 dark:text-green-200'
                                         : '',
                                     isDiffFieldChanged &&
+                                        !isSummaryOnly &&
                                         !isDiffFieldRemoved &&
                                         !isDiffNewField
                                         ? 'text-sky-800 dark:text-sky-200'
@@ -394,6 +416,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     : '',
                                 isDiffFieldChanged &&
                                     !isDiffFieldRemoved &&
+                                    !isSummaryOnly &&
                                     !isDiffNewField
                                     ? 'text-sky-800 dark:text-sky-200'
                                     : ''
@@ -414,7 +437,17 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 ) : (
                                     `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
                                 )}
-                                {field.nullable ? '?' : ''}
+                                {fieldDiffChangedNullable !== null ? (
+                                    fieldDiffChangedNullable ? (
+                                        <span className="font-semibold">?</span>
+                                    ) : (
+                                        <span className="line-through">?</span>
+                                    )
+                                ) : field.nullable ? (
+                                    '?'
+                                ) : (
+                                    ''
+                                )}
                             </span>
                         </div>
                         {readonly ? null : (

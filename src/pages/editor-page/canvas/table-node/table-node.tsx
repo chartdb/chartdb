@@ -86,6 +86,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             checkIfTableHasChange,
             checkIfNewTable,
             checkIfTableRemoved,
+            isSummaryOnly,
         } = useDiff();
 
         const fields = useMemo(() => table.fields, [table.fields]);
@@ -397,7 +398,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                         Table Removed
                                     </TooltipContent>
                                 </Tooltip>
-                            ) : isDiffTableChanged ? (
+                            ) : isDiffTableChanged && !isSummaryOnly ? (
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <SquareDot
@@ -433,7 +434,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-red-200 px-2 py-0.5 text-sm font-normal text-red-900 dark:bg-red-800 dark:text-red-200">
                                     {table.name}
                                 </Label>
-                            ) : isDiffTableChanged ? (
+                            ) : isDiffTableChanged && !isSummaryOnly ? (
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
                                     {table.name}
                                 </Label>

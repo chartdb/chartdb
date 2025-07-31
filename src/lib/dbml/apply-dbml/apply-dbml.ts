@@ -193,13 +193,16 @@ const buildSourceMappings = (sourceDiagram: Diagram) => {
 };
 
 // Functional helper to update tables and collect ID mappings
-const updateTables = (
-    targetTables: DBTable[] | undefined,
-    sourceTables: DBTable[] | undefined,
-    objectKeysToIdsMap: Record<string, string>,
-    sourceIdToDataMap: SourceIdToDataMap,
-    defaultDatabaseSchema?: string
-): { tables: DBTable[]; idMappings: IdMappings } => {
+const updateTables = ({
+    targetTables,
+    sourceTables,
+}: {
+    targetTables: DBTable[] | undefined;
+    sourceTables: DBTable[] | undefined;
+    objectKeysToIdsMap: Record<string, string>;
+    sourceIdToDataMap: SourceIdToDataMap;
+    defaultDatabaseSchema?: string;
+}): { tables: DBTable[]; idMappings: IdMappings } => {
     if (!targetTables)
         return { tables: [], idMappings: { tables: {}, fields: {} } };
     if (!sourceTables)
@@ -250,7 +253,6 @@ const updateTables = (
                     ...targetField,
                     id: sourceField.id,
                     createdAt: sourceField.createdAt,
-                    
                 };
             }
             // For new fields not in source, keep target field as-is
@@ -284,8 +286,10 @@ const updateTables = (
 
         // Update nullable, unique, primaryKey from target fields
         if (targetTable.fields) {
-            resultTable.fields = resultTable.fields?.map(field => {
-                const targetField = targetTable.fields?.find(f => f.name === field.name);
+            resultTable.fields = resultTable.fields?.map((field) => {
+                const targetField = targetTable.fields?.find(
+                    (f) => f.name === field.name
+                );
                 if (targetField) {
                     return {
                         ...field,
@@ -349,7 +353,7 @@ const updateRelationships = (
 ): DBRelationship[] => {
     // If target has no relationships, return empty array (relationships were removed)
     if (!targetRelationships || targetRelationships.length === 0) return [];
-    
+
     // If source has no relationships, we need to add the target relationships with updated IDs
     if (!sourceRelationships || sourceRelationships.length === 0) {
         return targetRelationships.map((targetRel) => {
@@ -358,7 +362,7 @@ const updateRelationships = (
             let targetTableId = targetRel.targetTableId;
             let sourceFieldId = targetRel.sourceFieldId;
             let targetFieldId = targetRel.targetFieldId;
-            
+
             // Find source table/field IDs from the mappings
             for (const [targetId, srcId] of Object.entries(idMappings.tables)) {
                 if (targetId === targetRel.sourceTableId) {
@@ -368,7 +372,7 @@ const updateRelationships = (
                     targetTableId = srcId;
                 }
             }
-            
+
             for (const [targetId, srcId] of Object.entries(idMappings.fields)) {
                 if (targetId === targetRel.sourceFieldId) {
                     sourceFieldId = srcId;
@@ -377,7 +381,7 @@ const updateRelationships = (
                     targetFieldId = srcId;
                 }
             }
-            
+
             return {
                 ...targetRel,
                 sourceTableId,
@@ -402,19 +406,17 @@ const updateRelationships = (
             const mappedTargetFieldId = idMappings.fields[tgtRel.targetFieldId];
 
             // Check both directions since relationships can be defined in either direction
-            const directMatch = (
+            const directMatch =
                 sourceRel.sourceTableId === mappedSourceTableId &&
                 sourceRel.targetTableId === mappedTargetTableId &&
                 sourceRel.sourceFieldId === mappedSourceFieldId &&
-                sourceRel.targetFieldId === mappedTargetFieldId
-            );
+                sourceRel.targetFieldId === mappedTargetFieldId;
 
-            const reverseMatch = (
+            const reverseMatch =
                 sourceRel.sourceTableId === mappedTargetTableId &&
                 sourceRel.targetTableId === mappedSourceTableId &&
                 sourceRel.sourceFieldId === mappedTargetFieldId &&
-                sourceRel.targetFieldId === mappedSourceFieldId
-            );
+                sourceRel.targetFieldId === mappedSourceFieldId;
 
             return directMatch || reverseMatch;
         });
@@ -448,7 +450,7 @@ const updateRelationships = (
             let targetTableId = targetRel.targetTableId;
             let sourceFieldId = targetRel.sourceFieldId;
             let targetFieldId = targetRel.targetFieldId;
-            
+
             // Find source table/field IDs from the mappings
             for (const [targetId, srcId] of Object.entries(idMappings.tables)) {
                 if (targetId === targetRel.sourceTableId) {
@@ -458,7 +460,7 @@ const updateRelationships = (
                     targetTableId = srcId;
                 }
             }
-            
+
             for (const [targetId, srcId] of Object.entries(idMappings.fields)) {
                 if (targetId === targetRel.sourceFieldId) {
                     sourceFieldId = srcId;
@@ -467,7 +469,7 @@ const updateRelationships = (
                     targetFieldId = srcId;
                 }
             }
-            
+
             resultRelationships.push({
                 ...targetRel,
                 sourceTableId,
@@ -556,13 +558,13 @@ export const applyDBMLChanges = ({
         buildSourceMappings(sourceDiagram);
 
     // Step 2: Update tables and collect ID mappings
-    const { tables: updatedTables, idMappings } = updateTables(
-        targetDiagram.tables,
-        sourceDiagram.tables,
+    const { tables: updatedTables, idMappings } = updateTables({
+        targetTables: targetDiagram.tables,
+        sourceTables: sourceDiagram.tables,
         objectKeysToIdsMap,
         sourceIdToDataMap,
-        defaultSchemas[sourceDiagram.databaseType]
-    );
+        defaultDatabaseSchema: defaultSchemas[sourceDiagram.databaseType],
+    });
 
     // Step 3: Update all other entities functionally
     const updatedCustomTypes = updateCustomTypes(
@@ -613,11 +615,11 @@ export const applyDBMLChanges = ({
         relationships: sortedRelationships,
         dependencies: updatedDependencies,
     };
-    
+
     // Only include customTypes if source has it
     if (sourceDiagram.customTypes !== undefined) {
         result.customTypes = updatedCustomTypes;
     }
-    
+
     return result;
 };
