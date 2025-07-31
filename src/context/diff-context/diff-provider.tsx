@@ -339,6 +339,14 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const resetDiff = useCallback<DiffContext['resetDiff']>(() => {
+        setDiffMap(new Map<string, ChartDBDiff>());
+        setTablesChanged(new Map<string, boolean>());
+        setFieldsChanged(new Map<string, boolean>());
+        setNewDiagram(null);
+        setOriginalDiagram(null);
+    }, []);
+
     return (
         <diffContext.Provider
             value={{
@@ -348,6 +356,7 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 hasDiff: diffMap.size > 0,
 
                 calculateDiff,
+                resetDiff,
 
                 // table diff
                 getTableNewName,

@@ -40,6 +40,7 @@ export interface DiffContext {
         diagram: Diagram;
         newDiagram: Diagram;
     }) => void;
+    resetDiff: () => void;
 
     // table diff
     checkIfTableHasChange: ({ tableId }: { tableId: string }) => boolean;
