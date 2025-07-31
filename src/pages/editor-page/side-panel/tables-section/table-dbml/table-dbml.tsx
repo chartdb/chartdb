@@ -13,12 +13,22 @@ import type { EffectiveTheme } from '@/context/theme-context/theme-context';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useToast } from '@/components/toast/use-toast';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
-import { ArrowLeftRight, Pencil, PencilOff } from 'lucide-react';
+import {
+    AlertCircle,
+    ArrowLeftRight,
+    Pencil,
+    PencilOff,
+    X,
+} from 'lucide-react';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import { applyDBMLChanges } from '@/lib/dbml/apply-dbml/apply-dbml';
 import { useDebounce } from '@/hooks/use-debounce';
+import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
+import { highlightErrorLine } from '@/components/code-snippet/dbml/utils';
+import type * as monaco from 'monaco-editor';
+import { useTranslation } from 'react-i18next';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -39,6 +49,19 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [standardDbml, setStandardDbml] = useState('');
     const [inlineDbml, setInlineDbml] = useState('');
 
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+    const decorationsCollection =
+        useRef<monaco.editor.IEditorDecorationsCollection>();
+
+    const handleEditorDidMount = useCallback(
+        (editor: monaco.editor.IStandaloneCodeEditor) => {
+            editorRef.current = editor;
+            decorationsCollection.current =
+                editor.createDecorationsCollection();
+        },
+        []
+    );
+
     // Determine which DBML string to display
     const dbmlToDisplay = useMemo(
         () => (dbmlFormat === 'inline' ? inlineDbml : standardDbml),
@@ -55,9 +78,15 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const lastDBMLChange = useRef(editedDbml);
     const { calculateDiff, originalDiagram, resetDiff } = useDiff();
     const { loadDiagramFromData } = useChartDB();
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const [warningMessage, setWarningMessage] = useState<string>();
+    const { t } = useTranslation();
 
-    // --- Effect for handling empty field name warnings ---
+    // --- Check for empty field name warnings only on mount ---
     useEffect(() => {
+        // Only check when not in edit mode
+        if (isEditMode) return;
+
         let foundInvalidFields = false;
         const invalidTableNames = new Set<string>();
 
@@ -72,13 +101,11 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
 
         if (foundInvalidFields) {
             const tableNamesString = Array.from(invalidTableNames).join(', ');
-            toast({
-                title: 'Warning',
-                description: `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`,
-                variant: 'default',
-            });
+            setWarningMessage(
+                `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`
+            );
         }
-    }, [filteredTables, toast]); // Depend on filteredTables and toast
+    }, [filteredTables, t, isEditMode]);
 
     // Generate DBML asynchronously
     useEffect(() => {
@@ -112,7 +139,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             setIsLoading(false);
         };
 
-        generateDBML();
+        setTimeout(() => generateDBML(), 0);
     }, [currentDiagram, filteredTables, toast, isEditMode]);
 
     // Update editedDbml when dbmlToDisplay changes
@@ -126,41 +153,61 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     // Create the showDiff function
     const showDiff = useCallback(
         async (dbmlContent: string) => {
-            if (originalDiagram) {
-                resetDiff();
-                loadDiagramFromData(originalDiagram);
+            try {
+                const diagramFromDBML: Diagram =
+                    await importDBMLToDiagram(dbmlContent);
+
+                const sourceDiagram: Diagram =
+                    originalDiagram ?? currentDiagram;
+
+                const targetDiagram: Diagram = {
+                    ...sourceDiagram,
+                    tables: diagramFromDBML.tables,
+                    relationships: diagramFromDBML.relationships,
+                    customTypes: diagramFromDBML.customTypes,
+                };
+
+                console.log({ sourceDiagram, targetDiagram });
+
+                const newDiagram = applyDBMLChanges({
+                    sourceDiagram,
+                    targetDiagram,
+                });
+
+                console.log({ newDiagram });
+
+                console.log('New Diagram from DBML:', newDiagram);
+
+                if (originalDiagram) {
+                    resetDiff();
+                    loadDiagramFromData(originalDiagram);
+                }
+
+                calculateDiff({
+                    diagram: sourceDiagram,
+                    newDiagram,
+                    options: { summaryOnly: true },
+                });
+            } catch (error) {
+                const dbmlError = parseDBMLError(error);
+
+                if (dbmlError) {
+                    highlightErrorLine({
+                        error: dbmlError,
+                        model: editorRef.current?.getModel(),
+                        editorDecorationsCollection:
+                            decorationsCollection.current,
+                    });
+
+                    setErrorMessage(
+                        t('import_dbml_dialog.error.description') +
+                            ` (1 error found - in line ${dbmlError.line})`
+                    );
+                }
             }
-
-            const diagramFromDBML: Diagram =
-                await importDBMLToDiagram(dbmlContent);
-
-            const sourceDiagram: Diagram = originalDiagram ?? currentDiagram;
-
-            const targetDiagram: Diagram = {
-                ...sourceDiagram,
-                tables: diagramFromDBML.tables,
-                relationships: diagramFromDBML.relationships,
-                customTypes: diagramFromDBML.customTypes,
-            };
-
-            console.log({ sourceDiagram, targetDiagram });
-
-            const newDiagram = applyDBMLChanges({
-                sourceDiagram,
-                targetDiagram,
-            });
-
-            console.log({ newDiagram });
-
-            console.log('New Diagram from DBML:', newDiagram);
-
-            calculateDiff({
-                diagram: sourceDiagram,
-                newDiagram,
-                options: { summaryOnly: true },
-            });
         },
         [
+            t,
             originalDiagram,
             currentDiagram,
             resetDiff,
@@ -188,49 +235,90 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     }, [editedDbml, isEditMode, debouncedShowDiff]);
 
     return (
-        <CodeSnippet
-            code={editedDbml}
-            loading={isLoading}
-            actionsTooltipSide="right"
-            className="my-0.5"
-            allowCopy={!isEditMode}
-            actions={
-                isEditMode
-                    ? [
-                          {
-                              label: 'View',
-                              icon: PencilOff,
-                              onClick: () => setIsEditMode((prev) => !prev),
-                          },
-                      ]
-                    : [
-                          {
-                              label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
-                              icon: ArrowLeftRight,
-                              onClick: toggleFormat,
-                          },
-                          {
-                              label: 'Edit',
-                              icon: Pencil,
-                              onClick: () => setIsEditMode((prev) => !prev),
-                          },
-                      ]
-            }
-            editorProps={{
-                height: '100%',
-                defaultLanguage: 'dbml',
-                beforeMount: setupDBMLLanguage,
-                theme: getEditorTheme(effectiveTheme),
-                options: {
-                    wordWrap: 'off',
-                    mouseWheelZoom: false,
-                    domReadOnly: true,
-                    readOnly: !isEditMode,
-                },
-                onChange: (value) => {
-                    setEditedDbml(value ?? '');
-                },
-            }}
-        />
+        <>
+            <CodeSnippet
+                code={editedDbml}
+                loading={isLoading}
+                actionsTooltipSide="right"
+                className="my-0.5"
+                allowCopy={!isEditMode}
+                actions={
+                    isEditMode
+                        ? [
+                              {
+                                  label: 'View',
+                                  icon: PencilOff,
+                                  onClick: () => setIsEditMode((prev) => !prev),
+                              },
+                          ]
+                        : [
+                              {
+                                  label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
+                                  icon: ArrowLeftRight,
+                                  onClick: toggleFormat,
+                              },
+                              {
+                                  label: 'Edit',
+                                  icon: Pencil,
+                                  onClick: () => setIsEditMode((prev) => !prev),
+                              },
+                          ]
+                }
+                editorProps={{
+                    height: '100%',
+                    defaultLanguage: 'dbml',
+                    beforeMount: setupDBMLLanguage,
+                    theme: getEditorTheme(effectiveTheme),
+                    onMount: handleEditorDidMount,
+                    options: {
+                        wordWrap: 'off',
+                        mouseWheelZoom: false,
+                        domReadOnly: true,
+                        readOnly: !isEditMode,
+                    },
+                    onChange: (value) => {
+                        setEditedDbml(value ?? '');
+                    },
+                }}
+            />
+            {warningMessage ? (
+                <div className="my-2 rounded-md border border-blue-200 bg-blue-50 p-3 dark:border-blue-900/50 dark:bg-blue-950/20">
+                    <div className="flex items-start gap-2">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                                Warning
+                            </p>
+                            <p className="mt-0.5 text-xs text-blue-700 dark:text-blue-300">
+                                {warningMessage}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setWarningMessage(undefined)}
+                            className="rounded p-0.5 text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                            aria-label="Close warning"
+                        >
+                            <X className="size-3.5" />
+                        </button>
+                    </div>
+                </div>
+            ) : null}
+            {errorMessage ? (
+                <div className="my-2 rounded-md border border-orange-200 bg-orange-50 p-3 dark:border-orange-900/50 dark:bg-orange-950/20">
+                    <div className="flex gap-2">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0 text-orange-600 dark:text-orange-400" />
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-orange-800 dark:text-orange-200">
+                                Syntax Error
+                            </p>
+                            <p className="mt-0.5 text-xs text-orange-700 dark:text-orange-300">
+                                {errorMessage ||
+                                    t('import_dbml_dialog.error.description')}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+        </>
     );
 };
