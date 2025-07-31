@@ -22,11 +22,6 @@ export interface LocalConfigContext {
     showFieldAttributes: boolean;
     setShowFieldAttributes: (showFieldAttributes: boolean) => void;
 
-    hideMultiSchemaNotification: boolean;
-    setHideMultiSchemaNotification: (
-        hideMultiSchemaNotification: boolean
-    ) => void;
-
     githubRepoOpened: boolean;
     setGithubRepoOpened: (githubRepoOpened: boolean) => void;
 
@@ -55,9 +50,6 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     showFieldAttributes: true,
     setShowFieldAttributes: emptyFn,
-
-    hideMultiSchemaNotification: false,
-    setHideMultiSchemaNotification: emptyFn,
 
     githubRepoOpened: false,
     setGithubRepoOpened: emptyFn,

@@ -8,7 +8,6 @@ const scrollActionKey = 'scroll_action';
 const schemasFilterKey = 'schemas_filter';
 const showCardinalityKey = 'show_cardinality';
 const showFieldAttributesKey = 'show_field_attributes';
-const hideMultiSchemaNotificationKey = 'hide_multi_schema_notification';
 const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
@@ -38,12 +37,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     const [showFieldAttributes, setShowFieldAttributes] =
         React.useState<boolean>(
             (localStorage.getItem(showFieldAttributesKey) || 'true') === 'true'
-        );
-
-    const [hideMultiSchemaNotification, setHideMultiSchemaNotification] =
-        React.useState<boolean>(
-            (localStorage.getItem(hideMultiSchemaNotificationKey) ||
-                'false') === 'true'
         );
 
     const [githubRepoOpened, setGithubRepoOpened] = React.useState<boolean>(
@@ -76,13 +69,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     useEffect(() => {
         localStorage.setItem(githubRepoOpenedKey, githubRepoOpened.toString());
     }, [githubRepoOpened]);
-
-    useEffect(() => {
-        localStorage.setItem(
-            hideMultiSchemaNotificationKey,
-            hideMultiSchemaNotification.toString()
-        );
-    }, [hideMultiSchemaNotification]);
 
     useEffect(() => {
         localStorage.setItem(themeKey, theme);
@@ -127,8 +113,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setShowCardinality,
                 showFieldAttributes,
                 setShowFieldAttributes,
-                hideMultiSchemaNotification,
-                setHideMultiSchemaNotification,
                 setGithubRepoOpened,
                 githubRepoOpened,
                 starUsDialogLastOpen,

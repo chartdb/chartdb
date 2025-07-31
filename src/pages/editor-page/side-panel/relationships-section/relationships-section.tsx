@@ -20,7 +20,7 @@ import { useDialog } from '@/hooks/use-dialog';
 export interface RelationshipsSectionProps {}
 
 export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
-    const { relationships, filteredSchemas } = useChartDB();
+    const { relationships, filteredSchemas, hiddenTableIds } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRelationshipsInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -34,13 +34,18 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
             !filterText?.trim?.() ||
             relationship.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterSchema: (relationship: DBRelationship) => boolean = (
+        const filterVisible: (relationship: DBRelationship) => boolean = (
             relationship
         ) =>
-            shouldShowRelationshipBySchemaFilter(relationship, filteredSchemas);
+            shouldShowRelationshipBySchemaFilter(
+                relationship,
+                filteredSchemas
+            ) &&
+            !hiddenTableIds?.includes(relationship.sourceTableId) &&
+            !hiddenTableIds?.includes(relationship.targetTableId);
 
-        return relationships.filter(filterSchema).filter(filterName);
-    }, [relationships, filterText, filteredSchemas]);
+        return relationships.filter(filterVisible).filter(filterName);
+    }, [relationships, filterText, filteredSchemas, hiddenTableIds]);
 
     const handleCreateRelationship = useCallback(async () => {
         setFilterText('');

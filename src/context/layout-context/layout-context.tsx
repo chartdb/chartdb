@@ -36,10 +36,6 @@ export interface LayoutContext {
     hideSidePanel: () => void;
     showSidePanel: () => void;
     toggleSidePanel: () => void;
-
-    isSelectSchemaOpen: boolean;
-    openSelectSchema: () => void;
-    closeSelectSchema: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -70,8 +66,4 @@ export const layoutContext = createContext<LayoutContext>({
     hideSidePanel: emptyFn,
     showSidePanel: emptyFn,
     toggleSidePanel: emptyFn,
-
-    isSelectSchemaOpen: false,
-    openSelectSchema: emptyFn,
-    closeSelectSchema: emptyFn,
 });

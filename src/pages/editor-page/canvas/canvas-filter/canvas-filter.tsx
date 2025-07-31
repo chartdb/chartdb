@@ -93,9 +93,18 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
         tablesBySchema.forEach((schemaTables, schemaName) => {
             const schemaId = schemaNameToSchemaId(schemaName);
-            const schemaHidden = filteredSchemas
+            const schemaFilteredOut = filteredSchemas
                 ? !filteredSchemas.includes(schemaId)
                 : false;
+
+            // Pre-calculate if all tables in this schema are hidden
+            const allTablesHidden = schemaTables.every(
+                (table) => hiddenTableIds?.includes(table.id) ?? false
+            );
+
+            // Schema appears hidden if filtered out OR all tables are hidden
+            const schemaHidden = schemaFilteredOut || allTablesHidden;
+
             const schemaNode: TreeNode<NodeType, NodeContext> = {
                 id: `schema-${schemaName}`,
                 name: `${schemaName} (${schemaTables.length})`,
@@ -136,13 +145,24 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         return nodes;
     }, [relevantTableData, databaseType, hiddenTableIds, filteredSchemas]);
 
-    // Initialize expanded state with all schemas expanded
-    useMemo(() => {
-        const initialExpanded: Record<string, boolean> = {};
-        treeData.forEach((node) => {
-            initialExpanded[node.id] = true;
+    // Initialize expanded state - collapse if multiple schemas, expand if single schema
+    useEffect(() => {
+        setExpanded((prevExpanded) => {
+            const hasMultipleSchemas = treeData.length > 1;
+            const newExpanded: Record<string, boolean> = {};
+
+            treeData.forEach((node) => {
+                // Preserve existing expanded state if it exists, otherwise set based on schema count
+                if (node.id in prevExpanded) {
+                    newExpanded[node.id] = prevExpanded[node.id];
+                } else {
+                    // If there are multiple schemas, start collapsed; otherwise expanded
+                    newExpanded[node.id] = !hasMultipleSchemas;
+                }
+            });
+
+            return newExpanded;
         });
-        setExpanded(initialExpanded);
     }, [treeData]);
 
     // Filter tree data based on search query
@@ -222,9 +242,18 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             if (node.type === 'schema') {
                 const schemaContext = node.context as SchemaContext;
                 const schemaId = schemaNameToSchemaId(schemaContext.name);
-                const schemaHidden = filteredSchemas
+                const schemaFilteredOut = filteredSchemas
                     ? !filteredSchemas.includes(schemaId)
                     : false;
+
+                // Check if all tables in this schema are hidden
+                const allTablesHidden =
+                    node.children?.every((child) =>
+                        hiddenTableIds?.includes(child.id)
+                    ) ?? false;
+
+                // Schema is "hidden" if filtered out OR all tables are hidden
+                const schemaHidden = schemaFilteredOut || allTablesHidden;
 
                 return (
                     <Button
@@ -233,21 +262,26 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         className="size-7 h-fit p-0"
                         onClick={(e) => {
                             e.stopPropagation();
-                            // unhide all tables in this schema
-                            node.children?.forEach((child) => {
-                                if (
-                                    child.type === 'table' &&
-                                    hiddenTableIds?.includes(child.id)
-                                ) {
-                                    removeHiddenTableId(child.id);
-                                }
-                            });
+
                             if (schemaHidden) {
-                                filterSchemas([
-                                    ...(filteredSchemas ?? []),
-                                    schemaId,
-                                ]);
+                                // Show the schema in filter
+                                if (schemaFilteredOut) {
+                                    filterSchemas([
+                                        ...(filteredSchemas ?? []),
+                                        schemaId,
+                                    ]);
+                                }
+                                // Unhide all tables in this schema
+                                node.children?.forEach((child) => {
+                                    if (
+                                        child.type === 'table' &&
+                                        hiddenTableIds?.includes(child.id)
+                                    ) {
+                                        removeHiddenTableId(child.id);
+                                    }
+                                });
                             } else {
+                                // Hide the schema and all its tables
                                 filterSchemas(
                                     filteredSchemas?.filter(
                                         (s) => s !== schemaId
@@ -308,6 +342,39 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 }
                             } else {
                                 toggleTableVisibility(tableId, !hidden);
+
+                                // Check if this was the last visible table in the schema
+                                if (!hidden && tableSchema) {
+                                    const schemaNode = treeData.find(
+                                        (s) =>
+                                            (s.context as SchemaContext)
+                                                .name === tableSchema
+                                    );
+                                    if (schemaNode) {
+                                        // Check if all other tables in this schema will be hidden
+                                        const willAllBeHidden =
+                                            schemaNode.children?.every(
+                                                (child) =>
+                                                    child.id === tableId ||
+                                                    hiddenTableIds?.includes(
+                                                        child.id
+                                                    )
+                                            ) ?? false;
+
+                                        if (willAllBeHidden) {
+                                            // Hide the schema as well
+                                            const schemaId =
+                                                schemaNameToSchemaId(
+                                                    tableSchema
+                                                );
+                                            filterSchemas(
+                                                filteredSchemas?.filter(
+                                                    (s) => s !== schemaId
+                                                ) ?? []
+                                            );
+                                        }
+                                    }
+                                }
                             }
                         }}
                     >
@@ -336,7 +403,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     // Handle node click
     const handleNodeClick = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
-            if (node.type === 'table') {
+            if (node.type === 'schema') {
+                // Toggle schema expansion on single click
+                setExpanded((prev) => ({
+                    ...prev,
+                    [node.id]: !prev[node.id],
+                }));
+            } else if (node.type === 'table') {
                 const tableContext = node.context as TableContext;
                 const tableSchema = tableContext.tableSchema;
                 const visibleBySchema = shouldShowTableSchemaBySchemaFilter({
