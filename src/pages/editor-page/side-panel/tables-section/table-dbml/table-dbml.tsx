@@ -53,7 +53,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editedDbml, setEditedDbml] = useState<string>('');
     const lastDBMLChange = useRef(editedDbml);
-    const { calculateDiff, originalDiagram, resetDiff, diffMap } = useDiff();
+    const { calculateDiff, originalDiagram, resetDiff } = useDiff();
     const { loadDiagramFromData } = useChartDB();
 
     // --- Effect for handling empty field name warnings ---
@@ -122,8 +122,6 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
             lastDBMLChange.current = dbmlToDisplay;
         }
     }, [dbmlToDisplay, isLoading, isEditMode]);
-
-    console.log('Diff Map:', diffMap);
 
     // Create the showDiff function
     const showDiff = useCallback(

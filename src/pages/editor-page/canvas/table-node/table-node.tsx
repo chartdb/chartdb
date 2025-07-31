@@ -313,7 +313,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     hasHighlightedCustomType
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2 animate-scale'
                         : '',
-                    isDiffTableChanged && !isDiffNewTable && !isDiffTableRemoved
+                    isDiffTableChanged &&
+                        !isSummaryOnly &&
+                        !isDiffNewTable &&
+                        !isDiffTableRemoved
                         ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
                         : '',
                     isDiffNewTable
@@ -328,7 +331,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isOverlapping,
                 highlightOverlappingTables,
                 hasHighlightedCustomType,
-
+                isSummaryOnly,
                 isDiffTableChanged,
                 isDiffNewTable,
                 isDiffTableRemoved,
@@ -365,7 +368,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 ? 'new'
                                 : isDiffTableRemoved
                                   ? 'removed'
-                                  : isDiffTableChanged
+                                  : isDiffTableChanged && !isSummaryOnly
                                     ? 'changed'
                                     : 'none'
                         }
