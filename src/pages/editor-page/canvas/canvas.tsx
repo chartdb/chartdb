@@ -154,6 +154,21 @@ const areaToAreaNode = (
     const tablesInArea = tables.filter(
         (table) => table.parentAreaId === area.id
     );
+
+    // Don't hide area if it has no tables (empty area)
+    if (tablesInArea.length === 0) {
+        return {
+            id: area.id,
+            type: 'area',
+            position: { x: area.x, y: area.y },
+            data: { area },
+            width: area.width,
+            height: area.height,
+            zIndex: -10,
+            hidden: false,
+        };
+    }
+
     const allTablesHidden = tablesInArea.every(
         (table) =>
             hiddenTableIds?.includes(table.id) ||
@@ -490,7 +505,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const checkParentAreas = debounce(() => {
-            const updatedTables = updateTablesParentAreas(tables, areas);
+            const updatedTables = updateTablesParentAreas(
+                tables,
+                areas,
+                hiddenTableIds,
+                filteredSchemas
+            );
             const needsUpdate: Array<{
                 id: string;
                 parentAreaId: string | null;
@@ -530,7 +550,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         }, 300);
 
         checkParentAreas();
-    }, [tablePositions, areas, updateTablesState, tables]);
+    }, [
+        tablePositions,
+        areas,
+        updateTablesState,
+        tables,
+        hiddenTableIds,
+        filteredSchemas,
+    ]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {

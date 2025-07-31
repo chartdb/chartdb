@@ -1,6 +1,9 @@
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Area } from '@/lib/domain/area';
-import { calcTableHeight } from '@/lib/domain/db-table';
+import {
+    calcTableHeight,
+    shouldShowTablesBySchemaFilter,
+} from '@/lib/domain/db-table';
 
 /**
  * Check if a table is inside an area based on their positions and dimensions
@@ -53,9 +56,31 @@ const findContainingArea = (table: DBTable, areas: Area[]): Area | null => {
  */
 export const updateTablesParentAreas = (
     tables: DBTable[],
-    areas: Area[]
+    areas: Area[],
+    hiddenTableIds?: string[],
+    filteredSchemas?: string[]
 ): DBTable[] => {
     return tables.map((table) => {
+        // Check if table is hidden by direct hiding or schema filter
+        const isHiddenDirectly = hiddenTableIds?.includes(table.id) ?? false;
+        const isHiddenBySchema = !shouldShowTablesBySchemaFilter(
+            table,
+            filteredSchemas
+        );
+        const isHidden = isHiddenDirectly || isHiddenBySchema;
+
+        // If table is hidden, remove it from any area
+        if (isHidden) {
+            if (table.parentAreaId !== null) {
+                return {
+                    ...table,
+                    parentAreaId: null,
+                };
+            }
+            return table;
+        }
+
+        // For visible tables, find containing area as before
         const containingArea = findContainingArea(table, areas);
         const newParentAreaId = containingArea?.id || null;
 

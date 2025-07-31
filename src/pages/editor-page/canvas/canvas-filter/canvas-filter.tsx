@@ -132,15 +132,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             // Convert to tree nodes
             const nodes: TreeNode<NodeType, NodeContext>[] = [];
 
-            // Sort areas by order or name
-            const sortedAreas = areas
-                .filter((area) => tablesByArea.has(area.id))
-                .sort((a, b) => {
-                    if (a.order !== undefined && b.order !== undefined) {
-                        return a.order - b.order;
-                    }
-                    return a.name.localeCompare(b.name);
-                });
+            // Sort all areas by order or name (including empty ones)
+            const sortedAreas = areas.sort((a, b) => {
+                if (a.order !== undefined && b.order !== undefined) {
+                    return a.order - b.order;
+                }
+                return a.name.localeCompare(b.name);
+            });
 
             sortedAreas.forEach((area) => {
                 const areaTables = tablesByArea.get(area.id) || [];
@@ -400,13 +398,16 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         variant="ghost"
                         size="sm"
                         className="size-7 h-fit p-0"
+                        disabled={!node.children || node.children.length === 0}
                         onClick={(e) => {
                             e.stopPropagation();
                             // Toggle all tables in this area
                             const allHidden =
-                                node.children?.every((child) =>
-                                    hiddenTableIds?.includes(child.id)
-                                ) ?? false;
+                                (node.children?.length > 0 &&
+                                    node.children?.every((child) =>
+                                        hiddenTableIds?.includes(child.id)
+                                    )) ||
+                                false;
 
                             node.children?.forEach((child) => {
                                 if (child.type === 'table') {
