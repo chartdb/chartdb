@@ -266,6 +266,15 @@ export const en = {
             },
         },
 
+        canvas_filter: {
+            title: 'Filter Tables',
+            search_placeholder: 'Search tables...',
+            default_grouping: 'Default View',
+            group_by_schema: 'Group by Schema',
+            group_by_area: 'Group by Area',
+            no_area: 'No Area',
+        },
+
         toolbar: {
             zoom_in: 'Zoom In',
             zoom_out: 'Zoom Out',

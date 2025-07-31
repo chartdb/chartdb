@@ -144,15 +144,33 @@ const tableToTableNode = (
     };
 };
 
-const areaToAreaNode = (area: Area): AreaNodeType => ({
-    id: area.id,
-    type: 'area',
-    position: { x: area.x, y: area.y },
-    data: { area },
-    width: area.width,
-    height: area.height,
-    zIndex: -10,
-});
+const areaToAreaNode = (
+    area: Area,
+    tables: DBTable[],
+    hiddenTableIds?: string[],
+    filteredSchemas?: string[]
+): AreaNodeType => {
+    // Check if all tables in this area are hidden
+    const tablesInArea = tables.filter(
+        (table) => table.parentAreaId === area.id
+    );
+    const allTablesHidden = tablesInArea.every(
+        (table) =>
+            hiddenTableIds?.includes(table.id) ||
+            !shouldShowTablesBySchemaFilter(table, filteredSchemas)
+    );
+
+    return {
+        id: area.id,
+        type: 'area',
+        position: { x: area.x, y: area.y },
+        data: { area },
+        width: area.width,
+        height: area.height,
+        zIndex: -10,
+        hidden: allTablesHidden,
+    };
+};
 
 export interface CanvasProps {
     initialTables: DBTable[];
@@ -415,7 +433,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         },
                     };
                 }),
-                ...areas.map(areaToAreaNode),
+                ...areas.map((area) =>
+                    areaToAreaNode(
+                        area,
+                        tables,
+                        hiddenTableIds,
+                        filteredSchemas
+                    )
+                ),
             ];
 
             // Check if nodes actually changed
