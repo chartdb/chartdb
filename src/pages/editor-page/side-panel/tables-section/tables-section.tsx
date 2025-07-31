@@ -25,7 +25,8 @@ import type { DBSchema } from '@/lib/domain';
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, filteredSchemas, schemas } = useChartDB();
+    const { createTable, tables, hiddenTableIds, filteredSchemas, schemas } =
+        useChartDB();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
@@ -39,11 +40,13 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterSchema: (table: DBTable) => boolean = (table) =>
+        // Show only tables that are visible on the canvas
+        const filterVisible: (table: DBTable) => boolean = (table) =>
+            !hiddenTableIds?.includes(table.id) &&
             shouldShowTablesBySchemaFilter(table, filteredSchemas);
 
-        return tables.filter(filterSchema).filter(filterTableName);
-    }, [tables, filterText, filteredSchemas]);
+        return tables.filter(filterVisible).filter(filterTableName);
+    }, [tables, filterText, hiddenTableIds, filteredSchemas]);
 
     const createTableWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {

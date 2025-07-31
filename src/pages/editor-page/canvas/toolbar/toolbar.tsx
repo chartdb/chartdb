@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Card, CardContent } from '@/components/card/card';
 import { ZoomIn, ZoomOut, Funnel, Redo, Undo, Scan } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
@@ -30,11 +30,25 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
     const { setShowFilter } = useCanvas();
-    const { hiddenTableIds } = useChartDB();
+    const { hiddenTableIds, filteredSchemas, schemas } = useChartDB();
 
     const toggleFilter = useCallback(() => {
         setShowFilter((prev) => !prev);
     }, [setShowFilter]);
+
+    // Check if any filtering is active
+    const hasActiveFilter = useMemo(() => {
+        // Check if any tables are hidden
+        const hasHiddenTables = (hiddenTableIds ?? []).length > 0;
+
+        // Check if schemas are being filtered
+        const hasSchemasFilter =
+            filteredSchemas &&
+            schemas.length > 0 &&
+            filteredSchemas.length < schemas.length;
+
+        return hasHiddenTables || hasSchemasFilter;
+    }, [hiddenTableIds, filteredSchemas, schemas]);
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -80,8 +94,7 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                                         'transition-all duration-200',
                                         {
                                             'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
-                                                (hiddenTableIds ?? []).length >
-                                                0,
+                                                hasActiveFilter,
                                         }
                                     )}
                                 >
