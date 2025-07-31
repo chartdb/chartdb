@@ -19,7 +19,8 @@ import { useLayout } from '@/hooks/use-layout';
 export interface DependenciesSectionProps {}
 
 export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
-    const { dependencies, filteredSchemas, getTable } = useChartDB();
+    const { dependencies, filteredSchemas, hiddenTableIds, getTable } =
+        useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllDependenciesInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -44,12 +45,15 @@ export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
             );
         };
 
-        const filterSchema: (dependency: DBDependency) => boolean = (
+        const filterVisible: (dependency: DBDependency) => boolean = (
             dependency
-        ) => shouldShowDependencyBySchemaFilter(dependency, filteredSchemas);
+        ) =>
+            shouldShowDependencyBySchemaFilter(dependency, filteredSchemas) &&
+            !hiddenTableIds?.includes(dependency.tableId) &&
+            !hiddenTableIds?.includes(dependency.dependentTableId);
 
         return dependencies
-            .filter(filterSchema)
+            .filter(filterVisible)
             .filter(filterName)
             .sort((a, b) => {
                 const dependentTableA = getTable(a.dependentTableId);
@@ -60,7 +64,7 @@ export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
                     `${dependentTableB?.name}${tableB?.name}`
                 );
             });
-    }, [dependencies, filterText, filteredSchemas, getTable]);
+    }, [dependencies, filterText, filteredSchemas, hiddenTableIds, getTable]);
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">

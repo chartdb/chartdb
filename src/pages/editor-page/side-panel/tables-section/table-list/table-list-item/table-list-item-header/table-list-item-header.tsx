@@ -55,7 +55,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         createField,
         createTable,
         schemas,
-        filteredSchemas,
         databaseType,
     } = useChartDB();
     const { openTableSchemaDialog } = useDialog();
@@ -267,7 +266,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     let schemaToDisplay;
 
-    if (schemas.length > 1 && !!filteredSchemas && filteredSchemas.length > 1) {
+    if (schemas.length > 1) {
         schemaToDisplay = table.schema;
     }
 

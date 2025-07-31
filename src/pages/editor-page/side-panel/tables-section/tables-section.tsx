@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, List, X, Code } from 'lucide-react';
+import { Table, List, X, Code, Funnel } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
@@ -21,11 +21,13 @@ import { TableDBML } from './table-dbml/table-dbml';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getOperatingSystem } from '@/lib/utils';
 import type { DBSchema } from '@/lib/domain';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, filteredSchemas, schemas } = useChartDB();
+    const { createTable, tables, hiddenTableIds, filteredSchemas, schemas } =
+        useChartDB();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
@@ -33,17 +35,32 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
     const filterInputRef = React.useRef<HTMLInputElement>(null);
+    const { setShowFilter } = useCanvas();
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterSchema: (table: DBTable) => boolean = (table) =>
+        // Show only tables that are visible on the canvas
+        const filterVisible: (table: DBTable) => boolean = (table) =>
+            !hiddenTableIds?.includes(table.id) &&
             shouldShowTablesBySchemaFilter(table, filteredSchemas);
 
-        return tables.filter(filterSchema).filter(filterTableName);
-    }, [tables, filterText, filteredSchemas]);
+        return tables.filter(filterVisible).filter(filterTableName);
+    }, [tables, filterText, hiddenTableIds, filteredSchemas]);
+
+    // Check if all tables are filtered out by canvas filters (not text filter)
+    const allTablesFilteredByCanvas = useMemo(() => {
+        return (
+            tables.length > 0 &&
+            tables.every(
+                (table) =>
+                    hiddenTableIds?.includes(table.id) ||
+                    !shouldShowTablesBySchemaFilter(table, filteredSchemas)
+            )
+        );
+    }, [tables, hiddenTableIds, filteredSchemas]);
 
     const createTableWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {
@@ -96,6 +113,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const handleClearFilter = useCallback(() => {
         setFilterText('');
     }, []);
+
+    const handleOpenCanvasFilter = useCallback(() => {
+        setShowFilter(true);
+    }, [setShowFilter]);
 
     const operatingSystem = useMemo(() => getOperatingSystem(), []);
 
@@ -177,6 +198,23 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 )}
                                 className="mt-20"
                             />
+                        ) : allTablesFilteredByCanvas ? (
+                            <div className="mt-10 flex flex-col items-center gap-2">
+                                <div className="text-sm text-muted-foreground">
+                                    {t(
+                                        'side_panel.tables_section.all_tables_filtered'
+                                    )}
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleOpenCanvasFilter}
+                                    className="gap-1"
+                                >
+                                    <Funnel className="size-3.5" />
+                                    {t('side_panel.tables_section.open_filter')}
+                                </Button>
+                            </div>
                         ) : filterText && filteredTables.length === 0 ? (
                             <div className="mt-10 flex flex-col items-center gap-2">
                                 <div className="text-sm text-muted-foreground">
