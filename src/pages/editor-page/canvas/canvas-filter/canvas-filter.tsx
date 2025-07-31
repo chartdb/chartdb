@@ -301,14 +301,24 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         t,
     ]);
 
-    // Initialize expanded state with all schemas expanded
-    useMemo(() => {
-        const initialExpanded: Record<string, boolean> = {};
-        treeData.forEach((node) => {
-            initialExpanded[node.id] = true;
+    // Initialize expanded state with all schemas expanded only when grouping changes
+    useEffect(() => {
+        setExpanded((prevExpanded) => {
+            const newExpanded: Record<string, boolean> = {};
+
+            // Preserve existing expanded states for nodes that still exist
+            treeData.forEach((node) => {
+                if (node.id in prevExpanded) {
+                    newExpanded[node.id] = prevExpanded[node.id];
+                } else {
+                    // Default new nodes to expanded
+                    newExpanded[node.id] = true;
+                }
+            });
+
+            return newExpanded;
         });
-        setExpanded(initialExpanded);
-    }, [treeData]);
+    }, [groupBy, treeData]);
 
     // Filter tree data based on search query
     const filteredTreeData: TreeNode<NodeType, NodeContext>[] = useMemo(() => {
