@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import equal from 'fast-deep-equal';
-import type { DatabaseType } from '@/lib/domain';
+import type { DatabaseType, DBTable } from '@/lib/domain';
 
 import {
     Select,
@@ -29,6 +29,7 @@ import {
 
 export interface TableFieldPopoverProps {
     field: DBField;
+    table: DBTable;
     databaseType: DatabaseType;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
@@ -36,6 +37,7 @@ export interface TableFieldPopoverProps {
 
 export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     field,
+    table,
     databaseType,
     updateField,
     removeField,
@@ -43,6 +45,19 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
     const [isOpen, setIsOpen] = React.useState(false);
+
+    // Check if this field is the only primary key in the table
+    const isOnlyPrimaryKey = React.useMemo(() => {
+        if (!field.primaryKey) return false;
+
+        // Early exit if we find another primary key
+        for (const f of table.fields) {
+            if (f.id !== field.id && f.primaryKey) {
+                return false;
+            }
+        }
+        return true;
+    }, [table.fields, field.primaryKey, field.id]);
 
     useEffect(() => {
         setLocalField(field);
@@ -113,7 +128,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             </Label>
                             <Checkbox
                                 checked={localField.unique}
-                                disabled={field.primaryKey}
+                                disabled={isOnlyPrimaryKey}
                                 onCheckedChange={(value) =>
                                     setLocalField((current) => ({
                                         ...current,

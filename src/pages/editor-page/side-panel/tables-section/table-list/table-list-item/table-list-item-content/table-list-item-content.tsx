@@ -56,6 +56,32 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     >(['fields']);
     const sensors = useSensors(useSensor(PointerSensor));
 
+    // Create a memoized version of the field updater that handles primary key logic
+    const handleFieldUpdate = useCallback(
+        (fieldId: string, attrs: Partial<DBField>) => {
+            updateField(table.id, fieldId, attrs);
+
+            // Handle the case when removing a primary key and only one remains
+            if (attrs.primaryKey === false) {
+                const remainingPrimaryKeys = table.fields.filter(
+                    (f) => f.id !== fieldId && f.primaryKey
+                );
+                if (remainingPrimaryKeys.length === 1) {
+                    // Set the remaining primary key field as unique
+                    updateField(
+                        table.id,
+                        remainingPrimaryKeys[0].id,
+                        {
+                            unique: true,
+                        },
+                        { updateHistory: false }
+                    );
+                }
+            }
+        },
+        [table.id, table.fields, updateField]
+    );
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
 
@@ -147,14 +173,9 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     <TableField
                                         key={field.id}
                                         field={field}
-                                        updateField={(
-                                            attrs: Partial<DBField>
-                                        ) =>
-                                            updateField(
-                                                table.id,
-                                                field.id,
-                                                attrs
-                                            )
+                                        table={table}
+                                        updateField={(attrs) =>
+                                            handleFieldUpdate(field.id, attrs)
                                         }
                                         removeField={() =>
                                             removeField(table.id, field.id)
