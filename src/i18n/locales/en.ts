@@ -127,6 +127,10 @@ export const en = {
                 no_results: 'No tables found matching your filter.',
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                default_grouping: 'Default View',
+                group_by_schema: 'Group by Schema',
+                group_by_area: 'Group by Area',
+                no_area: 'No Area',
 
                 table: {
                     fields: 'Fields',
