@@ -9,12 +9,14 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
         base: 'vs-dark',
         inherit: true,
         rules: [
+            { token: 'comment', foreground: '6A9955' }, // Comments
             { token: 'keyword', foreground: '569CD6' }, // Table, Ref keywords
             { token: 'string', foreground: 'CE9178' }, // Strings
             { token: 'annotation', foreground: '9CDCFE' }, // [annotations]
             { token: 'delimiter', foreground: 'D4D4D4' }, // Braces {}
             { token: 'operator', foreground: 'D4D4D4' }, // Operators
-            { token: 'datatype', foreground: '4EC9B0' }, // Data types
+            { token: 'type', foreground: '4EC9B0' }, // Data types
+            { token: 'identifier', foreground: '9CDCFE' }, // Field names
         ],
         colors: {},
     });
@@ -23,12 +25,14 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
         base: 'vs',
         inherit: true,
         rules: [
+            { token: 'comment', foreground: '008000' }, // Comments
             { token: 'keyword', foreground: '0000FF' }, // Table, Ref keywords
             { token: 'string', foreground: 'A31515' }, // Strings
             { token: 'annotation', foreground: '001080' }, // [annotations]
             { token: 'delimiter', foreground: '000000' }, // Braces {}
             { token: 'operator', foreground: '000000' }, // Operators
             { token: 'type', foreground: '267F99' }, // Data types
+            { token: 'identifier', foreground: '001080' }, // Field names
         ],
         colors: {},
     });
@@ -37,20 +41,56 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
     const datatypePattern = dataTypesNames.join('|');
 
     monaco.languages.setMonarchTokensProvider('dbml', {
-        keywords: ['Table', 'Ref', 'Indexes'],
+        keywords: ['Table', 'Ref', 'Indexes', 'enum'],
         datatypes: dataTypesNames,
+        operators: ['>', '<', '-'],
+
         tokenizer: {
             root: [
-                [/\b(Table|Ref|Indexes)\b/, 'keyword'],
+                // Comments
+                [/\/\/.*$/, 'comment'],
+
+                // Keywords
+                [/\b(Table|Ref|Indexes|enum)\b/, 'keyword'],
+
+                // Annotations in brackets
                 [/\[.*?\]/, 'annotation'],
+
+                // Strings
                 [/'''/, 'string', '@tripleQuoteString'],
-                [/".*?"/, 'string'],
-                [/'.*?'/, 'string'],
+                [/"([^"\\]|\\.)*$/, 'string.invalid'], // non-terminated string
+                [/'([^'\\]|\\.)*$/, 'string.invalid'], // non-terminated string
+                [/"/, 'string', '@string_double'],
+                [/'/, 'string', '@string_single'],
                 [/`.*?`/, 'string'],
-                [/[{}]/, 'delimiter'],
-                [/[<>]/, 'operator'],
-                [new RegExp(`\\b(${datatypePattern})\\b`, 'i'), 'type'], // Added 'i' flag for case-insensitive matching
+
+                // Delimiters and operators
+                [/[{}()]/, 'delimiter'],
+                [/[<>-]/, 'operator'],
+                [/:/, 'delimiter'],
+
+                // Data types
+                [new RegExp(`\\b(${datatypePattern})\\b`, 'i'), 'type'],
+
+                // Numbers
+                [/\d+/, 'number'],
+
+                // Identifiers
+                [/[a-zA-Z_]\w*/, 'identifier'],
             ],
+
+            string_double: [
+                [/[^\\"]+/, 'string'],
+                [/\\./, 'string.escape'],
+                [/"/, 'string', '@pop'],
+            ],
+
+            string_single: [
+                [/[^\\']+/, 'string'],
+                [/\\./, 'string.escape'],
+                [/'/, 'string', '@pop'],
+            ],
+
             tripleQuoteString: [
                 [/[^']+/, 'string'],
                 [/'''/, 'string', '@pop'],
