@@ -118,6 +118,8 @@ export const fr: LanguageTranslation = {
                 clear: 'Effacer le Filtre',
                 no_results:
                     'Aucune table trouvée correspondant à votre filtre.',
+                all_tables_filtered: 'All tables are filtered.',
+                open_filter: 'Open Filter',
                 show_list: 'Afficher la Liste des Tableaux',
                 show_dbml: "Afficher l'éditeur DBML",
 
