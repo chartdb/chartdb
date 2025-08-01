@@ -17,13 +17,24 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useChartDB } from '@/hooks/use-chartdb.ts';
+import type { Area } from '@/lib/domain/area';
+import { useTranslation } from 'react-i18next';
+import { defaultSchemas } from '@/lib/data/default-schemas';
+import { databasesWithSchemas } from '@/lib/domain/db-schema';
 
 export interface TableListProps {
     tables: DBTable[];
+    groupBy?: 'schema' | 'area';
+    areas?: Area[];
 }
 
-export const TableList: React.FC<TableListProps> = ({ tables }) => {
-    const { updateTablesState } = useChartDB();
+export const TableList: React.FC<TableListProps> = ({
+    tables,
+    groupBy = 'schema',
+    areas = [],
+}) => {
+    const { updateTablesState, databaseType } = useChartDB();
+    const { t } = useTranslation();
 
     const { openTableFromSidebar, openedTableInSidebar } = useLayout();
     const lastOpenedTable = React.useRef<string | null>(null);
@@ -87,62 +98,162 @@ export const TableList: React.FC<TableListProps> = ({ tables }) => {
         }
     }, [scrollToTable, openedTableInSidebar]);
 
+    const sortTables = useCallback((tablesToSort: DBTable[]) => {
+        return tablesToSort.sort((table1: DBTable, table2: DBTable) => {
+            // if one table has order and the other doesn't, the one with order should come first
+            if (table1.order && table2.order === undefined) {
+                return -1;
+            }
+
+            if (table1.order === undefined && table2.order) {
+                return 1;
+            }
+
+            // if both tables have order, sort by order
+            if (table1.order !== undefined && table2.order !== undefined) {
+                return (table1.order ?? 0) - (table2.order ?? 0);
+            }
+
+            // if both tables don't have order, sort by name
+            if (table1.isView === table2.isView) {
+                // Both are either tables or views, so sort alphabetically by name
+                return table1.name.localeCompare(table2.name);
+            }
+            // If one is a view and the other is not, put tables first
+            return table1.isView ? 1 : -1;
+        });
+    }, []);
+
+    const groupedTables = useMemo(() => {
+        if (groupBy === 'area') {
+            // Group tables by area
+            const tablesWithArea: Record<string, DBTable[]> = {};
+            const tablesWithoutArea: DBTable[] = [];
+
+            // Create a map of area id to area name
+            const areaMap = areas.reduce(
+                (acc, area) => {
+                    acc[area.id] = area.name;
+                    return acc;
+                },
+                {} as Record<string, string>
+            );
+
+            tables.forEach((table) => {
+                if (table.parentAreaId && areaMap[table.parentAreaId]) {
+                    if (!tablesWithArea[table.parentAreaId]) {
+                        tablesWithArea[table.parentAreaId] = [];
+                    }
+                    tablesWithArea[table.parentAreaId].push(table);
+                } else {
+                    tablesWithoutArea.push(table);
+                }
+            });
+
+            // Sort areas by their order or name
+            const sortedAreas = areas
+                .filter((area) => tablesWithArea[area.id])
+                .sort((a, b) => {
+                    if (a.order !== undefined && b.order !== undefined) {
+                        return a.order - b.order;
+                    }
+                    return a.name.localeCompare(b.name);
+                });
+
+            return [
+                ...sortedAreas.map((area) => ({
+                    id: area.id,
+                    name: area.name,
+                    tables: sortTables(tablesWithArea[area.id]),
+                })),
+                ...(tablesWithoutArea.length > 0
+                    ? [
+                          {
+                              id: 'no-area',
+                              name: t('side_panel.tables_section.no_area'),
+                              tables: sortTables(tablesWithoutArea),
+                          },
+                      ]
+                    : []),
+            ];
+        }
+
+        // Group by schema
+        const supportsSchemas = databasesWithSchemas.includes(databaseType);
+
+        if (supportsSchemas) {
+            // Group tables by schema
+            const tablesBySchema: Record<string, DBTable[]> = {};
+
+            tables.forEach((table) => {
+                const schema =
+                    table.schema ?? defaultSchemas[databaseType] ?? 'default';
+                if (!tablesBySchema[schema]) {
+                    tablesBySchema[schema] = [];
+                }
+                tablesBySchema[schema].push(table);
+            });
+
+            // Sort schemas alphabetically
+            const sortedSchemas = Object.keys(tablesBySchema).sort((a, b) =>
+                a.localeCompare(b)
+            );
+
+            return sortedSchemas.map((schema) => ({
+                id: `schema-${schema}`,
+                name: schema,
+                tables: sortTables(tablesBySchema[schema]),
+            }));
+        }
+
+        // For databases that don't support schemas, return all tables as one group
+        return [
+            {
+                id: 'all',
+                name: '',
+                tables: sortTables(tables),
+            },
+        ];
+    }, [tables, groupBy, areas, sortTables, t, databaseType]);
+
     return (
-        <Accordion
-            type="single"
-            collapsible
-            className="flex w-full flex-col gap-1"
-            value={openedTableInSidebar}
-            onValueChange={openTableFromSidebar}
-            onAnimationEnd={handleScrollToTable}
-        >
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-            >
-                <SortableContext
-                    items={tables}
-                    strategy={verticalListSortingStrategy}
-                >
-                    {tables
-                        .sort((table1: DBTable, table2: DBTable) => {
-                            // if one table has order and the other doesn't, the one with order should come first
-                            if (table1.order && table2.order === undefined) {
-                                return -1;
-                            }
-
-                            if (table1.order === undefined && table2.order) {
-                                return 1;
-                            }
-
-                            // if both tables have order, sort by order
-                            if (
-                                table1.order !== undefined &&
-                                table2.order !== undefined
-                            ) {
-                                return (
-                                    (table1.order ?? 0) - (table2.order ?? 0)
-                                );
-                            }
-
-                            // if both tables don't have order, sort by name
-                            if (table1.isView === table2.isView) {
-                                // Both are either tables or views, so sort alphabetically by name
-                                return table1.name.localeCompare(table2.name);
-                            }
-                            // If one is a view and the other is not, put tables first
-                            return table1.isView ? 1 : -1;
-                        })
-                        .map((table) => (
-                            <TableListItem
-                                key={table.id}
-                                table={table}
-                                ref={refs[table.id]}
-                            />
-                        ))}
-                </SortableContext>
-            </DndContext>
-        </Accordion>
+        <div className="flex flex-col gap-3">
+            {groupedTables.map((group) => (
+                <div key={group.id}>
+                    {group.name && (
+                        <div className="mb-2 px-2 text-xs font-medium text-muted-foreground">
+                            {group.name}
+                        </div>
+                    )}
+                    <Accordion
+                        type="single"
+                        collapsible
+                        className="flex w-full flex-col gap-1"
+                        value={openedTableInSidebar}
+                        onValueChange={openTableFromSidebar}
+                        onAnimationEnd={handleScrollToTable}
+                    >
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext
+                                items={group.tables}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {group.tables.map((table) => (
+                                    <TableListItem
+                                        key={table.id}
+                                        table={table}
+                                        ref={refs[table.id]}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
+                    </Accordion>
+                </div>
+            ))}
+        </div>
     );
 };

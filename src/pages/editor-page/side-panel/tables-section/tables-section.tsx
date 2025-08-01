@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, List, X, Code, Funnel } from 'lucide-react';
+import { Table, List, X, Code, Funnel, Layers, Database } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
@@ -22,20 +22,34 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { getOperatingSystem } from '@/lib/utils';
 import type { DBSchema } from '@/lib/domain';
 import { useCanvas } from '@/hooks/use-canvas';
+import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
+import { databasesWithSchemas } from '@/lib/domain/db-schema';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, hiddenTableIds, filteredSchemas, schemas } =
-        useChartDB();
+    const {
+        createTable,
+        tables,
+        hiddenTableIds,
+        filteredSchemas,
+        schemas,
+        areas,
+        databaseType,
+    } = useChartDB();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const [showDBML, setShowDBML] = useState(false);
+    const [groupBy, setGroupBy] = useState<'schema' | 'area'>('schema');
     const filterInputRef = React.useRef<HTMLInputElement>(null);
     const { setShowFilter } = useCanvas();
+    const supportsSchemas = useMemo(
+        () => databasesWithSchemas.includes(databaseType),
+        [databaseType]
+    );
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -183,6 +197,37 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     {t('side_panel.tables_section.add_table')}
                 </Button>
             </div>
+            <div className="mb-2">
+                <ToggleGroup
+                    type="single"
+                    value={groupBy}
+                    onValueChange={(value) => {
+                        if (value) setGroupBy(value as 'schema' | 'area');
+                    }}
+                    className="w-full justify-start"
+                >
+                    <ToggleGroupItem
+                        value="schema"
+                        aria-label={
+                            supportsSchemas ? 'Group by schema' : 'Default'
+                        }
+                        className="h-8 flex-1 gap-1.5 text-xs"
+                    >
+                        <Database className="size-3.5" />
+                        {supportsSchemas
+                            ? t('side_panel.tables_section.group_by_schema')
+                            : t('side_panel.tables_section.default_grouping')}
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                        value="area"
+                        aria-label="Group by area"
+                        className="h-8 flex-1 gap-1.5 text-xs"
+                    >
+                        <Layers className="size-3.5" />
+                        {t('side_panel.tables_section.group_by_area')}
+                    </ToggleGroupItem>
+                </ToggleGroup>
+            </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 {showDBML ? (
                     <TableDBML filteredTables={filteredTables} />
@@ -231,7 +276,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 </Button>
                             </div>
                         ) : (
-                            <TableList tables={filteredTables} />
+                            <TableList
+                                tables={filteredTables}
+                                groupBy={groupBy}
+                                areas={areas}
+                            />
                         )}
                     </ScrollArea>
                 )}

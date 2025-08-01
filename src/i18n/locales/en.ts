@@ -129,6 +129,10 @@ export const en = {
                 open_filter: 'Open Filter',
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                default_grouping: 'Default View',
+                group_by_schema: 'Group by Schema',
+                group_by_area: 'Group by Area',
+                no_area: 'No Area',
 
                 table: {
                     fields: 'Fields',
@@ -262,6 +266,15 @@ export const en = {
                     delete_custom_type: 'Delete Type',
                 },
             },
+        },
+
+        canvas_filter: {
+            title: 'Filter Tables',
+            search_placeholder: 'Search tables...',
+            default_grouping: 'Default View',
+            group_by_schema: 'Group by Schema',
+            group_by_area: 'Group by Area',
+            no_area: 'No Area',
         },
 
         toolbar: {

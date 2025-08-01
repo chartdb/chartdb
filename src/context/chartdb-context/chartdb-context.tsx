@@ -285,6 +285,8 @@ export interface ChartDBContext {
     hiddenTableIds?: string[];
     addHiddenTableId: (tableId: string) => Promise<void>;
     removeHiddenTableId: (tableId: string) => Promise<void>;
+    addHiddenTableIds: (tableIds: string[]) => Promise<void>;
+    removeHiddenTableIds: (tableIds: string[]) => Promise<void>;
 }
 
 export const chartDBContext = createContext<ChartDBContext>({
@@ -386,4 +388,6 @@ export const chartDBContext = createContext<ChartDBContext>({
     hiddenTableIds: [],
     addHiddenTableId: emptyFn,
     removeHiddenTableId: emptyFn,
+    addHiddenTableIds: emptyFn,
+    removeHiddenTableIds: emptyFn,
 });

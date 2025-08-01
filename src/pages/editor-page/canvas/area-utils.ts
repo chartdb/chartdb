@@ -56,6 +56,7 @@ export const updateTablesParentAreas = (
     areas: Area[]
 ): DBTable[] => {
     return tables.map((table) => {
+        // Find containing area based on position
         const containingArea = findContainingArea(table, areas);
         const newParentAreaId = containingArea?.id || null;
 

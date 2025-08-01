@@ -162,12 +162,9 @@ export const ChartDBProvider: React.FC<
             return schemasFilterFromCache;
         }
 
-        // Only default to showing schemas if no filter has been set
-        return [
-            schemas.find((s) => s.name === defaultSchemaName)?.id ??
-                schemas[0]?.id,
-        ];
-    }, [schemasFilter, diagramId, schemas, defaultSchemaName]);
+        // Default to showing all schemas if no filter has been set
+        return schemas.map((s) => s.id);
+    }, [schemasFilter, diagramId, schemas]);
 
     const currentDiagram: Diagram = useMemo(
         () => ({
@@ -1751,25 +1748,81 @@ export const ChartDBProvider: React.FC<
 
     const addHiddenTableId: ChartDBContext['addHiddenTableId'] = useCallback(
         async (tableId: string) => {
-            if (!hiddenTableIds.includes(tableId)) {
-                setHiddenTableIds((prev) => [...prev, tableId]);
-                await hideTableForDiagram(diagramId, tableId);
-            }
+            setHiddenTableIds((prev) => {
+                if (!prev.includes(tableId)) {
+                    hideTableForDiagram(diagramId, tableId);
+                    return [...prev, tableId];
+                }
+                return prev;
+            });
         },
-        [hiddenTableIds, diagramId, hideTableForDiagram]
+        [diagramId, hideTableForDiagram]
     );
 
     const removeHiddenTableId: ChartDBContext['removeHiddenTableId'] =
         useCallback(
             async (tableId: string) => {
-                if (hiddenTableIds.includes(tableId)) {
-                    setHiddenTableIds((prev) =>
-                        prev.filter((id) => id !== tableId)
+                setHiddenTableIds((prev) => {
+                    if (prev.includes(tableId)) {
+                        unhideTableForDiagram(diagramId, tableId);
+                        return prev.filter((id) => id !== tableId);
+                    }
+                    return prev;
+                });
+            },
+            [diagramId, unhideTableForDiagram]
+        );
+
+    const addHiddenTableIds: ChartDBContext['addHiddenTableIds'] = useCallback(
+        async (tableIds: string[]) => {
+            if (tableIds.length === 0) return;
+
+            const newIds: string[] = [];
+            setHiddenTableIds((prev) => {
+                const toAdd = tableIds.filter((id) => !prev.includes(id));
+                newIds.push(...toAdd);
+                if (toAdd.length === 0) return prev;
+                return [...prev, ...toAdd];
+            });
+
+            // Batch update config for all tables after state update
+            if (newIds.length > 0) {
+                await Promise.all(
+                    newIds.map((id) => hideTableForDiagram(diagramId, id))
+                );
+            }
+        },
+        [diagramId, hideTableForDiagram]
+    );
+
+    const removeHiddenTableIds: ChartDBContext['removeHiddenTableIds'] =
+        useCallback(
+            async (tableIds: string[]) => {
+                if (tableIds.length === 0) return;
+
+                const idsToRemove: string[] = [];
+                setHiddenTableIds((prev) => {
+                    const toRemove = new Set(tableIds);
+                    const filtered = prev.filter((id) => !toRemove.has(id));
+                    if (filtered.length === prev.length) return prev;
+
+                    // Collect IDs that need to be removed
+                    idsToRemove.push(
+                        ...tableIds.filter((id) => prev.includes(id))
                     );
-                    await unhideTableForDiagram(diagramId, tableId);
+                    return filtered;
+                });
+
+                // Batch update config for all tables after state update
+                if (idsToRemove.length > 0) {
+                    await Promise.all(
+                        idsToRemove.map((id) =>
+                            unhideTableForDiagram(diagramId, id)
+                        )
+                    );
                 }
             },
-            [hiddenTableIds, diagramId, unhideTableForDiagram]
+            [diagramId, unhideTableForDiagram]
         );
 
     return (
@@ -1847,6 +1900,8 @@ export const ChartDBProvider: React.FC<
                 hiddenTableIds,
                 addHiddenTableId,
                 removeHiddenTableId,
+                addHiddenTableIds,
+                removeHiddenTableIds,
                 highlightCustomTypeId,
                 highlightedCustomType,
             }}
