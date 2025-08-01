@@ -127,6 +127,8 @@ export const ru: LanguageTranslation = {
 
                 no_results:
                     'Таблицы не найдены, соответствующие вашему фильтру.',
+                all_tables_filtered: 'All tables are filtered.',
+                open_filter: 'Open Filter',
                 show_list: 'Переключиться на список таблиц',
                 show_dbml: 'Переключиться на редактор DBML',
 
