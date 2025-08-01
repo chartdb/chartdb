@@ -155,17 +155,18 @@ export const ChartDBProvider: React.FC<
             return undefined;
         }
 
-        const schemasFilterFromCache =
-            (schemasFilter[diagramId] ?? []).length === 0
-                ? undefined // in case of empty filter, skip cache
-                : schemasFilter[diagramId];
+        const schemasFilterFromCache = schemasFilter[diagramId];
 
-        return (
-            schemasFilterFromCache ?? [
-                schemas.find((s) => s.name === defaultSchemaName)?.id ??
-                    schemas[0]?.id,
-            ]
-        );
+        // If there's an explicit filter set (even if empty), use it
+        if (schemasFilterFromCache !== undefined) {
+            return schemasFilterFromCache;
+        }
+
+        // Only default to showing schemas if no filter has been set
+        return [
+            schemas.find((s) => s.name === defaultSchemaName)?.id ??
+                schemas[0]?.id,
+        ];
     }, [schemasFilter, diagramId, schemas, defaultSchemaName]);
 
     const currentDiagram: Diagram = useMemo(

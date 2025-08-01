@@ -126,6 +126,8 @@ export const hr: LanguageTranslation = {
                 clear: 'Očisti filter',
                 no_results:
                     'Nema pronađenih tablica koje odgovaraju vašem filteru.',
+                all_tables_filtered: 'All tables are filtered.',
+                open_filter: 'Open Filter',
                 show_list: 'Prikaži popis tablica',
                 show_dbml: 'Prikaži DBML uređivač',
 

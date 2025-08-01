@@ -130,6 +130,9 @@ export const ne: LanguageTranslation = {
                 clear: 'Clear Filter',
                 no_results: 'No tables found matching your filter.',
                 // TODO: Translate
+                all_tables_filtered: 'All tables are filtered.',
+                open_filter: 'Open Filter',
+                // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
 
