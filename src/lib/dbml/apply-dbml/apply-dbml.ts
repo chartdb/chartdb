@@ -1,6 +1,9 @@
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import type { Area } from '../../domain/area';
-import type { DBCustomType } from '../../domain/db-custom-type';
+import {
+    DBCustomTypeKind,
+    type DBCustomType,
+} from '../../domain/db-custom-type';
 import type { DBDependency } from '../../domain/db-dependency';
 import type { DBField } from '../../domain/db-field';
 import type { DBIndex } from '../../domain/db-index';
@@ -327,24 +330,6 @@ const updateCustomTypes = (
     });
 };
 
-// Functional helper to update areas
-const updateAreas = (
-    areas: Area[] | undefined,
-    objectKeysToIdsMap: Record<string, string>
-): Area[] => {
-    if (!areas) return [];
-
-    return areas.map((area) => {
-        const key = createObjectKeyFromArea(area);
-        const sourceId = objectKeysToIdsMap[key];
-
-        if (sourceId) {
-            return { ...area, id: sourceId };
-        }
-        return area;
-    });
-};
-
 // Functional helper to update relationships
 const updateRelationships = (
     targetRelationships: DBRelationship[] | undefined,
@@ -567,12 +552,17 @@ export const applyDBMLChanges = ({
     });
 
     // Step 3: Update all other entities functionally
-    const updatedCustomTypes = updateCustomTypes(
+    const newCustomTypes = updateCustomTypes(
         targetDiagram.customTypes,
         objectKeysToIdsMap
     );
 
-    const updatedAreas = updateAreas(targetDiagram.areas, objectKeysToIdsMap);
+    const updatedCustomTypes = [
+        ...(sourceDiagram.customTypes?.filter(
+            (ct) => ct.kind === DBCustomTypeKind.composite
+        ) ?? []),
+        ...newCustomTypes,
+    ];
 
     const updatedRelationships = updateRelationships(
         targetDiagram.relationships,
@@ -611,15 +601,11 @@ export const applyDBMLChanges = ({
     const result: Diagram = {
         ...sourceDiagram,
         tables: finalTables.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
-        areas: updatedAreas,
+        areas: targetDiagram.areas,
         relationships: sortedRelationships,
         dependencies: updatedDependencies,
+        customTypes: updatedCustomTypes,
     };
-
-    // Only include customTypes if source has it
-    if (sourceDiagram.customTypes !== undefined) {
-        result.customTypes = updatedCustomTypes;
-    }
 
     return result;
 };

@@ -10,6 +10,10 @@ import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
 import type { DBIndex } from '@/lib/domain';
+import {
+    DBCustomTypeKind,
+    type DBCustomType,
+} from '@/lib/domain/db-custom-type';
 
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
@@ -21,8 +25,8 @@ export const preprocessDBML = (content: string): string => {
     // Remove Note blocks
     processed = processed.replace(/Note\s+\w+\s*\{[^}]*\}/gs, '');
 
-    // Remove enum definitions (blocks)
-    processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
+    // Don't remove enum definitions - we'll parse them
+    // processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
 
     // Handle array types by converting them to text
     processed = processed.replace(/(\w+)\[\]/g, 'text');
@@ -115,11 +119,41 @@ interface DBMLRef {
     endpoints: [DBMLEndpoint, DBMLEndpoint];
 }
 
+interface DBMLEnum {
+    name: string;
+    schema?: string | { name: string };
+    values: Array<{ name: string; note?: string }>;
+    note?: string | { value: string } | null;
+}
+
 const mapDBMLTypeToDataType = (
     dbmlType: string,
-    options?: { databaseType?: DatabaseType }
+    options?: { databaseType?: DatabaseType; enums?: DBMLEnum[] }
 ): DataTypeData => {
     const normalizedType = dbmlType.toLowerCase().replace(/\(.*\)/, '');
+
+    // Check if it's an enum type
+    if (options?.enums) {
+        const enumDef = options.enums.find((e) => {
+            // Check both with and without schema prefix
+            const enumName = e.name.toLowerCase();
+            const enumFullName = e.schema
+                ? `${e.schema}.${enumName}`
+                : enumName;
+            return (
+                normalizedType === enumName || normalizedType === enumFullName
+            );
+        });
+
+        if (enumDef) {
+            // Return enum as custom type reference
+            return {
+                id: enumDef.name,
+                name: enumDef.name,
+            } satisfies DataTypeData;
+        }
+    }
+
     const matchedType = findDataTypeDataById(
         normalizedType,
         options?.databaseType
@@ -205,18 +239,22 @@ export const importDBMLToDiagram = async (
         // Process all schemas, not just the first one
         const allTables: DBMLTable[] = [];
         const allRefs: DBMLRef[] = [];
+        const allEnums: DBMLEnum[] = [];
 
-        const getFieldExtraAttributes = (field: Field): Partial<DBMLField> => {
+        const getFieldExtraAttributes = (
+            field: Field,
+            enums: DBMLEnum[]
+        ): Partial<DBMLField> => {
             if (!field.type || !field.type.args) {
                 return {};
             }
 
             const args = field.type.args.split(',') as string[];
 
-            const dataType = mapDBMLTypeToDataType(
-                field.type.type_name,
-                options
-            );
+            const dataType = mapDBMLTypeToDataType(field.type.type_name, {
+                ...options,
+                enums,
+            });
 
             if (dataType.fieldAttributes?.hasCharMaxLength) {
                 const charMaxLength = args?.[0];
@@ -273,7 +311,7 @@ export const importDBMLToDiagram = async (
                                 pk: field.pk,
                                 not_null: field.not_null,
                                 increment: field.increment,
-                                ...getFieldExtraAttributes(field),
+                                ...getFieldExtraAttributes(field, allEnums),
                             } satisfies DBMLField;
                         }),
                         indexes:
@@ -349,15 +387,34 @@ export const importDBMLToDiagram = async (
                     }
                 });
             }
+
+            if (schema.enums) {
+                schema.enums.forEach((enumDef) => {
+                    // Get schema name from enum or use schema's name
+                    const enumSchema =
+                        typeof enumDef.schema === 'string'
+                            ? enumDef.schema
+                            : enumDef.schema?.name || schema.name;
+
+                    allEnums.push({
+                        name: enumDef.name,
+                        schema: enumSchema === 'public' ? '' : enumSchema,
+                        values: enumDef.values || [],
+                        note: enumDef.note,
+                    });
+                });
+            }
         });
 
         // Extract only the necessary data from the parsed DBML
         const extractedData: {
             tables: DBMLTable[];
             refs: DBMLRef[];
+            enums: DBMLEnum[];
         } = {
             tables: allTables,
             refs: allRefs,
+            enums: allEnums,
         };
 
         // Convert DBML tables to ChartDB table objects
@@ -370,7 +427,10 @@ export const importDBMLToDiagram = async (
             const fields: DBField[] = table.fields.map((field) => ({
                 id: generateId(),
                 name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToDataType(field.type.type_name, options),
+                type: mapDBMLTypeToDataType(field.type.type_name, {
+                    ...options,
+                    enums: extractedData.enums,
+                }),
                 nullable: !field.not_null,
                 primaryKey: field.pk || false,
                 unique: field.unique || false,
@@ -487,12 +547,43 @@ export const importDBMLToDiagram = async (
             }
         );
 
+        // Convert DBML enums to custom types
+        const customTypes: DBCustomType[] = extractedData.enums.map(
+            (enumDef) => {
+                // Extract values from enum
+                const values = enumDef.values
+                    .map((v) => {
+                        // Handle both string values and objects with name property
+                        if (typeof v === 'string') {
+                            return v;
+                        } else if (v && typeof v === 'object' && 'name' in v) {
+                            return v.name.replace(/["']/g, ''); // Remove quotes from values
+                        }
+                        return '';
+                    })
+                    .filter((v) => v !== '');
+
+                return {
+                    id: generateId(),
+                    schema:
+                        typeof enumDef.schema === 'string'
+                            ? enumDef.schema
+                            : undefined,
+                    name: enumDef.name,
+                    kind: DBCustomTypeKind.enum,
+                    values,
+                    order: 0,
+                } satisfies DBCustomType;
+            }
+        );
+
         return {
             id: generateDiagramId(),
             name: 'DBML Import',
             databaseType: options?.databaseType ?? DatabaseType.GENERIC,
             tables,
             relationships,
+            customTypes,
             createdAt: new Date(),
             updatedAt: new Date(),
         };

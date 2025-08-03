@@ -1238,6 +1238,7 @@ describe('Apply DBML Changes - relationships', () => {
             ],
             dependencies: [],
             areas: [],
+            customTypes: [],
         };
 
         const result = applyDBMLChanges({
