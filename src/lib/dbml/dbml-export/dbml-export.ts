@@ -350,7 +350,10 @@ const convertToInlineRefs = (dbml: string): string => {
                     // Combine all attributes into a single bracket
                     const combinedAttributes = allAttributes.join(', ');
 
-                    return `${fieldPart.trim()} [${combinedAttributes}]${commentPart || ''}`;
+                    // Preserve original spacing from fieldPart
+                    const leadingSpaces = fieldPart.match(/^(\s*)/)?.[1] || '';
+                    const fieldDefWithoutSpaces = fieldPart.trim();
+                    return `${leadingSpaces}${fieldDefWithoutSpaces} [${combinedAttributes}]${commentPart || ''}`;
                 }
             );
 
@@ -388,7 +391,10 @@ const convertToInlineRefs = (dbml: string): string => {
         .filter((line) => !line.trim().startsWith('Ref '));
     const finalDbml = finalLines.join('\n').trim();
 
-    return finalDbml;
+    // Clean up excessive empty lines - replace multiple consecutive empty lines with just one
+    const cleanedDbml = finalDbml.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+    return cleanedDbml;
 };
 
 // Function to check for SQL keywords (add more if needed)
@@ -804,9 +810,15 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         standard = restoreTableSchemas(standard, diagram);
 
         // Prepend Enum DBML to the standard output
-        standard = enumsDBML + '\n' + standard;
+        if (enumsDBML) {
+            standard = enumsDBML + '\n\n' + standard;
+        }
 
         inline = normalizeCharTypeFormat(convertToInlineRefs(standard));
+
+        // Clean up excessive empty lines in both outputs
+        standard = standard.replace(/\n\s*\n\s*\n/g, '\n\n');
+        inline = inline.replace(/\n\s*\n\s*\n/g, '\n\n');
     } catch (error: unknown) {
         console.error(
             'Error during DBML generation process:',
@@ -822,11 +834,11 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // If an error occurred, still prepend enums if they exist, or they'll be lost.
         // The error message will then follow.
-        if (standard.startsWith('// Error generating DBML:')) {
-            standard = enumsDBML + standard;
+        if (standard.startsWith('// Error generating DBML:') && enumsDBML) {
+            standard = enumsDBML + '\n\n' + standard;
         }
-        if (inline.startsWith('// Error generating DBML:')) {
-            inline = enumsDBML + inline;
+        if (inline.startsWith('// Error generating DBML:') && enumsDBML) {
+            inline = enumsDBML + '\n\n' + inline;
         }
     }
 

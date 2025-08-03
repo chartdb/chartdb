@@ -23,8 +23,10 @@ import type {
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
+import type { DBTable } from '@/lib/domain';
 
 export interface TableFieldProps {
+    table: DBTable;
     field: DBField;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
@@ -76,12 +78,20 @@ const generateFieldRegexPatterns = (
 };
 
 export const TableField: React.FC<TableFieldProps> = ({
+    table,
     field,
     updateField,
     removeField,
 }) => {
     const { databaseType, customTypes } = useChartDB();
     const { t } = useTranslation();
+
+    // Only calculate primary key fields, not just count
+    const primaryKeyFields = useMemo(() => {
+        return table.fields.filter((f) => f.primaryKey);
+    }, [table.fields]);
+
+    const primaryKeyCount = primaryKeyFields.length;
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
@@ -191,6 +201,42 @@ export const TableField: React.FC<TableFieldProps> = ({
         transition,
     };
 
+    const handlePrimaryKeyToggle = useCallback(
+        (value: boolean) => {
+            if (value) {
+                // When setting as primary key
+                const updates: Partial<DBField> = {
+                    primaryKey: true,
+                };
+                // Only auto-set unique if this will be the only primary key
+                if (primaryKeyCount === 0) {
+                    updates.unique = true;
+                }
+                updateField(updates);
+            } else {
+                // When removing primary key
+                updateField({
+                    primaryKey: false,
+                });
+            }
+        },
+        [primaryKeyCount, updateField]
+    );
+
+    const handleNullableToggle = useCallback(
+        (value: boolean) => {
+            updateField({ nullable: value });
+        },
+        [updateField]
+    );
+
+    const handleNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            updateField({ name: e.target.value });
+        },
+        [updateField]
+    );
+
     return (
         <div
             className="flex flex-1 touch-none flex-row justify-between gap-2 p-1"
@@ -215,11 +261,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                     'side_panel.tables_section.table.field_name'
                                 )}
                                 value={field.name}
-                                onChange={(e) =>
-                                    updateField({
-                                        name: e.target.value,
-                                    })
-                                }
+                                onChange={handleNameChange}
                             />
                         </span>
                     </TooltipTrigger>
@@ -265,11 +307,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <span>
                             <TableFieldToggle
                                 pressed={field.nullable}
-                                onPressedChange={(value) =>
-                                    updateField({
-                                        nullable: value,
-                                    })
-                                }
+                                onPressedChange={handleNullableToggle}
                             >
                                 N
                             </TableFieldToggle>
@@ -284,12 +322,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <span>
                             <TableFieldToggle
                                 pressed={field.primaryKey}
-                                onPressedChange={(value) =>
-                                    updateField({
-                                        unique: value,
-                                        primaryKey: value,
-                                    })
-                                }
+                                onPressedChange={handlePrimaryKeyToggle}
                             >
                                 <KeyRound className="h-3.5" />
                             </TableFieldToggle>
@@ -301,6 +334,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                 </Tooltip>
                 <TableFieldPopover
                     field={field}
+                    table={table}
                     updateField={updateField}
                     removeField={removeField}
                     databaseType={databaseType}
