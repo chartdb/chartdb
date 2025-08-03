@@ -40,7 +40,8 @@ export const ChartDBProvider: React.FC<
     React.PropsWithChildren<ChartDBProviderProps>
 > = ({ children, diagram, readonly: readonlyProp }) => {
     const { hasDiff } = useDiff();
-    let db = useStorage();
+    const dbStorage = useStorage();
+    let db = dbStorage;
     const events = useEventEmitter<ChartDBEvent>();
     const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
@@ -1585,6 +1586,16 @@ export const ChartDBProvider: React.FC<
             ]
         );
 
+    const updateDiagramData: ChartDBContext['updateDiagramData'] = useCallback(
+        async (diagram, options) => {
+            const st = options?.forceUpdateStorage ? dbStorage : db;
+            await st.deleteDiagram(diagram.id);
+            await st.addDiagram({ diagram });
+            loadDiagramFromData(diagram);
+        },
+        [db, dbStorage, loadDiagramFromData]
+    );
+
     const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
         async (diagramId: string) => {
             const diagram = await db.getDiagram(diagramId, {
@@ -1787,6 +1798,7 @@ export const ChartDBProvider: React.FC<
                 events,
                 readonly,
                 filterSchemas,
+                updateDiagramData,
                 updateDiagramId,
                 updateDiagramName,
                 loadDiagram,

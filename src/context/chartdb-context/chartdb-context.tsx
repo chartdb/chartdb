@@ -95,6 +95,10 @@ export interface ChartDBContext {
     updateDiagramUpdatedAt: () => Promise<void>;
     clearDiagramData: () => Promise<void>;
     deleteDiagram: () => Promise<void>;
+    updateDiagramData: (
+        diagram: Diagram,
+        options?: { forceUpdateStorage?: boolean }
+    ) => Promise<void>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
@@ -317,6 +321,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     loadDiagramFromData: emptyFn,
     clearDiagramData: emptyFn,
     deleteDiagram: emptyFn,
+    updateDiagramData: emptyFn,
 
     // Database type operations
     updateDatabaseType: emptyFn,

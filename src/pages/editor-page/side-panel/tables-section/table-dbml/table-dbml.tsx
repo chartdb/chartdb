@@ -16,8 +16,10 @@ import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-lang
 import {
     AlertCircle,
     ArrowLeftRight,
+    Check,
     Pencil,
     PencilOff,
+    Undo2,
     X,
 } from 'lucide-react';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
@@ -26,9 +28,13 @@ import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import { applyDBMLChanges } from '@/lib/dbml/apply-dbml/apply-dbml';
 import { useDebounce } from '@/hooks/use-debounce';
 import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
-import { highlightErrorLine } from '@/components/code-snippet/dbml/utils';
+import {
+    clearErrorHighlight,
+    highlightErrorLine,
+} from '@/components/code-snippet/dbml/utils';
 import type * as monaco from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
+import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 
 export interface TableDBMLProps {
     filteredTables: DBTable[];
@@ -39,7 +45,7 @@ const getEditorTheme = (theme: EffectiveTheme) => {
 };
 
 export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
-    const { currentDiagram } = useChartDB();
+    const { currentDiagram, updateDiagramData } = useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
@@ -76,11 +82,13 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editedDbml, setEditedDbml] = useState<string>('');
     const lastDBMLChange = useRef(editedDbml);
-    const { calculateDiff, originalDiagram, resetDiff } = useDiff();
+    const { calculateDiff, originalDiagram, resetDiff, hasDiff, newDiagram } =
+        useDiff();
     const { loadDiagramFromData } = useChartDB();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [warningMessage, setWarningMessage] = useState<string>();
     const { t } = useTranslation();
+    const { hideLoader, showLoader } = useFullScreenLoader();
 
     // --- Check for empty field name warnings only on mount ---
     useEffect(() => {
@@ -153,6 +161,8 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     // Create the showDiff function
     const showDiff = useCallback(
         async (dbmlContent: string) => {
+            clearErrorHighlight(decorationsCollection.current);
+            setErrorMessage(undefined);
             try {
                 const diagramFromDBML: Diagram =
                     await importDBMLToDiagram(dbmlContent);
@@ -234,6 +244,49 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         debouncedShowDiff(editedDbml);
     }, [editedDbml, isEditMode, debouncedShowDiff]);
 
+    const acceptChanges = useCallback(async () => {
+        if (!editedDbml) return;
+        if (!newDiagram) return;
+
+        showLoader();
+
+        await updateDiagramData(newDiagram, { forceUpdateStorage: true });
+
+        resetDiff();
+        setEditedDbml(editedDbml);
+        setIsEditMode(false);
+        lastDBMLChange.current = editedDbml;
+        hideLoader();
+    }, [
+        editedDbml,
+        updateDiagramData,
+        newDiagram,
+        resetDiff,
+        showLoader,
+        hideLoader,
+    ]);
+
+    const undoChanges = useCallback(() => {
+        if (!editedDbml) return;
+        if (!originalDiagram) return;
+
+        loadDiagramFromData(originalDiagram);
+        setIsEditMode(false);
+        resetDiff();
+        setEditedDbml(dbmlToDisplay);
+        lastDBMLChange.current = dbmlToDisplay;
+    }, [
+        editedDbml,
+        loadDiagramFromData,
+        originalDiagram,
+        resetDiff,
+        dbmlToDisplay,
+    ]);
+
+    useEffect(() => {
+        return () => undoChanges();
+    }, [undoChanges]);
+
     return (
         <>
             <CodeSnippet
@@ -243,26 +296,45 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 className="my-0.5"
                 allowCopy={!isEditMode}
                 actions={
-                    isEditMode
+                    isEditMode && hasDiff
                         ? [
                               {
-                                  label: 'View',
-                                  icon: PencilOff,
-                                  onClick: () => setIsEditMode((prev) => !prev),
-                              },
-                          ]
-                        : [
-                              {
-                                  label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
-                                  icon: ArrowLeftRight,
-                                  onClick: toggleFormat,
+                                  label: 'Accept Changes',
+                                  icon: Check,
+                                  onClick: acceptChanges,
+                                  className:
+                                      'h-7 items-center gap-1.5 rounded-md border border-green-200 bg-green-50 px-2.5 py-1.5 text-xs font-medium text-green-600 shadow-sm hover:bg-green-100 dark:border-green-800 dark:bg-green-800 dark:text-green-200 dark:hover:bg-green-700',
                               },
                               {
-                                  label: 'Edit',
-                                  icon: Pencil,
-                                  onClick: () => setIsEditMode((prev) => !prev),
+                                  label: 'Undo Changes',
+                                  icon: Undo2,
+                                  onClick: undoChanges,
+                                  className:
+                                      'h-7 items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-600 shadow-sm hover:bg-red-100 dark:border-red-800 dark:bg-red-800 dark:text-red-200 dark:hover:bg-red-700',
                               },
                           ]
+                        : isEditMode && !hasDiff
+                          ? [
+                                {
+                                    label: 'View',
+                                    icon: PencilOff,
+                                    onClick: () =>
+                                        setIsEditMode((prev) => !prev),
+                                },
+                            ]
+                          : [
+                                {
+                                    label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
+                                    icon: ArrowLeftRight,
+                                    onClick: toggleFormat,
+                                },
+                                {
+                                    label: 'Edit',
+                                    icon: Pencil,
+                                    onClick: () =>
+                                        setIsEditMode((prev) => !prev),
+                                },
+                            ]
                 }
                 editorProps={{
                     height: '100%',
