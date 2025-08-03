@@ -464,10 +464,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     );
 
     useEffect(() => {
-        if (areas.length == 0) {
-            return;
-        }
-
         const checkParentAreas = debounce(() => {
             const updatedTables = updateTablesParentAreas(tables, areas);
             const needsUpdate: Array<{
