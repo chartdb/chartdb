@@ -45,7 +45,7 @@ const getEditorTheme = (theme: EffectiveTheme) => {
 };
 
 export const TableDBML: React.FC<TableDBMLProps> = () => {
-    const { currentDiagram, updateDiagramData } = useChartDB();
+    const { currentDiagram, updateDiagramData, databaseType } = useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
@@ -159,8 +159,10 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             clearErrorHighlight(decorationsCollection.current);
             setErrorMessage(undefined);
             try {
-                const diagramFromDBML: Diagram =
-                    await importDBMLToDiagram(dbmlContent);
+                const diagramFromDBML: Diagram = await importDBMLToDiagram(
+                    dbmlContent,
+                    { databaseType }
+                );
 
                 const sourceDiagram: Diagram =
                     originalDiagram ?? currentDiagram;
@@ -212,6 +214,7 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             resetDiff,
             loadDiagramFromData,
             calculateDiff,
+            databaseType,
         ]
     );
 

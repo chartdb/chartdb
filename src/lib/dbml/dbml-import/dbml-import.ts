@@ -4,13 +4,13 @@ import { generateDiagramId, generateId } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
-import {
-    findDataTypeDataById,
-    type DataType,
-} from '@/lib/data/data-types/data-types';
+import type { DataTypeData } from '@/lib/data/data-types/data-types';
+import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
+import type Field from '@dbml/core/types/model_structure/field';
+import type { DBIndex } from '@/lib/domain';
 
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
@@ -80,6 +80,9 @@ interface DBMLField {
     pk?: boolean;
     not_null?: boolean;
     increment?: boolean;
+    characterMaximumLength?: string | null;
+    precision?: number | null;
+    scale?: number | null;
 }
 
 interface DBMLIndexColumn {
@@ -113,10 +116,10 @@ interface DBMLRef {
     endpoints: [DBMLEndpoint, DBMLEndpoint];
 }
 
-const mapDBMLTypeToGenericType = (
+const mapDBMLTypeToDataType = (
     dbmlType: string,
     options?: { databaseType?: DatabaseType }
-): DataType => {
+): DataTypeData => {
     const normalizedType = dbmlType.toLowerCase().replace(/\(.*\)/, '');
     const matchedType = findDataTypeDataById(
         normalizedType,
@@ -228,6 +231,51 @@ export const importDBMLToDiagram = async (
         const allTables: DBMLTable[] = [];
         const allRefs: DBMLRef[] = [];
 
+        const getFieldExtraAttributes = (field: Field): Partial<DBMLField> => {
+            if (!field.type || !field.type.args) {
+                return {};
+            }
+
+            const args = field.type.args.split(',') as string[];
+
+            const dataType = mapDBMLTypeToDataType(
+                field.type.type_name,
+                options
+            );
+
+            if (dataType.fieldAttributes?.hasCharMaxLength) {
+                const charMaxLength = args?.[0];
+                return {
+                    characterMaximumLength: charMaxLength,
+                };
+            } else if (
+                dataType.fieldAttributes?.precision &&
+                dataType.fieldAttributes?.scale
+            ) {
+                const precisionNum = args?.[0] ? parseInt(args[0]) : undefined;
+                const scaleNum = args?.[1] ? parseInt(args[1]) : undefined;
+
+                const precision = precisionNum
+                    ? isNaN(precisionNum)
+                        ? undefined
+                        : precisionNum
+                    : undefined;
+
+                const scale = scaleNum
+                    ? isNaN(scaleNum)
+                        ? undefined
+                        : scaleNum
+                    : undefined;
+
+                return {
+                    precision,
+                    scale,
+                };
+            }
+
+            return {};
+        };
+
         parsedData.schemas.forEach((schema) => {
             if (schema.tables) {
                 schema.tables.forEach((table) => {
@@ -242,17 +290,17 @@ export const importDBMLToDiagram = async (
                         name: table.name,
                         schema: schemaName,
                         note: table.note,
-                        fields: table.fields.map(
-                            (field) =>
-                                ({
-                                    name: field.name,
-                                    type: field.type,
-                                    unique: field.unique,
-                                    pk: field.pk,
-                                    not_null: field.not_null,
-                                    increment: field.increment,
-                                }) satisfies DBMLField
-                        ),
+                        fields: table.fields.map((field): DBMLField => {
+                            return {
+                                name: field.name,
+                                type: field.type,
+                                unique: field.unique,
+                                pk: field.pk,
+                                not_null: field.not_null,
+                                increment: field.increment,
+                                ...getFieldExtraAttributes(field),
+                            } satisfies DBMLField;
+                        }),
                         indexes:
                             table.indexes?.map((dbmlIndex) => {
                                 let indexColumns: string[];
@@ -344,18 +392,21 @@ export const importDBMLToDiagram = async (
             const tableSpacing = 300;
 
             // Create fields first so we have their IDs
-            const fields = table.fields.map((field) => ({
+            const fields: DBField[] = table.fields.map((field) => ({
                 id: generateId(),
                 name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToGenericType(field.type.type_name, options),
+                type: mapDBMLTypeToDataType(field.type.type_name, options),
                 nullable: !field.not_null,
                 primaryKey: field.pk || false,
                 unique: field.unique || false,
                 createdAt: Date.now(),
+                characterMaximumLength: field.characterMaximumLength,
+                precision: field.precision,
+                scale: field.scale,
             }));
 
             // Convert DBML indexes to ChartDB indexes
-            const indexes =
+            const indexes: DBIndex[] =
                 table.indexes?.map((dbmlIndex) => {
                     const fieldIds = dbmlIndex.columns.map((columnName) => {
                         const field = fields.find((f) => f.name === columnName);
@@ -407,7 +458,7 @@ export const importDBMLToDiagram = async (
                 isView: false,
                 createdAt: Date.now(),
                 comments: tableComment,
-            };
+            } as DBTable;
         });
 
         // Create relationships using the refs
