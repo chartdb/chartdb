@@ -6,7 +6,6 @@ import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
-import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
@@ -126,35 +125,11 @@ const mapDBMLTypeToDataType = (
         options?.databaseType
     );
     if (matchedType) return matchedType;
-    const typeMap: Record<string, string> = {
-        int: 'int',
-        integer: 'int',
-        varchar: 'varchar',
-        bool: 'boolean',
-        boolean: 'boolean',
-        number: 'numeric',
-        string: 'varchar',
-        text: 'text',
-        timestamp: 'timestamp',
-        datetime: 'timestamp',
-        float: 'float',
-        double: 'double',
-        decimal: 'decimal',
-        bigint: 'bigint',
-        smallint: 'smallint',
-        char: 'char',
-    };
-    const mappedType = typeMap[normalizedType];
-    if (mappedType) {
-        const foundType = genericDataTypes.find((t) => t.id === mappedType);
-        if (foundType) return foundType;
-    }
-    const type = genericDataTypes.find((t) => t.id === 'varchar')!;
 
     return {
-        id: type.id,
-        name: type.name,
-    };
+        id: normalizedType.split(' ').join('_').toLowerCase(),
+        name: normalizedType,
+    } satisfies DataTypeData;
 };
 
 const determineCardinality = (

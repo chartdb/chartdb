@@ -11,14 +11,7 @@ import { exportMySQL } from './export-per-type/mysql';
 
 // Function to simplify verbose data type names
 const simplifyDataType = (typeName: string): string => {
-    const typeMap: Record<string, string> = {
-        'character varying': 'varchar',
-        'char varying': 'varchar',
-        'timestamp without time zone': 'timestamp',
-        'timestamp with time zone': 'timestamptz',
-        'time without time zone': 'time',
-        'time with time zone': 'timetz',
-    };
+    const typeMap: Record<string, string> = {};
 
     return typeMap[typeName.toLowerCase()] || typeName;
 };

@@ -123,6 +123,9 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             return;
         }
 
+        setErrorMessage(undefined);
+        clearErrorHighlight(decorationsCollection.current);
+
         const generateDBML = async () => {
             setIsLoading(true);
 
