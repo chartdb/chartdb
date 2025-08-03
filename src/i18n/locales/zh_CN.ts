@@ -484,6 +484,11 @@ export const zh_CN: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: '编辑区域名称',
+            delete_area: '删除区域',
+        },
+
         snap_to_grid_tooltip: '对齐到网格（按住 {{key}}）',
 
         tool_tips: {
