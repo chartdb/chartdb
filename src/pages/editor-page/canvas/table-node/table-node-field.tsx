@@ -383,7 +383,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
                         <div
                             className={cn(
-                                'content-center text-right text-xs text-muted-foreground overflow-hidden min-w-[3rem] max-w-[8rem]',
+                                'content-center text-right text-xs text-muted-foreground overflow-hidden max-w-[8rem]',
+                                field.primaryKey ? 'min-w-0' : 'min-w-[3rem]',
                                 !readonly ? 'group-hover:hidden' : '',
                                 isDiffFieldRemoved
                                     ? 'text-red-800 dark:text-red-200'

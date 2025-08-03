@@ -82,13 +82,15 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
 
-    if (!isDesktop || readonly) {
+    if (!isDesktop) {
         return <>{children}</>;
     }
 
     return (
         <ContextMenu>
-            <ContextMenuTrigger>{children}</ContextMenuTrigger>
+            <ContextMenuTrigger disabled={readonly}>
+                {children}
+            </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuItem
                     onClick={createTableHandler}
