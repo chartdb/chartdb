@@ -1272,7 +1272,7 @@ Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
         // Check that the entity_id field in user_activities has multiple relationships in inline DBML
         // The field should have both references in a single bracket
         expect(result.inlineDbml).toContain(
-            '"entity_id" int [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
+            '"entity_id" integer [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
         );
 
         // Check that standard DBML has separate Ref entries for each relationship

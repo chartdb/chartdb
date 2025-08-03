@@ -4,7 +4,10 @@ import { generateDiagramId, generateId } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
-import type { DataType } from '@/lib/data/data-types/data-types';
+import {
+    findDataTypeDataById,
+    type DataType,
+} from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -110,9 +113,15 @@ interface DBMLRef {
     endpoints: [DBMLEndpoint, DBMLEndpoint];
 }
 
-const mapDBMLTypeToGenericType = (dbmlType: string): DataType => {
+const mapDBMLTypeToGenericType = (
+    dbmlType: string,
+    options?: { databaseType?: DatabaseType }
+): DataType => {
     const normalizedType = dbmlType.toLowerCase().replace(/\(.*\)/, '');
-    const matchedType = genericDataTypes.find((t) => t.id === normalizedType);
+    const matchedType = findDataTypeDataById(
+        normalizedType,
+        options?.databaseType
+    );
     if (matchedType) return matchedType;
     const typeMap: Record<string, string> = {
         int: 'int',
@@ -163,7 +172,10 @@ const determineCardinality = (
 };
 
 export const importDBMLToDiagram = async (
-    dbmlContent: string
+    dbmlContent: string,
+    options?: {
+        databaseType?: DatabaseType;
+    }
 ): Promise<Diagram> => {
     try {
         // Handle empty content
@@ -171,7 +183,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -189,7 +201,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -204,7 +216,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -335,7 +347,7 @@ export const importDBMLToDiagram = async (
             const fields = table.fields.map((field) => ({
                 id: generateId(),
                 name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToGenericType(field.type.type_name),
+                type: mapDBMLTypeToGenericType(field.type.type_name, options),
                 nullable: !field.not_null,
                 primaryKey: field.pk || false,
                 unique: field.unique || false,
@@ -452,7 +464,7 @@ export const importDBMLToDiagram = async (
         return {
             id: generateDiagramId(),
             name: 'DBML Import',
-            databaseType: DatabaseType.GENERIC,
+            databaseType: options?.databaseType ?? DatabaseType.GENERIC,
             tables,
             relationships,
             createdAt: new Date(),
