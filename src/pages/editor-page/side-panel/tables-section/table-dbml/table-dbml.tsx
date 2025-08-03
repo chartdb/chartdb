@@ -44,7 +44,7 @@ const getEditorTheme = (theme: EffectiveTheme) => {
     return theme === 'dark' ? 'dbml-dark' : 'dbml-light';
 };
 
-export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
+export const TableDBML: React.FC<TableDBMLProps> = () => {
     const { currentDiagram, updateDiagramData } = useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
@@ -99,7 +99,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         let foundInvalidFields = false;
         const invalidTableNames = new Set<string>();
 
-        filteredTables.forEach((table) => {
+        currentDiagram.tables?.forEach((table) => {
             table.fields.forEach((field) => {
                 if (field.name === '') {
                     foundInvalidFields = true;
@@ -114,7 +114,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                 `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`
             );
         }
-    }, [filteredTables, t, isEditMode]);
+    }, [currentDiagram.tables, t, isEditMode]);
 
     // Generate DBML asynchronously
     useEffect(() => {
@@ -126,13 +126,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         const generateDBML = async () => {
             setIsLoading(true);
 
-            // Create a filtered diagram with only the selected tables
-            const filteredDiagram: Diagram = {
-                ...currentDiagram,
-                tables: filteredTables,
-            };
-
-            const result = generateDBMLFromDiagram(filteredDiagram);
+            const result = generateDBMLFromDiagram(currentDiagram);
 
             // Handle errors
             if (result.error) {
@@ -149,7 +143,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
         };
 
         setTimeout(() => generateDBML(), 0);
-    }, [currentDiagram, filteredTables, toast, isEditMode]);
+    }, [currentDiagram, toast, isEditMode]);
 
     // Update editedDbml when dbmlToDisplay changes
     useEffect(() => {
@@ -178,16 +172,10 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
                     customTypes: diagramFromDBML.customTypes,
                 };
 
-                console.log({ sourceDiagram, targetDiagram });
-
                 const newDiagram = applyDBMLChanges({
                     sourceDiagram,
                     targetDiagram,
                 });
-
-                console.log({ newDiagram });
-
-                console.log('New Diagram from DBML:', newDiagram);
 
                 if (originalDiagram) {
                     resetDiff();
