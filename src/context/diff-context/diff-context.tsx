@@ -68,6 +68,13 @@ export interface DiffContext {
     getFieldNewType: ({ fieldId }: { fieldId: string }) => DataType | null;
     getFieldNewPrimaryKey: ({ fieldId }: { fieldId: string }) => boolean | null;
     getFieldNewNullable: ({ fieldId }: { fieldId: string }) => boolean | null;
+    getFieldNewCharacterMaximumLength: ({
+        fieldId,
+    }: {
+        fieldId: string;
+    }) => string | null;
+    getFieldNewScale: ({ fieldId }: { fieldId: string }) => number | null;
+    getFieldNewPrecision: ({ fieldId }: { fieldId: string }) => number | null;
 
     // relationship diff
     checkIfNewRelationship: ({

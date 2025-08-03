@@ -154,6 +154,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             getFieldNewType,
             getFieldNewNullable,
             getFieldNewPrimaryKey,
+            getFieldNewCharacterMaximumLength,
+            getFieldNewPrecision,
+            getFieldNewScale,
             checkIfFieldHasChange,
             isSummaryOnly,
         } = useDiff();
@@ -164,6 +167,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedName: string | null;
             fieldDiffChangedType: DBField['type'] | null;
             fieldDiffChangedNullable: boolean | null;
+            fieldDiffChangedCharacterMaximumLength: string | null;
+            fieldDiffChangedScale: number | null;
+            fieldDiffChangedPrecision: number | null;
             fieldDiffChangedPrimaryKey: boolean | null;
             isDiffFieldChanged: boolean;
         }>({
@@ -172,6 +178,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedName: null,
             fieldDiffChangedType: null,
             fieldDiffChangedNullable: null,
+            fieldDiffChangedCharacterMaximumLength: null,
+            fieldDiffChangedScale: null,
+            fieldDiffChangedPrecision: null,
             fieldDiffChangedPrimaryKey: null,
             isDiffFieldChanged: false,
         });
@@ -196,6 +205,16 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     fieldDiffChangedPrimaryKey: getFieldNewPrimaryKey({
                         fieldId: field.id,
                     }),
+                    fieldDiffChangedCharacterMaximumLength:
+                        getFieldNewCharacterMaximumLength({
+                            fieldId: field.id,
+                        }),
+                    fieldDiffChangedScale: getFieldNewScale({
+                        fieldId: field.id,
+                    }),
+                    fieldDiffChangedPrecision: getFieldNewPrecision({
+                        fieldId: field.id,
+                    }),
                     isDiffFieldChanged: checkIfFieldHasChange({
                         fieldId: field.id,
                         tableId: tableNodeId,
@@ -211,6 +230,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             getFieldNewPrimaryKey,
             getFieldNewNullable,
             checkIfFieldHasChange,
+            getFieldNewCharacterMaximumLength,
+            getFieldNewPrecision,
+            getFieldNewScale,
             field.id,
             tableNodeId,
         ]);
@@ -223,6 +245,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             isDiffFieldChanged,
             fieldDiffChangedNullable,
             fieldDiffChangedPrimaryKey,
+            fieldDiffChangedCharacterMaximumLength,
+            fieldDiffChangedScale,
+            fieldDiffChangedPrecision,
         } = diffState;
 
         const enterEditMode = useCallback((e: React.MouseEvent) => {
@@ -435,7 +460,24 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                         }
                                     </>
                                 ) : (
-                                    `${field.type.name.split(' ')[0]}${showFieldAttributes ? generateDBFieldSuffix(field) : ''}`
+                                    `${field.type.name.split(' ')[0]}${
+                                        showFieldAttributes
+                                            ? generateDBFieldSuffix({
+                                                  ...field,
+                                                  ...{
+                                                      precision:
+                                                          fieldDiffChangedPrecision ??
+                                                          field.precision,
+                                                      scale:
+                                                          fieldDiffChangedScale ??
+                                                          field.scale,
+                                                      characterMaximumLength:
+                                                          fieldDiffChangedCharacterMaximumLength ??
+                                                          field.characterMaximumLength,
+                                                  },
+                                              })
+                                            : ''
+                                    }`
                                 )}
                                 {fieldDiffChangedNullable !== null ? (
                                     fieldDiffChangedNullable ? (

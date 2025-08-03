@@ -351,6 +351,73 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const getFieldNewCharacterMaximumLength = useCallback<
+        DiffContext['getFieldNewCharacterMaximumLength']
+    >(
+        ({ fieldId }) => {
+            const fieldKey = getDiffMapKey({
+                diffObject: 'field',
+                objectId: fieldId,
+                attribute: 'characterMaximumLength',
+            });
+
+            if (diffMap.has(fieldKey)) {
+                const diff = diffMap.get(fieldKey);
+
+                if (diff?.type === 'changed') {
+                    return diff.newValue as string;
+                }
+            }
+
+            return null;
+        },
+        [diffMap]
+    );
+
+    const getFieldNewScale = useCallback<DiffContext['getFieldNewScale']>(
+        ({ fieldId }) => {
+            const fieldKey = getDiffMapKey({
+                diffObject: 'field',
+                objectId: fieldId,
+                attribute: 'scale',
+            });
+
+            if (diffMap.has(fieldKey)) {
+                const diff = diffMap.get(fieldKey);
+
+                if (diff?.type === 'changed') {
+                    return diff.newValue as number;
+                }
+            }
+
+            return null;
+        },
+        [diffMap]
+    );
+
+    const getFieldNewPrecision = useCallback<
+        DiffContext['getFieldNewPrecision']
+    >(
+        ({ fieldId }) => {
+            const fieldKey = getDiffMapKey({
+                diffObject: 'field',
+                objectId: fieldId,
+                attribute: 'precision',
+            });
+
+            if (diffMap.has(fieldKey)) {
+                const diff = diffMap.get(fieldKey);
+
+                if (diff?.type === 'changed') {
+                    return diff.newValue as number;
+                }
+            }
+
+            return null;
+        },
+        [diffMap]
+    );
+
     const checkIfNewRelationship = useCallback<
         DiffContext['checkIfNewRelationship']
     >(
@@ -421,6 +488,9 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 getFieldNewType,
                 getFieldNewPrimaryKey,
                 getFieldNewNullable,
+                getFieldNewCharacterMaximumLength,
+                getFieldNewScale,
+                getFieldNewPrecision,
 
                 // relationship diff
                 checkIfNewRelationship,
