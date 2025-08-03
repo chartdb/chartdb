@@ -464,6 +464,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     );
 
     useEffect(() => {
+        if (areas.length == 0) {
+            return;
+        }
+
         const checkParentAreas = debounce(() => {
             const updatedTables = updateTablesParentAreas(tables, areas);
             const needsUpdate: Array<{
@@ -475,6 +479,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 const oldTable = tables[index];
                 if (
                     oldTable &&
+                    (!!newTable.parentAreaId || !!oldTable.parentAreaId) &&
                     newTable.parentAreaId !== oldTable.parentAreaId
                 ) {
                     needsUpdate.push({
