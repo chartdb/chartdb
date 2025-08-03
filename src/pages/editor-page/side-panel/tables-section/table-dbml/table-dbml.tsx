@@ -54,6 +54,7 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [standardDbml, setStandardDbml] = useState('');
     const [inlineDbml, setInlineDbml] = useState('');
+    const isMountedRef = useRef(true);
 
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const decorationsCollection =
@@ -284,7 +285,23 @@ export const TableDBML: React.FC<TableDBMLProps> = ({ filteredTables }) => {
     ]);
 
     useEffect(() => {
-        return () => undoChanges();
+        isMountedRef.current = true;
+
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        const currentUndoChanges = undoChanges;
+
+        return () => {
+            setTimeout(() => {
+                if (!isMountedRef.current) {
+                    currentUndoChanges();
+                }
+            }, 0);
+        };
     }, [undoChanges]);
 
     return (
