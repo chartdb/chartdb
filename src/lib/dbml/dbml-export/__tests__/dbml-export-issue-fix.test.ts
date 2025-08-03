@@ -1056,4 +1056,247 @@ Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
         expect(result.inlineDbml).toBe(expectedInlineDBML);
         expect(result.standardDbml).toBe(expectedStandardDBML);
     });
+
+    it('should handle tables with multiple relationships correctly', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'users',
+                    name: 'users',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'users_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'posts',
+                    name: 'posts',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'posts_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'posts_user_id',
+                            name: 'user_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'reviews',
+                    name: 'reviews',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'reviews_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'reviews_user_id',
+                            name: 'user_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'user_activities',
+                    name: 'user_activities',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'activities_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'activities_entity_id',
+                            name: 'entity_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'activities_type',
+                            name: 'activity_type',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '50',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel1',
+                    name: 'fk_posts_user',
+                    sourceTableId: 'posts',
+                    sourceFieldId: 'posts_user_id',
+                    targetTableId: 'users',
+                    targetFieldId: 'users_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel2',
+                    name: 'fk_reviews_user',
+                    sourceTableId: 'reviews',
+                    sourceFieldId: 'reviews_user_id',
+                    targetTableId: 'users',
+                    targetFieldId: 'users_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel3',
+                    name: 'fk_activities_posts',
+                    sourceTableId: 'user_activities',
+                    sourceFieldId: 'activities_entity_id',
+                    targetTableId: 'posts',
+                    targetFieldId: 'posts_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel4',
+                    name: 'fk_activities_reviews',
+                    sourceTableId: 'user_activities',
+                    sourceFieldId: 'activities_entity_id',
+                    targetTableId: 'reviews',
+                    targetFieldId: 'reviews_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+            ],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Debug output removed
+        // console.log('Inline DBML:', result.inlineDbml);
+
+        // Check standard DBML output
+        expect(result.standardDbml).toContain('Table "users" {');
+        expect(result.standardDbml).toContain('Table "posts" {');
+        expect(result.standardDbml).toContain('Table "reviews" {');
+        expect(result.standardDbml).toContain('Table "user_activities" {');
+
+        // Check that the entity_id field in user_activities has multiple relationships in inline DBML
+        // The field should have both references in a single bracket
+        expect(result.inlineDbml).toContain(
+            '"entity_id" int [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
+        );
+
+        // Check that standard DBML has separate Ref entries for each relationship
+        expect(result.standardDbml).toContain(
+            'Ref "fk_0_fk_posts_user":"users"."id" < "posts"."user_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_1_fk_reviews_user":"users"."id" < "reviews"."user_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_2_fk_activities_posts":"posts"."id" < "user_activities"."entity_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_3_fk_activities_reviews":"reviews"."id" < "user_activities"."entity_id"'
+        );
+
+        // No automatic comment is added for fields with multiple relationships
+
+        // Check proper formatting - closing brace should be on a new line
+        expect(result.inlineDbml).toMatch(
+            /Table "user_activities" \{\s*\n\s*"id".*\n\s*"entity_id".*\]\s*\n\s*"activity_type".*\n\s*\}/
+        );
+
+        // Ensure no closing brace appears on the same line as a field with inline refs
+        expect(result.inlineDbml).not.toMatch(/\[.*ref:.*\]\}/);
+    });
 });

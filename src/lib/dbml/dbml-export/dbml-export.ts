@@ -285,9 +285,14 @@ const convertToInlineRefs = (dbml: string): string => {
     // Create a map for faster table lookup
     const tableMap = new Map(Object.entries(tables));
 
-    // 1. Add inline refs to table contents
+    // 1. First, collect all refs per field
+    const fieldRefs = new Map<
+        string,
+        { table: string; refs: string[]; relatedTables: string[] }
+    >();
+
     refs.forEach((ref) => {
-        let targetTableName, fieldNameToModify, inlineRefSyntax;
+        let targetTableName, fieldNameToModify, inlineRefSyntax, relatedTable;
 
         if (ref.direction === '<') {
             targetTableName = ref.targetSchema
@@ -298,6 +303,7 @@ const convertToInlineRefs = (dbml: string): string => {
                 ? `"${ref.sourceSchema}"."${ref.sourceTable}"."${ref.sourceField}"`
                 : `"${ref.sourceTable}"."${ref.sourceField}"`;
             inlineRefSyntax = `ref: < ${sourceRef}`;
+            relatedTable = ref.sourceTable;
         } else {
             targetTableName = ref.sourceSchema
                 ? `${ref.sourceSchema}.${ref.sourceTable}`
@@ -307,13 +313,32 @@ const convertToInlineRefs = (dbml: string): string => {
                 ? `"${ref.targetSchema}"."${ref.targetTable}"."${ref.targetField}"`
                 : `"${ref.targetTable}"."${ref.targetField}"`;
             inlineRefSyntax = `ref: > ${targetRef}`;
+            relatedTable = ref.targetTable;
         }
 
-        const tableData = tableMap.get(targetTableName);
+        const fieldKey = `${targetTableName}.${fieldNameToModify}`;
+        const existing = fieldRefs.get(fieldKey) || {
+            table: targetTableName,
+            refs: [],
+            relatedTables: [],
+        };
+        existing.refs.push(inlineRefSyntax);
+        existing.relatedTables.push(relatedTable);
+        fieldRefs.set(fieldKey, existing);
+    });
+
+    // 2. Apply all refs to fields
+    fieldRefs.forEach((fieldData, fieldKey) => {
+        // fieldKey might be "schema.table.field" or just "table.field"
+        const lastDotIndex = fieldKey.lastIndexOf('.');
+        const tableName = fieldKey.substring(0, lastDotIndex);
+        const fieldName = fieldKey.substring(lastDotIndex + 1);
+        const tableData = tableMap.get(tableName);
+
         if (tableData) {
             // Updated pattern to capture field definition and all existing attributes in brackets
             const fieldPattern = new RegExp(
-                `^([ \t]*"${fieldNameToModify}"[^\\n]*?)(?:\\s*(\\[[^\\]]*\\]))*\\s*(//.*)?$`,
+                `^([ \t]*"${fieldName}"[^\\n]*?)(?:\\s*(\\[[^\\]]*\\]))*\\s*(//.*)?$`,
                 'gm'
             );
             let newContent = tableData.content;
@@ -321,11 +346,6 @@ const convertToInlineRefs = (dbml: string): string => {
             newContent = newContent.replace(
                 fieldPattern,
                 (lineMatch, fieldPart, existingBrackets, commentPart) => {
-                    // Avoid adding duplicate refs
-                    if (lineMatch.includes('ref:')) {
-                        return lineMatch;
-                    }
-
                     // Collect all attributes from existing brackets
                     const allAttributes: string[] = [];
                     if (existingBrackets) {
@@ -343,8 +363,8 @@ const convertToInlineRefs = (dbml: string): string => {
                         }
                     }
 
-                    // Add the new ref
-                    allAttributes.push(inlineRefSyntax);
+                    // Add all refs for this field
+                    allAttributes.push(...fieldData.refs);
 
                     // Combine all attributes into a single bracket
                     const combinedAttributes = allAttributes.join(', ');
@@ -352,6 +372,7 @@ const convertToInlineRefs = (dbml: string): string => {
                     // Preserve original spacing from fieldPart
                     const leadingSpaces = fieldPart.match(/^(\s*)/)?.[1] || '';
                     const fieldDefWithoutSpaces = fieldPart.trim();
+
                     return `${leadingSpaces}${fieldDefWithoutSpaces} [${combinedAttributes}]${commentPart || ''}`;
                 }
             );
@@ -359,7 +380,7 @@ const convertToInlineRefs = (dbml: string): string => {
             // Update the table content if modified
             if (newContent !== tableData.content) {
                 tableData.content = newContent;
-                tableMap.set(targetTableName, tableData);
+                tableMap.set(tableName, tableData);
             }
         }
     });
