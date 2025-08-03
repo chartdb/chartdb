@@ -227,7 +227,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).not.toContain('DEFAULT DEFAULT has default');
             // The fields should still be in the table
             expect(sql).toContain('is_active boolean');
-            expect(sql).toContain('stock_count int NOT NULL'); // integer gets simplified to int
+            expect(sql).toContain('stock_count integer NOT NULL'); // integer gets simplified to int
         });
 
         it('should handle valid default values correctly', () => {
