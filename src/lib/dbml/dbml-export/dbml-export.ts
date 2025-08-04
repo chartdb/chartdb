@@ -6,7 +6,6 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { type DBField } from '@/lib/domain/db-field';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
-import { defaultSchemas } from '@/lib/data/default-schemas';
 
 // Use DBCustomType for generating Enum DBML
 const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
@@ -251,7 +250,7 @@ const convertToInlineRefs = (dbml: string): string => {
     } = {};
     // Updated pattern to handle various table name formats including schema.table
     const tablePattern =
-        /Table\s+(?:"([^"]+)"(?:\."([^"]+)")?|(\[?[^\s[]+\]?\.\[?[^\s\]]+\]?)|(\[?[^\s[{]+\]?))\s*{([^}]*)}/g;
+        /Table\s+(?:"([^"]+)"(?:\."([^"]+)")?|(\[?[^\s[]+\]?\.\[?[^\s\]]+\]?)|(\[?[^\s[{]+\]?))\s*{([^}]*)}/gs;
 
     let tableMatch;
     while ((tableMatch = tablePattern.exec(dbml)) !== null) {
@@ -397,18 +396,14 @@ const convertToInlineRefs = (dbml: string): string => {
         reconstructedDbml += dbml.substring(lastIndex, tableData.start);
         // Preserve the original table definition format but with updated content
         const originalTableDef = tableData.fullMatch;
-
-        // Ensure the content ends with proper whitespace before the closing brace
-        let content = tableData.content;
-        // Check if content ends with a field that has inline refs
-        if (content.match(/\[.*ref:.*\]\s*$/)) {
-            // Ensure there's a newline before the closing brace
-            content = content.trimEnd() + '\n';
+        // Ensure content ends with a newline before the closing brace
+        let formattedContent = tableData.content;
+        if (!formattedContent.endsWith('\n')) {
+            formattedContent = formattedContent + '\n';
         }
-
         const updatedTableDef = originalTableDef.replace(
-            /{[^}]*}/,
-            `{${content}}`
+            /{[^}]*}/s,
+            `{${formattedContent}}`
         );
         reconstructedDbml += updatedTableDef;
         lastIndex = tableData.end;
@@ -422,7 +417,10 @@ const convertToInlineRefs = (dbml: string): string => {
     const finalDbml = finalLines.join('\n').trim();
 
     // Clean up excessive empty lines - replace multiple consecutive empty lines with just one
-    const cleanedDbml = finalDbml.replace(/\n\s*\n\s*\n/g, '\n\n');
+    // But ensure there's at least one blank line between tables
+    const cleanedDbml = finalDbml
+        .replace(/\n\s*\n\s*\n/g, '\n\n')
+        .replace(/}\n(?=Table)/g, '}\n\n');
 
     return cleanedDbml;
 };
@@ -519,15 +517,15 @@ const fixTableBracketSyntax = (dbml: string): string => {
 };
 
 // Restore schema information that may have been stripped by the DBML importer
-const restoreTableSchemas = (dbml: string, diagram: Diagram): string => {
-    if (!diagram.tables) return dbml;
+const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
 
     // Group tables by name to handle duplicates
     const tablesByName = new Map<
         string,
-        Array<{ table: (typeof diagram.tables)[0]; index: number }>
+        Array<{ table: DBTable; index: number }>
     >();
-    diagram.tables.forEach((table, index) => {
+    tables.forEach((table, index) => {
         const existing = tablesByName.get(table.name) || [];
         existing.push({ table, index });
         tablesByName.set(table.name, existing);
@@ -577,30 +575,20 @@ const restoreTableSchemas = (dbml: string, diagram: Diagram): string => {
             }
         } else {
             // Multiple tables with the same name - need to be more careful
-            const defaultSchema = defaultSchemas[diagram.databaseType];
-
-            // Separate tables by whether they have the default schema or not
-            const defaultSchemaTable = tablesGroup.find(
-                ({ table }) => table.schema === defaultSchema
-            );
-            const nonDefaultSchemaTables = tablesGroup.filter(
-                ({ table }) => table.schema && table.schema !== defaultSchema
-            );
-
             // Find all table definitions for this name
             const escapedTableName = tableName.replace(
                 /[.*+?^${}()|[\]\\]/g,
                 '\\$&'
             );
 
-            // First, handle tables that already have schema in DBML
-            const schemaTablePattern = new RegExp(
-                `Table\\s+"[^"]+"\\.\\s*"${escapedTableName}"\\s*{`,
-                'g'
-            );
-            result = result.replace(schemaTablePattern, (match) => {
-                // This table already has a schema, keep it as is
-                return match;
+            // Get tables that need schema restoration (those without schema in DBML)
+            const tablesNeedingSchema = tablesGroup.filter(({ table }) => {
+                // Check if this table's schema is already in the DBML
+                const schemaPattern = new RegExp(
+                    `Table\\s+"${table.schema}"\\.\\s*"${escapedTableName}"\\s*{`,
+                    'g'
+                );
+                return !result.match(schemaPattern);
             });
 
             // Then handle tables without schema in DBML
@@ -611,21 +599,25 @@ const restoreTableSchemas = (dbml: string, diagram: Diagram): string => {
 
             let noSchemaMatchIndex = 0;
             result = result.replace(noSchemaTablePattern, (match) => {
-                // If we have a table with the default schema and this is the first match without schema,
-                // it should be the default schema table
-                if (noSchemaMatchIndex === 0 && defaultSchemaTable) {
-                    noSchemaMatchIndex++;
-                    return `Table "${defaultSchema}"."${tableName}" {`;
+                // We need to match based on the order in the DBML output
+                // For PostgreSQL DBML, the @dbml/core sorts tables by:
+                // 1. Tables with schemas (alphabetically)
+                // 2. Tables without schemas
+                // Since both our tables have schemas, they should appear in order
+
+                // Only process tables that need schema restoration
+                if (noSchemaMatchIndex >= tablesNeedingSchema.length) {
+                    return match;
                 }
-                // Otherwise, try to match with non-default schema tables
-                const remainingNonDefault =
-                    nonDefaultSchemaTables[
-                        noSchemaMatchIndex - (defaultSchemaTable ? 1 : 0)
-                    ];
-                if (remainingNonDefault) {
-                    noSchemaMatchIndex++;
-                    return `Table "${remainingNonDefault.table.schema}"."${tableName}" {`;
+
+                const correspondingTable =
+                    tablesNeedingSchema[noSchemaMatchIndex];
+                noSchemaMatchIndex++;
+
+                if (correspondingTable && correspondingTable.table.schema) {
+                    return `Table "${correspondingTable.table.schema}"."${tableName}" {`;
                 }
+                // If the table doesn't have a schema, keep it as is
                 return match;
             });
         }
@@ -837,7 +829,7 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         );
 
         // Restore schema information that may have been stripped by DBML importer
-        standard = restoreTableSchemas(standard, diagram);
+        standard = restoreTableSchemas(standard, uniqueTables);
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {
@@ -849,6 +841,14 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         // Clean up excessive empty lines in both outputs
         standard = standard.replace(/\n\s*\n\s*\n/g, '\n\n');
         inline = inline.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+        // Ensure proper formatting with newline at end
+        if (!standard.endsWith('\n')) {
+            standard += '\n';
+        }
+        if (!inline.endsWith('\n')) {
+            inline += '\n';
+        }
     } catch (error: unknown) {
         console.error(
             'Error during DBML generation process:',

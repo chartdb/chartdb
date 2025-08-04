@@ -12,7 +12,10 @@ export type FieldDiffAttribute =
     | 'primaryKey'
     | 'unique'
     | 'nullable'
-    | 'comments';
+    | 'comments'
+    | 'characterMaximumLength'
+    | 'precision'
+    | 'scale';
 
 export const fieldDiffAttributeSchema: z.ZodType<FieldDiffAttribute> = z.union([
     z.literal('name'),
@@ -61,8 +64,8 @@ export interface FieldDiffChanged {
     fieldId: string;
     tableId: string;
     attribute: FieldDiffAttribute;
-    oldValue: string | boolean | DataType;
-    newValue: string | boolean | DataType;
+    oldValue: string | boolean | DataType | number;
+    newValue: string | boolean | DataType | number;
 }
 
 export const fieldDiffChangedSchema: z.ZodType<FieldDiffChanged> = z.object({

@@ -86,6 +86,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             checkIfTableHasChange,
             checkIfNewTable,
             checkIfTableRemoved,
+            isSummaryOnly,
         } = useDiff();
 
         const fields = useMemo(() => table.fields, [table.fields]);
@@ -312,7 +313,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     hasHighlightedCustomType
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2 animate-scale'
                         : '',
-                    isDiffTableChanged && !isDiffNewTable && !isDiffTableRemoved
+                    isDiffTableChanged &&
+                        !isSummaryOnly &&
+                        !isDiffNewTable &&
+                        !isDiffTableRemoved
                         ? 'outline outline-[3px] outline-sky-500 dark:outline-sky-900 outline-offset-[5px]'
                         : '',
                     isDiffNewTable
@@ -327,7 +331,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isOverlapping,
                 highlightOverlappingTables,
                 hasHighlightedCustomType,
-
+                isSummaryOnly,
                 isDiffTableChanged,
                 isDiffNewTable,
                 isDiffTableRemoved,
@@ -364,7 +368,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 ? 'new'
                                 : isDiffTableRemoved
                                   ? 'removed'
-                                  : isDiffTableChanged
+                                  : isDiffTableChanged && !isSummaryOnly
                                     ? 'changed'
                                     : 'none'
                         }
@@ -397,7 +401,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                         Table Removed
                                     </TooltipContent>
                                 </Tooltip>
-                            ) : isDiffTableChanged ? (
+                            ) : isDiffTableChanged && !isSummaryOnly ? (
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <SquareDot
@@ -433,7 +437,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-red-200 px-2 py-0.5 text-sm font-normal text-red-900 dark:bg-red-800 dark:text-red-200">
                                     {table.name}
                                 </Label>
-                            ) : isDiffTableChanged ? (
+                            ) : isDiffTableChanged && !isSummaryOnly ? (
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
                                     {table.name}
                                 </Label>

@@ -4,10 +4,16 @@ import { generateDiagramId, generateId } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
-import type { DataType } from '@/lib/data/data-types/data-types';
-import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
+import type { DataTypeData } from '@/lib/data/data-types/data-types';
+import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import { randomColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
+import type Field from '@dbml/core/types/model_structure/field';
+import type { DBIndex } from '@/lib/domain';
+import {
+    DBCustomTypeKind,
+    type DBCustomType,
+} from '@/lib/domain/db-custom-type';
 
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
@@ -19,8 +25,8 @@ export const preprocessDBML = (content: string): string => {
     // Remove Note blocks
     processed = processed.replace(/Note\s+\w+\s*\{[^}]*\}/gs, '');
 
-    // Remove enum definitions (blocks)
-    processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
+    // Don't remove enum definitions - we'll parse them
+    // processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
 
     // Handle array types by converting them to text
     processed = processed.replace(/(\w+)\[\]/g, 'text');
@@ -77,6 +83,9 @@ interface DBMLField {
     pk?: boolean;
     not_null?: boolean;
     increment?: boolean;
+    characterMaximumLength?: string | null;
+    precision?: number | null;
+    scale?: number | null;
 }
 
 interface DBMLIndexColumn {
@@ -110,39 +119,51 @@ interface DBMLRef {
     endpoints: [DBMLEndpoint, DBMLEndpoint];
 }
 
-const mapDBMLTypeToGenericType = (dbmlType: string): DataType => {
+interface DBMLEnum {
+    name: string;
+    schema?: string | { name: string };
+    values: Array<{ name: string; note?: string }>;
+    note?: string | { value: string } | null;
+}
+
+const mapDBMLTypeToDataType = (
+    dbmlType: string,
+    options?: { databaseType?: DatabaseType; enums?: DBMLEnum[] }
+): DataTypeData => {
     const normalizedType = dbmlType.toLowerCase().replace(/\(.*\)/, '');
-    const matchedType = genericDataTypes.find((t) => t.id === normalizedType);
-    if (matchedType) return matchedType;
-    const typeMap: Record<string, string> = {
-        int: 'int',
-        integer: 'int',
-        varchar: 'varchar',
-        bool: 'boolean',
-        boolean: 'boolean',
-        number: 'numeric',
-        string: 'varchar',
-        text: 'text',
-        timestamp: 'timestamp',
-        datetime: 'timestamp',
-        float: 'float',
-        double: 'double',
-        decimal: 'decimal',
-        bigint: 'bigint',
-        smallint: 'smallint',
-        char: 'char',
-    };
-    const mappedType = typeMap[normalizedType];
-    if (mappedType) {
-        const foundType = genericDataTypes.find((t) => t.id === mappedType);
-        if (foundType) return foundType;
+
+    // Check if it's an enum type
+    if (options?.enums) {
+        const enumDef = options.enums.find((e) => {
+            // Check both with and without schema prefix
+            const enumName = e.name.toLowerCase();
+            const enumFullName = e.schema
+                ? `${e.schema}.${enumName}`
+                : enumName;
+            return (
+                normalizedType === enumName || normalizedType === enumFullName
+            );
+        });
+
+        if (enumDef) {
+            // Return enum as custom type reference
+            return {
+                id: enumDef.name,
+                name: enumDef.name,
+            } satisfies DataTypeData;
+        }
     }
-    const type = genericDataTypes.find((t) => t.id === 'varchar')!;
+
+    const matchedType = findDataTypeDataById(
+        normalizedType,
+        options?.databaseType
+    );
+    if (matchedType) return matchedType;
 
     return {
-        id: type.id,
-        name: type.name,
-    };
+        id: normalizedType.split(' ').join('_').toLowerCase(),
+        name: normalizedType,
+    } satisfies DataTypeData;
 };
 
 const determineCardinality = (
@@ -163,7 +184,10 @@ const determineCardinality = (
 };
 
 export const importDBMLToDiagram = async (
-    dbmlContent: string
+    dbmlContent: string,
+    options?: {
+        databaseType?: DatabaseType;
+    }
 ): Promise<Diagram> => {
     try {
         // Handle empty content
@@ -171,7 +195,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -189,7 +213,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -204,7 +228,7 @@ export const importDBMLToDiagram = async (
             return {
                 id: generateDiagramId(),
                 name: 'DBML Import',
-                databaseType: DatabaseType.GENERIC,
+                databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
                 createdAt: new Date(),
@@ -215,6 +239,55 @@ export const importDBMLToDiagram = async (
         // Process all schemas, not just the first one
         const allTables: DBMLTable[] = [];
         const allRefs: DBMLRef[] = [];
+        const allEnums: DBMLEnum[] = [];
+
+        const getFieldExtraAttributes = (
+            field: Field,
+            enums: DBMLEnum[]
+        ): Partial<DBMLField> => {
+            if (!field.type || !field.type.args) {
+                return {};
+            }
+
+            const args = field.type.args.split(',') as string[];
+
+            const dataType = mapDBMLTypeToDataType(field.type.type_name, {
+                ...options,
+                enums,
+            });
+
+            if (dataType.fieldAttributes?.hasCharMaxLength) {
+                const charMaxLength = args?.[0];
+                return {
+                    characterMaximumLength: charMaxLength,
+                };
+            } else if (
+                dataType.fieldAttributes?.precision &&
+                dataType.fieldAttributes?.scale
+            ) {
+                const precisionNum = args?.[0] ? parseInt(args[0]) : undefined;
+                const scaleNum = args?.[1] ? parseInt(args[1]) : undefined;
+
+                const precision = precisionNum
+                    ? isNaN(precisionNum)
+                        ? undefined
+                        : precisionNum
+                    : undefined;
+
+                const scale = scaleNum
+                    ? isNaN(scaleNum)
+                        ? undefined
+                        : scaleNum
+                    : undefined;
+
+                return {
+                    precision,
+                    scale,
+                };
+            }
+
+            return {};
+        };
 
         parsedData.schemas.forEach((schema) => {
             if (schema.tables) {
@@ -230,17 +303,17 @@ export const importDBMLToDiagram = async (
                         name: table.name,
                         schema: schemaName,
                         note: table.note,
-                        fields: table.fields.map(
-                            (field) =>
-                                ({
-                                    name: field.name,
-                                    type: field.type,
-                                    unique: field.unique,
-                                    pk: field.pk,
-                                    not_null: field.not_null,
-                                    increment: field.increment,
-                                }) satisfies DBMLField
-                        ),
+                        fields: table.fields.map((field): DBMLField => {
+                            return {
+                                name: field.name,
+                                type: field.type,
+                                unique: field.unique,
+                                pk: field.pk,
+                                not_null: field.not_null,
+                                increment: field.increment,
+                                ...getFieldExtraAttributes(field, allEnums),
+                            } satisfies DBMLField;
+                        }),
                         indexes:
                             table.indexes?.map((dbmlIndex) => {
                                 let indexColumns: string[];
@@ -314,15 +387,34 @@ export const importDBMLToDiagram = async (
                     }
                 });
             }
+
+            if (schema.enums) {
+                schema.enums.forEach((enumDef) => {
+                    // Get schema name from enum or use schema's name
+                    const enumSchema =
+                        typeof enumDef.schema === 'string'
+                            ? enumDef.schema
+                            : enumDef.schema?.name || schema.name;
+
+                    allEnums.push({
+                        name: enumDef.name,
+                        schema: enumSchema === 'public' ? '' : enumSchema,
+                        values: enumDef.values || [],
+                        note: enumDef.note,
+                    });
+                });
+            }
         });
 
         // Extract only the necessary data from the parsed DBML
         const extractedData: {
             tables: DBMLTable[];
             refs: DBMLRef[];
+            enums: DBMLEnum[];
         } = {
             tables: allTables,
             refs: allRefs,
+            enums: allEnums,
         };
 
         // Convert DBML tables to ChartDB table objects
@@ -332,18 +424,24 @@ export const importDBMLToDiagram = async (
             const tableSpacing = 300;
 
             // Create fields first so we have their IDs
-            const fields = table.fields.map((field) => ({
+            const fields: DBField[] = table.fields.map((field) => ({
                 id: generateId(),
                 name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToGenericType(field.type.type_name),
+                type: mapDBMLTypeToDataType(field.type.type_name, {
+                    ...options,
+                    enums: extractedData.enums,
+                }),
                 nullable: !field.not_null,
                 primaryKey: field.pk || false,
                 unique: field.unique || false,
                 createdAt: Date.now(),
+                characterMaximumLength: field.characterMaximumLength,
+                precision: field.precision,
+                scale: field.scale,
             }));
 
             // Convert DBML indexes to ChartDB indexes
-            const indexes =
+            const indexes: DBIndex[] =
                 table.indexes?.map((dbmlIndex) => {
                     const fieldIds = dbmlIndex.columns.map((columnName) => {
                         const field = fields.find((f) => f.name === columnName);
@@ -395,7 +493,7 @@ export const importDBMLToDiagram = async (
                 isView: false,
                 createdAt: Date.now(),
                 comments: tableComment,
-            };
+            } as DBTable;
         });
 
         // Create relationships using the refs
@@ -449,12 +547,43 @@ export const importDBMLToDiagram = async (
             }
         );
 
+        // Convert DBML enums to custom types
+        const customTypes: DBCustomType[] = extractedData.enums.map(
+            (enumDef) => {
+                // Extract values from enum
+                const values = enumDef.values
+                    .map((v) => {
+                        // Handle both string values and objects with name property
+                        if (typeof v === 'string') {
+                            return v;
+                        } else if (v && typeof v === 'object' && 'name' in v) {
+                            return v.name.replace(/["']/g, ''); // Remove quotes from values
+                        }
+                        return '';
+                    })
+                    .filter((v) => v !== '');
+
+                return {
+                    id: generateId(),
+                    schema:
+                        typeof enumDef.schema === 'string'
+                            ? enumDef.schema
+                            : undefined,
+                    name: enumDef.name,
+                    kind: DBCustomTypeKind.enum,
+                    values,
+                    order: 0,
+                } satisfies DBCustomType;
+            }
+        );
+
         return {
             id: generateDiagramId(),
             name: 'DBML Import',
-            databaseType: DatabaseType.GENERIC,
+            databaseType: options?.databaseType ?? DatabaseType.GENERIC,
             tables,
             relationships,
+            customTypes,
             createdAt: new Date(),
             updatedAt: new Date(),
         };

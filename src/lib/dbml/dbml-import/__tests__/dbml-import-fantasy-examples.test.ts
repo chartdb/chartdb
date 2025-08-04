@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { importDBMLToDiagram } from '../dbml-import';
+import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
 describe('DBML Import - Fantasy Examples', () => {
     describe('Magical Academy System', () => {
@@ -613,6 +614,228 @@ Note quest_system_note {
         });
     });
 
+    describe('Enum Support', () => {
+        it('should import enums as customTypes', async () => {
+            const dbmlWithEnums = `
+// Test DBML with various enum definitions
+enum job_status {
+  created [note: 'Waiting to be processed']
+  running
+  done
+  failure
+}
+
+// Enum with schema
+enum hr.employee_type {
+  full_time
+  part_time
+  contractor
+  intern
+}
+
+// Enum with special characters and spaces
+enum grade {
+  "A+"
+  "A"
+  "A-"
+  "Not Yet Set"
+}
+
+Table employees {
+  id integer [pk]
+  name varchar(200) [not null]
+  status job_status
+  type hr.employee_type
+  performance_grade grade
+  created_at timestamp [default: 'now()']
+}
+
+Table projects {
+  id integer [pk]
+  name varchar(300) [not null]
+  status job_status [not null]
+  priority enum // inline enum without values - will be converted to varchar
+}`;
+
+            const diagram = await importDBMLToDiagram(dbmlWithEnums);
+
+            // Verify customTypes are created for enums
+            expect(diagram.customTypes).toBeDefined();
+            expect(diagram.customTypes).toHaveLength(3); // job_status, hr.employee_type, grade
+
+            // Check job_status enum
+            const jobStatusEnum = diagram.customTypes?.find(
+                (ct) => ct.name === 'job_status' && !ct.schema
+            );
+            expect(jobStatusEnum).toBeDefined();
+            expect(jobStatusEnum?.kind).toBe(DBCustomTypeKind.enum);
+            expect(jobStatusEnum?.values).toEqual([
+                'created',
+                'running',
+                'done',
+                'failure',
+            ]);
+
+            // Check hr.employee_type enum with schema
+            const employeeTypeEnum = diagram.customTypes?.find(
+                (ct) => ct.name === 'employee_type' && ct.schema === 'hr'
+            );
+            expect(employeeTypeEnum).toBeDefined();
+            expect(employeeTypeEnum?.kind).toBe(DBCustomTypeKind.enum);
+            expect(employeeTypeEnum?.values).toEqual([
+                'full_time',
+                'part_time',
+                'contractor',
+                'intern',
+            ]);
+
+            // Check grade enum with quoted values
+            const gradeEnum = diagram.customTypes?.find(
+                (ct) => ct.name === 'grade' && !ct.schema
+            );
+            expect(gradeEnum).toBeDefined();
+            expect(gradeEnum?.kind).toBe(DBCustomTypeKind.enum);
+            expect(gradeEnum?.values).toEqual(['A+', 'A', 'A-', 'Not Yet Set']);
+
+            // Verify tables are created
+            expect(diagram.tables).toHaveLength(2);
+
+            // Check that enum fields in tables reference the custom types
+            const employeesTable = diagram.tables?.find(
+                (t) => t.name === 'employees'
+            );
+            const statusField = employeesTable?.fields.find(
+                (f) => f.name === 'status'
+            );
+            const typeField = employeesTable?.fields.find(
+                (f) => f.name === 'type'
+            );
+            const gradeField = employeesTable?.fields.find(
+                (f) => f.name === 'performance_grade'
+            );
+
+            // Verify fields have correct types
+            expect(statusField?.type.id).toBe('job_status');
+            expect(typeField?.type.id).toBe('employee_type');
+            expect(gradeField?.type.id).toBe('grade');
+
+            // Check inline enum was converted to varchar
+            const projectsTable = diagram.tables?.find(
+                (t) => t.name === 'projects'
+            );
+            const priorityField = projectsTable?.fields.find(
+                (f) => f.name === 'priority'
+            );
+            expect(priorityField?.type.id).toBe('varchar');
+        });
+
+        it('should handle enum values with notes', async () => {
+            const dbmlWithEnumNotes = `
+enum order_status {
+  pending [note: 'Order has been placed but not confirmed']
+  confirmed [note: 'Payment received and order confirmed']
+  shipped [note: 'Order has been dispatched']
+  delivered [note: 'Order delivered to customer']
+  cancelled [note: 'Order cancelled by customer or system']
+}
+
+Table orders {
+  id integer [pk]
+  status order_status [not null]
+}`;
+
+            const diagram = await importDBMLToDiagram(dbmlWithEnumNotes);
+
+            // Verify enum is created
+            expect(diagram.customTypes).toHaveLength(1);
+
+            const orderStatusEnum = diagram.customTypes?.[0];
+            expect(orderStatusEnum?.name).toBe('order_status');
+            expect(orderStatusEnum?.kind).toBe(DBCustomTypeKind.enum);
+            expect(orderStatusEnum?.values).toEqual([
+                'pending',
+                'confirmed',
+                'shipped',
+                'delivered',
+                'cancelled',
+            ]);
+        });
+
+        it('should handle multiple schemas with same enum names', async () => {
+            const dbmlWithSameEnumNames = `
+// Public schema status enum
+enum status {
+  active
+  inactive
+  deleted
+}
+
+// Admin schema status enum with different values
+enum admin.status {
+  pending_approval
+  approved
+  rejected
+  suspended
+}
+
+Table public.users {
+  id integer [pk]
+  status status
+}
+
+Table admin.users {
+  id integer [pk]
+  status admin.status
+}`;
+
+            const diagram = await importDBMLToDiagram(dbmlWithSameEnumNames);
+
+            // Verify both enums are created
+            expect(diagram.customTypes).toHaveLength(2);
+
+            // Check public.status enum
+            const publicStatusEnum = diagram.customTypes?.find(
+                (ct) => ct.name === 'status' && !ct.schema
+            );
+            expect(publicStatusEnum).toBeDefined();
+            expect(publicStatusEnum?.values).toEqual([
+                'active',
+                'inactive',
+                'deleted',
+            ]);
+
+            // Check admin.status enum
+            const adminStatusEnum = diagram.customTypes?.find(
+                (ct) => ct.name === 'status' && ct.schema === 'admin'
+            );
+            expect(adminStatusEnum).toBeDefined();
+            expect(adminStatusEnum?.values).toEqual([
+                'pending_approval',
+                'approved',
+                'rejected',
+                'suspended',
+            ]);
+
+            // Verify fields reference correct enums
+            const publicUsersTable = diagram.tables?.find(
+                (t) => t.name === 'users' && t.schema === 'public'
+            );
+            const adminUsersTable = diagram.tables?.find(
+                (t) => t.name === 'users' && t.schema === 'admin'
+            );
+
+            const publicStatusField = publicUsersTable?.fields.find(
+                (f) => f.name === 'status'
+            );
+            const adminStatusField = adminUsersTable?.fields.find(
+                (f) => f.name === 'status'
+            );
+
+            expect(publicStatusField?.type.id).toBe('status');
+            expect(adminStatusField?.type.id).toBe('status');
+        });
+    });
+
     describe('Edge Cases and Special Features', () => {
         it('should handle tables with all DBML features', async () => {
             const edgeCaseDBML = `
@@ -793,11 +1016,11 @@ Table "bb"."users" {
             expect(bbUsersTable?.fields).toHaveLength(1);
 
             expect(aaUsersTable?.fields[0].name).toBe('id');
-            expect(aaUsersTable?.fields[0].type.id).toBe('int');
+            expect(aaUsersTable?.fields[0].type.id).toBe('integer');
             expect(aaUsersTable?.fields[0].primaryKey).toBe(true);
 
             expect(bbUsersTable?.fields[0].name).toBe('id');
-            expect(bbUsersTable?.fields[0].type.id).toBe('int');
+            expect(bbUsersTable?.fields[0].type.id).toBe('integer');
             expect(bbUsersTable?.fields[0].primaryKey).toBe(true);
         });
 

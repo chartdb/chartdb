@@ -958,6 +958,105 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
+    it('should export in the right format', () => {
+        const diagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T16:11:22.554Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: '8ftpn9qn0o2ddrvhzgdjro3zv',
+                    name: 'table_1',
+                    x: 260,
+                    y: 80,
+                    fields: [
+                        {
+                            id: 'w9wlmimvjaci2krhfb4v9bhy0',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753890297335,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753890297335,
+                    isView: false,
+                    order: 0,
+                    parentAreaId: null,
+                },
+                {
+                    id: 'wofcygo4u9623oueif9k3v734',
+                    name: 'table_2',
+                    x: -178.62499999999994,
+                    y: -244.375,
+                    fields: [
+                        {
+                            id: '6ca6p6lnss4d2top8pjcfsli7',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753891879081,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753891879081,
+                    isView: false,
+                    order: 1,
+                    parentAreaId: null,
+                },
+            ],
+            relationships: [
+                {
+                    id: 'o5ynn1x9nxm5ipuugo690doau',
+                    name: 'table_2_id_fk',
+                    sourceTableId: 'wofcygo4u9623oueif9k3v734',
+                    targetTableId: '8ftpn9qn0o2ddrvhzgdjro3zv',
+                    sourceFieldId: '6ca6p6lnss4d2top8pjcfsli7',
+                    targetFieldId: 'w9wlmimvjaci2krhfb4v9bhy0',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
+                    createdAt: 1753891882554,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        const expectedInlineDBML = `Table "table_1" {
+  "id" bigint [pk, not null]
+}
+
+Table "table_2" {
+  "id" bigint [pk, not null, ref: < "table_1"."id"]
+}
+`;
+
+        const expectedStandardDBML = `Table "table_1" {
+  "id" bigint [pk, not null]
+}
+
+Table "table_2" {
+  "id" bigint [pk, not null]
+}
+
+Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
+`;
+
+        expect(result.inlineDbml).toBe(expectedInlineDBML);
+        expect(result.standardDbml).toBe(expectedStandardDBML);
+    });
+
     it('should handle tables with multiple relationships correctly', () => {
         const diagram: Diagram = {
             id: 'test-diagram',
@@ -1173,7 +1272,7 @@ describe('DBML Export - Issue Fixes', () => {
         // Check that the entity_id field in user_activities has multiple relationships in inline DBML
         // The field should have both references in a single bracket
         expect(result.inlineDbml).toContain(
-            '"entity_id" int [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
+            '"entity_id" integer [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
         );
 
         // Check that standard DBML has separate Ref entries for each relationship

@@ -329,6 +329,27 @@ function compareFieldProperties({
         changedAttributes.push('comments');
     }
 
+    if (
+        (newField.characterMaximumLength || oldField.characterMaximumLength) &&
+        oldField.characterMaximumLength !== newField.characterMaximumLength
+    ) {
+        changedAttributes.push('characterMaximumLength');
+    }
+
+    if (
+        (newField.scale || oldField.scale) &&
+        oldField.scale !== newField.scale
+    ) {
+        changedAttributes.push('scale');
+    }
+
+    if (
+        (newField.precision || oldField.precision) &&
+        oldField.precision !== newField.precision
+    ) {
+        changedAttributes.push('precision');
+    }
+
     if (changedAttributes.length > 0) {
         for (const attribute of changedAttributes) {
             diffMap.set(
