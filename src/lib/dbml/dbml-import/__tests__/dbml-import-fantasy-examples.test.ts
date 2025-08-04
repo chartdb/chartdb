@@ -1244,4 +1244,47 @@ Table "public_3"."comments" {
             expect(relationshipsHaveSchemas).toBe(true);
         });
     });
+
+    describe('Notes Support', () => {
+        it('should import table with note', async () => {
+            const dbmlWithTableNote = `
+Table products {
+  id integer [pk]
+  name varchar(100)
+  Note: 'This table stores product information'
+}`;
+
+            const diagram = await importDBMLToDiagram(dbmlWithTableNote);
+
+            expect(diagram.tables).toHaveLength(1);
+            const productsTable = diagram.tables?.[0];
+            expect(productsTable?.name).toBe('products');
+            expect(productsTable?.comments).toBe(
+                'This table stores product information'
+            );
+        });
+
+        it('should import field with note', async () => {
+            const dbmlWithFieldNote = `
+Table orders {
+  id integer [pk]
+  total numeric(10,2) [note: 'Order total including tax']
+}`;
+
+            const diagram = await importDBMLToDiagram(dbmlWithFieldNote);
+
+            expect(diagram.tables).toHaveLength(1);
+            const ordersTable = diagram.tables?.[0];
+            expect(ordersTable?.fields).toHaveLength(2);
+
+            const totalField = ordersTable?.fields.find(
+                (f) => f.name === 'total'
+            );
+
+            // Field notes should be imported
+            expect(totalField).toBeDefined();
+            expect(totalField?.name).toBe('total');
+            expect(totalField?.comments).toBe('Order total including tax');
+        });
+    });
 });

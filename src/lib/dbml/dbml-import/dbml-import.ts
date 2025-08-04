@@ -86,6 +86,7 @@ interface DBMLField {
     characterMaximumLength?: string | null;
     precision?: number | null;
     scale?: number | null;
+    note?: string | { value: string } | null;
 }
 
 interface DBMLIndexColumn {
@@ -311,6 +312,7 @@ export const importDBMLToDiagram = async (
                                 pk: field.pk,
                                 not_null: field.not_null,
                                 increment: field.increment,
+                                note: field.note,
                                 ...getFieldExtraAttributes(field, allEnums),
                             } satisfies DBMLField;
                         }),
@@ -424,21 +426,37 @@ export const importDBMLToDiagram = async (
             const tableSpacing = 300;
 
             // Create fields first so we have their IDs
-            const fields: DBField[] = table.fields.map((field) => ({
-                id: generateId(),
-                name: field.name.replace(/['"]/g, ''),
-                type: mapDBMLTypeToDataType(field.type.type_name, {
-                    ...options,
-                    enums: extractedData.enums,
-                }),
-                nullable: !field.not_null,
-                primaryKey: field.pk || false,
-                unique: field.unique || false,
-                createdAt: Date.now(),
-                characterMaximumLength: field.characterMaximumLength,
-                precision: field.precision,
-                scale: field.scale,
-            }));
+            const fields: DBField[] = table.fields.map((field) => {
+                // Extract field note/comment
+                let fieldComment: string | undefined;
+                if (field.note) {
+                    if (typeof field.note === 'string') {
+                        fieldComment = field.note;
+                    } else if (
+                        typeof field.note === 'object' &&
+                        'value' in field.note
+                    ) {
+                        fieldComment = field.note.value;
+                    }
+                }
+
+                return {
+                    id: generateId(),
+                    name: field.name.replace(/['"]/g, ''),
+                    type: mapDBMLTypeToDataType(field.type.type_name, {
+                        ...options,
+                        enums: extractedData.enums,
+                    }),
+                    nullable: !field.not_null,
+                    primaryKey: field.pk || false,
+                    unique: field.unique || false,
+                    createdAt: Date.now(),
+                    characterMaximumLength: field.characterMaximumLength,
+                    precision: field.precision,
+                    scale: field.scale,
+                    ...(fieldComment ? { comments: fieldComment } : {}),
+                };
+            });
 
             // Convert DBML indexes to ChartDB indexes
             const indexes: DBIndex[] =
