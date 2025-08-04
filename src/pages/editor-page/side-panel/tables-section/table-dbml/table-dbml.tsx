@@ -55,6 +55,7 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
     const [standardDbml, setStandardDbml] = useState('');
     const [inlineDbml, setInlineDbml] = useState('');
     const isMountedRef = useRef(true);
+    const [isEditButtonEmphasized, setIsEditButtonEmphasized] = useState(false);
 
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const decorationsCollection =
@@ -65,6 +66,28 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             editorRef.current = editor;
             decorationsCollection.current =
                 editor.createDecorationsCollection();
+
+            if (readOnlyDisposableRef.current) {
+                readOnlyDisposableRef.current.dispose();
+            }
+
+            const readOnlyDisposable = editor.onDidAttemptReadOnlyEdit(() => {
+                if (emphasisTimeoutRef.current) {
+                    clearTimeout(emphasisTimeoutRef.current);
+                }
+
+                setIsEditButtonEmphasized(false);
+
+                requestAnimationFrame(() => {
+                    setIsEditButtonEmphasized(true);
+
+                    emphasisTimeoutRef.current = setTimeout(() => {
+                        setIsEditButtonEmphasized(false);
+                    }, 600);
+                });
+            });
+
+            readOnlyDisposableRef.current = readOnlyDisposable;
         },
         []
     );
@@ -90,6 +113,8 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
     const [warningMessage, setWarningMessage] = useState<string>();
     const { t } = useTranslation();
     const { hideLoader, showLoader } = useFullScreenLoader();
+    const emphasisTimeoutRef = useRef<NodeJS.Timeout>();
+    const readOnlyDisposableRef = useRef<monaco.IDisposable>();
 
     // --- Check for empty field name warnings only on mount ---
     useEffect(() => {
@@ -283,6 +308,15 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
 
         return () => {
             isMountedRef.current = false;
+            // Clean up emphasis timeout if component unmounts
+            if (emphasisTimeoutRef.current) {
+                clearTimeout(emphasisTimeoutRef.current);
+            }
+            // Clean up editor event listener
+            if (readOnlyDisposableRef.current) {
+                readOnlyDisposableRef.current.dispose();
+                readOnlyDisposableRef.current = undefined;
+            }
         };
     }, []);
 
@@ -344,6 +378,9 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                                     icon: Pencil,
                                     onClick: () =>
                                         setIsEditMode((prev) => !prev),
+                                    className: isEditButtonEmphasized
+                                        ? 'dbml-edit-button-emphasis'
+                                        : undefined,
                                 },
                             ]
                 }
@@ -356,7 +393,6 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                     options: {
                         wordWrap: 'off',
                         mouseWheelZoom: false,
-                        domReadOnly: true,
                         readOnly: !isEditMode,
                     },
                     onChange: (value) => {
