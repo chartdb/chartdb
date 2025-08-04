@@ -80,7 +80,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                 <NodeResizer
                     isVisible={focused}
                     lineClassName="!border-4 !border-transparent"
-                    handleClassName="!h-[18px] !w-[18px] !rounded-full !bg-pink-600"
+                    handleClassName="!h-[10px] !w-[10px] !rounded-full !bg-pink-600"
                     minHeight={100}
                     minWidth={100}
                 />
