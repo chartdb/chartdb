@@ -244,13 +244,6 @@ const updateTables = ({
             }
         }
 
-        // If no exact match, try matching by name only
-        if (!sourceTable) {
-            sourceTable = sourceTables.find(
-                (srcTable) => srcTable.name === targetTable.name
-            );
-        }
-
         if (!sourceTable) {
             // No matching source table found - keep target as-is
             return targetTable;
