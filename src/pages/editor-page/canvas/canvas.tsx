@@ -475,6 +475,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 const oldTable = tables[index];
                 if (
                     oldTable &&
+                    (!!newTable.parentAreaId || !!oldTable.parentAreaId) &&
                     newTable.parentAreaId !== oldTable.parentAreaId
                 ) {
                     needsUpdate.push({
@@ -1012,6 +1013,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     overlapGraph
                 );
                 setOverlapGraph(newOverlappingGraph);
+
+                setTimeout(() => {
+                    setNodes((prevNodes) =>
+                        prevNodes.map((n) => {
+                            if (n.id === event.data.id) {
+                                return {
+                                    ...n,
+                                    measured,
+                                };
+                            }
+
+                            return n;
+                        })
+                    );
+                }, 0);
             } else if (
                 event.action === 'add_field' ||
                 event.action === 'remove_field'
@@ -1051,7 +1067,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 setOverlapGraph(overlappingTablesInDiagram);
             }
         },
-        [overlapGraph, setOverlapGraph, getNode, nodes, filteredSchemas]
+        [
+            overlapGraph,
+            setOverlapGraph,
+            getNode,
+            nodes,
+            filteredSchemas,
+            setNodes,
+        ]
     );
 
     events.useSubscription(eventConsumer);
