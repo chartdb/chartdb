@@ -199,6 +199,7 @@ const buildSourceMappings = (sourceDiagram: Diagram) => {
 const updateTables = ({
     targetTables,
     sourceTables,
+    defaultDatabaseSchema,
 }: {
     targetTables: DBTable[] | undefined;
     sourceTables: DBTable[] | undefined;
@@ -224,6 +225,24 @@ const updateTables = ({
         // Try to find matching source table by schema + name
         const targetKey = createObjectKeyFromTable(targetTable);
         let sourceTable = sourceTablesByKey.get(targetKey);
+
+        if (!sourceTable && defaultDatabaseSchema) {
+            if (!targetTable.schema) {
+                // If target table has no schema, try matching with default schema
+                const defaultKey = createObjectKeyFromTable({
+                    ...targetTable,
+                    schema: defaultDatabaseSchema,
+                });
+                sourceTable = sourceTablesByKey.get(defaultKey);
+            } else if (targetTable.schema === defaultDatabaseSchema) {
+                // If target table's schema matches default, try matching without schema
+                const noSchemaKey = createObjectKeyFromTable({
+                    ...targetTable,
+                    schema: undefined,
+                });
+                sourceTable = sourceTablesByKey.get(noSchemaKey);
+            }
+        }
 
         // If no exact match, try matching by name only
         if (!sourceTable) {
@@ -285,6 +304,7 @@ const updateTables = ({
             ...sourceTable,
             fields: updatedFields,
             indexes: updatedIndexes,
+            comments: targetTable.comments,
         };
 
         // Update nullable, unique, primaryKey from target fields
