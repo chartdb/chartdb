@@ -141,7 +141,6 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         }
     }, [currentDiagram.tables, t, isEditMode]);
 
-    // Generate DBML asynchronously
     useEffect(() => {
         if (isEditMode) {
             setIsLoading(false);
@@ -246,7 +245,6 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         ]
     );
 
-    // Create debounced version of showDiff
     const debouncedShowDiff = useDebounce(showDiff, 1000);
 
     useEffect(() => {
@@ -308,11 +306,11 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
 
         return () => {
             isMountedRef.current = false;
-            // Clean up emphasis timeout if component unmounts
+
             if (emphasisTimeoutRef.current) {
                 clearTimeout(emphasisTimeoutRef.current);
             }
-            // Clean up editor event listener
+
             if (readOnlyDisposableRef.current) {
                 readOnlyDisposableRef.current.dispose();
                 readOnlyDisposableRef.current = undefined;
