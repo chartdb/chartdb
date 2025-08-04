@@ -1299,4 +1299,120 @@ Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
         // Ensure no closing brace appears on the same line as a field with inline refs
         expect(result.inlineDbml).not.toMatch(/\[.*ref:.*\]\}/);
     });
+
+    it('should properly format closing brace when table has both indexes and inline refs', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'table_1',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [
+                        {
+                            id: 'index1',
+                            name: 'index_1',
+                            unique: false,
+                            fieldIds: ['field1'],
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table2',
+                    name: 'table_2',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field2',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel1',
+                    name: 'table2_id_fkey',
+                    sourceTableId: 'table2',
+                    sourceFieldId: 'field2',
+                    targetTableId: 'table1',
+                    targetFieldId: 'field1',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+            ],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check that the inline DBML has proper indentation
+        expect(result.inlineDbml).toContain(`Table "table_1" {
+  "id" bigint [pk, not null]
+
+  Indexes {
+    id [name: "index_1"]
+  }
+}`);
+
+        expect(result.inlineDbml).toContain(`Table "table_2" {
+  "id" bigint [pk, not null, ref: < "table_1"."id"]
+}`);
+
+        // The issue was that it would generate:
+        // Table "table_1" {
+        //   "id" bigint [pk, not null]
+        //
+        //   Indexes {
+        //     id [name: "index_1"]
+        //
+        // }
+        // }
+
+        // Make sure there's no malformed closing brace
+        expect(result.inlineDbml).not.toMatch(/\n\s*\n\s*}\s*\n}/);
+        expect(result.inlineDbml).not.toMatch(/\s+\n}/);
+
+        // Ensure there's no extra closing brace
+        const braceBalance =
+            (result.inlineDbml.match(/{/g) || []).length -
+            (result.inlineDbml.match(/}/g) || []).length;
+        expect(braceBalance).toBe(0);
+    });
 });

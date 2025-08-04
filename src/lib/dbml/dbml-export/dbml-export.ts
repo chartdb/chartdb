@@ -248,34 +248,67 @@ const convertToInlineRefs = (dbml: string): string => {
             fullMatch: string;
         };
     } = {};
-    // Updated pattern to handle various table name formats including schema.table
-    const tablePattern =
-        /Table\s+(?:"([^"]+)"(?:\."([^"]+)")?|(\[?[^\s[]+\]?\.\[?[^\s\]]+\]?)|(\[?[^\s[{]+\]?))\s*{([^}]*)}/gs;
 
-    let tableMatch;
-    while ((tableMatch = tablePattern.exec(dbml)) !== null) {
-        // Extract table name - handle schema.table format
+    // Use a more sophisticated approach to handle nested braces
+    let currentPos = 0;
+    while (currentPos < dbml.length) {
+        // Find the next table definition
+        const tableStartPattern =
+            /Table\s+(?:"([^"]+)"(?:\."([^"]+)")?|(\[?[^\s[]+\]?\.\[?[^\s\]]+\]?)|(\[?[^\s[{]+\]?))\s*{/g;
+        tableStartPattern.lastIndex = currentPos;
+        const tableStartMatch = tableStartPattern.exec(dbml);
+
+        if (!tableStartMatch) break;
+
+        // Extract table name
         let tableName;
-        if (tableMatch[1] && tableMatch[2]) {
-            // Format: "schema"."table"
-            tableName = `${tableMatch[1]}.${tableMatch[2]}`;
-        } else if (tableMatch[1]) {
-            // Format: "table" (no schema)
-            tableName = tableMatch[1];
+        if (tableStartMatch[1] && tableStartMatch[2]) {
+            tableName = `${tableStartMatch[1]}.${tableStartMatch[2]}`;
+        } else if (tableStartMatch[1]) {
+            tableName = tableStartMatch[1];
         } else {
-            // Other formats
-            tableName = tableMatch[3] || tableMatch[4];
+            tableName = tableStartMatch[3] || tableStartMatch[4];
         }
 
         // Clean up any bracket syntax from table names
         const cleanTableName = tableName.replace(/\[([^\]]+)\]/g, '$1');
 
-        tables[cleanTableName] = {
-            start: tableMatch.index,
-            end: tableMatch.index + tableMatch[0].length,
-            content: tableMatch[5],
-            fullMatch: tableMatch[0],
-        };
+        // Find the matching closing brace by counting nested braces
+        const openBracePos =
+            tableStartMatch.index + tableStartMatch[0].length - 1;
+        let braceCount = 1;
+        const contentStart = openBracePos + 1;
+        let contentEnd = contentStart;
+
+        for (let i = contentStart; i < dbml.length && braceCount > 0; i++) {
+            if (dbml[i] === '{') braceCount++;
+            else if (dbml[i] === '}') {
+                braceCount--;
+                if (braceCount === 0) {
+                    contentEnd = i;
+                }
+            }
+        }
+
+        if (braceCount === 0) {
+            const content = dbml.substring(contentStart, contentEnd);
+            const fullMatch = dbml.substring(
+                tableStartMatch.index,
+                contentEnd + 1
+            );
+
+            tables[cleanTableName] = {
+                start: tableStartMatch.index,
+                end: contentEnd + 1,
+                content: content,
+                fullMatch: fullMatch,
+            };
+
+            currentPos = contentEnd + 1;
+        } else {
+            // Malformed DBML, skip this table
+            currentPos = tableStartMatch.index + tableStartMatch[0].length;
+        }
     }
 
     if (refs.length === 0 || Object.keys(tables).length === 0) {
@@ -396,15 +429,48 @@ const convertToInlineRefs = (dbml: string): string => {
         reconstructedDbml += dbml.substring(lastIndex, tableData.start);
         // Preserve the original table definition format but with updated content
         const originalTableDef = tableData.fullMatch;
-        // Ensure content ends with a newline before the closing brace
         let formattedContent = tableData.content;
+
+        // Clean up content formatting:
+        // 1. Split into lines to handle each line individually
+        const lines = formattedContent.split('\n');
+
+        // 2. Process lines to ensure proper formatting
+        const processedLines = [];
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const trimmedLine = line.trimEnd();
+
+            // Skip empty lines at the end if followed by a closing brace
+            if (trimmedLine === '' && i === lines.length - 1) {
+                continue;
+            }
+
+            // Skip empty lines before a closing brace
+            if (
+                trimmedLine === '' &&
+                i < lines.length - 1 &&
+                lines[i + 1].trim().startsWith('}')
+            ) {
+                continue;
+            }
+
+            processedLines.push(line);
+        }
+
+        formattedContent = processedLines.join('\n');
+
+        // Ensure content ends with a newline before the table's closing brace
         if (!formattedContent.endsWith('\n')) {
             formattedContent = formattedContent + '\n';
         }
-        const updatedTableDef = originalTableDef.replace(
-            /{[^}]*}/s,
-            `{${formattedContent}}`
+
+        // Since we properly extracted content with nested braces, we need to rebuild the table definition
+        const tableHeader = originalTableDef.substring(
+            0,
+            originalTableDef.indexOf('{') + 1
         );
+        const updatedTableDef = `${tableHeader}${formattedContent}}`;
         reconstructedDbml += updatedTableDef;
         lastIndex = tableData.end;
     }
