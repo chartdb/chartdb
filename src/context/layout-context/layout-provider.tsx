@@ -23,8 +23,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<SidebarSection>('tables');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(isDesktop);
-    const [isSelectSchemaOpen, setIsSelectSchemaOpen] =
-        React.useState<boolean>(false);
 
     const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
         () => setOpenedTableInSidebar('');
@@ -88,11 +86,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             setOpenedTableInSidebar(customTypeId);
         };
 
-    const openSelectSchema: LayoutContext['openSelectSchema'] = () =>
-        setIsSelectSchemaOpen(true);
-
-    const closeSelectSchema: LayoutContext['closeSelectSchema'] = () =>
-        setIsSelectSchemaOpen(false);
     return (
         <layoutContext.Provider
             value={{
@@ -108,9 +101,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 hideSidePanel,
                 showSidePanel,
                 toggleSidePanel,
-                isSelectSchemaOpen,
-                openSelectSchema,
-                closeSelectSchema,
                 openedDependencyInSidebar,
                 openDependencyFromSidebar,
                 closeAllDependenciesInSidebar,

@@ -73,15 +73,6 @@ export const bn: LanguageTranslation = {
             cancel: 'বাতিল করুন',
         },
 
-        multiple_schemas_alert: {
-            title: 'বহু স্কিমা',
-            description:
-                '{{schemasCount}} স্কিমা এই ডায়াগ্রামে রয়েছে। বর্তমানে প্রদর্শিত: {{formattedSchemas}}।',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'কিছুই না',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'কপি ব্যর্থ হয়েছে',
@@ -116,10 +107,6 @@ export const bn: LanguageTranslation = {
         copied: 'অনুলিপি সম্পন্ন!',
 
         side_panel: {
-            schema: 'স্কিমা:',
-            filter_by_schema: 'স্কিমা দ্বারা ফিল্টার করুন',
-            search_schema: 'স্কিমা খুঁজুন...',
-            no_schemas_found: 'কোনো স্কিমা পাওয়া যায়নি।',
             view_all_options: 'সমস্ত বিকল্প দেখুন...',
             tables_section: {
                 tables: 'টেবিল',

@@ -71,15 +71,6 @@ export const uk: LanguageTranslation = {
             cancel: 'Скасувати',
         },
 
-        multiple_schemas_alert: {
-            title: 'Кілька схем',
-            description:
-                '{{schemasCount}} схеми на цій діаграмі. Зараз відображається: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'немає',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Помилка копіювання',
@@ -114,10 +105,6 @@ export const uk: LanguageTranslation = {
         copied: 'Скопійовано!',
 
         side_panel: {
-            schema: 'Схема:',
-            filter_by_schema: 'Фільтрувати за схемою',
-            search_schema: 'Пошук схеми…',
-            no_schemas_found: 'Схеми не знайдено.',
             view_all_options: 'Переглянути всі параметри…',
             tables_section: {
                 tables: 'Таблиці',
