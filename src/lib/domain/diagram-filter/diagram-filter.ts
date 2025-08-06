@@ -22,16 +22,16 @@ export function reduceFilter(
 ): DiagramFilter {
     let { schemaIds, tableIds } = filter;
 
+    // If no filters are defined, everything is visible
+    if (!schemaIds && !tableIds) {
+        return { schemaIds: undefined, tableIds: undefined };
+    }
+
     // Get all unique schema IDs from tables
     const allSchemaIds = [
         ...new Set(tables.filter((t) => t.schemaId).map((t) => t.schemaId!)),
     ];
     const allTableIds = tables.map((t) => t.id);
-
-    // If no filters are defined, everything is visible
-    if (!schemaIds && !tableIds) {
-        return { schemaIds: undefined, tableIds: undefined };
-    }
 
     // Build a map of schema to its tables
     const schemaToTables = new Map<string, string[]>();

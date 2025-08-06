@@ -13,11 +13,12 @@ import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
 import { schemaNameToSchemaId } from '@/lib/domain';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { diagramId, tables, schemas } = useChartDB();
+    const { diagramId, tables, schemas, databaseType } = useChartDB();
     const { getDiagramFilter, updateDiagramFilter } = useStorage();
     const [filter, setFilter] = useState<DiagramFilter>({});
 
@@ -30,9 +31,9 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             id: table.id,
             schemaId: table.schema
                 ? schemaNameToSchemaId(table.schema)
-                : undefined,
+                : defaultSchemas[databaseType],
         }));
-    }, [tables]);
+    }, [tables, databaseType]);
 
     const diagramIdOfLoadedFilter = useRef<string | null>(null);
 
