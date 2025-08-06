@@ -46,12 +46,11 @@ export const CustomTypeListItemHeader: React.FC<
     const {
         updateCustomType,
         removeCustomType,
-        schemas,
         highlightedCustomType,
         highlightCustomTypeId,
         tables,
     } = useChartDB();
-    const { filter } = useDiagramFilter();
+    const { schemasDisplayed } = useDiagramFilter();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
     const [customTypeName, setCustomTypeName] = React.useState(customType.name);
@@ -163,14 +162,10 @@ export const CustomTypeListItemHeader: React.FC<
     ]);
 
     const schemaToDisplay = useMemo(() => {
-        if (
-            schemas.length > 1 &&
-            !!filter?.schemaIds &&
-            filter?.schemaIds.length > 1
-        ) {
+        if (schemasDisplayed.length > 1) {
             return customType.schema;
         }
-    }, [customType.schema, schemas, filter?.schemaIds]);
+    }, [customType.schema, schemasDisplayed.length]);
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">

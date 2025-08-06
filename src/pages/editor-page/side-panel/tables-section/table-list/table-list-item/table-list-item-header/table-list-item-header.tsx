@@ -58,7 +58,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         schemas,
         databaseType,
     } = useChartDB();
-    const { filter } = useDiagramFilter();
+    const { schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
@@ -267,14 +267,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     );
 
     const schemaToDisplay = useMemo(() => {
-        if (
-            schemas.length > 1 &&
-            !!filter?.schemaIds &&
-            filter?.schemaIds.length > 1
-        ) {
+        if (schemasDisplayed.length > 1) {
             return table.schema;
         }
-    }, [table.schema, schemas, filter?.schemaIds]);
+    }, [table.schema, schemasDisplayed.length]);
 
     useEffect(() => {
         if (table.name.trim()) {

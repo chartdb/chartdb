@@ -16,8 +16,8 @@ import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-f
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, schemas, readonly, createArea } = useChartDB();
-    const { filter } = useDiagramFilter();
+    const { createTable, readonly, createArea } = useChartDB();
+    const { schemasDisplayed } = useDiagramFilter();
     const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
@@ -31,7 +31,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            if ((filter?.schemaIds?.length ?? 0) > 1) {
+            if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
                     onConfirm: ({ schema }) =>
                         createTable({
@@ -39,15 +39,12 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                             y: position.y,
                             schema: schema.name,
                         }),
-                    schemas: schemas.filter((schema) =>
-                        filter?.schemaIds?.includes(schema.id)
-                    ),
+                    schemas: schemasDisplayed,
                 });
             } else {
                 const schema =
-                    filter?.schemaIds?.length === 1
-                        ? schemas.find((s) => s.id === filter?.schemaIds?.[0])
-                              ?.name
+                    schemasDisplayed?.length === 1
+                        ? schemasDisplayed[0]?.name
                         : undefined;
                 createTable({
                     x: position.x,
@@ -60,8 +57,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             createTable,
             screenToFlowPosition,
             openTableSchemaDialog,
-            schemas,
-            filter?.schemaIds,
+            schemasDisplayed,
         ]
     );
 

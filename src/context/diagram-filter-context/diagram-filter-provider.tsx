@@ -402,6 +402,17 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         return !!filter.schemaIds || !!filter.tableIds;
     }, [filter]);
 
+    const schemasDisplayed: DiagramFilterContext['schemasDisplayed'] =
+        useMemo(() => {
+            if (!filter.schemaIds) {
+                return schemas;
+            }
+
+            return schemas.filter((schema) =>
+                filter.schemaIds?.includes(schema.id)
+            );
+        }, [filter.schemaIds, schemas]);
+
     const value: DiagramFilterContext = {
         filter,
         schemaIdsFilter: filter.schemaIds,
@@ -417,6 +428,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         toggleTableFilter,
         addSchemaIfFiltered,
         hasActiveFilter,
+        schemasDisplayed,
     };
 
     return (

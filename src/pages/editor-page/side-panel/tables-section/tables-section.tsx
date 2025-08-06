@@ -27,8 +27,8 @@ import { defaultSchemas } from '@/lib/data/default-schemas';
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, schemas, databaseType } = useChartDB();
-    const { filter } = useDiagramFilter();
+    const { createTable, tables, databaseType } = useChartDB();
+    const { filter, schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
@@ -83,25 +83,20 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const handleCreateTable = useCallback(async () => {
         setFilterText('');
 
-        if ((filter?.schemaIds?.length ?? 0) > 1) {
+        if (schemasDisplayed.length > 1) {
             openTableSchemaDialog({
                 onConfirm: createTableWithLocation,
-                schemas: schemas.filter((schema) =>
-                    filter?.schemaIds?.includes(schema.id)
-                ),
+                schemas: schemasDisplayed,
             });
         } else {
             const schema =
-                filter?.schemaIds?.length === 1
-                    ? schemas.find((s) => s.id === filter?.schemaIds?.[0])
-                    : undefined;
+                schemasDisplayed.length === 1 ? schemasDisplayed[0] : undefined;
             createTableWithLocation({ schema });
         }
     }, [
         createTableWithLocation,
-        filter?.schemaIds,
+        schemasDisplayed,
         openTableSchemaDialog,
-        schemas,
         setFilterText,
     ]);
 

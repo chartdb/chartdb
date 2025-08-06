@@ -1,10 +1,13 @@
+import type { DBSchema } from '@/lib/domain';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { emptyFn } from '@/lib/utils';
 import { createContext } from 'react';
 
 export interface DiagramFilterContext {
     filter?: DiagramFilter;
+
     hasActiveFilter: boolean;
+    schemasDisplayed: DBSchema[];
 
     // schemas
     schemaIdsFilter?: string[];
@@ -43,6 +46,7 @@ export const diagramFilterContext = createContext<DiagramFilterContext>({
     toggleSchemaFilter: emptyFn,
     toggleTableFilter: emptyFn,
     addSchemaIfFiltered: emptyFn,
+    schemasDisplayed: [],
     // shouldFilterTable: emptyFn,
     // shouldFilterSchema: emptyFn,
     // shouldFilterRelationship: emptyFn,
