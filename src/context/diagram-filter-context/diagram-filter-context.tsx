@@ -25,8 +25,8 @@ export interface DiagramFilterContext {
     resetFilter: () => void;
 
     // smart filters
-    toggleSchemaFilter: (schemaId: string) => boolean;
-    toggleTableFilter: (tableId: string) => boolean;
+    toggleSchemaFilter: (schemaId: string) => void;
+    toggleTableFilter: (tableId: string) => void;
     addSchemaIfFiltered: (schemaId: string) => void;
 
     // shouldFilterTable: (tableId: string) => boolean;

@@ -215,14 +215,8 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                         allTables
                     );
                 });
-
-                // Return visibility state after toggle
-                return filterSchema({
-                    schemaId,
-                    schemaIdsFilter: filter.schemaIds,
-                });
             },
-            [allSchemasIds, allTables, filter]
+            [allSchemasIds, allTables]
         );
 
     const toggleTableFilter: DiagramFilterContext['toggleTableFilter'] =
@@ -231,15 +225,14 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                 setFilter((prev) => {
                     // Find the table in the tables list
                     const tableInfo = allTables.find((t) => t.id === tableId);
-                    const table = tables.find((t) => t.id === tableId);
 
-                    if (!table) {
+                    if (!tableInfo) {
                         return prev;
                     }
 
                     // Check if table is currently visible using filterTable
                     const isTableVisible = filterTable({
-                        table,
+                        table: tableInfo,
                         filter: prev,
                     });
 
@@ -298,17 +291,8 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                         allTables
                     );
                 });
-
-                // Return visibility state after toggle
-                const table = tables.find((t) => t.id === tableId);
-                if (!table) return false;
-
-                return filterTable({
-                    table,
-                    filter,
-                });
             },
-            [allTables, tables, filter]
+            [allTables]
         );
 
     const addSchemaIfFiltered: DiagramFilterContext['addSchemaIfFiltered'] =
