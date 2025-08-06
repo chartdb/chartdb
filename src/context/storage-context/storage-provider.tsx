@@ -46,8 +46,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 'id' // primary key "id" (for the typings only)
             >;
             diagram_filters: EntityTable<
-                DiagramFilter & { id: number; diagramId: string },
-                'id' // primary key "id" (for the typings only)
+                DiagramFilter & { diagramId: string },
+                'diagramId' // primary key "id" (for the typings only)
             >;
         };
 
@@ -210,7 +210,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 db_custom_types:
                     '++id, diagramId, schema, type, kind, values, fields',
                 config: '++id, defaultDiagramId',
-                diagram_filters: '++id, diagramId, tableIds, schemasIds',
+                diagram_filters: 'diagramId, tableIds, schemasIds',
             })
             .upgrade((tx) => {
                 tx.table('config').clear();
