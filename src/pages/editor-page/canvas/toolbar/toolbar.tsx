@@ -80,8 +80,7 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                                         'transition-all duration-200',
                                         {
                                             'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
-                                                (hasActiveFilter ?? []).length >
-                                                0,
+                                                hasActiveFilter,
                                         }
                                     )}
                                 >
