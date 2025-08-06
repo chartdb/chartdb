@@ -281,7 +281,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             if (node.type === 'table') {
                 const tableContext = node.context as TableContext;
 
-                const hidden = filterTable({
+                const isTableVisible = filterTable({
                     table: {
                         id: node.id,
                         schema: tableContext.tableSchema,
@@ -293,7 +293,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 });
 
                 // Only focus if neither table is hidden nor filtered by schema
-                if (!hidden) {
+                if (isTableVisible) {
                     focusOnTable(node.id);
                 }
             }

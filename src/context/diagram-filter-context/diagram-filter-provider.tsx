@@ -1,10 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import type { DiagramFilterContext } from './diagram-filter-context';
 import { diagramFilterContext } from './diagram-filter-context';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import { reduceFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { filterSchema } from '@/lib/domain/diagram-filter/filter';
+import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
 import { schemaNameToSchemaId } from '@/lib/domain';
 
 export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
@@ -21,18 +28,27 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     const allTables = useMemo(() => {
         return tables.map((table) => ({
             id: table.id,
-            schemaId: table.schema ? schemaNameToSchemaId(table.schema) : null,
+            schemaId: table.schema
+                ? schemaNameToSchemaId(table.schema)
+                : undefined,
         }));
     }, [tables]);
 
+    const diagramIdOfLoadedFilter = useRef<string | null>(null);
+
     useEffect(() => {
-        if (diagramId) {
+        if (diagramId && diagramId === diagramIdOfLoadedFilter.current) {
             updateDiagramFilter(diagramId, filter);
         }
     }, [diagramId, filter, updateDiagramFilter]);
 
     // Reset filter when diagram changes
     useEffect(() => {
+        if (diagramIdOfLoadedFilter.current === diagramId) {
+            // If the diagramId hasn't changed, do not reset the filter
+            return;
+        }
+
         const loadFilterFromStorage = async (diagramId: string) => {
             if (diagramId) {
                 const storedFilter = await getDiagramFilter(diagramId);
@@ -41,8 +57,10 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         };
 
         setFilter({});
+
         if (diagramId) {
             loadFilterFromStorage(diagramId);
+            diagramIdOfLoadedFilter.current = diagramId;
         }
     }, [diagramId, getDiagramFilter]);
 
@@ -135,139 +153,66 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                 setFilter((prev) => {
                     const currentSchemaIds = prev.schemaIds;
 
-                    // Check if schema is currently visible using filterSchema
+                    // Check if schema is currently visible
                     const isSchemaVisible = filterSchema({
                         schemaId,
                         schemaIdsFilter: currentSchemaIds,
                     });
 
+                    let newSchemaIds: string[] | undefined;
+                    let newTableIds: string[] | undefined = prev.tableIds;
+
                     if (isSchemaVisible) {
                         // Schema is visible, make it not visible
                         if (!currentSchemaIds) {
                             // All schemas are visible, create filter with all except this one
-                            const newSchemaIds = allSchemasIds.filter(
+                            newSchemaIds = allSchemasIds.filter(
                                 (id) => id !== schemaId
                             );
-
-                            // Also handle tables - remove tables from this schema
-                            const schemaTableIds = allTables
-                                .filter((table) => table.schemaId === schemaId)
-                                .map((table) => table.id);
-
-                            let newTableIds = prev.tableIds;
-                            if (prev.tableIds) {
-                                // Remove schema tables from the filter
-                                newTableIds = prev.tableIds.filter(
-                                    (id) => !schemaTableIds.includes(id)
-                                );
-                                // If no tables remain in filter, set to undefined
-                                if (newTableIds.length === 0) {
-                                    newTableIds = undefined;
-                                }
-                            }
-
-                            return {
-                                ...prev,
-                                schemaIds: newSchemaIds,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
                         } else {
                             // Remove this schema from the filter
-                            const newSchemaIds = currentSchemaIds.filter(
+                            newSchemaIds = currentSchemaIds.filter(
                                 (id) => id !== schemaId
                             );
+                        }
 
-                            // Also handle tables - remove tables from this schema
+                        // Remove tables from this schema from tableIds if present
+                        if (prev.tableIds) {
                             const schemaTableIds = allTables
                                 .filter((table) => table.schemaId === schemaId)
                                 .map((table) => table.id);
-
-                            let newTableIds = prev.tableIds;
-                            if (prev.tableIds) {
-                                // Remove schema tables from the filter
-                                newTableIds = prev.tableIds.filter(
-                                    (id) => !schemaTableIds.includes(id)
-                                );
-                                // If no tables remain in filter, set to undefined
-                                if (newTableIds.length === 0) {
-                                    newTableIds = undefined;
-                                }
-                            }
-
-                            return {
-                                ...prev,
-                                schemaIds:
-                                    newSchemaIds.length === 0
-                                        ? undefined
-                                        : newSchemaIds,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
+                            newTableIds = prev.tableIds.filter(
+                                (id) => !schemaTableIds.includes(id)
+                            );
                         }
                     } else {
                         // Schema is not visible, make it visible
-                        const newSchemaIds = [
+                        newSchemaIds = [
                             ...new Set([...(currentSchemaIds || []), schemaId]),
                         ];
 
-                        // Check if all schemas are now visible
-                        if (newSchemaIds.length === allSchemasIds.length) {
-                            // All schemas are visible, set to undefined
-
-                            // Also handle tables - add tables from this schema if tableIds is defined
-                            let newTableIds = prev.tableIds;
-                            if (prev.tableIds) {
-                                const schemaTableIds = allTables
-                                    .filter(
-                                        (table) => table.schemaId === schemaId
-                                    )
-                                    .map((table) => table.id);
-                                newTableIds = [
-                                    ...new Set([
-                                        ...prev.tableIds,
-                                        ...schemaTableIds,
-                                    ]),
-                                ];
-
-                                // If all tables are now in the filter, set to undefined
-                                if (newTableIds.length === allTables.length) {
-                                    newTableIds = undefined;
-                                }
-                            }
-
-                            return {
-                                ...prev,
-                                schemaIds: undefined,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
-                        } else {
-                            // Also handle tables - add tables from this schema if tableIds is defined
-                            let newTableIds = prev.tableIds;
-                            if (prev.tableIds) {
-                                const schemaTableIds = allTables
-                                    .filter(
-                                        (table) => table.schemaId === schemaId
-                                    )
-                                    .map((table) => table.id);
-                                newTableIds = [
-                                    ...new Set([
-                                        ...prev.tableIds,
-                                        ...schemaTableIds,
-                                    ]),
-                                ];
-
-                                // If all tables are now in the filter, set to undefined
-                                if (newTableIds.length === allTables.length) {
-                                    newTableIds = undefined;
-                                }
-                            }
-
-                            return {
-                                ...prev,
-                                schemaIds: newSchemaIds,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
+                        // Add tables from this schema to tableIds if tableIds is defined
+                        if (prev.tableIds) {
+                            const schemaTableIds = allTables
+                                .filter((table) => table.schemaId === schemaId)
+                                .map((table) => table.id);
+                            newTableIds = [
+                                ...new Set([
+                                    ...prev.tableIds,
+                                    ...schemaTableIds,
+                                ]),
+                            ];
                         }
                     }
+
+                    // Use reduceFilter to optimize and handle edge cases
+                    return reduceFilter(
+                        {
+                            schemaIds: newSchemaIds,
+                            tableIds: newTableIds,
+                        },
+                        allTables
+                    );
                 });
 
                 // Return visibility state after toggle
@@ -283,85 +228,86 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         useCallback(
             (tableId: string) => {
                 setFilter((prev) => {
-                    const currentTableIds = prev.tableIds;
-                    const table = allTables.find((t) => t.id === tableId);
+                    // Find the table in the tables list
+                    const tableInfo = allTables.find((t) => t.id === tableId);
+                    const table = tables.find((t) => t.id === tableId);
 
-                    // Check if table is currently visible according to user's requirements:
-                    // - visible if tableIds is undefined OR contains the table ID
-                    // - AND if schemaIds is defined and doesn't contain the table's schema, it's NOT visible
-                    let isTableVisible =
-                        !currentTableIds || currentTableIds.includes(tableId);
-
-                    // If table has a schema and schemaIds filter is defined, check schema visibility
-                    if (isTableVisible && table?.schemaId && prev.schemaIds) {
-                        isTableVisible = filterSchema({
-                            schemaId: table.schemaId,
-                            schemaIdsFilter: prev.schemaIds,
-                        });
+                    if (!table) {
+                        return prev;
                     }
+
+                    // Check if table is currently visible using filterTable
+                    const isTableVisible = filterTable({
+                        table,
+                        filter: prev,
+                    });
+
+                    let newSchemaIds = prev.schemaIds;
+                    let newTableIds = prev.tableIds;
 
                     if (isTableVisible) {
                         // Table is visible, make it not visible
-                        if (!currentTableIds) {
-                            // All tables are visible, create filter with all except this one
-                            const newTableIds = allTables
-                                .filter((table) => table.id !== tableId)
-                                .map((table) => table.id);
-                            return {
-                                ...prev,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
-                        } else {
-                            // Remove this table from the filter
-                            const newTableIds = currentTableIds.filter(
+
+                        // If the table is visible due to its schema being in schemaIds
+                        if (
+                            tableInfo?.schemaId &&
+                            prev.schemaIds?.includes(tableInfo.schemaId)
+                        ) {
+                            // Remove the schema from schemaIds and add all other tables from that schema to tableIds
+                            newSchemaIds = prev.schemaIds.filter(
+                                (id) => id !== tableInfo.schemaId
+                            );
+
+                            // Get all other tables from this schema (except the one being toggled)
+                            const otherTablesFromSchema = allTables
+                                .filter(
+                                    (t) =>
+                                        t.schemaId === tableInfo.schemaId &&
+                                        t.id !== tableId
+                                )
+                                .map((t) => t.id);
+
+                            // Add these tables to tableIds
+                            newTableIds = [
+                                ...(prev.tableIds || []),
+                                ...otherTablesFromSchema,
+                            ];
+                        } else if (prev.tableIds?.includes(tableId)) {
+                            // Table is visible because it's in tableIds, remove it
+                            newTableIds = prev.tableIds.filter(
                                 (id) => id !== tableId
                             );
-                            return {
-                                ...prev,
-                                tableIds:
-                                    newTableIds.length === 0
-                                        ? undefined
-                                        : newTableIds,
-                            } satisfies DiagramFilter;
+                        } else if (!prev.tableIds && !prev.schemaIds) {
+                            // No filters = all visible, create filter with all tables except this one
+                            newTableIds = allTables
+                                .filter((t) => t.id !== tableId)
+                                .map((t) => t.id);
                         }
                     } else {
-                        // Table is not visible, make it visible
-                        const newTableIds = currentTableIds
-                            ? [...currentTableIds, tableId]
-                            : [tableId];
-
-                        // Check if all tables are now visible
-                        if (newTableIds.length === allTables.length) {
-                            return {
-                                ...prev,
-                                tableIds: undefined,
-                            } satisfies DiagramFilter;
-                        } else {
-                            return {
-                                ...prev,
-                                tableIds: newTableIds,
-                            } satisfies DiagramFilter;
-                        }
+                        // Table is not visible, make it visible by adding to tableIds
+                        newTableIds = [...(prev.tableIds || []), tableId];
                     }
+
+                    // Use reduceFilter to optimize and handle edge cases
+                    return reduceFilter(
+                        {
+                            schemaIds: newSchemaIds,
+                            tableIds: newTableIds,
+                        },
+                        allTables
+                    );
                 });
 
                 // Return visibility state after toggle
-                const currentFilter = filter;
-                const currentTableIds = currentFilter.tableIds;
-                const table = allTables.find((t) => t.id === tableId);
+                const table = tables.find((t) => t.id === tableId);
+                if (!table) return false;
 
-                let isVisible =
-                    !currentTableIds || currentTableIds.includes(tableId);
-                if (isVisible && table?.schemaId && currentFilter.schemaIds) {
-                    isVisible = filterSchema({
-                        schemaId: table.schemaId,
-                        schemaIdsFilter: currentFilter.schemaIds,
-                    });
-                }
-
-                return isVisible;
+                return filterTable({
+                    table,
+                    filter,
+                });
             },
-            [allTables, filter]
+            [allTables, tables, filter]
         );
 
     const addSchemaIfFiltered: DiagramFilterContext['addSchemaIfFiltered'] =
