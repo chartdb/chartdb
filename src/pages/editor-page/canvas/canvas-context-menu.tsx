@@ -11,12 +11,13 @@ import { useReactFlow } from '@xyflow/react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Table, Workflow, Group } from 'lucide-react';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, filteredSchemas, schemas, readonly, createArea } =
-        useChartDB();
+    const { createTable, schemas, readonly, createArea } = useChartDB();
+    const { filter } = useDiagramFilter();
     const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
@@ -30,7 +31,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            if ((filteredSchemas?.length ?? 0) > 1) {
+            if ((filter?.schemaIds?.length ?? 0) > 1) {
                 openTableSchemaDialog({
                     onConfirm: ({ schema }) =>
                         createTable({
@@ -39,13 +40,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                             schema: schema.name,
                         }),
                     schemas: schemas.filter((schema) =>
-                        filteredSchemas?.includes(schema.id)
+                        filter?.schemaIds?.includes(schema.id)
                     ),
                 });
             } else {
                 const schema =
-                    filteredSchemas?.length === 1
-                        ? schemas.find((s) => s.id === filteredSchemas[0])?.name
+                    filter?.schemaIds?.length === 1
+                        ? schemas.find((s) => s.id === filter?.schemaIds?.[0])
+                              ?.name
                         : undefined;
                 createTable({
                     x: position.x,
@@ -59,7 +61,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             screenToFlowPosition,
             openTableSchemaDialog,
             schemas,
-            filteredSchemas,
+            filter?.schemaIds,
         ]
     );
 

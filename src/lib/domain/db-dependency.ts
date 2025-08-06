@@ -1,10 +1,7 @@
 import { z } from 'zod';
 import type { ViewInfo } from '../data/import-metadata/metadata-types/view-info';
 import { DatabaseType } from './database-type';
-import {
-    schemaNameToDomainSchemaName,
-    schemaNameToSchemaId,
-} from './db-schema';
+import { schemaNameToDomainSchemaName } from './db-schema';
 import { decodeViewDefinition, type DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 import type { AST } from 'node-sql-parser';
@@ -26,18 +23,6 @@ export const dbDependencySchema: z.ZodType<DBDependency> = z.object({
     dependentTableId: z.string(),
     createdAt: z.number(),
 });
-
-export const shouldShowDependencyBySchemaFilter = (
-    dependency: DBDependency,
-    filteredSchemas?: string[]
-): boolean =>
-    !filteredSchemas ||
-    !dependency.schema ||
-    !dependency.dependentSchema ||
-    (filteredSchemas.includes(schemaNameToSchemaId(dependency.schema)) &&
-        filteredSchemas.includes(
-            schemaNameToSchemaId(dependency.dependentSchema)
-        ));
 
 const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.POSTGRESQL]: 'postgresql',

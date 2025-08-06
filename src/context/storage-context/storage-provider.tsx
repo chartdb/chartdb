@@ -10,6 +10,7 @@ import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -42,6 +43,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             >;
             config: EntityTable<
                 ChartDBConfig & { id: number },
+                'id' // primary key "id" (for the typings only)
+            >;
+            diagram_filters: EntityTable<
+                DiagramFilter & { id: number; diagramId: string },
                 'id' // primary key "id" (for the typings only)
             >;
         };
@@ -190,6 +195,27 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             config: '++id, defaultDiagramId',
         });
 
+        dexieDB
+            .version(12)
+            .stores({
+                diagrams:
+                    '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+                db_tables:
+                    '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
+                db_relationships:
+                    '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+                db_dependencies:
+                    '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
+                areas: '++id, diagramId, name, x, y, width, height, color',
+                db_custom_types:
+                    '++id, diagramId, schema, type, kind, values, fields',
+                config: '++id, defaultDiagramId',
+                diagram_filters: '++id, diagramId, tableIds, schemasIds',
+            })
+            .upgrade((tx) => {
+                tx.table('config').clear();
+            });
+
         dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);
 
@@ -216,6 +242,32 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
         },
         [db]
     );
+
+    const getDiagramFilter: StorageContext['getDiagramFilter'] = useCallback(
+        async (diagramId: string): Promise<DiagramFilter | undefined> => {
+            return await db.diagram_filters.get({ diagramId });
+        },
+        [db]
+    );
+
+    const updateDiagramFilter: StorageContext['updateDiagramFilter'] =
+        useCallback(
+            async (diagramId, filter): Promise<void> => {
+                await db.diagram_filters.put({
+                    diagramId,
+                    ...filter,
+                });
+            },
+            [db]
+        );
+
+    const deleteDiagramFilter: StorageContext['deleteDiagramFilter'] =
+        useCallback(
+            async (diagramId: string): Promise<void> => {
+                await db.diagram_filters.where({ diagramId }).delete();
+            },
+            [db]
+        );
 
     const addTable: StorageContext['addTable'] = useCallback(
         async ({ diagramId, table }) => {
@@ -756,6 +808,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 deleteCustomType,
                 listCustomTypes,
                 deleteDiagramCustomTypes,
+                getDiagramFilter,
+                updateDiagramFilter,
+                deleteDiagramFilter,
             }}
         >
             {children}

@@ -4,7 +4,6 @@ import { Button } from '@/components/button/button';
 import { Table, List, X, Code } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
-import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
@@ -21,11 +20,15 @@ import { TableDBML } from './table-dbml/table-dbml';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getOperatingSystem } from '@/lib/utils';
 import type { DBSchema } from '@/lib/domain';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, filteredSchemas, schemas } = useChartDB();
+    const { createTable, tables, schemas, databaseType } = useChartDB();
+    const { filter } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
@@ -39,11 +42,20 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterSchema: (table: DBTable) => boolean = (table) =>
-            shouldShowTablesBySchemaFilter(table, filteredSchemas);
+        const filterTables: (table: DBTable) => boolean = (table) =>
+            filterTable({
+                table: {
+                    id: table.id,
+                    schema: table.schema,
+                },
+                filter,
+                options: {
+                    defaultSchema: defaultSchemas[databaseType],
+                },
+            });
 
-        return tables.filter(filterSchema).filter(filterTableName);
-    }, [tables, filterText, filteredSchemas]);
+        return tables.filter(filterTables).filter(filterTableName);
+    }, [tables, filterText, filter, databaseType]);
 
     const createTableWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {
@@ -71,23 +83,23 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const handleCreateTable = useCallback(async () => {
         setFilterText('');
 
-        if ((filteredSchemas?.length ?? 0) > 1) {
+        if ((filter?.schemaIds?.length ?? 0) > 1) {
             openTableSchemaDialog({
                 onConfirm: createTableWithLocation,
                 schemas: schemas.filter((schema) =>
-                    filteredSchemas?.includes(schema.id)
+                    filter?.schemaIds?.includes(schema.id)
                 ),
             });
         } else {
             const schema =
-                filteredSchemas?.length === 1
-                    ? schemas.find((s) => s.id === filteredSchemas[0])
+                filter?.schemaIds?.length === 1
+                    ? schemas.find((s) => s.id === filter?.schemaIds?.[0])
                     : undefined;
             createTableWithLocation({ schema });
         }
     }, [
         createTableWithLocation,
-        filteredSchemas,
+        filter?.schemaIds,
         openTableSchemaDialog,
         schemas,
         setFilterText,

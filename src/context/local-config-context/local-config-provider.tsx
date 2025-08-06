@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import type { SchemasFilter, ScrollAction } from './local-config-context';
+import type { ScrollAction } from './local-config-context';
 import { LocalConfigContext } from './local-config-context';
 import type { Theme } from '../theme-context/theme-context';
 
 const themeKey = 'theme';
 const scrollActionKey = 'scroll_action';
-const schemasFilterKey = 'schemas_filter';
 const showCardinalityKey = 'show_cardinality';
 const showFieldAttributesKey = 'show_field_attributes';
 const githubRepoOpenedKey = 'github_repo_opened';
@@ -22,12 +21,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
         (localStorage.getItem(scrollActionKey) as ScrollAction) || 'pan'
-    );
-
-    const [schemasFilter, setSchemasFilter] = React.useState<SchemasFilter>(
-        JSON.parse(
-            localStorage.getItem(schemasFilterKey) || '{}'
-        ) as SchemasFilter
     );
 
     const [showCardinality, setShowCardinality] = React.useState<boolean>(
@@ -79,10 +72,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     }, [scrollAction]);
 
     useEffect(() => {
-        localStorage.setItem(schemasFilterKey, JSON.stringify(schemasFilter));
-    }, [schemasFilter]);
-
-    useEffect(() => {
         localStorage.setItem(showCardinalityKey, showCardinality.toString());
     }, [showCardinality]);
 
@@ -107,8 +96,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setTheme,
                 scrollAction,
                 setScrollAction,
-                schemasFilter,
-                setSchemasFilter,
                 showCardinality,
                 setShowCardinality,
                 showFieldAttributes,

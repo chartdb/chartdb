@@ -20,12 +20,18 @@ import {
 } from '@/lib/data/export-metadata/export-sql-script';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { shouldShowTablesBySchemaFilter } from '@/lib/domain/db-table';
 import { Annoyed, Sparkles } from 'lucide-react';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import type { Diagram } from '@/lib/domain/diagram';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import {
+    filterDependency,
+    filterRelationship,
+    filterTable,
+} from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface ExportSQLDialogProps extends BaseDialogProps {
     targetDatabaseType: DatabaseType;
@@ -36,7 +42,8 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     targetDatabaseType,
 }) => {
     const { closeExportSQLDialog } = useDialog();
-    const { currentDiagram, filteredSchemas } = useChartDB();
+    const { currentDiagram } = useChartDB();
+    const { filter } = useDiagramFilter();
     const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
@@ -48,7 +55,16 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
         const filteredDiagram: Diagram = {
             ...currentDiagram,
             tables: currentDiagram.tables?.filter((table) =>
-                shouldShowTablesBySchemaFilter(table, filteredSchemas)
+                filterTable({
+                    table: {
+                        id: table.id,
+                        schema: table.schema,
+                    },
+                    filter,
+                    options: {
+                        defaultSchema: defaultSchemas[targetDatabaseType],
+                    },
+                })
             ),
             relationships: currentDiagram.relationships?.filter((rel) => {
                 const sourceTable = currentDiagram.tables?.find(
@@ -60,11 +76,20 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 return (
                     sourceTable &&
                     targetTable &&
-                    shouldShowTablesBySchemaFilter(
-                        sourceTable,
-                        filteredSchemas
-                    ) &&
-                    shouldShowTablesBySchemaFilter(targetTable, filteredSchemas)
+                    filterRelationship({
+                        tableA: {
+                            id: sourceTable.id,
+                            schema: sourceTable.schema,
+                        },
+                        tableB: {
+                            id: targetTable.id,
+                            schema: targetTable.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[targetDatabaseType],
+                        },
+                    })
                 );
             }),
             dependencies: currentDiagram.dependencies?.filter((dep) => {
@@ -77,11 +102,20 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 return (
                     table &&
                     dependentTable &&
-                    shouldShowTablesBySchemaFilter(table, filteredSchemas) &&
-                    shouldShowTablesBySchemaFilter(
-                        dependentTable,
-                        filteredSchemas
-                    )
+                    filterDependency({
+                        tableA: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        tableB: {
+                            id: dependentTable.id,
+                            schema: dependentTable.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[targetDatabaseType],
+                        },
+                    })
                 );
             }),
         };
@@ -101,7 +135,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 signal: abortControllerRef.current?.signal,
             });
         }
-    }, [targetDatabaseType, currentDiagram, filteredSchemas]);
+    }, [targetDatabaseType, currentDiagram, filter]);
 
     useEffect(() => {
         if (!dialog.open) {

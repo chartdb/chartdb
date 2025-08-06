@@ -5,7 +5,6 @@ import { Input } from '@/components/input/input';
 import { RelationshipList } from './relationship-list/relationship-list';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
-import { shouldShowRelationshipBySchemaFilter } from '@/lib/domain/db-relationship';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
@@ -16,11 +15,15 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { filterRelationship } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface RelationshipsSectionProps {}
 
 export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
-    const { relationships, filteredSchemas } = useChartDB();
+    const { relationships, databaseType } = useChartDB();
+    const { filter } = useDiagramFilter();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRelationshipsInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -34,13 +37,26 @@ export const RelationshipsSection: React.FC<RelationshipsSectionProps> = () => {
             !filterText?.trim?.() ||
             relationship.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterSchema: (relationship: DBRelationship) => boolean = (
+        const filterRelationships: (relationship: DBRelationship) => boolean = (
             relationship
         ) =>
-            shouldShowRelationshipBySchemaFilter(relationship, filteredSchemas);
+            filterRelationship({
+                tableA: {
+                    id: relationship.sourceTableId,
+                    schema: relationship.sourceSchema,
+                },
+                tableB: {
+                    id: relationship.targetTableId,
+                    schema: relationship.targetSchema,
+                },
+                filter,
+                options: {
+                    defaultSchema: defaultSchemas[databaseType],
+                },
+            });
 
-        return relationships.filter(filterSchema).filter(filterName);
-    }, [relationships, filterText, filteredSchemas]);
+        return relationships.filter(filterRelationships).filter(filterName);
+    }, [relationships, filterText, filter, databaseType]);
 
     const handleCreateRelationship = useCallback(async () => {
         setFilterText('');

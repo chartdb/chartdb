@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
     CircleDotDashed,
     GripVertical,
@@ -39,6 +39,7 @@ import {
 import { cloneTable } from '@/lib/clone';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -55,9 +56,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         createField,
         createTable,
         schemas,
-        filteredSchemas,
         databaseType,
     } = useChartDB();
+    const { filter } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
@@ -265,13 +266,17 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         ]
     );
 
-    let schemaToDisplay;
+    const schemaToDisplay = useMemo(() => {
+        if (
+            schemas.length > 1 &&
+            !!filter?.schemaIds &&
+            filter?.schemaIds.length > 1
+        ) {
+            return table.schema;
+        }
+    }, [table.schema, schemas, filter?.schemaIds]);
 
-    if (schemas.length > 1 && !!filteredSchemas && filteredSchemas.length > 1) {
-        schemaToDisplay = table.schema;
-    }
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (table.name.trim()) {
             setTableName(table.name.trim());
         }
