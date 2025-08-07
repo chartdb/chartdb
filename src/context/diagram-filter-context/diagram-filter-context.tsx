@@ -29,10 +29,6 @@ export interface DiagramFilterContext {
     toggleSchemaFilter: (schemaId: string) => void;
     toggleTableFilter: (tableId: string) => void;
     addSchemaIfFiltered: (schemaId: string) => void;
-
-    // shouldFilterTable: (tableId: string) => boolean;
-    // shouldFilterSchema: (schemaId: string) => boolean;
-    // shouldFilterRelationship: (relationshipId: string) => boolean;
 }
 
 export const diagramFilterContext = createContext<DiagramFilterContext>({
@@ -49,7 +45,4 @@ export const diagramFilterContext = createContext<DiagramFilterContext>({
     toggleTableFilter: emptyFn,
     addSchemaIfFiltered: emptyFn,
     schemasDisplayed: [],
-    // shouldFilterTable: emptyFn,
-    // shouldFilterSchema: emptyFn,
-    // shouldFilterRelationship: emptyFn,
 });
