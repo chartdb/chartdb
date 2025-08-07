@@ -17,6 +17,7 @@ import {
     Box,
 } from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
+import type { DBTable } from '@/lib/domain/db-table';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
@@ -45,9 +46,9 @@ type TableContext = {
 };
 
 type NodeContext = {
-    schema?: SchemaContext;
-    area?: AreaContext;
-    table?: TableContext;
+    schema: SchemaContext;
+    area: AreaContext;
+    table: TableContext;
 };
 
 type RelevantTableData = {
@@ -142,12 +143,10 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     isFolder: true,
                     icon: Box,
                     context: {
-                        area: {
-                            id: area.id,
-                            name: area.name,
-                            visible: areaVisible,
-                        },
-                    },
+                        id: area.id,
+                        name: area.name,
+                        visible: areaVisible,
+                    } as AreaContext,
                     className: !areaVisible ? 'opacity-50' : '',
                     children: areaTables.map(
                         (table): TreeNode<NodeType, NodeContext> => {
@@ -169,11 +168,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 isFolder: false,
                                 icon: Table,
                                 context: {
-                                    table: {
-                                        tableSchema: table.schema,
-                                        visible: tableVisible,
-                                    },
-                                },
+                                    tableSchema: table.schema,
+                                    visible: tableVisible,
+                                } as TableContext,
                                 className: !tableVisible ? 'opacity-50' : '',
                             };
                         }
@@ -207,12 +204,10 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     isFolder: true,
                     icon: Layers,
                     context: {
-                        area: {
-                            id: 'ungrouped',
-                            name: 'Ungrouped',
-                            visible: ungroupedVisible,
-                        },
-                    },
+                        id: 'ungrouped',
+                        name: 'Ungrouped',
+                        visible: ungroupedVisible,
+                    } as AreaContext,
                     className: !ungroupedVisible ? 'opacity-50' : '',
                     children: tablesWithoutArea.map(
                         (table): TreeNode<NodeType, NodeContext> => {
@@ -234,11 +229,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 isFolder: false,
                                 icon: Table,
                                 context: {
-                                    table: {
-                                        tableSchema: table.schema,
-                                        visible: tableVisible,
-                                    },
-                                },
+                                    tableSchema: table.schema,
+                                    visible: tableVisible,
+                                } as TableContext,
                                 className: !tableVisible ? 'opacity-50' : '',
                             };
                         }
@@ -300,8 +293,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     isFolder: true,
                     icon: Database,
                     context: {
-                        schema: { name: schemaName, visible: schemaVisible },
-                    },
+                        name: schemaName,
+                        visible: schemaVisible,
+                    } as SchemaContext,
                     className: !schemaVisible ? 'opacity-50' : '',
                     children: schemaTables.map(
                         (table): TreeNode<NodeType, NodeContext> => {
@@ -325,11 +319,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 isFolder: false,
                                 icon: Table,
                                 context: {
-                                    table: {
-                                        tableSchema: table.schema,
-                                        visible: tableVisible,
-                                    },
-                                },
+                                    tableSchema: table.schema,
+                                    visible: tableVisible,
+                                } as TableContext,
                                 className: hidden ? 'opacity-50' : '',
                             };
                         }
@@ -423,8 +415,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const renderActions = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'schema') {
-                const schemaVisible = node.context.schema?.visible;
-                const schemaName = node.context.schema?.name;
+                const context = node.context as SchemaContext;
+                const schemaVisible = context.visible;
+                const schemaName = context.name;
                 if (!schemaName) return null;
 
                 const schemaId = schemaNameToSchemaId(schemaName);
@@ -459,8 +452,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             }
 
             if (node.type === 'area') {
-                const areaVisible = node.context.area?.visible;
-                const areaId = node.context.area?.id;
+                const context = node.context as AreaContext;
+                const areaVisible = context.visible;
+                const areaId = context.id;
                 if (!areaId) return null;
 
                 // Get all tables in this area
@@ -532,7 +526,8 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
             if (node.type === 'table') {
                 const tableId = node.id;
-                const tableVisible = node.context.table?.visible;
+                const context = node.context as TableContext;
+                const tableVisible = context.visible;
 
                 return (
                     <Button
@@ -571,7 +566,8 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const handleNodeClick = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'table') {
-                const isTableVisible = node.context.table?.visible;
+                const context = node.context as TableContext;
+                const isTableVisible = context.visible;
 
                 // Only focus if table is visible
                 if (isTableVisible) {
