@@ -5,7 +5,17 @@ import React, {
     useEffect,
     useRef,
 } from 'react';
-import { X, Search, Eye, EyeOff, Database, Table, Funnel } from 'lucide-react';
+import {
+    X,
+    Search,
+    Eye,
+    EyeOff,
+    Database,
+    Table,
+    Funnel,
+    Layers,
+    Box,
+} from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
@@ -18,22 +28,26 @@ import type { TreeNode } from '@/components/tree-view/tree';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 
 export interface CanvasFilterProps {
     onClose: () => void;
 }
 
-type NodeType = 'schema' | 'table';
+type NodeType = 'schema' | 'area' | 'table';
+type GroupingMode = 'schema' | 'area';
 
 type SchemaContext = { name: string; visible: boolean };
+type AreaContext = { id: string; name: string; visible: boolean };
 type TableContext = {
     tableSchema?: string | null;
     visible: boolean;
 };
 
 type NodeContext = {
-    schema: SchemaContext;
-    table: TableContext;
+    schema?: SchemaContext;
+    area?: AreaContext;
+    table?: TableContext;
 };
 
 type RelevantTableData = {
@@ -44,7 +58,7 @@ type RelevantTableData = {
 
 export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const { t } = useTranslation();
-    const { tables, databaseType } = useChartDB();
+    const { tables, databaseType, areas } = useChartDB();
     const {
         filter,
         toggleSchemaFilter,
@@ -56,6 +70,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
     const [isFilterVisible, setIsFilterVisible] = useState(false);
+    const [groupingMode, setGroupingMode] = useState<GroupingMode>('schema');
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Extract only the properties needed for tree data
@@ -76,40 +91,103 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
     // Convert tables to tree nodes
     const treeData = useMemo(() => {
-        // Group tables by schema
-        const tablesBySchema = new Map<string, RelevantTableData[]>();
-
-        relevantTableData.forEach((table) => {
-            const schema = !databaseWithSchemas
-                ? 'All Tables'
-                : (table.schema ?? defaultSchemas[databaseType] ?? 'default');
-
-            if (!tablesBySchema.has(schema)) {
-                tablesBySchema.set(schema, []);
-            }
-            tablesBySchema.get(schema)!.push(table);
-        });
-
-        // Sort tables within each schema
-        tablesBySchema.forEach((tables) => {
-            tables.sort((a, b) => a.name.localeCompare(b.name));
-        });
-
-        // Convert to tree nodes
         const nodes: TreeNode<NodeType, NodeContext>[] = [];
 
-        tablesBySchema.forEach((schemaTables, schemaName) => {
-            let schemaVisible;
+        if (groupingMode === 'area') {
+            // Group tables by area
+            const tablesByArea = new Map<string | null, DBTable[]>();
+            const tablesWithoutArea: DBTable[] = [];
 
-            if (databaseWithSchemas) {
-                const schemaId = schemaNameToSchemaId(schemaName);
-                schemaVisible = filterSchema({
-                    schemaId,
-                    schemaIdsFilter: filter?.schemaIds,
-                });
-            } else {
-                // if at least one table is visible, the schema is considered visible
-                schemaVisible = schemaTables.some((table) =>
+            tables.forEach((table) => {
+                if (table.parentAreaId) {
+                    if (!tablesByArea.has(table.parentAreaId)) {
+                        tablesByArea.set(table.parentAreaId, []);
+                    }
+                    tablesByArea.get(table.parentAreaId)!.push(table);
+                } else {
+                    tablesWithoutArea.push(table);
+                }
+            });
+
+            // Sort tables within each area
+            tablesByArea.forEach((areaTables) => {
+                areaTables.sort((a, b) => a.name.localeCompare(b.name));
+            });
+            tablesWithoutArea.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Create nodes for areas
+            areas.forEach((area) => {
+                const areaTables = tablesByArea.get(area.id) || [];
+
+                // Check if at least one table in the area is visible
+                const areaVisible =
+                    areaTables.length === 0 ||
+                    areaTables.some((table) =>
+                        filterTable({
+                            table: {
+                                id: table.id,
+                                schema: table.schema,
+                            },
+                            filter,
+                            options: {
+                                defaultSchema: defaultSchemas[databaseType],
+                            },
+                        })
+                    );
+
+                const areaNode: TreeNode<NodeType, NodeContext> = {
+                    id: `area-${area.id}`,
+                    name: `${area.name} (${areaTables.length})`,
+                    type: 'area',
+                    isFolder: true,
+                    icon: Box,
+                    context: {
+                        area: {
+                            id: area.id,
+                            name: area.name,
+                            visible: areaVisible,
+                        },
+                    },
+                    className: !areaVisible ? 'opacity-50' : '',
+                    children: areaTables.map(
+                        (table): TreeNode<NodeType, NodeContext> => {
+                            const tableVisible = filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            });
+
+                            return {
+                                id: table.id,
+                                name: table.name,
+                                type: 'table',
+                                isFolder: false,
+                                icon: Table,
+                                context: {
+                                    table: {
+                                        tableSchema: table.schema,
+                                        visible: tableVisible,
+                                    },
+                                },
+                                className: !tableVisible ? 'opacity-50' : '',
+                            };
+                        }
+                    ),
+                };
+
+                if (areaTables.length > 0) {
+                    nodes.push(areaNode);
+                }
+            });
+
+            // Add ungrouped tables
+            if (tablesWithoutArea.length > 0) {
+                const ungroupedVisible = tablesWithoutArea.some((table) =>
                     filterTable({
                         table: {
                             id: table.id,
@@ -121,19 +199,88 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         },
                     })
                 );
-            }
 
-            const schemaNode: TreeNode<NodeType, NodeContext> = {
-                id: `schema-${schemaName}`,
-                name: `${schemaName} (${schemaTables.length})`,
-                type: 'schema',
-                isFolder: true,
-                icon: Database,
-                context: { name: schemaName, visible: schemaVisible },
-                className: !schemaVisible ? 'opacity-50' : '',
-                children: schemaTables.map(
-                    (table): TreeNode<NodeType, NodeContext> => {
-                        const tableVisible = filterTable({
+                const ungroupedNode: TreeNode<NodeType, NodeContext> = {
+                    id: 'ungrouped',
+                    name: `Ungrouped (${tablesWithoutArea.length})`,
+                    type: 'area',
+                    isFolder: true,
+                    icon: Layers,
+                    context: {
+                        area: {
+                            id: 'ungrouped',
+                            name: 'Ungrouped',
+                            visible: ungroupedVisible,
+                        },
+                    },
+                    className: !ungroupedVisible ? 'opacity-50' : '',
+                    children: tablesWithoutArea.map(
+                        (table): TreeNode<NodeType, NodeContext> => {
+                            const tableVisible = filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            });
+
+                            return {
+                                id: table.id,
+                                name: table.name,
+                                type: 'table',
+                                isFolder: false,
+                                icon: Table,
+                                context: {
+                                    table: {
+                                        tableSchema: table.schema,
+                                        visible: tableVisible,
+                                    },
+                                },
+                                className: !tableVisible ? 'opacity-50' : '',
+                            };
+                        }
+                    ),
+                };
+                nodes.push(ungroupedNode);
+            }
+        } else {
+            // Group tables by schema (existing logic)
+            const tablesBySchema = new Map<string, RelevantTableData[]>();
+
+            relevantTableData.forEach((table) => {
+                const schema = !databaseWithSchemas
+                    ? 'All Tables'
+                    : (table.schema ??
+                      defaultSchemas[databaseType] ??
+                      'default');
+
+                if (!tablesBySchema.has(schema)) {
+                    tablesBySchema.set(schema, []);
+                }
+                tablesBySchema.get(schema)!.push(table);
+            });
+
+            // Sort tables within each schema
+            tablesBySchema.forEach((tables) => {
+                tables.sort((a, b) => a.name.localeCompare(b.name));
+            });
+
+            tablesBySchema.forEach((schemaTables, schemaName) => {
+                let schemaVisible;
+
+                if (databaseWithSchemas) {
+                    const schemaId = schemaNameToSchemaId(schemaName);
+                    schemaVisible = filterSchema({
+                        schemaId,
+                        schemaIdsFilter: filter?.schemaIds,
+                    });
+                } else {
+                    // if at least one table is visible, the schema is considered visible
+                    schemaVisible = schemaTables.some((table) =>
+                        filterTable({
                             table: {
                                 id: table.id,
                                 schema: table.schema,
@@ -142,30 +289,66 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                             options: {
                                 defaultSchema: defaultSchemas[databaseType],
                             },
-                        });
+                        })
+                    );
+                }
 
-                        const hidden = !tableVisible;
+                const schemaNode: TreeNode<NodeType, NodeContext> = {
+                    id: `schema-${schemaName}`,
+                    name: `${schemaName} (${schemaTables.length})`,
+                    type: 'schema',
+                    isFolder: true,
+                    icon: Database,
+                    context: {
+                        schema: { name: schemaName, visible: schemaVisible },
+                    },
+                    className: !schemaVisible ? 'opacity-50' : '',
+                    children: schemaTables.map(
+                        (table): TreeNode<NodeType, NodeContext> => {
+                            const tableVisible = filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            });
 
-                        return {
-                            id: table.id,
-                            name: table.name,
-                            type: 'table',
-                            isFolder: false,
-                            icon: Table,
-                            context: {
-                                tableSchema: table.schema,
-                                visible: tableVisible,
-                            },
-                            className: hidden ? 'opacity-50' : '',
-                        };
-                    }
-                ),
-            };
-            nodes.push(schemaNode);
-        });
+                            const hidden = !tableVisible;
+
+                            return {
+                                id: table.id,
+                                name: table.name,
+                                type: 'table',
+                                isFolder: false,
+                                icon: Table,
+                                context: {
+                                    table: {
+                                        tableSchema: table.schema,
+                                        visible: tableVisible,
+                                    },
+                                },
+                                className: hidden ? 'opacity-50' : '',
+                            };
+                        }
+                    ),
+                };
+                nodes.push(schemaNode);
+            });
+        }
 
         return nodes;
-    }, [relevantTableData, databaseType, filter, databaseWithSchemas]);
+    }, [
+        relevantTableData,
+        tables,
+        databaseType,
+        filter,
+        databaseWithSchemas,
+        groupingMode,
+        areas,
+    ]);
 
     // Initialize expanded state with all schemas expanded
     useMemo(() => {
@@ -240,9 +423,11 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const renderActions = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'schema') {
-                const schemaContext = node.context as SchemaContext;
-                const schemaId = schemaNameToSchemaId(schemaContext.name);
-                const schemaVisible = node.context.visible;
+                const schemaVisible = node.context.schema?.visible;
+                const schemaName = node.context.schema?.name;
+                if (!schemaName) return null;
+
+                const schemaId = schemaNameToSchemaId(schemaName);
 
                 return (
                     <Button
@@ -256,7 +441,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 toggleSchemaFilter(schemaId);
                             } else {
                                 // Toggle visibility of all tables in this schema
-                                if (node.context.visible) {
+                                if (schemaVisible) {
                                     setTableIdsFilterEmpty();
                                 } else {
                                     clearTableIdsFilter();
@@ -273,10 +458,81 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 );
             }
 
+            if (node.type === 'area') {
+                const areaVisible = node.context.area?.visible;
+                const areaId = node.context.area?.id;
+                if (!areaId) return null;
+
+                // Get all tables in this area
+                const areaTables =
+                    areaId === 'ungrouped'
+                        ? tables.filter((t) => !t.parentAreaId)
+                        : tables.filter((t) => t.parentAreaId === areaId);
+                const tableIds = areaTables.map((t) => t.id);
+
+                return (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 h-fit p-0"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            // Toggle all tables in this area
+                            if (areaVisible) {
+                                // Hide all tables in this area
+                                tableIds.forEach((id) => {
+                                    const isVisible = filterTable({
+                                        table: {
+                                            id,
+                                            schema: tables.find(
+                                                (t) => t.id === id
+                                            )?.schema,
+                                        },
+                                        filter,
+                                        options: {
+                                            defaultSchema:
+                                                defaultSchemas[databaseType],
+                                        },
+                                    });
+                                    if (isVisible) {
+                                        toggleTableFilter(id);
+                                    }
+                                });
+                            } else {
+                                // Show all tables in this area
+                                tableIds.forEach((id) => {
+                                    const isVisible = filterTable({
+                                        table: {
+                                            id,
+                                            schema: tables.find(
+                                                (t) => t.id === id
+                                            )?.schema,
+                                        },
+                                        filter,
+                                        options: {
+                                            defaultSchema:
+                                                defaultSchemas[databaseType],
+                                        },
+                                    });
+                                    if (!isVisible) {
+                                        toggleTableFilter(id);
+                                    }
+                                });
+                            }
+                        }}
+                    >
+                        {!areaVisible ? (
+                            <EyeOff className="size-3.5 text-muted-foreground" />
+                        ) : (
+                            <Eye className="size-3.5" />
+                        )}
+                    </Button>
+                );
+            }
+
             if (node.type === 'table') {
                 const tableId = node.id;
-                const tableContext = node.context as TableContext;
-                const tableVisible = tableContext.visible;
+                const tableVisible = node.context.table?.visible;
 
                 return (
                     <Button
@@ -305,6 +561,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             clearTableIdsFilter,
             setTableIdsFilterEmpty,
             databaseWithSchemas,
+            tables,
+            filter,
+            databaseType,
         ]
     );
 
@@ -312,10 +571,9 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const handleNodeClick = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'table') {
-                const tableContext = node.context as TableContext;
-                const isTableVisible = tableContext.visible;
+                const isTableVisible = node.context.table?.visible;
 
-                // Only focus if neither table is hidden nor filtered by schema
+                // Only focus if table is visible
                 if (isTableVisible) {
                     focusOnTable(node.id);
                 }
@@ -376,13 +634,34 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 </div>
             </div>
 
+            {/* Grouping Toggle */}
+            <div className="border-b p-2">
+                <ToggleGroup
+                    type="single"
+                    value={groupingMode}
+                    onValueChange={(value) => {
+                        if (value) setGroupingMode(value as GroupingMode);
+                    }}
+                    className="w-full"
+                >
+                    <ToggleGroupItem value="schema" className="flex-1 text-xs">
+                        <Database className="mr-1.5 size-3.5" />
+                        {t('canvas_filter.group_by_schema', 'Group by Schema')}
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="area" className="flex-1 text-xs">
+                        <Box className="mr-1.5 size-3.5" />
+                        {t('canvas_filter.group_by_area', 'Group by Area')}
+                    </ToggleGroupItem>
+                </ToggleGroup>
+            </div>
+
             {/* Table Tree */}
             <ScrollArea className="flex-1 rounded-b-lg" type="auto">
                 <TreeView
                     data={filteredTreeData}
                     onNodeClick={handleNodeClick}
                     renderActionsComponent={renderActions}
-                    defaultFolderIcon={Database}
+                    defaultFolderIcon={groupingMode === 'area' ? Box : Database}
                     defaultIcon={Table}
                     expanded={expanded}
                     setExpanded={setExpanded}
