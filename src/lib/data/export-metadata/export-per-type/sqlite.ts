@@ -301,14 +301,40 @@ export function exportSQLite({
                         const fieldName = `"${field.name}"`;
 
                         // Handle type name - map to SQLite compatible types
-                        const typeName = mapSQLiteType(
+                        const baseTypeName = mapSQLiteType(
                             field.type.name,
                             field.primaryKey
                         );
 
-                        // SQLite ignores length specifiers, so we don't add them
-                        // We'll keep this simple without size info
-                        const typeWithoutSize = typeName;
+                        // Add size/precision/scale parameters if applicable
+                        let typeWithParams = baseTypeName;
+
+                        // Add character maximum length for VARCHAR, CHAR, etc.
+                        if (
+                            field.characterMaximumLength &&
+                            ['VARCHAR', 'CHAR', 'TEXT'].includes(
+                                baseTypeName.toUpperCase()
+                            )
+                        ) {
+                            typeWithParams = `${baseTypeName}(${field.characterMaximumLength})`;
+                        }
+                        // Add precision and scale for DECIMAL, NUMERIC, etc.
+                        else if (
+                            field.precision &&
+                            [
+                                'DECIMAL',
+                                'NUMERIC',
+                                'REAL',
+                                'FLOAT',
+                                'DOUBLE',
+                            ].includes(baseTypeName.toUpperCase())
+                        ) {
+                            if (field.scale) {
+                                typeWithParams = `${baseTypeName}(${field.precision}, ${field.scale})`;
+                            } else {
+                                typeWithParams = `${baseTypeName}(${field.precision})`;
+                            }
+                        }
 
                         const notNull = field.nullable ? '' : ' NOT NULL';
 
@@ -356,7 +382,7 @@ export function exportSQLite({
                                 ? ' PRIMARY KEY' + autoIncrement
                                 : '';
 
-                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithoutSize}${primaryKey}${notNull}${unique}${defaultValue}`;
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithParams}${primaryKey}${notNull}${unique}${defaultValue}`;
                     })
                     .join(',\n')}${
                     // Add PRIMARY KEY as table constraint for composite primary keys or non-INTEGER primary keys
