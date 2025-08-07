@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.15.0](https://github.com/chartdb/chartdb/compare/v1.14.0...v1.15.0) (2025-08-07)
+
+
+### Features
+
+* include foreign keys inline in SQLite CREATE TABLE statements ([#833](https://github.com/chartdb/chartdb/issues/833)) ([43fc1d7](https://github.com/chartdb/chartdb/commit/43fc1d7fc26876b22c61405f6c3df89fc66b7992))
+
+
+### Bug Fixes
+
+* **filters:** refactor diagram filters - remove schema filter ([#832](https://github.com/chartdb/chartdb/issues/832)) ([4f1d329](https://github.com/chartdb/chartdb/commit/4f1d3295c09782ab46d82ce21b662032aa094f22))
+* for sqlite import - add more types & include type parameters ([#834](https://github.com/chartdb/chartdb/issues/834)) ([5936500](https://github.com/chartdb/chartdb/commit/5936500ca00a57b3f161616264c26152a13c36d2))
+
 ## [1.14.0](https://github.com/chartdb/chartdb/compare/v1.13.2...v1.14.0) (2025-08-04)
 
 
