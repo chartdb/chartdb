@@ -157,6 +157,11 @@ export function exportSQLite({
     // Start SQL script - SQLite doesn't use schemas, so we skip schema creation
     let sqlScript = '-- SQLite database export\n';
 
+    // Add PRAGMA foreign_keys = ON if there are relationships
+    if (relationships && relationships.length > 0) {
+        sqlScript += 'PRAGMA foreign_keys = ON;\n\n';
+    }
+
     // Begin transaction for faster import
     sqlScript += 'BEGIN TRANSACTION;\n';
 
@@ -204,6 +209,86 @@ export function exportSQLite({
                     (primaryKeyFields[0].type.name.toLowerCase() ===
                         'integer' ||
                         primaryKeyFields[0].type.name.toLowerCase() === 'int');
+
+                // Collect foreign key constraints for this table
+                const tableForeignKeys: string[] = [];
+                relationships.forEach((r: DBRelationship) => {
+                    const sourceTable = tables.find(
+                        (t) => t.id === r.sourceTableId
+                    );
+                    const targetTable = tables.find(
+                        (t) => t.id === r.targetTableId
+                    );
+
+                    if (
+                        !sourceTable ||
+                        !targetTable ||
+                        sourceTable.isView ||
+                        targetTable.isView ||
+                        sqliteSystemTables.includes(
+                            sourceTable.name.toLowerCase()
+                        ) ||
+                        sqliteSystemTables.includes(
+                            targetTable.name.toLowerCase()
+                        )
+                    ) {
+                        return;
+                    }
+
+                    const sourceField = sourceTable.fields.find(
+                        (f) => f.id === r.sourceFieldId
+                    );
+                    const targetField = targetTable.fields.find(
+                        (f) => f.id === r.targetFieldId
+                    );
+
+                    if (!sourceField || !targetField) {
+                        return;
+                    }
+
+                    // Determine which table should have the foreign key based on cardinality
+                    let fkTable, fkField, refTable, refField;
+
+                    if (
+                        r.sourceCardinality === 'one' &&
+                        r.targetCardinality === 'many'
+                    ) {
+                        // FK goes on target table
+                        fkTable = targetTable;
+                        fkField = targetField;
+                        refTable = sourceTable;
+                        refField = sourceField;
+                    } else if (
+                        r.sourceCardinality === 'many' &&
+                        r.targetCardinality === 'one'
+                    ) {
+                        // FK goes on source table
+                        fkTable = sourceTable;
+                        fkField = sourceField;
+                        refTable = targetTable;
+                        refField = targetField;
+                    } else if (
+                        r.sourceCardinality === 'one' &&
+                        r.targetCardinality === 'one'
+                    ) {
+                        // For 1:1, FK can go on either side, but typically goes on the table that references the other
+                        // We'll keep the current behavior for 1:1
+                        fkTable = sourceTable;
+                        fkField = sourceField;
+                        refTable = targetTable;
+                        refField = targetField;
+                    } else {
+                        // Many-to-many relationships need a junction table, skip for now
+                        return;
+                    }
+
+                    // If this foreign key belongs to the current table, add it
+                    if (fkTable.id === table.id) {
+                        tableForeignKeys.push(
+                            `    FOREIGN KEY("${fkField.name}") REFERENCES "${refTable.name}"("${refField.name}")`
+                        );
+                    }
+                });
 
                 return `${schemaComment}${
                     table.comments ? formatTableComment(table.comments) : ''
@@ -276,6 +361,11 @@ export function exportSQLite({
                               .map((f) => `"${f.name}"`)
                               .join(', ')})`
                         : ''
+                }${
+                    // Add foreign key constraints
+                    tableForeignKeys.length > 0
+                        ? ',\n' + tableForeignKeys.join(',\n')
+                        : ''
                 }\n);\n${
                     // Add indexes - SQLite doesn't support indexes in CREATE TABLE
                     (() => {
@@ -333,82 +423,8 @@ export function exportSQLite({
             .filter(Boolean) // Remove empty strings (views)
             .join('\n');
     }
-    // Generate table constraints and triggers for foreign keys
-    // SQLite handles foreign keys differently - we'll add them with CREATE TABLE statements
-    // But we'll also provide individual ALTER TABLE statements as comments for reference
-
-    if (relationships.length > 0) {
-        sqlScript += '\n-- Foreign key constraints\n';
-        sqlScript +=
-            '-- Note: SQLite requires foreign_keys pragma to be enabled:\n';
-        sqlScript += '-- PRAGMA foreign_keys = ON;\n';
-
-        relationships.forEach((r: DBRelationship) => {
-            const sourceTable = tables.find((t) => t.id === r.sourceTableId);
-            const targetTable = tables.find((t) => t.id === r.targetTableId);
-
-            if (
-                !sourceTable ||
-                !targetTable ||
-                sourceTable.isView ||
-                targetTable.isView ||
-                sqliteSystemTables.includes(sourceTable.name.toLowerCase()) ||
-                sqliteSystemTables.includes(targetTable.name.toLowerCase())
-            ) {
-                return;
-            }
-
-            const sourceField = sourceTable.fields.find(
-                (f) => f.id === r.sourceFieldId
-            );
-            const targetField = targetTable.fields.find(
-                (f) => f.id === r.targetFieldId
-            );
-
-            if (!sourceField || !targetField) {
-                return;
-            }
-
-            // Determine which table should have the foreign key based on cardinality
-            let fkTable, fkField, refTable, refField;
-
-            if (
-                r.sourceCardinality === 'one' &&
-                r.targetCardinality === 'many'
-            ) {
-                // FK goes on target table
-                fkTable = targetTable;
-                fkField = targetField;
-                refTable = sourceTable;
-                refField = sourceField;
-            } else if (
-                r.sourceCardinality === 'many' &&
-                r.targetCardinality === 'one'
-            ) {
-                // FK goes on source table
-                fkTable = sourceTable;
-                fkField = sourceField;
-                refTable = targetTable;
-                refField = targetField;
-            } else if (
-                r.sourceCardinality === 'one' &&
-                r.targetCardinality === 'one'
-            ) {
-                // For 1:1, FK can go on either side, but typically goes on the table that references the other
-                // We'll keep the current behavior for 1:1
-                fkTable = sourceTable;
-                fkField = sourceField;
-                refTable = targetTable;
-                refField = targetField;
-            } else {
-                // Many-to-many relationships need a junction table, skip for now
-                return;
-            }
-
-            // Create commented out version of what would be ALTER TABLE statement
-            sqlScript += `-- ALTER TABLE "${fkTable.name}" ADD CONSTRAINT "fk_${fkTable.name}_${fkField.name}" FOREIGN KEY("${fkField.name}") REFERENCES "${refTable.name}"("${refField.name}");\n`;
-        });
-    }
+    // Foreign keys are now included inline in CREATE TABLE statements
+    // No need for separate ALTER TABLE statements in SQLite
 
     // Commit transaction
     sqlScript += '\nCOMMIT;\n';
