@@ -1,6 +1,10 @@
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Area } from '@/lib/domain/area';
 import { calcTableHeight } from '@/lib/domain/db-table';
+import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 /**
  * Check if a table is inside an area based on their positions and dimensions
@@ -31,15 +35,53 @@ const isTableInsideArea = (table: DBTable, area: Area): boolean => {
 };
 
 /**
+ * Check if an area is visible based on its tables
+ */
+const isAreaVisible = (
+    area: Area,
+    tables: DBTable[],
+    filter?: DiagramFilter,
+    databaseType?: DatabaseType
+): boolean => {
+    const tablesInArea = tables.filter((t) => t.parentAreaId === area.id);
+
+    // If area has no tables, consider it visible
+    if (tablesInArea.length === 0) return true;
+
+    // Area is visible if at least one table in it is visible
+    return tablesInArea.some((table) =>
+        filterTable({
+            table: { id: table.id, schema: table.schema },
+            filter,
+            options: {
+                defaultSchema:
+                    defaultSchemas[databaseType || DatabaseType.GENERIC],
+            },
+        })
+    );
+};
+
+/**
  * Find which area contains a table
  */
-const findContainingArea = (table: DBTable, areas: Area[]): Area | null => {
+const findContainingArea = (
+    table: DBTable,
+    areas: Area[],
+    tables: DBTable[],
+    filter?: DiagramFilter,
+    databaseType?: DatabaseType
+): Area | null => {
     // Sort areas by order (if available) to prioritize top-most areas
     const sortedAreas = [...areas].sort(
         (a, b) => (b.order ?? 0) - (a.order ?? 0)
     );
 
     for (const area of sortedAreas) {
+        // Skip hidden areas - they shouldn't capture tables
+        if (!isAreaVisible(area, tables, filter, databaseType)) {
+            continue;
+        }
+
         if (isTableInsideArea(table, area)) {
             return area;
         }
@@ -53,10 +95,33 @@ const findContainingArea = (table: DBTable, areas: Area[]): Area | null => {
  */
 export const updateTablesParentAreas = (
     tables: DBTable[],
-    areas: Area[]
+    areas: Area[],
+    filter?: DiagramFilter,
+    databaseType?: DatabaseType
 ): DBTable[] => {
     return tables.map((table) => {
-        const containingArea = findContainingArea(table, areas);
+        // Skip hidden tables - they shouldn't be assigned to areas
+        const isTableVisible = filterTable({
+            table: { id: table.id, schema: table.schema },
+            filter,
+            options: {
+                defaultSchema:
+                    defaultSchemas[databaseType || DatabaseType.GENERIC],
+            },
+        });
+
+        if (!isTableVisible) {
+            // Hidden tables keep their current parent area (don't change)
+            return table;
+        }
+
+        const containingArea = findContainingArea(
+            table,
+            areas,
+            tables,
+            filter,
+            databaseType
+        );
         const newParentAreaId = containingArea?.id || null;
 
         // Only update if parentAreaId has changed
@@ -79,4 +144,27 @@ export const getTablesInArea = (
     tables: DBTable[]
 ): DBTable[] => {
     return tables.filter((table) => table.parentAreaId === areaId);
+};
+
+/**
+ * Get visible tables that are inside a specific area
+ */
+export const getVisibleTablesInArea = (
+    areaId: string,
+    tables: DBTable[],
+    filter?: DiagramFilter,
+    databaseType?: DatabaseType
+): DBTable[] => {
+    return tables.filter((table) => {
+        if (table.parentAreaId !== areaId) return false;
+
+        return filterTable({
+            table: { id: table.id, schema: table.schema },
+            filter,
+            options: {
+                defaultSchema:
+                    defaultSchemas[databaseType || DatabaseType.GENERIC],
+            },
+        });
+    });
 };

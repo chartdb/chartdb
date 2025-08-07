@@ -86,7 +86,7 @@ import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
-import { updateTablesParentAreas, getTablesInArea } from './area-utils';
+import { updateTablesParentAreas, getVisibleTablesInArea } from './area-utils';
 import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { ShowAllButton } from './show-all-button';
@@ -142,15 +142,40 @@ const tableToTableNode = (
     };
 };
 
-const areaToAreaNode = (area: Area): AreaNodeType => ({
-    id: area.id,
-    type: 'area',
-    position: { x: area.x, y: area.y },
-    data: { area },
-    width: area.width,
-    height: area.height,
-    zIndex: -10,
-});
+const areaToAreaNode = (
+    area: Area,
+    tables: DBTable[],
+    filter?: DiagramFilter,
+    databaseType?: DatabaseType
+): AreaNodeType => {
+    // Get all tables in this area
+    const tablesInArea = tables.filter((t) => t.parentAreaId === area.id);
+
+    // Check if at least one table in the area is visible
+    const hasVisibleTable =
+        tablesInArea.length === 0 ||
+        tablesInArea.some((table) =>
+            filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: {
+                    defaultSchema:
+                        defaultSchemas[databaseType || DatabaseType.GENERIC],
+                },
+            })
+        );
+
+    return {
+        id: area.id,
+        type: 'area',
+        position: { x: area.x, y: area.y },
+        data: { area },
+        width: area.width,
+        height: area.height,
+        zIndex: -10,
+        hidden: !hasVisibleTable,
+    };
+};
 
 export interface CanvasProps {
     initialTables: DBTable[];
@@ -409,7 +434,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         },
                     };
                 }),
-                ...areas.map(areaToAreaNode),
+                ...areas.map((area) =>
+                    areaToAreaNode(area, tables, filter, databaseType)
+                ),
             ];
 
             // Check if nodes actually changed
@@ -468,7 +495,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const checkParentAreas = debounce(() => {
-            const updatedTables = updateTablesParentAreas(tables, areas);
+            const updatedTables = updateTablesParentAreas(
+                tables,
+                areas,
+                filter,
+                databaseType
+            );
             const needsUpdate: Array<{
                 id: string;
                 parentAreaId: string | null;
@@ -509,7 +541,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         }, 300);
 
         checkParentAreas();
-    }, [tablePositions, areas, updateTablesState, tables]);
+    }, [
+        tablePositions,
+        areas,
+        updateTablesState,
+        tables,
+        filter,
+        databaseType,
+    ]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -888,16 +927,37 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             const deltaX = change.position.x - currentArea.x;
                             const deltaY = change.position.y - currentArea.y;
 
-                            const childTables = getTablesInArea(
+                            // Only move visible child tables
+                            const childTables = getVisibleTablesInArea(
                                 change.id,
-                                tables
+                                tables,
+                                filter,
+                                databaseType
                             );
 
                             // Update child table positions in storage
                             if (childTables.length > 0) {
                                 updateTablesState((currentTables) =>
                                     currentTables.map((table) => {
-                                        if (table.parentAreaId === change.id) {
+                                        // Only move visible tables that are in this area
+                                        const isVisible = filterTable({
+                                            table: {
+                                                id: table.id,
+                                                schema: table.schema,
+                                            },
+                                            filter,
+                                            options: {
+                                                defaultSchema:
+                                                    defaultSchemas[
+                                                        databaseType
+                                                    ],
+                                            },
+                                        });
+
+                                        if (
+                                            table.parentAreaId === change.id &&
+                                            isVisible
+                                        ) {
                                             return {
                                                 id: table.id,
                                                 x: table.x + deltaX,
@@ -961,6 +1021,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             tables,
             areas,
             getNode,
+            databaseType,
+            filter,
         ]
     );
 
