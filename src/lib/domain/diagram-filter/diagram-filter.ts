@@ -33,6 +33,16 @@ export function reduceFilter(
     ];
     const allTableIds = tables.map((t) => t.id);
 
+    // in case its db with no schemas
+    if (allSchemaIds.length === 0) {
+        const tableSet = new Set(tableIds);
+        if (tableSet.size === allTableIds.length) {
+            return { schemaIds: undefined, tableIds: undefined };
+        }
+
+        return { schemaIds: undefined, tableIds: Array.from(tableSet) };
+    }
+
     // Build a map of schema to its tables
     const schemaToTables = new Map<string, string[]>();
     tables.forEach((table) => {

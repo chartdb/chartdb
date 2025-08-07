@@ -20,6 +20,7 @@ export interface DiagramFilterContext {
     addTableIdsFilter: (...ids: string[]) => void;
     removeTableIdsFilter: (...ids: string[]) => void;
     clearTableIdsFilter: () => void;
+    setTableIdsFilterEmpty: () => void;
 
     // reset
     resetFilter: () => void;
@@ -40,6 +41,7 @@ export const diagramFilterContext = createContext<DiagramFilterContext>({
     addTableIdsFilter: emptyFn,
     clearSchemaIdsFilter: emptyFn,
     clearTableIdsFilter: emptyFn,
+    setTableIdsFilterEmpty: emptyFn,
     removeSchemaIdsFilter: emptyFn,
     removeTableIdsFilter: emptyFn,
     resetFilter: emptyFn,

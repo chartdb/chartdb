@@ -8,6 +8,7 @@ import type { Graph } from '@/lib/graph';
 import { createGraph } from '@/lib/graph';
 import { useDiagramFilter } from '../diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 interface CanvasProviderProps {
     children: ReactNode;
@@ -39,7 +40,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                         },
                         filter,
                         options: {
-                            defaultSchema: databaseType,
+                            defaultSchema: defaultSchemas[databaseType],
                         },
                     })
                 ),

@@ -143,6 +143,17 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             );
         }, []);
 
+    const setTableIdsEmpty: DiagramFilterContext['setTableIdsFilterEmpty'] =
+        useCallback(() => {
+            setFilter(
+                (prev) =>
+                    ({
+                        ...prev,
+                        tableIds: [],
+                    }) satisfies DiagramFilter
+            );
+        }, []);
+
     // Reset filter
     const resetFilter: DiagramFilterContext['resetFilter'] = useCallback(() => {
         setFilter({});
@@ -219,9 +230,62 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             [allSchemasIds, allTables]
         );
 
+    const toggleTableFilterForNoSchema = useCallback(
+        (tableId: string) => {
+            setFilter((prev) => {
+                const currentTableIds = prev.tableIds;
+
+                // Check if table is currently visible
+                const isTableVisible = filterTable({
+                    table: { id: tableId, schema: null },
+                    filter: prev,
+                    options: { defaultSchema: defaultSchemas[databaseType] },
+                });
+
+                let newTableIds: string[] | undefined;
+
+                if (isTableVisible) {
+                    // Table is visible, make it not visible
+                    if (!currentTableIds) {
+                        // All tables are visible, create filter with all except this one
+                        newTableIds = allTables
+                            .filter((t) => t.id !== tableId)
+                            .map((t) => t.id);
+                    } else {
+                        // Remove this table from the filter
+                        newTableIds = currentTableIds.filter(
+                            (id) => id !== tableId
+                        );
+                    }
+                } else {
+                    // Table is not visible, make it visible
+                    newTableIds = [
+                        ...new Set([...(currentTableIds || []), tableId]),
+                    ];
+                }
+
+                // Use reduceFilter to optimize and handle edge cases
+                return reduceFilter(
+                    {
+                        schemaIds: undefined,
+                        tableIds: newTableIds,
+                    },
+                    allTables
+                );
+            });
+        },
+        [allTables, databaseType]
+    );
+
     const toggleTableFilter: DiagramFilterContext['toggleTableFilter'] =
         useCallback(
             (tableId: string) => {
+                if (!defaultSchemas[databaseType]) {
+                    // No schemas, toggle table filter without schema context
+                    toggleTableFilterForNoSchema(tableId);
+                    return;
+                }
+
                 setFilter((prev) => {
                     // Find the table in the tables list
                     const tableInfo = allTables.find((t) => t.id === tableId);
@@ -234,6 +298,9 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                     const isTableVisible = filterTable({
                         table: tableInfo,
                         filter: prev,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
                     });
 
                     let newSchemaIds = prev.schemaIds;
@@ -292,7 +359,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                     );
                 });
             },
-            [allTables]
+            [allTables, databaseType, toggleTableFilterForNoSchema]
         );
 
     const addSchemaIfFiltered: DiagramFilterContext['addSchemaIfFiltered'] =
@@ -350,6 +417,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         addSchemaIdsFilter: addSchemaIds,
         removeSchemaIdsFilter: removeSchemaIds,
         clearSchemaIdsFilter: clearSchemaIds,
+        setTableIdsFilterEmpty: setTableIdsEmpty,
         tableIdsFilter: filter.tableIds,
         addTableIdsFilter: addTableIds,
         removeTableIdsFilter: removeTableIds,

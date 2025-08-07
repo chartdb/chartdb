@@ -25,10 +25,10 @@ export interface CanvasFilterProps {
 
 type NodeType = 'schema' | 'table';
 
-type SchemaContext = { name: string };
+type SchemaContext = { name: string; visible: boolean };
 type TableContext = {
     tableSchema?: string | null;
-    // hidden: boolean;
+    visible: boolean;
 };
 
 type NodeContext = {
@@ -45,8 +45,13 @@ type RelevantTableData = {
 export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const { tables, databaseType } = useChartDB();
-    const { filter, toggleSchemaFilter, toggleTableFilter } =
-        useDiagramFilter();
+    const {
+        filter,
+        toggleSchemaFilter,
+        toggleTableFilter,
+        clearTableIdsFilter,
+        setTableIdsFilterEmpty,
+    } = useDiagramFilter();
     const { fitView, setNodes } = useReactFlow();
     const [searchQuery, setSearchQuery] = useState('');
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -64,14 +69,21 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         [tables]
     );
 
+    const databaseWithSchemas = useMemo(
+        () => !!defaultSchemas[databaseType],
+        [databaseType]
+    );
+
     // Convert tables to tree nodes
     const treeData = useMemo(() => {
         // Group tables by schema
         const tablesBySchema = new Map<string, RelevantTableData[]>();
 
         relevantTableData.forEach((table) => {
-            const schema =
-                table.schema ?? defaultSchemas[databaseType] ?? 'default';
+            const schema = !databaseWithSchemas
+                ? 'All Tables'
+                : (table.schema ?? defaultSchemas[databaseType] ?? 'default');
+
             if (!tablesBySchema.has(schema)) {
                 tablesBySchema.set(schema, []);
             }
@@ -87,11 +99,29 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         const nodes: TreeNode<NodeType, NodeContext>[] = [];
 
         tablesBySchema.forEach((schemaTables, schemaName) => {
-            const schemaId = schemaNameToSchemaId(schemaName);
-            const schemaVisible = filterSchema({
-                schemaId,
-                schemaIdsFilter: filter?.schemaIds,
-            });
+            let schemaVisible;
+
+            if (databaseWithSchemas) {
+                const schemaId = schemaNameToSchemaId(schemaName);
+                schemaVisible = filterSchema({
+                    schemaId,
+                    schemaIdsFilter: filter?.schemaIds,
+                });
+            } else {
+                // if at least one table is visible, the schema is considered visible
+                schemaVisible = schemaTables.some((table) =>
+                    filterTable({
+                        table: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
+                    })
+                );
+            }
 
             const schemaNode: TreeNode<NodeType, NodeContext> = {
                 id: `schema-${schemaName}`,
@@ -99,7 +129,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 type: 'schema',
                 isFolder: true,
                 icon: Database,
-                context: { name: schemaName },
+                context: { name: schemaName, visible: schemaVisible },
                 className: !schemaVisible ? 'opacity-50' : '',
                 children: schemaTables.map(
                     (table): TreeNode<NodeType, NodeContext> => {
@@ -124,7 +154,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                             icon: Table,
                             context: {
                                 tableSchema: table.schema,
-                                // hidden,
+                                visible: tableVisible,
                             },
                             className: hidden ? 'opacity-50' : '',
                         };
@@ -135,7 +165,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         });
 
         return nodes;
-    }, [relevantTableData, databaseType, filter]);
+    }, [relevantTableData, databaseType, filter, databaseWithSchemas]);
 
     // Initialize expanded state with all schemas expanded
     useMemo(() => {
@@ -212,10 +242,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             if (node.type === 'schema') {
                 const schemaContext = node.context as SchemaContext;
                 const schemaId = schemaNameToSchemaId(schemaContext.name);
-                const schemaVisible = filterSchema({
-                    schemaId,
-                    schemaIdsFilter: filter?.schemaIds,
-                });
+                const schemaVisible = node.context.visible;
 
                 return (
                     <Button
@@ -224,7 +251,17 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         className="size-7 h-fit p-0"
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleSchemaFilter(schemaId);
+
+                            if (databaseWithSchemas) {
+                                toggleSchemaFilter(schemaId);
+                            } else {
+                                // Toggle visibility of all tables in this schema
+                                if (node.context.visible) {
+                                    setTableIdsFilterEmpty();
+                                } else {
+                                    clearTableIdsFilter();
+                                }
+                            }
                         }}
                     >
                         {!schemaVisible ? (
@@ -272,7 +309,15 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
             return null;
         },
-        [filter, databaseType, toggleSchemaFilter, toggleTableFilter]
+        [
+            filter,
+            databaseType,
+            toggleSchemaFilter,
+            toggleTableFilter,
+            clearTableIdsFilter,
+            setTableIdsFilterEmpty,
+            databaseWithSchemas,
+        ]
     );
 
     // Handle node click
