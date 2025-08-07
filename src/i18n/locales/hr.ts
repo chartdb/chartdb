@@ -71,14 +71,6 @@ export const hr: LanguageTranslation = {
             cancel: 'Odustani',
         },
 
-        multiple_schemas_alert: {
-            title: 'Više shema',
-            description:
-                '{{schemasCount}} shema u ovom dijagramu. Trenutno prikazano: {{formattedSchemas}}.',
-            show_me: 'Prikaži mi',
-            none: 'nijedna',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Kopiranje neuspješno',
@@ -113,10 +105,6 @@ export const hr: LanguageTranslation = {
         copied: 'Kopirano!',
 
         side_panel: {
-            schema: 'Shema:',
-            filter_by_schema: 'Filtriraj po shemi',
-            search_schema: 'Pretraži shemu...',
-            no_schemas_found: 'Nema pronađenih shema.',
             view_all_options: 'Prikaži sve opcije...',
             tables_section: {
                 tables: 'Tablice',

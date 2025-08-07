@@ -957,4 +957,462 @@ describe('DBML Export - Issue Fixes', () => {
             '(email, created_at) [name: "idx_email_created"]'
         );
     });
+
+    it('should export in the right format', () => {
+        const diagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T16:11:22.554Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: '8ftpn9qn0o2ddrvhzgdjro3zv',
+                    name: 'table_1',
+                    x: 260,
+                    y: 80,
+                    fields: [
+                        {
+                            id: 'w9wlmimvjaci2krhfb4v9bhy0',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753890297335,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753890297335,
+                    isView: false,
+                    order: 0,
+                    parentAreaId: null,
+                },
+                {
+                    id: 'wofcygo4u9623oueif9k3v734',
+                    name: 'table_2',
+                    x: -178.62499999999994,
+                    y: -244.375,
+                    fields: [
+                        {
+                            id: '6ca6p6lnss4d2top8pjcfsli7',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753891879081,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753891879081,
+                    isView: false,
+                    order: 1,
+                    parentAreaId: null,
+                },
+            ],
+            relationships: [
+                {
+                    id: 'o5ynn1x9nxm5ipuugo690doau',
+                    name: 'table_2_id_fk',
+                    sourceTableId: 'wofcygo4u9623oueif9k3v734',
+                    targetTableId: '8ftpn9qn0o2ddrvhzgdjro3zv',
+                    sourceFieldId: '6ca6p6lnss4d2top8pjcfsli7',
+                    targetFieldId: 'w9wlmimvjaci2krhfb4v9bhy0',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
+                    createdAt: 1753891882554,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        const expectedInlineDBML = `Table "table_1" {
+  "id" bigint [pk, not null]
+}
+
+Table "table_2" {
+  "id" bigint [pk, not null, ref: < "table_1"."id"]
+}
+`;
+
+        const expectedStandardDBML = `Table "table_1" {
+  "id" bigint [pk, not null]
+}
+
+Table "table_2" {
+  "id" bigint [pk, not null]
+}
+
+Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
+`;
+
+        expect(result.inlineDbml).toBe(expectedInlineDBML);
+        expect(result.standardDbml).toBe(expectedStandardDBML);
+    });
+
+    it('should handle tables with multiple relationships correctly', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'users',
+                    name: 'users',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'users_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'posts',
+                    name: 'posts',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'posts_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'posts_user_id',
+                            name: 'user_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'reviews',
+                    name: 'reviews',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'reviews_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'reviews_user_id',
+                            name: 'user_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'user_activities',
+                    name: 'user_activities',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'activities_id',
+                            name: 'id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'activities_entity_id',
+                            name: 'entity_id',
+                            type: { id: 'integer', name: 'integer' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'activities_type',
+                            name: 'activity_type',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '50',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel1',
+                    name: 'fk_posts_user',
+                    sourceTableId: 'posts',
+                    sourceFieldId: 'posts_user_id',
+                    targetTableId: 'users',
+                    targetFieldId: 'users_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel2',
+                    name: 'fk_reviews_user',
+                    sourceTableId: 'reviews',
+                    sourceFieldId: 'reviews_user_id',
+                    targetTableId: 'users',
+                    targetFieldId: 'users_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel3',
+                    name: 'fk_activities_posts',
+                    sourceTableId: 'user_activities',
+                    sourceFieldId: 'activities_entity_id',
+                    targetTableId: 'posts',
+                    targetFieldId: 'posts_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'rel4',
+                    name: 'fk_activities_reviews',
+                    sourceTableId: 'user_activities',
+                    sourceFieldId: 'activities_entity_id',
+                    targetTableId: 'reviews',
+                    targetFieldId: 'reviews_id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+            ],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Debug output removed
+        // console.log('Inline DBML:', result.inlineDbml);
+
+        // Check standard DBML output
+        expect(result.standardDbml).toContain('Table "users" {');
+        expect(result.standardDbml).toContain('Table "posts" {');
+        expect(result.standardDbml).toContain('Table "reviews" {');
+        expect(result.standardDbml).toContain('Table "user_activities" {');
+
+        // Check that the entity_id field in user_activities has multiple relationships in inline DBML
+        // The field should have both references in a single bracket
+        expect(result.inlineDbml).toContain(
+            '"entity_id" integer [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
+        );
+
+        // Check that standard DBML has separate Ref entries for each relationship
+        expect(result.standardDbml).toContain(
+            'Ref "fk_0_fk_posts_user":"users"."id" < "posts"."user_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_1_fk_reviews_user":"users"."id" < "reviews"."user_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_2_fk_activities_posts":"posts"."id" < "user_activities"."entity_id"'
+        );
+        expect(result.standardDbml).toContain(
+            'Ref "fk_3_fk_activities_reviews":"reviews"."id" < "user_activities"."entity_id"'
+        );
+
+        // No automatic comment is added for fields with multiple relationships
+
+        // Check proper formatting - closing brace should be on a new line
+        expect(result.inlineDbml).toMatch(
+            /Table "user_activities" \{\s*\n\s*"id".*\n\s*"entity_id".*\]\s*\n\s*"activity_type".*\n\s*\}/
+        );
+
+        // Ensure no closing brace appears on the same line as a field with inline refs
+        expect(result.inlineDbml).not.toMatch(/\[.*ref:.*\]\}/);
+    });
+
+    it('should properly format closing brace when table has both indexes and inline refs', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'table_1',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [
+                        {
+                            id: 'index1',
+                            name: 'index_1',
+                            unique: false,
+                            fieldIds: ['field1'],
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+                {
+                    id: 'table2',
+                    name: 'table_2',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field2',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel1',
+                    name: 'table2_id_fkey',
+                    sourceTableId: 'table2',
+                    sourceFieldId: 'field2',
+                    targetTableId: 'table1',
+                    targetFieldId: 'field1',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: Date.now(),
+                },
+            ],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check that the inline DBML has proper indentation
+        expect(result.inlineDbml).toContain(`Table "table_1" {
+  "id" bigint [pk, not null]
+
+  Indexes {
+    id [name: "index_1"]
+  }
+}`);
+
+        expect(result.inlineDbml).toContain(`Table "table_2" {
+  "id" bigint [pk, not null, ref: < "table_1"."id"]
+}`);
+
+        // The issue was that it would generate:
+        // Table "table_1" {
+        //   "id" bigint [pk, not null]
+        //
+        //   Indexes {
+        //     id [name: "index_1"]
+        //
+        // }
+        // }
+
+        // Make sure there's no malformed closing brace
+        expect(result.inlineDbml).not.toMatch(/\n\s*\n\s*}\s*\n}/);
+        expect(result.inlineDbml).not.toMatch(/\s+\n}/);
+
+        // Ensure there's no extra closing brace
+        const braceBalance =
+            (result.inlineDbml.match(/{/g) || []).length -
+            (result.inlineDbml.match(/}/g) || []).length;
+        expect(braceBalance).toBe(0);
+    });
 });

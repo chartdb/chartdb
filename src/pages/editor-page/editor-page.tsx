@@ -1,14 +1,9 @@
-import React, { Suspense, useCallback, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Toaster } from '@/components/toast/toaster';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
-import { useLayout } from '@/hooks/use-layout';
-import { useToast } from '@/components/toast/use-toast';
-import { ToastAction } from '@/components/toast/toast';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { useTranslation } from 'react-i18next';
 import { FullScreenLoaderProvider } from '@/context/full-screen-spinner-context/full-screen-spinner-provider';
 import { LayoutProvider } from '@/context/layout-context/layout-provider';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
@@ -30,6 +25,7 @@ import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
+import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -43,21 +39,11 @@ export const EditorMobileLayoutLazy = React.lazy(
 );
 
 const EditorPageComponent: React.FC = () => {
-    const { diagramName, currentDiagram, schemas, filteredSchemas } =
-        useChartDB();
-    const { openSelectSchema, showSidePanel } = useLayout();
+    const { diagramName, currentDiagram } = useChartDB();
     const { openStarUsDialog } = useDialog();
-    const { diagramId } = useParams<{ diagramId: string }>();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const {
-        hideMultiSchemaNotification,
-        setHideMultiSchemaNotification,
-        starUsDialogLastOpen,
-        setStarUsDialogLastOpen,
-        githubRepoOpened,
-    } = useLocalConfig();
-    const { toast } = useToast();
-    const { t } = useTranslation();
+    const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
+        useLocalConfig();
     const { initialDiagram } = useDiagramLoader();
 
     useEffect(() => {
@@ -83,73 +69,6 @@ const EditorPageComponent: React.FC = () => {
         openStarUsDialog,
         setStarUsDialogLastOpen,
         starUsDialogLastOpen,
-    ]);
-
-    const lastDiagramId = useRef<string>('');
-
-    const handleChangeSchema = useCallback(async () => {
-        showSidePanel();
-        if (!isDesktop) {
-            await new Promise((resolve) => setTimeout(resolve, 500));
-        }
-        openSelectSchema();
-    }, [openSelectSchema, showSidePanel, isDesktop]);
-
-    useEffect(() => {
-        if (lastDiagramId.current === currentDiagram.id) {
-            return;
-        }
-
-        lastDiagramId.current = currentDiagram.id;
-        if (schemas.length > 1 && !hideMultiSchemaNotification) {
-            const formattedSchemas = !filteredSchemas
-                ? t('multiple_schemas_alert.none')
-                : filteredSchemas
-                      .map((filteredSchema) =>
-                          schemas.find((schema) => schema.id === filteredSchema)
-                      )
-                      .map((schema) => `'${schema?.name}'`)
-                      .join(', ');
-            toast({
-                duration: Infinity,
-                title: t('multiple_schemas_alert.title'),
-                description: t('multiple_schemas_alert.description', {
-                    schemasCount: schemas.length,
-                    formattedSchemas,
-                }),
-                variant: 'default',
-                layout: 'column',
-                hideCloseButton: true,
-                className:
-                    'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4',
-                action: (
-                    <div className="flex justify-between gap-1">
-                        <div />
-                        <ToastAction
-                            onClick={() => {
-                                handleChangeSchema();
-                                setHideMultiSchemaNotification(true);
-                            }}
-                            altText="Show me the schemas"
-                            className="border border-pink-600 bg-pink-600 text-white hover:bg-pink-500"
-                        >
-                            {t('multiple_schemas_alert.show_me')}
-                        </ToastAction>
-                    </div>
-                ),
-            });
-        }
-    }, [
-        schemas,
-        filteredSchemas,
-        toast,
-        currentDiagram.id,
-        diagramId,
-        openSelectSchema,
-        t,
-        handleChangeSchema,
-        hideMultiSchemaNotification,
-        setHideMultiSchemaNotification,
     ]);
 
     return (
@@ -202,21 +121,23 @@ export const EditorPage: React.FC = () => (
                             <RedoUndoStackProvider>
                                 <DiffProvider>
                                     <ChartDBProvider>
-                                        <HistoryProvider>
-                                            <ReactFlowProvider>
-                                                <CanvasProvider>
-                                                    <ExportImageProvider>
-                                                        <AlertProvider>
-                                                            <DialogProvider>
-                                                                <KeyboardShortcutsProvider>
-                                                                    <EditorPageComponent />
-                                                                </KeyboardShortcutsProvider>
-                                                            </DialogProvider>
-                                                        </AlertProvider>
-                                                    </ExportImageProvider>
-                                                </CanvasProvider>
-                                            </ReactFlowProvider>
-                                        </HistoryProvider>
+                                        <DiagramFilterProvider>
+                                            <HistoryProvider>
+                                                <ReactFlowProvider>
+                                                    <CanvasProvider>
+                                                        <ExportImageProvider>
+                                                            <AlertProvider>
+                                                                <DialogProvider>
+                                                                    <KeyboardShortcutsProvider>
+                                                                        <EditorPageComponent />
+                                                                    </KeyboardShortcutsProvider>
+                                                                </DialogProvider>
+                                                            </AlertProvider>
+                                                        </ExportImageProvider>
+                                                    </CanvasProvider>
+                                                </ReactFlowProvider>
+                                            </HistoryProvider>
+                                        </DiagramFilterProvider>
                                     </ChartDBProvider>
                                 </DiffProvider>
                             </RedoUndoStackProvider>

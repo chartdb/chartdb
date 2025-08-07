@@ -73,15 +73,6 @@ export const gu: LanguageTranslation = {
             cancel: 'રદ કરો',
         },
 
-        multiple_schemas_alert: {
-            title: 'કઈંક વધારે સ્કીમા',
-            description:
-                '{{schemasCount}} સ્કીમા આ ડાયાગ્રામમાં છે. હાલમાં દર્શાવેલ છે: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'કઈ નહીં',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'નકલ નિષ્ફળ',
@@ -116,10 +107,6 @@ export const gu: LanguageTranslation = {
         copied: 'નકલ થયું!',
 
         side_panel: {
-            schema: 'સ્કીમા:',
-            filter_by_schema: 'સ્કીમા દ્વારા ફિલ્ટર કરો',
-            search_schema: 'સ્કીમા શોધો...',
-            no_schemas_found: 'કોઈ સ્કીમા મળ્યા નથી.',
             view_all_options: 'બધા વિકલ્પો જુઓ...',
             tables_section: {
                 tables: 'ટેબલ્સ',

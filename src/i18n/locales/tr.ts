@@ -73,15 +73,6 @@ export const tr: LanguageTranslation = {
             cancel: 'İptal',
         },
 
-        multiple_schemas_alert: {
-            title: 'Birden Fazla Şema',
-            description:
-                'Bu diyagramda {{schemasCount}} şema var. Şu anda görüntülenen: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'yok',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Kopyalama başarısız',
@@ -115,10 +106,6 @@ export const tr: LanguageTranslation = {
         copy_to_clipboard: 'Panoya Kopyala',
         copied: 'Kopyalandı!',
         side_panel: {
-            schema: 'Şema:',
-            filter_by_schema: 'Şemaya Göre Filtrele',
-            search_schema: 'Şema ara...',
-            no_schemas_found: 'Şema bulunamadı.',
             view_all_options: 'Tüm Seçenekleri Gör...',
             tables_section: {
                 tables: 'Tablolar',

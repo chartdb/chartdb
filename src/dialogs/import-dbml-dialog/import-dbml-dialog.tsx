@@ -5,7 +5,7 @@ import React, {
     Suspense,
     useRef,
 } from 'react';
-import * as monaco from 'monaco-editor';
+import type * as monaco from 'monaco-editor';
 import { useDialog } from '@/hooks/use-dialog';
 import {
     Dialog,
@@ -36,45 +36,11 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { useToast } from '@/components/toast/use-toast';
 import { Spinner } from '@/components/spinner/spinner';
 import { debounce } from '@/lib/utils';
-
-interface DBMLError {
-    message: string;
-    line: number;
-    column: number;
-}
-
-function parseDBMLError(error: unknown): DBMLError | null {
-    try {
-        if (typeof error === 'string') {
-            const parsed = JSON.parse(error);
-            if (parsed.diags?.[0]) {
-                const diag = parsed.diags[0];
-                return {
-                    message: diag.message,
-                    line: diag.location.start.line,
-                    column: diag.location.start.column,
-                };
-            }
-        } else if (error && typeof error === 'object' && 'diags' in error) {
-            const parsed = error as {
-                diags: Array<{
-                    message: string;
-                    location: { start: { line: number; column: number } };
-                }>;
-            };
-            if (parsed.diags?.[0]) {
-                return {
-                    message: parsed.diags[0].message,
-                    line: parsed.diags[0].location.start.line,
-                    column: parsed.diags[0].location.start.column,
-                };
-            }
-        }
-    } catch (e) {
-        console.error('Error parsing DBML error:', e);
-    }
-    return null;
-}
+import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
+import {
+    clearErrorHighlight,
+    highlightErrorLine,
+} from '@/components/code-snippet/dbml/utils';
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {
     withCreateEmptyDiagram?: boolean;
@@ -150,39 +116,8 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         }
     }, [reorder, reorderTables]);
 
-    const highlightErrorLine = useCallback((error: DBMLError) => {
-        if (!editorRef.current) return;
-
-        const model = editorRef.current.getModel();
-        if (!model) return;
-
-        const decorations = [
-            {
-                range: new monaco.Range(
-                    error.line,
-                    1,
-                    error.line,
-                    model.getLineMaxColumn(error.line)
-                ),
-                options: {
-                    isWholeLine: true,
-                    className: 'dbml-error-line',
-                    glyphMarginClassName: 'dbml-error-glyph',
-                    hoverMessage: { value: error.message },
-                    overviewRuler: {
-                        color: '#ff0000',
-                        position: monaco.editor.OverviewRulerLane.Right,
-                        darkColor: '#ff0000',
-                    },
-                },
-            },
-        ];
-
-        decorationsCollection.current?.set(decorations);
-    }, []);
-
     const clearDecorations = useCallback(() => {
-        decorationsCollection.current?.clear();
+        clearErrorHighlight(decorationsCollection.current);
     }, []);
 
     const validateDBML = useCallback(
@@ -205,7 +140,12 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                         t('import_dbml_dialog.error.description') +
                             ` (1 error found - in line ${parsedError.line})`
                     );
-                    highlightErrorLine(parsedError);
+                    highlightErrorLine({
+                        error: parsedError,
+                        model: editorRef.current?.getModel(),
+                        editorDecorationsCollection:
+                            decorationsCollection.current,
+                    });
                 } else {
                     setErrorMessage(
                         e instanceof Error ? e.message : JSON.stringify(e)
@@ -213,7 +153,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 }
             }
         },
-        [clearDecorations, highlightErrorLine, t]
+        [clearDecorations, t]
     );
 
     const debouncedValidateRef = useRef<((value: string) => void) | null>(null);

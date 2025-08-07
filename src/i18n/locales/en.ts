@@ -71,14 +71,6 @@ export const en = {
             cancel: 'Cancel',
         },
 
-        multiple_schemas_alert: {
-            title: 'Multiple Schemas',
-            description:
-                '{{schemasCount}} schemas in this diagram. Currently displaying: {{formattedSchemas}}.',
-            show_me: 'Show me',
-            none: 'none',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Copy failed',
@@ -113,10 +105,6 @@ export const en = {
         copied: 'Copied!',
 
         side_panel: {
-            schema: 'Schema:',
-            filter_by_schema: 'Filter by schema',
-            search_schema: 'Search schema...',
-            no_schemas_found: 'No schemas found.',
             view_all_options: 'View all Options...',
             tables_section: {
                 tables: 'Tables',

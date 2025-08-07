@@ -37,11 +37,14 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
     const datatypePattern = dataTypesNames.join('|');
 
     monaco.languages.setMonarchTokensProvider('dbml', {
-        keywords: ['Table', 'Ref', 'Indexes'],
+        keywords: ['Table', 'Ref', 'Indexes', 'Note', 'Enum'],
         datatypes: dataTypesNames,
         tokenizer: {
             root: [
-                [/\b(Table|Ref|Indexes)\b/, 'keyword'],
+                [
+                    /\b([Tt][Aa][Bb][Ll][Ee]|[Ee][Nn][Uu][Mm]|[Rr][Ee][Ff]|[Ii][Nn][Dd][Ee][Xx][Ee][Ss]|[Nn][Oo][Tt][Ee])\b/,
+                    'keyword',
+                ],
                 [/\[.*?\]/, 'annotation'],
                 [/'''/, 'string', '@tripleQuoteString'],
                 [/".*?"/, 'string'],

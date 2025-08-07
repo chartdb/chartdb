@@ -106,10 +106,6 @@ export const es: LanguageTranslation = {
         copied: 'Copied!',
 
         side_panel: {
-            schema: 'Esquema:',
-            filter_by_schema: 'Filtrar por esquema',
-            search_schema: 'Buscar esquema...',
-            no_schemas_found: 'No se encontraron esquemas.',
             view_all_options: 'Ver todas las opciones...',
             tables_section: {
                 tables: 'Tablas',
@@ -424,14 +420,6 @@ export const es: LanguageTranslation = {
             confirm: '¡Claro!',
         },
 
-        multiple_schemas_alert: {
-            title: 'Múltiples Esquemas',
-            description:
-                '{{schemasCount}} esquemas en este diagrama. Actualmente mostrando: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'nada',
-        },
         // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',

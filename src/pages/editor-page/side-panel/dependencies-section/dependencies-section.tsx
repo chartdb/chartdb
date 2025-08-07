@@ -13,13 +13,16 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import type { DBDependency } from '@/lib/domain/db-dependency';
-import { shouldShowDependencyBySchemaFilter } from '@/lib/domain/db-dependency';
 import { useLayout } from '@/hooks/use-layout';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { filterDependency } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface DependenciesSectionProps {}
 
 export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
-    const { dependencies, filteredSchemas, getTable } = useChartDB();
+    const { dependencies, getTable, databaseType } = useChartDB();
+    const { filter } = useDiagramFilter();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllDependenciesInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -44,12 +47,26 @@ export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
             );
         };
 
-        const filterSchema: (dependency: DBDependency) => boolean = (
+        const filterDependencies: (dependency: DBDependency) => boolean = (
             dependency
-        ) => shouldShowDependencyBySchemaFilter(dependency, filteredSchemas);
+        ) =>
+            filterDependency({
+                tableA: {
+                    id: dependency.tableId,
+                    schema: dependency.schema,
+                },
+                tableB: {
+                    id: dependency.dependentTableId,
+                    schema: dependency.dependentSchema,
+                },
+                filter,
+                options: {
+                    defaultSchema: defaultSchemas[databaseType],
+                },
+            });
 
         return dependencies
-            .filter(filterSchema)
+            .filter(filterDependencies)
             .filter(filterName)
             .sort((a, b) => {
                 const dependentTableA = getTable(a.dependentTableId);
@@ -60,7 +77,7 @@ export const DependenciesSection: React.FC<DependenciesSectionProps> = () => {
                     `${dependentTableB?.name}${tableB?.name}`
                 );
             });
-    }, [dependencies, filterText, filteredSchemas, getTable]);
+    }, [dependencies, filterText, filter, getTable, databaseType]);
 
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">

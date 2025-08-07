@@ -155,3 +155,29 @@
         background-size: 650%;
     }
 }
+
+/* Edit button emphasis animation */
+@keyframes dbml_edit-button-emphasis {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+        background-color: rgba(59, 130, 246, 0);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+        background-color: rgba(59, 130, 246, 0);
+    }
+}
+
+.dbml-edit-button-emphasis {
+    animation: dbml_edit-button-emphasis 0.6s ease-in-out;
+    animation-iteration-count: 1;
+    position: relative;
+    z-index: 10;
+}

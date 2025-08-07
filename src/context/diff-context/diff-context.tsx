@@ -32,14 +32,20 @@ export interface DiffContext {
     originalDiagram: Diagram | null;
     diffMap: DiffMap;
     hasDiff: boolean;
+    isSummaryOnly: boolean;
 
     calculateDiff: ({
         diagram,
         newDiagram,
+        options,
     }: {
         diagram: Diagram;
         newDiagram: Diagram;
+        options?: {
+            summaryOnly?: boolean;
+        };
     }) => void;
+    resetDiff: () => void;
 
     // table diff
     checkIfTableHasChange: ({ tableId }: { tableId: string }) => boolean;
@@ -60,6 +66,15 @@ export interface DiffContext {
     checkIfNewField: ({ fieldId }: { fieldId: string }) => boolean;
     getFieldNewName: ({ fieldId }: { fieldId: string }) => string | null;
     getFieldNewType: ({ fieldId }: { fieldId: string }) => DataType | null;
+    getFieldNewPrimaryKey: ({ fieldId }: { fieldId: string }) => boolean | null;
+    getFieldNewNullable: ({ fieldId }: { fieldId: string }) => boolean | null;
+    getFieldNewCharacterMaximumLength: ({
+        fieldId,
+    }: {
+        fieldId: string;
+    }) => string | null;
+    getFieldNewScale: ({ fieldId }: { fieldId: string }) => number | null;
+    getFieldNewPrecision: ({ fieldId }: { fieldId: string }) => number | null;
 
     // relationship diff
     checkIfNewRelationship: ({

@@ -73,15 +73,6 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
         },
 
-        multiple_schemas_alert: {
-            title: 'Mehrere Schemas',
-            description:
-                '{{schemasCount}} Schemas in diesem Diagramm. Derzeit angezeigt: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'Keine',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Kopieren fehlgeschlagen',
@@ -117,10 +108,6 @@ export const de: LanguageTranslation = {
         copied: 'Kopiert!',
 
         side_panel: {
-            schema: 'Schema:',
-            filter_by_schema: 'Nach Schema filtern',
-            search_schema: 'Schema suchen...',
-            no_schemas_found: 'Keine Schemas gefunden.',
             view_all_options: 'Alle Optionen anzeigen...',
             tables_section: {
                 tables: 'Tabellen',

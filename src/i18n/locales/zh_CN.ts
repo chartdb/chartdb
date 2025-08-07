@@ -69,15 +69,6 @@ export const zh_CN: LanguageTranslation = {
             cancel: '取消',
         },
 
-        multiple_schemas_alert: {
-            title: '多个模式',
-            description:
-                '此关系图中有 {{schemasCount}} 个模式，当前显示：{{formattedSchemas}}。',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: '无',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: '复制失败',
@@ -112,10 +103,6 @@ export const zh_CN: LanguageTranslation = {
         copied: '复制了！',
 
         side_panel: {
-            schema: '模式：',
-            filter_by_schema: '按模式筛选',
-            search_schema: '搜索模式...',
-            no_schemas_found: '未找到模式。',
             view_all_options: '查看所有选项...',
             tables_section: {
                 tables: '表',

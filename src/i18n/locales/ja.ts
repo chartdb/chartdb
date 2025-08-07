@@ -74,15 +74,6 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
         },
 
-        multiple_schemas_alert: {
-            title: '複数のスキーマ',
-            description:
-                'このダイアグラムには{{schemasCount}}個のスキーマがあります。現在表示中: {{formattedSchemas}}。',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'なし',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'コピー失敗',
@@ -119,10 +110,6 @@ export const ja: LanguageTranslation = {
         copied: 'Copied!',
 
         side_panel: {
-            schema: 'スキーマ:',
-            filter_by_schema: 'スキーマでフィルタ',
-            search_schema: 'スキーマを検索...',
-            no_schemas_found: 'スキーマが見つかりません。',
             view_all_options: 'すべてのオプションを表示...',
             tables_section: {
                 tables: 'テーブル',

@@ -31,6 +31,7 @@ export interface CodeSnippetAction {
     label: string;
     icon: LucideIcon;
     onClick: () => void;
+    className?: string;
 }
 
 export interface CodeSnippetProps {
@@ -172,7 +173,10 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                             <TooltipTrigger asChild>
                                                 <span>
                                                     <Button
-                                                        className="h-fit p-1.5"
+                                                        className={cn(
+                                                            'h-fit p-1.5',
+                                                            action.className
+                                                        )}
                                                         variant="outline"
                                                         onClick={action.onClick}
                                                     >

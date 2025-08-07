@@ -28,6 +28,7 @@ import {
 import { useChartDB } from '@/hooks/use-chartdb';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { Label } from '@/components/label/label';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 
 export interface TableSchemaDialogProps extends BaseDialogProps {
     table?: DBTable;
@@ -44,7 +45,8 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
     allowSchemaCreation = false,
 }) => {
     const { t } = useTranslation();
-    const { databaseType, filteredSchemas, filterSchemas } = useChartDB();
+    const { databaseType } = useChartDB();
+    const { addSchemaIfFiltered } = useDiagramFilter();
     const [selectedSchemaId, setSelectedSchemaId] = useState<string>(
         table?.schema
             ? schemaNameToSchemaId(table.schema)
@@ -112,18 +114,14 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
             onConfirm({ schema });
         }
 
-        filterSchemas([
-            ...(filteredSchemas ?? schemas.map((s) => s.id)),
-            createdSchemaId,
-        ]);
+        addSchemaIfFiltered(createdSchemaId);
     }, [
         onConfirm,
         selectedSchemaId,
         schemas,
         isCreatingNew,
         newSchemaName,
-        filteredSchemas,
-        filterSchemas,
+        addSchemaIfFiltered,
     ]);
 
     const schemaOptions: SelectBoxOption[] = useMemo(

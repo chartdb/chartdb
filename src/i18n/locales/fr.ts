@@ -105,10 +105,6 @@ export const fr: LanguageTranslation = {
         copied: 'Copié !',
 
         side_panel: {
-            schema: 'Schéma:',
-            filter_by_schema: 'Filtrer par schéma',
-            search_schema: 'Rechercher un schéma...',
-            no_schemas_found: 'Aucun schéma trouvé.',
             view_all_options: 'Voir toutes les Options...',
             tables_section: {
                 tables: 'Tables',
@@ -355,15 +351,6 @@ export const fr: LanguageTranslation = {
             pattern_description: 'Add subtle grid pattern to background.',
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
-        },
-
-        multiple_schemas_alert: {
-            title: 'Schémas Multiples',
-            description:
-                '{{schemasCount}} schémas dans ce diagramme. Actuellement affiché(s) : {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'Aucun',
         },
 
         new_table_schema_dialog: {

@@ -73,15 +73,6 @@ export const mr: LanguageTranslation = {
             cancel: 'रद्द करा',
         },
 
-        multiple_schemas_alert: {
-            title: 'एकाधिक स्कीमा',
-            description:
-                '{{schemasCount}} स्कीमा या आरेखात आहेत. सध्या दाखवत आहोत: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'काहीही नाही',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'कॉपी अयशस्वी',
@@ -118,10 +109,6 @@ export const mr: LanguageTranslation = {
         copied: 'Copied!',
 
         side_panel: {
-            schema: 'स्कीमा:',
-            filter_by_schema: 'स्कीमा द्वारे फिल्टर करा',
-            search_schema: 'स्कीमा शोधा...',
-            no_schemas_found: 'कोणतेही स्कीमा सापडले नाहीत.',
             view_all_options: 'सर्व पर्याय पहा...',
             tables_section: {
                 tables: 'टेबल्स',

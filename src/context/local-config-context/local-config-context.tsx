@@ -4,8 +4,6 @@ import type { Theme } from '../theme-context/theme-context';
 
 export type ScrollAction = 'pan' | 'zoom';
 
-export type SchemasFilter = Record<string, string[]>;
-
 export interface LocalConfigContext {
     theme: Theme;
     setTheme: (theme: Theme) => void;
@@ -13,19 +11,11 @@ export interface LocalConfigContext {
     scrollAction: ScrollAction;
     setScrollAction: (action: ScrollAction) => void;
 
-    schemasFilter: SchemasFilter;
-    setSchemasFilter: React.Dispatch<React.SetStateAction<SchemasFilter>>;
-
     showCardinality: boolean;
     setShowCardinality: (showCardinality: boolean) => void;
 
     showFieldAttributes: boolean;
     setShowFieldAttributes: (showFieldAttributes: boolean) => void;
-
-    hideMultiSchemaNotification: boolean;
-    setHideMultiSchemaNotification: (
-        hideMultiSchemaNotification: boolean
-    ) => void;
 
     githubRepoOpened: boolean;
     setGithubRepoOpened: (githubRepoOpened: boolean) => void;
@@ -47,17 +37,11 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
     scrollAction: 'pan',
     setScrollAction: emptyFn,
 
-    schemasFilter: {},
-    setSchemasFilter: emptyFn,
-
     showCardinality: true,
     setShowCardinality: emptyFn,
 
     showFieldAttributes: true,
     setShowFieldAttributes: emptyFn,
-
-    hideMultiSchemaNotification: false,
-    setHideMultiSchemaNotification: emptyFn,
 
     githubRepoOpened: false,
     setGithubRepoOpened: emptyFn,
