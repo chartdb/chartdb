@@ -13,11 +13,9 @@ import {
     Database,
     Table,
     Funnel,
-    Layers,
     Box,
 } from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
-import type { DBTable } from '@/lib/domain/db-table';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
@@ -27,35 +25,23 @@ import { useReactFlow } from '@xyflow/react';
 import { TreeView } from '@/components/tree-view/tree-view';
 import type { TreeNode } from '@/components/tree-view/tree';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
-import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
+import type {
+    AreaContext,
+    GroupingMode,
+    NodeContext,
+    NodeType,
+    RelevantTableData,
+    SchemaContext,
+    TableContext,
+} from './types';
+import { generateTreeDataByAreas, generateTreeDataBySchemas } from './utils';
 
 export interface CanvasFilterProps {
     onClose: () => void;
 }
-
-type NodeType = 'schema' | 'area' | 'table';
-type GroupingMode = 'schema' | 'area';
-
-type SchemaContext = { name: string; visible: boolean };
-type AreaContext = { id: string; name: string; visible: boolean };
-type TableContext = {
-    tableSchema?: string | null;
-    visible: boolean;
-};
-
-type NodeContext = {
-    schema: SchemaContext;
-    area: AreaContext;
-    table: TableContext;
-};
-
-type RelevantTableData = {
-    id: string;
-    name: string;
-    schema?: string | null;
-};
 
 export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const { t } = useTranslation();
@@ -81,6 +67,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 id: table.id,
                 name: table.name,
                 schema: table.schema,
+                parentAreaId: table.parentAreaId,
             })),
         [tables]
     );
@@ -92,249 +79,23 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
     // Convert tables to tree nodes
     const treeData = useMemo(() => {
-        const nodes: TreeNode<NodeType, NodeContext>[] = [];
-
         if (groupingMode === 'area') {
-            // Group tables by area
-            const tablesByArea = new Map<string | null, DBTable[]>();
-            const tablesWithoutArea: DBTable[] = [];
-
-            tables.forEach((table) => {
-                if (table.parentAreaId) {
-                    if (!tablesByArea.has(table.parentAreaId)) {
-                        tablesByArea.set(table.parentAreaId, []);
-                    }
-                    tablesByArea.get(table.parentAreaId)!.push(table);
-                } else {
-                    tablesWithoutArea.push(table);
-                }
+            return generateTreeDataByAreas({
+                areas,
+                databaseType,
+                filter,
+                relevantTableData,
             });
-
-            // Sort tables within each area
-            tablesByArea.forEach((areaTables) => {
-                areaTables.sort((a, b) => a.name.localeCompare(b.name));
-            });
-            tablesWithoutArea.sort((a, b) => a.name.localeCompare(b.name));
-
-            // Create nodes for areas
-            areas.forEach((area) => {
-                const areaTables = tablesByArea.get(area.id) || [];
-
-                // Check if at least one table in the area is visible
-                const areaVisible =
-                    areaTables.length === 0 ||
-                    areaTables.some((table) =>
-                        filterTable({
-                            table: {
-                                id: table.id,
-                                schema: table.schema,
-                            },
-                            filter,
-                            options: {
-                                defaultSchema: defaultSchemas[databaseType],
-                            },
-                        })
-                    );
-
-                const areaNode: TreeNode<NodeType, NodeContext> = {
-                    id: `area-${area.id}`,
-                    name: `${area.name} (${areaTables.length})`,
-                    type: 'area',
-                    isFolder: true,
-                    icon: Box,
-                    context: {
-                        id: area.id,
-                        name: area.name,
-                        visible: areaVisible,
-                    } as AreaContext,
-                    className: !areaVisible ? 'opacity-50' : '',
-                    children: areaTables.map(
-                        (table): TreeNode<NodeType, NodeContext> => {
-                            const tableVisible = filterTable({
-                                table: {
-                                    id: table.id,
-                                    schema: table.schema,
-                                },
-                                filter,
-                                options: {
-                                    defaultSchema: defaultSchemas[databaseType],
-                                },
-                            });
-
-                            return {
-                                id: table.id,
-                                name: table.name,
-                                type: 'table',
-                                isFolder: false,
-                                icon: Table,
-                                context: {
-                                    tableSchema: table.schema,
-                                    visible: tableVisible,
-                                } as TableContext,
-                                className: !tableVisible ? 'opacity-50' : '',
-                            };
-                        }
-                    ),
-                };
-
-                if (areaTables.length > 0) {
-                    nodes.push(areaNode);
-                }
-            });
-
-            // Add ungrouped tables
-            if (tablesWithoutArea.length > 0) {
-                const ungroupedVisible = tablesWithoutArea.some((table) =>
-                    filterTable({
-                        table: {
-                            id: table.id,
-                            schema: table.schema,
-                        },
-                        filter,
-                        options: {
-                            defaultSchema: defaultSchemas[databaseType],
-                        },
-                    })
-                );
-
-                const ungroupedNode: TreeNode<NodeType, NodeContext> = {
-                    id: 'ungrouped',
-                    name: `Ungrouped (${tablesWithoutArea.length})`,
-                    type: 'area',
-                    isFolder: true,
-                    icon: Layers,
-                    context: {
-                        id: 'ungrouped',
-                        name: 'Ungrouped',
-                        visible: ungroupedVisible,
-                    } as AreaContext,
-                    className: !ungroupedVisible ? 'opacity-50' : '',
-                    children: tablesWithoutArea.map(
-                        (table): TreeNode<NodeType, NodeContext> => {
-                            const tableVisible = filterTable({
-                                table: {
-                                    id: table.id,
-                                    schema: table.schema,
-                                },
-                                filter,
-                                options: {
-                                    defaultSchema: defaultSchemas[databaseType],
-                                },
-                            });
-
-                            return {
-                                id: table.id,
-                                name: table.name,
-                                type: 'table',
-                                isFolder: false,
-                                icon: Table,
-                                context: {
-                                    tableSchema: table.schema,
-                                    visible: tableVisible,
-                                } as TableContext,
-                                className: !tableVisible ? 'opacity-50' : '',
-                            };
-                        }
-                    ),
-                };
-                nodes.push(ungroupedNode);
-            }
         } else {
-            // Group tables by schema (existing logic)
-            const tablesBySchema = new Map<string, RelevantTableData[]>();
-
-            relevantTableData.forEach((table) => {
-                const schema = !databaseWithSchemas
-                    ? 'All Tables'
-                    : (table.schema ??
-                      defaultSchemas[databaseType] ??
-                      'default');
-
-                if (!tablesBySchema.has(schema)) {
-                    tablesBySchema.set(schema, []);
-                }
-                tablesBySchema.get(schema)!.push(table);
-            });
-
-            // Sort tables within each schema
-            tablesBySchema.forEach((tables) => {
-                tables.sort((a, b) => a.name.localeCompare(b.name));
-            });
-
-            tablesBySchema.forEach((schemaTables, schemaName) => {
-                let schemaVisible;
-
-                if (databaseWithSchemas) {
-                    const schemaId = schemaNameToSchemaId(schemaName);
-                    schemaVisible = filterSchema({
-                        schemaId,
-                        schemaIdsFilter: filter?.schemaIds,
-                    });
-                } else {
-                    // if at least one table is visible, the schema is considered visible
-                    schemaVisible = schemaTables.some((table) =>
-                        filterTable({
-                            table: {
-                                id: table.id,
-                                schema: table.schema,
-                            },
-                            filter,
-                            options: {
-                                defaultSchema: defaultSchemas[databaseType],
-                            },
-                        })
-                    );
-                }
-
-                const schemaNode: TreeNode<NodeType, NodeContext> = {
-                    id: `schema-${schemaName}`,
-                    name: `${schemaName} (${schemaTables.length})`,
-                    type: 'schema',
-                    isFolder: true,
-                    icon: Database,
-                    context: {
-                        name: schemaName,
-                        visible: schemaVisible,
-                    } as SchemaContext,
-                    className: !schemaVisible ? 'opacity-50' : '',
-                    children: schemaTables.map(
-                        (table): TreeNode<NodeType, NodeContext> => {
-                            const tableVisible = filterTable({
-                                table: {
-                                    id: table.id,
-                                    schema: table.schema,
-                                },
-                                filter,
-                                options: {
-                                    defaultSchema: defaultSchemas[databaseType],
-                                },
-                            });
-
-                            const hidden = !tableVisible;
-
-                            return {
-                                id: table.id,
-                                name: table.name,
-                                type: 'table',
-                                isFolder: false,
-                                icon: Table,
-                                context: {
-                                    tableSchema: table.schema,
-                                    visible: tableVisible,
-                                } as TableContext,
-                                className: hidden ? 'opacity-50' : '',
-                            };
-                        }
-                    ),
-                };
-                nodes.push(schemaNode);
+            return generateTreeDataBySchemas({
+                relevantTableData,
+                databaseWithSchemas,
+                databaseType,
+                filter,
             });
         }
-
-        return nodes;
     }, [
         relevantTableData,
-        tables,
         databaseType,
         filter,
         databaseWithSchemas,

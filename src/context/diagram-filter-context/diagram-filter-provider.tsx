@@ -32,7 +32,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             schemaId: table.schema
                 ? schemaNameToSchemaId(table.schema)
                 : defaultSchemas[databaseType],
-            schema: table.schema,
+            schema: table.schema ?? defaultSchemas[databaseType],
         }));
     }, [tables, databaseType]);
 
@@ -406,14 +406,34 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
 
     const schemasDisplayed: DiagramFilterContext['schemasDisplayed'] =
         useMemo(() => {
-            if (!filter.schemaIds) {
+            if (!hasActiveFilter) {
                 return schemas;
             }
 
+            const displayedSchemaIds = new Set<string>();
+            for (const table of allTables) {
+                if (
+                    filterTable({
+                        table: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
+                    })
+                ) {
+                    if (table.schemaId) {
+                        displayedSchemaIds.add(table.schemaId);
+                    }
+                }
+            }
+
             return schemas.filter((schema) =>
-                filter.schemaIds?.includes(schema.id)
+                displayedSchemaIds.has(schema.id)
             );
-        }, [filter.schemaIds, schemas]);
+        }, [hasActiveFilter, schemas, allTables, filter, databaseType]);
 
     const value: DiagramFilterContext = {
         filter,
