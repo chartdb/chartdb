@@ -24,12 +24,12 @@ export const filterTable = ({
         return true;
     }
 
-    const tableSchemaId = table.schema ?? options.defaultSchema;
+    const tableSchema = table.schema ?? options.defaultSchema;
 
     if (
-        tableSchemaId &&
+        tableSchema &&
         filter.schemaIds &&
-        filter.schemaIds.includes(schemaNameToSchemaId(tableSchemaId))
+        filter.schemaIds.includes(schemaNameToSchemaId(tableSchema))
     ) {
         return true;
     }

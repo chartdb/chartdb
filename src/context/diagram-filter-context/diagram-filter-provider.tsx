@@ -32,6 +32,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             schemaId: table.schema
                 ? schemaNameToSchemaId(table.schema)
                 : defaultSchemas[databaseType],
+            schema: table.schema,
         }));
     }, [tables, databaseType]);
 
@@ -237,9 +238,9 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
 
                 // Check if table is currently visible
                 const isTableVisible = filterTable({
-                    table: { id: tableId, schema: null },
+                    table: { id: tableId, schema: undefined },
                     filter: prev,
-                    options: { defaultSchema: defaultSchemas[databaseType] },
+                    options: { defaultSchema: undefined },
                 });
 
                 let newTableIds: string[] | undefined;
@@ -274,7 +275,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                 );
             });
         },
-        [allTables, databaseType]
+        [allTables]
     );
 
     const toggleTableFilter: DiagramFilterContext['toggleTableFilter'] =
@@ -296,7 +297,10 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
 
                     // Check if table is currently visible using filterTable
                     const isTableVisible = filterTable({
-                        table: tableInfo,
+                        table: {
+                            id: tableInfo.id,
+                            schema: tableInfo.schema,
+                        },
                         filter: prev,
                         options: {
                             defaultSchema: defaultSchemas[databaseType],

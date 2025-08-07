@@ -276,17 +276,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             if (node.type === 'table') {
                 const tableId = node.id;
                 const tableContext = node.context as TableContext;
-
-                const tableVisible = filterTable({
-                    table: {
-                        id: tableId,
-                        schema: tableContext.tableSchema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                });
+                const tableVisible = tableContext.visible;
 
                 return (
                     <Button
@@ -310,8 +300,6 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             return null;
         },
         [
-            filter,
-            databaseType,
             toggleSchemaFilter,
             toggleTableFilter,
             clearTableIdsFilter,
@@ -325,17 +313,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         (node: TreeNode<NodeType, NodeContext>) => {
             if (node.type === 'table') {
                 const tableContext = node.context as TableContext;
-
-                const isTableVisible = filterTable({
-                    table: {
-                        id: node.id,
-                        schema: tableContext.tableSchema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                });
+                const isTableVisible = tableContext.visible;
 
                 // Only focus if neither table is hidden nor filtered by schema
                 if (isTableVisible) {
@@ -343,7 +321,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 }
             }
         },
-        [focusOnTable, filter, databaseType]
+        [focusOnTable]
     );
 
     // Animate in on mount and focus search input
