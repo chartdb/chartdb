@@ -50,5 +50,8 @@ export const sqliteDataTypes: readonly DataTypeData[] = [
     { name: 'smallint', id: 'smallint' },
     { name: 'bigint', id: 'bigint' },
     { name: 'bool', id: 'bool' },
+    { name: 'boolean', id: 'boolean' }, // Added for smartquery compatibility
     { name: 'time', id: 'time' },
+    { name: 'date', id: 'date' }, // Added for smartquery compatibility
+    { name: 'datetime', id: 'datetime' }, // Added for smartquery compatibility
 ] as const;
