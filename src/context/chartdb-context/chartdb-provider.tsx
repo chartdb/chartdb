@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { randomColor } from '@/lib/colors';
@@ -17,7 +17,6 @@ import {
     databasesWithSchemas,
     schemaNameToSchemaId,
 } from '@/lib/domain/db-schema';
-import { useLocalConfig } from '@/hooks/use-local-config';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
@@ -29,7 +28,6 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
-import { useConfig } from '@/hooks/use-config';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -43,14 +41,9 @@ export const ChartDBProvider: React.FC<
     const dbStorage = useStorage();
     let db = dbStorage;
     const events = useEventEmitter<ChartDBEvent>();
-    const { setSchemasFilter, schemasFilter } = useLocalConfig();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
-    const {
-        getHiddenTablesForDiagram,
-        hideTableForDiagram,
-        unhideTableForDiagram,
-    } = useConfig();
+
     const [diagramId, setDiagramId] = useState('');
     const [diagramName, setDiagramName] = useState('');
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
@@ -72,7 +65,7 @@ export const ChartDBProvider: React.FC<
     const [customTypes, setCustomTypes] = useState<DBCustomType[]>(
         diagram?.customTypes ?? []
     );
-    const [hiddenTableIds, setHiddenTableIds] = useState<string[]>([]);
+
     const { events: diffEvents } = useDiff();
 
     const [highlightedCustomTypeId, setHighlightedCustomTypeId] =
@@ -95,14 +88,6 @@ export const ChartDBProvider: React.FC<
     }, []);
 
     diffEvents.useSubscription(diffCalculatedHandler);
-
-    // Sync hiddenTableIds with config
-    useEffect(() => {
-        if (diagramId) {
-            const hiddenTables = getHiddenTablesForDiagram(diagramId);
-            setHiddenTableIds(hiddenTables);
-        }
-    }, [diagramId, getHiddenTablesForDiagram]);
 
     const defaultSchemaName = defaultSchemas[databaseType];
 
@@ -140,34 +125,6 @@ export const ChartDBProvider: React.FC<
                 : [],
         [tables, defaultSchemaName, databaseType]
     );
-
-    const filterSchemas: ChartDBContext['filterSchemas'] = useCallback(
-        (schemaIds) => {
-            setSchemasFilter((prev) => ({
-                ...prev,
-                [diagramId]: schemaIds,
-            }));
-        },
-        [diagramId, setSchemasFilter]
-    );
-
-    const filteredSchemas: ChartDBContext['filteredSchemas'] = useMemo(() => {
-        if (schemas.length === 0) {
-            return undefined;
-        }
-
-        const schemasFilterFromCache =
-            (schemasFilter[diagramId] ?? []).length === 0
-                ? undefined // in case of empty filter, skip cache
-                : schemasFilter[diagramId];
-
-        return (
-            schemasFilterFromCache ?? [
-                schemas.find((s) => s.name === defaultSchemaName)?.id ??
-                    schemas[0]?.id,
-            ]
-        );
-    }, [schemasFilter, diagramId, schemas, defaultSchemaName]);
 
     const currentDiagram: Diagram = useMemo(
         () => ({
@@ -1125,12 +1082,15 @@ export const ChartDBProvider: React.FC<
 
                 const sourceFieldName = sourceField?.name ?? '';
 
+                const targetTable = getTable(targetTableId);
+                const targetTableSchema = targetTable?.schema;
+
                 const relationship: DBRelationship = {
                     id: generateId(),
                     name: `${sourceTableName}_${sourceFieldName}_fk`,
                     sourceSchema: sourceTable?.schema,
                     sourceTableId,
-                    targetSchema: sourceTable?.schema,
+                    targetSchema: targetTableSchema,
                     targetTableId,
                     sourceFieldId,
                     targetFieldId,
@@ -1759,29 +1719,6 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
-    const addHiddenTableId: ChartDBContext['addHiddenTableId'] = useCallback(
-        async (tableId: string) => {
-            if (!hiddenTableIds.includes(tableId)) {
-                setHiddenTableIds((prev) => [...prev, tableId]);
-                await hideTableForDiagram(diagramId, tableId);
-            }
-        },
-        [hiddenTableIds, diagramId, hideTableForDiagram]
-    );
-
-    const removeHiddenTableId: ChartDBContext['removeHiddenTableId'] =
-        useCallback(
-            async (tableId: string) => {
-                if (hiddenTableIds.includes(tableId)) {
-                    setHiddenTableIds((prev) =>
-                        prev.filter((id) => id !== tableId)
-                    );
-                    await unhideTableForDiagram(diagramId, tableId);
-                }
-            },
-            [hiddenTableIds, diagramId, unhideTableForDiagram]
-        );
-
     return (
         <chartDBContext.Provider
             value={{
@@ -1794,10 +1731,8 @@ export const ChartDBProvider: React.FC<
                 areas,
                 currentDiagram,
                 schemas,
-                filteredSchemas,
                 events,
                 readonly,
-                filterSchemas,
                 updateDiagramData,
                 updateDiagramId,
                 updateDiagramName,
@@ -1855,9 +1790,6 @@ export const ChartDBProvider: React.FC<
                 removeCustomType,
                 removeCustomTypes,
                 updateCustomType,
-                hiddenTableIds,
-                addHiddenTableId,
-                removeHiddenTableId,
                 highlightCustomTypeId,
                 highlightedCustomType,
             }}

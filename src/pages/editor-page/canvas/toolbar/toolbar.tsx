@@ -15,8 +15,8 @@ import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useCanvas } from '@/hooks/use-canvas';
-import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -30,7 +30,7 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
     const { setShowFilter } = useCanvas();
-    const { hiddenTableIds } = useChartDB();
+    const { hasActiveFilter } = useDiagramFilter();
 
     const toggleFilter = useCallback(() => {
         setShowFilter((prev) => !prev);
@@ -80,8 +80,7 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                                         'transition-all duration-200',
                                         {
                                             'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
-                                                (hiddenTableIds ?? []).length >
-                                                0,
+                                                hasActiveFilter,
                                         }
                                     )}
                                 >

@@ -18,10 +18,7 @@ import {
     deepCopy,
     generateId,
 } from '../utils';
-import {
-    schemaNameToDomainSchemaName,
-    schemaNameToSchemaId,
-} from './db-schema';
+import { schemaNameToDomainSchemaName } from './db-schema';
 import { DatabaseType } from './database-type';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import { z } from 'zod';
@@ -76,26 +73,6 @@ export const generateTableKey = ({
     schemaName: string | null | undefined;
     tableName: string;
 }) => `${schemaNameToDomainSchemaName(schemaName) ?? ''}.${tableName}`;
-
-export const shouldShowTableSchemaBySchemaFilter = ({
-    filteredSchemas,
-    tableSchema,
-}: {
-    tableSchema?: string | null;
-    filteredSchemas?: string[];
-}): boolean =>
-    !filteredSchemas ||
-    !tableSchema ||
-    filteredSchemas.includes(schemaNameToSchemaId(tableSchema));
-
-export const shouldShowTablesBySchemaFilter = (
-    table: DBTable,
-    filteredSchemas?: string[]
-): boolean =>
-    shouldShowTableSchemaBySchemaFilter({
-        filteredSchemas,
-        tableSchema: table?.schema,
-    });
 
 export const decodeViewDefinition = (
     databaseType: DatabaseType,

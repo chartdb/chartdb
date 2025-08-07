@@ -1,10 +1,7 @@
 import { z } from 'zod';
 import type { ForeignKeyInfo } from '../data/import-metadata/metadata-types/foreign-key-info';
 import type { DBField } from './db-field';
-import {
-    schemaNameToDomainSchemaName,
-    schemaNameToSchemaId,
-} from './db-schema';
+import { schemaNameToDomainSchemaName } from './db-schema';
 import type { DBTable } from './db-table';
 import { generateId } from '@/lib/utils';
 
@@ -42,20 +39,6 @@ export type RelationshipType =
     | 'many_to_one'
     | 'many_to_many';
 export type Cardinality = 'one' | 'many';
-
-export const shouldShowRelationshipBySchemaFilter = (
-    relationship: DBRelationship,
-    filteredSchemas?: string[]
-): boolean =>
-    !filteredSchemas ||
-    !relationship.sourceSchema ||
-    !relationship.targetSchema ||
-    (filteredSchemas.includes(
-        schemaNameToSchemaId(relationship.sourceSchema)
-    ) &&
-        filteredSchemas.includes(
-            schemaNameToSchemaId(relationship.targetSchema)
-        ));
 
 const determineCardinality = (
     field: DBField,

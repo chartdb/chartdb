@@ -73,15 +73,6 @@ export const te: LanguageTranslation = {
             cancel: 'రద్దు',
         },
 
-        multiple_schemas_alert: {
-            title: 'బహుళ స్కీమాలు',
-            description:
-                '{{schemasCount}} స్కీమాలు ఈ చిత్రంలో ఉన్నాయి. ప్రస్తుత స్కీమాలు: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'ఎదరికాదు',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'కాపీ విఫలమైంది',
@@ -116,10 +107,6 @@ export const te: LanguageTranslation = {
         copied: 'కాపీ చేయబడింది!',
 
         side_panel: {
-            schema: 'స్కీమా:',
-            filter_by_schema: 'స్కీమా ద్వారా ఫిల్టర్ చేయండి',
-            search_schema: 'స్కీమా కోసం శోధించండి...',
-            no_schemas_found: 'ఏ స్కీమాలు కూడా కనుగొనబడలేదు.',
             view_all_options: 'అన్ని ఎంపికలను చూడండి...',
             tables_section: {
                 tables: 'పట్టికలు',

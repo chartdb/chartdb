@@ -72,15 +72,6 @@ export const vi: LanguageTranslation = {
             cancel: 'Hủy',
         },
 
-        multiple_schemas_alert: {
-            title: 'Có nhiều lược đồ',
-            description:
-                'Có {{schemasCount}} lược đồ trong sơ đồ này. Hiện đang hiển thị: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'không có',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Sao chép thất bại',
@@ -115,10 +106,6 @@ export const vi: LanguageTranslation = {
         copied: 'Đã sao chép!',
 
         side_panel: {
-            schema: 'Lược đồ:',
-            filter_by_schema: 'Lọc bởi lược đồ',
-            search_schema: 'Tìm kiếm lược đồ...',
-            no_schemas_found: 'Không tìm thấy lược đồ.',
             view_all_options: 'Xem tất cả tùy chọn...',
             tables_section: {
                 tables: 'Bảng',

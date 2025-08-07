@@ -72,15 +72,6 @@ export const ko_KR: LanguageTranslation = {
             cancel: '취소',
         },
 
-        multiple_schemas_alert: {
-            title: '다중 스키마',
-            description:
-                '현재 다이어그램에 {{schemasCount}}개의 스키마가 있습니다. Currently displaying: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: '없음',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: '복사 실패',
@@ -115,10 +106,6 @@ export const ko_KR: LanguageTranslation = {
         copied: '복사됨!',
 
         side_panel: {
-            schema: '스키마:',
-            filter_by_schema: '스키마로 필터링',
-            search_schema: '스키마 검색...',
-            no_schemas_found: '스키마를 찾을 수 없습니다.',
             view_all_options: '전체 옵션 보기...',
             tables_section: {
                 tables: '테이블',

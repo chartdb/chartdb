@@ -69,15 +69,6 @@ export const zh_TW: LanguageTranslation = {
             cancel: '取消',
         },
 
-        multiple_schemas_alert: {
-            title: '多重 Schema',
-            description:
-                '此圖表中包含 {{schemasCount}} 個 Schema，目前顯示：{{formattedSchemas}}。',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: '無',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: '複製失敗',
@@ -112,10 +103,6 @@ export const zh_TW: LanguageTranslation = {
         copied: '已複製！',
 
         side_panel: {
-            schema: 'Schema:',
-            filter_by_schema: '依 Schema 篩選',
-            search_schema: '搜尋 Schema...',
-            no_schemas_found: '未找到 Schema。',
             view_all_options: '顯示所有選項...',
             tables_section: {
                 tables: '表格',

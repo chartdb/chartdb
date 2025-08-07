@@ -73,15 +73,6 @@ export const ne: LanguageTranslation = {
             cancel: 'रद्द गर्नुहोस्',
         },
 
-        multiple_schemas_alert: {
-            title: 'विविध स्कीमहरू',
-            description:
-                '{{schemasCount}} डायाग्राममा स्कीमहरू। हालको रूपमा देखाइएको छ: {{formattedSchemas}}।',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'कुनै पनि छैन',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'प्रतिलिपि असफल',
@@ -116,10 +107,6 @@ export const ne: LanguageTranslation = {
         copied: 'प्रतिलिपि गरियो!',
 
         side_panel: {
-            schema: 'स्कीम:',
-            filter_by_schema: 'स्कीम अनुसार फिल्टर गर्नुहोस्',
-            search_schema: 'स्कीम खोज्नुहोस्...',
-            no_schemas_found: 'कुनै स्कीमहरू फेला परेनन्',
             view_all_options: 'सबै विकल्पहरू हेर्नुहोस्',
             tables_section: {
                 tables: 'तालिकाहरू',

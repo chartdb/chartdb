@@ -54,10 +54,7 @@ import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
 import type { DBTable } from '@/lib/domain/db-table';
-import {
-    MIN_TABLE_SIZE,
-    shouldShowTablesBySchemaFilter,
-} from '@/lib/domain/db-table';
+import { MIN_TABLE_SIZE } from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import {
     Tooltip,
@@ -94,6 +91,10 @@ import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { ShowAllButton } from './show-all-button';
 import { useIsLostInCanvas } from './hooks/use-is-lost-in-canvas';
+import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -118,13 +119,8 @@ const initialEdges: EdgeType[] = [];
 
 const tableToTableNode = (
     table: DBTable,
-    {
-        filteredSchemas,
-        hiddenTableIds,
-    }: {
-        filteredSchemas?: string[];
-        hiddenTableIds?: string[];
-    }
+    filter: DiagramFilter | undefined,
+    databaseType: DatabaseType
 ): TableNodeType => {
     // Always use absolute position for now
     const position = { x: table.x, y: table.y };
@@ -138,9 +134,11 @@ const tableToTableNode = (
             isOverlapping: false,
         },
         width: table.width ?? MIN_TABLE_SIZE,
-        hidden:
-            !shouldShowTablesBySchemaFilter(table, filteredSchemas) ||
-            (hiddenTableIds?.includes(table.id) ?? false),
+        hidden: !filterTable({
+            table: { id: table.id, schema: table.schema },
+            filter,
+            options: { defaultSchema: defaultSchemas[databaseType] },
+        }),
     };
 };
 
@@ -178,7 +176,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         removeDependencies,
         getField,
         databaseType,
-        filteredSchemas,
         events,
         dependencies,
         readonly,
@@ -186,7 +183,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         updateArea,
         highlightedCustomType,
         highlightCustomTypeId,
-        hiddenTableIds,
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
@@ -204,12 +200,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showFilter,
         setShowFilter,
     } = useCanvas();
+    const { filter } = useDiagramFilter();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) =>
-            tableToTableNode(table, { filteredSchemas, hiddenTableIds })
+            tableToTableNode(table, filter, databaseType)
         )
     );
     const [edges, setEdges, onEdgesChange] =
@@ -223,12 +220,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const initialNodes = initialTables.map((table) =>
-            tableToTableNode(table, { filteredSchemas, hiddenTableIds })
+            tableToTableNode(table, filter, databaseType)
         );
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
-    }, [initialTables, nodes, filteredSchemas, hiddenTableIds]);
+    }, [initialTables, nodes, filter, databaseType]);
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
@@ -391,10 +388,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 ...tables.map((table) => {
                     const isOverlapping =
                         (overlapGraph.graph.get(table.id) ?? []).length > 0;
-                    const node = tableToTableNode(table, {
-                        filteredSchemas,
-                        hiddenTableIds,
-                    });
+                    const node = tableToTableNode(table, filter, databaseType);
 
                     // Check if table uses the highlighted custom type
                     let hasHighlightedCustomType = false;
@@ -429,21 +423,30 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         tables,
         areas,
         setNodes,
-        filteredSchemas,
-        hiddenTableIds,
+        filter,
+        databaseType,
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
         highlightedCustomType,
     ]);
 
-    const prevFilteredSchemas = useRef<string[] | undefined>(undefined);
+    const prevFilter = useRef<DiagramFilter | undefined>(undefined);
     useEffect(() => {
-        if (!equal(filteredSchemas, prevFilteredSchemas.current)) {
+        if (!equal(filter, prevFilter.current)) {
             debounce(() => {
                 const overlappingTablesInDiagram = findOverlappingTables({
                     tables: tables.filter((table) =>
-                        shouldShowTablesBySchemaFilter(table, filteredSchemas)
+                        filterTable({
+                            table: {
+                                id: table.id,
+                                schema: table.schema,
+                            },
+                            filter,
+                            options: {
+                                defaultSchema: defaultSchemas[databaseType],
+                            },
+                        })
                     ),
                 });
                 setOverlapGraph(overlappingTablesInDiagram);
@@ -453,9 +456,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     maxZoom: 0.8,
                 });
             }, 500)();
-            prevFilteredSchemas.current = filteredSchemas;
+            prevFilter.current = filter;
         }
-    }, [filteredSchemas, fitView, tables, setOverlapGraph]);
+    }, [filter, fitView, tables, setOverlapGraph, databaseType]);
 
     // Handle parent area updates when tables move
     const tablePositions = useMemo(
@@ -1061,7 +1064,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 const diagramTables = event.data.diagram.tables ?? [];
                 const overlappingTablesInDiagram = findOverlappingTables({
                     tables: diagramTables.filter((table) =>
-                        shouldShowTablesBySchemaFilter(table, filteredSchemas)
+                        filterTable({
+                            table: {
+                                id: table.id,
+                                schema: table.schema,
+                            },
+                            filter,
+                            options: {
+                                defaultSchema: defaultSchemas[databaseType],
+                            },
+                        })
                     ),
                 });
                 setOverlapGraph(overlappingTablesInDiagram);
@@ -1072,8 +1084,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             setOverlapGraph,
             getNode,
             nodes,
-            filteredSchemas,
+            filter,
             setNodes,
+            databaseType,
         ]
     );
 

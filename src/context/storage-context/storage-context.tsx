@@ -7,11 +7,20 @@ import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 
 export interface StorageContext {
     // Config operations
     getConfig: () => Promise<ChartDBConfig | undefined>;
     updateConfig: (config: Partial<ChartDBConfig>) => Promise<void>;
+
+    // Diagram filter operations
+    getDiagramFilter: (diagramId: string) => Promise<DiagramFilter | undefined>;
+    updateDiagramFilter: (
+        diagramId: string,
+        filter: DiagramFilter
+    ) => Promise<void>;
+    deleteDiagramFilter: (diagramId: string) => Promise<void>;
 
     // Diagram operations
     addDiagram: (params: { diagram: Diagram }) => Promise<void>;
@@ -131,6 +140,10 @@ export interface StorageContext {
 export const storageInitialValue: StorageContext = {
     getConfig: emptyFn,
     updateConfig: emptyFn,
+
+    getDiagramFilter: emptyFn,
+    updateDiagramFilter: emptyFn,
+    deleteDiagramFilter: emptyFn,
 
     addDiagram: emptyFn,
     listDiagrams: emptyFn,

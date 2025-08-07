@@ -71,15 +71,6 @@ export const ru: LanguageTranslation = {
             cancel: 'Отменить',
         },
 
-        multiple_schemas_alert: {
-            title: 'Множественные схемы',
-            description:
-                '{{schemasCount}} схем в этой диаграмме. В данный момент отображается: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'никто',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Ошибка копирования',
@@ -113,10 +104,6 @@ export const ru: LanguageTranslation = {
         show_less: 'Показать меньше',
 
         side_panel: {
-            schema: 'Схема:',
-            filter_by_schema: 'Фильтр по схеме',
-            search_schema: 'Схема поиска...',
-            no_schemas_found: 'Схемы не найдены.',
             view_all_options: 'Просмотреть все варианты...',
             tables_section: {
                 tables: 'Таблицы',

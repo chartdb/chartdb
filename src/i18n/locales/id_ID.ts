@@ -72,15 +72,6 @@ export const id_ID: LanguageTranslation = {
             cancel: 'Batal',
         },
 
-        multiple_schemas_alert: {
-            title: 'Schema Lebih dari satu',
-            description:
-                '{{schemasCount}} schema di diagram ini. Sedang ditampilkan: {{formattedSchemas}}.',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'Tidak ada',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Gagal menyalin',
@@ -115,10 +106,6 @@ export const id_ID: LanguageTranslation = {
         copied: 'Tersalin!',
 
         side_panel: {
-            schema: 'Skema:',
-            filter_by_schema: 'Saring berdasarkan skema',
-            search_schema: 'Cari skema...',
-            no_schemas_found: 'Tidak ada skema yang ditemukan.',
             view_all_options: 'Tampilkan Semua Pilihan...',
             tables_section: {
                 tables: 'Tabel',

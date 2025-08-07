@@ -72,15 +72,6 @@ export const ar: LanguageTranslation = {
             cancel: 'إلغاء',
         },
 
-        multiple_schemas_alert: {
-            title: 'مخططات متعددة',
-            description:
-                '{{formattedSchemas}} :مخططات في هذا الرسم البياني. يتم حاليا عرض {{schemasCount}} هناك',
-            // TODO: Translate
-            show_me: 'Show me',
-            none: 'لا شيء',
-        },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'فشل النسخ',
@@ -115,10 +106,6 @@ export const ar: LanguageTranslation = {
         copied: '!تم النسخ',
 
         side_panel: {
-            schema: ':المخطط',
-            filter_by_schema: 'تصفية حسب المخطط',
-            search_schema: '...بحث في المخطط',
-            no_schemas_found: '.لم يتم العثور على مخططات',
             view_all_options: '...عرض جميع الخيارات',
             tables_section: {
                 tables: 'الجداول',
