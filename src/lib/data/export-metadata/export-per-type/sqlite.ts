@@ -67,8 +67,9 @@ function parseSQLiteDefault(field: DBField): string {
     return `'${defaultValue.replace(/'/g, "''")}'`;
 }
 
-// Map problematic types to SQLite compatible types
+// Preserve original types for SQLite export (only map when necessary)
 function mapSQLiteType(typeName: string, isPrimaryKey: boolean): string {
+    const originalType = typeName;
     typeName = typeName.toLowerCase();
 
     // Special handling for primary key integer columns (autoincrement requires INTEGER PRIMARY KEY)
@@ -76,59 +77,62 @@ function mapSQLiteType(typeName: string, isPrimaryKey: boolean): string {
         return 'INTEGER'; // Must be uppercase for SQLite to recognize it for AUTOINCREMENT
     }
 
-    // Map common types to SQLite's simplified type system
+    // Preserve original type names that SQLite accepts
     switch (typeName) {
+        // Keep these types as-is
+        case 'integer':
+        case 'text':
+        case 'real':
+        case 'blob':
+        case 'numeric':
+        case 'decimal':
+        case 'boolean':
+        case 'date':
+        case 'datetime':
+        case 'timestamp':
+        case 'float':
+        case 'double':
+        case 'varchar':
+        case 'char':
         case 'int':
         case 'smallint':
         case 'tinyint':
-        case 'mediumint':
         case 'bigint':
-            return 'INTEGER';
+        case 'json':
+            return typeName.toUpperCase();
 
-        case 'decimal':
-        case 'numeric':
-        case 'float':
-        case 'double':
-        case 'real':
-            return 'REAL';
-
-        case 'char':
+        // Only map types that SQLite truly doesn't recognize
         case 'nchar':
-        case 'varchar':
         case 'nvarchar':
-        case 'text':
         case 'ntext':
         case 'character varying':
         case 'character':
             return 'TEXT';
 
-        case 'date':
-        case 'datetime':
-        case 'timestamp':
         case 'datetime2':
-            return 'TEXT'; // SQLite doesn't have dedicated date types
+            return 'DATETIME';
 
-        case 'blob':
         case 'binary':
         case 'varbinary':
         case 'image':
             return 'BLOB';
 
         case 'bit':
-        case 'boolean':
-            return 'INTEGER'; // SQLite doesn't have a boolean type, use INTEGER
+            return 'BOOLEAN';
 
         case 'user-defined':
-        case 'json':
         case 'jsonb':
-            return 'TEXT'; // Store as JSON text
+            return 'TEXT';
 
         case 'array':
-            return 'TEXT'; // Store as serialized array text
+            return 'TEXT';
 
         case 'geometry':
         case 'geography':
-            return 'BLOB'; // Store spatial data as BLOB in SQLite
+            return 'BLOB';
+
+        case 'mediumint':
+            return 'INTEGER';
     }
 
     // If type has array notation (ends with []), treat as TEXT
@@ -136,8 +140,8 @@ function mapSQLiteType(typeName: string, isPrimaryKey: boolean): string {
         return 'TEXT';
     }
 
-    // For any other types, default to TEXT
-    return typeName;
+    // For any other types, preserve the original
+    return originalType.toUpperCase();
 }
 
 export function exportSQLite({
@@ -297,14 +301,40 @@ export function exportSQLite({
                         const fieldName = `"${field.name}"`;
 
                         // Handle type name - map to SQLite compatible types
-                        const typeName = mapSQLiteType(
+                        const baseTypeName = mapSQLiteType(
                             field.type.name,
                             field.primaryKey
                         );
 
-                        // SQLite ignores length specifiers, so we don't add them
-                        // We'll keep this simple without size info
-                        const typeWithoutSize = typeName;
+                        // Add size/precision/scale parameters if applicable
+                        let typeWithParams = baseTypeName;
+
+                        // Add character maximum length for VARCHAR, CHAR, etc.
+                        if (
+                            field.characterMaximumLength &&
+                            ['VARCHAR', 'CHAR', 'TEXT'].includes(
+                                baseTypeName.toUpperCase()
+                            )
+                        ) {
+                            typeWithParams = `${baseTypeName}(${field.characterMaximumLength})`;
+                        }
+                        // Add precision and scale for DECIMAL, NUMERIC, etc.
+                        else if (
+                            field.precision &&
+                            [
+                                'DECIMAL',
+                                'NUMERIC',
+                                'REAL',
+                                'FLOAT',
+                                'DOUBLE',
+                            ].includes(baseTypeName.toUpperCase())
+                        ) {
+                            if (field.scale) {
+                                typeWithParams = `${baseTypeName}(${field.precision}, ${field.scale})`;
+                            } else {
+                                typeWithParams = `${baseTypeName}(${field.precision})`;
+                            }
+                        }
 
                         const notNull = field.nullable ? '' : ' NOT NULL';
 
@@ -352,7 +382,7 @@ export function exportSQLite({
                                 ? ' PRIMARY KEY' + autoIncrement
                                 : '';
 
-                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithoutSize}${primaryKey}${notNull}${unique}${defaultValue}`;
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeWithParams}${primaryKey}${notNull}${unique}${defaultValue}`;
                     })
                     .join(',\n')}${
                     // Add PRIMARY KEY as table constraint for composite primary keys or non-INTEGER primary keys
