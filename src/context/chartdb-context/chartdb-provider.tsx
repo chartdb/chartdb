@@ -1082,12 +1082,15 @@ export const ChartDBProvider: React.FC<
 
                 const sourceFieldName = sourceField?.name ?? '';
 
+                const targetTable = getTable(targetTableId);
+                const targetTableSchema = targetTable?.schema;
+
                 const relationship: DBRelationship = {
                     id: generateId(),
                     name: `${sourceTableName}_${sourceFieldName}_fk`,
                     sourceSchema: sourceTable?.schema,
                     sourceTableId,
-                    targetSchema: sourceTable?.schema,
+                    targetSchema: targetTableSchema,
                     targetTableId,
                     sourceFieldId,
                     targetFieldId,
