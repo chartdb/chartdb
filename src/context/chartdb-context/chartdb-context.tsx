@@ -153,7 +153,7 @@ export interface ChartDBContext {
     ) => Promise<void>;
 
     // Index operations
-    createIndex: (tableId: string) => Promise<DBIndex>;
+    createIndex: (tableId: string, type?: DBIndex['type']) => Promise<DBIndex>;
     addIndex: (
         tableId: string,
         index: DBIndex,

@@ -950,7 +950,7 @@ export const ChartDBProvider: React.FC<
     );
 
     const createIndex: ChartDBContext['createIndex'] = useCallback(
-        async (tableId: string) => {
+        async (tableId: string, type?: DBIndex['type']) => {
             const table = getTable(tableId);
             const index: DBIndex = {
                 id: generateId(),
@@ -958,6 +958,7 @@ export const ChartDBProvider: React.FC<
                 fieldIds: [],
                 unique: false,
                 createdAt: Date.now(),
+                ...(type && { type }),
             };
 
             await addIndex(tableId, index);
