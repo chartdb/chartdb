@@ -8,6 +8,7 @@ export const de: LanguageTranslation = {
                 new: 'Neu',
                 open: 'Öffnen',
                 save: 'Speichern',
+                duplicate: 'Diagramm duplizieren',
                 import: 'Datenbank importieren',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
@@ -298,7 +299,7 @@ export const de: LanguageTranslation = {
                     step_1: 'Gehen Sie zu Tools > Optionen > Abfrageergebnisse > SQL Server.',
                     step_2: 'Wenn Sie "Ergebnisse in Raster" verwenden, ändern Sie die maximale Zeichenanzahl für Nicht-XML-Daten (auf 9999999 setzen).',
                 },
-                instructions_link: 'Brauchen Sie Hilfe? So geht’s',
+                instructions_link: "Brauchen Sie Hilfe? So geht's",
                 check_script_result: 'Skriptergebnis überprüfen',
             },
 

@@ -8,6 +8,7 @@ export const pt_BR: LanguageTranslation = {
                 new: 'Novo',
                 open: 'Abrir',
                 save: 'Salvar',
+                duplicate: 'Duplicar',
                 import: 'Importar Banco de Dados',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',

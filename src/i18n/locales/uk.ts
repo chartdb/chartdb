@@ -8,6 +8,7 @@ export const uk: LanguageTranslation = {
                 new: 'Новий',
                 open: 'Відкрити',
                 save: 'Зберегти',
+                duplicate: 'Дублювати',
                 import: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',

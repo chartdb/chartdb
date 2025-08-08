@@ -8,6 +8,7 @@ export const zh_CN: LanguageTranslation = {
                 new: '新建',
                 open: '打开',
                 save: '保存',
+                duplicate: '复制',
                 import: '导入数据库',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
