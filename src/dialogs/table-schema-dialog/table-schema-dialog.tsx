@@ -46,7 +46,7 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const { databaseType } = useChartDB();
-    const { addSchemaIfFiltered } = useDiagramFilter();
+    const { addSchemaToFilter } = useDiagramFilter();
     const [selectedSchemaId, setSelectedSchemaId] = useState<string>(
         table?.schema
             ? schemaNameToSchemaId(table.schema)
@@ -114,14 +114,14 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
             onConfirm({ schema });
         }
 
-        addSchemaIfFiltered(createdSchemaId);
+        addSchemaToFilter(createdSchemaId);
     }, [
         onConfirm,
         selectedSchemaId,
         schemas,
         isCreatingNew,
         newSchemaName,
-        addSchemaIfFiltered,
+        addSchemaToFilter,
     ]);
 
     const schemaOptions: SelectBoxOption[] = useMemo(

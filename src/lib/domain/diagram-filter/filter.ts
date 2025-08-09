@@ -37,48 +37,6 @@ export const filterTable = ({
     return false;
 };
 
-export const filterTableBySchema = ({
-    table,
-    schemaIdsFilter,
-    options = { defaultSchema: undefined },
-}: {
-    table: { id: string; schema?: string | null };
-    schemaIdsFilter?: string[];
-    options?: {
-        defaultSchema?: string;
-    };
-}): boolean => {
-    if (!schemaIdsFilter) {
-        return true;
-    }
-
-    const tableSchemaId = table.schema ?? options.defaultSchema;
-
-    if (tableSchemaId) {
-        return schemaIdsFilter.includes(schemaNameToSchemaId(tableSchemaId));
-    }
-
-    return false;
-};
-
-export const filterSchema = ({
-    schemaId,
-    schemaIdsFilter,
-}: {
-    schemaId?: string;
-    schemaIdsFilter?: string[];
-}): boolean => {
-    if (!schemaIdsFilter) {
-        return true;
-    }
-
-    if (!schemaId) {
-        return false;
-    }
-
-    return schemaIdsFilter.includes(schemaId);
-};
-
 export const filterRelationship = ({
     tableA: { id: tableAId, schema: tableASchema },
     tableB: { id: tableBId, schema: tableBSchema },
