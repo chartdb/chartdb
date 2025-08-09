@@ -7,8 +7,14 @@ import React, {
 } from 'react';
 import type { DiagramFilterContext } from './diagram-filter-context';
 import { diagramFilterContext } from './diagram-filter-context';
-import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
-import { reduceFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import type {
+    DiagramFilter,
+    FilterTableInfo,
+} from '@/lib/domain/diagram-filter/diagram-filter';
+import {
+    reduceFilter,
+    spreadFilterTables,
+} from '@/lib/domain/diagram-filter/diagram-filter';
 import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
@@ -26,14 +32,18 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         return schemas.map((schema) => schema.id);
     }, [schemas]);
 
-    const allTables = useMemo(() => {
-        return tables.map((table) => ({
-            id: table.id,
-            schemaId: table.schema
-                ? schemaNameToSchemaId(table.schema)
-                : defaultSchemas[databaseType],
-            schema: table.schema ?? defaultSchemas[databaseType],
-        }));
+    const allTables: FilterTableInfo[] = useMemo(() => {
+        return tables.map(
+            (table) =>
+                ({
+                    id: table.id,
+                    schemaId: table.schema
+                        ? schemaNameToSchemaId(table.schema)
+                        : defaultSchemas[databaseType],
+                    schema: table.schema ?? defaultSchemas[databaseType],
+                    areaId: table.parentAreaId ?? undefined,
+                }) satisfies FilterTableInfo
+        );
     }, [tables, databaseType]);
 
     const diagramIdOfLoadedFilter = useRef<string | null>(null);
@@ -66,33 +76,6 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         }
     }, [diagramId, getDiagramFilter]);
 
-    // Schema methods
-    const addSchemaIds: DiagramFilterContext['addSchemaIdsFilter'] =
-        useCallback((...ids: string[]) => {
-            setFilter(
-                (prev) =>
-                    ({
-                        ...prev,
-                        schemaIds: [
-                            ...new Set([...(prev.schemaIds || []), ...ids]),
-                        ],
-                    }) satisfies DiagramFilter
-            );
-        }, []);
-
-    const removeSchemaIds: DiagramFilterContext['removeSchemaIdsFilter'] =
-        useCallback((...ids: string[]) => {
-            setFilter(
-                (prev) =>
-                    ({
-                        ...prev,
-                        schemaIds: prev.schemaIds?.filter(
-                            (id) => !ids.includes(id)
-                        ),
-                    }) satisfies DiagramFilter
-            );
-        }, []);
-
     const clearSchemaIds: DiagramFilterContext['clearSchemaIdsFilter'] =
         useCallback(() => {
             setFilter(
@@ -100,35 +83,6 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                     ({
                         ...prev,
                         schemaIds: undefined,
-                    }) satisfies DiagramFilter
-            );
-        }, []);
-
-    // Table methods
-    const addTableIds: DiagramFilterContext['addTableIdsFilter'] = useCallback(
-        (...ids: string[]) => {
-            setFilter(
-                (prev) =>
-                    ({
-                        ...prev,
-                        tableIds: [
-                            ...new Set([...(prev.tableIds || []), ...ids]),
-                        ],
-                    }) satisfies DiagramFilter
-            );
-        },
-        []
-    );
-
-    const removeTableIds: DiagramFilterContext['removeTableIdsFilter'] =
-        useCallback((...ids: string[]) => {
-            setFilter(
-                (prev) =>
-                    ({
-                        ...prev,
-                        tableIds: prev.tableIds?.filter(
-                            (id) => !ids.includes(id)
-                        ),
                     }) satisfies DiagramFilter
             );
         }, []);
@@ -224,7 +178,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             schemaIds: newSchemaIds,
                             tableIds: newTableIds,
                         },
-                        allTables
+                        allTables satisfies FilterTableInfo[]
                     );
                 });
             },
@@ -271,7 +225,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                         schemaIds: undefined,
                         tableIds: newTableIds,
                     },
-                    allTables
+                    allTables satisfies FilterTableInfo[]
                 );
             });
         },
@@ -359,14 +313,14 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             schemaIds: newSchemaIds,
                             tableIds: newTableIds,
                         },
-                        allTables
+                        allTables satisfies FilterTableInfo[]
                     );
                 });
             },
             [allTables, databaseType, toggleTableFilterForNoSchema]
         );
 
-    const addSchemaIfFiltered: DiagramFilterContext['addSchemaIfFiltered'] =
+    const addSchemaIfFiltered: DiagramFilterContext['addSchemaToFilter'] =
         useCallback(
             (schemaId: string) => {
                 setFilter((prev) => {
@@ -435,23 +389,103 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             );
         }, [hasActiveFilter, schemas, allTables, filter, databaseType]);
 
+    const addTablesToFilter: DiagramFilterContext['addTablesToFilter'] =
+        useCallback(
+            ({ tableIds, filterCallback }) => {
+                setFilter((prev) => {
+                    let tableIdsToAdd: string[];
+
+                    if (tableIds) {
+                        // If tableIds are provided, use them directly
+                        tableIdsToAdd = tableIds;
+                    } else if (filterCallback) {
+                        // If filterCallback is provided, filter tables based on it
+                        tableIdsToAdd = allTables
+                            .filter(filterCallback)
+                            .map((table) => table.id);
+                    } else {
+                        // If neither is provided, do nothing
+                        return prev;
+                    }
+
+                    const filterByTableIds = spreadFilterTables(
+                        prev,
+                        allTables satisfies FilterTableInfo[]
+                    );
+
+                    const currentTableIds = filterByTableIds.tableIds || [];
+                    const newTableIds = [
+                        ...new Set([...currentTableIds, ...tableIdsToAdd]),
+                    ];
+
+                    return reduceFilter(
+                        {
+                            ...filterByTableIds,
+                            tableIds: newTableIds,
+                        },
+                        allTables satisfies FilterTableInfo[]
+                    );
+                });
+            },
+            [allTables]
+        );
+
+    const removeTablesFromFilter: DiagramFilterContext['removeTablesFromFilter'] =
+        useCallback(
+            ({ tableIds, filterCallback }) => {
+                setFilter((prev) => {
+                    let tableIdsToRemovoe: string[];
+
+                    if (tableIds) {
+                        // If tableIds are provided, use them directly
+                        tableIdsToRemovoe = tableIds;
+                    } else if (filterCallback) {
+                        // If filterCallback is provided, filter tables based on it
+                        tableIdsToRemovoe = allTables
+                            .filter(filterCallback)
+                            .map((table) => table.id);
+                    } else {
+                        // If neither is provided, do nothing
+                        return prev;
+                    }
+
+                    const filterByTableIds = spreadFilterTables(
+                        prev,
+                        allTables satisfies FilterTableInfo[]
+                    );
+
+                    const currentTableIds = filterByTableIds.tableIds || [];
+                    const newTableIds = currentTableIds.filter(
+                        (id) => !tableIdsToRemovoe.includes(id)
+                    );
+
+                    return reduceFilter(
+                        {
+                            ...filterByTableIds,
+                            tableIds: newTableIds,
+                        },
+                        allTables satisfies FilterTableInfo[]
+                    );
+                });
+            },
+            [allTables]
+        );
+
+    console.log({ filter });
+
     const value: DiagramFilterContext = {
         filter,
-        schemaIdsFilter: filter.schemaIds,
-        addSchemaIdsFilter: addSchemaIds,
-        removeSchemaIdsFilter: removeSchemaIds,
         clearSchemaIdsFilter: clearSchemaIds,
         setTableIdsFilterEmpty: setTableIdsEmpty,
-        tableIdsFilter: filter.tableIds,
-        addTableIdsFilter: addTableIds,
-        removeTableIdsFilter: removeTableIds,
         clearTableIdsFilter: clearTableIds,
         resetFilter,
         toggleSchemaFilter,
         toggleTableFilter,
-        addSchemaIfFiltered,
+        addSchemaToFilter: addSchemaIfFiltered,
         hasActiveFilter,
         schemasDisplayed,
+        addTablesToFilter,
+        removeTablesFromFilter,
     };
 
     return (

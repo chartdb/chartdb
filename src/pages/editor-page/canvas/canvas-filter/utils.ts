@@ -1,5 +1,4 @@
 import type { Area, DatabaseType } from '@/lib/domain';
-import { schemaNameToSchemaId } from '@/lib/domain';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import type {
     AreaContext,
@@ -11,7 +10,7 @@ import type {
 } from './types';
 import type { TreeNode } from '@/components/tree-view/tree';
 import { Box, Database, Layers, Table } from 'lucide-react';
-import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export const generateTreeDataByAreas = ({
@@ -54,18 +53,19 @@ export const generateTreeDataByAreas = ({
 
         // Check if at least one table in the area is visible
         const areaVisible =
-            areaTables.length === 0 ||
-            areaTables.some((table) =>
-                filterTable({
-                    table: {
-                        id: table.id,
-                        schema: table.schema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                })
+            // areaTables.length === 0 ||
+            !areaTables.some(
+                (table) =>
+                    filterTable({
+                        table: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
+                    }) === false
             );
 
         const areaNode: TreeNode<NodeType, NodeContext> = {
@@ -78,7 +78,8 @@ export const generateTreeDataByAreas = ({
                 id: area.id,
                 name: area.name,
                 visible: areaVisible,
-            } as AreaContext,
+                isUngrouped: false,
+            } satisfies AreaContext,
             className: !areaVisible ? 'opacity-50' : '',
             children: areaTables.map(
                 (table): TreeNode<NodeType, NodeContext> => {
@@ -102,7 +103,7 @@ export const generateTreeDataByAreas = ({
                         context: {
                             tableSchema: table.schema,
                             visible: tableVisible,
-                        } as TableContext,
+                        } satisfies TableContext,
                         className: !tableVisible ? 'opacity-50' : '',
                     };
                 }
@@ -139,7 +140,8 @@ export const generateTreeDataByAreas = ({
                 id: 'ungrouped',
                 name: 'Ungrouped',
                 visible: ungroupedVisible,
-            } as AreaContext,
+                isUngrouped: true,
+            } satisfies AreaContext,
             className: !ungroupedVisible ? 'opacity-50' : '',
             children: tablesWithoutArea.map(
                 (table): TreeNode<NodeType, NodeContext> => {
@@ -163,7 +165,7 @@ export const generateTreeDataByAreas = ({
                         context: {
                             tableSchema: table.schema,
                             visible: tableVisible,
-                        } as TableContext,
+                        } satisfies TableContext,
                         className: !tableVisible ? 'opacity-50' : '',
                     };
                 }
@@ -211,24 +213,33 @@ export const generateTreeDataBySchemas = ({
         let schemaVisible;
 
         if (databaseWithSchemas) {
-            const schemaId = schemaNameToSchemaId(schemaName);
-            schemaVisible = filterSchema({
-                schemaId,
-                schemaIdsFilter: filter?.schemaIds,
-            });
+            schemaVisible = !schemaTables.some(
+                (table) =>
+                    filterTable({
+                        table: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
+                    }) === false
+            );
         } else {
             // if at least one table is visible, the schema is considered visible
-            schemaVisible = schemaTables.some((table) =>
-                filterTable({
-                    table: {
-                        id: table.id,
-                        schema: table.schema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                })
+            schemaVisible = !schemaTables.some(
+                (table) =>
+                    filterTable({
+                        table: {
+                            id: table.id,
+                            schema: table.schema,
+                        },
+                        filter,
+                        options: {
+                            defaultSchema: defaultSchemas[databaseType],
+                        },
+                    }) === false
             );
         }
 
