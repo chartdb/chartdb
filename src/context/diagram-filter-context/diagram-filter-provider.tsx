@@ -17,7 +17,7 @@ import {
 } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { filterSchema, filterTable } from '@/lib/domain/diagram-filter/filter';
+import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { schemaNameToSchemaId } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 
@@ -121,10 +121,20 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                     const currentSchemaIds = prev.schemaIds;
 
                     // Check if schema is currently visible
-                    const isSchemaVisible = filterSchema({
-                        schemaId,
-                        schemaIdsFilter: currentSchemaIds,
-                    });
+                    const isSchemaVisible = !allTables.some(
+                        (table) =>
+                            table.schemaId === schemaId &&
+                            filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter: prev,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            }) === false
+                    );
 
                     let newSchemaIds: string[] | undefined;
                     let newTableIds: string[] | undefined = prev.tableIds;
@@ -182,7 +192,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                     );
                 });
             },
-            [allSchemasIds, allTables]
+            [allSchemasIds, allTables, databaseType]
         );
 
     const toggleTableFilterForNoSchema = useCallback(
@@ -320,7 +330,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             [allTables, databaseType, toggleTableFilterForNoSchema]
         );
 
-    const addSchemaIfFiltered: DiagramFilterContext['addSchemaToFilter'] =
+    const addSchemaToFilter: DiagramFilterContext['addSchemaToFilter'] =
         useCallback(
             (schemaId: string) => {
                 setFilter((prev) => {
@@ -471,8 +481,6 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             [allTables]
         );
 
-    console.log({ filter });
-
     const value: DiagramFilterContext = {
         filter,
         clearSchemaIdsFilter: clearSchemaIds,
@@ -481,7 +489,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
         resetFilter,
         toggleSchemaFilter,
         toggleTableFilter,
-        addSchemaToFilter: addSchemaIfFiltered,
+        addSchemaToFilter,
         hasActiveFilter,
         schemasDisplayed,
         addTablesToFilter,

@@ -117,17 +117,18 @@ export const generateTreeDataByAreas = ({
 
     // Add ungrouped tables
     if (tablesWithoutArea.length > 0) {
-        const ungroupedVisible = tablesWithoutArea.some((table) =>
-            filterTable({
-                table: {
-                    id: table.id,
-                    schema: table.schema,
-                },
-                filter,
-                options: {
-                    defaultSchema: defaultSchemas[databaseType],
-                },
-            })
+        const ungroupedVisible = !tablesWithoutArea.some(
+            (table) =>
+                filterTable({
+                    table: {
+                        id: table.id,
+                        schema: table.schema,
+                    },
+                    filter,
+                    options: {
+                        defaultSchema: defaultSchemas[databaseType],
+                    },
+                }) == false
         );
 
         const ungroupedNode: TreeNode<NodeType, NodeContext> = {
