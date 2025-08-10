@@ -20,11 +20,12 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { schemaNameToSchemaId } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import type { ChartDBEvent } from '../chartdb-context/chartdb-context';
 
 export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { diagramId, tables, schemas, databaseType } = useChartDB();
+    const { diagramId, tables, schemas, databaseType, events } = useChartDB();
     const { getDiagramFilter, updateDiagramFilter } = useStorage();
     const [filter, setFilter] = useState<DiagramFilter>({});
 
@@ -480,6 +481,23 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             },
             [allTables]
         );
+
+    const eventConsumer = useCallback(
+        (event: ChartDBEvent) => {
+            if (!hasActiveFilter) {
+                return;
+            }
+
+            if (event.action === 'add_tables') {
+                addTablesToFilter({
+                    tableIds: event.data.tables.map((table) => table.id),
+                });
+            }
+        },
+        [hasActiveFilter, addTablesToFilter]
+    );
+
+    events.useSubscription(eventConsumer);
 
     const value: DiagramFilterContext = {
         filter,
