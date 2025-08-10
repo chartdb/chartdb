@@ -16,7 +16,6 @@ import type { TreeNode } from '@/components/tree-view/tree';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
-import { defaultSchemas } from '@/lib/data/default-schemas';
 import type {
     GroupingMode,
     NodeContext,
@@ -26,6 +25,7 @@ import type {
 } from './types';
 import { generateTreeDataByAreas, generateTreeDataBySchemas } from './utils';
 import { FilterItemActions } from './filter-item-actions';
+import { databasesWithSchemas } from '@/lib/domain';
 
 export interface CanvasFilterProps {
     onClose: () => void;
@@ -63,7 +63,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     );
 
     const databaseWithSchemas = useMemo(
-        () => !!defaultSchemas[databaseType],
+        () => databasesWithSchemas.includes(databaseType),
         [databaseType]
     );
 

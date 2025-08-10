@@ -154,6 +154,7 @@ export const ja: LanguageTranslation = {
                         title: 'インデックス属性',
                         name: '名前',
                         unique: 'ユニーク',
+                        index_type: 'インデックスタイプ',
                         delete_index: 'インデックスを削除',
                     },
                     table_actions: {

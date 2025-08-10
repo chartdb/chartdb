@@ -150,6 +150,7 @@ export const id_ID: LanguageTranslation = {
                         title: 'Atribut Indeks',
                         name: 'Nama',
                         unique: 'Unik',
+                        index_type: 'Tipe Indeks',
                         delete_index: 'Hapus Indeks',
                     },
                     table_actions: {

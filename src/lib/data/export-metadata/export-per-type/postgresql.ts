@@ -405,7 +405,7 @@ export function exportPostgreSQL({
                                     .filter(Boolean);
 
                                 return indexFieldNames.length > 0
-                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFieldNames.join(', ')});`
+                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName}${index.type && index.type !== 'btree' ? ` USING ${index.type.toUpperCase()}` : ''} (${indexFieldNames.join(', ')});`
                                     : '';
                             })
                             .filter(Boolean);

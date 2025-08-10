@@ -150,6 +150,7 @@ export const tr: LanguageTranslation = {
                         title: 'İndeks Özellikleri',
                         name: 'Ad',
                         unique: 'Tekil',
+                        index_type: 'İndeks Türü',
                         delete_index: 'İndeksi Sil',
                     },
                     table_actions: {

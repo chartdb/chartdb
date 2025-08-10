@@ -18,7 +18,7 @@ import {
 import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
-import { schemaNameToSchemaId } from '@/lib/domain';
+import { databasesWithSchemas, schemaNameToSchemaId } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import type { ChartDBEvent } from '../chartdb-context/chartdb-context';
 
@@ -246,7 +246,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     const toggleTableFilter: DiagramFilterContext['toggleTableFilter'] =
         useCallback(
             (tableId: string) => {
-                if (!defaultSchemas[databaseType]) {
+                if (!databasesWithSchemas.includes(databaseType)) {
                     // No schemas, toggle table filter without schema context
                     toggleTableFilterForNoSchema(tableId);
                     return;

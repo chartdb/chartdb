@@ -145,6 +145,7 @@ export const en = {
                         title: 'Index Attributes',
                         name: 'Name',
                         unique: 'Unique',
+                        index_type: 'Index Type',
                         delete_index: 'Delete Index',
                     },
                     table_actions: {

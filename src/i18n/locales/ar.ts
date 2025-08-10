@@ -149,6 +149,7 @@ export const ar: LanguageTranslation = {
                         title: 'خصائص الفهرس',
                         name: 'الإسم',
                         unique: 'فريد',
+                        index_type: 'نوع الفهرس',
                         delete_index: 'حذف الفهرس',
                     },
                     table_actions: {

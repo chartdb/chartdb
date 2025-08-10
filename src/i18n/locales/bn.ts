@@ -151,6 +151,7 @@ export const bn: LanguageTranslation = {
                         title: 'ইনডেক্স কর্ম',
                         name: 'নাম',
                         unique: 'অদ্বিতীয়',
+                        index_type: 'ইনডেক্স ধরন',
                         delete_index: 'ইনডেক্স মুছুন',
                     },
                     table_actions: {

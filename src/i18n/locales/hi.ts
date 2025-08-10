@@ -151,6 +151,7 @@ export const hi: LanguageTranslation = {
                         title: 'सूचकांक विशेषताएँ',
                         name: 'नाम',
                         unique: 'अद्वितीय',
+                        index_type: 'इंडेक्स प्रकार',
                         delete_index: 'सूचकांक हटाएँ',
                     },
                     table_actions: {

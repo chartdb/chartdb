@@ -150,6 +150,7 @@ export const ko_KR: LanguageTranslation = {
                         title: '인덱스 속성',
                         name: '인덱스 명',
                         unique: '유니크 여부',
+                        index_type: '인덱스 타입',
                         delete_index: '인덱스 삭제',
                     },
                     table_actions: {

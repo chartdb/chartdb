@@ -147,6 +147,7 @@ export const zh_CN: LanguageTranslation = {
                         title: '索引属性',
                         name: '名称',
                         unique: '唯一',
+                        index_type: '索引类型',
                         delete_index: '删除索引',
                     },
                     table_actions: {

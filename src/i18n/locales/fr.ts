@@ -148,6 +148,7 @@ export const fr: LanguageTranslation = {
                         title: "Attributs de l'Index",
                         name: 'Nom',
                         unique: 'Unique',
+                        index_type: "Type d'index",
                         delete_index: "Supprimer l'Index",
                     },
                     table_actions: {
