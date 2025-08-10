@@ -10,7 +10,11 @@ import {
 } from './db-field';
 import type { TableInfo } from '../data/import-metadata/metadata-types/table-info';
 import { createAggregatedIndexes } from '../data/import-metadata/metadata-types/index-info';
-import { materializedViewColor, viewColor, randomColor } from '@/lib/colors';
+import {
+    materializedViewColor,
+    viewColor,
+    defaultTableColor,
+} from '@/lib/colors';
 import type { DBRelationship } from './db-relationship';
 import {
     decodeBase64ToUtf16LE,
@@ -224,7 +228,7 @@ export const createTablesFromMetadata = ({
                 ? materializedViewColor
                 : isView
                   ? viewColor
-                  : randomColor(),
+                  : defaultTableColor,
             isView: isView,
             isMaterializedView: isMaterializedView,
             createdAt: Date.now(),

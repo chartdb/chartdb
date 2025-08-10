@@ -6,7 +6,7 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
 import type { DataType } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
-import { randomColor } from '@/lib/colors';
+import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
@@ -727,10 +727,10 @@ export function convertToChartDBDiagram(
             indexes,
             x: col * tableSpacing,
             y: row * tableSpacing,
-            color: randomColor(),
+            color: defaultTableColor,
             isView: false,
             createdAt: Date.now(),
-        };
+        } satisfies DBTable;
     });
 
     // Process relationships
