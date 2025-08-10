@@ -66,10 +66,8 @@ export const TableIndex: React.FC<TableIndexProps> = ({
 
     const indexTypeOptions = useMemo(
         () =>
-            allIndexTypeOptions.filter(
-                (option) =>
-                    !databaseIndexTypes[databaseType] ||
-                    databaseIndexTypes[databaseType]?.includes(option.value)
+            allIndexTypeOptions.filter((option) =>
+                databaseIndexTypes[databaseType]?.includes(option.value)
             ),
         [databaseType]
     );
