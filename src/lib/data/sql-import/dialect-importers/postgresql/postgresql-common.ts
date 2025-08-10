@@ -203,11 +203,6 @@ export function findTableWithSchemaSupport(
     // If still not found with schema, try any match on the table name
     if (!table) {
         table = tables.find((t) => t.name === tableName);
-        if (table) {
-            console.log(
-                `Found table ${tableName} without schema match, source schema: ${effectiveSchema}, table schema: ${table.schema}`
-            );
-        }
     }
 
     return table;
@@ -235,11 +230,7 @@ export function getTableIdWithSchemaSupport(
     // If still not found with schema, try without schema
     if (!tableId) {
         tableId = tableMap[tableName];
-        if (tableId) {
-            console.log(
-                `Found table ID for ${tableName} without schema match, source schema: ${effectiveSchema}`
-            );
-        } else {
+        if (!tableId) {
             console.warn(
                 `No table ID found for ${tableName} with schema ${effectiveSchema}`
             );

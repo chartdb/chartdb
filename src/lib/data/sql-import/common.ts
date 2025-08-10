@@ -786,12 +786,6 @@ export function convertToChartDBDiagram(
         );
 
         if (!sourceField || !targetField) {
-            console.log('Relationship refers to non-existent field:', {
-                sourceTable: rel.sourceTable,
-                sourceField: rel.sourceColumn,
-                targetTable: rel.targetTable,
-                targetField: rel.targetColumn,
-            });
             return;
         }
 

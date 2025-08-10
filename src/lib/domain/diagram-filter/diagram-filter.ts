@@ -4,9 +4,11 @@ export interface DiagramFilter {
     tableIds?: string[];
 }
 
-export interface TableInfo {
+export interface FilterTableInfo {
     id: string;
     schemaId?: string;
+    schema?: string;
+    areaId?: string;
 }
 
 /**
@@ -18,13 +20,17 @@ export interface TableInfo {
  */
 export function reduceFilter(
     filter: DiagramFilter,
-    tables: TableInfo[]
+    tables: FilterTableInfo[]
 ): DiagramFilter {
     let { schemaIds, tableIds } = filter;
 
     // If no filters are defined, everything is visible
     if (!schemaIds && !tableIds) {
         return { schemaIds: undefined, tableIds: undefined };
+    }
+
+    if (!schemaIds && tableIds && tableIds.length === 0) {
+        return { schemaIds: undefined, tableIds: [] };
     }
 
     // Get all unique schema IDs from tables
@@ -145,3 +151,50 @@ export function reduceFilter(
         tableIds: reducedTableIds,
     };
 }
+
+export const spreadFilterTables = (
+    filter: DiagramFilter,
+    tables: FilterTableInfo[]
+): DiagramFilter => {
+    const { schemaIds, tableIds } = filter;
+
+    // If no filters are defined, everything is visible (return undefined)
+    if (!schemaIds && !tableIds) {
+        const allTablesIds = new Set<string>();
+        tables.forEach((table) => {
+            allTablesIds.add(table.id);
+        });
+
+        return { tableIds: Array.from(allTablesIds) };
+    }
+
+    // If only tableIds is defined, return it as is
+    if (!schemaIds && tableIds) {
+        return { tableIds };
+    }
+
+    // Collect all table IDs that should be visible
+    const visibleTableIds = new Set<string>();
+
+    // Add existing tableIds to the set
+    if (tableIds) {
+        tableIds.forEach((id) => visibleTableIds.add(id));
+    }
+
+    // Add all tables from specified schemas
+    if (schemaIds) {
+        const schemaSet = new Set(schemaIds);
+        tables.forEach((table) => {
+            if (table.schemaId && schemaSet.has(table.schemaId)) {
+                visibleTableIds.add(table.id);
+            }
+        });
+    }
+
+    // If no tables are visible, return empty array
+    if (visibleTableIds.size === 0) {
+        return { tableIds: [] };
+    }
+
+    return { tableIds: Array.from(visibleTableIds) };
+};

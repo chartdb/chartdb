@@ -268,9 +268,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     const schemaToDisplay = useMemo(() => {
         if (schemasDisplayed.length > 1) {
-            return table.schema;
+            return table.schema ?? defaultSchemas[databaseType];
         }
-    }, [table.schema, schemasDisplayed.length]);
+    }, [table.schema, schemasDisplayed.length, databaseType]);
 
     useEffect(() => {
         if (table.name.trim()) {
