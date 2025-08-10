@@ -500,22 +500,26 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         }
     }, [filter, fitView, tables, setOverlapGraph, databaseType]);
 
-    // Handle parent area updates when tables move
-    const tablePositions = useMemo(
-        () => tables.map((t) => ({ id: t.id, x: t.x, y: t.y })),
-        [tables]
-    );
-
     useEffect(() => {
         const checkParentAreas = debounce(() => {
-            const updatedTables = updateTablesParentAreas(tables, areas);
+            const visibleTables = nodes
+                .filter((node) => node.type === 'table' && !node.hidden)
+                .map((node) => (node as TableNodeType).data.table);
+            const visibleAreas = nodes
+                .filter((node) => node.type === 'area' && !node.hidden)
+                .map((node) => (node as AreaNodeType).data.area);
+
+            const updatedTables = updateTablesParentAreas(
+                visibleTables,
+                visibleAreas
+            );
             const needsUpdate: Array<{
                 id: string;
                 parentAreaId: string | null;
             }> = [];
 
             updatedTables.forEach((newTable, index) => {
-                const oldTable = tables[index];
+                const oldTable = visibleTables[index];
                 if (
                     oldTable &&
                     (!!newTable.parentAreaId || !!oldTable.parentAreaId) &&
@@ -549,7 +553,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         }, 300);
 
         checkParentAreas();
-    }, [tablePositions, areas, updateTablesState, tables]);
+    }, [nodes, updateTablesState]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
