@@ -6,7 +6,7 @@ import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
-import { randomColor } from '@/lib/colors';
+import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
 import type { DBIndex } from '@/lib/domain';
@@ -507,11 +507,11 @@ export const importDBMLToDiagram = async (
                 indexes,
                 x: col * tableSpacing,
                 y: row * tableSpacing,
-                color: randomColor(),
+                color: defaultTableColor,
                 isView: false,
                 createdAt: Date.now(),
                 comments: tableComment,
-            } as DBTable;
+            } satisfies DBTable;
         });
 
         // Create relationships using the refs

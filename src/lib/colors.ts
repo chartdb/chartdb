@@ -19,3 +19,5 @@ export const randomColor = () => {
 
 export const viewColor = '#b0b0b0';
 export const materializedViewColor = '#7d7d7d';
+export const defaultTableColor = '#8eb7ff';
+export const defaultAreaColor = '#b067e9';
