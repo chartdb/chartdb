@@ -94,6 +94,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                 setOpen?.(isOpen);
                 setIsOpen(isOpen);
 
+                if (isOpen) {
+                    setSearchTerm('');
+                }
+
                 setTimeout(() => (document.body.style.pointerEvents = ''), 500);
             },
             [setOpen]

@@ -218,8 +218,14 @@ export const CreateRelationshipDialog: React.FC<
                     closeCreateRelationshipDialog();
                 }
             }}
+            modal={false}
         >
-            <DialogContent className="flex flex-col overflow-y-auto" showClose>
+            <DialogContent
+                className="flex flex-col overflow-y-auto"
+                showClose
+                forceOverlay
+                onInteractOutside={(e) => e.preventDefault()}
+            >
                 <DialogHeader>
                     <DialogTitle>
                         {t('create_relationship_dialog.title')}
