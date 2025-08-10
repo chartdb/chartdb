@@ -150,6 +150,7 @@ export const vi: LanguageTranslation = {
                         title: 'Thuộc tính chỉ mục',
                         name: 'Tên',
                         unique: 'Giá trị duy nhất',
+                        index_type: 'Loại chỉ mục',
                         delete_index: 'Xóa chỉ mục',
                     },
                     table_actions: {

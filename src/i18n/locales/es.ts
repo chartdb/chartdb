@@ -150,6 +150,7 @@ export const es: LanguageTranslation = {
                         title: 'Atributos del Índice',
                         name: 'Nombre',
                         unique: 'Único',
+                        index_type: 'Tipo de Índice',
                         delete_index: 'Eliminar Índice',
                     },
                     table_actions: {

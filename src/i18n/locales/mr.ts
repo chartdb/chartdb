@@ -153,6 +153,7 @@ export const mr: LanguageTranslation = {
                         title: 'इंडेक्स गुणधर्म',
                         name: 'नाव',
                         unique: 'युनिक',
+                        index_type: 'इंडेक्स प्रकार',
                         delete_index: 'इंडेक्स हटवा',
                     },
                     table_actions: {

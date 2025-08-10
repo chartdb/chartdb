@@ -152,6 +152,7 @@ export const gu: LanguageTranslation = {
                         title: 'ઇન્ડેક્સ લક્ષણો',
                         name: 'નામ',
                         unique: 'અદ્વિતીય',
+                        index_type: 'ઇન્ડેક્સ પ્રકાર',
                         delete_index: 'ઇન્ડેક્સ કાઢી નાખો',
                     },
                     table_actions: {

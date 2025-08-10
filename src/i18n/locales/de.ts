@@ -152,6 +152,7 @@ export const de: LanguageTranslation = {
                         title: 'Indexattribute',
                         name: 'Name',
                         unique: 'Eindeutig',
+                        index_type: 'Indextyp',
                         delete_index: 'Index löschen',
                     },
                     table_actions: {

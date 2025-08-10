@@ -149,6 +149,7 @@ export const uk: LanguageTranslation = {
                         title: 'Атрибути індексу',
                         name: 'Назва індекса',
                         unique: 'Унікальний',
+                        index_type: 'Тип індексу',
                         delete_index: 'Видалити індекс',
                     },
                     table_actions: {

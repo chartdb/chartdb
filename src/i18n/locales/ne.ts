@@ -151,6 +151,7 @@ export const ne: LanguageTranslation = {
                         title: 'सूचक विशेषताहरू',
                         name: 'नाम',
                         unique: 'अनन्य',
+                        index_type: 'इन्डेक्स प्रकार',
                         delete_index: 'सूचक हटाउनुहोस्',
                     },
                     table_actions: {

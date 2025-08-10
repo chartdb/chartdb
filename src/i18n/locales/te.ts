@@ -151,6 +151,7 @@ export const te: LanguageTranslation = {
                         title: 'ఇండెక్స్ గుణాలు',
                         name: 'పేరు',
                         unique: 'అద్వితీయ',
+                        index_type: 'ఇండెక్స్ రకం',
                         delete_index: 'ఇండెక్స్ తొలగించు',
                     },
                     table_actions: {

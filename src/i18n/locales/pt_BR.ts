@@ -151,6 +151,7 @@ export const pt_BR: LanguageTranslation = {
                         title: 'Atributos do Índice',
                         name: 'Nome',
                         unique: 'Único',
+                        index_type: 'Tipo de Índice',
                         delete_index: 'Excluir Índice',
                     },
                     table_actions: {

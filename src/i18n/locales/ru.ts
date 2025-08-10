@@ -147,6 +147,7 @@ export const ru: LanguageTranslation = {
                         title: 'Атрибуты индекса',
                         name: 'Имя',
                         unique: 'Уникальный',
+                        index_type: 'Тип индекса',
                         delete_index: 'Удалить индекс',
                     },
                     table_actions: {

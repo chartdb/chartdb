@@ -146,6 +146,7 @@ export const hr: LanguageTranslation = {
                         title: 'Atributi indeksa',
                         name: 'Naziv',
                         unique: 'Jedinstven',
+                        index_type: 'Vrsta indeksa',
                         delete_index: 'Izbriši indeks',
                     },
                     table_actions: {
