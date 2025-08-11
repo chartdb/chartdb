@@ -174,7 +174,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     return (
         <Sidebar
             side="left"
-            collapsible="icon"
+            collapsible="icon-extended"
             variant="sidebar"
             className="relative h-full"
         >
