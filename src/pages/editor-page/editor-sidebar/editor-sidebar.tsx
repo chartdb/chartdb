@@ -53,7 +53,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const diagramItems: SidebarItem[] = useMemo(
         () => [
             {
-                title: t('menu.file.new'),
+                title: t('menu.databases.new'),
                 icon: Plus,
                 onClick: () => {
                     openCreateDiagramDialog();
@@ -61,7 +61,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: false,
             },
             {
-                title: t('menu.file.open'),
+                title: t('menu.databases.browse'),
                 icon: FolderOpen,
                 onClick: () => {
                     openOpenDiagramDialog();

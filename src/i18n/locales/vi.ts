@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const vi: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'Tệp',
-                new: 'Tạo mới',
-                open: 'Mở',
+            databases: {
+                databases: 'Cơ sở dữ liệu',
+                new: 'Sơ đồ mới',
+                browse: 'Duyệt...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
                 delete_diagram: 'Xóa sơ đồ',
-                exit: 'Thoát',
             },
             edit: {
                 edit: 'Sửa',

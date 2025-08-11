@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const te: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'ఫైల్',
-                new: 'కొత్తది',
-                open: 'తెరవు',
+            databases: {
+                databases: 'డేటాబేస్లు',
+                new: 'కొత్త డైగ్రాం',
+                browse: 'బ్రాఉజ్ చేయండి...',
                 save: 'సేవ్',
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',
                 delete_diagram: 'చిత్రాన్ని తొలగించండి',
-                exit: 'నిష్క్రమించు',
             },
             edit: {
                 edit: 'సవరించు',

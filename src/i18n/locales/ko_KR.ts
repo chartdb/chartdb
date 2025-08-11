@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const ko_KR: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: '파일',
+            databases: {
+                databases: '데이터베이스',
                 new: '새 다이어그램',
-                open: '열기',
+                browse: '찾아보기...',
                 save: '저장',
                 import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
                 delete_diagram: '다이어그램 삭제',
-                exit: '종료',
             },
             edit: {
                 edit: '편집',

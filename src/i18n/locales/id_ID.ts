@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const id_ID: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'Berkas',
-                new: 'Buat Baru',
-                open: 'Buka',
+            databases: {
+                databases: 'Basis Data',
+                new: 'Diagram Baru',
+                browse: 'Jelajahi...',
                 save: 'Simpan',
                 import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
                 delete_diagram: 'Hapus Diagram',
-                exit: 'Keluar',
             },
             edit: {
                 edit: 'Ubah',
