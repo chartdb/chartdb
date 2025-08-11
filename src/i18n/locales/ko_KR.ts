@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const ko_KR: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: '새로 만들기',
+            browse: '찾아보기',
+            tables: '테이블',
+            relationships: '관계',
+            areas: '영역',
+            dependencies: '종속성',
+            custom_types: '사용자 지정 타입',
+        },
         menu: {
             databases: {
                 databases: '데이터베이스',

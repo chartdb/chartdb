@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const es: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Nuevo',
+            browse: 'Examinar',
+            tables: 'Tablas',
+            relationships: 'Relaciones',
+            areas: 'Áreas',
+            dependencies: 'Dependencias',
+            custom_types: 'Tipos Personalizados',
+        },
         menu: {
             databases: {
                 databases: 'Bases de Datos',

@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const hr: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Novi',
+            browse: 'Pregledaj',
+            tables: 'Tablice',
+            relationships: 'Veze',
+            areas: 'Područja',
+            dependencies: 'Ovisnosti',
+            custom_types: 'Prilagođeni Tipovi',
+        },
         menu: {
             databases: {
                 databases: 'Baze Podataka',

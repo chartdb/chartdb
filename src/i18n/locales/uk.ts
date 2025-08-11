@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const uk: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Нова',
+            browse: 'Огляд',
+            tables: 'Таблиці',
+            relationships: 'Зв’язки',
+            areas: 'Області',
+            dependencies: 'Залежності',
+            custom_types: 'Користувацькі типи',
+        },
         menu: {
             databases: {
                 databases: 'Бази даних',

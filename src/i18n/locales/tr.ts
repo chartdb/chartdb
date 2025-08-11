@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const tr: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Yeni',
+            browse: 'Gözat',
+            tables: 'Tablolar',
+            relationships: 'İlişkiler',
+            areas: 'Alanlar',
+            dependencies: 'Bağımlılıklar',
+            custom_types: 'Özel Tipler',
+        },
         menu: {
             databases: {
                 databases: 'Veritabanları',

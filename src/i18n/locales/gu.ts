@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const gu: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'નવું',
+            browse: 'બ્રાઉજ',
+            tables: 'ટેબલો',
+            relationships: 'સંબંધો',
+            areas: 'ક્ષેત્રો',
+            dependencies: 'નિર્ભરતાઓ',
+            custom_types: 'કસ્ટમ ટાઇપ',
+        },
         menu: {
             databases: {
                 databases: 'ડેટાબેસેસ',

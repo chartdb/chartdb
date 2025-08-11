@@ -10,18 +10,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import {
-    Twitter,
-    BookOpen,
-    Group,
-    FileType,
-    Plus,
-    FolderOpen,
-} from 'lucide-react';
+import { BookOpen, Group, FileType, Plus, FolderOpen } from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { DiscordLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
@@ -149,7 +142,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             },
             {
                 title: 'Twitter',
-                icon: Twitter,
+                icon: TwitterLogoIcon,
                 onClick: () =>
                     window.open(
                         'https://x.com/intent/follow?screen_name=jonathanfishner',
@@ -262,7 +255,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                 </span>
                             )}
                             <SidebarMenuButton
-                                className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                 isActive={item.active}
                                 asChild
                                 tooltip={item.title}
