@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const es: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'Archivo',
-                new: 'Nuevo',
-                open: 'Abrir',
+            databases: {
+                databases: 'Bases de Datos',
+                new: 'Nuevo Diagrama',
+                browse: 'Examinar...',
                 save: 'Guardar',
                 import: 'Importar Base de Datos',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
                 delete_diagram: 'Eliminar Diagrama',
-                exit: 'Salir',
             },
             edit: {
                 edit: 'Editar',

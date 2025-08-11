@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const zh_TW: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: '檔案',
-                new: '新增',
-                open: '開啟',
+            databases: {
+                databases: '資料庫',
+                new: '新增圖表',
+                browse: '瀏覽...',
                 save: '儲存',
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
                 delete_diagram: '刪除圖表',
-                exit: '退出',
             },
             edit: {
                 edit: '編輯',

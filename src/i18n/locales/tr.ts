@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const tr: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'Dosya',
-                new: 'Yeni',
-                open: 'Aç',
+            databases: {
+                databases: 'Veritabanları',
+                new: 'Yeni Diyagram',
+                browse: 'Gözat...',
                 save: 'Kaydet',
                 import: 'Veritabanı İçe Aktar',
                 export_sql: 'SQL Olarak Dışa Aktar',
                 export_as: 'Olarak Dışa Aktar',
                 delete_diagram: 'Diyagramı Sil',
-                exit: 'Çıkış',
             },
             edit: {
                 edit: 'Düzenle',

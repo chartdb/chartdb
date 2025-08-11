@@ -156,13 +156,13 @@ export const Menu: React.FC<MenuProps> = () => {
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
-                <MenubarTrigger>{t('menu.file.file')}</MenubarTrigger>
+                <MenubarTrigger>{t('menu.databases.databases')}</MenubarTrigger>
                 <MenubarContent>
                     <MenubarItem onClick={createNewDiagram}>
-                        {t('menu.file.new')}
+                        {t('menu.databases.new')}
                     </MenubarItem>
                     <MenubarItem onClick={openDiagram}>
-                        {t('menu.file.open')}
+                        {t('menu.databases.browse')}
                         <MenubarShortcut>
                             {
                                 keyboardShortcutsForOS[
@@ -172,7 +172,7 @@ export const Menu: React.FC<MenuProps> = () => {
                         </MenubarShortcut>
                     </MenubarItem>
                     <MenubarItem onClick={updateDiagramUpdatedAt}>
-                        {t('menu.file.save')}
+                        {t('menu.databases.save')}
                         <MenubarShortcut>
                             {
                                 keyboardShortcutsForOS[
@@ -184,7 +184,7 @@ export const Menu: React.FC<MenuProps> = () => {
                     <MenubarSeparator />
                     <MenubarSub>
                         <MenubarSubTrigger>
-                            {t('menu.file.import')}
+                            {t('menu.databases.import')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             <MenubarItem onClick={openImportDiagramDialog}>
@@ -253,7 +253,7 @@ export const Menu: React.FC<MenuProps> = () => {
                     <MenubarSeparator />
                     <MenubarSub>
                         <MenubarSubTrigger>
-                            {t('menu.file.export_sql')}
+                            {t('menu.databases.export_sql')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             {databaseType === DatabaseType.GENERIC ? (
@@ -336,7 +336,7 @@ export const Menu: React.FC<MenuProps> = () => {
                     </MenubarSub>
                     <MenubarSub>
                         <MenubarSubTrigger>
-                            {t('menu.file.export_as')}
+                            {t('menu.databases.export_as')}
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             <MenubarItem onClick={exportPNG}>PNG</MenubarItem>
@@ -362,10 +362,8 @@ export const Menu: React.FC<MenuProps> = () => {
                             })
                         }
                     >
-                        {t('menu.file.delete_diagram')}
+                        {t('menu.databases.delete_diagram')}
                     </MenubarItem>
-                    <MenubarSeparator />
-                    <MenubarItem>{t('menu.file.exit')}</MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
             <MenubarMenu>

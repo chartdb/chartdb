@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const ja: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'ファイル',
-                new: '新規',
-                open: '開く',
+            databases: {
+                databases: 'データベース',
+                new: '新しいダイアグラム',
+                browse: '参照...',
                 save: '保存',
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
                 delete_diagram: 'ダイアグラムを削除',
-                exit: '終了',
             },
             edit: {
                 edit: '編集',

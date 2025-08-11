@@ -3,16 +3,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 export const hr: LanguageTranslation = {
     translation: {
         menu: {
-            file: {
-                file: 'Datoteka',
-                new: 'Nova',
-                open: 'Otvori',
+            databases: {
+                databases: 'Baze Podataka',
+                new: 'Novi Dijagram',
+                browse: 'Pregledaj...',
                 save: 'Spremi',
                 import: 'Uvezi',
                 export_sql: 'Izvezi SQL',
                 export_as: 'Izvezi kao',
                 delete_diagram: 'Izbriši dijagram',
-                exit: 'Izađi',
             },
             edit: {
                 edit: 'Uredi',
