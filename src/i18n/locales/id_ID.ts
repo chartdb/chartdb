@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const id_ID: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Baru',
+            browse: 'Jelajahi',
+            tables: 'Tabel',
+            relationships: 'Relasi',
+            areas: 'Area',
+            dependencies: 'Ketergantungan',
+            custom_types: 'Tipe Kustom',
+        },
         menu: {
             databases: {
                 databases: 'Basis Data',

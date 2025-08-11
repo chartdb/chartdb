@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const ja: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: '新規',
+            browse: '参照',
+            tables: 'テーブル',
+            relationships: 'リレーション',
+            areas: 'エリア',
+            dependencies: '依存関係',
+            custom_types: 'カスタムタイプ',
+        },
         menu: {
             databases: {
                 databases: 'データベース',

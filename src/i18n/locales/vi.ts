@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const vi: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'Mới',
+            browse: 'Duyệt',
+            tables: 'Bảng',
+            relationships: 'Mối quan hệ',
+            areas: 'Khu vực',
+            dependencies: 'Phụ thuộc',
+            custom_types: 'Kiểu tùy chỉnh',
+        },
         menu: {
             databases: {
                 databases: 'Cơ sở dữ liệu',

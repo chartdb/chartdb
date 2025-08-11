@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const zh_TW: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: '新建',
+            browse: '瀏覽',
+            tables: '表格',
+            relationships: '關係',
+            areas: '區域',
+            dependencies: '相依性',
+            custom_types: '自定義類型',
+        },
         menu: {
             databases: {
                 databases: '資料庫',

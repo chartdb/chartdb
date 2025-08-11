@@ -2,6 +2,15 @@ import type { LanguageMetadata, LanguageTranslation } from '../types';
 
 export const te: LanguageTranslation = {
     translation: {
+        editor_sidebar: {
+            new_diagram: 'కొత్తది',
+            browse: 'బ్రాఉజ్',
+            tables: 'టేబల్లు',
+            relationships: 'సంబంధాలు',
+            areas: 'ప్రదేశాలు',
+            dependencies: 'ఆధారతలు',
+            custom_types: 'కస్టమ్ టైప్స్',
+        },
         menu: {
             databases: {
                 databases: 'డేటాబేస్లు',

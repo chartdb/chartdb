@@ -10,18 +10,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import {
-    Twitter,
-    BookOpen,
-    Group,
-    FileType,
-    Plus,
-    FolderOpen,
-} from 'lucide-react';
+import { BookOpen, Group, FileType, Plus, FolderOpen } from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { DiscordLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
@@ -53,7 +46,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const diagramItems: SidebarItem[] = useMemo(
         () => [
             {
-                title: t('menu.databases.new'),
+                title: t('editor_sidebar.new_diagram'),
                 icon: Plus,
                 onClick: () => {
                     openCreateDiagramDialog();
@@ -61,7 +54,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: false,
             },
             {
-                title: t('menu.databases.browse'),
+                title: t('editor_sidebar.browse'),
                 icon: FolderOpen,
                 onClick: () => {
                     openOpenDiagramDialog();
@@ -75,7 +68,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const baseItems: SidebarItem[] = useMemo(
         () => [
             {
-                title: t('side_panel.tables_section.tables'),
+                title: t('editor_sidebar.tables'),
                 icon: Table,
                 onClick: () => {
                     showSidePanel();
@@ -84,7 +77,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'tables',
             },
             {
-                title: t('side_panel.relationships_section.relationships'),
+                title: t('editor_sidebar.relationships'),
                 icon: Workflow,
                 onClick: () => {
                     showSidePanel();
@@ -93,7 +86,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'relationships',
             },
             {
-                title: t('side_panel.areas_section.areas'),
+                title: t('editor_sidebar.areas'),
                 icon: Group,
                 onClick: () => {
                     showSidePanel();
@@ -104,9 +97,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             ...(dependencies && dependencies.length > 0
                 ? [
                       {
-                          title: t(
-                              'side_panel.dependencies_section.dependencies'
-                          ),
+                          title: t('editor_sidebar.dependencies'),
                           icon: SquareStack,
                           onClick: () => {
                               showSidePanel();
@@ -119,9 +110,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             ...(databaseType === DatabaseType.POSTGRESQL
                 ? [
                       {
-                          title: t(
-                              'side_panel.custom_types_section.custom_types'
-                          ),
+                          title: t('editor_sidebar.custom_types'),
                           icon: FileType,
                           onClick: () => {
                               showSidePanel();
@@ -153,7 +142,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             },
             {
                 title: 'Twitter',
-                icon: Twitter,
+                icon: TwitterLogoIcon,
                 onClick: () =>
                     window.open(
                         'https://x.com/intent/follow?screen_name=jonathanfishner',
@@ -162,7 +151,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: false,
             },
             {
-                title: 'Documentation',
+                title: 'Docs',
                 icon: BookOpen,
                 onClick: () => window.open('https://docs.chartdb.io', '_blank'),
                 active: false,
@@ -174,7 +163,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     return (
         <Sidebar
             side="left"
-            collapsible="icon"
+            collapsible="icon-extended"
             variant="sidebar"
             className="relative h-full"
         >
@@ -205,14 +194,21 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                             {diagramItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
-                                        className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                        className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                         isActive={item.active}
                                         asChild
-                                        tooltip={item.title}
                                     >
                                         <button onClick={item.onClick}>
                                             <item.icon />
-                                            <span>{item.title}</span>
+                                            <span>
+                                                {item.title
+                                                    .split(' ')
+                                                    .map((word, index) => (
+                                                        <div key={index}>
+                                                            {word}
+                                                        </div>
+                                                    ))}
+                                            </span>
                                         </button>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -223,14 +219,21 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                             {baseItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
-                                        className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                        className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                         isActive={item.active}
                                         asChild
-                                        tooltip={item.title}
                                     >
                                         <button onClick={item.onClick}>
                                             <item.icon />
-                                            <span>{item.title}</span>
+                                            <span>
+                                                {item.title
+                                                    .split(' ')
+                                                    .map((word, index) => (
+                                                        <div key={index}>
+                                                            {word}
+                                                        </div>
+                                                    ))}
+                                            </span>{' '}
                                         </button>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -250,10 +253,9 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                 </span>
                             )}
                             <SidebarMenuButton
-                                className="hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                 isActive={item.active}
                                 asChild
-                                tooltip={item.title}
                             >
                                 <button onClick={item.onClick}>
                                     <item.icon />
