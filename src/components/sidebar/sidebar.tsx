@@ -33,14 +33,13 @@ const SIDEBAR_WIDTH_ICON_EXTENDED = '4rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 type SidebarContext = {
-    state: 'expanded' | 'collapsed' | 'icon-extended';
+    state: 'expanded' | 'collapsed';
     open: boolean;
     setOpen: (open: boolean) => void;
     openMobile: boolean;
     setOpenMobile: (open: boolean) => void;
     isMobile: boolean;
     toggleSidebar: () => void;
-    collapsible?: 'offcanvas' | 'icon' | 'icon-extended' | 'none';
 };
 
 const SidebarContext = React.createContext<SidebarContext | null>(null);
@@ -51,7 +50,6 @@ const SidebarProvider = React.forwardRef<
         defaultOpen?: boolean;
         open?: boolean;
         onOpenChange?: (open: boolean) => void;
-        collapsible?: 'offcanvas' | 'icon' | 'icon-extended' | 'none';
     }
 >(
     (
@@ -59,7 +57,6 @@ const SidebarProvider = React.forwardRef<
             defaultOpen = true,
             open: openProp,
             onOpenChange: setOpenProp,
-            collapsible = 'offcanvas',
             className,
             style,
             children,
@@ -92,24 +89,10 @@ const SidebarProvider = React.forwardRef<
 
         // Helper to toggle the sidebar.
         const toggleSidebar = React.useCallback(() => {
-            if (isMobile) {
-                return setOpenMobile((open) => !open);
-            }
-
-            // For icon-extended mode: expanded -> icon-extended -> collapsed -> expanded
-            if (collapsible === 'icon-extended') {
-                if (open) {
-                    // If expanded, go to icon-extended (still closed but different state)
-                    setOpen(false);
-                } else {
-                    // If closed (either icon-extended or fully collapsed), go to expanded
-                    setOpen(true);
-                }
-            } else {
-                // Standard toggle for other modes
-                setOpen((open) => !open);
-            }
-        }, [isMobile, setOpen, setOpenMobile, collapsible, open]);
+            return isMobile
+                ? setOpenMobile((open) => !open)
+                : setOpen((open) => !open);
+        }, [isMobile, setOpen, setOpenMobile]);
 
         // Adds a keyboard shortcut to toggle the sidebar.
         React.useEffect(() => {
@@ -127,13 +110,9 @@ const SidebarProvider = React.forwardRef<
             return () => window.removeEventListener('keydown', handleKeyDown);
         }, [toggleSidebar]);
 
-        // We add a state so that we can do data-state="expanded", "collapsed", or "icon-extended".
+        // We add a state so that we can do data-state="expanded" or "collapsed".
         // This makes it easier to style the sidebar with Tailwind classes.
-        const state = React.useMemo(() => {
-            if (open) return 'expanded';
-            if (collapsible === 'icon-extended') return 'icon-extended';
-            return 'collapsed';
-        }, [open, collapsible]);
+        const state = open ? 'expanded' : 'collapsed';
 
         const contextValue = React.useMemo<SidebarContext>(
             () => ({
@@ -144,7 +123,6 @@ const SidebarProvider = React.forwardRef<
                 openMobile,
                 setOpenMobile,
                 toggleSidebar,
-                collapsible,
             }),
             [
                 state,
@@ -154,7 +132,6 @@ const SidebarProvider = React.forwardRef<
                 openMobile,
                 setOpenMobile,
                 toggleSidebar,
-                collapsible,
             ]
         );
 
@@ -260,7 +237,7 @@ const Sidebar = React.forwardRef<
                 ref={ref}
                 className="group peer hidden text-sidebar-foreground md:block"
                 data-state={state}
-                data-collapsible={state !== 'expanded' ? collapsible : ''}
+                data-collapsible={state === 'collapsed' ? collapsible : ''}
                 data-variant={variant}
                 data-side={side}
             >

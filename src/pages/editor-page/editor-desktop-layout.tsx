@@ -27,7 +27,6 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
             <SidebarProvider
                 defaultOpen={false}
                 open={false}
-                collapsible="icon-extended"
                 className="h-full min-h-0"
             >
                 <EditorSidebar />
