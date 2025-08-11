@@ -197,7 +197,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                         className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                         isActive={item.active}
                                         asChild
-                                        tooltip={item.title}
                                     >
                                         <button onClick={item.onClick}>
                                             <item.icon />
@@ -223,7 +222,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                         className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                         isActive={item.active}
                                         asChild
-                                        tooltip={item.title}
                                     >
                                         <button onClick={item.onClick}>
                                             <item.icon />
@@ -258,7 +256,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                 className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                 isActive={item.active}
                                 asChild
-                                tooltip={item.title}
                             >
                                 <button onClick={item.onClick}>
                                     <item.icon />
