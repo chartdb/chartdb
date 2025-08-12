@@ -11,6 +11,14 @@ export const INDEX_TYPES = [
     'gin',
     'spgist',
     'brin',
+    // sql server
+    'nonclustered',
+    'clustered',
+    'xml',
+    'fulltext',
+    'spatial',
+    'hash',
+    'index',
 ] as const;
 export type IndexType = (typeof INDEX_TYPES)[number];
 
