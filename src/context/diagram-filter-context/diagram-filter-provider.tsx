@@ -28,6 +28,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     const { diagramId, tables, schemas, databaseType, events } = useChartDB();
     const { getDiagramFilter, updateDiagramFilter } = useStorage();
     const [filter, setFilter] = useState<DiagramFilter>({});
+    const [loading, setLoading] = useState<boolean>(true);
 
     const allSchemasIds = useMemo(() => {
         return schemas.map((schema) => schema.id);
@@ -62,11 +63,26 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             return;
         }
 
+        setLoading(true);
+
         const loadFilterFromStorage = async (diagramId: string) => {
             if (diagramId) {
                 const storedFilter = await getDiagramFilter(diagramId);
-                setFilter(storedFilter ?? {});
+
+                let filterToSet = storedFilter;
+
+                if (!filterToSet) {
+                    // If no filter is stored, set default based on database type
+                    filterToSet =
+                        schemas.length > 0
+                            ? { schemaIds: [schemas[0].id] }
+                            : {};
+                }
+
+                setFilter(filterToSet);
             }
+
+            setLoading(false);
         };
 
         setFilter({});
@@ -75,7 +91,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
             loadFilterFromStorage(diagramId);
             diagramIdOfLoadedFilter.current = diagramId;
         }
-    }, [diagramId, getDiagramFilter]);
+    }, [diagramId, getDiagramFilter, schemas]);
 
     const clearSchemaIds: DiagramFilterContext['clearSchemaIdsFilter'] =
         useCallback(() => {
@@ -500,6 +516,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     events.useSubscription(eventConsumer);
 
     const value: DiagramFilterContext = {
+        loading,
         filter,
         clearSchemaIdsFilter: clearSchemaIds,
         setTableIdsFilterEmpty: setTableIdsEmpty,

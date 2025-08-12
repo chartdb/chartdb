@@ -122,9 +122,11 @@ const tableToTableNode = (
     {
         filter,
         databaseType,
+        filterLoading,
     }: {
         filter?: DiagramFilter;
         databaseType: DatabaseType;
+        filterLoading: boolean;
     }
 ): TableNodeType => {
     // Always use absolute position for now
@@ -139,11 +141,12 @@ const tableToTableNode = (
             isOverlapping: false,
         },
         width: table.width ?? MIN_TABLE_SIZE,
-        hidden: !filterTable({
-            table: { id: table.id, schema: table.schema },
-            filter,
-            options: { defaultSchema: defaultSchemas[databaseType] },
-        }),
+        hidden:
+            !filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: { defaultSchema: defaultSchemas[databaseType] },
+            }) || filterLoading,
     };
 };
 
@@ -153,10 +156,12 @@ const areaToAreaNode = (
         tables,
         filter,
         databaseType,
+        filterLoading,
     }: {
         tables: DBTable[];
         filter?: DiagramFilter;
         databaseType: DatabaseType;
+        filterLoading: boolean;
     }
 ): AreaNodeType => {
     // Get all tables in this area
@@ -183,7 +188,7 @@ const areaToAreaNode = (
         width: area.width,
         height: area.height,
         zIndex: -10,
-        hidden: !hasVisibleTable,
+        hidden: !hasVisibleTable || filterLoading,
     };
 };
 
@@ -235,13 +240,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showFilter,
         setShowFilter,
     } = useCanvas();
-    const { filter } = useDiagramFilter();
+    const { filter, loading: filterLoading } = useDiagramFilter();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) =>
-            tableToTableNode(table, { filter, databaseType })
+            tableToTableNode(table, { filter, databaseType, filterLoading })
         )
     );
     const [edges, setEdges, onEdgesChange] =
@@ -255,12 +260,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const initialNodes = initialTables.map((table) =>
-            tableToTableNode(table, { filter, databaseType })
+            tableToTableNode(table, { filter, databaseType, filterLoading })
         );
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
-    }, [initialTables, nodes, filter, databaseType]);
+    }, [initialTables, nodes, filter, databaseType, filterLoading]);
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
@@ -426,6 +431,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     const node = tableToTableNode(table, {
                         filter,
                         databaseType,
+                        filterLoading,
                     });
 
                     // Check if table uses the highlighted custom type
@@ -448,7 +454,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     };
                 }),
                 ...areas.map((area) =>
-                    areaToAreaNode(area, { tables, filter, databaseType })
+                    areaToAreaNode(area, {
+                        tables,
+                        filter,
+                        databaseType,
+                        filterLoading,
+                    })
                 ),
             ];
 
@@ -469,6 +480,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph.graph,
         highlightOverlappingTables,
         highlightedCustomType,
+        filterLoading,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
