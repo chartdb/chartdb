@@ -233,7 +233,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                                             {word}
                                                         </div>
                                                     ))}
-                                            </span>{' '}
+                                            </span>
                                         </button>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
