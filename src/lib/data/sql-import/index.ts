@@ -220,11 +220,45 @@ export async function sqlImportToDiagram({
         targetDatabaseType
     );
 
-    const adjustedTables = adjustTablePositions({
-        tables: diagram.tables ?? [],
-        relationships: diagram.relationships ?? [],
-        mode: 'perSchema',
-    });
+    // Apply the same logic as loadFromDatabaseMetadata for large diagrams
+    const LARGE_DIAGRAM_THRESHOLD = 200;
+    const tables = diagram.tables ?? [];
+    const relationships = diagram.relationships ?? [];
+    let adjustedTables = tables;
+
+    if (tables.length > LARGE_DIAGRAM_THRESHOLD) {
+        // Create a set of table IDs that have relationships
+        const tablesWithRelationships = new Set<string>();
+        relationships.forEach((rel) => {
+            tablesWithRelationships.add(rel.sourceTableId);
+            tablesWithRelationships.add(rel.targetTableId);
+        });
+
+        // Separate tables into connected and isolated
+        const connectedTables = tables.filter((table) =>
+            tablesWithRelationships.has(table.id)
+        );
+        const isolatedTables = tables.filter(
+            (table) => !tablesWithRelationships.has(table.id)
+        );
+
+        // Only reorder connected tables
+        const reorderedConnectedTables = adjustTablePositions({
+            tables: connectedTables,
+            relationships,
+            mode: 'perSchema',
+        });
+
+        // Combine reordered connected tables with isolated tables
+        adjustedTables = [...reorderedConnectedTables, ...isolatedTables];
+    } else {
+        // For smaller diagrams, reorder all tables as before
+        adjustedTables = adjustTablePositions({
+            tables,
+            relationships,
+            mode: 'perSchema',
+        });
+    }
 
     const sortedTables = adjustedTables.sort((a, b) => {
         if (a.isView === b.isView) {
