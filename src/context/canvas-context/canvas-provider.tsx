@@ -15,7 +15,7 @@ interface CanvasProviderProps {
 }
 
 export const CanvasProvider = ({ children }: CanvasProviderProps) => {
-    const { tables, relationships, updateTablesState, databaseType } =
+    const { tables, relationships, updateTablesState, databaseType, areas } =
         useChartDB();
     const { filter } = useDiagramFilter();
     const { fitView } = useReactFlow();
@@ -44,6 +44,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                         },
                     })
                 ),
+                areas,
                 mode: 'all',
             });
 
@@ -86,6 +87,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
             updateTablesState,
             fitView,
             databaseType,
+            areas,
         ]
     );
 

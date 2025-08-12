@@ -26,6 +26,7 @@ import { schemaNameToDomainSchemaName } from './db-schema';
 import { DatabaseType } from './database-type';
 import type { DatabaseMetadata } from '../data/import-metadata/metadata-types/database-metadata';
 import { z } from 'zod';
+import type { Area } from './area';
 
 export const MAX_TABLE_SIZE = 450;
 export const MID_TABLE_SIZE = 337;
@@ -239,89 +240,170 @@ export const createTablesFromMetadata = ({
     return result;
 };
 
-// Simple grid-based positioning for large databases
-const adjustTablePositionsSimple = (
-    tables: DBTable[],
-    mode: 'all' | 'perSchema' = 'all'
-): DBTable[] => {
-    const TABLES_PER_ROW = 20;
-    const TABLE_WIDTH = 250;
-    const TABLE_HEIGHT = 350;
-    const GAP_X = 50;
-    const GAP_Y = 50;
-    const START_X = 100;
-    const START_Y = 100;
-
-    if (mode === 'perSchema') {
-        // Group tables by schema for better organization
-        const tablesBySchema = new Map<string, DBTable[]>();
-        tables.forEach((table) => {
-            const schema = table.schema || 'default';
-            if (!tablesBySchema.has(schema)) {
-                tablesBySchema.set(schema, []);
-            }
-            tablesBySchema.get(schema)!.push(table);
-        });
-
-        const result: DBTable[] = [];
-        let currentSchemaOffset = 0;
-
-        // Position each schema's tables in its own section
-        tablesBySchema.forEach((schemaTables) => {
-            schemaTables.forEach((table, index) => {
-                const row = Math.floor(index / TABLES_PER_ROW);
-                const col = index % TABLES_PER_ROW;
-
-                result.push({
-                    ...table,
-                    x: START_X + col * (TABLE_WIDTH + GAP_X),
-                    y:
-                        START_Y +
-                        currentSchemaOffset +
-                        row * (TABLE_HEIGHT + GAP_Y),
-                });
-            });
-
-            // Add extra spacing between schemas
-            const schemaRows = Math.ceil(schemaTables.length / TABLES_PER_ROW);
-            currentSchemaOffset += schemaRows * (TABLE_HEIGHT + GAP_Y) + 200;
-        });
-
-        return result;
-    }
-
-    // Simple mode - just arrange all tables in a grid
-    return tables.map((table, index) => {
-        const row = Math.floor(index / TABLES_PER_ROW);
-        const col = index % TABLES_PER_ROW;
-
-        return {
-            ...table,
-            x: START_X + col * (TABLE_WIDTH + GAP_X),
-            y: START_Y + row * (TABLE_HEIGHT + GAP_Y),
-        };
-    });
-};
-
 export const adjustTablePositions = ({
     relationships: inputRelationships,
     tables: inputTables,
+    areas: inputAreas = [],
     mode = 'all',
 }: {
     tables: DBTable[];
     relationships: DBRelationship[];
+    areas?: Area[];
     mode?: 'all' | 'perSchema';
 }): DBTable[] => {
-    // For large databases, use simple grid layout for better performance
-    if (inputTables.length > 200) {
-        const result = adjustTablePositionsSimple(inputTables, mode);
-        return result;
-    }
-
-    // For smaller databases, use the existing complex algorithm
+    // Deep copy inputs for manipulation
     const tables = deepCopy(inputTables);
     const relationships = deepCopy(inputRelationships);
+    const areas = deepCopy(inputAreas);
 
+    // If there are no areas, fall back to the original algorithm
+    if (areas.length === 0) {
+        return adjustTablePositionsWithoutAreas(tables, relationships, mode);
+    }
+
+    // Group tables by their parent area
+    const tablesByArea = new Map<string | null, DBTable[]>();
+
+    // Initialize with empty arrays for all areas
+    areas.forEach((area) => {
+        tablesByArea.set(area.id, []);
+    });
+
+    // Also create a group for tables without areas
+    tablesByArea.set(null, []);
+
+    // Group tables
+    tables.forEach((table) => {
+        const areaId = table.parentAreaId || null;
+        if (areaId && tablesByArea.has(areaId)) {
+            tablesByArea.get(areaId)!.push(table);
+        } else {
+            // If the area doesn't exist or table has no area, put it in the null group
+            tablesByArea.get(null)!.push(table);
+        }
+    });
+
+    // Check and adjust tables within each area
+    areas.forEach((area) => {
+        const tablesInArea = tablesByArea.get(area.id) || [];
+        if (tablesInArea.length === 0) return;
+
+        // Only reposition tables that are outside their area bounds
+        const tablesToReposition = tablesInArea.filter((table) => {
+            return !isTableInsideArea(table, area);
+        });
+
+        if (tablesToReposition.length > 0) {
+            // Create a sub-graph of relationships for tables that need repositioning
+            const areaRelationships = relationships.filter((rel) => {
+                const sourceNeedsReposition = tablesToReposition.some(
+                    (t) => t.id === rel.sourceTableId
+                );
+                const targetNeedsReposition = tablesToReposition.some(
+                    (t) => t.id === rel.targetTableId
+                );
+                return sourceNeedsReposition && targetNeedsReposition;
+            });
+
+            // Position only tables that are outside the area bounds
+            positionTablesWithinArea(
+                tablesToReposition,
+                areaRelationships,
+                area
+            );
+        }
+        // Tables already inside the area keep their positions
+    });
+
+    // Position free tables (those not in any area)
+    const freeTables = tablesByArea.get(null) || [];
+    if (freeTables.length > 0) {
+        // Create a sub-graph of relationships for free tables
+        const freeRelationships = relationships.filter((rel) => {
+            const sourceIsFree = freeTables.some(
+                (t) => t.id === rel.sourceTableId
+            );
+            const targetIsFree = freeTables.some(
+                (t) => t.id === rel.targetTableId
+            );
+            return sourceIsFree && targetIsFree;
+        });
+
+        // Use the original algorithm for free tables with area avoidance
+        adjustTablePositionsWithoutAreas(
+            freeTables,
+            freeRelationships,
+            mode,
+            areas
+        );
+    }
+
+    return tables;
+};
+
+// Helper function to check if a table is inside an area
+function isTableInsideArea(table: DBTable, area: Area): boolean {
+    const tableDimensions = getTableDimensions(table);
+    const padding = 20; // Same padding as used in positioning
+
+    return (
+        table.x >= area.x + padding &&
+        table.x + tableDimensions.width <= area.x + area.width - padding &&
+        table.y >= area.y + padding &&
+        table.y + tableDimensions.height <= area.y + area.height - padding
+    );
+}
+
+// Helper function to position tables within an area
+function positionTablesWithinArea(
+    tables: DBTable[],
+    _relationships: DBRelationship[],
+    area: Area
+) {
+    if (tables.length === 0) return;
+
+    const padding = 20; // Padding from area edges
+    const gapX = 50;
+    const gapY = 50;
+
+    // Available space within the area
+    const availableWidth = area.width - 2 * padding;
+    const availableHeight = area.height - 2 * padding;
+
+    // Simple grid layout within the area
+    const cols = Math.max(1, Math.floor(availableWidth / 250));
+    const rows = Math.ceil(tables.length / cols);
+
+    const cellWidth = availableWidth / cols;
+    const cellHeight = availableHeight / Math.max(rows, 1);
+
+    tables.forEach((table, index) => {
+        const col = index % cols;
+        const row = Math.floor(index / cols);
+
+        // Position relative to area
+        table.x = area.x + padding + col * cellWidth + gapX / 2;
+        table.y = area.y + padding + row * cellHeight + gapY / 2;
+
+        // Ensure table stays within area bounds
+        const tableDimensions = getTableDimensions(table);
+        const maxX = area.x + area.width - padding - tableDimensions.width;
+        const maxY = area.y + area.height - padding - tableDimensions.height;
+
+        table.x = Math.min(table.x, maxX);
+        table.y = Math.min(table.y, maxY);
+        table.x = Math.max(table.x, area.x + padding);
+        table.y = Math.max(table.y, area.y + padding);
+    });
+}
+
+// Original algorithm with area avoidance
+function adjustTablePositionsWithoutAreas(
+    tables: DBTable[],
+    relationships: DBRelationship[],
+    mode: 'all' | 'perSchema',
+    areas: Area[] = []
+): DBTable[] {
     const adjustPositionsForTables = (tablesToAdjust: DBTable[]) => {
         const defaultTableWidth = 200;
         const defaultTableHeight = 300;
@@ -343,8 +425,23 @@ export const adjustTablePositions = ({
             tableConnections.get(rel.targetTableId)!.add(rel.sourceTableId);
         });
 
-        // Sort tables by number of connections
-        const sortedTables = [...tablesToAdjust].sort(
+        // Separate tables into connected and isolated
+        const connectedTables: DBTable[] = [];
+        const isolatedTables: DBTable[] = [];
+
+        tablesToAdjust.forEach((table) => {
+            if (
+                tableConnections.has(table.id) &&
+                tableConnections.get(table.id)!.size > 0
+            ) {
+                connectedTables.push(table);
+            } else {
+                isolatedTables.push(table);
+            }
+        });
+
+        // Sort connected tables by number of connections (most connected first)
+        connectedTables.sort(
             (a, b) =>
                 (tableConnections.get(b.id)?.size || 0) -
                 (tableConnections.get(a.id)?.size || 0)
@@ -372,6 +469,7 @@ export const adjustTablePositions = ({
             y: number,
             currentTableId: string
         ): boolean => {
+            // Check overlap with other tables
             for (const [tableId, pos] of tablePositions) {
                 if (tableId === currentTableId) continue;
 
@@ -383,6 +481,26 @@ export const adjustTablePositions = ({
                     return true;
                 }
             }
+
+            // Check overlap with areas
+            const { width: currentWidth, height: currentHeight } =
+                getTableWidthAndHeight(currentTableId);
+            const buffer = 50; // Add buffer around areas to keep tables away
+
+            for (const area of areas) {
+                // Check if the table position would overlap with the area (with buffer)
+                if (
+                    !(
+                        x + currentWidth < area.x - buffer ||
+                        x > area.x + area.width + buffer ||
+                        y + currentHeight < area.y - buffer ||
+                        y > area.y + area.height + buffer
+                    )
+                ) {
+                    return true;
+                }
+            }
+
             return false;
         };
 
@@ -466,19 +584,80 @@ export const adjustTablePositions = ({
             });
         };
 
-        // Position tables
-        sortedTables.forEach((table, index) => {
-            if (!positionedTables.has(table.id)) {
-                const row = Math.floor(index / 6);
-                const col = index % 6;
-                const { width: tableWidth, height: tableHeight } =
-                    getTableWidthAndHeight(table.id);
+        // Position connected tables first
+        if (connectedTables.length < 100) {
+            // Use relationship-based positioning for small sets of connected tables
+            connectedTables.forEach((table, index) => {
+                if (!positionedTables.has(table.id)) {
+                    const row = Math.floor(index / 6);
+                    const col = index % 6;
+                    const { width: tableWidth, height: tableHeight } =
+                        getTableWidthAndHeight(table.id);
 
-                const x = startX + col * (tableWidth + gapX * 2);
-                const y = startY + row * (tableHeight + gapY * 2);
-                positionTable(table, x, y);
+                    const x = startX + col * (tableWidth + gapX * 2);
+                    const y = startY + row * (tableHeight + gapY * 2);
+                    positionTable(table, x, y);
+                }
+            });
+        } else {
+            // Use simple grid layout for large sets of connected tables
+            connectedTables.forEach((table, index) => {
+                if (!positionedTables.has(table.id)) {
+                    const row = Math.floor(index / 10); // More columns for large sets
+                    const col = index % 10;
+                    const { width: tableWidth, height: tableHeight } =
+                        getTableWidthAndHeight(table.id);
+
+                    const x = startX + col * (tableWidth + gapX);
+                    const y = startY + row * (tableHeight + gapY);
+
+                    // Direct positioning without relationship-based clustering
+                    const finalPos = findNonOverlappingPosition(x, y, table.id);
+                    table.x = finalPos.x;
+                    table.y = finalPos.y;
+                    tablePositions.set(table.id, { x: table.x, y: table.y });
+                    positionedTables.add(table.id);
+                }
+            });
+        }
+
+        // Find the bottommost position of connected tables for isolated table placement
+        let maxY = startY;
+        for (const pos of tablePositions.values()) {
+            const tableId = [...tablePositions.entries()].find(
+                ([, p]) => p === pos
+            )?.[0];
+            if (tableId) {
+                const { height } = getTableWidthAndHeight(tableId);
+                maxY = Math.max(maxY, pos.y + height);
             }
-        });
+        }
+
+        // Position isolated tables after connected ones
+        if (isolatedTables.length > 0) {
+            const isolatedStartY = maxY + gapY * 2;
+            const isolatedStartX = startX;
+
+            isolatedTables.forEach((table, index) => {
+                if (!positionedTables.has(table.id)) {
+                    const row = Math.floor(index / 8); // More columns for isolated tables
+                    const col = index % 8;
+                    const { width: tableWidth, height: tableHeight } =
+                        getTableWidthAndHeight(table.id);
+
+                    // Use a simple grid layout for isolated tables
+                    const x = isolatedStartX + col * (tableWidth + gapX);
+                    const y = isolatedStartY + row * (tableHeight + gapY);
+
+                    // Find non-overlapping position
+                    const finalPos = findNonOverlappingPosition(x, y, table.id);
+                    table.x = finalPos.x;
+                    table.y = finalPos.y;
+                    tablePositions.set(table.id, { x: table.x, y: table.y });
+                    positionedTables.add(table.id);
+                }
+            });
+        }
 
         // Apply positions to tables
         tablesToAdjust.forEach((table) => {
@@ -512,7 +691,7 @@ export const adjustTablePositions = ({
     }
 
     return tables;
-};
+}
 
 export const calcTableHeight = (table?: DBTable): number => {
     if (!table) {
