@@ -245,7 +245,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
 
     const getDiagramFilter: StorageContext['getDiagramFilter'] = useCallback(
         async (diagramId: string): Promise<DiagramFilter | undefined> => {
-            return await db.diagram_filters.get({ diagramId });
+            const filter = await db.diagram_filters.get({ diagramId });
+
+            return filter;
         },
         [db]
     );

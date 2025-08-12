@@ -8,6 +8,7 @@ import { createContext } from 'react';
 
 export interface DiagramFilterContext {
     filter?: DiagramFilter;
+    loading: boolean;
 
     hasActiveFilter: boolean;
     schemasDisplayed: DBSchema[];
@@ -45,4 +46,5 @@ export const diagramFilterContext = createContext<DiagramFilterContext>({
     schemasDisplayed: [],
     addTablesToFilter: emptyFn,
     removeTablesFromFilter: emptyFn,
+    loading: false,
 });
