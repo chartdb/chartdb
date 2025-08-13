@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useDebounce } from '@/hooks/use-debounce';
+import { DiagramRowActionsMenu } from './diagram-row-actions-menu/diagram-row-actions-menu';
 
 export interface OpenDiagramDialogProps extends BaseDialogProps {
     canClose?: boolean;
@@ -50,17 +51,18 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         setSelectedDiagramId(undefined);
     }, [dialog.open]);
 
+    const fetchDiagrams = useCallback(async () => {
+        const diagrams = await listDiagrams({ includeTables: true });
+        setDiagrams(
+            diagrams.sort(
+                (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+            )
+        );
+    }, [listDiagrams]);
+
     useEffect(() => {
-        const fetchDiagrams = async () => {
-            const diagrams = await listDiagrams({ includeTables: true });
-            setDiagrams(
-                diagrams.sort(
-                    (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
-                )
-            );
-        };
         fetchDiagrams();
-    }, [listDiagrams, setDiagrams, dialog.open]);
+    }, [fetchDiagrams, dialog.open]);
 
     const openDiagram = useCallback(
         (diagramId: string) => {
@@ -220,6 +222,19 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                         </TableCell>
                                         <TableCell className="text-center">
                                             {diagram.tables?.length}
+                                        </TableCell>
+                                        <TableCell className="items-center p-0 pr-1 text-right">
+                                            <DiagramRowActionsMenu
+                                                diagram={diagram}
+                                                onOpen={() => {
+                                                    openDiagram(diagram.id);
+                                                    closeOpenDiagramDialog();
+                                                }}
+                                                refetch={fetchDiagrams}
+                                                onSelectDiagram={
+                                                    setSelectedDiagramId
+                                                }
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}

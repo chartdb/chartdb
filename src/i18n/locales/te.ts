@@ -17,6 +17,7 @@ export const te: LanguageTranslation = {
                 new: 'కొత్త డైగ్రాం',
                 browse: 'బ్రాఉజ్ చేయండి...',
                 save: 'సేవ్',
+                duplicate: 'డుప్లికేట్',
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',

@@ -17,6 +17,7 @@ export const ne: LanguageTranslation = {
                 new: 'नयाँ डायाग्राम',
                 browse: 'ब्राउज गर्नुहोस्...',
                 save: 'सुरक्षित गर्नुहोस्',
+                duplicate: 'डुप्लिकेट',
                 import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',

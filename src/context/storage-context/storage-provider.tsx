@@ -764,6 +764,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 db.db_dependencies.where('diagramId').equals(id).delete(),
                 db.areas.where('diagramId').equals(id).delete(),
                 db.db_custom_types.where('diagramId').equals(id).delete(),
+                db.diagram_filters.where('diagramId').equals(id).delete(),
             ]);
         },
         [db]
