@@ -1,4 +1,10 @@
-import React, { type ReactNode, useCallback, useState } from 'react';
+import React, {
+    type ReactNode,
+    useCallback,
+    useState,
+    useEffect,
+    useRef,
+} from 'react';
 import { canvasContext } from './canvas-context';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { adjustTablePositions } from '@/lib/domain/db-table';
@@ -15,14 +21,41 @@ interface CanvasProviderProps {
 }
 
 export const CanvasProvider = ({ children }: CanvasProviderProps) => {
-    const { tables, relationships, updateTablesState, databaseType, areas } =
-        useChartDB();
-    const { filter } = useDiagramFilter();
+    const {
+        tables,
+        relationships,
+        updateTablesState,
+        databaseType,
+        areas,
+        diagramId,
+    } = useChartDB();
+    const {
+        filter,
+        hasActiveFilter,
+        loading: filterLoading,
+    } = useDiagramFilter();
     const { fitView } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
 
     const [showFilter, setShowFilter] = useState(false);
+    const diagramIdActiveFilterRef = useRef<string>();
+
+    useEffect(() => {
+        if (filterLoading) {
+            return;
+        }
+
+        if (diagramIdActiveFilterRef.current === diagramId) {
+            return;
+        }
+
+        diagramIdActiveFilterRef.current = diagramId;
+
+        if (hasActiveFilter) {
+            setShowFilter(true);
+        }
+    }, [hasActiveFilter, filterLoading, diagramId]);
 
     const reorderTables = useCallback(
         (
