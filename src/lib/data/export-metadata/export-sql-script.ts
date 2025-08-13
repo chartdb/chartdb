@@ -8,6 +8,7 @@ import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
+import { escapeSQLComment } from './export-per-type/common';
 
 // Function to simplify verbose data type names
 const simplifyDataType = (typeName: string): string => {
@@ -323,15 +324,22 @@ export const exportBaseSQL = ({
 
         sqlScript += '\n);\n';
 
-        // Add table comment
-        if (table.comments) {
-            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments.replace(/'/g, "''")}';\n`;
+        // Add table comment (only for databases that support COMMENT ON syntax)
+        // PostgreSQL and Oracle support COMMENT ON syntax
+        // SQL Server uses extended properties, MySQL uses inline comments, SQLite uses comments in DDL
+        const supportsCommentOn =
+            targetDatabaseType === DatabaseType.POSTGRESQL ||
+            targetDatabaseType === DatabaseType.COCKROACHDB ||
+            targetDatabaseType === DatabaseType.ORACLE;
+
+        if (table.comments && supportsCommentOn) {
+            sqlScript += `COMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';\n`;
         }
 
         table.fields.forEach((field) => {
-            // Add column comment
-            if (field.comments) {
-                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments.replace(/'/g, "''")}';\n`;
+            // Add column comment (only for databases that support COMMENT ON syntax)
+            if (field.comments && supportsCommentOn) {
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${escapeSQLComment(field.comments)}';\n`;
             }
         });
 
