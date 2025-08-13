@@ -1,6 +1,9 @@
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
-import { DatabaseType } from '@/lib/domain/database-type';
+import {
+    DatabaseType,
+    databaseTypesWithCommentSupport,
+} from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
@@ -325,12 +328,8 @@ export const exportBaseSQL = ({
         sqlScript += '\n);\n';
 
         // Add table comment (only for databases that support COMMENT ON syntax)
-        // PostgreSQL and Oracle support COMMENT ON syntax
-        // SQL Server uses extended properties, MySQL uses inline comments, SQLite uses comments in DDL
         const supportsCommentOn =
-            targetDatabaseType === DatabaseType.POSTGRESQL ||
-            targetDatabaseType === DatabaseType.COCKROACHDB ||
-            targetDatabaseType === DatabaseType.ORACLE;
+            databaseTypesWithCommentSupport.includes(targetDatabaseType);
 
         if (table.comments && supportsCommentOn) {
             sqlScript += `COMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';\n`;
