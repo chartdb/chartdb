@@ -89,7 +89,10 @@ export const ChartDBProvider: React.FC<
 
     diffEvents.useSubscription(diffCalculatedHandler);
 
-    const defaultSchemaName = defaultSchemas[databaseType];
+    const defaultSchemaName = useMemo(
+        () => defaultSchemas[databaseType],
+        [databaseType]
+    );
 
     const readonly = useMemo(
         () => readonlyProp ?? hasDiff ?? false,
@@ -110,9 +113,11 @@ export const ChartDBProvider: React.FC<
                               .filter((schema) => !!schema) as string[]
                       ),
                   ]
-                      .sort((a, b) =>
-                          a === defaultSchemaName ? -1 : a.localeCompare(b)
-                      )
+                      .sort((a, b) => {
+                          if (a === defaultSchemaName) return -1;
+                          if (b === defaultSchemaName) return 1;
+                          return a.localeCompare(b);
+                      })
                       .map(
                           (schema): DBSchema => ({
                               id: schemaNameToSchemaId(schema),
