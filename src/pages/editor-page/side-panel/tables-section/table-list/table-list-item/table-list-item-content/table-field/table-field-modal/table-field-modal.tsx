@@ -83,6 +83,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                 scale: localField.scale,
                 unique: localField.unique,
                 default: localField.default,
+                increment: localField.increment,
             });
         }
         prevFieldRef.current = localField;
@@ -92,6 +93,26 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         () => findDataTypeDataById(field.type.id, databaseType),
         [field.type.id, databaseType]
     );
+
+    // Check if the field type supports auto increment
+    const supportsAutoIncrement = useMemo(() => {
+        const typeName = field.type.name.toLowerCase();
+        const autoIncrementTypes = [
+            'integer',
+            'int',
+            'bigint',
+            'smallint',
+            'tinyint',
+            'mediumint',
+            'serial',
+            'bigserial',
+            'smallserial',
+            'number',
+            'numeric',
+            'decimal',
+        ];
+        return autoIncrementTypes.some((type) => typeName.includes(type));
+    }, [field.type.name]);
 
     return (
         <Popover
@@ -137,6 +158,28 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 }
                             />
                         </div>
+                        {supportsAutoIncrement && (
+                            <div className="flex items-center justify-between">
+                                <Label
+                                    htmlFor="increment"
+                                    className="text-subtitle"
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.field_actions.auto_increment'
+                                    )}
+                                </Label>
+                                <Checkbox
+                                    checked={localField.increment || false}
+                                    disabled={!localField.primaryKey}
+                                    onCheckedChange={(value) =>
+                                        setLocalField((current) => ({
+                                            ...current,
+                                            increment: !!value,
+                                        }))
+                                    }
+                                />
+                            </div>
+                        )}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="default" className="text-subtitle">
                                 {t(
