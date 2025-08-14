@@ -74,7 +74,7 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                 if (!filterToSet) {
                     // If no filter is stored, set default based on database type
                     filterToSet =
-                        schemas.length > 0
+                        schemas.length > 1
                             ? { schemaIds: [schemas[0].id] }
                             : {};
                 }
