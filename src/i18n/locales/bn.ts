@@ -487,6 +487,11 @@ export const bn: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'এলাকার নাম সম্পাদনা করুন',
+            delete_area: 'এলাকা মুছে ফেলুন',
+        },
+
         snap_to_grid_tooltip: 'গ্রিডে স্ন্যাপ করুন (অবস্থান {{key}})',
 
         tool_tips: {
