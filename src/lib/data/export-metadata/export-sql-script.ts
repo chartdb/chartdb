@@ -274,8 +274,13 @@ export const exportBaseSQL = ({
                 sqlScript += ` UNIQUE`;
             }
 
+            // Handle AUTO INCREMENT - add as a comment for AI to process
+            if (field.increment) {
+                sqlScript += ` /* AUTO_INCREMENT */`;
+            }
+
             // Handle DEFAULT value
-            if (field.default) {
+            if (field.default && !field.increment) {
                 // Temp remove default user-define value when it have it
                 let fieldDefault = field.default;
 
