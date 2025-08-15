@@ -1,6 +1,9 @@
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
-import { DatabaseType } from '@/lib/domain/database-type';
+import {
+    DatabaseType,
+    databaseTypesWithCommentSupport,
+} from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
@@ -8,6 +11,7 @@ import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
+import { escapeSQLComment } from './export-per-type/common';
 
 // Function to simplify verbose data type names
 const simplifyDataType = (typeName: string): string => {
@@ -323,15 +327,18 @@ export const exportBaseSQL = ({
 
         sqlScript += '\n);\n';
 
-        // Add table comment
-        if (table.comments) {
-            sqlScript += `COMMENT ON TABLE ${tableName} IS '${table.comments.replace(/'/g, "''")}';\n`;
+        // Add table comment (only for databases that support COMMENT ON syntax)
+        const supportsCommentOn =
+            databaseTypesWithCommentSupport.includes(targetDatabaseType);
+
+        if (table.comments && supportsCommentOn) {
+            sqlScript += `COMMENT ON TABLE ${tableName} IS '${escapeSQLComment(table.comments)}';\n`;
         }
 
         table.fields.forEach((field) => {
-            // Add column comment
-            if (field.comments) {
-                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${field.comments.replace(/'/g, "''")}';\n`;
+            // Add column comment (only for databases that support COMMENT ON syntax)
+            if (field.comments && supportsCommentOn) {
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${escapeSQLComment(field.comments)}';\n`;
             }
         });
 
