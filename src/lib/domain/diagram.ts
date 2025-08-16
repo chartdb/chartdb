@@ -64,7 +64,7 @@ export const loadFromDatabaseMetadata = async ({
     databaseMetadata: DatabaseMetadata;
     diagramNumber?: number;
     databaseEdition?: DatabaseEdition;
-}): Promise<Diagram> => {
+}): Promise<{ diagram: Diagram; initialFilter?: { tableIds: string[] } }> => {
     const {
         fk_info: foreignKeys,
         views: views,
@@ -93,11 +93,51 @@ export const loadFromDatabaseMetadata = async ({
           })
         : [];
 
-    const adjustedTables = adjustTablePositions({
-        tables,
-        relationships,
-        mode: 'perSchema',
-    });
+    // For large diagrams, apply special handling
+    const LARGE_DIAGRAM_THRESHOLD = 200;
+    let adjustedTables = tables;
+    let initialFilter: { tableIds: string[] } | undefined;
+
+    if (tables.length > LARGE_DIAGRAM_THRESHOLD) {
+        // Create a set of table IDs that have relationships
+        const tablesWithRelationships = new Set<string>();
+        relationships.forEach((rel) => {
+            tablesWithRelationships.add(rel.sourceTableId);
+            tablesWithRelationships.add(rel.targetTableId);
+        });
+
+        // Separate tables into connected and isolated
+        const connectedTables = tables.filter((table) =>
+            tablesWithRelationships.has(table.id)
+        );
+        const isolatedTables = tables.filter(
+            (table) => !tablesWithRelationships.has(table.id)
+        );
+
+        // Only reorder connected tables
+        const reorderedConnectedTables = adjustTablePositions({
+            tables: connectedTables,
+            relationships,
+            mode: 'perSchema',
+        });
+
+        // Combine reordered connected tables with isolated tables
+        adjustedTables = [...reorderedConnectedTables, ...isolatedTables];
+
+        // Set up filter to hide isolated tables if there are any
+        if (isolatedTables.length > 0) {
+            initialFilter = {
+                tableIds: connectedTables.map((t) => t.id),
+            };
+        }
+    } else {
+        // For smaller diagrams, reorder all tables as before
+        adjustedTables = adjustTablePositions({
+            tables,
+            relationships,
+            mode: 'perSchema',
+        });
+    }
 
     const sortedTables = adjustedTables.sort((a, b) => {
         if (a.isView === b.isView) {
@@ -125,5 +165,5 @@ export const loadFromDatabaseMetadata = async ({
         updatedAt: new Date(),
     };
 
-    return diagram;
+    return { diagram, initialFilter };
 };

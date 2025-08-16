@@ -19,6 +19,7 @@ import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
+import { getInitialFilterForLargeDiagram } from '@/lib/export-import-utils';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
@@ -43,7 +44,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
-    const { listDiagrams, addDiagram } = useStorage();
+    const { listDiagrams, addDiagram, updateDiagramFilter } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
@@ -89,6 +90,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     sourceDatabaseType: databaseType,
                     targetDatabaseType: databaseType,
                 });
+
+                // Check if we need a filter for large SQL imports
+                const initialFilter = getInitialFilterForLargeDiagram(diagram);
+                if (initialFilter) {
+                    await updateDiagramFilter(diagram.id, initialFilter);
+                }
             } else {
                 let metadata: DatabaseMetadata | undefined = databaseMetadata;
 
@@ -103,7 +110,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     });
                 }
 
-                diagram = await loadFromDatabaseMetadata({
+                const result = await loadFromDatabaseMetadata({
                     databaseType,
                     databaseMetadata: metadata,
                     diagramNumber,
@@ -112,6 +119,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                             ? undefined
                             : databaseEdition,
                 });
+                diagram = result.diagram;
+
+                // Apply filter if needed for large diagrams
+                if (result.initialFilter) {
+                    await updateDiagramFilter(diagram.id, result.initialFilter);
+                }
             }
 
             await addDiagram({ diagram });
@@ -126,6 +139,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             importMethod,
             databaseType,
             addDiagram,
+            updateDiagramFilter,
             databaseEdition,
             closeCreateDiagramDialog,
             navigate,
