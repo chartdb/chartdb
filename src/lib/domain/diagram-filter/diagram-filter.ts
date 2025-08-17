@@ -20,7 +20,8 @@ export interface FilterTableInfo {
  */
 export function reduceFilter(
     filter: DiagramFilter,
-    tables: FilterTableInfo[]
+    tables: FilterTableInfo[],
+    options: { databaseWithSchemas: boolean }
 ): DiagramFilter {
     let { schemaIds, tableIds } = filter;
 
@@ -34,9 +35,9 @@ export function reduceFilter(
     }
 
     // Get all unique schema IDs from tables
-    const allSchemaIds = [
-        ...new Set(tables.filter((t) => t.schemaId).map((t) => t.schemaId!)),
-    ];
+    const allSchemaIds = options.databaseWithSchemas
+        ? [...new Set(tables.filter((t) => t.schemaId).map((t) => t.schemaId!))]
+        : [];
     const allTableIds = tables.map((t) => t.id);
 
     // in case its db with no schemas

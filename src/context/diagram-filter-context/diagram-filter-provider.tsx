@@ -205,7 +205,11 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             schemaIds: newSchemaIds,
                             tableIds: newTableIds,
                         },
-                        allTables satisfies FilterTableInfo[]
+                        allTables satisfies FilterTableInfo[],
+                        {
+                            databaseWithSchemas:
+                                databasesWithSchemas.includes(databaseType),
+                        }
                     );
                 });
             },
@@ -252,11 +256,15 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                         schemaIds: undefined,
                         tableIds: newTableIds,
                     },
-                    allTables satisfies FilterTableInfo[]
+                    allTables satisfies FilterTableInfo[],
+                    {
+                        databaseWithSchemas:
+                            databasesWithSchemas.includes(databaseType),
+                    }
                 );
             });
         },
-        [allTables]
+        [allTables, databaseType]
     );
 
     const toggleTableFilter: DiagramFilterContext['toggleTableFilter'] =
@@ -340,7 +348,11 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             schemaIds: newSchemaIds,
                             tableIds: newTableIds,
                         },
-                        allTables satisfies FilterTableInfo[]
+                        allTables satisfies FilterTableInfo[],
+                        {
+                            databaseWithSchemas:
+                                databasesWithSchemas.includes(databaseType),
+                        }
                     );
                 });
             },
@@ -450,11 +462,15 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             ...filterByTableIds,
                             tableIds: newTableIds,
                         },
-                        allTables satisfies FilterTableInfo[]
+                        allTables satisfies FilterTableInfo[],
+                        {
+                            databaseWithSchemas:
+                                databasesWithSchemas.includes(databaseType),
+                        }
                     );
                 });
             },
-            [allTables]
+            [allTables, databaseType]
         );
 
     const removeTablesFromFilter: DiagramFilterContext['removeTablesFromFilter'] =
@@ -491,11 +507,15 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
                             ...filterByTableIds,
                             tableIds: newTableIds,
                         },
-                        allTables satisfies FilterTableInfo[]
+                        allTables satisfies FilterTableInfo[],
+                        {
+                            databaseWithSchemas:
+                                databasesWithSchemas.includes(databaseType),
+                        }
                     );
                 });
             },
-            [allTables]
+            [allTables, databaseType]
         );
 
     const eventConsumer = useCallback(
