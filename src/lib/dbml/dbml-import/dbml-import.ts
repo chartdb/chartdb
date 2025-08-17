@@ -500,7 +500,9 @@ export const importDBMLToDiagram = async (
                 name: table.name.replace(/['"]/g, ''),
                 schema:
                     typeof table.schema === 'string'
-                        ? table.schema
+                        ? table.schema === 'public'
+                            ? ''
+                            : table.schema
                         : table.schema?.name || '',
                 order: index,
                 fields,

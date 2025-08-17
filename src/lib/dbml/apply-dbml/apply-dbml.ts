@@ -226,6 +226,16 @@ const updateTables = ({
         const targetKey = createObjectKeyFromTable(targetTable);
         let sourceTable = sourceTablesByKey.get(targetKey);
 
+        // If no match and target has a schema, try without schema
+        if (!sourceTable && targetTable.schema) {
+            const noSchemaKey = createObjectKeyFromTable({
+                ...targetTable,
+                schema: undefined,
+            });
+            sourceTable = sourceTablesByKey.get(noSchemaKey);
+        }
+
+        // If still no match, try with default schema
         if (!sourceTable && defaultDatabaseSchema) {
             if (!targetTable.schema) {
                 // If target table has no schema, try matching with default schema
@@ -235,12 +245,7 @@ const updateTables = ({
                 });
                 sourceTable = sourceTablesByKey.get(defaultKey);
             } else if (targetTable.schema === defaultDatabaseSchema) {
-                // If target table's schema matches default, try matching without schema
-                const noSchemaKey = createObjectKeyFromTable({
-                    ...targetTable,
-                    schema: undefined,
-                });
-                sourceTable = sourceTablesByKey.get(noSchemaKey);
+                // Already tried without schema above
             }
         }
 

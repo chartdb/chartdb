@@ -817,8 +817,9 @@ Table admin.users {
             ]);
 
             // Verify fields reference correct enums
+            // Note: 'public' schema is converted to empty string
             const publicUsersTable = diagram.tables?.find(
-                (t) => t.name === 'users' && t.schema === 'public'
+                (t) => t.name === 'users' && t.schema === ''
             );
             const adminUsersTable = diagram.tables?.find(
                 (t) => t.name === 'users' && t.schema === 'admin'
@@ -1075,8 +1076,9 @@ Table "public_3"."comments" {
             // Verify tables
             expect(diagram.tables).toHaveLength(3);
 
+            // Note: 'public' schema is converted to empty string
             const usersTable = diagram.tables?.find(
-                (t) => t.name === 'users' && t.schema === 'public'
+                (t) => t.name === 'users' && t.schema === ''
             );
             const postsTable = diagram.tables?.find(
                 (t) => t.name === 'posts' && t.schema === 'public_2'

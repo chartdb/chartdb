@@ -491,9 +491,21 @@ const convertToInlineRefs = (dbml: string): string => {
     return cleanedDbml;
 };
 
+// Function to check for DBML reserved keywords
+const isDBMLKeyword = (name: string): boolean => {
+    const keywords = new Set([
+        'YES',
+        'NO',
+        'TRUE',
+        'FALSE',
+        'NULL', // DBML reserved keywords (boolean literals)
+    ]);
+    return keywords.has(name.toUpperCase());
+};
+
 // Function to check for SQL keywords (add more if needed)
 const isSQLKeyword = (name: string): boolean => {
-    const keywords = new Set(['CASE', 'ORDER', 'GROUP', 'FROM', 'TO', 'USER']); // Add common keywords
+    const keywords = new Set(['CASE', 'ORDER', 'GROUP', 'FROM', 'TO', 'USER']); // Common SQL keywords
     return keywords.has(name.toUpperCase());
 };
 
@@ -758,6 +770,8 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
     const cleanDiagram = fixProblematicFieldNames(filteredDiagram);
 
     // --- Final sanitization and renaming pass ---
+    // Only rename keywords for PostgreSQL/SQLite
+    // For other databases, we'll wrap problematic names in quotes instead
     const shouldRenameKeywords =
         diagram.databaseType === DatabaseType.POSTGRESQL ||
         diagram.databaseType === DatabaseType.SQLITE;
@@ -777,13 +791,20 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             safeTableName = `"${originalName.replace(/"/g, '\\"')}"`;
         }
 
-        // Rename table if SQL keyword (PostgreSQL only)
-        if (shouldRenameKeywords && isSQLKeyword(originalName)) {
+        // Rename table if it's a keyword (PostgreSQL/SQLite only)
+        if (
+            shouldRenameKeywords &&
+            (isDBMLKeyword(originalName) || isSQLKeyword(originalName))
+        ) {
             const newName = `${originalName}_table`;
             sqlRenamedTables.set(newName, originalName);
             safeTableName = /[^\w]/.test(newName)
                 ? `"${newName.replace(/"/g, '\\"')}"`
                 : newName;
+        }
+        // For other databases, just quote DBML keywords
+        else if (!shouldRenameKeywords && isDBMLKeyword(originalName)) {
+            safeTableName = `"${originalName.replace(/"/g, '\\"')}"`;
         }
 
         const fieldNameCounts = new Map<string, number>();
@@ -811,8 +832,11 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
                 name: finalSafeName,
             };
 
-            // Rename field if SQL keyword (PostgreSQL only)
-            if (shouldRenameKeywords && isSQLKeyword(field.name)) {
+            // Rename field if it's a keyword (PostgreSQL/SQLite only)
+            if (
+                shouldRenameKeywords &&
+                (isDBMLKeyword(field.name) || isSQLKeyword(field.name))
+            ) {
                 const newFieldName = `${field.name}_field`;
                 fieldRenames.push({
                     table: safeTableName,
@@ -822,6 +846,10 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
                 sanitizedField.name = /[^\w]/.test(newFieldName)
                     ? `"${newFieldName.replace(/"/g, '\\"')}"`
                     : newFieldName;
+            }
+            // For other databases, just quote DBML keywords
+            else if (!shouldRenameKeywords && isDBMLKeyword(field.name)) {
+                sanitizedField.name = `"${field.name.replace(/"/g, '\\"')}"`;
             }
 
             return sanitizedField;
@@ -875,8 +903,11 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         baseScript = sanitizeSQLforDBML(baseScript);
 
-        // Append comments for renamed tables and fields (PostgreSQL only)
-        if (shouldRenameKeywords) {
+        // Append comments for renamed tables and fields (PostgreSQL/SQLite only)
+        if (
+            shouldRenameKeywords &&
+            (sqlRenamedTables.size > 0 || fieldRenames.length > 0)
+        ) {
             baseScript = appendRenameComments(
                 baseScript,
                 sqlRenamedTables,
