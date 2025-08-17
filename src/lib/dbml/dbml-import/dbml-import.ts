@@ -246,21 +246,47 @@ export const importDBMLToDiagram = async (
             field: Field,
             enums: DBMLEnum[]
         ): Partial<DBMLField> => {
-            if (!field.type || !field.type.args) {
-                return {};
+            // First check if the type name itself contains the length (e.g., "character varying(50)")
+            const typeName = field.type.type_name;
+            let extractedArgs: string[] | undefined;
+
+            // Check for types with embedded length like "character varying(50)" or varchar(255)
+            const typeWithLengthMatch = typeName.match(/^(.+?)\(([^)]+)\)$/);
+            if (typeWithLengthMatch) {
+                // Extract the args from the type name itself
+                extractedArgs = typeWithLengthMatch[2]
+                    .split(',')
+                    .map((arg: string) => arg.trim());
             }
 
-            const args = field.type.args.split(',') as string[];
+            // Use extracted args or fall back to field.type.args
+            const args =
+                extractedArgs ||
+                (field.type.args ? field.type.args.split(',') : undefined);
+
+            if (!args || args.length === 0) {
+                return {};
+            }
 
             const dataType = mapDBMLTypeToDataType(field.type.type_name, {
                 ...options,
                 enums,
             });
 
-            if (dataType.fieldAttributes?.hasCharMaxLength) {
-                const charMaxLength = args?.[0];
+            // Check if this is a character type that should have a max length
+            const baseTypeName = typeName
+                .replace(/\(.*\)/, '')
+                .toLowerCase()
+                .replace(/['"]/g, '');
+            const isCharType =
+                baseTypeName.includes('char') ||
+                baseTypeName.includes('varchar') ||
+                baseTypeName === 'text' ||
+                baseTypeName === 'string';
+
+            if (isCharType && args[0]) {
                 return {
-                    characterMaximumLength: charMaxLength,
+                    characterMaximumLength: args[0],
                 };
             } else if (
                 dataType.fieldAttributes?.precision &&

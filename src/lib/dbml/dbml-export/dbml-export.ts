@@ -155,14 +155,25 @@ export const sanitizeSQLforDBML = (sql: string): string => {
         }
     );
 
-    // Comment out self-referencing foreign keys to prevent "Two endpoints are the same" error
-    // Example: ALTER TABLE public.class ADD CONSTRAINT ... FOREIGN KEY (class_id) REFERENCES public.class (class_id);
+    // Comment out invalid self-referencing foreign keys where the same field references itself
+    // Example: ALTER TABLE table ADD CONSTRAINT ... FOREIGN KEY (field_a) REFERENCES table (field_a);
+    // But keep valid self-references like: FOREIGN KEY (field_a) REFERENCES table (field_b);
     const lines = sanitized.split('\n');
     const processedLines = lines.map((line) => {
+        // Match pattern: ALTER TABLE [schema.]table ADD CONSTRAINT ... FOREIGN KEY(field) REFERENCES [schema.]table(field)
+        // Capture the table name, source field, and target field
         const selfRefFKPattern =
-            /ALTER\s+TABLE\s+(?:\S+\.)?(\S+)\s+ADD\s+CONSTRAINT\s+\S+\s+FOREIGN\s+KEY\s*\([^)]+\)\s+REFERENCES\s+(?:\S+\.)?\1\s*\([^)]+\)\s*;/i;
-        if (selfRefFKPattern.test(line)) {
-            return `-- ${line}`; // Comment out the line
+            /ALTER\s+TABLE\s+(?:["[]?(\S+?)[\]"]?\.)?["[]?(\S+?)[\]"]?\s+ADD\s+CONSTRAINT\s+\S+\s+FOREIGN\s+KEY\s*\(["[]?([^)"]+)[\]"]?\)\s+REFERENCES\s+(?:["[]?\S+?[\]"]?\.)?"?[[]?\2[\]]?"?\s*\(["[]?([^)"]+)[\]"]?\)\s*;/i;
+        const match = selfRefFKPattern.exec(line);
+
+        if (match) {
+            const sourceField = match[3].trim();
+            const targetField = match[4].trim();
+
+            // Only comment out if source and target fields are the same
+            if (sourceField === targetField) {
+                return `-- ${line}`; // Comment out invalid self-reference
+            }
         }
         return line;
     });
