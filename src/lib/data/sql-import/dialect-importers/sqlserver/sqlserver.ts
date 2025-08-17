@@ -162,14 +162,35 @@ function parseAlterTableAddConstraint(statements: string[]): SQLForeignKey[] {
         if (match) {
             const [
                 ,
-                sourceSchema = 'dbo',
-                sourceTable,
+                sourceSchemaOrTable,
+                sourceTableIfSchema,
                 constraintName,
                 sourceColumn,
-                targetSchema = 'dbo',
-                targetTable,
+                targetSchemaOrTable,
+                targetTableIfSchema,
                 targetColumn,
             ] = match;
+
+            // Handle both schema.table and just table formats
+            let sourceSchema = 'dbo';
+            let sourceTable = '';
+            let targetSchema = 'dbo';
+            let targetTable = '';
+
+            // If second group is empty, first group is the table name
+            if (!sourceTableIfSchema) {
+                sourceTable = sourceSchemaOrTable;
+            } else {
+                sourceSchema = sourceSchemaOrTable;
+                sourceTable = sourceTableIfSchema;
+            }
+
+            if (!targetTableIfSchema) {
+                targetTable = targetSchemaOrTable;
+            } else {
+                targetSchema = targetSchemaOrTable;
+                targetTable = targetTableIfSchema;
+            }
 
             fkData.push({
                 name: constraintName,
