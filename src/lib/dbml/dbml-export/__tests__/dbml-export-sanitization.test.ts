@@ -93,17 +93,38 @@ ALTER TABLE wizard_spellbooks ADD CONSTRAINT fk_mentor FOREIGN KEY (owner_id) RE
             );
         });
 
-        it('should comment out self-referential foreign keys', () => {
-            const sql = `ALTER TABLE quest_prerequisites ADD CONSTRAINT fk_quest_prereq FOREIGN KEY (quest_id) REFERENCES quest_prerequisites (quest_id);
+        it('should preserve valid self-referential foreign keys but filter invalid ones', () => {
+            const sql = `-- Valid self-references (different fields)
 ALTER TABLE spell_components ADD CONSTRAINT fk_component_substitute FOREIGN KEY (substitute_id) REFERENCES spell_components (id);
-ALTER TABLE guild_hierarchy ADD CONSTRAINT fk_parent_guild FOREIGN KEY (parent_guild_id) REFERENCES guild_hierarchy (guild_id);`;
+ALTER TABLE guild_hierarchy ADD CONSTRAINT fk_parent_guild FOREIGN KEY (parent_guild_id) REFERENCES guild_hierarchy (guild_id);
+ALTER TABLE "finance"."general_ledger" ADD CONSTRAINT fk_reversal FOREIGN KEY("reversal_id") REFERENCES "finance"."general_ledger"("ledger_id");
+
+-- Invalid self-references (same field referencing itself)
+ALTER TABLE quest_prerequisites ADD CONSTRAINT fk_quest_prereq FOREIGN KEY (quest_id) REFERENCES quest_prerequisites (quest_id);
+ALTER TABLE "finance"."general_ledger" ADD CONSTRAINT fk_ledger_self FOREIGN KEY("ledger_id") REFERENCES "finance"."general_ledger"("ledger_id");
+ALTER TABLE wizards ADD CONSTRAINT fk_wizard_self FOREIGN KEY (id) REFERENCES wizards (id);`;
 
             const sanitized = sanitizeSQLforDBML(sql);
 
-            // Self-referential constraints should be commented out
+            // Valid self-referential constraints should be preserved
+            expect(sanitized).toContain(
+                'ALTER TABLE spell_components ADD CONSTRAINT'
+            );
+            expect(sanitized).toContain(
+                'ALTER TABLE guild_hierarchy ADD CONSTRAINT'
+            );
+            expect(sanitized).toMatch(
+                /ALTER TABLE "finance"\."general_ledger".*fk_reversal.*FOREIGN KEY\("reversal_id"\)/
+            );
+
+            // Invalid self-referential constraints (same field to itself) should be commented out
             expect(sanitized).toContain('-- ALTER TABLE quest_prerequisites');
-            expect(sanitized).toContain('-- ALTER TABLE spell_components');
-            expect(sanitized).toContain('-- ALTER TABLE guild_hierarchy');
+            expect(sanitized).toMatch(
+                /-- ALTER TABLE "finance"\."general_ledger".*fk_ledger_self.*FOREIGN KEY\("ledger_id"\).*REFERENCES.*\("ledger_id"\)/
+            );
+            expect(sanitized).toContain(
+                '-- ALTER TABLE wizards ADD CONSTRAINT fk_wizard_self'
+            );
         });
 
         it('should not comment out normal foreign keys', () => {
@@ -246,7 +267,11 @@ ALTER TABLE spell_component_links ADD CONSTRAINT fk_creator FOREIGN KEY (link_id
             expect(sanitized).toContain("DEFAULT 'F'");
             expect(sanitized).toContain("DEFAULT 'NOW'"); // NOW is quoted as a single word
             expect(sanitized).toContain('(matrix_pattern)'); // Deduplicated
+            // Valid self-referencing relationships (different fields) are preserved
             expect(sanitized).toContain(
+                'ALTER TABLE spell_matrices ADD CONSTRAINT fk_self_ref'
+            );
+            expect(sanitized).not.toContain(
                 '-- ALTER TABLE spell_matrices ADD CONSTRAINT fk_self_ref'
             );
             expect(sanitized).toContain(
