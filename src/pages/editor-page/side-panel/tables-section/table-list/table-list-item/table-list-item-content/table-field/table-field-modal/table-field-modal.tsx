@@ -5,7 +5,10 @@ import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
 import type { DBField } from '@/lib/domain/db-field';
 import type { FieldAttributeRange } from '@/lib/data/data-types/data-types';
-import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
+import {
+    findDataTypeDataById,
+    supportsAutoIncrementDataType,
+} from '@/lib/data/data-types/data-types';
 import {
     Popover,
     PopoverContent,
@@ -94,25 +97,10 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         [field.type.id, databaseType]
     );
 
-    // Check if the field type supports auto increment
-    const supportsAutoIncrement = useMemo(() => {
-        const typeName = field.type.name.toLowerCase();
-        const autoIncrementTypes = [
-            'integer',
-            'int',
-            'bigint',
-            'smallint',
-            'tinyint',
-            'mediumint',
-            'serial',
-            'bigserial',
-            'smallserial',
-            'number',
-            'numeric',
-            'decimal',
-        ];
-        return autoIncrementTypes.some((type) => typeName.includes(type));
-    }, [field.type.name]);
+    const supportsAutoIncrement = useMemo(
+        () => supportsAutoIncrementDataType(field.type.name),
+        [field.type.name]
+    );
 
     return (
         <Popover
@@ -158,7 +146,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 }
                             />
                         </div>
-                        {supportsAutoIncrement && (
+                        {supportsAutoIncrement ? (
                             <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="increment"
@@ -169,7 +157,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     )}
                                 </Label>
                                 <Checkbox
-                                    checked={localField.increment || false}
+                                    checked={localField.increment ?? false}
                                     disabled={!localField.primaryKey}
                                     onCheckedChange={(value) =>
                                         setLocalField((current) => ({
@@ -179,7 +167,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     }
                                 />
                             </div>
-                        )}
+                        ) : null}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="default" className="text-subtitle">
                                 {t(

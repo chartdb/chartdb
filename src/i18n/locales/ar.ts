@@ -143,6 +143,7 @@ export const ar: LanguageTranslation = {
                     field_actions: {
                         title: 'خصائص الحقل',
                         unique: 'فريد',
+                        auto_increment: 'زيادة تلقائية',
                         comments: 'تعليقات',
                         no_comments: 'لا يوجد تعليقات',
                         delete_field: 'حذف الحقل',

@@ -147,6 +147,7 @@ export const ja: LanguageTranslation = {
                     field_actions: {
                         title: 'フィールド属性',
                         unique: 'ユニーク',
+                        auto_increment: 'オートインクリメント',
                         comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',

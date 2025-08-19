@@ -144,6 +144,7 @@ export const ne: LanguageTranslation = {
                     field_actions: {
                         title: 'क्षेत्र विशेषताहरू',
                         unique: 'अनन्य',
+                        auto_increment: 'स्वचालित वृद्धि',
                         comments: 'टिप्पणीहरू',
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',

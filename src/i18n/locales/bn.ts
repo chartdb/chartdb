@@ -144,6 +144,7 @@ export const bn: LanguageTranslation = {
                     field_actions: {
                         title: 'ফিল্ড কর্ম',
                         unique: 'অদ্বিতীয়',
+                        auto_increment: 'স্বয়ংক্রিয় বৃদ্ধি',
                         comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',

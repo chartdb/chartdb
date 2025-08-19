@@ -143,6 +143,7 @@ export const vi: LanguageTranslation = {
                     field_actions: {
                         title: 'Thuộc tính trường',
                         unique: 'Giá trị duy nhất',
+                        auto_increment: 'Tự động tăng',
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',

@@ -144,6 +144,7 @@ export const te: LanguageTranslation = {
                     field_actions: {
                         title: 'ఫీల్డ్ గుణాలు',
                         unique: 'అద్వితీయ',
+                        auto_increment: 'ఆటో ఇంక్రిమెంట్',
                         comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',

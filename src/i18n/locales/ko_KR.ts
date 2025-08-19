@@ -143,6 +143,7 @@ export const ko_KR: LanguageTranslation = {
                     field_actions: {
                         title: '필드 속성',
                         unique: '유니크 여부',
+                        auto_increment: '자동 증가',
                         comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',

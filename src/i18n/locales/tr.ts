@@ -143,6 +143,7 @@ export const tr: LanguageTranslation = {
                     field_actions: {
                         title: 'Alan Özellikleri',
                         unique: 'Tekil',
+                        auto_increment: 'Otomatik Artış',
                         comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
