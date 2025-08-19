@@ -343,9 +343,10 @@ export function exportSQLite({
                         if (
                             field.primaryKey &&
                             singleIntegerPrimaryKey &&
-                            (field.default
-                                ?.toLowerCase()
-                                .includes('identity') ||
+                            (field.increment ||
+                                field.default
+                                    ?.toLowerCase()
+                                    .includes('identity') ||
                                 field.default
                                     ?.toLowerCase()
                                     .includes('autoincrement') ||
@@ -362,6 +363,7 @@ export function exportSQLite({
                         let defaultValue = '';
                         if (
                             field.default &&
+                            !field.increment &&
                             !field.default.toLowerCase().includes('identity') &&
                             !field.default
                                 .toLowerCase()

@@ -144,6 +144,7 @@ export const pt_BR: LanguageTranslation = {
                     field_actions: {
                         title: 'Atributos do Campo',
                         unique: 'Único',
+                        auto_increment: 'Incremento Automático',
                         comments: 'Comentários',
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',

@@ -146,3 +146,22 @@ export const findDataTypeDataById = (
 
     return dataTypesOptions.find((dataType) => dataType.id === id);
 };
+
+export const supportsAutoIncrementDataType = (
+    dataTypeName: string
+): boolean => {
+    return [
+        'integer',
+        'int',
+        'bigint',
+        'smallint',
+        'tinyint',
+        'mediumint',
+        'serial',
+        'bigserial',
+        'smallserial',
+        'number',
+        'numeric',
+        'decimal',
+    ].includes(dataTypeName.toLocaleLowerCase());
+};

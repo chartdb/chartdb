@@ -140,6 +140,7 @@ export const en = {
                     field_actions: {
                         title: 'Field Attributes',
                         unique: 'Unique',
+                        auto_increment: 'Auto Increment',
                         character_length: 'Max Length',
                         precision: 'Precision',
                         scale: 'Scale',

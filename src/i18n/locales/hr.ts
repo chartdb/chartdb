@@ -141,6 +141,7 @@ export const hr: LanguageTranslation = {
                     field_actions: {
                         title: 'Atributi polja',
                         unique: 'Jedinstven',
+                        auto_increment: 'Automatsko povećavanje',
                         character_length: 'Maksimalna dužina',
                         precision: 'Preciznost',
                         scale: 'Skala',

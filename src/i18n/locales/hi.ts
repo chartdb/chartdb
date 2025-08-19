@@ -144,6 +144,7 @@ export const hi: LanguageTranslation = {
                     field_actions: {
                         title: 'फ़ील्ड विशेषताएँ',
                         unique: 'अद्वितीय',
+                        auto_increment: 'ऑटो इंक्रीमेंट',
                         comments: 'टिप्पणियाँ',
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',

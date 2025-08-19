@@ -146,6 +146,7 @@ export const mr: LanguageTranslation = {
                     field_actions: {
                         title: 'फील्ड गुणधर्म',
                         unique: 'युनिक',
+                        auto_increment: 'ऑटो इंक्रिमेंट',
                         comments: 'टिप्पण्या',
                         no_comments: 'कोणत्याही टिप्पणी नाहीत',
                         delete_field: 'फील्ड हटवा',

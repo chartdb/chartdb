@@ -142,6 +142,7 @@ export const uk: LanguageTranslation = {
                     field_actions: {
                         title: 'Атрибути полів',
                         unique: 'Унікальне',
+                        auto_increment: 'Автоінкремент',
                         comments: 'Коментарі',
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',

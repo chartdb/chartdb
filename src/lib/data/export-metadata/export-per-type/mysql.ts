@@ -274,14 +274,15 @@ export function exportMySQL({
                         // Handle auto_increment - MySQL uses AUTO_INCREMENT keyword
                         let autoIncrement = '';
                         if (
-                            field.primaryKey &&
-                            (field.default
-                                ?.toLowerCase()
-                                .includes('identity') ||
-                                field.default
+                            field.increment ||
+                            (field.primaryKey &&
+                                (field.default
                                     ?.toLowerCase()
-                                    .includes('autoincrement') ||
-                                field.default?.includes('nextval'))
+                                    .includes('identity') ||
+                                    field.default
+                                        ?.toLowerCase()
+                                        .includes('autoincrement') ||
+                                    field.default?.includes('nextval')))
                         ) {
                             autoIncrement = ' AUTO_INCREMENT';
                         }
@@ -290,9 +291,10 @@ export function exportMySQL({
                         const unique =
                             !field.primaryKey && field.unique ? ' UNIQUE' : '';
 
-                        // Handle default value
+                        // Handle default value - skip if auto increment
                         const defaultValue =
                             field.default &&
+                            !field.increment &&
                             !field.default.toLowerCase().includes('identity') &&
                             !field.default
                                 .toLowerCase()
