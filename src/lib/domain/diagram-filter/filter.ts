@@ -120,10 +120,15 @@ export const applyFilterOnDiagram = ({
         })
     );
 
+    const filteredAreas = diagram.areas?.filter((area) =>
+        filteredTables?.some((table) => table.parentAreaId === area.id)
+    );
+
     return {
         ...diagram,
         tables: filteredTables,
         relationships: filteredRelationships,
         dependencies: filteredDependencies,
+        areas: filteredAreas,
     };
 };
