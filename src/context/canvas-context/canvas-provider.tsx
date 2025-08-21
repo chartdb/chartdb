@@ -29,11 +29,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         areas,
         diagramId,
     } = useChartDB();
-    const {
-        filter,
-        hasActiveFilter,
-        loading: filterLoading,
-    } = useDiagramFilter();
+    const { filter, loading: filterLoading } = useDiagramFilter();
     const { fitView } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
@@ -52,10 +48,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
 
         diagramIdActiveFilterRef.current = diagramId;
 
-        if (hasActiveFilter) {
-            setShowFilter(true);
-        }
-    }, [hasActiveFilter, filterLoading, diagramId]);
+        setShowFilter(true);
+    }, [filterLoading, diagramId]);
 
     const reorderTables = useCallback(
         (

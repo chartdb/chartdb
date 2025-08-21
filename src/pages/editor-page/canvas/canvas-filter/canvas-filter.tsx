@@ -26,6 +26,7 @@ import type {
 import { generateTreeDataByAreas, generateTreeDataBySchemas } from './utils';
 import { FilterItemActions } from './filter-item-actions';
 import { databasesWithSchemas } from '@/lib/domain';
+import { getOperatingSystem } from '@/lib/utils';
 
 export interface CanvasFilterProps {
     onClose: () => void;
@@ -212,6 +213,11 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         }, 300);
     }, []);
 
+    const openFilterShortcut = useMemo(
+        () => (getOperatingSystem() === 'mac' ? '⌘' : 'Ctrl+') + 'F',
+        []
+    );
+
     return (
         <div
             className={`absolute right-2 top-2 z-10 flex flex-col rounded-lg border bg-background/85 shadow-lg backdrop-blur-sm transition-all duration-300 md:right-4 md:top-4 ${
@@ -225,8 +231,11 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 <div className="flex items-center gap-2">
                     <Funnel className="size-3.5 text-muted-foreground md:size-4" />
                     <h2 className="text-sm font-medium">
-                        {t('canvas_filter.title', 'Filter Tables')}
+                        {t('canvas_filter.title', 'Filter Tables')}{' '}
                     </h2>
+                    <span className="text-xs text-muted-foreground">
+                        ({openFilterShortcut})
+                    </span>
                 </div>
                 <Button
                     variant="ghost"
