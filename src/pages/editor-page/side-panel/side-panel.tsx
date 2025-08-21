@@ -18,6 +18,7 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { AreasSection } from './areas-section/areas-section';
 import { CustomTypesSection } from './custom-types-section/custom-types-section';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { DBMLSection } from './dbml-section/dbml-section';
 
 export interface SidePanelProps {}
 
@@ -75,6 +76,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
             ) : null}
             {selectedSidebarSection === 'tables' ? (
                 <TablesSection />
+            ) : selectedSidebarSection === 'dbml' ? (
+                <DBMLSection />
             ) : selectedSidebarSection === 'relationships' ? (
                 <RelationshipsSection />
             ) : selectedSidebarSection === 'dependencies' ? (

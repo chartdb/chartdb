@@ -5,7 +5,6 @@ import React, {
     useCallback,
     useRef,
 } from 'react';
-import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
@@ -36,9 +35,7 @@ import type * as monaco from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 
-export interface TableDBMLProps {
-    filteredTables: DBTable[];
-}
+export interface TableDBMLProps {}
 
 const getEditorTheme = (theme: EffectiveTheme) => {
     return theme === 'dark' ? 'dbml-dark' : 'dbml-light';

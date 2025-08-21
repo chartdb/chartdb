@@ -10,7 +10,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import { BookOpen, Group, FileType, Plus, FolderOpen } from 'lucide-react';
+import {
+    BookOpen,
+    Group,
+    FileType,
+    Plus,
+    FolderOpen,
+    CodeXml,
+} from 'lucide-react';
 import { SquareStack, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +82,15 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                     selectSidebarSection('tables');
                 },
                 active: selectedSidebarSection === 'tables',
+            },
+            {
+                title: 'DBML',
+                icon: CodeXml,
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('dbml');
+                },
+                active: selectedSidebarSection === 'dbml',
             },
             {
                 title: t('editor_sidebar.relationships'),
