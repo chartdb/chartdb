@@ -2,6 +2,7 @@ import { emptyFn } from '@/lib/utils';
 import { createContext } from 'react';
 
 export type SidebarSection =
+    | 'dbml'
     | 'tables'
     | 'relationships'
     | 'dependencies'
