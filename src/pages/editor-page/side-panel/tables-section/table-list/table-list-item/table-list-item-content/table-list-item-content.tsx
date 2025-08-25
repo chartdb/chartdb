@@ -281,10 +281,15 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             </Accordion>
             <Separator className="" />
             <div className="flex flex-1 items-center justify-between">
-                <ColorPicker
-                    color={color}
-                    onChange={(color) => updateTable(table.id, { color })}
-                />
+                {!table.isView ? (
+                    <ColorPicker
+                        color={color}
+                        onChange={(color) => updateTable(table.id, { color })}
+                    />
+                ) : (
+                    <div />
+                )}
+
                 <div className="flex gap-1">
                     <Button
                         variant="outline"
