@@ -327,7 +327,13 @@ export const exportBaseSQL = ({
         // Add composite primary key constraint if needed
         if (hasCompositePrimaryKey) {
             const pkFieldNames = primaryKeyFields.map((f) => f.name).join(', ');
-            sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
+            // Find PK index to get the constraint name if it exists
+            const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+            if (pkIndex?.name) {
+                sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
+            } else {
+                sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
+            }
         }
 
         sqlScript += '\n);\n';
@@ -349,12 +355,33 @@ export const exportBaseSQL = ({
 
         // Generate SQL for indexes
         table.indexes.forEach((index) => {
-            const fieldNames = index.fieldIds
-                .map(
-                    (fieldId) =>
-                        table.fields.find((field) => field.id === fieldId)?.name
+            // Skip the primary key index (it's already handled as a constraint)
+            if (index.isPrimaryKey) {
+                return;
+            }
+
+            // Get the fields for this index
+            const indexFields = index.fieldIds
+                .map((fieldId) => table.fields.find((f) => f.id === fieldId))
+                .filter(
+                    (field): field is NonNullable<typeof field> =>
+                        field !== undefined
+                );
+
+            // Skip if this index exactly matches the primary key fields
+            // This prevents creating redundant indexes for composite primary keys
+            if (
+                primaryKeyFields.length > 0 &&
+                primaryKeyFields.length === indexFields.length &&
+                primaryKeyFields.every((pk) =>
+                    indexFields.some((field) => field.id === pk.id)
                 )
-                .filter(Boolean)
+            ) {
+                return; // Skip this index as it's redundant with the primary key
+            }
+
+            const fieldNames = indexFields
+                .map((field) => field.name)
                 .join(', ');
 
             if (fieldNames) {

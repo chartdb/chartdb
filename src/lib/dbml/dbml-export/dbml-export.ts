@@ -605,6 +605,45 @@ const fixTableBracketSyntax = (dbml: string): string => {
     );
 };
 
+// Restore composite primary key names in the DBML
+const restoreCompositePKNames = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
+
+    let result = dbml;
+
+    tables.forEach((table) => {
+        // Check if this table has a composite PK index with a name
+        const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+        if (pkIndex?.name) {
+            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
+            if (primaryKeyFields.length > 1) {
+                // Build the column list for the composite PK
+                const columnList = primaryKeyFields
+                    .map((f) => f.name)
+                    .join(', ');
+
+                // Build the table identifier pattern
+                const tableIdentifier = table.schema
+                    ? `"${table.schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\."${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`
+                    : `"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`;
+
+                // Pattern to match the composite PK index line
+                // Match patterns like: (col1, col2, col3) [pk]
+                const pkPattern = new RegExp(
+                    `(Table ${tableIdentifier} \\{[^}]*?Indexes \\{[^}]*?)(\\(${columnList.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\) \\[pk\\])`,
+                    'gs'
+                );
+
+                // Replace with the named version
+                const replacement = `$1(${columnList}) [pk, name: "${pkIndex.name}"]`;
+                result = result.replace(pkPattern, replacement);
+            }
+        }
+    });
+
+    return result;
+};
+
 // Restore schema information that may have been stripped by the DBML importer
 const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
     if (!tables || tables.length === 0) return dbml;
@@ -870,14 +909,16 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             ...table,
             name: safeTableName,
             fields: processedFields,
-            indexes: (table.indexes || []).map((index) => ({
-                ...index,
-                name: index.name
-                    ? /[^\w]/.test(index.name)
-                        ? `"${index.name.replace(/"/g, '\\"')}"`
-                        : index.name
-                    : `idx_${Math.random().toString(36).substring(2, 8)}`,
-            })),
+            indexes: (table.indexes || [])
+                .filter((index) => !index.isPrimaryKey) // Filter out PK indexes as they're handled separately
+                .map((index) => ({
+                    ...index,
+                    name: index.name
+                        ? /[^\w]/.test(index.name)
+                            ? `"${index.name.replace(/"/g, '\\"')}"`
+                            : index.name
+                        : `idx_${Math.random().toString(36).substring(2, 8)}`,
+                })),
         };
     };
 
@@ -938,6 +979,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore schema information that may have been stripped by DBML importer
         standard = restoreTableSchemas(standard, uniqueTables);
+
+        // Restore composite primary key names
+        standard = restoreCompositePKNames(standard, uniqueTables);
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {

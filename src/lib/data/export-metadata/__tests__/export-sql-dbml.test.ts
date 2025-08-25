@@ -124,6 +124,96 @@ describe('DBML Export - SQL Generation Tests', () => {
             );
         });
 
+        it('should not create duplicate index for composite primary key', () => {
+            const tableId = testId();
+            const field1Id = testId();
+            const field2Id = testId();
+            const field3Id = testId();
+
+            const diagram: Diagram = createDiagram({
+                id: testId(),
+                name: 'Landlord System',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        id: tableId,
+                        name: 'users_master_table',
+                        schema: 'landlord',
+                        fields: [
+                            createField({
+                                id: field1Id,
+                                name: 'master_user_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                                unique: false,
+                            }),
+                            createField({
+                                id: field2Id,
+                                name: 'tenant_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                                unique: false,
+                            }),
+                            createField({
+                                id: field3Id,
+                                name: 'tenant_user_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                                unique: false,
+                            }),
+                            createField({
+                                id: testId(),
+                                name: 'enabled',
+                                type: { id: 'boolean', name: 'boolean' },
+                                primaryKey: false,
+                                nullable: true,
+                                unique: false,
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: testId(),
+                                name: 'idx_users_master_table_master_user_id_tenant_id_tenant_user_id',
+                                unique: false,
+                                fieldIds: [field1Id, field2Id, field3Id],
+                                createdAt: testTime,
+                            },
+                            {
+                                id: testId(),
+                                name: 'index_1',
+                                unique: true,
+                                fieldIds: [field2Id, field3Id],
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                ],
+                relationships: [],
+            });
+
+            const sql = exportBaseSQL({
+                diagram,
+                targetDatabaseType: DatabaseType.POSTGRESQL,
+                isDBMLFlow: true,
+            });
+
+            // Should contain composite primary key constraint
+            expect(sql).toContain(
+                'PRIMARY KEY (master_user_id, tenant_id, tenant_user_id)'
+            );
+
+            // Should NOT contain the duplicate index for the primary key fields
+            expect(sql).not.toContain(
+                'CREATE INDEX idx_users_master_table_master_user_id_tenant_id_tenant_user_id'
+            );
+
+            // Should still contain the unique index on subset of fields
+            expect(sql).toContain('CREATE UNIQUE INDEX index_1');
+        });
+
         it('should handle single primary keys inline', () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),

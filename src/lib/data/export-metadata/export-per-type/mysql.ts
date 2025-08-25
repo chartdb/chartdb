@@ -313,7 +313,15 @@ export function exportMySQL({
                     .join(',\n')}${
                     // Add PRIMARY KEY as table constraint
                     primaryKeyFields.length > 0
-                        ? `,\n    PRIMARY KEY (${primaryKeyFields
+                        ? `,\n    ${(() => {
+                              // Find PK index to get the constraint name
+                              const pkIndex = table.indexes.find(
+                                  (idx) => idx.isPrimaryKey
+                              );
+                              return pkIndex?.name
+                                  ? `CONSTRAINT \`${pkIndex.name}\` `
+                                  : '';
+                          })()}PRIMARY KEY (${primaryKeyFields
                               .map((f) => `\`${f.name}\``)
                               .join(', ')})`
                         : ''

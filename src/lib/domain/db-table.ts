@@ -203,10 +203,56 @@ export const createTablesFromMetadata = ({
             tableSchema,
         });
 
+        // Check for composite primary key and find matching index name
+        const primaryKeyFields = fields.filter((f) => f.primaryKey);
+        let pkMatchingIndexName: string | undefined;
+        let pkIndex: DBIndex | undefined;
+
+        if (primaryKeyFields.length > 1) {
+            // We have a composite primary key, look for an index that matches all PK columns
+            const pkFieldNames = primaryKeyFields.map((f) => f.name).sort();
+
+            // Find an index that matches the primary key columns exactly
+            const matchingIndex = aggregatedIndexes.find((index) => {
+                const indexColumnNames = index.columns
+                    .map((c) => c.name)
+                    .sort();
+                return (
+                    indexColumnNames.length === pkFieldNames.length &&
+                    indexColumnNames.every((col, i) => col === pkFieldNames[i])
+                );
+            });
+
+            if (matchingIndex) {
+                pkMatchingIndexName = matchingIndex.name;
+                // Create a special PK index
+                pkIndex = {
+                    id: generateId(),
+                    name: matchingIndex.name,
+                    unique: true,
+                    fieldIds: primaryKeyFields.map((f) => f.id),
+                    createdAt: Date.now(),
+                    isPrimaryKey: true,
+                };
+            }
+        }
+
+        // Filter out the index that matches the composite PK (to avoid duplication)
+        const filteredAggregatedIndexes = pkMatchingIndexName
+            ? aggregatedIndexes.filter(
+                  (idx) => idx.name !== pkMatchingIndexName
+              )
+            : aggregatedIndexes;
+
         const dbIndexes = createIndexesFromMetadata({
-            aggregatedIndexes,
+            aggregatedIndexes: filteredAggregatedIndexes,
             fields,
         });
+
+        // Add the PK index if it exists
+        if (pkIndex) {
+            dbIndexes.push(pkIndex);
+        }
 
         // Determine if the current table is a view by checking against pre-computed sets
         const viewKey = generateTableKey({
