@@ -4,8 +4,7 @@ import { createContext } from 'react';
 export type SidebarSection =
     | 'dbml'
     | 'tables'
-    | 'relationships'
-    | 'dependencies'
+    | 'refs'
     | 'areas'
     | 'customTypes';
 
@@ -14,13 +13,15 @@ export interface LayoutContext {
     openTableFromSidebar: (tableId: string) => void;
     closeAllTablesInSidebar: () => void;
 
-    openedRelationshipInSidebar: string | undefined;
     openRelationshipFromSidebar: (relationshipId: string) => void;
     closeAllRelationshipsInSidebar: () => void;
 
-    openedDependencyInSidebar: string | undefined;
     openDependencyFromSidebar: (dependencyId: string) => void;
     closeAllDependenciesInSidebar: () => void;
+
+    openedRefInSidebar: string | undefined;
+    openRefFromSidebar: (refId: string) => void;
+    closeAllRefsInSidebar: () => void;
 
     openedAreaInSidebar: string | undefined;
     openAreaFromSidebar: (areaId: string) => void;
@@ -43,13 +44,15 @@ export const layoutContext = createContext<LayoutContext>({
     openedTableInSidebar: undefined,
     selectedSidebarSection: 'tables',
 
-    openedRelationshipInSidebar: undefined,
     openRelationshipFromSidebar: emptyFn,
     closeAllRelationshipsInSidebar: emptyFn,
 
-    openedDependencyInSidebar: undefined,
     openDependencyFromSidebar: emptyFn,
     closeAllDependenciesInSidebar: emptyFn,
+
+    openedRefInSidebar: undefined,
+    openRefFromSidebar: emptyFn,
+    closeAllRefsInSidebar: emptyFn,
 
     openedAreaInSidebar: undefined,
     openAreaFromSidebar: emptyFn,

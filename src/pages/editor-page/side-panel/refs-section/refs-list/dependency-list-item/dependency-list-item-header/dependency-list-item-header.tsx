@@ -105,7 +105,7 @@ export const DependencyListItemHeader: React.FC<
                 <DropdownMenuContent className="w-40">
                     <DropdownMenuLabel>
                         {t(
-                            'side_panel.dependencies_section.dependency.dependency_actions.title'
+                            'side_panel.refs_section.dependency.dependency_actions.title'
                         )}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -115,7 +115,7 @@ export const DependencyListItemHeader: React.FC<
                             className="flex justify-between !text-red-700"
                         >
                             {t(
-                                'side_panel.dependencies_section.dependency.dependency_actions.delete_dependency'
+                                'side_panel.refs_section.dependency.dependency_actions.delete_dependency'
                             )}
                             <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
@@ -127,11 +127,11 @@ export const DependencyListItemHeader: React.FC<
     );
 
     return (
-        <div className="group flex h-11 flex-1 items-center justify-between overflow-hidden">
+        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
             <div className="flex min-w-0 flex-1">
                 <div className="truncate">{dependencyName}</div>
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse items-center">
                 <div>{renderDropDownMenu()}</div>
                 <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                     <ListItemHeaderButton onClick={focusOnDependency}>

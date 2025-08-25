@@ -41,7 +41,7 @@ export const DependencyListItemContent: React.FC<
                             <FileMinus2 className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
-                                    'side_panel.dependencies_section.dependency.dependent_table'
+                                    'side_panel.refs_section.dependency.dependent_table'
                                 )}
                             </div>
                         </div>
@@ -60,9 +60,7 @@ export const DependencyListItemContent: React.FC<
                         <div className="flex flex-row items-center gap-1">
                             <FileOutput className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.dependencies_section.dependency.table'
-                                )}
+                                {t('side_panel.refs_section.dependency.table')}
                             </div>
                         </div>
                         <Tooltip>
@@ -85,7 +83,7 @@ export const DependencyListItemContent: React.FC<
                     <Trash2 className="mr-1 size-3.5 text-red-700" />
                     <div className="text-red-700">
                         {t(
-                            'side_panel.dependencies_section.dependency.delete_dependency'
+                            'side_panel.refs_section.dependency.delete_dependency'
                         )}
                     </div>
                 </Button>

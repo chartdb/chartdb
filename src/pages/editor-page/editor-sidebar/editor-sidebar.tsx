@@ -18,7 +18,7 @@ import {
     FolderOpen,
     CodeXml,
 } from 'lucide-react';
-import { SquareStack, Table, Workflow } from 'lucide-react';
+import { Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
 import { DiscordLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
@@ -30,7 +30,6 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
-import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface SidebarItem {
     title: string;
@@ -49,7 +48,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
-    const { showDBViews } = useLocalConfig();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
 
     const diagramItems: SidebarItem[] = useMemo(
@@ -99,9 +97,9 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 icon: Workflow,
                 onClick: () => {
                     showSidePanel();
-                    selectSidebarSection('relationships');
+                    selectSidebarSection('refs');
                 },
-                active: selectedSidebarSection === 'relationships',
+                active: selectedSidebarSection === 'refs',
             },
             {
                 title: t('editor_sidebar.areas'),
@@ -112,19 +110,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'areas',
             },
-            ...(showDBViews
-                ? [
-                      {
-                          title: t('editor_sidebar.dependencies'),
-                          icon: SquareStack,
-                          onClick: () => {
-                              showSidePanel();
-                              selectSidebarSection('dependencies');
-                          },
-                          active: selectedSidebarSection === 'dependencies',
-                      },
-                  ]
-                : []),
             ...(databaseType === DatabaseType.POSTGRESQL
                 ? [
                       {
@@ -145,7 +130,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             t,
             showSidePanel,
             databaseType,
-            showDBViews,
         ]
     );
 

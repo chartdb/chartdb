@@ -8,17 +8,16 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { TablesSection } from './tables-section/tables-section';
-import { RelationshipsSection } from './relationships-section/relationships-section';
 import { useLayout } from '@/hooks/use-layout';
 import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { DependenciesSection } from './dependencies-section/dependencies-section';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { AreasSection } from './areas-section/areas-section';
 import { CustomTypesSection } from './custom-types-section/custom-types-section';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { DBMLSection } from './dbml-section/dbml-section';
+import { RefsSection } from './refs-section/refs-section';
 
 export interface SidePanelProps {}
 
@@ -49,15 +48,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                 <SelectItem value="tables">
                                     {t('side_panel.tables_section.tables')}
                                 </SelectItem>
-                                <SelectItem value="relationships">
-                                    {t(
-                                        'side_panel.relationships_section.relationships'
-                                    )}
-                                </SelectItem>
-                                <SelectItem value="dependencies">
-                                    {t(
-                                        'side_panel.dependencies_section.dependencies'
-                                    )}
+                                <SelectItem value="refs">
+                                    {t('side_panel.refs_section.refs')}
                                 </SelectItem>
                                 <SelectItem value="areas">
                                     {t('side_panel.areas_section.areas')}
@@ -78,10 +70,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <TablesSection />
             ) : selectedSidebarSection === 'dbml' ? (
                 <DBMLSection />
-            ) : selectedSidebarSection === 'relationships' ? (
-                <RelationshipsSection />
-            ) : selectedSidebarSection === 'dependencies' ? (
-                <DependenciesSection />
+            ) : selectedSidebarSection === 'refs' ? (
+                <RefsSection />
             ) : selectedSidebarSection === 'areas' ? (
                 <AreasSection />
             ) : (

@@ -173,12 +173,15 @@ export const en = {
                     description: 'Create a table to get started',
                 },
             },
-            relationships_section: {
-                relationships: 'Relationships',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filter',
-                add_relationship: 'Add Relationship',
                 collapse: 'Collapse All',
+                add_relationship: 'Add Relationship',
+                relationships: 'Relationships',
+                dependencies: 'Dependencies',
                 relationship: {
+                    relationship: 'Relationship',
                     primary: 'Primary Table',
                     foreign: 'Referenced Table',
                     cardinality: 'Cardinality',
@@ -188,16 +191,8 @@ export const en = {
                         delete_relationship: 'Delete',
                     },
                 },
-                empty_state: {
-                    title: 'No relationships',
-                    description: 'Create a relationship to connect tables',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
                 dependency: {
+                    dependency: 'Dependency',
                     table: 'Table',
                     dependent_table: 'Dependent View',
                     delete_dependency: 'Delete',

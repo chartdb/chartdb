@@ -91,7 +91,7 @@ export const RelationshipListItemContent: React.FC<
                             <FileOutput className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
-                                    'side_panel.relationships_section.relationship.primary'
+                                    'side_panel.refs_section.relationship.primary'
                                 )}
                             </div>
                         </div>
@@ -117,7 +117,7 @@ export const RelationshipListItemContent: React.FC<
                             <FileMinus2 className="size-4 text-subtitle" />
                             <div className="font-bold text-subtitle">
                                 {t(
-                                    'side_panel.relationships_section.relationship.foreign'
+                                    'side_panel.refs_section.relationship.foreign'
                                 )}
                             </div>
                         </div>
@@ -144,7 +144,7 @@ export const RelationshipListItemContent: React.FC<
                         <ChevronsLeftRightEllipsis className="size-4 text-subtitle" />
                         <div className="font-bold text-subtitle">
                             {t(
-                                'side_panel.relationships_section.relationship.cardinality'
+                                'side_panel.refs_section.relationship.cardinality'
                             )}
                         </div>
                     </div>
@@ -184,7 +184,7 @@ export const RelationshipListItemContent: React.FC<
                     <Trash2 className="mr-1 size-3.5 text-red-700" />
                     <div className="text-red-700">
                         {t(
-                            'side_panel.relationships_section.relationship.delete_relationship'
+                            'side_panel.refs_section.relationship.delete_relationship'
                         )}
                     </div>
                 </Button>
