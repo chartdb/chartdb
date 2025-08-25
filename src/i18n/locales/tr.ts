@@ -37,6 +37,7 @@ export const tr: LanguageTranslation = {
                 show_field_attributes: 'Alan Özelliklerini Göster',
                 hide_field_attributes: 'Alan Özelliklerini Gizle',
                 zoom_on_scroll: 'Kaydırarak Yakınlaştır',
+                show_views: 'Veritabanı Görünümleri',
                 theme: 'Tema',
                 show_dependencies: 'Bağımlılıkları Göster',
                 hide_dependencies: 'Bağımlılıkları Gizle',
@@ -118,6 +119,7 @@ export const tr: LanguageTranslation = {
             tables_section: {
                 tables: 'Tablolar',
                 add_table: 'Tablo Ekle',
+                add_view: 'Görünüm Ekle',
                 filter: 'Filtrele',
                 collapse: 'Hepsini Daralt',
                 // TODO: Translate
@@ -467,6 +469,7 @@ export const tr: LanguageTranslation = {
         },
         canvas_context_menu: {
             new_table: 'Yeni Tablo',
+            new_view: 'Yeni Görünüm',
             new_relationship: 'Yeni İlişki',
             // TODO: Translate
             new_area: 'New Area',
@@ -489,6 +492,9 @@ export const tr: LanguageTranslation = {
         language_select: {
             change_language: 'Dil',
         },
+
+        on: 'Açık',
+        off: 'Kapalı',
     },
 };
 

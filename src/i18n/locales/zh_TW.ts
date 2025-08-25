@@ -37,6 +37,7 @@ export const zh_TW: LanguageTranslation = {
                 hide_field_attributes: '隱藏欄位屬性',
                 show_field_attributes: '顯示欄位屬性',
                 zoom_on_scroll: '滾動縮放',
+                show_views: '資料庫檢視',
                 theme: '主題',
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
@@ -115,6 +116,7 @@ export const zh_TW: LanguageTranslation = {
             tables_section: {
                 tables: '表格',
                 add_table: '新增表格',
+                add_view: '新增檢視',
                 filter: '篩選',
                 collapse: '全部摺疊',
                 // TODO: Translate
@@ -469,6 +471,7 @@ export const zh_TW: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: '新建表格',
+            new_view: '新檢視',
             new_relationship: '新建關聯',
             // TODO: Translate
             new_area: 'New Area',
@@ -490,6 +493,9 @@ export const zh_TW: LanguageTranslation = {
         language_select: {
             change_language: '變更語言',
         },
+
+        on: '開啟',
+        off: '關閉',
     },
 };
 

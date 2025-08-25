@@ -37,6 +37,7 @@ export const id_ID: LanguageTranslation = {
                 hide_field_attributes: 'Sembunyikan Atribut Kolom',
                 show_field_attributes: 'Tampilkan Atribut Kolom',
                 zoom_on_scroll: 'Perbesar saat Scroll',
+                show_views: 'Tampilan Database',
                 theme: 'Tema',
                 show_dependencies: 'Tampilkan Dependensi',
                 hide_dependencies: 'Sembunyikan Dependensi',
@@ -118,6 +119,7 @@ export const id_ID: LanguageTranslation = {
             tables_section: {
                 tables: 'Tabel',
                 add_table: 'Tambah Tabel',
+                add_view: 'Tambah Tampilan',
                 filter: 'Saring',
                 collapse: 'Lipat Semua',
                 // TODO: Translate
@@ -476,6 +478,7 @@ export const id_ID: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Tabel Baru',
+            new_view: 'Tampilan Baru',
             new_relationship: 'Hubungan Baru',
             // TODO: Translate
             new_area: 'New Area',
@@ -497,6 +500,9 @@ export const id_ID: LanguageTranslation = {
         language_select: {
             change_language: 'Bahasa',
         },
+
+        on: 'Aktif',
+        off: 'Nonaktif',
     },
 };
 

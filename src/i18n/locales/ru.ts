@@ -37,6 +37,7 @@ export const ru: LanguageTranslation = {
                 show_field_attributes: 'Показать атрибуты поля',
                 hide_field_attributes: 'Скрыть атрибуты поля',
                 zoom_on_scroll: 'Увеличение при прокрутке',
+                show_views: 'Представления базы данных',
                 theme: 'Тема',
                 show_dependencies: 'Показать зависимости',
                 hide_dependencies: 'Скрыть зависимости',
@@ -116,6 +117,7 @@ export const ru: LanguageTranslation = {
             tables_section: {
                 tables: 'Таблицы',
                 add_table: 'Добавить таблицу',
+                add_view: 'Добавить представление',
                 filter: 'Фильтр',
                 collapse: 'Свернуть все',
                 clear: 'Очистить фильтр',
@@ -474,6 +476,7 @@ export const ru: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Создать таблицу',
+            new_view: 'Новое представление',
             new_relationship: 'Создать отношение',
             new_area: 'Новая область',
         },
@@ -495,6 +498,9 @@ export const ru: LanguageTranslation = {
         language_select: {
             change_language: 'Сменить язык',
         },
+
+        on: 'Вкл',
+        off: 'Выкл',
     },
 };
 

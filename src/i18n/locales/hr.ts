@@ -37,6 +37,7 @@ export const hr: LanguageTranslation = {
                 hide_field_attributes: 'Sakrij atribute polja',
                 show_field_attributes: 'Prikaži atribute polja',
                 zoom_on_scroll: 'Zumiranje pri skrolanju',
+                show_views: 'Pogledi Baze Podataka',
                 theme: 'Tema',
                 show_dependencies: 'Prikaži ovisnosti',
                 hide_dependencies: 'Sakrij ovisnosti',
@@ -117,6 +118,7 @@ export const hr: LanguageTranslation = {
             tables_section: {
                 tables: 'Tablice',
                 add_table: 'Dodaj tablicu',
+                add_view: 'Dodaj Pogled',
                 filter: 'Filtriraj',
                 collapse: 'Sažmi sve',
                 clear: 'Očisti filter',
@@ -471,6 +473,7 @@ export const hr: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Nova tablica',
+            new_view: 'Novi Pogled',
             new_relationship: 'Nova veza',
             new_area: 'Novo područje',
         },
@@ -491,6 +494,9 @@ export const hr: LanguageTranslation = {
         language_select: {
             change_language: 'Jezik',
         },
+
+        on: 'Uključeno',
+        off: 'Isključeno',
     },
 };
 

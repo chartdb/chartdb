@@ -37,6 +37,7 @@ export const zh_CN: LanguageTranslation = {
                 show_field_attributes: '展示字段属性',
                 hide_field_attributes: '隐藏字段属性',
                 zoom_on_scroll: '滚动缩放',
+                show_views: '数据库视图',
                 theme: '主题',
                 show_dependencies: '展示依赖',
                 hide_dependencies: '隐藏依赖',
@@ -115,6 +116,7 @@ export const zh_CN: LanguageTranslation = {
             tables_section: {
                 tables: '表',
                 add_table: '添加表',
+                add_view: '添加视图',
                 filter: '筛选',
                 collapse: '全部折叠',
                 // TODO: Translate
@@ -469,6 +471,7 @@ export const zh_CN: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: '新建表',
+            new_view: '新建视图',
             new_relationship: '新建关系',
             // TODO: Translate
             new_area: 'New Area',
@@ -490,6 +493,9 @@ export const zh_CN: LanguageTranslation = {
         language_select: {
             change_language: '语言',
         },
+
+        on: '开启',
+        off: '关闭',
     },
 };
 

@@ -37,6 +37,7 @@ export const bn: LanguageTranslation = {
                 hide_field_attributes: 'ফিল্ড অ্যাট্রিবিউট লুকান',
                 show_field_attributes: 'ফিল্ড অ্যাট্রিবিউট দেখান',
                 zoom_on_scroll: 'স্ক্রলে জুম করুন',
+                show_views: 'ডাটাবেস ভিউ',
                 theme: 'থিম',
                 show_dependencies: 'নির্ভরতাগুলি দেখান',
                 hide_dependencies: 'নির্ভরতাগুলি লুকান',
@@ -119,6 +120,7 @@ export const bn: LanguageTranslation = {
             tables_section: {
                 tables: 'টেবিল',
                 add_table: 'টেবিল যোগ করুন',
+                add_view: 'ভিউ যোগ করুন',
                 filter: 'ফিল্টার',
                 collapse: 'সব ভাঁজ করুন',
                 // TODO: Translate
@@ -476,6 +478,7 @@ export const bn: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'নতুন টেবিল',
+            new_view: 'নতুন ভিউ',
             new_relationship: 'নতুন সম্পর্ক',
             // TODO: Translate
             new_area: 'New Area',

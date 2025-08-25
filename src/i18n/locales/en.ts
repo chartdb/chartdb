@@ -37,7 +37,7 @@ export const en = {
                 hide_field_attributes: 'Hide Field Attributes',
                 show_field_attributes: 'Show Field Attributes',
                 zoom_on_scroll: 'Zoom on Scroll',
-                show_views: 'Show Views',
+                show_views: 'Database Views',
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
