@@ -6,7 +6,7 @@ export const zh_CN: LanguageTranslation = {
             new_diagram: '新建',
             browse: '浏览',
             tables: '表',
-            relationships: '关系',
+            refs: '引用',
             areas: '区域',
             dependencies: '依赖关系',
             custom_types: '自定义类型',
@@ -175,12 +175,15 @@ export const zh_CN: LanguageTranslation = {
                     description: '新建表以开始',
                 },
             },
-            relationships_section: {
-                relationships: '关系',
+            refs_section: {
+                refs: '引用',
                 filter: '筛选',
-                add_relationship: '添加关系',
                 collapse: '全部折叠',
+                add_relationship: '添加关系',
+                relationships: '关系',
+                dependencies: '依赖关系',
                 relationship: {
+                    relationship: '关系',
                     primary: '主表',
                     foreign: '被引用表',
                     cardinality: '基数',
@@ -190,16 +193,8 @@ export const zh_CN: LanguageTranslation = {
                         delete_relationship: '删除',
                     },
                 },
-                empty_state: {
-                    title: '无关系',
-                    description: '创建关系以连接表',
-                },
-            },
-            dependencies_section: {
-                dependencies: '依赖关系',
-                filter: '筛选',
-                collapse: '全部折叠',
                 dependency: {
+                    dependency: '依赖',
                     table: '表',
                     dependent_table: '依赖视图',
                     delete_dependency: '删除',
@@ -209,8 +204,8 @@ export const zh_CN: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: '无依赖',
-                    description: '创建视图以开始',
+                    title: '无关系',
+                    description: '创建关系以开始',
                 },
             },
 

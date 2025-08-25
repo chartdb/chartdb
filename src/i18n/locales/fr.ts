@@ -6,7 +6,7 @@ export const fr: LanguageTranslation = {
             new_diagram: 'Nouveau',
             browse: 'Parcourir',
             tables: 'Tables',
-            relationships: 'Relations',
+            refs: 'Refs',
             areas: 'Zones',
             dependencies: 'Dépendances',
             custom_types: 'Types Personnalisés',
@@ -176,12 +176,15 @@ export const fr: LanguageTranslation = {
                     description: 'Créez une table pour commencer',
                 },
             },
-            relationships_section: {
-                relationships: 'Relations',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filtrer',
-                add_relationship: 'Ajouter une Relation',
                 collapse: 'Réduire Tout',
+                add_relationship: 'Ajouter une Relation',
+                relationships: 'Relations',
+                dependencies: 'Dépendances',
                 relationship: {
+                    relationship: 'Relation',
                     primary: 'Table Principale',
                     foreign: 'Table Référencée',
                     cardinality: 'Cardinalité',
@@ -191,16 +194,8 @@ export const fr: LanguageTranslation = {
                         delete_relationship: 'Supprimer',
                     },
                 },
-                empty_state: {
-                    title: 'Aucune relation',
-                    description: 'Créez une relation pour connecter les tables',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dépendances',
-                filter: 'Filtrer',
-                collapse: 'Réduire Tout',
                 dependency: {
+                    dependency: 'Dépendance',
                     table: 'Table',
                     dependent_table: 'Vue Dépendante',
                     delete_dependency: 'Supprimer',
@@ -210,8 +205,8 @@ export const fr: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Aucune dépendance',
-                    description: 'Créez une vue pour commencer',
+                    title: 'Aucune relation',
+                    description: 'Créez une relation pour commencer',
                 },
             },
 

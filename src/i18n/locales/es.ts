@@ -6,7 +6,7 @@ export const es: LanguageTranslation = {
             new_diagram: 'Nuevo',
             browse: 'Examinar',
             tables: 'Tablas',
-            relationships: 'Relaciones',
+            refs: 'Refs',
             areas: 'Áreas',
             dependencies: 'Dependencias',
             custom_types: 'Tipos Personalizados',
@@ -178,14 +178,17 @@ export const es: LanguageTranslation = {
                     description: 'Crea una tabla para comenzar',
                 },
             },
-            relationships_section: {
-                relationships: 'Relaciones',
-                add_relationship: 'Agregar Relación',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todo',
+                add_relationship: 'Agregar Relación',
+                relationships: 'Relaciones',
+                dependencies: 'Dependencias',
                 relationship: {
-                    primary: 'Primaria',
-                    foreign: 'Foránea',
+                    relationship: 'Relación',
+                    primary: 'Tabla Primaria',
+                    foreign: 'Tabla Referenciada',
                     cardinality: 'Cardinalidad',
                     delete_relationship: 'Eliminar',
                     relationship_actions: {
@@ -193,18 +196,10 @@ export const es: LanguageTranslation = {
                         delete_relationship: 'Eliminar',
                     },
                 },
-                empty_state: {
-                    title: 'No hay relaciones',
-                    description: 'Crea una relación para conectar tablas',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dependencias',
-                filter: 'Filtro',
-                collapse: 'Colapsar todo',
                 dependency: {
+                    dependency: 'Dependencia',
                     table: 'Tabla',
-                    dependent_table: 'Vista dependiente',
+                    dependent_table: 'Vista Dependiente',
                     delete_dependency: 'Eliminar',
                     dependency_actions: {
                         title: 'Acciones',
@@ -212,8 +207,8 @@ export const es: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Sin dependencias',
-                    description: 'Crea una vista para comenzar',
+                    title: 'Sin relaciones',
+                    description: 'Crea una relación para comenzar',
                 },
             },
 

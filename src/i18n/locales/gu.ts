@@ -6,7 +6,7 @@ export const gu: LanguageTranslation = {
             new_diagram: 'નવું',
             browse: 'બ્રાઉજ',
             tables: 'ટેબલો',
-            relationships: 'સંબંધો',
+            refs: 'રેફ્સ',
             areas: 'ક્ષેત્રો',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
@@ -180,14 +180,17 @@ export const gu: LanguageTranslation = {
                     description: 'શરૂ કરવા માટે એક ટેબલ બનાવો',
                 },
             },
-            relationships_section: {
-                relationships: 'સંબંધો',
+            refs_section: {
+                refs: 'રેફ્સ',
                 filter: 'ફિલ્ટર',
-                add_relationship: 'સંબંધ ઉમેરો',
                 collapse: 'બધાને સકુચિત કરો',
+                add_relationship: 'સંબંધ ઉમેરો',
+                relationships: 'સંબંધો',
+                dependencies: 'નિર્ભરતાઓ',
                 relationship: {
+                    relationship: 'સંબંધ',
                     primary: 'પ્રાથમિક ટેબલ',
-                    foreign: 'સંદર્ભ ટેબલ',
+                    foreign: 'સંદર્ભિત ટેબલ',
                     cardinality: 'કાર્ડિનાલિટી',
                     delete_relationship: 'કાઢી નાખો',
                     relationship_actions: {
@@ -195,27 +198,19 @@ export const gu: LanguageTranslation = {
                         delete_relationship: 'કાઢી નાખો',
                     },
                 },
-                empty_state: {
-                    title: 'કોઈ સંબંધો નથી',
-                    description: 'ટેબલ્સ કનેક્ટ કરવા માટે એક સંબંધ બનાવો',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'નિર્ભરતાઓ',
-                filter: 'ફિલ્ટર',
-                collapse: 'સિકોડો',
                 dependency: {
+                    dependency: 'નિર્ભરતા',
                     table: 'ટેબલ',
-                    dependent_table: 'આધાર રાખેલું ટેબલ',
-                    delete_dependency: 'નિર્ભરતા કાઢી નાખો',
+                    dependent_table: 'નિર્ભરશીલ વ્યૂ',
+                    delete_dependency: 'કાઢી નાખો',
                     dependency_actions: {
                         title: 'ક્રિયાઓ',
-                        delete_dependency: 'નિર્ભરતા કાઢી નાખો',
+                        delete_dependency: 'કાઢી નાખો',
                     },
                 },
                 empty_state: {
-                    title: 'કોઈ નિર્ભરતાઓ નથી',
-                    description: 'આ વિભાગમાં કોઈ નિર્ભરતા ઉપલબ્ધ નથી.',
+                    title: 'કોઈ સંબંધો નથી',
+                    description: 'શરૂ કરવા માટે એક સંબંધ બનાવો',
                 },
             },
 

@@ -6,7 +6,7 @@ export const ar: LanguageTranslation = {
             new_diagram: 'جديد',
             browse: 'تصفح',
             tables: 'الجداول',
-            relationships: 'الروابط',
+            refs: 'المراجع',
             areas: 'المناطق',
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
@@ -177,12 +177,15 @@ export const ar: LanguageTranslation = {
                     description: 'أنشئ جدولاً للبدء',
                 },
             },
-            relationships_section: {
-                relationships: 'العلاقات',
+            refs_section: {
+                refs: 'المراجع',
                 filter: 'تصفية',
-                add_relationship: 'إضافة علاقة',
                 collapse: 'طي الكل',
+                add_relationship: 'إضافة علاقة',
+                relationships: 'العلاقات',
+                dependencies: 'الاعتمادات',
                 relationship: {
+                    relationship: 'العلاقة',
                     primary: 'الجدول الأساسي',
                     foreign: 'الجدول المرتبط',
                     cardinality: 'الكاردينالية',
@@ -192,16 +195,8 @@ export const ar: LanguageTranslation = {
                         delete_relationship: 'حذف',
                     },
                 },
-                empty_state: {
-                    title: 'لا توجد علاقات',
-                    description: 'إنشئ علاقة لربط الجداول',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'الاعتمادات',
-                filter: 'تصفية',
-                collapse: 'طي الكل',
                 dependency: {
+                    dependency: 'الاعتماد',
                     table: 'الجدول',
                     dependent_table: 'عرض الاعتمادات',
                     delete_dependency: 'حذف',
@@ -211,8 +206,8 @@ export const ar: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'لا توجد اعتمادات',
-                    description: 'إنشاء اعتماد للبدء',
+                    title: 'لا توجد علاقات',
+                    description: 'إنشاء علاقة للبدء',
                 },
             },
 

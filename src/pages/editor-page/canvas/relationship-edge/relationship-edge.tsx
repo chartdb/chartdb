@@ -41,7 +41,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             const relationship = data?.relationship;
 
             const openRelationshipInEditor = useCallback(() => {
-                selectSidebarSection('relationships');
+                selectSidebarSection('refs');
                 openRelationshipFromSidebar(id);
             }, [id, openRelationshipFromSidebar, selectSidebarSection]);
 

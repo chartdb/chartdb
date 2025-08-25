@@ -6,7 +6,7 @@ export const ko_KR: LanguageTranslation = {
             new_diagram: '새로 만들기',
             browse: '찾아보기',
             tables: '테이블',
-            relationships: '관계',
+            refs: 'Refs',
             areas: '영역',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
@@ -178,12 +178,15 @@ export const ko_KR: LanguageTranslation = {
                     description: '테이블을 만들어 시작하세요.',
                 },
             },
-            relationships_section: {
-                relationships: '연관 관계',
+            refs_section: {
+                refs: 'Refs',
                 filter: '필터',
-                add_relationship: '연관 관계 추가',
                 collapse: '모두 접기',
+                add_relationship: '연관 관계 추가',
+                relationships: '연관 관계',
+                dependencies: '종속성',
                 relationship: {
+                    relationship: '연관 관계',
                     primary: '주 테이블',
                     foreign: '참조 테이블',
                     cardinality: '카디널리티',
@@ -193,16 +196,8 @@ export const ko_KR: LanguageTranslation = {
                         delete_relationship: '연관 관계 삭제',
                     },
                 },
-                empty_state: {
-                    title: '연관 관계',
-                    description: '테이블 연결을 위해 연관 관계를 생성하세요',
-                },
-            },
-            dependencies_section: {
-                dependencies: '종속성',
-                filter: '필터',
-                collapse: '모두 접기',
                 dependency: {
+                    dependency: '종속성',
                     table: '테이블',
                     dependent_table: '뷰 테이블',
                     delete_dependency: '삭제',
@@ -212,8 +207,8 @@ export const ko_KR: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: '뷰 테이블 없음',
-                    description: '뷰 테이블을 만들어 시작하세요.',
+                    title: '연관 관계 없음',
+                    description: '연관 관계를 만들어 시작하세요.',
                 },
             },
 

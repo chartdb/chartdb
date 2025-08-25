@@ -6,7 +6,7 @@ export const tr: LanguageTranslation = {
             new_diagram: 'Yeni',
             browse: 'Gözat',
             tables: 'Tablolar',
-            relationships: 'İlişkiler',
+            refs: 'Refs',
             areas: 'Alanlar',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
@@ -179,12 +179,15 @@ export const tr: LanguageTranslation = {
                     description: 'Başlamak için bir tablo oluşturun',
                 },
             },
-            relationships_section: {
-                relationships: 'İlişkiler',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filtrele',
-                add_relationship: 'İlişki Ekle',
                 collapse: 'Hepsini Daralt',
+                add_relationship: 'İlişki Ekle',
+                relationships: 'İlişkiler',
+                dependencies: 'Bağımlılıklar',
                 relationship: {
+                    relationship: 'İlişki',
                     primary: 'Birincil Tablo',
                     foreign: 'Referans Tablo',
                     cardinality: 'Kardinalite',
@@ -194,16 +197,8 @@ export const tr: LanguageTranslation = {
                         delete_relationship: 'Sil',
                     },
                 },
-                empty_state: {
-                    title: 'İlişki yok',
-                    description: 'Tabloları bağlamak için bir ilişki oluşturun',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Bağımlılıklar',
-                filter: 'Filtrele',
-                collapse: 'Hepsini Daralt',
                 dependency: {
+                    dependency: 'Bağımlılık',
                     table: 'Tablo',
                     dependent_table: 'Bağımlı Görünüm',
                     delete_dependency: 'Sil',
@@ -213,8 +208,8 @@ export const tr: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Bağımlılık yok',
-                    description: 'Başlamak için bir görünüm oluşturun',
+                    title: 'İlişki yok',
+                    description: 'Başlamak için bir ilişki oluşturun',
                 },
             },
 

@@ -6,7 +6,7 @@ export const hr: LanguageTranslation = {
             new_diagram: 'Novi',
             browse: 'Pregledaj',
             tables: 'Tablice',
-            relationships: 'Veze',
+            refs: 'Refs',
             areas: 'Područja',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
@@ -174,12 +174,15 @@ export const hr: LanguageTranslation = {
                     description: 'Stvorite tablicu za početak',
                 },
             },
-            relationships_section: {
-                relationships: 'Veze',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filtriraj',
-                add_relationship: 'Dodaj vezu',
                 collapse: 'Sažmi sve',
+                add_relationship: 'Dodaj vezu',
+                relationships: 'Veze',
+                dependencies: 'Ovisnosti',
                 relationship: {
+                    relationship: 'Veza',
                     primary: 'Primarna tablica',
                     foreign: 'Referentna tablica',
                     cardinality: 'Kardinalnost',
@@ -189,16 +192,8 @@ export const hr: LanguageTranslation = {
                         delete_relationship: 'Izbriši',
                     },
                 },
-                empty_state: {
-                    title: 'Nema veza',
-                    description: 'Stvorite vezu za povezivanje tablica',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Ovisnosti',
-                filter: 'Filtriraj',
-                collapse: 'Sažmi sve',
                 dependency: {
+                    dependency: 'Ovisnost',
                     table: 'Tablica',
                     dependent_table: 'Ovisni pogled',
                     delete_dependency: 'Izbriši',
@@ -208,8 +203,8 @@ export const hr: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Nema ovisnosti',
-                    description: 'Stvorite pogled za početak',
+                    title: 'Nema veze',
+                    description: 'Stvorite vezu za početak',
                 },
             },
 

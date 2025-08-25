@@ -133,7 +133,7 @@ export const RelationshipListItemHeader: React.FC<
                 <DropdownMenuContent className="w-40">
                     <DropdownMenuLabel>
                         {t(
-                            'side_panel.relationships_section.relationship.relationship_actions.title'
+                            'side_panel.refs_section.relationship.relationship_actions.title'
                         )}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -143,7 +143,7 @@ export const RelationshipListItemHeader: React.FC<
                             className="flex justify-between !text-red-700"
                         >
                             {t(
-                                'side_panel.relationships_section.relationship.relationship_actions.delete_relationship'
+                                'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
                             )}
                             <Trash2 className="size-3.5 text-red-700" />
                         </DropdownMenuItem>
@@ -155,7 +155,7 @@ export const RelationshipListItemHeader: React.FC<
     );
 
     return (
-        <div className="group flex h-11 flex-1 items-center justify-between overflow-hidden">
+        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
             <div className="flex min-w-0 flex-1">
                 {editMode ? (
                     <Input
@@ -172,7 +172,7 @@ export const RelationshipListItemHeader: React.FC<
                     <div className="truncate">{relationship.name}</div>
                 )}
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
                         <div>{renderDropDownMenu()}</div>

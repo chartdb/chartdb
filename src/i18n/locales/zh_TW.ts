@@ -6,7 +6,7 @@ export const zh_TW: LanguageTranslation = {
             new_diagram: '新建',
             browse: '瀏覽',
             tables: '表格',
-            relationships: '關係',
+            refs: 'Refs',
             areas: '區域',
             dependencies: '相依性',
             custom_types: '自定義類型',
@@ -175,12 +175,15 @@ export const zh_TW: LanguageTranslation = {
                     description: '請新增表格以開始',
                 },
             },
-            relationships_section: {
-                relationships: '關聯',
+            refs_section: {
+                refs: 'Refs',
                 filter: '篩選',
-                add_relationship: '新增關聯',
                 collapse: '全部摺疊',
+                add_relationship: '新增關聯',
+                relationships: '關聯',
+                dependencies: '相依性',
                 relationship: {
+                    relationship: '關聯',
                     primary: '主表格',
                     foreign: '參照表格',
                     cardinality: '基數',
@@ -190,16 +193,8 @@ export const zh_TW: LanguageTranslation = {
                         delete_relationship: '刪除',
                     },
                 },
-                empty_state: {
-                    title: '尚無關聯',
-                    description: '請新增關聯以連接表格',
-                },
-            },
-            dependencies_section: {
-                dependencies: '相依性',
-                filter: '篩選',
-                collapse: '全部摺疊',
                 dependency: {
+                    dependency: '相依性',
                     table: '表格',
                     dependent_table: '相依檢視',
                     delete_dependency: '刪除',
@@ -209,8 +204,8 @@ export const zh_TW: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: '尚無相依性',
-                    description: '請建立檢視以開始',
+                    title: '尚無關聯',
+                    description: '請建立關聯以開始',
                 },
             },
 

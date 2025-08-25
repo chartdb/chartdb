@@ -6,7 +6,7 @@ export const de: LanguageTranslation = {
             new_diagram: 'Neu',
             browse: 'Durchsuchen',
             tables: 'Tabellen',
-            relationships: 'Beziehungen',
+            refs: 'Refs',
             areas: 'Bereiche',
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
@@ -180,32 +180,26 @@ export const de: LanguageTranslation = {
                     description: 'Erstellen Sie eine Tabelle, um zu beginnen',
                 },
             },
-            relationships_section: {
-                relationships: 'Beziehungen',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filter',
-                add_relationship: 'Beziehung hinzufügen',
                 collapse: 'Alle einklappen',
+                add_relationship: 'Beziehung hinzufügen',
+                relationships: 'Beziehungen',
+                dependencies: 'Abhängigkeiten',
                 relationship: {
+                    relationship: 'Beziehung',
                     primary: 'Primäre Tabelle',
                     foreign: 'Referenzierte Tabelle',
                     cardinality: 'Kardinalität',
-                    delete_relationship: 'Beziehung löschen',
+                    delete_relationship: 'Löschen',
                     relationship_actions: {
                         title: 'Aktionen',
-                        delete_relationship: 'Beziehung löschen',
+                        delete_relationship: 'Löschen',
                     },
                 },
-                empty_state: {
-                    title: 'Keine Beziehungen',
-                    description:
-                        'Erstellen Sie eine Beziehung, um Tabellen zu verbinden',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Abhängigkeiten',
-                filter: 'Filter',
-                collapse: 'Alle einklappen',
                 dependency: {
+                    dependency: 'Abhängigkeit',
                     table: 'Tabelle',
                     dependent_table: 'Abhängige Ansicht',
                     delete_dependency: 'Löschen',
@@ -215,8 +209,8 @@ export const de: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Keine Abhängigkeiten',
-                    description: 'Erstellen Sie eine Ansicht, um zu beginnen',
+                    title: 'Keine Beziehungen',
+                    description: 'Erstellen Sie eine Beziehung, um zu beginnen',
                 },
             },
 

@@ -6,7 +6,7 @@ export const uk: LanguageTranslation = {
             new_diagram: 'Нова',
             browse: 'Огляд',
             tables: 'Таблиці',
-            relationships: 'Зв’язки',
+            refs: 'Зв’язки',
             areas: 'Області',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
@@ -177,12 +177,15 @@ export const uk: LanguageTranslation = {
                     description: 'Щоб почати, створіть таблицю',
                 },
             },
-            relationships_section: {
-                relationships: 'Звʼязки',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Фільтр',
-                add_relationship: 'Додати звʼязок',
                 collapse: 'Згорнути все',
+                add_relationship: 'Додати звʼязок',
+                relationships: 'Звʼязки',
+                dependencies: 'Залежності',
                 relationship: {
+                    relationship: 'Звʼязок',
                     primary: 'Первинна таблиця',
                     foreign: 'Посилання на таблицю',
                     cardinality: 'Звʼязок',
@@ -192,16 +195,8 @@ export const uk: LanguageTranslation = {
                         delete_relationship: 'Видалити',
                     },
                 },
-                empty_state: {
-                    title: 'Звʼязків немає',
-                    description: 'Створіть звʼязок для зʼєднання таблиць',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Залежності',
-                filter: 'Фільтр',
-                collapse: 'Згорнути все',
                 dependency: {
+                    dependency: 'Залежність',
                     table: 'Таблиця',
                     dependent_table: 'Залежне подання',
                     delete_dependency: 'Видалити',
@@ -211,8 +206,8 @@ export const uk: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Жодних залежностей',
-                    description: 'Створіть подання, щоб почати',
+                    title: 'Жодних зв’язків',
+                    description: 'Створіть зв’язок, щоб почати',
                 },
             },
 

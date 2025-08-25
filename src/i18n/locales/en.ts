@@ -6,7 +6,7 @@ export const en = {
             new_diagram: 'New',
             browse: 'Browse',
             tables: 'Tables',
-            relationships: 'Refs',
+            refs: 'Refs',
             areas: 'Areas',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
@@ -173,12 +173,15 @@ export const en = {
                     description: 'Create a table to get started',
                 },
             },
-            relationships_section: {
-                relationships: 'Relationships',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filter',
-                add_relationship: 'Add Relationship',
                 collapse: 'Collapse All',
+                add_relationship: 'Add Relationship',
+                relationships: 'Relationships',
+                dependencies: 'Dependencies',
                 relationship: {
+                    relationship: 'Relationship',
                     primary: 'Primary Table',
                     foreign: 'Referenced Table',
                     cardinality: 'Cardinality',
@@ -188,16 +191,8 @@ export const en = {
                         delete_relationship: 'Delete',
                     },
                 },
-                empty_state: {
-                    title: 'No relationships',
-                    description: 'Create a relationship to connect tables',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
                 dependency: {
+                    dependency: 'Dependency',
                     table: 'Table',
                     dependent_table: 'Dependent View',
                     delete_dependency: 'Delete',
@@ -207,8 +202,8 @@ export const en = {
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'No relationships',
+                    description: 'Create a relationship to get started',
                 },
             },
 
