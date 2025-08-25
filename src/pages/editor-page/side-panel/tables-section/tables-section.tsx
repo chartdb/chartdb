@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, X } from 'lucide-react';
+import { Table, View, X } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -15,6 +15,8 @@ import type { DBSchema } from '@/lib/domain';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { ButtonWithAlternatives } from '@/components/button/button-with-alternatives';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface TablesSectionProps {}
 
@@ -26,6 +28,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { t } = useTranslation();
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
+    const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
 
     const filteredTables = useMemo(() => {
@@ -48,13 +51,17 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         return tables.filter(filterTables).filter(filterTableName);
     }, [tables, filterText, filter, databaseType]);
 
+    const getCenterLocation = useCallback(() => {
+        const padding = 80;
+        const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
+        const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
+
+        return { centerX, centerY };
+    }, [viewport.x, viewport.y, viewport.zoom]);
+
     const createTableWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {
-            const padding = 80;
-            const centerX =
-                -viewport.x / viewport.zoom + padding / viewport.zoom;
-            const centerY =
-                -viewport.y / viewport.zoom + padding / viewport.zoom;
+            const { centerX, centerY } = getCenterLocation();
             const table = await createTable({
                 x: centerX,
                 y: centerY,
@@ -62,34 +69,55 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             });
             openTableFromSidebar(table.id);
         },
-        [
-            createTable,
-            openTableFromSidebar,
-            viewport.x,
-            viewport.y,
-            viewport.zoom,
-        ]
+        [createTable, openTableFromSidebar, getCenterLocation]
     );
 
-    const handleCreateTable = useCallback(async () => {
-        setFilterText('');
-
-        if (schemasDisplayed.length > 1) {
-            openTableSchemaDialog({
-                onConfirm: createTableWithLocation,
-                schemas: schemasDisplayed,
+    const createViewWithLocation = useCallback(
+        async ({ schema }: { schema?: DBSchema }) => {
+            const { centerX, centerY } = getCenterLocation();
+            const table = await createTable({
+                x: centerX,
+                y: centerY,
+                schema: schema?.name,
+                isView: true,
             });
-        } else {
-            const schema =
-                schemasDisplayed.length === 1 ? schemasDisplayed[0] : undefined;
-            createTableWithLocation({ schema });
-        }
-    }, [
-        createTableWithLocation,
-        schemasDisplayed,
-        openTableSchemaDialog,
-        setFilterText,
-    ]);
+            openTableFromSidebar(table.id);
+        },
+        [createTable, openTableFromSidebar, getCenterLocation]
+    );
+
+    const handleCreateTable = useCallback(
+        async ({ view }: { view?: boolean }) => {
+            setFilterText('');
+
+            if (schemasDisplayed.length > 1) {
+                openTableSchemaDialog({
+                    onConfirm: view
+                        ? createViewWithLocation
+                        : createTableWithLocation,
+                    schemas: schemasDisplayed,
+                });
+            } else {
+                const schema =
+                    schemasDisplayed.length === 1
+                        ? schemasDisplayed[0]
+                        : undefined;
+
+                if (view) {
+                    createViewWithLocation({ schema });
+                } else {
+                    createTableWithLocation({ schema });
+                }
+            }
+        },
+        [
+            createViewWithLocation,
+            createTableWithLocation,
+            schemasDisplayed,
+            openTableSchemaDialog,
+            setFilterText,
+        ]
+    );
 
     const handleClearFilter = useCallback(() => {
         setFilterText('');
@@ -111,14 +139,31 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
-                <Button
+                <ButtonWithAlternatives
                     variant="secondary"
                     className="h-8 p-2 text-xs"
-                    onClick={handleCreateTable}
+                    onClick={() => handleCreateTable({ view: false })}
+                    dropdownTriggerClassName="px-1"
+                    chevronDownIconClassName="!size-3.5"
+                    alternatives={
+                        showDBViews
+                            ? [
+                                  {
+                                      label: t(
+                                          'side_panel.tables_section.add_view'
+                                      ),
+                                      onClick: () =>
+                                          handleCreateTable({ view: true }),
+                                      icon: <View className="size-4" />,
+                                      className: 'text-xs',
+                                  },
+                              ]
+                            : []
+                    }
                 >
                     <Table className="h-4" />
                     {t('side_panel.tables_section.add_table')}
-                </Button>
+                </ButtonWithAlternatives>
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">

@@ -30,6 +30,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface SidebarItem {
     title: string;
@@ -47,7 +48,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
-    const { dependencies, databaseType } = useChartDB();
+    const { databaseType } = useChartDB();
+    const { showDBViews } = useLocalConfig();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
 
     const diagramItems: SidebarItem[] = useMemo(
@@ -110,7 +112,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'areas',
             },
-            ...(dependencies && dependencies.length > 0
+            ...(showDBViews
                 ? [
                       {
                           title: t('editor_sidebar.dependencies'),
@@ -142,8 +144,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             selectedSidebarSection,
             t,
             showSidePanel,
-            dependencies,
             databaseType,
+            showDBViews,
         ]
     );
 

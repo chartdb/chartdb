@@ -37,6 +37,7 @@ export const en = {
                 hide_field_attributes: 'Hide Field Attributes',
                 show_field_attributes: 'Show Field Attributes',
                 zoom_on_scroll: 'Zoom on Scroll',
+                show_views: 'Show Views',
                 theme: 'Theme',
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
@@ -117,6 +118,7 @@ export const en = {
             tables_section: {
                 tables: 'Tables',
                 add_table: 'Add Table',
+                add_view: 'Add View',
                 filter: 'Filter',
                 collapse: 'Collapse All',
                 clear: 'Clear Filter',
@@ -466,6 +468,7 @@ export const en = {
 
         canvas_context_menu: {
             new_table: 'New Table',
+            new_view: 'New View',
             new_relationship: 'New Relationship',
             new_area: 'New Area',
         },
@@ -486,6 +489,9 @@ export const en = {
         language_select: {
             change_language: 'Language',
         },
+
+        on: 'On',
+        off: 'Off',
     },
 };
 
