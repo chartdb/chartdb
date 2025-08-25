@@ -48,8 +48,14 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 },
             });
 
-        return tables.filter(filterTables).filter(filterTableName);
-    }, [tables, filterText, filter, databaseType]);
+        const filterViews: (table: DBTable) => boolean = (table) =>
+            showDBViews ? true : !table.isView;
+
+        return tables
+            .filter(filterTables)
+            .filter(filterTableName)
+            .filter(filterViews);
+    }, [tables, filterText, filter, databaseType, showDBViews]);
 
     const getCenterLocation = useCallback(() => {
         const padding = 80;
