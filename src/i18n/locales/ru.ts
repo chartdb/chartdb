@@ -488,6 +488,11 @@ export const ru: LanguageTranslation = {
             add_relationship: 'Добавить связь',
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Изменить название области',
+            delete_area: 'Удалить область',
+        },
+
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
         snap_to_grid_tooltip: 'Выравнивание по сетке (Удерживайте {{key}})',

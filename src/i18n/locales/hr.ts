@@ -485,6 +485,11 @@ export const hr: LanguageTranslation = {
             add_relationship: 'Dodaj vezu',
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Uredi naziv područja',
+            delete_area: 'Izbriši područje',
+        },
+
         snap_to_grid_tooltip: 'Priljepljivanje na mrežu (Drži {{key}})',
 
         tool_tips: {

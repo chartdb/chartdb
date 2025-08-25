@@ -495,6 +495,11 @@ export const hi: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'क्षेत्र का नाम संपादित करें',
+            delete_area: 'क्षेत्र हटाएँ',
+        },
+
         // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 

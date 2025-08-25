@@ -62,7 +62,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { fitView, setNodes } = useReactFlow();
-    const { hideSidePanel } = useLayout();
+    const { hideSidePanel, openedTableInSidebar } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -277,6 +277,23 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             setTableName(table.name.trim());
         }
     }, [table.name]);
+
+    // Auto-select table name for newly created tables when opened in sidebar
+    useEffect(() => {
+        // Check if this is a new table that was just opened in the sidebar
+        if (
+            table.name.startsWith('table_') &&
+            openedTableInSidebar === table.id
+        ) {
+            setEditMode(true);
+            // Select all text when input is ready
+            setTimeout(() => {
+                if (inputRef.current) {
+                    inputRef.current.select();
+                }
+            }, 100);
+        }
+    }, [table.name, openedTableInSidebar, table.id]);
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">

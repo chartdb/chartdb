@@ -491,6 +491,11 @@ export const id_ID: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Ubah Nama Area',
+            delete_area: 'Hapus Area',
+        },
+
         snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',
 
         tool_tips: {

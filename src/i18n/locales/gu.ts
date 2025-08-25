@@ -492,6 +492,11 @@ export const gu: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'વિસ્તાર નામ સંપાદિત કરો',
+            delete_area: 'વિસ્તાર કાઢી નાખો',
+        },
+
         snap_to_grid_tooltip: 'ગ્રિડ પર સ્નેપ કરો (જમાવટ {{key}})',
 
         tool_tips: {
