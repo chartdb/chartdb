@@ -37,6 +37,7 @@ export const ko_KR: LanguageTranslation = {
                 hide_field_attributes: '필드 속성 숨기기',
                 show_field_attributes: '필드 속성 보이기',
                 zoom_on_scroll: '스크롤 시 확대',
+                show_views: '데이터베이스 뷰',
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
@@ -118,6 +119,7 @@ export const ko_KR: LanguageTranslation = {
             tables_section: {
                 tables: '테이블',
                 add_table: '테이블 추가',
+                add_view: '뷰 추가',
                 filter: '필터',
                 collapse: '모두 접기',
                 // TODO: Translate
@@ -473,6 +475,7 @@ export const ko_KR: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: '새 테이블',
+            new_view: '새 뷰',
             new_relationship: '새 연관관계',
             // TODO: Translate
             new_area: 'New Area',
@@ -494,6 +497,9 @@ export const ko_KR: LanguageTranslation = {
         language_select: {
             change_language: '언어',
         },
+
+        on: '켜기',
+        off: '끄기',
     },
 };
 

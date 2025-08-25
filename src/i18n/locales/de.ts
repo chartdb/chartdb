@@ -37,6 +37,7 @@ export const de: LanguageTranslation = {
                 hide_field_attributes: 'Feldattribute ausblenden',
                 show_field_attributes: 'Feldattribute anzeigen',
                 zoom_on_scroll: 'Zoom beim Scrollen',
+                show_views: 'Datenbankansichten',
                 theme: 'Stil',
                 show_dependencies: 'Abhängigkeiten anzeigen',
                 hide_dependencies: 'Abhängigkeiten ausblenden',
@@ -120,6 +121,7 @@ export const de: LanguageTranslation = {
             tables_section: {
                 tables: 'Tabellen',
                 add_table: 'Tabelle hinzufügen',
+                add_view: 'Ansicht hinzufügen',
                 filter: 'Filter',
                 collapse: 'Alle einklappen',
                 // TODO: Translate
@@ -480,6 +482,7 @@ export const de: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Neue Tabelle',
+            new_view: 'Neue Ansicht',
             new_relationship: 'Neue Beziehung',
             // TODO: Translate
             new_area: 'New Area',
@@ -502,6 +505,9 @@ export const de: LanguageTranslation = {
         language_select: {
             change_language: 'Sprache',
         },
+
+        on: 'Ein',
+        off: 'Aus',
     },
 };
 

@@ -37,6 +37,7 @@ export const gu: LanguageTranslation = {
                 hide_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ છુપાવો',
                 show_field_attributes: 'ફીલ્ડ અટ્રિબ્યુટ્સ બતાવો',
                 zoom_on_scroll: 'સ્ક્રોલ પર ઝૂમ કરો',
+                show_views: 'ડેટાબેઝ વ્યૂઝ',
                 theme: 'થિમ',
                 show_dependencies: 'નિર્ભરતાઓ બતાવો',
                 hide_dependencies: 'નિર્ભરતાઓ છુપાવો',
@@ -119,6 +120,7 @@ export const gu: LanguageTranslation = {
             tables_section: {
                 tables: 'ટેબલ્સ',
                 add_table: 'ટેબલ ઉમેરો',
+                add_view: 'વ્યૂ ઉમેરો',
                 filter: 'ફિલ્ટર',
                 collapse: 'બધાને સકુચિત કરો',
                 // TODO: Translate
@@ -477,6 +479,7 @@ export const gu: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'નવું ટેબલ',
+            new_view: 'નવું વ્યૂ',
             new_relationship: 'નવો સંબંધ',
             // TODO: Translate
             new_area: 'New Area',
@@ -498,6 +501,9 @@ export const gu: LanguageTranslation = {
         language_select: {
             change_language: 'ભાષા બદલો',
         },
+
+        on: 'ચાલુ',
+        off: 'બંધ',
     },
 };
 

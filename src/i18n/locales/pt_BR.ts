@@ -37,6 +37,7 @@ export const pt_BR: LanguageTranslation = {
                 hide_field_attributes: 'Ocultar Atributos de Campo',
                 show_field_attributes: 'Mostrar Atributos de Campo',
                 zoom_on_scroll: 'Zoom ao Rolar',
+                show_views: 'Visualizações do Banco de Dados',
                 theme: 'Tema',
                 show_dependencies: 'Mostrar Dependências',
                 hide_dependencies: 'Ocultar Dependências',
@@ -119,6 +120,7 @@ export const pt_BR: LanguageTranslation = {
             tables_section: {
                 tables: 'Tabelas',
                 add_table: 'Adicionar Tabela',
+                add_view: 'Adicionar Visualização',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todas',
                 // TODO: Translate
@@ -478,6 +480,7 @@ export const pt_BR: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Nova Tabela',
+            new_view: 'Nova Visualização',
             new_relationship: 'Novo Relacionamento',
             // TODO: Translate
             new_area: 'New Area',
@@ -500,6 +503,9 @@ export const pt_BR: LanguageTranslation = {
         language_select: {
             change_language: 'Idioma',
         },
+
+        on: 'Ligado',
+        off: 'Desligado',
     },
 };
 

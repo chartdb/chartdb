@@ -37,6 +37,7 @@ export const ar: LanguageTranslation = {
                 hide_field_attributes: 'إخفاء خصائص الحقل',
                 show_field_attributes: 'إظهار خصائص الحقل',
                 zoom_on_scroll: 'تكبير/تصغير عند التمرير',
+                show_views: 'عروض قاعدة البيانات',
                 theme: 'المظهر',
                 show_dependencies: 'إظهار الاعتمادات',
                 hide_dependencies: 'إخفاء الاعتمادات',
@@ -118,6 +119,7 @@ export const ar: LanguageTranslation = {
             tables_section: {
                 tables: 'الجداول',
                 add_table: 'إضافة جدول',
+                add_view: 'إضافة عرض',
                 filter: 'تصفية',
                 collapse: 'طي الكل',
                 // TODO: Translate
@@ -471,6 +473,7 @@ export const ar: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'جدول جديد',
+            new_view: 'عرض جديد',
             new_relationship: 'علاقة جديدة',
             // TODO: Translate
             new_area: 'New Area',
@@ -492,6 +495,8 @@ export const ar: LanguageTranslation = {
         language_select: {
             change_language: 'اللغة',
         },
+        on: 'تشغيل',
+        off: 'إيقاف',
     },
 };
 

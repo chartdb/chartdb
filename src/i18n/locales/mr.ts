@@ -37,6 +37,7 @@ export const mr: LanguageTranslation = {
                 hide_field_attributes: 'फील्ड गुणधर्म लपवा',
                 show_field_attributes: 'फील्ड गुणधर्म दाखवा',
                 zoom_on_scroll: 'स्क्रोलवर झूम करा',
+                show_views: 'डेटाबेस व्ह्यूज',
                 theme: 'थीम',
                 show_dependencies: 'डिपेंडेन्सि दाखवा',
                 hide_dependencies: 'डिपेंडेन्सि लपवा',
@@ -121,6 +122,7 @@ export const mr: LanguageTranslation = {
             tables_section: {
                 tables: 'टेबल्स',
                 add_table: 'टेबल जोडा',
+                add_view: 'व्ह्यू जोडा',
                 filter: 'फिल्टर',
                 collapse: 'सर्व संकुचित करा',
                 // TODO: Translate
@@ -486,6 +488,7 @@ export const mr: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'नवीन टेबल',
+            new_view: 'नवीन व्ह्यू',
             new_relationship: 'नवीन रिलेशनशिप',
             // TODO: Translate
             new_area: 'New Area',
@@ -509,6 +512,9 @@ export const mr: LanguageTranslation = {
         language_select: {
             change_language: 'भाषा बदला',
         },
+
+        on: 'चालू',
+        off: 'बंद',
     },
 };
 

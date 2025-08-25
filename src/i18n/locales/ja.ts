@@ -37,6 +37,7 @@ export const ja: LanguageTranslation = {
                 hide_field_attributes: 'フィールド属性を非表示',
                 show_field_attributes: 'フィールド属性を表示',
                 zoom_on_scroll: 'スクロールでズーム',
+                show_views: 'データベースビュー',
                 theme: 'テーマ',
                 // TODO: Translate
                 show_dependencies: 'Show Dependencies',
@@ -122,6 +123,7 @@ export const ja: LanguageTranslation = {
             tables_section: {
                 tables: 'テーブル',
                 add_table: 'テーブルを追加',
+                add_view: 'ビューを追加',
                 filter: 'フィルタ',
                 collapse: 'すべて折りたたむ',
                 // TODO: Translate
@@ -482,6 +484,7 @@ export const ja: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: '新しいテーブル',
+            new_view: '新しいビュー',
             new_relationship: '新しいリレーションシップ',
             // TODO: Translate
             new_area: 'New Area',
@@ -504,6 +507,9 @@ export const ja: LanguageTranslation = {
         language_select: {
             change_language: '言語',
         },
+
+        on: 'オン',
+        off: 'オフ',
     },
 };
 

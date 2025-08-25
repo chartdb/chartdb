@@ -37,6 +37,7 @@ export const vi: LanguageTranslation = {
                 show_field_attributes: 'Hiển thị thuộc tính trường',
                 hide_field_attributes: 'Ẩn thuộc tính trường',
                 zoom_on_scroll: 'Thu phóng khi cuộn',
+                show_views: 'Chế độ xem Cơ sở dữ liệu',
                 theme: 'Chủ đề',
                 show_dependencies: 'Hiển thị các phụ thuộc',
                 hide_dependencies: 'Ẩn các phụ thuộc',
@@ -118,6 +119,7 @@ export const vi: LanguageTranslation = {
             tables_section: {
                 tables: 'Bảng',
                 add_table: 'Thêm bảng',
+                add_view: 'Thêm Chế độ xem',
                 filter: 'Lọc',
                 collapse: 'Thu gọn tất cả',
                 // TODO: Translate
@@ -474,6 +476,7 @@ export const vi: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Tạo bảng mới',
+            new_view: 'Chế độ xem Mới',
             new_relationship: 'Tạo quan hệ mới',
             // TODO: Translate
             new_area: 'New Area',
@@ -495,6 +498,9 @@ export const vi: LanguageTranslation = {
         language_select: {
             change_language: 'Ngôn ngữ',
         },
+
+        on: 'Bật',
+        off: 'Tắt',
     },
 };
 

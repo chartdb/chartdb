@@ -37,6 +37,7 @@ export const te: LanguageTranslation = {
                 show_field_attributes: 'ఫీల్డ్ గుణాలను చూపించు',
                 hide_field_attributes: 'ఫీల్డ్ గుణాలను దాచండి',
                 zoom_on_scroll: 'స్క్రోల్‌పై జూమ్',
+                show_views: 'డేటాబేస్ వ్యూలు',
                 theme: 'థీమ్',
                 show_dependencies: 'ఆధారాలు చూపించండి',
                 hide_dependencies: 'ఆధారాలను దాచండి',
@@ -119,6 +120,7 @@ export const te: LanguageTranslation = {
             tables_section: {
                 tables: 'పట్టికలు',
                 add_table: 'పట్టికను జోడించు',
+                add_view: 'వ్యూ జోడించండి',
                 filter: 'ఫిల్టర్',
                 collapse: 'అన్ని కూల్ చేయి',
                 // TODO: Translate
@@ -482,6 +484,7 @@ export const te: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'కొత్త పట్టిక',
+            new_view: 'కొత్త వ్యూ',
             new_relationship: 'కొత్త సంబంధం',
             // TODO: Translate
             new_area: 'New Area',
@@ -505,6 +508,9 @@ export const te: LanguageTranslation = {
         language_select: {
             change_language: 'భాష మార్చు',
         },
+
+        on: 'ఆన్',
+        off: 'ఆఫ్',
     },
 };
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
-import { defaultTableColor, defaultAreaColor } from '@/lib/colors';
+import { defaultTableColor, defaultAreaColor, viewColor } from '@/lib/colors';
 import type { ChartDBContext, ChartDBEvent } from './chartdb-context';
 import { chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -342,7 +342,7 @@ export const ChartDBProvider: React.FC<
                     },
                 ],
                 indexes: [],
-                color: defaultTableColor,
+                color: attributes?.isView ? viewColor : defaultTableColor,
                 createdAt: Date.now(),
                 isView: false,
                 order: tables.length,

@@ -27,6 +27,7 @@ import { generateTreeDataByAreas, generateTreeDataBySchemas } from './utils';
 import { FilterItemActions } from './filter-item-actions';
 import { databasesWithSchemas } from '@/lib/domain';
 import { getOperatingSystem } from '@/lib/utils';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface CanvasFilterProps {
     onClose: () => void;
@@ -50,17 +51,20 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const [isFilterVisible, setIsFilterVisible] = useState(false);
     const [groupingMode, setGroupingMode] = useState<GroupingMode>('schema');
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const { showDBViews } = useLocalConfig();
 
     // Extract only the properties needed for tree data
     const relevantTableData = useMemo<RelevantTableData[]>(
         () =>
-            tables.map((table) => ({
-                id: table.id,
-                name: table.name,
-                schema: table.schema,
-                parentAreaId: table.parentAreaId,
-            })),
-        [tables]
+            tables
+                .filter((table) => (showDBViews ? true : !table.isView))
+                .map((table) => ({
+                    id: table.id,
+                    name: table.name,
+                    schema: table.schema,
+                    parentAreaId: table.parentAreaId,
+                })),
+        [tables, showDBViews]
     );
 
     const databaseWithSchemas = useMemo(

@@ -37,6 +37,7 @@ export const uk: LanguageTranslation = {
                 show_field_attributes: 'Показати атрибути полів',
                 hide_field_attributes: 'Приховати атрибути полів',
                 zoom_on_scroll: 'Масштабувати прокручуванням',
+                show_views: 'Представлення бази даних',
                 theme: 'Тема',
                 show_dependencies: 'Показати залежності',
                 hide_dependencies: 'Приховати залежності',
@@ -117,6 +118,7 @@ export const uk: LanguageTranslation = {
             tables_section: {
                 tables: 'Таблиці',
                 add_table: 'Додати таблицю',
+                add_view: 'Додати представлення',
                 filter: 'Фільтр',
                 collapse: 'Згорнути все',
                 // TODO: Translate
@@ -473,6 +475,7 @@ export const uk: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'Нова таблиця',
+            new_view: 'Нове представлення',
             new_relationship: 'Новий звʼязок',
             // TODO: Translate
             new_area: 'New Area',
@@ -494,6 +497,9 @@ export const uk: LanguageTranslation = {
         language_select: {
             change_language: 'Мова',
         },
+
+        on: 'Увімк',
+        off: 'Вимк',
     },
 };
 

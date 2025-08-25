@@ -80,7 +80,7 @@ import {
     TARGET_DEP_PREFIX,
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
-import { DatabaseType } from '@/lib/domain/database-type';
+import type { DatabaseType } from '@/lib/domain/database-type';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
@@ -123,10 +123,12 @@ const tableToTableNode = (
         filter,
         databaseType,
         filterLoading,
+        showDBViews,
     }: {
         filter?: DiagramFilter;
         databaseType: DatabaseType;
         filterLoading: boolean;
+        showDBViews?: boolean;
     }
 ): TableNodeType => {
     // Always use absolute position for now
@@ -146,7 +148,9 @@ const tableToTableNode = (
                 table: { id: table.id, schema: table.schema },
                 filter,
                 options: { defaultSchema: defaultSchemas[databaseType] },
-            }) || filterLoading,
+            }) ||
+            filterLoading ||
+            (!showDBViews && table.isView),
     };
 };
 
@@ -226,8 +230,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDependenciesOnCanvas, showMiniMapOnCanvas } =
-        useLocalConfig();
+    const { scrollAction, showDBViews, showMiniMapOnCanvas } = useLocalConfig();
     const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
@@ -246,7 +249,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) =>
-            tableToTableNode(table, { filter, databaseType, filterLoading })
+            tableToTableNode(table, {
+                filter,
+                databaseType,
+                filterLoading,
+                showDBViews,
+            })
         )
     );
     const [edges, setEdges, onEdgesChange] =
@@ -260,12 +268,24 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         const initialNodes = initialTables.map((table) =>
-            tableToTableNode(table, { filter, databaseType, filterLoading })
+            tableToTableNode(table, {
+                filter,
+                databaseType,
+                filterLoading,
+                showDBViews,
+            })
         );
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
-    }, [initialTables, nodes, filter, databaseType, filterLoading]);
+    }, [
+        initialTables,
+        nodes,
+        filter,
+        databaseType,
+        filterLoading,
+        showDBViews,
+    ]);
 
     useEffect(() => {
         if (!isInitialLoadingNodes) {
@@ -319,19 +339,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
                     type: 'dependency-edge',
                     data: { dependency: dep },
-                    hidden:
-                        !showDependenciesOnCanvas &&
-                        databaseType !== DatabaseType.CLICKHOUSE,
+                    hidden: !showDBViews,
                 })
             ),
         ]);
-    }, [
-        relationships,
-        dependencies,
-        setEdges,
-        showDependenciesOnCanvas,
-        databaseType,
-    ]);
+    }, [relationships, dependencies, setEdges, showDBViews]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
@@ -432,6 +444,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         filter,
                         databaseType,
                         filterLoading,
+                        showDBViews,
                     });
 
                     // Check if table uses the highlighted custom type
@@ -481,6 +494,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         highlightOverlappingTables,
         highlightedCustomType,
         filterLoading,
+        showDBViews,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);

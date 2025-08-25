@@ -9,8 +9,8 @@ const showCardinalityKey = 'show_cardinality';
 const showFieldAttributesKey = 'show_field_attributes';
 const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
-const showDependenciesOnCanvasKey = 'show_dependencies_on_canvas';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
+const showDBViewsKey = 'show_db_views';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -21,6 +21,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
         (localStorage.getItem(scrollActionKey) as ScrollAction) || 'pan'
+    );
+
+    const [showDBViews, setShowDBViews] = React.useState<boolean>(
+        (localStorage.getItem(showDBViewsKey) || 'false') === 'true'
     );
 
     const [showCardinality, setShowCardinality] = React.useState<boolean>(
@@ -39,12 +43,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     const [starUsDialogLastOpen, setStarUsDialogLastOpen] =
         React.useState<number>(
             parseInt(localStorage.getItem(starUsDialogLastOpenKey) || '0')
-        );
-
-    const [showDependenciesOnCanvas, setShowDependenciesOnCanvas] =
-        React.useState<boolean>(
-            (localStorage.getItem(showDependenciesOnCanvasKey) || 'false') ===
-                'true'
         );
 
     const [showMiniMapOnCanvas, setShowMiniMapOnCanvas] =
@@ -72,15 +70,12 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     }, [scrollAction]);
 
     useEffect(() => {
-        localStorage.setItem(showCardinalityKey, showCardinality.toString());
-    }, [showCardinality]);
+        localStorage.setItem(showDBViewsKey, showDBViews.toString());
+    }, [showDBViews]);
 
     useEffect(() => {
-        localStorage.setItem(
-            showDependenciesOnCanvasKey,
-            showDependenciesOnCanvas.toString()
-        );
-    }, [showDependenciesOnCanvas]);
+        localStorage.setItem(showCardinalityKey, showCardinality.toString());
+    }, [showCardinality]);
 
     useEffect(() => {
         localStorage.setItem(
@@ -96,6 +91,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setTheme,
                 scrollAction,
                 setScrollAction,
+                showDBViews,
+                setShowDBViews,
                 showCardinality,
                 setShowCardinality,
                 showFieldAttributes,
@@ -104,8 +101,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 githubRepoOpened,
                 starUsDialogLastOpen,
                 setStarUsDialogLastOpen,
-                showDependenciesOnCanvas,
-                setShowDependenciesOnCanvas,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
             }}

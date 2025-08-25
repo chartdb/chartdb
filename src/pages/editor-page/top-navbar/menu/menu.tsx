@@ -37,7 +37,6 @@ export const Menu: React.FC<MenuProps> = () => {
         deleteDiagram,
         updateDiagramUpdatedAt,
         databaseType,
-        dependencies,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -59,10 +58,10 @@ export const Menu: React.FC<MenuProps> = () => {
         showCardinality,
         setShowFieldAttributes,
         showFieldAttributes,
-        setShowDependenciesOnCanvas,
-        showDependenciesOnCanvas,
         setShowMiniMapOnCanvas,
         showMiniMapOnCanvas,
+        showDBViews,
+        setShowDBViews,
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -142,10 +141,6 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideFieldAttributes = useCallback(() => {
         setShowFieldAttributes(!showFieldAttributes);
     }, [showFieldAttributes, setShowFieldAttributes]);
-
-    const showOrHideDependencies = useCallback(() => {
-        setShowDependenciesOnCanvas(!showDependenciesOnCanvas);
-    }, [showDependenciesOnCanvas, setShowDependenciesOnCanvas]);
 
     const showOrHideMiniMap = useCallback(() => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
@@ -433,15 +428,6 @@ export const Menu: React.FC<MenuProps> = () => {
                             ? t('menu.view.hide_field_attributes')
                             : t('menu.view.show_field_attributes')}
                     </MenubarItem>
-                    {databaseType !== DatabaseType.CLICKHOUSE &&
-                    dependencies &&
-                    dependencies.length > 0 ? (
-                        <MenubarItem onClick={showOrHideDependencies}>
-                            {showDependenciesOnCanvas
-                                ? t('menu.view.hide_dependencies')
-                                : t('menu.view.show_dependencies')}
-                        </MenubarItem>
-                    ) : null}
                     <MenubarItem onClick={showOrHideMiniMap}>
                         {showMiniMapOnCanvas
                             ? t('menu.view.hide_minimap')
@@ -464,6 +450,26 @@ export const Menu: React.FC<MenuProps> = () => {
                                 onClick={() => setScrollAction('pan')}
                             >
                                 {t('zoom.off')}
+                            </MenubarCheckboxItem>
+                        </MenubarSubContent>
+                    </MenubarSub>
+                    <MenubarSeparator />
+                    <MenubarSub>
+                        <MenubarSubTrigger>
+                            {t('menu.view.show_views')}
+                        </MenubarSubTrigger>
+                        <MenubarSubContent>
+                            <MenubarCheckboxItem
+                                checked={showDBViews}
+                                onClick={() => setShowDBViews(true)}
+                            >
+                                {t('on')}
+                            </MenubarCheckboxItem>
+                            <MenubarCheckboxItem
+                                checked={!showDBViews}
+                                onClick={() => setShowDBViews(false)}
+                            >
+                                {t('off')}
                             </MenubarCheckboxItem>
                         </MenubarSubContent>
                     </MenubarSub>

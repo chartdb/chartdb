@@ -37,6 +37,7 @@ export const ne: LanguageTranslation = {
                 hide_field_attributes: 'फिल्ड विशेषताहरू लुकाउनुहोस्',
                 show_field_attributes: 'फिल्ड विशेषताहरू देखाउनुहोस्',
                 zoom_on_scroll: 'स्क्रोलमा जुम गर्नुहोस्',
+                show_views: 'डाटाबेस भ्यूहरू',
                 theme: 'थिम',
                 show_dependencies: 'डिपेन्डेन्सीहरू देखाउनुहोस्',
                 hide_dependencies: 'डिपेन्डेन्सीहरू लुकाउनुहोस्',
@@ -119,6 +120,7 @@ export const ne: LanguageTranslation = {
             tables_section: {
                 tables: 'तालिकाहरू',
                 add_table: 'तालिका थप्नुहोस्',
+                add_view: 'भ्यू थप्नुहोस्',
                 filter: 'फिल्टर',
                 collapse: 'सबै लुकाउनुहोस्',
                 // TODO: Translate
@@ -480,6 +482,7 @@ export const ne: LanguageTranslation = {
 
         canvas_context_menu: {
             new_table: 'नयाँ तालिका',
+            new_view: 'नयाँ भ्यू',
             new_relationship: 'नयाँ सम्बन्ध',
             // TODO: Translate
             new_area: 'New Area',
@@ -501,6 +504,9 @@ export const ne: LanguageTranslation = {
         language_select: {
             change_language: 'भाषा परिवर्तन गर्नुहोस्',
         },
+
+        on: 'सक्रिय',
+        off: 'निष्क्रिय',
     },
 };
 
