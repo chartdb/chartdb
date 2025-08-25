@@ -17,6 +17,7 @@ export const hr: LanguageTranslation = {
                 new: 'Novi Dijagram',
                 browse: 'Pregledaj...',
                 save: 'Spremi',
+                duplicate: 'Dupliciraj dijagram',
                 import: 'Uvezi',
                 export_sql: 'Izvezi SQL',
                 export_as: 'Izvezi kao',

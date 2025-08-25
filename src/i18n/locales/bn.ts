@@ -17,6 +17,7 @@ export const bn: LanguageTranslation = {
                 new: 'নতুন ডায়াগ্রাম',
                 browse: 'ব্রাউজ করুন...',
                 save: 'সংরক্ষণ করুন',
+                duplicate: 'ডুপ্লিকেট করুন',
                 import: 'ডাটাবেস আমদানি করুন',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',

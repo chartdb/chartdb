@@ -17,6 +17,7 @@ export const tr: LanguageTranslation = {
                 new: 'Yeni Diyagram',
                 browse: 'Gözat...',
                 save: 'Kaydet',
+                duplicate: 'Kopyala',
                 import: 'Veritabanı İçe Aktar',
                 export_sql: 'SQL Olarak Dışa Aktar',
                 export_as: 'Olarak Dışa Aktar',

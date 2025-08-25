@@ -17,6 +17,7 @@ export const en = {
                 new: 'New Diagram',
                 browse: 'Browse...',
                 save: 'Save',
+                duplicate: 'Duplicate Diagram',
                 import: 'Import',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
