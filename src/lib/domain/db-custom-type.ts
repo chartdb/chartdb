@@ -30,7 +30,7 @@ export const dbCustomTypeFieldSchema = z.object({
 
 export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     id: z.string(),
-    schema: z.string(),
+    schema: z.string().optional(),
     name: z.string(),
     kind: z.nativeEnum(DBCustomTypeKind),
     values: z.array(z.string()).optional(),
