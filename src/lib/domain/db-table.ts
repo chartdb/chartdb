@@ -208,7 +208,7 @@ export const createTablesFromMetadata = ({
         let pkMatchingIndexName: string | undefined;
         let pkIndex: DBIndex | undefined;
 
-        if (primaryKeyFields.length > 1) {
+        if (primaryKeyFields.length >= 1) {
             // We have a composite primary key, look for an index that matches all PK columns
             const pkFieldNames = primaryKeyFields.map((f) => f.name).sort();
 

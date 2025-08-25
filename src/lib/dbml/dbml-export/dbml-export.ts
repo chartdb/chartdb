@@ -612,11 +612,11 @@ const restoreCompositePKNames = (dbml: string, tables: DBTable[]): string => {
     let result = dbml;
 
     tables.forEach((table) => {
-        // Check if this table has a composite PK index with a name
+        // Check if this table has a PK index with a name
         const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
         if (pkIndex?.name) {
             const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
-            if (primaryKeyFields.length > 1) {
+            if (primaryKeyFields.length >= 1) {
                 // Build the column list for the composite PK
                 const columnList = primaryKeyFields
                     .map((f) => f.name)
