@@ -178,7 +178,15 @@ export function exportMSSQL({
                     })
                     .join(',\n')}${
                     table.fields.filter((f) => f.primaryKey).length > 0
-                        ? `,\n    PRIMARY KEY (${table.fields
+                        ? `,\n    ${(() => {
+                              // Find PK index to get the constraint name
+                              const pkIndex = table.indexes.find(
+                                  (idx) => idx.isPrimaryKey
+                              );
+                              return pkIndex?.name
+                                  ? `CONSTRAINT [${pkIndex.name}] `
+                                  : '';
+                          })()}PRIMARY KEY (${table.fields
                               .filter((f) => f.primaryKey)
                               .map((f) => `[${f.name}]`)
                               .join(', ')})`

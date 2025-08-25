@@ -29,6 +29,7 @@ export interface DBIndex {
     fieldIds: string[];
     createdAt: number;
     type?: IndexType | null;
+    isPrimaryKey?: boolean | null;
 }
 
 export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
@@ -38,6 +39,7 @@ export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
     fieldIds: z.array(z.string()),
     createdAt: z.number(),
     type: z.enum(INDEX_TYPES).optional(),
+    isPrimaryKey: z.boolean().or(z.null()).optional(),
 });
 
 export const createIndexesFromMetadata = ({
