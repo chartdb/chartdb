@@ -1383,12 +1383,9 @@ Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
         const result = generateDBMLFromDiagram(diagram);
 
         // Check that the inline DBML has proper indentation
+        // Note: indexes on primary key fields should be filtered out
         expect(result.inlineDbml).toContain(`Table "table_1" {
   "id" bigint [pk, not null]
-
-  Indexes {
-    id [name: "index_1"]
-  }
 }`);
 
         expect(result.inlineDbml).toContain(`Table "table_2" {
