@@ -30,7 +30,7 @@ export const DependencyEdge: React.FC<EdgeProps<DependencyEdgeType>> = ({
     const { openDependencyFromSidebar, selectSidebarSection } = useLayout();
 
     const openDependencyInEditor = useCallback(() => {
-        selectSidebarSection('dependencies');
+        selectSidebarSection('refs');
         openDependencyFromSidebar(id);
     }, [id, openDependencyFromSidebar, selectSidebarSection]);
 
