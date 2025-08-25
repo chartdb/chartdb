@@ -313,22 +313,28 @@ export const exportBaseSQL = ({
                 }
             }
 
-            // Handle PRIMARY KEY constraint - only add inline if not composite
-            if (field.primaryKey && !hasCompositePrimaryKey) {
+            // Handle PRIMARY KEY constraint - only add inline if no PK index with custom name
+            const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+            if (field.primaryKey && !hasCompositePrimaryKey && !pkIndex?.name) {
                 sqlScript += ' PRIMARY KEY';
             }
 
-            // Add a comma after each field except the last one (or before composite primary key)
-            if (index < table.fields.length - 1 || hasCompositePrimaryKey) {
+            // Add a comma after each field except the last one (or before PK constraint)
+            const needsPKConstraint =
+                hasCompositePrimaryKey ||
+                (primaryKeyFields.length === 1 && pkIndex?.name);
+            if (index < table.fields.length - 1 || needsPKConstraint) {
                 sqlScript += ',\n';
             }
         });
 
-        // Add composite primary key constraint if needed
-        if (hasCompositePrimaryKey) {
+        // Add primary key constraint if needed (for composite PKs or single PK with custom name)
+        const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+        if (
+            hasCompositePrimaryKey ||
+            (primaryKeyFields.length === 1 && pkIndex?.name)
+        ) {
             const pkFieldNames = primaryKeyFields.map((f) => f.name).join(', ');
-            // Find PK index to get the constraint name if it exists
-            const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
             if (pkIndex?.name) {
                 sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
             } else {

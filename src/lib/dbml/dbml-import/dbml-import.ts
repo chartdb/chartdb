@@ -587,9 +587,9 @@ export const importDBMLToDiagram = async (
                         };
                     }) || [];
 
-            // Add composite PK as an index if it exists and has a name
+            // Add PK as an index if it exists and has a name
             // Only create the PK index if there's an explicit name for it
-            if (compositePKFields.length > 1 && compositePKIndexName) {
+            if (compositePKFields.length >= 1 && compositePKIndexName) {
                 const pkFieldIds = compositePKFields.map((columnName) => {
                     const field = fields.find((f) => f.name === columnName);
                     if (!field) {
