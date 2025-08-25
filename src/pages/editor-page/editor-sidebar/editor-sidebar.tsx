@@ -93,7 +93,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 active: selectedSidebarSection === 'dbml',
             },
             {
-                title: t('editor_sidebar.relationships'),
+                title: t('editor_sidebar.refs'),
                 icon: Workflow,
                 onClick: () => {
                     showSidePanel();

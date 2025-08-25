@@ -6,7 +6,7 @@ export const bn: LanguageTranslation = {
             new_diagram: 'নতুন',
             browse: 'ব্রাউজ',
             tables: 'টেবিল',
-            relationships: 'সম্পর্ক',
+            refs: 'রেফস',
             areas: 'এলাকা',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
@@ -179,14 +179,17 @@ export const bn: LanguageTranslation = {
                     description: 'শুরু করতে একটি টেবিল তৈরি করুন',
                 },
             },
-            relationships_section: {
-                relationships: 'সম্পর্ক',
+            refs_section: {
+                refs: 'রেফস',
                 filter: 'ফিল্টার',
-                add_relationship: 'সম্পর্ক যোগ করুন',
                 collapse: 'সব ভাঁজ করুন',
+                add_relationship: 'সম্পর্ক যোগ করুন',
+                relationships: 'সম্পর্ক',
+                dependencies: 'নির্ভরতাগুলি',
                 relationship: {
+                    relationship: 'সম্পর্ক',
                     primary: 'প্রাথমিক টেবিল',
-                    foreign: 'বিদেশি টেবিল',
+                    foreign: 'রেফারেন্স করা টেবিল',
                     cardinality: 'কার্ডিনালিটি',
                     delete_relationship: 'মুছুন',
                     relationship_actions: {
@@ -194,27 +197,19 @@ export const bn: LanguageTranslation = {
                         delete_relationship: 'মুছুন',
                     },
                 },
-                empty_state: {
-                    title: 'কোনো সম্পর্ক নেই',
-                    description: 'টেবিল সংযোগ করতে একটি সম্পর্ক তৈরি করুন',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'নির্ভরতাগুলি',
-                filter: 'ফিল্টার',
-                collapse: 'ভাঁজ করুন',
                 dependency: {
+                    dependency: 'নির্ভরতা',
                     table: 'টেবিল',
-                    dependent_table: 'নির্ভরশীল টেবিল',
-                    delete_dependency: 'নির্ভরতা মুছুন',
+                    dependent_table: 'নির্ভরশীল ভিউ',
+                    delete_dependency: 'মুছুন',
                     dependency_actions: {
                         title: 'কর্ম',
-                        delete_dependency: 'নির্ভরতা মুছুন',
+                        delete_dependency: 'মুছুন',
                     },
                 },
                 empty_state: {
-                    title: 'কোনো নির্ভরতাগুলি নেই',
-                    description: 'এই অংশে কোনো নির্ভরতা উপলব্ধ নেই।',
+                    title: 'কোনো সম্পর্ক নেই',
+                    description: 'শুরু করতে একটি সম্পর্ক তৈরি করুন',
                 },
             },
 

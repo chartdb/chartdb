@@ -6,7 +6,7 @@ export const ja: LanguageTranslation = {
             new_diagram: '新規',
             browse: '参照',
             tables: 'テーブル',
-            relationships: 'リレーション',
+            refs: '参照',
             areas: 'エリア',
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
@@ -182,12 +182,15 @@ export const ja: LanguageTranslation = {
                     description: 'テーブルを作成して開始してください',
                 },
             },
-            relationships_section: {
-                relationships: 'リレーションシップ',
+            refs_section: {
+                refs: '参照',
                 filter: 'フィルタ',
-                add_relationship: 'リレーションシップを追加',
                 collapse: 'すべて折りたたむ',
+                add_relationship: 'リレーションシップを追加',
+                relationships: 'リレーションシップ',
+                dependencies: '依存関係',
                 relationship: {
+                    relationship: 'リレーションシップ',
                     primary: '主テーブル',
                     foreign: '参照テーブル',
                     cardinality: 'カーディナリティ',
@@ -197,29 +200,19 @@ export const ja: LanguageTranslation = {
                         delete_relationship: '削除',
                     },
                 },
-                empty_state: {
-                    title: 'リレーションシップがありません',
-                    description:
-                        'テーブルを接続するためにリレーションシップを作成してください',
-                },
-            },
-            // TODO: Translate
-            dependencies_section: {
-                dependencies: 'Dependencies',
-                filter: 'Filter',
-                collapse: 'Collapse All',
                 dependency: {
-                    table: 'Table',
-                    dependent_table: 'Dependent View',
-                    delete_dependency: 'Delete',
+                    dependency: '依存関係',
+                    table: 'テーブル',
+                    dependent_table: '依存ビュー',
+                    delete_dependency: '削除',
                     dependency_actions: {
-                        title: 'Actions',
-                        delete_dependency: 'Delete',
+                        title: '操作',
+                        delete_dependency: '削除',
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'リレーションシップがありません',
+                    description: '開始するためにリレーションシップを作成してください',
                 },
             },
 

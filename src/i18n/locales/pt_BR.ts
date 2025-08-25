@@ -6,7 +6,7 @@ export const pt_BR: LanguageTranslation = {
             new_diagram: 'Novo',
             browse: 'Navegar',
             tables: 'Tabelas',
-            relationships: 'Relacionamentos',
+            refs: 'Refs',
             areas: 'Áreas',
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
@@ -179,12 +179,15 @@ export const pt_BR: LanguageTranslation = {
                     description: 'Crie uma tabela para começar',
                 },
             },
-            relationships_section: {
-                relationships: 'Relacionamentos',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Filtrar',
-                add_relationship: 'Adicionar Relacionamento',
                 collapse: 'Colapsar Todas',
+                add_relationship: 'Adicionar Relacionamento',
+                relationships: 'Relacionamentos',
+                dependencies: 'Dependências',
                 relationship: {
+                    relationship: 'Relacionamento',
                     primary: 'Tabela Primária',
                     foreign: 'Tabela Referenciada',
                     cardinality: 'Cardinalidade',
@@ -194,16 +197,8 @@ export const pt_BR: LanguageTranslation = {
                         delete_relationship: 'Excluir',
                     },
                 },
-                empty_state: {
-                    title: 'Sem relacionamentos',
-                    description: 'Crie um relacionamento para conectar tabelas',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dependências',
-                filter: 'Filtrar',
-                collapse: 'Colapsar Todas',
                 dependency: {
+                    dependency: 'Dependência',
                     table: 'Tabela',
                     dependent_table: 'Visualização Dependente',
                     delete_dependency: 'Excluir',
@@ -213,8 +208,8 @@ export const pt_BR: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Sem dependências',
-                    description: 'Crie uma visualização para começar',
+                    title: 'Sem relacionamentos',
+                    description: 'Crie um relacionamento para começar',
                 },
             },
 

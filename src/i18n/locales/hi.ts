@@ -6,7 +6,7 @@ export const hi: LanguageTranslation = {
             new_diagram: 'नया',
             browse: 'ब्राउज़',
             tables: 'टेबल',
-            relationships: 'संबंध',
+            refs: 'रेफ्स',
             areas: 'क्षेत्र',
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
@@ -179,12 +179,15 @@ export const hi: LanguageTranslation = {
                     description: 'शुरू करने के लिए एक तालिका बनाएँ',
                 },
             },
-            relationships_section: {
-                relationships: 'संबंध',
+            refs_section: {
+                refs: 'रेफ्स',
                 filter: 'फ़िल्टर',
-                add_relationship: 'संबंध जोड़ें',
                 collapse: 'सभी को संक्षिप्त करें',
+                add_relationship: 'संबंध जोड़ें',
+                relationships: 'संबंध',
+                dependencies: 'निर्भरताएँ',
                 relationship: {
+                    relationship: 'संबंध',
                     primary: 'प्राथमिक तालिका',
                     foreign: 'संदर्भित तालिका',
                     cardinality: 'कार्डिनैलिटी',
@@ -194,28 +197,19 @@ export const hi: LanguageTranslation = {
                         delete_relationship: 'हटाएँ',
                     },
                 },
-                empty_state: {
-                    title: 'कोई संबंध नहीं',
-                    description:
-                        'तालिकाओं को कनेक्ट करने के लिए एक संबंध बनाएँ',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'निर्भरताएँ',
-                filter: 'फ़िल्टर',
-                collapse: 'सिकोड़ें',
                 dependency: {
+                    dependency: 'निर्भरता',
                     table: 'तालिका',
-                    dependent_table: 'आश्रित तालिका',
-                    delete_dependency: 'निर्भरता हटाएँ',
+                    dependent_table: 'आश्रित दृश्य',
+                    delete_dependency: 'हटाएँ',
                     dependency_actions: {
-                        title: 'कार्रवाइयाँ',
-                        delete_dependency: 'निर्भरता हटाएँ',
+                        title: 'क्रियाएँ',
+                        delete_dependency: 'हटाएँ',
                     },
                 },
                 empty_state: {
-                    title: 'कोई निर्भरता नहीं',
-                    description: 'इस अनुभाग में कोई निर्भरता उपलब्ध नहीं है।',
+                    title: 'कोई संबंध नहीं',
+                    description: 'शुरू करने के लिए एक संबंध बनाएँ',
                 },
             },
 

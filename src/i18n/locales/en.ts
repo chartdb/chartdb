@@ -6,7 +6,7 @@ export const en = {
             new_diagram: 'New',
             browse: 'Browse',
             tables: 'Tables',
-            relationships: 'Refs',
+            refs: 'Refs',
             areas: 'Areas',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
@@ -202,8 +202,8 @@ export const en = {
                     },
                 },
                 empty_state: {
-                    title: 'No dependencies',
-                    description: 'Create a view to get started',
+                    title: 'No relationships',
+                    description: 'Create a relationship to get started',
                 },
             },
 

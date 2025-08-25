@@ -6,7 +6,7 @@ export const te: LanguageTranslation = {
             new_diagram: 'కొత్తది',
             browse: 'బ్రాఉజ్',
             tables: 'టేబల్లు',
-            relationships: 'సంబంధాలు',
+            refs: 'సంబంధాలు',
             areas: 'ప్రదేశాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
@@ -180,12 +180,15 @@ export const te: LanguageTranslation = {
                     description: 'ప్రారంభించడానికి ఒక పట్టిక సృష్టించండి',
                 },
             },
-            relationships_section: {
-                relationships: 'సంబంధాలు',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'ఫిల్టర్',
-                add_relationship: 'సంబంధం జోడించు',
                 collapse: 'అన్ని కూల్ చేయి',
+                add_relationship: 'సంబంధం జోడించు',
+                relationships: 'సంబంధాలు',
+                dependencies: 'ఆధారాలు',
                 relationship: {
+                    relationship: 'సంబంధం',
                     primary: 'ప్రాథమిక పట్టిక',
                     foreign: 'సూచించబడిన పట్టిక',
                     cardinality: 'కార్డినాలిటీ',
@@ -195,16 +198,8 @@ export const te: LanguageTranslation = {
                         delete_relationship: 'సంబంధం తొలగించు',
                     },
                 },
-                empty_state: {
-                    title: 'సంబంధాలు లేవు',
-                    description: 'పట్టికలను అనుసంధించడానికి సంబంధం సృష్టించండి',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'ఆధారాలు',
-                filter: 'ఫిల్టర్',
-                collapse: 'అన్ని కూల్ చేయి',
                 dependency: {
+                    dependency: 'ఆధారం',
                     table: 'పట్టిక',
                     dependent_table: 'ఆధారిత వీక్షణ',
                     delete_dependency: 'ఆధారాన్ని తొలగించు',
@@ -214,8 +209,8 @@ export const te: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'ఆధారాలు లేవు',
-                    description: 'ప్రారంభించడానికి ఒక వీక్షణ సృష్టించండి',
+                    title: 'సంబంధాలు లేవు',
+                    description: 'ప్రారంభించడానికి ఒక సంబంధం సృష్టించండి',
                 },
             },
 

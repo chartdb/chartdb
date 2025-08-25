@@ -6,7 +6,7 @@ export const mr: LanguageTranslation = {
             new_diagram: 'नवीन',
             browse: 'ब्राउज',
             tables: 'टेबल',
-            relationships: 'संबंध',
+            refs: 'Refs',
             areas: 'क्षेत्रे',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
@@ -182,12 +182,15 @@ export const mr: LanguageTranslation = {
                     description: 'सुरू करण्यासाठी एक टेबल तयार करा',
                 },
             },
-            relationships_section: {
-                relationships: 'रिलेशनशिप',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'फिल्टर',
-                add_relationship: 'रिलेशनशिप जोडा',
                 collapse: 'सर्व संकुचित करा',
+                add_relationship: 'रिलेशनशिप जोडा',
+                relationships: 'रिलेशनशिप',
+                dependencies: 'डिपेंडेन्सि',
                 relationship: {
+                    relationship: 'रिलेशनशिप',
                     primary: 'प्राथमिक टेबल',
                     foreign: 'रेफरंस टेबल',
                     cardinality: 'कार्डिनॅलिटी',
@@ -197,17 +200,8 @@ export const mr: LanguageTranslation = {
                         delete_relationship: 'हटवा',
                     },
                 },
-                empty_state: {
-                    title: 'कोणतेही रिलेशनशिप नाहीत',
-                    description:
-                        'टेबल्स कनेक्ट करण्यासाठी एक रिलेशनशिप तयार करा',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'डिपेंडेन्सि',
-                filter: 'फिल्टर',
-                collapse: 'सर्व संकुचित करा',
                 dependency: {
+                    dependency: 'डिपेंडेन्सि',
                     table: 'टेबल',
                     dependent_table: 'डिपेंडेन्सि दृश्य',
                     delete_dependency: 'हटवा',
@@ -217,8 +211,8 @@ export const mr: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'कोणत्याही डिपेंडेन्सि नाहीत',
-                    description: 'सुरू करण्यासाठी एक दृश्य तयार करा',
+                    title: 'कोणतेही रिलेशनशिप नाहीत',
+                    description: 'सुरू करण्यासाठी एक रिलेशनशिप तयार करा',
                 },
             },
 

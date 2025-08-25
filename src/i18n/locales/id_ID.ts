@@ -6,7 +6,7 @@ export const id_ID: LanguageTranslation = {
             new_diagram: 'Baru',
             browse: 'Jelajahi',
             tables: 'Tabel',
-            relationships: 'Relasi',
+            refs: 'Refs',
             areas: 'Area',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
@@ -178,12 +178,15 @@ export const id_ID: LanguageTranslation = {
                     description: 'Buat tabel untuk memulai',
                 },
             },
-            relationships_section: {
-                relationships: 'Hubungan',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Saring',
-                add_relationship: 'Tambah Hubungan',
                 collapse: 'Lipat Semua',
+                add_relationship: 'Tambah Hubungan',
+                relationships: 'Hubungan',
+                dependencies: 'Dependensi',
                 relationship: {
+                    relationship: 'Hubungan',
                     primary: 'Tabel Primer',
                     foreign: 'Tabel Referensi',
                     cardinality: 'Kardinalitas',
@@ -193,16 +196,8 @@ export const id_ID: LanguageTranslation = {
                         delete_relationship: 'Hapus',
                     },
                 },
-                empty_state: {
-                    title: 'Tidak ada hubungan',
-                    description: 'Buat hubungan untuk menghubungkan tabel',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Dependensi',
-                filter: 'Saring',
-                collapse: 'Lipat Semua',
                 dependency: {
+                    dependency: 'Dependensi',
                     table: 'Tabel',
                     dependent_table: 'Tampilan Dependen',
                     delete_dependency: 'Hapus',
@@ -212,8 +207,8 @@ export const id_ID: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Tidak ada dependensi',
-                    description: 'Buat tampilan untuk memulai',
+                    title: 'Tidak ada hubungan',
+                    description: 'Buat hubungan untuk memulai',
                 },
             },
 

@@ -6,7 +6,7 @@ export const ne: LanguageTranslation = {
             new_diagram: 'नयाँ',
             browse: 'ब्राउज',
             tables: 'टेबलहरू',
-            relationships: 'सम्बन्धहरू',
+            refs: 'Refs',
             areas: 'क्षेत्रहरू',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
@@ -179,12 +179,15 @@ export const ne: LanguageTranslation = {
                     description: 'सुरु गर्नका लागि एक तालिका बनाउनुहोस्',
                 },
             },
-            relationships_section: {
-                relationships: 'सम्बन्धहरू',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'फिल्टर',
-                add_relationship: 'सम्बन्ध थप्नुहोस्',
                 collapse: 'सबै लुकाउनुहोस्',
+                add_relationship: 'सम्बन्ध थप्नुहोस्',
+                relationships: 'सम्बन्धहरू',
+                dependencies: 'डिपेन्डेन्सीहरू',
                 relationship: {
+                    relationship: 'सम्बन्ध',
                     primary: 'मुख्य तालिका',
                     foreign: 'परिचित तालिका',
                     cardinality: 'कार्डिन्यालिटी',
@@ -194,16 +197,8 @@ export const ne: LanguageTranslation = {
                         delete_relationship: 'हटाउनुहोस्',
                     },
                 },
-                empty_state: {
-                    title: 'कुनै सम्बन्धहरू छैनन्',
-                    description: 'तालिकाहरू जोड्नका लागि एक सम्बन्ध बनाउनुहोस्',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'डिपेन्डेन्सीहरू',
-                filter: 'फिल्टर',
-                collapse: 'सबै लुकाउनुहोस्',
                 dependency: {
+                    dependency: 'डिपेन्डेन्सी',
                     table: 'तालिका',
                     dependent_table: 'विचलित तालिका',
                     delete_dependency: 'हटाउनुहोस्',
@@ -213,9 +208,9 @@ export const ne: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'कुनै डिपेन्डेन्सीहरू छैनन्',
+                    title: 'कुनै सम्बन्धहरू छैनन्',
                     description:
-                        'डिपेन्डेन्सीहरू देखाउनका लागि एक व्यू बनाउनुहोस्',
+                        'सुरु गर्नका लागि एक सम्बन्ध बनाउनुहोस्',
                 },
             },
 

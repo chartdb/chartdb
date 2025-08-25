@@ -6,7 +6,7 @@ export const ru: LanguageTranslation = {
             new_diagram: 'Новая',
             browse: 'Обзор',
             tables: 'Таблицы',
-            relationships: 'Связи',
+            refs: 'Ссылки',
             areas: 'Области',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
@@ -175,12 +175,15 @@ export const ru: LanguageTranslation = {
                     description: 'Создайте таблицу, чтобы начать',
                 },
             },
-            relationships_section: {
-                relationships: 'Отношения',
+            refs_section: {
+                refs: 'Ссылки',
                 filter: 'Фильтр',
-                add_relationship: 'Добавить отношение',
                 collapse: 'Свернуть все',
+                add_relationship: 'Добавить отношение',
+                relationships: 'Отношения',
+                dependencies: 'Зависимости',
                 relationship: {
+                    relationship: 'Отношение',
                     primary: 'Основная таблица',
                     foreign: 'Справочная таблица',
                     cardinality: 'Тип множественной связи',
@@ -190,18 +193,10 @@ export const ru: LanguageTranslation = {
                         delete_relationship: 'Удалить',
                     },
                 },
-                empty_state: {
-                    title: 'Нет отношений',
-                    description: 'Создайте связь для соединения таблиц',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Зависимости',
-                filter: 'Фильтр',
-                collapse: 'Свернуть все',
                 dependency: {
-                    table: 'Стол',
-                    dependent_table: 'Зависимый вид',
+                    dependency: 'Зависимость',
+                    table: 'Таблица',
+                    dependent_table: 'Зависимое представление',
                     delete_dependency: 'Удалить',
                     dependency_actions: {
                         title: 'Действия',
@@ -209,8 +204,8 @@ export const ru: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Нет зависимостей',
-                    description: 'Создайте представление, чтобы начать',
+                    title: 'Нет отношений',
+                    description: 'Создайте отношение, чтобы начать',
                 },
             },
 

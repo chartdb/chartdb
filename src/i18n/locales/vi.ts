@@ -6,7 +6,7 @@ export const vi: LanguageTranslation = {
             new_diagram: 'Mới',
             browse: 'Duyệt',
             tables: 'Bảng',
-            relationships: 'Mối quan hệ',
+            refs: 'Refs',
             areas: 'Khu vực',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
@@ -178,12 +178,15 @@ export const vi: LanguageTranslation = {
                     description: 'Tạo một bảng để bắt đầu',
                 },
             },
-            relationships_section: {
-                relationships: 'Quan hệ',
+            refs_section: {
+                refs: 'Refs',
                 filter: 'Lọc',
-                add_relationship: 'Thêm quan hệ',
                 collapse: 'Thu gọn tất cả',
+                add_relationship: 'Thêm quan hệ',
+                relationships: 'Quan hệ',
+                dependencies: 'Phụ thuộc',
                 relationship: {
+                    relationship: 'Quan hệ',
                     primary: 'Bảng khóa chính',
                     foreign: 'Bảng khóa ngoại',
                     cardinality: 'Quan hệ',
@@ -193,16 +196,8 @@ export const vi: LanguageTranslation = {
                         delete_relationship: 'Xóa',
                     },
                 },
-                empty_state: {
-                    title: 'Không có quan hệ',
-                    description: 'Tạo quan hệ để kết nối các bảng',
-                },
-            },
-            dependencies_section: {
-                dependencies: 'Phụ thuộc',
-                filter: 'Lọc',
-                collapse: 'Thu gọn tất cả',
                 dependency: {
+                    dependency: 'Phụ thuộc',
                     table: 'Bảng',
                     dependent_table: 'Bảng xem phụ thuộc',
                     delete_dependency: 'Xóa',
@@ -212,8 +207,8 @@ export const vi: LanguageTranslation = {
                     },
                 },
                 empty_state: {
-                    title: 'Không có phụ thuộc',
-                    description: 'Tạo bảng xem phụ thuộc để bắt đầu',
+                    title: 'Không có quan hệ',
+                    description: 'Tạo một quan hệ để bắt đầu',
                 },
             },
 
