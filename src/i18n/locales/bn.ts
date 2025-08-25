@@ -500,6 +500,9 @@ export const bn: LanguageTranslation = {
         language_select: {
             change_language: 'ভাষা পরিবর্তন করুন',
         },
+
+        on: 'চালু',
+        off: 'বন্ধ',
     },
 };
 
