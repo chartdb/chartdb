@@ -80,7 +80,7 @@ import {
     TARGET_DEP_PREFIX,
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
-import { DatabaseType } from '@/lib/domain/database-type';
+import type { DatabaseType } from '@/lib/domain/database-type';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
@@ -339,13 +339,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
                     type: 'dependency-edge',
                     data: { dependency: dep },
-                    hidden:
-                        !showDBViews &&
-                        databaseType !== DatabaseType.CLICKHOUSE,
+                    hidden: !showDBViews,
                 })
             ),
         ]);
-    }, [relationships, dependencies, setEdges, showDBViews, databaseType]);
+    }, [relationships, dependencies, setEdges, showDBViews]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
