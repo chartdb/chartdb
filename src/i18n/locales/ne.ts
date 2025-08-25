@@ -209,8 +209,7 @@ export const ne: LanguageTranslation = {
                 },
                 empty_state: {
                     title: 'कुनै सम्बन्धहरू छैनन्',
-                    description:
-                        'सुरु गर्नका लागि एक सम्बन्ध बनाउनुहोस्',
+                    description: 'सुरु गर्नका लागि एक सम्बन्ध बनाउनुहोस्',
                 },
             },
 

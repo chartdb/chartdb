@@ -212,7 +212,8 @@ export const ja: LanguageTranslation = {
                 },
                 empty_state: {
                     title: 'リレーションシップがありません',
-                    description: '開始するためにリレーションシップを作成してください',
+                    description:
+                        '開始するためにリレーションシップを作成してください',
                 },
             },
 
