@@ -177,7 +177,7 @@ Table ranks {
             expect(wizardsTable?.fields).toHaveLength(11);
 
             // Check indexes
-            expect(wizardsTable?.indexes).toHaveLength(2);
+            expect(wizardsTable?.indexes).toHaveLength(3);
             const emailIndex = wizardsTable?.indexes.find((idx) =>
                 idx.name.includes('email')
             );
