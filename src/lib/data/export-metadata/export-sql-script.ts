@@ -20,6 +20,38 @@ const simplifyDataType = (typeName: string): string => {
     return typeMap[typeName.toLowerCase()] || typeName;
 };
 
+// Helper function to properly quote table/schema names with special characters
+const getQuotedTableName = (
+    table: { schema?: string; name: string },
+    isDBMLFlow: boolean = false
+): string => {
+    // Check if a name is already quoted
+    const isAlreadyQuoted = (name: string) => {
+        return (
+            (name.startsWith('"') && name.endsWith('"')) ||
+            (name.startsWith('`') && name.endsWith('`')) ||
+            (name.startsWith('[') && name.endsWith(']'))
+        );
+    };
+
+    // Only add quotes if needed and not already quoted
+    const quoteIfNeeded = (name: string) => {
+        if (isAlreadyQuoted(name)) {
+            return name;
+        }
+        const needsQuoting = /[^a-zA-Z0-9_]/.test(name) || isDBMLFlow;
+        return needsQuoting ? `"${name}"` : name;
+    };
+
+    if (table.schema) {
+        const quotedSchema = quoteIfNeeded(table.schema);
+        const quotedTable = quoteIfNeeded(table.name);
+        return `${quotedSchema}.${quotedTable}`;
+    } else {
+        return quoteIfNeeded(table.name);
+    }
+};
+
 export const exportBaseSQL = ({
     diagram,
     targetDatabaseType,
@@ -63,18 +95,21 @@ export const exportBaseSQL = ({
     let sqlScript = '';
 
     // First create the CREATE SCHEMA statements for all the found schemas based on tables
-    const schemas = new Set<string>();
-    tables.forEach((table) => {
-        if (table.schema) {
-            schemas.add(table.schema);
-        }
-    });
+    // Skip schema creation for DBML flow as DBML doesn't support CREATE SCHEMA syntax
+    if (!isDBMLFlow) {
+        const schemas = new Set<string>();
+        tables.forEach((table) => {
+            if (table.schema) {
+                schemas.add(table.schema);
+            }
+        });
 
-    // Add CREATE SCHEMA statements if any schemas exist
-    schemas.forEach((schema) => {
-        sqlScript += `CREATE SCHEMA IF NOT EXISTS ${schema};\n`;
-    });
-    if (schemas.size > 0) sqlScript += '\n'; // Add newline only if schemas were added
+        // Add CREATE SCHEMA statements if any schemas exist
+        schemas.forEach((schema) => {
+            sqlScript += `CREATE SCHEMA IF NOT EXISTS "${schema}";\n`;
+        });
+        if (schemas.size > 0) sqlScript += '\n'; // Add newline only if schemas were added
+    }
 
     // Add CREATE TYPE statements for ENUMs and COMPOSITE types from diagram.customTypes
     if (diagram.customTypes && diagram.customTypes.length > 0) {
@@ -166,9 +201,7 @@ export const exportBaseSQL = ({
 
     // Loop through each non-view table to generate the SQL statements
     nonViewTables.forEach((table) => {
-        const tableName = table.schema
-            ? `${table.schema}.${table.name}`
-            : table.name;
+        const tableName = getQuotedTableName(table, isDBMLFlow);
         sqlScript += `CREATE TABLE ${tableName} (\n`;
 
         // Check for composite primary keys
@@ -465,12 +498,9 @@ export const exportBaseSQL = ({
                 return;
             }
 
-            const fkTableName = fkTable.schema
-                ? `${fkTable.schema}.${fkTable.name}`
-                : fkTable.name;
-            const refTableName = refTable.schema
-                ? `${refTable.schema}.${refTable.name}`
-                : refTable.name;
+            const fkTableName = getQuotedTableName(fkTable, isDBMLFlow);
+            const refTableName = getQuotedTableName(refTable, isDBMLFlow);
+
             sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${fkField.name}) REFERENCES ${refTableName} (${refField.name});\n`;
         }
     });

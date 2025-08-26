@@ -490,16 +490,21 @@ function extractForeignKeysFromCreateTable(
 
     const tableBody = tableBodyMatch[1];
 
-    // Pattern for inline REFERENCES - more flexible to handle various formats
+    // Pattern for inline REFERENCES - handles quoted and unquoted identifiers
     const inlineRefPattern =
-        /["']?(\w+)["']?\s+(?:\w+(?:\([^)]*\))?(?:\[[^\]]*\])?(?:\s+\w+)*\s+)?REFERENCES\s+(?:["']?(\w+)["']?\.)?["']?(\w+)["']?\s*\(\s*["']?(\w+)["']?\s*\)/gi;
+        /(?:"([^"]+)"|([^"\s,()]+))\s+(?:\w+(?:\([^)]*\))?(?:\[[^\]]*\])?(?:\s+\w+)*\s+)?REFERENCES\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s*\(\s*(?:"([^"]+)"|([^"\s,)]+))\s*\)/gi;
 
     let match;
     while ((match = inlineRefPattern.exec(tableBody)) !== null) {
-        const sourceColumn = match[1];
-        const targetSchema = match[2] || 'public';
-        const targetTable = match[3];
-        const targetColumn = match[4];
+        // Extract values from appropriate match groups
+        // Groups: 1=quoted source col, 2=unquoted source col,
+        //         3=quoted schema, 4=unquoted schema,
+        //         5=quoted target table, 6=unquoted target table,
+        //         7=quoted target col, 8=unquoted target col
+        const sourceColumn = match[1] || match[2];
+        const targetSchema = match[3] || match[4] || 'public';
+        const targetTable = match[5] || match[6];
+        const targetColumn = match[7] || match[8];
 
         const targetTableKey = `${targetSchema}.${targetTable}`;
         const targetTableId = tableMap[targetTableKey];
@@ -521,15 +526,16 @@ function extractForeignKeysFromCreateTable(
         }
     }
 
-    // Pattern for FOREIGN KEY constraints
+    // Pattern for FOREIGN KEY constraints - handles quoted and unquoted identifiers
     const fkConstraintPattern =
-        /FOREIGN\s+KEY\s*\(\s*["']?(\w+)["']?\s*\)\s*REFERENCES\s+(?:["']?(\w+)["']?\.)?["']?(\w+)["']?\s*\(\s*["']?(\w+)["']?\s*\)/gi;
+        /FOREIGN\s+KEY\s*\(\s*(?:"([^"]+)"|([^"\s,)]+))\s*\)\s*REFERENCES\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s*\(\s*(?:"([^"]+)"|([^"\s,)]+))\s*\)/gi;
 
     while ((match = fkConstraintPattern.exec(tableBody)) !== null) {
-        const sourceColumn = match[1];
-        const targetSchema = match[2] || 'public';
-        const targetTable = match[3];
-        const targetColumn = match[4];
+        // Extract values from appropriate match groups
+        const sourceColumn = match[1] || match[2];
+        const targetSchema = match[3] || match[4] || 'public';
+        const targetTable = match[5] || match[6];
+        const targetColumn = match[7] || match[8];
 
         const targetTableKey = `${targetSchema}.${targetTable}`;
         const targetTableId = tableMap[targetTableKey];
@@ -585,12 +591,16 @@ export async function fromPostgres(
                     ? stmt.sql.substring(createTableIndex)
                     : stmt.sql;
 
+            // Updated regex to properly handle quoted identifiers with special characters
+            // Matches: schema.table, "schema"."table", "schema".table, schema."table"
             const tableMatch = sqlFromCreate.match(
-                /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?/i
+                /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))/i
             );
             if (tableMatch) {
-                const schemaName = tableMatch[1] || 'public';
-                const tableName = tableMatch[2];
+                // Extract schema and table names from the appropriate match groups
+                // Groups: 1=quoted schema, 2=unquoted schema, 3=quoted table, 4=unquoted table
+                const schemaName = tableMatch[1] || tableMatch[2] || 'public';
+                const tableName = tableMatch[3] || tableMatch[4];
                 const tableKey = `${schemaName}.${tableName}`;
                 tableMap[tableKey] = generateId();
             }
@@ -938,12 +948,16 @@ export async function fromPostgres(
                     ? stmt.sql.substring(createTableIndex)
                     : stmt.sql;
 
+            // Updated regex to properly handle quoted identifiers with special characters
+            // Matches: schema.table, "schema"."table", "schema".table, schema."table"
             const tableMatch = sqlFromCreate.match(
-                /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?([^"\s.]+)"?\.)?["'`]?([^"'`\s.(]+)["'`]?/i
+                /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))/i
             );
             if (tableMatch) {
-                const schemaName = tableMatch[1] || 'public';
-                const tableName = tableMatch[2];
+                // Extract schema and table names from the appropriate match groups
+                // Groups: 1=quoted schema, 2=unquoted schema, 3=quoted table, 4=unquoted table
+                const schemaName = tableMatch[1] || tableMatch[2] || 'public';
+                const tableName = tableMatch[3] || tableMatch[4];
                 const tableKey = `${schemaName}.${tableName}`;
                 const tableId = tableMap[tableKey];
 
@@ -1130,18 +1144,22 @@ export async function fromPostgres(
         } else if (stmt.type === 'alter' && !stmt.parsed) {
             // Handle ALTER TABLE statements that failed to parse
             // Extract foreign keys using regex as fallback
+            // Updated regex to handle quoted identifiers properly
             const alterFKMatch = stmt.sql.match(
-                /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:"?([^"\s.]+)"?\.)?["']?([^"'\s.(]+)["']?\s+ADD\s+CONSTRAINT\s+["']?([^"'\s]+)["']?\s+FOREIGN\s+KEY\s*\(["']?([^"'\s)]+)["']?\)\s+REFERENCES\s+(?:"?([^"\s.]+)"?\.)?["']?([^"'\s.(]+)["']?\s*\(["']?([^"'\s)]+)["']?\)/i
+                /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s+ADD\s+CONSTRAINT\s+(?:"([^"]+)"|([^"\s]+))\s+FOREIGN\s+KEY\s*\((?:"([^"]+)"|([^"\s)]+))\)\s+REFERENCES\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s*\((?:"([^"]+)"|([^"\s)]+))\)/i
             );
 
             if (alterFKMatch) {
-                const sourceSchema = alterFKMatch[1] || 'public';
-                const sourceTable = alterFKMatch[2];
-                const constraintName = alterFKMatch[3];
-                const sourceColumn = alterFKMatch[4];
-                const targetSchema = alterFKMatch[5] || 'public';
-                const targetTable = alterFKMatch[6];
-                const targetColumn = alterFKMatch[7];
+                // Extract values from appropriate match groups
+                const sourceSchema =
+                    alterFKMatch[1] || alterFKMatch[2] || 'public';
+                const sourceTable = alterFKMatch[3] || alterFKMatch[4];
+                const constraintName = alterFKMatch[5] || alterFKMatch[6];
+                const sourceColumn = alterFKMatch[7] || alterFKMatch[8];
+                const targetSchema =
+                    alterFKMatch[9] || alterFKMatch[10] || 'public';
+                const targetTable = alterFKMatch[11] || alterFKMatch[12];
+                const targetColumn = alterFKMatch[13] || alterFKMatch[14];
 
                 const sourceTableId = getTableIdWithSchemaSupport(
                     tableMap,

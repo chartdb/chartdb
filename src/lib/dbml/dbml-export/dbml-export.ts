@@ -605,6 +605,23 @@ const fixTableBracketSyntax = (dbml: string): string => {
     );
 };
 
+// Fix table names that have been broken across multiple lines
+const fixMultilineTableNames = (dbml: string): string => {
+    // Match Table declarations that might have line breaks in the table name
+    // This regex captures:
+    // - Table keyword
+    // - Optional quoted schema with dot
+    // - Table name that might be broken across lines (until the opening brace)
+    return dbml.replace(
+        /Table\s+((?:"[^"]*"\.)?"[^"]*(?:\n[^"]*)*")\s*\{/g,
+        (match, tableName) => {
+            // Remove line breaks within the table name
+            const fixedTableName = tableName.replace(/\n\s*/g, '');
+            return `Table ${fixedTableName} {`;
+        }
+    );
+};
+
 // Restore composite primary key names in the DBML
 const restoreCompositePKNames = (dbml: string, tables: DBTable[]): string => {
     if (!tables || tables.length === 0) return dbml;
@@ -969,10 +986,12 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         }
 
         standard = normalizeCharTypeFormat(
-            fixTableBracketSyntax(
-                importer.import(
-                    baseScript,
-                    databaseTypeToImportFormat(diagram.databaseType)
+            fixMultilineTableNames(
+                fixTableBracketSyntax(
+                    importer.import(
+                        baseScript,
+                        databaseTypeToImportFormat(diagram.databaseType)
+                    )
                 )
             )
         );
