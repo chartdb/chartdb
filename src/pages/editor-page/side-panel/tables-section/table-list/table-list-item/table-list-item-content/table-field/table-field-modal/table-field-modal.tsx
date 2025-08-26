@@ -8,6 +8,7 @@ import type { FieldAttributeRange } from '@/lib/data/data-types/data-types';
 import {
     findDataTypeDataById,
     supportsAutoIncrementDataType,
+    supportsArrayDataType,
 } from '@/lib/data/data-types/data-types';
 import {
     Popover,
@@ -87,6 +88,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                 unique: localField.unique,
                 default: localField.default,
                 increment: localField.increment,
+                array: localField.array,
             });
         }
         prevFieldRef.current = localField;
@@ -100,6 +102,13 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     const supportsAutoIncrement = useMemo(
         () => supportsAutoIncrementDataType(field.type.name),
         [field.type.name]
+    );
+
+    const supportsArray = useMemo(
+        () =>
+            databaseType === 'postgresql' &&
+            supportsArrayDataType(field.type.name),
+        [field.type.name, databaseType]
     );
 
     return (
@@ -163,6 +172,27 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         setLocalField((current) => ({
                                             ...current,
                                             increment: !!value,
+                                        }))
+                                    }
+                                />
+                            </div>
+                        ) : null}
+                        {supportsArray ? (
+                            <div className="flex items-center justify-between">
+                                <Label
+                                    htmlFor="array"
+                                    className="text-subtitle"
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.field_actions.array'
+                                    )}
+                                </Label>
+                                <Checkbox
+                                    checked={localField.array ?? false}
+                                    onCheckedChange={(value) =>
+                                        setLocalField((current) => ({
+                                            ...current,
+                                            array: !!value,
                                         }))
                                     }
                                 />

@@ -29,6 +29,7 @@ export interface SQLColumn {
     comment?: string;
     default?: string;
     increment?: boolean;
+    array?: boolean;
 }
 
 export interface SQLTable {
@@ -612,6 +613,7 @@ export function convertToChartDBDiagram(
                 default: column.default || '',
                 createdAt: Date.now(),
                 increment: column.increment,
+                array: column.array,
             };
 
             // Add type arguments if present
