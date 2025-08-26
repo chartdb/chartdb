@@ -7,6 +7,10 @@ import {
     useUpdateNodeInternals,
 } from '@xyflow/react';
 import React, { useEffect, useMemo, useRef } from 'react';
+import {
+    LEFT_HANDLE_ID_PREFIX,
+    RIGHT_HANDLE_ID_PREFIX,
+} from './table-node-field';
 
 export const TOP_SOURCE_HANDLE_ID_PREFIX = 'top_dep_';
 export const BOTTOM_SOURCE_HANDLE_ID_PREFIX = 'bottom_dep_';
@@ -36,6 +40,22 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
             [connection, table.id]
         );
 
+        const isTargetFromTable = useMemo(
+            () =>
+                connection.inProgress &&
+                connection.fromNode.id !== table.id &&
+                (connection.fromHandle.id?.startsWith(RIGHT_HANDLE_ID_PREFIX) ||
+                    connection.fromHandle.id?.startsWith(
+                        LEFT_HANDLE_ID_PREFIX
+                    )),
+            [
+                connection.inProgress,
+                connection.fromNode?.id,
+                connection.fromHandle?.id,
+                table.id,
+            ]
+        );
+
         const numberOfEdgesToTable = useMemo(
             () =>
                 dependencies.filter(
@@ -58,12 +78,20 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
         return (
             <>
                 {table.isView || table.isMaterializedView ? (
-                    <Handle
-                        id={`${TOP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
-                        className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused ? '!invisible' : ''}`}
-                        position={Position.Top}
-                        type="source"
-                    />
+                    <>
+                        <Handle
+                            id={`${TOP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || isTargetFromTable ? '!invisible' : ''}`}
+                            position={Position.Top}
+                            type="source"
+                        />
+                        <Handle
+                            id={`${BOTTOM_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
+                            className={`!z-10 !h-4 !w-4 !border-2 !bg-pink-600 ${!focused || isTargetFromTable ? '!invisible' : ''}`}
+                            position={Position.Bottom}
+                            type="source"
+                        />
+                    </>
                 ) : null}
                 {Array.from(
                     { length: numberOfEdgesToTable },
@@ -82,7 +110,7 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
                         id={`${TARGET_DEP_PREFIX}${numberOfEdgesToTable}_${table.id}`}
                         className={
                             isTarget
-                                ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
+                                ? '!absolute !inset-0 !z-10 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
                                 : `!invisible`
                         }
                         position={Position.Top}
