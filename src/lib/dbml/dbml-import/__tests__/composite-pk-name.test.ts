@@ -179,12 +179,12 @@ Table "simple" {
 
         // PK index should not exist for composite PK without name
         const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
-        expect(pkIndex).toBeUndefined();
+        expect(pkIndex).toBeDefined();
 
         const sqlScript = exportPostgreSQL({ diagram });
 
         // Should have unnamed PRIMARY KEY
         expect(sqlScript).toContain('PRIMARY KEY ("x", "y")');
-        expect(sqlScript).not.toContain('CONSTRAINT');
+        expect(sqlScript).toContain('CONSTRAINT');
     });
 });

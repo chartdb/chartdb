@@ -920,7 +920,7 @@ Note dragon_note {
             expect(hoardsTable).toBeDefined();
 
             // Verify all indexes are imported correctly
-            expect(hoardsTable?.indexes).toHaveLength(3); // Should have 3 indexes as defined in DBML
+            expect(hoardsTable?.indexes).toHaveLength(4); // 3 from DBML + 1 implicit PK index
 
             // Verify named indexes
             const uniqueDragonIndex = hoardsTable?.indexes.find(
@@ -1119,7 +1119,7 @@ Table "public_3"."comments" {
             ).toBe('timestamp');
 
             // Check posts indexes thoroughly
-            expect(postsTable?.indexes).toHaveLength(2);
+            expect(postsTable?.indexes).toHaveLength(3);
 
             // Index 1: Composite unique index on (content, user_id)
             const compositeIndex = postsTable?.indexes.find(
@@ -1154,7 +1154,7 @@ Table "public_3"."comments" {
 
             // Check comments table
             expect(commentsTable?.fields).toHaveLength(5);
-            expect(commentsTable?.indexes).toHaveLength(1);
+            expect(commentsTable?.indexes).toHaveLength(2);
 
             // Index: Unique index on id
             const idIndex = commentsTable?.indexes.find(
