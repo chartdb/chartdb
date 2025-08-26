@@ -313,21 +313,33 @@ export const exportBaseSQL = ({
                 }
             }
 
-            // Handle PRIMARY KEY constraint - only add inline if not composite
-            if (field.primaryKey && !hasCompositePrimaryKey) {
+            // Handle PRIMARY KEY constraint - only add inline if no PK index with custom name
+            const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+            if (field.primaryKey && !hasCompositePrimaryKey && !pkIndex?.name) {
                 sqlScript += ' PRIMARY KEY';
             }
 
-            // Add a comma after each field except the last one (or before composite primary key)
-            if (index < table.fields.length - 1 || hasCompositePrimaryKey) {
+            // Add a comma after each field except the last one (or before PK constraint)
+            const needsPKConstraint =
+                hasCompositePrimaryKey ||
+                (primaryKeyFields.length === 1 && pkIndex?.name);
+            if (index < table.fields.length - 1 || needsPKConstraint) {
                 sqlScript += ',\n';
             }
         });
 
-        // Add composite primary key constraint if needed
-        if (hasCompositePrimaryKey) {
+        // Add primary key constraint if needed (for composite PKs or single PK with custom name)
+        const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+        if (
+            hasCompositePrimaryKey ||
+            (primaryKeyFields.length === 1 && pkIndex?.name)
+        ) {
             const pkFieldNames = primaryKeyFields.map((f) => f.name).join(', ');
-            sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
+            if (pkIndex?.name) {
+                sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
+            } else {
+                sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
+            }
         }
 
         sqlScript += '\n);\n';
@@ -349,12 +361,33 @@ export const exportBaseSQL = ({
 
         // Generate SQL for indexes
         table.indexes.forEach((index) => {
-            const fieldNames = index.fieldIds
-                .map(
-                    (fieldId) =>
-                        table.fields.find((field) => field.id === fieldId)?.name
+            // Skip the primary key index (it's already handled as a constraint)
+            if (index.isPrimaryKey) {
+                return;
+            }
+
+            // Get the fields for this index
+            const indexFields = index.fieldIds
+                .map((fieldId) => table.fields.find((f) => f.id === fieldId))
+                .filter(
+                    (field): field is NonNullable<typeof field> =>
+                        field !== undefined
+                );
+
+            // Skip if this index exactly matches the primary key fields
+            // This prevents creating redundant indexes for composite primary keys
+            if (
+                primaryKeyFields.length > 0 &&
+                primaryKeyFields.length === indexFields.length &&
+                primaryKeyFields.every((pk) =>
+                    indexFields.some((field) => field.id === pk.id)
                 )
-                .filter(Boolean)
+            ) {
+                return; // Skip this index as it's redundant with the primary key
+            }
+
+            const fieldNames = indexFields
+                .map((field) => field.name)
                 .join(', ');
 
             if (fieldNames) {

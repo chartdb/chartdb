@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Ellipsis, Trash2 } from 'lucide-react';
+import { Ellipsis, Trash2, KeyRound } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
     databaseIndexTypes,
@@ -106,29 +106,45 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     'side_panel.tables_section.table.no_types_found'
                 )}
                 keepOrder
+                disabled={index.isPrimaryKey ?? false}
             />
             <div className="flex shrink-0 gap-1">
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span>
-                            <TableIndexToggle
-                                pressed={index.unique}
-                                onPressedChange={(value) =>
-                                    updateIndex({
-                                        unique: !!value,
-                                    })
-                                }
-                            >
-                                U
-                            </TableIndexToggle>
-                        </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {t(
-                            'side_panel.tables_section.table.index_actions.unique'
-                        )}
-                    </TooltipContent>
-                </Tooltip>
+                {index.isPrimaryKey ? (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <TableIndexToggle pressed={true} disabled>
+                                    <KeyRound className="h-3.5" />
+                                </TableIndexToggle>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('side_panel.tables_section.table.primary_key')}
+                        </TooltipContent>
+                    </Tooltip>
+                ) : (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <TableIndexToggle
+                                    pressed={index.unique}
+                                    onPressedChange={(value) =>
+                                        updateIndex({
+                                            unique: !!value,
+                                        })
+                                    }
+                                >
+                                    U
+                                </TableIndexToggle>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t(
+                                'side_panel.tables_section.table.index_actions.unique'
+                            )}
+                        </TooltipContent>
+                    </Tooltip>
+                )}
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -164,52 +180,56 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     }
                                 />
                             </div>
-                            <div className="mt-2 flex items-center justify-between">
-                                <Label
-                                    htmlFor="width"
-                                    className="text-subtitle"
-                                >
-                                    {t(
-                                        'side_panel.tables_section.table.index_actions.unique'
-                                    )}
-                                </Label>
-                                <Checkbox
-                                    checked={index.unique}
-                                    onCheckedChange={(value) =>
-                                        updateIndex({
-                                            unique: !!value,
-                                        })
-                                    }
-                                />
-                            </div>
-                            {indexTypeOptions.length > 0 ? (
-                                <div className="mt-2 flex flex-col gap-2">
-                                    <Label
-                                        htmlFor="indexType"
-                                        className="text-subtitle"
+                            {!index.isPrimaryKey ? (
+                                <>
+                                    <div className="mt-2 flex items-center justify-between">
+                                        <Label
+                                            htmlFor="width"
+                                            className="text-subtitle"
+                                        >
+                                            {t(
+                                                'side_panel.tables_section.table.index_actions.unique'
+                                            )}
+                                        </Label>
+                                        <Checkbox
+                                            checked={index.unique}
+                                            onCheckedChange={(value) =>
+                                                updateIndex({
+                                                    unique: !!value,
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    {indexTypeOptions.length > 0 ? (
+                                        <div className="mt-2 flex flex-col gap-2">
+                                            <Label
+                                                htmlFor="indexType"
+                                                className="text-subtitle"
+                                            >
+                                                {t(
+                                                    'side_panel.tables_section.table.index_actions.index_type'
+                                                )}
+                                            </Label>
+                                            <SelectBox
+                                                options={indexTypeOptions}
+                                                value={index.type || 'btree'}
+                                                onChange={updateIndexType}
+                                            />
+                                        </div>
+                                    ) : null}
+                                    <Separator orientation="horizontal" />
+                                    <Button
+                                        variant="outline"
+                                        className="flex gap-2 !text-red-700"
+                                        onClick={removeIndex}
                                     >
+                                        <Trash2 className="size-3.5 text-red-700" />
                                         {t(
-                                            'side_panel.tables_section.table.index_actions.index_type'
+                                            'side_panel.tables_section.table.index_actions.delete_index'
                                         )}
-                                    </Label>
-                                    <SelectBox
-                                        options={indexTypeOptions}
-                                        value={index.type || 'btree'}
-                                        onChange={updateIndexType}
-                                    />
-                                </div>
+                                    </Button>
+                                </>
                             ) : null}
-                            <Separator orientation="horizontal" />
-                            <Button
-                                variant="outline"
-                                className="flex gap-2 !text-red-700"
-                                onClick={removeIndex}
-                            >
-                                <Trash2 className="size-3.5 text-red-700" />
-                                {t(
-                                    'side_panel.tables_section.table.index_actions.delete_index'
-                                )}
-                            </Button>
                         </div>
                     </PopoverContent>
                 </Popover>

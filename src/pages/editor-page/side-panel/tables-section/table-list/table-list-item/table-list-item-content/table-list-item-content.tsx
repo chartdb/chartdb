@@ -224,19 +224,27 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
-                        {table.indexes.map((index) => (
-                            <TableIndex
-                                key={index.id}
-                                index={index}
-                                removeIndex={() =>
-                                    removeIndex(table.id, index.id)
-                                }
-                                updateIndex={(attrs: Partial<DBIndex>) =>
-                                    updateIndex(table.id, index.id, attrs)
-                                }
-                                fields={table.fields}
-                            />
-                        ))}
+                        {[...table.indexes]
+                            .sort((a, b) => {
+                                // Sort PK indexes first
+                                if (a.isPrimaryKey && !b.isPrimaryKey)
+                                    return -1;
+                                if (!a.isPrimaryKey && b.isPrimaryKey) return 1;
+                                return 0;
+                            })
+                            .map((index) => (
+                                <TableIndex
+                                    key={index.id}
+                                    index={index}
+                                    removeIndex={() =>
+                                        removeIndex(table.id, index.id)
+                                    }
+                                    updateIndex={(attrs: Partial<DBIndex>) =>
+                                        updateIndex(table.id, index.id, attrs)
+                                    }
+                                    fields={table.fields}
+                                />
+                            ))}
                         <div className="flex justify-start p-1">
                             <Button
                                 variant="ghost"

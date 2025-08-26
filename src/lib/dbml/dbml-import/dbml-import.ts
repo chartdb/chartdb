@@ -9,7 +9,7 @@ import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
-import type { DBIndex } from '@/lib/domain';
+import { getTableIndexesWithPrimaryKey, type DBIndex } from '@/lib/domain';
 import {
     DBCustomTypeKind,
     type DBCustomType,
@@ -100,6 +100,7 @@ interface DBMLIndex {
     columns: (string | DBMLIndexColumn)[];
     unique?: boolean;
     name?: string;
+    pk?: boolean; // Primary key index flag
 }
 
 interface DBMLTable {
@@ -387,15 +388,19 @@ export const importDBMLToDiagram = async (
                                     );
                                 }
 
-                                // Generate a consistent index name
+                                // For PK indexes, only use the name if explicitly provided
+                                // For regular indexes, generate a default name if needed
                                 const indexName =
                                     dbmlIndex.name ||
-                                    `idx_${table.name}_${indexColumns.join('_')}`;
+                                    (!dbmlIndex.pk
+                                        ? `idx_${table.name}_${indexColumns.join('_')}`
+                                        : undefined);
 
                                 return {
                                     columns: indexColumns,
                                     unique: dbmlIndex.unique || false,
                                     name: indexName,
+                                    pk: Boolean(dbmlIndex.pk) || false,
                                 };
                             }) || [],
                     });
@@ -484,29 +489,126 @@ export const importDBMLToDiagram = async (
                 };
             });
 
-            // Convert DBML indexes to ChartDB indexes
-            const indexes: DBIndex[] =
-                table.indexes?.map((dbmlIndex) => {
-                    const fieldIds = dbmlIndex.columns.map((columnName) => {
-                        const field = fields.find((f) => f.name === columnName);
-                        if (!field) {
-                            throw new Error(
-                                `Index references non-existent column: ${columnName}`
-                            );
-                        }
-                        return field.id;
-                    });
+            // Process composite primary keys from indexes with [pk] attribute
+            let compositePKFields: string[] = [];
+            let compositePKIndexName: string | undefined;
 
-                    return {
-                        id: generateId(),
-                        name:
-                            dbmlIndex.name ||
-                            `idx_${table.name}_${(dbmlIndex.columns as string[]).join('_')}`,
-                        fieldIds,
-                        unique: dbmlIndex.unique || false,
-                        createdAt: Date.now(),
-                    };
-                }) || [];
+            // Find PK indexes and mark fields as primary keys
+            table.indexes?.forEach((dbmlIndex) => {
+                if (dbmlIndex.pk) {
+                    // Extract column names from the columns array
+                    compositePKFields = dbmlIndex.columns.map((col) =>
+                        typeof col === 'string' ? col : col.value
+                    );
+                    // Only store the name if it was explicitly provided (not undefined)
+                    if (dbmlIndex.name) {
+                        compositePKIndexName = dbmlIndex.name;
+                    }
+                    // Mark fields as primary keys
+                    dbmlIndex.columns.forEach((col) => {
+                        const columnName =
+                            typeof col === 'string' ? col : col.value;
+                        const field = fields.find((f) => f.name === columnName);
+                        if (field) {
+                            field.primaryKey = true;
+                        }
+                    });
+                }
+            });
+
+            // If we found a PK without a name, look for a duplicate index with just a name
+            if (compositePKFields.length > 0 && !compositePKIndexName) {
+                table.indexes?.forEach((dbmlIndex) => {
+                    if (
+                        !dbmlIndex.pk &&
+                        dbmlIndex.name &&
+                        dbmlIndex.columns.length === compositePKFields.length
+                    ) {
+                        // Check if columns match
+                        const indexColumns = dbmlIndex.columns.map((col) =>
+                            typeof col === 'string' ? col : col.value
+                        );
+                        if (
+                            indexColumns.every(
+                                (col, i) => col === compositePKFields[i]
+                            )
+                        ) {
+                            compositePKIndexName = dbmlIndex.name;
+                        }
+                    }
+                });
+            }
+
+            // Convert DBML indexes to ChartDB indexes (excluding PK indexes and their duplicates)
+            const indexes: DBIndex[] =
+                table.indexes
+                    ?.filter((dbmlIndex) => {
+                        // Skip PK indexes - we'll handle them separately
+                        if (dbmlIndex.pk) return false;
+
+                        // Skip duplicate indexes that match the composite PK
+                        // (when user has both [pk] and [name: "..."] on same fields)
+                        if (
+                            compositePKFields.length > 0 &&
+                            dbmlIndex.columns.length ===
+                                compositePKFields.length &&
+                            dbmlIndex.columns.every((col, i) => {
+                                const colName =
+                                    typeof col === 'string' ? col : col.value;
+                                return colName === compositePKFields[i];
+                            })
+                        ) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    .map((dbmlIndex) => {
+                        const fieldIds = dbmlIndex.columns.map((columnName) => {
+                            const field = fields.find(
+                                (f) => f.name === columnName
+                            );
+                            if (!field) {
+                                throw new Error(
+                                    `Index references non-existent column: ${columnName}`
+                                );
+                            }
+                            return field.id;
+                        });
+
+                        return {
+                            id: generateId(),
+                            name:
+                                dbmlIndex.name ||
+                                `idx_${table.name}_${(dbmlIndex.columns as string[]).join('_')}`,
+                            fieldIds,
+                            unique: dbmlIndex.unique || false,
+                            createdAt: Date.now(),
+                        };
+                    }) || [];
+
+            // Add PK as an index if it exists and has a name
+            // Only create the PK index if there's an explicit name for it
+            if (compositePKFields.length >= 1 && compositePKIndexName) {
+                const pkFieldIds = compositePKFields.map((columnName) => {
+                    const field = fields.find((f) => f.name === columnName);
+                    if (!field) {
+                        throw new Error(
+                            `PK references non-existent column: ${columnName}`
+                        );
+                    }
+                    return field.id;
+                });
+
+                indexes.push({
+                    id: generateId(),
+                    name: compositePKIndexName,
+                    fieldIds: pkFieldIds,
+                    unique: true,
+                    isPrimaryKey: true,
+                    createdAt: Date.now(),
+                });
+            }
 
             // Extract table note/comment
             let tableComment: string | undefined;
@@ -521,7 +623,7 @@ export const importDBMLToDiagram = async (
                 }
             }
 
-            return {
+            const tableToReturn: DBTable = {
                 id: generateId(),
                 name: table.name.replace(/['"]/g, ''),
                 schema:
@@ -540,6 +642,13 @@ export const importDBMLToDiagram = async (
                 createdAt: Date.now(),
                 comments: tableComment,
             } satisfies DBTable;
+
+            return {
+                ...tableToReturn,
+                indexes: getTableIndexesWithPrimaryKey({
+                    table: tableToReturn,
+                }),
+            };
         });
 
         // Create relationships using the refs
