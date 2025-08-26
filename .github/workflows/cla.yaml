@@ -7,7 +7,7 @@ on:
 
 permissions:
   actions: write
-  contents: write # this can be 'read' if the signatures are in remote repository
+  contents: read
   pull-requests: write
   statuses: write
 
