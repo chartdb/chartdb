@@ -112,17 +112,6 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         [createIndex, table.id, setSelectedItems]
     );
 
-    // Check if we should show the "Add Index" button
-    // Don't show it if there are PK fields without a PK index already
-    const shouldShowAddIndexButton = React.useMemo(() => {
-        const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
-        if (primaryKeyFields.length === 0) {
-            return true; // Always show when no PK fields
-        }
-        // For any PK fields (single or composite), only show if there's already a PK index
-        return table.indexes.some((idx) => idx.isPrimaryKey);
-    }, [table.fields, table.indexes]);
-
     const createFieldHandler = useCallback(
         (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.stopPropagation();
@@ -222,17 +211,15 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 {t('side_panel.tables_section.table.indexes')}
                             </div>
                             <div className="flex flex-row-reverse">
-                                {shouldShowAddIndexButton && (
-                                    <div className="hidden flex-row-reverse group-hover:flex">
-                                        <Button
-                                            variant="ghost"
-                                            className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                            onClick={createIndexHandler}
-                                        >
-                                            <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-                                        </Button>
-                                    </div>
-                                )}
+                                <div className="hidden flex-row-reverse group-hover:flex">
+                                    <Button
+                                        variant="ghost"
+                                        className="size-4 p-0 text-xs hover:bg-primary-foreground"
+                                        onClick={createIndexHandler}
+                                    >
+                                        <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </AccordionTrigger>
@@ -250,7 +237,6 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     key={index.id}
                                     index={index}
                                     removeIndex={() =>
-                                        !index.isPrimaryKey &&
                                         removeIndex(table.id, index.id)
                                     }
                                     updateIndex={(attrs: Partial<DBIndex>) =>
@@ -259,20 +245,16 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                     fields={table.fields}
                                 />
                             ))}
-                        {shouldShowAddIndexButton && (
-                            <div className="flex justify-start p-1">
-                                <Button
-                                    variant="ghost"
-                                    className="flex h-7 items-center gap-1 px-2 text-xs"
-                                    onClick={createIndexHandler}
-                                >
-                                    <Plus className="size-4 text-muted-foreground" />
-                                    {t(
-                                        'side_panel.tables_section.table.add_index'
-                                    )}
-                                </Button>
-                            </div>
-                        )}
+                        <div className="flex justify-start p-1">
+                            <Button
+                                variant="ghost"
+                                className="flex h-7 items-center gap-1 px-2 text-xs"
+                                onClick={createIndexHandler}
+                            >
+                                <Plus className="size-4 text-muted-foreground" />
+                                {t('side_panel.tables_section.table.add_index')}
+                            </Button>
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
 
@@ -317,16 +299,14 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 )}
 
                 <div className="flex gap-1">
-                    {shouldShowAddIndexButton && (
-                        <Button
-                            variant="outline"
-                            className="h-8 p-2 text-xs"
-                            onClick={createIndexHandler}
-                        >
-                            <FileKey2 className="h-4" />
-                            {t('side_panel.tables_section.table.add_index')}
-                        </Button>
-                    )}
+                    <Button
+                        variant="outline"
+                        className="h-8 p-2 text-xs"
+                        onClick={createIndexHandler}
+                    >
+                        <FileKey2 className="h-4" />
+                        {t('side_panel.tables_section.table.add_index')}
+                    </Button>
                     <Button
                         variant="outline"
                         className="h-8 p-2 text-xs"

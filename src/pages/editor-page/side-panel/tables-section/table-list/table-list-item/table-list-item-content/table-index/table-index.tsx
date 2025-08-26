@@ -180,7 +180,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                     }
                                 />
                             </div>
-                            {!index.isPrimaryKey && (
+                            {!index.isPrimaryKey ? (
                                 <>
                                     <div className="mt-2 flex items-center justify-between">
                                         <Label
@@ -229,7 +229,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                         )}
                                     </Button>
                                 </>
-                            )}
+                            ) : null}
                         </div>
                     </PopoverContent>
                 </Popover>

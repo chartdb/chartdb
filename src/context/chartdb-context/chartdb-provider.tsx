@@ -6,7 +6,10 @@ import type { ChartDBContext, ChartDBEvent } from './chartdb-context';
 import { chartDBContext } from './chartdb-context';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBField } from '@/lib/domain/db-field';
-import type { DBIndex } from '@/lib/domain/db-index';
+import {
+    getTableIndexesWithPrimaryKey,
+    type DBIndex,
+} from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
@@ -348,6 +351,11 @@ export const ChartDBProvider: React.FC<
                 order: tables.length,
                 ...attributes,
             };
+
+            table.indexes = getTableIndexesWithPrimaryKey({
+                table,
+            });
+
             await addTable(table);
 
             return table;
@@ -631,10 +639,6 @@ export const ChartDBProvider: React.FC<
         [getTable]
     );
 
-    // Placeholder for managePrimaryKeyIndex - will be defined after index functions
-    const managePrimaryKeyIndexRef =
-        React.useRef<(tableId: string) => Promise<void>>();
-
     const updateField: ChartDBContext['updateField'] = useCallback(
         async (
             tableId: string,
@@ -643,17 +647,30 @@ export const ChartDBProvider: React.FC<
             options = { updateHistory: true }
         ) => {
             const prevField = getField(tableId, fieldId);
+
+            const updateTableFn = (table: DBTable) => {
+                const updatedTable: DBTable = {
+                    ...table,
+                    fields: table.fields.map((f) =>
+                        f.id === fieldId ? { ...f, ...field } : f
+                    ),
+                } satisfies DBTable;
+
+                updatedTable.indexes = getTableIndexesWithPrimaryKey({
+                    table: updatedTable,
+                });
+
+                return updatedTable;
+            };
+
             setTables((tables) =>
-                tables.map((table) =>
-                    table.id === tableId
-                        ? {
-                              ...table,
-                              fields: table.fields.map((f) =>
-                                  f.id === fieldId ? { ...f, ...field } : f
-                              ),
-                          }
-                        : table
-                )
+                tables.map((table) => {
+                    if (table.id === tableId) {
+                        return updateTableFn(table);
+                    }
+
+                    return table;
+                })
             );
 
             const table = await db.getTable({ diagramId, id: tableId });
@@ -668,21 +685,10 @@ export const ChartDBProvider: React.FC<
                 db.updateTable({
                     id: tableId,
                     attributes: {
-                        ...table,
-                        fields: table.fields.map((f) =>
-                            f.id === fieldId ? { ...f, ...field } : f
-                        ),
+                        ...updateTableFn(table),
                     },
                 }),
             ]);
-
-            // Manage PK index if primary key status changed
-            if (
-                field.primaryKey !== undefined &&
-                field.primaryKey !== prevField?.primaryKey
-            ) {
-                await managePrimaryKeyIndexRef.current?.(tableId);
-            }
 
             if (!!prevField && options.updateHistory) {
                 addUndoAction({
@@ -706,19 +712,29 @@ export const ChartDBProvider: React.FC<
             fieldId: string,
             options = { updateHistory: true }
         ) => {
+            const updateTableFn = (table: DBTable) => {
+                const updatedTable: DBTable = {
+                    ...table,
+                    fields: table.fields.filter((f) => f.id !== fieldId),
+                } satisfies DBTable;
+
+                updatedTable.indexes = getTableIndexesWithPrimaryKey({
+                    table: updatedTable,
+                });
+
+                return updatedTable;
+            };
+
             const fields = getTable(tableId)?.fields ?? [];
             const prevField = getField(tableId, fieldId);
             setTables((tables) =>
-                tables.map((table) =>
-                    table.id === tableId
-                        ? {
-                              ...table,
-                              fields: table.fields.filter(
-                                  (f) => f.id !== fieldId
-                              ),
-                          }
-                        : table
-                )
+                tables.map((table) => {
+                    if (table.id === tableId) {
+                        return updateTableFn(table);
+                    }
+
+                    return table;
+                })
             );
 
             events.emit({
@@ -742,16 +758,10 @@ export const ChartDBProvider: React.FC<
                 db.updateTable({
                     id: tableId,
                     attributes: {
-                        ...table,
-                        fields: table.fields.filter((f) => f.id !== fieldId),
+                        ...updateTableFn(table),
                     },
                 }),
             ]);
-
-            // Manage PK index if a primary key field was removed
-            if (prevField?.primaryKey) {
-                await managePrimaryKeyIndexRef.current?.(tableId);
-            }
 
             if (!!prevField && options.updateHistory) {
                 addUndoAction({
@@ -1042,67 +1052,6 @@ export const ChartDBProvider: React.FC<
         },
         [db, diagramId, setTables, addUndoAction, resetRedoStack, getIndex]
     );
-
-    // Helper function to manage PK index automatically
-    const managePrimaryKeyIndex = useCallback(
-        async (tableId: string) => {
-            const table = getTable(tableId);
-            if (!table) return;
-
-            const primaryKeyFields = table.fields.filter((f) => f.primaryKey);
-            const existingPKIndex = table.indexes.find(
-                (idx) => idx.isPrimaryKey
-            );
-
-            // If no primary key fields, remove the PK index if it exists
-            if (primaryKeyFields.length === 0) {
-                if (existingPKIndex) {
-                    await removeIndex(tableId, existingPKIndex.id, {
-                        updateHistory: false,
-                    });
-                }
-                return;
-            }
-
-            // For any primary keys (1 or more fields)
-            if (primaryKeyFields.length >= 1) {
-                const pkFieldIds = primaryKeyFields.map((f) => f.id);
-
-                if (existingPKIndex) {
-                    // Update existing PK index if fields changed
-                    const fieldsChanged =
-                        existingPKIndex.fieldIds.length !== pkFieldIds.length ||
-                        !existingPKIndex.fieldIds.every((id) =>
-                            pkFieldIds.includes(id)
-                        );
-
-                    if (fieldsChanged) {
-                        await updateIndex(
-                            tableId,
-                            existingPKIndex.id,
-                            { fieldIds: pkFieldIds },
-                            { updateHistory: false }
-                        );
-                    }
-                } else {
-                    // Create new PK index for primary key(s)
-                    const pkIndex: DBIndex = {
-                        id: generateId(),
-                        name: `pk_${table.name}_${primaryKeyFields.map((f) => f.name).join('_')}`,
-                        fieldIds: pkFieldIds,
-                        unique: true,
-                        isPrimaryKey: true,
-                        createdAt: Date.now(),
-                    };
-                    await addIndex(tableId, pkIndex, { updateHistory: false });
-                }
-            }
-        },
-        [getTable, addIndex, updateIndex, removeIndex]
-    );
-
-    // Assign the function to the ref
-    managePrimaryKeyIndexRef.current = managePrimaryKeyIndex;
 
     const addRelationships: ChartDBContext['addRelationships'] = useCallback(
         async (
