@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.15.0](https://github.com/chartdb/chartdb/compare/v1.14.0...v1.15.0) (2025-08-26)
+
+
+### Features
+
+* add auto increment support for fields with database-specific export ([#851](https://github.com/chartdb/chartdb/issues/851)) ([c77c983](https://github.com/chartdb/chartdb/commit/c77c983989ae38a6b1139dd9015f4f3178d4e103))
+* **filter:** filter tables by areas ([#836](https://github.com/chartdb/chartdb/issues/836)) ([e9c5442](https://github.com/chartdb/chartdb/commit/e9c5442d9df2beadad78187da3363bb6406636c4))
+* include foreign keys inline in SQLite CREATE TABLE statements ([#833](https://github.com/chartdb/chartdb/issues/833)) ([43fc1d7](https://github.com/chartdb/chartdb/commit/43fc1d7fc26876b22c61405f6c3df89fc66b7992))
+* **postgres:** add support hash index types ([#812](https://github.com/chartdb/chartdb/issues/812)) ([0d623a8](https://github.com/chartdb/chartdb/commit/0d623a86b1cb7cbd223e10ad23d09fc0e106c006))
+* support create views ([#868](https://github.com/chartdb/chartdb/issues/868)) ([0a5874a](https://github.com/chartdb/chartdb/commit/0a5874a69b6323145430c1fb4e3482ac7da4916c))
+
+
+### Bug Fixes
+
+* area filter logic ([#861](https://github.com/chartdb/chartdb/issues/861)) ([73daf0d](https://github.com/chartdb/chartdb/commit/73daf0df2142a29c2eeebe60b43198bcca869026))
+* **area filter:** fix dragging tables over filtered areas ([#842](https://github.com/chartdb/chartdb/issues/842)) ([19fd94c](https://github.com/chartdb/chartdb/commit/19fd94c6bde3a9ec749cd1ccacbedb6abc96d037))
+* **canvas:** delete table + area together bug ([#859](https://github.com/chartdb/chartdb/issues/859)) ([b697e26](https://github.com/chartdb/chartdb/commit/b697e26170da95dcb427ff6907b6f663c98ba59f))
+* **cla:** Harden action ([#867](https://github.com/chartdb/chartdb/issues/867)) ([ad8e344](https://github.com/chartdb/chartdb/commit/ad8e34483fdf4226de76c9e7768bc2ba9bf154de))
+* DBML export error with multi-line table comments for SQL Server ([#852](https://github.com/chartdb/chartdb/issues/852)) ([0545b41](https://github.com/chartdb/chartdb/commit/0545b411407b2449220d10981a04c3e368a90ca3))
+* filter to default schema on load new diagram ([#849](https://github.com/chartdb/chartdb/issues/849)) ([712bdf5](https://github.com/chartdb/chartdb/commit/712bdf5b958919d940c4f2a1c3b7c7e969990f02))
+* **filter:** filter toggle issues with no schemas dbs ([#856](https://github.com/chartdb/chartdb/issues/856)) ([d0dee84](https://github.com/chartdb/chartdb/commit/d0dee849702161d979b4f589a7e6579fbaade22d))
+* **filters:** refactor diagram filters - remove schema filter ([#832](https://github.com/chartdb/chartdb/issues/832)) ([4f1d329](https://github.com/chartdb/chartdb/commit/4f1d3295c09782ab46d82ce21b662032aa094f22))
+* for sqlite import - add more types & include type parameters ([#834](https://github.com/chartdb/chartdb/issues/834)) ([5936500](https://github.com/chartdb/chartdb/commit/5936500ca00a57b3f161616264c26152a13c36d2))
+* improve creating view to table dependency ([#874](https://github.com/chartdb/chartdb/issues/874)) ([44be48f](https://github.com/chartdb/chartdb/commit/44be48ff3ad1361279331c17364090b13af471a1))
+* initially show filter when filter active ([#853](https://github.com/chartdb/chartdb/issues/853)) ([ab4845c](https://github.com/chartdb/chartdb/commit/ab4845c7728e6e0b2d852f8005921fd90630eef9))
+* **menu:** clear file menu ([#843](https://github.com/chartdb/chartdb/issues/843)) ([eaebe34](https://github.com/chartdb/chartdb/commit/eaebe3476824af779214a354b3e991923a22f195))
+* merge relationship & dependency sections to ref section ([#870](https://github.com/chartdb/chartdb/issues/870)) ([ec3719e](https://github.com/chartdb/chartdb/commit/ec3719ebce4664b2aa6e3322fb3337e72bc21015))
+* move dbml into sections menu ([#862](https://github.com/chartdb/chartdb/issues/862)) ([2531a70](https://github.com/chartdb/chartdb/commit/2531a7023f36ef29e67c0da6bca4fd0346b18a51))
+* open filter by default ([#863](https://github.com/chartdb/chartdb/issues/863)) ([7e0fdd1](https://github.com/chartdb/chartdb/commit/7e0fdd1595bffe29e769d29602d04f42edfe417e))
+* preserve composite primary key constraint names across import/export workflows ([#869](https://github.com/chartdb/chartdb/issues/869)) ([215d579](https://github.com/chartdb/chartdb/commit/215d57979df2e91fa61988acff590daad2f4e771))
+* prevent false change detection in DBML editor by stripping public schema on import ([#858](https://github.com/chartdb/chartdb/issues/858)) ([0aaa451](https://github.com/chartdb/chartdb/commit/0aaa451479911d047e4cc83f063afa68a122ba9b))
+* remove unnecessary space ([#845](https://github.com/chartdb/chartdb/issues/845)) ([f1a4298](https://github.com/chartdb/chartdb/commit/f1a429836221aacdda73b91665bf33ffb011164c))
+* reorder with areas ([#846](https://github.com/chartdb/chartdb/issues/846)) ([d7c9536](https://github.com/chartdb/chartdb/commit/d7c9536272cf1d42104b7064ea448d128d091a20))
+* **select-box:** fix select box issue in dialog ([#840](https://github.com/chartdb/chartdb/issues/840)) ([cb2ba66](https://github.com/chartdb/chartdb/commit/cb2ba66233c8c04e2d963cf2d210499d8512a268))
+* set default filter only if has more than 1 schemas ([#855](https://github.com/chartdb/chartdb/issues/855)) ([b4ccfcd](https://github.com/chartdb/chartdb/commit/b4ccfcdcde2f3565b0d3bbc46fa1715feb6cd925))
+* show default schema first ([#854](https://github.com/chartdb/chartdb/issues/854)) ([1759b0b](https://github.com/chartdb/chartdb/commit/1759b0b9f271ed25f7c71f26c344e3f1d97bc5fb))
+* **sidebar:** add titles to sidebar ([#844](https://github.com/chartdb/chartdb/issues/844)) ([b8f2141](https://github.com/chartdb/chartdb/commit/b8f2141bd2e67272030896fb4009a7925f9f09e4))
+* **sql-import:** fix SQL Server foreign key parsing for tables without schema prefix ([#857](https://github.com/chartdb/chartdb/issues/857)) ([04d91c6](https://github.com/chartdb/chartdb/commit/04d91c67b1075e94948f75186878e633df7abbca))
+* **table colors:** switch to default table color ([#841](https://github.com/chartdb/chartdb/issues/841)) ([0da3cae](https://github.com/chartdb/chartdb/commit/0da3caeeac37926dd22f38d98423611f39c0412a))
+* update filter on adding table ([#838](https://github.com/chartdb/chartdb/issues/838)) ([41ba251](https://github.com/chartdb/chartdb/commit/41ba25137789dda25266178cd7c96ecbb37e62a4))
+
 ## [1.14.0](https://github.com/chartdb/chartdb/compare/v1.13.2...v1.14.0) (2025-08-04)
 
 
