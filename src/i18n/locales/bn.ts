@@ -12,8 +12,8 @@ export const bn: LanguageTranslation = {
             custom_types: 'কাস্টম টাইপ',
         },
         menu: {
-            databases: {
-                databases: 'ডাটাবেস',
+            actions: {
+                actions: 'কার্য',
                 new: 'নতুন ডায়াগ্রাম',
                 browse: 'ব্রাউজ করুন...',
                 save: 'সংরক্ষণ করুন',
@@ -325,6 +325,12 @@ export const bn: LanguageTranslation = {
             },
             cancel: 'বাতিল করুন',
             open: 'খুলুন',
+
+            diagram_actions: {
+                open: 'খুলুন',
+                duplicate: 'ডুপ্লিকেট',
+                delete: 'ডায়াগ্রাম মুছুন',
+            },
         },
 
         export_sql_dialog: {

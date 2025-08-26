@@ -12,8 +12,8 @@ export const tr: LanguageTranslation = {
             custom_types: 'Özel Tipler',
         },
         menu: {
-            databases: {
-                databases: 'Veritabanları',
+            actions: {
+                actions: 'Eylemler',
                 new: 'Yeni Diyagram',
                 browse: 'Gözat...',
                 save: 'Kaydet',
@@ -322,6 +322,12 @@ export const tr: LanguageTranslation = {
             },
             cancel: 'İptal',
             open: 'Aç',
+
+            diagram_actions: {
+                open: 'Aç',
+                duplicate: 'Kopyala',
+                delete: 'Diyagramı Sil',
+            },
         },
 
         export_sql_dialog: {

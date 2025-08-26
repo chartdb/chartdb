@@ -12,8 +12,8 @@ export const fr: LanguageTranslation = {
             custom_types: 'Types Personnalisés',
         },
         menu: {
-            databases: {
-                databases: 'Bases de Données',
+            actions: {
+                actions: 'Actions',
                 new: 'Nouveau Diagramme',
                 browse: 'Parcourir...',
                 save: 'Enregistrer',
@@ -323,6 +323,12 @@ export const fr: LanguageTranslation = {
             },
             cancel: 'Annuler',
             open: 'Ouvrir',
+
+            diagram_actions: {
+                open: 'Ouvrir',
+                duplicate: 'Dupliquer',
+                delete: 'Supprimer le diagramme',
+            },
         },
 
         export_sql_dialog: {

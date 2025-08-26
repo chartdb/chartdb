@@ -12,8 +12,8 @@ export const en = {
             custom_types: 'Custom Types',
         },
         menu: {
-            databases: {
-                databases: 'Databases',
+            actions: {
+                actions: 'Actions',
                 new: 'New Diagram',
                 browse: 'Browse...',
                 save: 'Save',
@@ -316,6 +316,12 @@ export const en = {
             },
             cancel: 'Cancel',
             open: 'Open',
+
+            diagram_actions: {
+                open: 'Open',
+                duplicate: 'Duplicate',
+                delete: 'Delete Diagram',
+            },
         },
 
         export_sql_dialog: {

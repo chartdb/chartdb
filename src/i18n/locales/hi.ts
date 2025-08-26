@@ -12,8 +12,8 @@ export const hi: LanguageTranslation = {
             custom_types: 'कस्टम टाइप',
         },
         menu: {
-            databases: {
-                databases: 'डेटाबेस',
+            actions: {
+                actions: 'कार्य',
                 new: 'नया आरेख',
                 browse: 'ब्राउज़ करें...',
                 save: 'सहेजें',
@@ -327,6 +327,12 @@ export const hi: LanguageTranslation = {
             },
             cancel: 'रद्द करें',
             open: 'खोलें',
+
+            diagram_actions: {
+                open: 'खोलें',
+                duplicate: 'डुप्लिकेट',
+                delete: 'डायग्राम हटाएं',
+            },
         },
 
         export_sql_dialog: {

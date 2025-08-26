@@ -12,8 +12,8 @@ export const ja: LanguageTranslation = {
             custom_types: 'カスタムタイプ',
         },
         menu: {
-            databases: {
-                databases: 'データベース',
+            actions: {
+                actions: 'アクション',
                 new: '新しいダイアグラム',
                 browse: '参照...',
                 save: '保存',
@@ -329,6 +329,12 @@ export const ja: LanguageTranslation = {
             },
             cancel: 'キャンセル',
             open: '開く',
+
+            diagram_actions: {
+                open: '開く',
+                duplicate: '複製',
+                delete: 'ダイアグラムを削除',
+            },
         },
 
         export_sql_dialog: {

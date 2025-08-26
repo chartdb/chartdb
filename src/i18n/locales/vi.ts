@@ -12,8 +12,8 @@ export const vi: LanguageTranslation = {
             custom_types: 'Kiểu tùy chỉnh',
         },
         menu: {
-            databases: {
-                databases: 'Cơ sở dữ liệu',
+            actions: {
+                actions: 'Hành động',
                 new: 'Sơ đồ mới',
                 browse: 'Duyệt...',
                 save: 'Lưu',
@@ -324,6 +324,12 @@ export const vi: LanguageTranslation = {
             },
             cancel: 'Hủy',
             open: 'Mở',
+
+            diagram_actions: {
+                open: 'Mở',
+                duplicate: 'Nhân bản',
+                delete: 'Xóa sơ đồ',
+            },
         },
 
         export_sql_dialog: {

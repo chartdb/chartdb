@@ -12,8 +12,8 @@ export const te: LanguageTranslation = {
             custom_types: 'కస్టమ్ టైప్స్',
         },
         menu: {
-            databases: {
-                databases: 'డేటాబేస్లు',
+            actions: {
+                actions: 'చర్యలు',
                 new: 'కొత్త డైగ్రాం',
                 browse: 'బ్రాఉజ్ చేయండి...',
                 save: 'సేవ్',
@@ -327,6 +327,12 @@ export const te: LanguageTranslation = {
             },
             cancel: 'రద్దు',
             open: 'తెరవు',
+
+            diagram_actions: {
+                open: 'తెరవు',
+                duplicate: 'నకలు',
+                delete: 'డైగ్రామ్ తొలగించు',
+            },
         },
 
         export_sql_dialog: {

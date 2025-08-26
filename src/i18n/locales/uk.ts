@@ -12,8 +12,8 @@ export const uk: LanguageTranslation = {
             custom_types: 'Користувацькі типи',
         },
         menu: {
-            databases: {
-                databases: 'Бази даних',
+            actions: {
+                actions: 'Дії',
                 new: 'Нова діаграма',
                 browse: 'Огляд...',
                 save: 'Зберегти',
@@ -324,6 +324,12 @@ export const uk: LanguageTranslation = {
             },
             cancel: 'Скасувати',
             open: 'Відкрити',
+
+            diagram_actions: {
+                open: 'Відкрити',
+                duplicate: 'Дублювати',
+                delete: 'Видалити діаграму',
+            },
         },
 
         export_sql_dialog: {

@@ -12,8 +12,8 @@ export const de: LanguageTranslation = {
             custom_types: 'Benutzerdefinierte Typen',
         },
         menu: {
-            databases: {
-                databases: 'Datenbanken',
+            actions: {
+                actions: 'Aktionen',
                 new: 'Neues Diagramm',
                 browse: 'Durchsuchen...',
                 save: 'Speichern',
@@ -328,6 +328,12 @@ export const de: LanguageTranslation = {
             },
             cancel: 'Abbrechen',
             open: 'Öffnen',
+
+            diagram_actions: {
+                open: 'Öffnen',
+                duplicate: 'Duplizieren',
+                delete: 'Diagramm löschen',
+            },
         },
 
         export_sql_dialog: {

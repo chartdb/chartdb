@@ -12,8 +12,8 @@ export const ru: LanguageTranslation = {
             custom_types: 'Пользовательские типы',
         },
         menu: {
-            databases: {
-                databases: 'Базы данных',
+            actions: {
+                actions: 'Действия',
                 new: 'Новая диаграмма',
                 browse: 'Обзор...',
                 save: 'Сохранить',
@@ -323,6 +323,12 @@ export const ru: LanguageTranslation = {
             },
             cancel: 'Отмена',
             open: 'Открыть',
+
+            diagram_actions: {
+                open: 'Открыть',
+                duplicate: 'Дублировать',
+                delete: 'Удалить диаграмму',
+            },
         },
 
         export_sql_dialog: {

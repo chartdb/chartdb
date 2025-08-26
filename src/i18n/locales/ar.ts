@@ -12,8 +12,8 @@ export const ar: LanguageTranslation = {
             custom_types: 'الأنواع المخصصة',
         },
         menu: {
-            databases: {
-                databases: 'قواعد البيانات',
+            actions: {
+                actions: 'الإجراءات',
                 new: 'مخطط جديد',
                 browse: 'تصفح...',
                 save: 'حفظ',
@@ -323,6 +323,12 @@ export const ar: LanguageTranslation = {
             },
             cancel: 'إلغاء',
             open: 'فتح',
+
+            diagram_actions: {
+                open: 'فتح',
+                duplicate: 'تكرار',
+                delete: 'حذف الرسم التخطيطي',
+            },
         },
 
         export_sql_dialog: {
