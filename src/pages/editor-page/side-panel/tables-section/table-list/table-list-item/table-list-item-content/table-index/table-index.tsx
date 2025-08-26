@@ -106,7 +106,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                     'side_panel.tables_section.table.no_types_found'
                 )}
                 keepOrder
-                disabled={index.isPrimaryKey}
+                disabled={index.isPrimaryKey ?? false}
             />
             <div className="flex shrink-0 gap-1">
                 {index.isPrimaryKey ? (
