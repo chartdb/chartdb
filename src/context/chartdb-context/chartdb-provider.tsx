@@ -325,9 +325,20 @@ export const ChartDBProvider: React.FC<
 
     const createTable: ChartDBContext['createTable'] = useCallback(
         async (attributes) => {
+            const isView = attributes?.isView || false;
+            let name: string;
+
+            if (isView) {
+                const viewCount = tables.filter((t) => t.isView).length;
+                name = `view_${viewCount + 1}`;
+            } else {
+                const tableCount = tables.filter((t) => !t.isView).length;
+                name = `table_${tableCount + 1}`;
+            }
+
             const table: DBTable = {
                 id: generateId(),
-                name: `table_${tables.length + 1}`,
+                name,
                 x: 0,
                 y: 0,
                 fields: [
