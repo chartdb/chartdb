@@ -12,8 +12,8 @@ export const zh_TW: LanguageTranslation = {
             custom_types: '自定義類型',
         },
         menu: {
-            databases: {
-                databases: '資料庫',
+            actions: {
+                actions: '操作',
                 new: '新增圖表',
                 browse: '瀏覽...',
                 save: '儲存',
@@ -320,6 +320,12 @@ export const zh_TW: LanguageTranslation = {
             },
             cancel: '取消',
             open: '開啟',
+
+            diagram_actions: {
+                open: '開啟',
+                duplicate: '複製',
+                delete: '刪除圖表',
+            },
         },
 
         export_sql_dialog: {

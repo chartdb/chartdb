@@ -12,8 +12,8 @@ export const ne: LanguageTranslation = {
             custom_types: 'कस्टम प्रकारहरू',
         },
         menu: {
-            databases: {
-                databases: 'डाटाबेसहरू',
+            actions: {
+                actions: 'कार्यहरू',
                 new: 'नयाँ डायाग्राम',
                 browse: 'ब्राउज गर्नुहोस्...',
                 save: 'सुरक्षित गर्नुहोस्',
@@ -327,6 +327,12 @@ export const ne: LanguageTranslation = {
             },
             cancel: 'रद्द गर्नुहोस्',
             open: 'खोल्नुहोस्',
+
+            diagram_actions: {
+                open: 'खोल्नुहोस्',
+                duplicate: 'डुप्लिकेट',
+                delete: 'डायग्राम मेटाउनुहोस्',
+            },
         },
 
         export_sql_dialog: {

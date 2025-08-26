@@ -12,8 +12,8 @@ export const zh_CN: LanguageTranslation = {
             custom_types: '自定义类型',
         },
         menu: {
-            databases: {
-                databases: '数据库',
+            actions: {
+                actions: '操作',
                 new: '新建关系图',
                 browse: '浏览...',
                 save: '保存',
@@ -321,6 +321,12 @@ export const zh_CN: LanguageTranslation = {
             },
             cancel: '取消',
             open: '打开',
+
+            diagram_actions: {
+                open: '打开',
+                duplicate: '复制',
+                delete: '删除图表',
+            },
         },
 
         export_sql_dialog: {

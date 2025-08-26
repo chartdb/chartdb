@@ -12,8 +12,8 @@ export const ko_KR: LanguageTranslation = {
             custom_types: '사용자 지정 타입',
         },
         menu: {
-            databases: {
-                databases: '데이터베이스',
+            actions: {
+                actions: '작업',
                 new: '새 다이어그램',
                 browse: '찾아보기...',
                 save: '저장',
@@ -324,6 +324,12 @@ export const ko_KR: LanguageTranslation = {
             },
             cancel: '취소',
             open: '열기',
+
+            diagram_actions: {
+                open: '열기',
+                duplicate: '복제',
+                delete: '다이어그램 삭제',
+            },
         },
 
         export_sql_dialog: {

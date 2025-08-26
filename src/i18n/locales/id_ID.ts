@@ -12,8 +12,8 @@ export const id_ID: LanguageTranslation = {
             custom_types: 'Tipe Kustom',
         },
         menu: {
-            databases: {
-                databases: 'Basis Data',
+            actions: {
+                actions: 'Aksi',
                 new: 'Diagram Baru',
                 browse: 'Jelajahi...',
                 save: 'Simpan',
@@ -324,6 +324,12 @@ export const id_ID: LanguageTranslation = {
             },
             cancel: 'Batal',
             open: 'Buka',
+
+            diagram_actions: {
+                open: 'Buka',
+                duplicate: 'Duplikat',
+                delete: 'Hapus Diagram',
+            },
         },
 
         export_sql_dialog: {

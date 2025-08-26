@@ -12,8 +12,8 @@ export const hr: LanguageTranslation = {
             custom_types: 'Prilagođeni Tipovi',
         },
         menu: {
-            databases: {
-                databases: 'Baze Podataka',
+            actions: {
+                actions: 'Akcije',
                 new: 'Novi Dijagram',
                 browse: 'Pregledaj...',
                 save: 'Spremi',
@@ -320,6 +320,12 @@ export const hr: LanguageTranslation = {
             },
             cancel: 'Odustani',
             open: 'Otvori',
+
+            diagram_actions: {
+                open: 'Otvori',
+                duplicate: 'Dupliciraj',
+                delete: 'Obriši dijagram',
+            },
         },
 
         export_sql_dialog: {

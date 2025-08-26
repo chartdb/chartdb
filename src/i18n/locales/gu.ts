@@ -12,8 +12,8 @@ export const gu: LanguageTranslation = {
             custom_types: 'કસ્ટમ ટાઇપ',
         },
         menu: {
-            databases: {
-                databases: 'ડેટાબેસેસ',
+            actions: {
+                actions: 'ક્રિયાઓ',
                 new: 'નવું ડાયાગ્રામ',
                 browse: 'બ્રાઉજ કરો...',
                 save: 'સાચવો',
@@ -325,6 +325,12 @@ export const gu: LanguageTranslation = {
             },
             cancel: 'રદ કરો',
             open: 'ખોલો',
+
+            diagram_actions: {
+                open: 'ખોલો',
+                duplicate: 'ડુપ્લિકેટ',
+                delete: 'ડાયાગ્રામ કાઢી નાખો',
+            },
         },
 
         export_sql_dialog: {

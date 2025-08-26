@@ -12,8 +12,8 @@ export const mr: LanguageTranslation = {
             custom_types: 'कस्टम प्रकार',
         },
         menu: {
-            databases: {
-                databases: 'डेटाबेस',
+            actions: {
+                actions: 'क्रिया',
                 new: 'नवीन आरेख',
                 browse: 'ब्राउज करा...',
                 save: 'जतन करा',
@@ -330,6 +330,12 @@ export const mr: LanguageTranslation = {
             },
             cancel: 'रद्द करा',
             open: 'उघडा',
+
+            diagram_actions: {
+                open: 'उघडा',
+                duplicate: 'डुप्लिकेट',
+                delete: 'आरेख हटवा',
+            },
         },
 
         export_sql_dialog: {
