@@ -33,6 +33,10 @@ import { useClickAway, useKeyPressEvent } from 'react-use';
 import { Input } from '@/components/input/input';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import {
+    BOTTOM_SOURCE_HANDLE_ID_PREFIX,
+    TOP_SOURCE_HANDLE_ID_PREFIX,
+} from './table-node-dependency-indicator';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -102,6 +106,24 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 tableNodeId,
             ]
         );
+        const isTargetFromView = useMemo(
+            () =>
+                connection.inProgress &&
+                connection.fromNode.id !== tableNodeId &&
+                (connection.fromHandle.id?.startsWith(
+                    TOP_SOURCE_HANDLE_ID_PREFIX
+                ) ||
+                    connection.fromHandle.id?.startsWith(
+                        BOTTOM_SOURCE_HANDLE_ID_PREFIX
+                    )),
+            [
+                connection.inProgress,
+                connection.fromNode?.id,
+                connection.fromHandle?.id,
+                tableNodeId,
+            ]
+        );
+
         const numberOfEdgesToField = useMemo(() => {
             let count = 0;
             for (const rel of relationships) {
@@ -289,13 +311,13 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     <>
                         <Handle
                             id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}
-                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly ? '!invisible' : ''}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly || isTargetFromView ? '!invisible' : ''}`}
                             position={Position.Right}
                             type="source"
                         />
                         <Handle
                             id={`${LEFT_HANDLE_ID_PREFIX}${field.id}`}
-                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly ? '!invisible' : ''}`}
+                            className={`!h-4 !w-4 !border-2 !bg-pink-600 ${!focused || readonly || isTargetFromView ? '!invisible' : ''}`}
                             position={Position.Left}
                             type="source"
                         />

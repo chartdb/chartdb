@@ -6,7 +6,7 @@ import React, {
     useEffect,
 } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
-import { NodeResizer, useStore } from '@xyflow/react';
+import { NodeResizer, useConnection, useStore } from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
     ChevronsLeftRight,
@@ -79,6 +79,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [tableName, setTableName] = useState(table.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
         const [isHovering, setIsHovering] = useState(false);
+
+        const connection = useConnection();
+
+        const isTarget = useMemo(() => {
+            if (!isHovering) return false;
+
+            return connection.inProgress && connection.fromNode.id !== table.id;
+        }, [connection, table.id, isHovering]);
 
         const {
             getTableNewName,
@@ -298,7 +306,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () =>
                 cn(
                     'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
-                    selected
+                    selected || isTarget
                         ? 'border-pink-600'
                         : 'border-slate-500 dark:border-slate-700',
                     isOverlapping
@@ -335,6 +343,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isDiffTableChanged,
                 isDiffNewTable,
                 isDiffTableRemoved,
+                isTarget,
             ]
         );
 
