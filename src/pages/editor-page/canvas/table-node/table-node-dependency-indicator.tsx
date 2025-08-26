@@ -11,6 +11,8 @@ import React, { useEffect, useMemo, useRef } from 'react';
 export const TOP_SOURCE_HANDLE_ID_PREFIX = 'top_dep_';
 export const BOTTOM_SOURCE_HANDLE_ID_PREFIX = 'bottom_dep_';
 export const TARGET_DEP_PREFIX = 'target_dep_';
+export const TARGET_TOP_DEP_PREFIX = 'target_top_dep_';
+export const TARGET_BOTTOM_DEP_PREFIX = 'target_bottom_dep_';
 
 export interface TableNodeDependencyIndicatorProps {
     table: DBTable;
@@ -23,17 +25,16 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
 
-        const isTarget = useMemo(
+        const isConnectionFromView = useMemo(
             () =>
                 connection.inProgress &&
-                connection.fromNode.id !== table.id &&
-                (connection.fromHandle.id?.startsWith(
+                (connection.fromHandle?.id?.startsWith(
                     TOP_SOURCE_HANDLE_ID_PREFIX
                 ) ||
-                    connection.fromHandle.id?.startsWith(
+                    connection.fromHandle?.id?.startsWith(
                         BOTTOM_SOURCE_HANDLE_ID_PREFIX
                     )),
-            [connection, table.id]
+            [connection.inProgress, connection.fromHandle?.id]
         );
 
         const numberOfEdgesToTable = useMemo(
@@ -77,17 +78,38 @@ export const TableNodeDependencyIndicator: React.FC<TableNodeDependencyIndicator
                         type="target"
                     />
                 ))}
-                {isTarget ? (
-                    <Handle
-                        id={`${TARGET_DEP_PREFIX}${numberOfEdgesToTable}_${table.id}`}
-                        className={
-                            isTarget
-                                ? '!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
-                                : `!invisible`
-                        }
-                        position={Position.Top}
-                        type="target"
-                    />
+                {/* Show visible connection points at top and bottom when dragging from view */}
+                {!table.isView &&
+                !table.isMaterializedView &&
+                isConnectionFromView ? (
+                    <>
+                        {/* Top connection point */}
+                        <Handle
+                            id={`${TARGET_TOP_DEP_PREFIX}${table.id}`}
+                            className="!h-4 !w-4 !border-2 !bg-pink-600"
+                            style={{
+                                position: 'absolute',
+                                top: '-8px',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                            }}
+                            position={Position.Top}
+                            type="target"
+                        />
+                        {/* Bottom connection point */}
+                        <Handle
+                            id={`${TARGET_BOTTOM_DEP_PREFIX}${table.id}`}
+                            className="!h-4 !w-4 !border-2 !bg-pink-600"
+                            style={{
+                                position: 'absolute',
+                                bottom: '-8px',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                            }}
+                            position={Position.Bottom}
+                            type="target"
+                        />
+                    </>
                 ) : null}
             </>
         );

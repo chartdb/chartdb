@@ -11,6 +11,10 @@ import {
     useConnection,
     useUpdateNodeInternals,
 } from '@xyflow/react';
+import {
+    TOP_SOURCE_HANDLE_ID_PREFIX,
+    BOTTOM_SOURCE_HANDLE_ID_PREFIX,
+} from './table-node-dependency-indicator';
 import { Button } from '@/components/button/button';
 import {
     Check,
@@ -87,12 +91,28 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
 
         const updateNodeInternals = useUpdateNodeInternals();
         const connection = useConnection();
+
+        // Check if connection is from a view (dependency connection)
+        const isConnectionFromView = useMemo(
+            () =>
+                connection.inProgress &&
+                (connection.fromHandle?.id?.startsWith(
+                    TOP_SOURCE_HANDLE_ID_PREFIX
+                ) ||
+                    connection.fromHandle?.id?.startsWith(
+                        BOTTOM_SOURCE_HANDLE_ID_PREFIX
+                    )),
+            [connection.inProgress, connection.fromHandle?.id]
+        );
+
         const isTarget = useMemo(
             () =>
                 connection.inProgress &&
-                connection.fromNode.id !== tableNodeId &&
-                (connection.fromHandle.id?.startsWith(RIGHT_HANDLE_ID_PREFIX) ||
-                    connection.fromHandle.id?.startsWith(
+                connection.fromNode?.id !== tableNodeId &&
+                (connection.fromHandle?.id?.startsWith(
+                    RIGHT_HANDLE_ID_PREFIX
+                ) ||
+                    connection.fromHandle?.id?.startsWith(
                         LEFT_HANDLE_ID_PREFIX
                     )),
             [
@@ -285,7 +305,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     }
                 )}
             >
-                {isConnectable ? (
+                {isConnectable && !isConnectionFromView ? (
                     <>
                         <Handle
                             id={`${RIGHT_HANDLE_ID_PREFIX}${field.id}`}

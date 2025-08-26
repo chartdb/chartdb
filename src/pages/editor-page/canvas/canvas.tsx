@@ -78,6 +78,8 @@ import { DependencyEdge } from './dependency-edge/dependency-edge';
 import {
     BOTTOM_SOURCE_HANDLE_ID_PREFIX,
     TARGET_DEP_PREFIX,
+    TARGET_TOP_DEP_PREFIX,
+    TARGET_BOTTOM_DEP_PREFIX,
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
 import type { DatabaseType } from '@/lib/domain/database-type';
@@ -583,14 +585,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
-            if (
+            // Check if this is a dependency connection (from a view to a table)
+            const isDependencyConnection =
                 params.sourceHandle?.startsWith?.(
                     TOP_SOURCE_HANDLE_ID_PREFIX
                 ) ||
                 params.sourceHandle?.startsWith?.(
                     BOTTOM_SOURCE_HANDLE_ID_PREFIX
-                )
-            ) {
+                );
+
+            const isDependencyTarget =
+                params.targetHandle?.startsWith?.(TARGET_TOP_DEP_PREFIX) ||
+                params.targetHandle?.startsWith?.(TARGET_BOTTOM_DEP_PREFIX) ||
+                params.targetHandle?.startsWith?.(TARGET_DEP_PREFIX);
+
+            if (isDependencyConnection || isDependencyTarget) {
                 const tableId = params.target;
                 const dependentTableId = params.source;
 
