@@ -9,7 +9,7 @@ import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
-import type { DBIndex } from '@/lib/domain';
+import { getTableIndexesWithPrimaryKey, type DBIndex } from '@/lib/domain';
 import {
     DBCustomTypeKind,
     type DBCustomType,
@@ -623,7 +623,7 @@ export const importDBMLToDiagram = async (
                 }
             }
 
-            return {
+            const tableToReturn: DBTable = {
                 id: generateId(),
                 name: table.name.replace(/['"]/g, ''),
                 schema:
@@ -642,6 +642,13 @@ export const importDBMLToDiagram = async (
                 createdAt: Date.now(),
                 comments: tableComment,
             } satisfies DBTable;
+
+            return {
+                ...tableToReturn,
+                indexes: getTableIndexesWithPrimaryKey({
+                    table: tableToReturn,
+                }),
+            };
         });
 
         // Create relationships using the refs
