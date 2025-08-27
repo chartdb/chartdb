@@ -128,8 +128,8 @@ export const CustomTypeList: React.FC<CustomTypeProps> = ({ customTypes }) => {
 
                                 // if both have order, sort by order
                                 if (
-                                    customType1.order !== undefined &&
-                                    customType2.order !== undefined
+                                    customType1.order != null &&
+                                    customType2.order != null
                                 ) {
                                     return (
                                         customType1.order - customType2.order
