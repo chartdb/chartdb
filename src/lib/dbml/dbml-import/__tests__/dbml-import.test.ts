@@ -154,7 +154,7 @@ Note note_1750185617764 {
 
             // Should not throw
             const parser = new Parser();
-            expect(() => parser.parse(sanitized, 'dbml')).not.toThrow();
+            expect(() => parser.parse(sanitized, 'dbmlv2')).not.toThrow();
         });
     });
 
