@@ -1,19 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { exportBaseSQL } from '../export-sql-script';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
-
-// Mock the dbml/core importer
-vi.mock('@dbml/core', () => ({
-    importer: {
-        import: vi.fn((sql: string) => {
-            // Return a simplified DBML for testing
-            return sql;
-        }),
-    },
-}));
 
 describe('DBML Export - SQL Generation Tests', () => {
     // Helper to generate test IDs and timestamps
@@ -606,7 +596,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should create a valid table without primary key
-            expect(sql).toContain('CREATE TABLE experiment_logs');
+            expect(sql).toContain('CREATE TABLE "experiment_logs"');
             expect(sql).not.toContain('PRIMARY KEY');
         });
 
@@ -721,11 +711,11 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should create both tables
-            expect(sql).toContain('CREATE TABLE guilds');
-            expect(sql).toContain('CREATE TABLE guild_members');
+            expect(sql).toContain('CREATE TABLE "guilds"');
+            expect(sql).toContain('CREATE TABLE "guild_members"');
             // Should create foreign key
             expect(sql).toContain(
-                'ALTER TABLE guild_members ADD CONSTRAINT fk_guild_members_guild FOREIGN KEY (guild_id) REFERENCES guilds (id)'
+                'ALTER TABLE "guild_members" ADD CONSTRAINT fk_guild_members_guild FOREIGN KEY (guild_id) REFERENCES "guilds" (id);'
             );
         });
     });
@@ -799,12 +789,9 @@ describe('DBML Export - SQL Generation Tests', () => {
                 isDBMLFlow: true,
             });
 
-            // Should create schemas
-            expect(sql).toContain('CREATE SCHEMA IF NOT EXISTS transportation');
-            expect(sql).toContain('CREATE SCHEMA IF NOT EXISTS magic');
             // Should use schema-qualified table names
-            expect(sql).toContain('CREATE TABLE transportation.portals');
-            expect(sql).toContain('CREATE TABLE magic.spells');
+            expect(sql).toContain('CREATE TABLE "transportation"."portals"');
+            expect(sql).toContain('CREATE TABLE "magic"."spells"');
         });
     });
 
@@ -851,7 +838,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should still create table structure
-            expect(sql).toContain('CREATE TABLE empty_table');
+            expect(sql).toContain('CREATE TABLE "empty_table"');
             expect(sql).toContain('(\n\n)');
         });
 

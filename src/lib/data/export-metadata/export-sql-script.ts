@@ -22,7 +22,7 @@ const simplifyDataType = (typeName: string): string => {
 
 // Helper function to properly quote table/schema names with special characters
 const getQuotedTableName = (
-    table: { schema?: string; name: string },
+    table: DBTable,
     isDBMLFlow: boolean = false
 ): string => {
     // Check if a name is already quoted
