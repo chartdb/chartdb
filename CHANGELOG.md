@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.15.1](https://github.com/chartdb/chartdb/compare/v1.15.0...v1.15.1) (2025-08-27)
+
+
+### Bug Fixes
+
+* add actions menu to diagram list + add duplicate diagram ([#876](https://github.com/chartdb/chartdb/issues/876)) ([abd2a6c](https://github.com/chartdb/chartdb/commit/abd2a6ccbe1aa63db44ec28b3eff525cc5d3f8b0))
+* **custom-types:** Make schema optional ([#866](https://github.com/chartdb/chartdb/issues/866)) ([60c5675](https://github.com/chartdb/chartdb/commit/60c5675cbfe205859d2d0c9848d8345a0a854671))
+* handle quoted identifiers with special characters in SQL import/export and DBML generation ([#877](https://github.com/chartdb/chartdb/issues/877)) ([66b0863](https://github.com/chartdb/chartdb/commit/66b086378cd63347acab5fc7f13db7db4feaa872))
+
 ## [1.15.0](https://github.com/chartdb/chartdb/compare/v1.14.0...v1.15.0) (2025-08-26)
 
 
