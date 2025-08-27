@@ -52,6 +52,29 @@ const getQuotedTableName = (
     }
 };
 
+const getQuotedFieldName = (
+    fieldName: string,
+    isDBMLFlow: boolean = false
+): string => {
+    // Check if a name is already quoted
+    const isAlreadyQuoted = (name: string) => {
+        return (
+            (name.startsWith('"') && name.endsWith('"')) ||
+            (name.startsWith('`') && name.endsWith('`')) ||
+            (name.startsWith('[') && name.endsWith(']'))
+        );
+    };
+
+    if (isAlreadyQuoted(fieldName)) {
+        return fieldName;
+    }
+
+    // For DBML flow, always quote field names
+    // Otherwise, only quote if it contains special characters
+    const needsQuoting = /[^a-zA-Z0-9_]/.test(fieldName) || isDBMLFlow;
+    return needsQuoting ? `"${fieldName}"` : fieldName;
+};
+
 export const exportBaseSQL = ({
     diagram,
     targetDatabaseType,
@@ -270,7 +293,8 @@ export const exportBaseSQL = ({
                 typeName = 'char';
             }
 
-            sqlScript += `  ${field.name} ${typeName}`;
+            const quotedFieldName = getQuotedFieldName(field.name, isDBMLFlow);
+            sqlScript += `  ${quotedFieldName} ${typeName}`;
 
             // Add size for character types
             if (
@@ -367,7 +391,9 @@ export const exportBaseSQL = ({
             hasCompositePrimaryKey ||
             (primaryKeyFields.length === 1 && pkIndex?.name)
         ) {
-            const pkFieldNames = primaryKeyFields.map((f) => f.name).join(', ');
+            const pkFieldNames = primaryKeyFields
+                .map((f) => getQuotedFieldName(f.name, isDBMLFlow))
+                .join(', ');
             if (pkIndex?.name) {
                 sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
             } else {
@@ -388,7 +414,11 @@ export const exportBaseSQL = ({
         table.fields.forEach((field) => {
             // Add column comment (only for databases that support COMMENT ON syntax)
             if (field.comments && supportsCommentOn) {
-                sqlScript += `COMMENT ON COLUMN ${tableName}.${field.name} IS '${escapeSQLComment(field.comments)}';\n`;
+                const quotedFieldName = getQuotedFieldName(
+                    field.name,
+                    isDBMLFlow
+                );
+                sqlScript += `COMMENT ON COLUMN ${tableName}.${quotedFieldName} IS '${escapeSQLComment(field.comments)}';\n`;
             }
         });
 
@@ -420,7 +450,7 @@ export const exportBaseSQL = ({
             }
 
             const fieldNames = indexFields
-                .map((field) => field.name)
+                .map((field) => getQuotedFieldName(field.name, isDBMLFlow))
                 .join(', ');
 
             if (fieldNames) {
@@ -500,8 +530,16 @@ export const exportBaseSQL = ({
 
             const fkTableName = getQuotedTableName(fkTable, isDBMLFlow);
             const refTableName = getQuotedTableName(refTable, isDBMLFlow);
+            const quotedFkFieldName = getQuotedFieldName(
+                fkField.name,
+                isDBMLFlow
+            );
+            const quotedRefFieldName = getQuotedFieldName(
+                refField.name,
+                isDBMLFlow
+            );
 
-            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${fkField.name}) REFERENCES ${refTableName} (${refField.name});\n`;
+            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${quotedFkFieldName}) REFERENCES ${refTableName} (${quotedRefFieldName});\n`;
         }
     });
 

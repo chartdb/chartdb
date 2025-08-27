@@ -1,0 +1,17 @@
+Table "bruit"."100-AAB-CABAS-Mdap" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "from" decimal(8,2)
+  "to" decimal(8,2)
+  "period" nvarchar(500)
+  "objectid" float
+  "insee" float
+  "nom" nvarchar(500)
+  "code_posta" int
+  "ut" nvarchar(500)
+  "territoire" nvarchar(500)
+  "surface" float
+  "perimetre" float
+  "ccodter" float
+  "numcom" nvarchar(500)
+}

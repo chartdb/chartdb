@@ -1,0 +1,7273 @@
+Table "public"."Users" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_1"]
+  }
+}
+
+Table "public"."Settings" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Settings_1"]
+  }
+}
+
+Table "public"."Settings_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Settings_1_1"]
+  }
+}
+
+Table "public"."Orders_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Orders_2_1"]
+  }
+}
+
+Table "public"."Profiles_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Profiles_2_1"]
+  }
+}
+
+Table "public"."Metrics_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" bigint
+
+  Indexes {
+    geom [name: "idx_Metrics_2_1"]
+  }
+}
+
+Table "public"."Categories_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" date
+
+  Indexes {
+    geom [name: "idx_Categories_3_1"]
+  }
+}
+
+Table "public"."Transactions_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Transactions_3_1"]
+  }
+}
+
+Table "public"."Logs_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Logs_3_1"]
+  }
+}
+
+Table "public"."Metrics_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Metrics_3_1"]
+  }
+}
+
+Table "public"."Orders_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" float
+
+  Indexes {
+    geom [name: "idx_Orders_4_1"]
+  }
+}
+
+Table "public"."Profiles_5" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+
+  Indexes {
+    geom [name: "idx_Profiles_5_1"]
+  }
+}
+
+Table "public"."Inventory_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" nvarchar(500)
+  "value" bigint
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_6_1"]
+  }
+}
+
+Table "public"."Transactions_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Transactions_6_1"]
+  }
+}
+
+Table "public"."Categories_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_7_1"]
+  }
+}
+
+Table "public"."Inventory_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_8_1"]
+  }
+}
+
+Table "public"."Transactions_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Transactions_8_1"]
+  }
+}
+
+Table "public"."Orders_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_9_1"]
+  }
+}
+
+Table "public"."Categories_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+
+  Indexes {
+    geom [name: "idx_Categories_9_1"]
+  }
+}
+
+Table "public"."Settings_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" date
+
+  Indexes {
+    geom [name: "idx_Settings_9_1"]
+  }
+}
+
+Table "public"."Profiles_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_9_1"]
+  }
+}
+
+Table "public"."Users_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Users_10_1"]
+  }
+}
+
+Table "public"."Inventory_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Inventory_10_1"]
+  }
+}
+
+Table "public"."Settings_11" {
+  "qgs_fid" int [pk, not null]
+  "created_at" nvarchar(500)
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" bigint
+}
+
+Table "public"."Orders_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_13_1"]
+  }
+}
+
+Table "public"."Categories_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Categories_13_1"]
+  }
+}
+
+Table "public"."Categories_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Categories_14_1"]
+  }
+}
+
+Table "public"."Inventory_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" float
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_15_1"]
+  }
+}
+
+Table "public"."Products_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Products_16_1"]
+  }
+}
+
+Table "public"."Profiles_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Profiles_17_1"]
+  }
+}
+
+Table "public"."Inventory_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" bigint
+
+  Indexes {
+    geom [name: "idx_Inventory_18_1"]
+  }
+}
+
+Table "public"."Products_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Products_19_1"]
+  }
+}
+
+Table "public"."Categories_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_19_1"]
+  }
+}
+
+Table "public"."Logs_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_19_1"]
+  }
+}
+
+Table "public"."Transactions_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Transactions_20_1"]
+  }
+}
+
+Table "public"."Profiles_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_20_1"]
+  }
+}
+
+Table "public"."Categories_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_23_1"]
+  }
+}
+
+Table "public"."Transactions_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Transactions_23_1"]
+  }
+}
+
+Table "public"."Settings_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Settings_23_1"]
+  }
+}
+
+Table "public"."Products_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Products_24_1"]
+  }
+}
+
+Table "public"."Orders_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Orders_24_1"]
+  }
+}
+
+Table "public"."Inventory_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Inventory_24_1"]
+  }
+}
+
+Table "public"."Users_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_25_1"]
+  }
+}
+
+Table "public"."Inventory_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_25_1"]
+  }
+}
+
+Table "public"."Logs_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_25_1"]
+  }
+}
+
+Table "public"."Settings_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Settings_25_1"]
+  }
+}
+
+Table "public"."Logs_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_26_1"]
+  }
+}
+
+Table "public"."Inventory_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" bigint
+  "field_21" bigint
+  "field_22" float
+  "field_23" float
+
+  Indexes {
+    geom [name: "idx_Inventory_27_1"]
+  }
+}
+
+Table "public"."Profiles_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_28_1"]
+  }
+}
+
+Table "public"."Products_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Products_29_1"]
+  }
+}
+
+Table "public"."Orders_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_29_1"]
+  }
+}
+
+Table "public"."Categories_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_29_1"]
+  }
+}
+
+Table "public"."Settings_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Settings_30_1"]
+  }
+}
+
+Table "public"."Logs_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Logs_31_1"]
+  }
+}
+
+Table "public"."Settings_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_31_1"]
+  }
+}
+
+Table "public"."Products_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_32_1"]
+  }
+}
+
+Table "public"."Settings_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Settings_32_1"]
+  }
+}
+
+Table "public"."Products_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" date
+
+  Indexes {
+    geom [name: "idx_Products_34_1"]
+  }
+}
+
+Table "public"."Products_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_35_1"]
+  }
+}
+
+Table "public"."Orders_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_35_1"]
+  }
+}
+
+Table "public"."Categories_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_35_1"]
+  }
+}
+
+Table "public"."Categories_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+
+  Indexes {
+    geom [name: "idx_Categories_36_1"]
+  }
+}
+
+Table "public"."Transactions_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+  "date" float
+  "timestamp" float
+
+  Indexes {
+    geom [name: "idx_Transactions_36_1"]
+  }
+}
+
+Table "public"."Users_37" {
+  "qgs_fid" int [pk, not null]
+  "created_at" nvarchar(500)
+  "updated_at" nvarchar(500)
+  "name" bigint
+}
+
+Ref "fk_0_rel_uobqadav":"data"."Products_8"."created_at" < "data"."Products_3"."updated_at"
+
+Ref "fk_1_rel_tjwkm4vg":"data"."Products_8"."created_at" < "data"."Transactions_10"."updated_at"
+
+Ref "fk_2_rel_1a2cz1fe":"admin"."Transactions_2"."updated_at" < "admin"."Categories_11"."updated_at"
+
+Ref "fk_3_rel_rwfzm2uw":"data"."Products_8"."created_at" < "data"."Users_27"."name"
+
+Ref "fk_4_rel_9m17o0cp":"data"."Products_8"."created_at" < "data"."Inventory_26"."updated_at"
+
+Ref "fk_5_rel_knm2r9qn":"data"."Products_20"."updated_at" < "auth"."Logs_4"."name"
+
+Ref "fk_6_rel_funm318w":"data"."Products_20"."updated_at" < "auth"."Orders_22"."updated_at"
+
+Ref "fk_7_rel_1cum4y9j":"data"."Products_20"."updated_at" < "auth"."Profiles_23"."name"
+
+Ref "fk_8_rel_hdo6sheg":"data"."Products_8"."created_at" < "data"."Metrics_17"."name"
+
+Ref "fk_9_rel_g0i870xr":"data"."Products_8"."created_at" < "data"."Orders_19"."name"
+
+Ref "fk_10_rel_blbldnbz":"admin"."Transactions_14"."updated_at" < "data"."Products_20"."status"
+
+Ref "fk_11_rel_jvmpjimf":"data"."Products_20"."updated_at" < "admin"."Categories_17"."ref_id"
+
+Ref "fk_12_rel_h74tx8lr":"data"."Products_20"."updated_at" < "admin"."Metrics_15"."field_21"
+
+Ref "fk_13_rel_5sgf7la0":"data"."Products_8"."created_at" < "data"."Metrics_8"."updated_at"
+
+Ref "fk_14_rel_u9ksay74":"data"."Products_8"."created_at" < "data"."Orders_27"."name"
+
+Ref "fk_15_rel_mo1t38sr":"data"."Products_8"."created_at" < "data"."Transactions_12"."name"
+
+Ref "fk_16_rel_n62szguj":"data"."Products_8"."created_at" < "data"."Orders_30"."name"
+
+Ref "fk_17_rel_b64pkgtx":"data"."Products_20"."updated_at" < "data"."Products_8"."updated_at"
+
+Ref "fk_18_rel_f99mk7mw":"data"."Products_8"."created_at" < "data"."Inventory_4"."type"
+
+Ref "fk_19_rel_565yqyyg":"data"."Products_8"."created_at" < "data"."Metrics_36"."updated_at"
+
+Ref "fk_20_rel_6sp80jwg":"data"."Products_8"."created_at" < "data"."Categories_15"."updated_at"
+
+Ref "fk_21_rel_i56aygpy":"data"."Products_8"."created_at" < "data"."Categories_33"."updated_at"
+
+Ref "fk_22_rel_0h9cq9mi":"data"."Products_8"."created_at" < "data"."Orders_12"."created_at"
+
+Ref "fk_23_rel_ykx8br8b":"data"."Products_8"."created_at" < "data"."Orders_5"."name"
+
+Ref "fk_24_rel_vgg3z98u":"data"."Products_8"."created_at" < "data"."Profiles_34"."name"
+
+Ref "fk_25_rel_60ivpluf":"data"."Products_8"."created_at" < "data"."Transactions_5"."name"
+
+Ref "fk_26_rel_jdc4q2o1":"data"."Products_8"."created_at" < "data"."Orders_18"."updated_at"
+
+Ref "fk_27_rel_b861xb0o":"data"."Products_8"."created_at" < "data"."Products_11"."name"
+
+Ref "fk_28_rel_8dy39c3n":"data"."Products_8"."created_at" < "data"."Transactions_30"."updated_at"
+
+Ref "fk_29_rel_mpu6lu4f":"data"."Products_8"."created_at" < "data"."Metrics_4"."updated_at"
+
+Table "app"."Products" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_1"]
+  }
+}
+
+Table "app"."Orders" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" date
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_1"]
+  }
+}
+
+Table "app"."Profiles" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Profiles_1"]
+  }
+}
+
+Table "app"."Orders_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Orders_1_1"]
+  }
+}
+
+Table "app"."Inventory_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_1_1"]
+  }
+}
+
+Table "app"."Logs_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Logs_1_1"]
+  }
+}
+
+Table "app"."Categories_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" decimal(8,2)
+  "name" decimal(8,2)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" nvarchar(500)
+  "count" int
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_2_1"]
+  }
+}
+
+Table "app"."Users_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" bigint
+
+  Indexes {
+    geom [name: "idx_Users_3_1"]
+  }
+}
+
+Table "app"."Orders_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Orders_3_1"]
+  }
+}
+
+Table "app"."Categories_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Categories_4_1"]
+  }
+}
+
+Table "app"."Transactions_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Transactions_4_1"]
+  }
+}
+
+Table "app"."Users_5" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_5_1"]
+  }
+}
+
+Table "app"."Orders_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_6_1"]
+  }
+}
+
+Table "app"."Settings_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" nvarchar(500)
+  "value" bigint
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" float
+  "field_21" float
+  "field_22" float
+  "field_23" float
+
+  Indexes {
+    geom [name: "idx_Settings_6_1"]
+  }
+}
+
+Table "app"."Users_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" bigint
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" date
+  "date" date
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" bigint
+
+  Indexes {
+    geom [name: "idx_Users_7_1"]
+  }
+}
+
+Table "app"."Logs_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_8_1"]
+  }
+}
+
+Table "app"."Profiles_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" bigint
+
+  Indexes {
+    geom [name: "idx_Profiles_8_1"]
+  }
+}
+
+Table "app"."Transactions_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Transactions_9_1"]
+  }
+}
+
+Table "app"."Orders_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Orders_11_1"]
+  }
+}
+
+Table "app"."Profiles_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" nvarchar(500)
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_11_1"]
+  }
+}
+
+Table "app"."Users_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_14_1"]
+  }
+}
+
+Table "app"."Logs_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+}
+
+Table "app"."Products_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Products_15_1"]
+  }
+}
+
+Table "app"."Logs_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+}
+
+Table "app"."Profiles_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+  "amount" date
+
+  Indexes {
+    geom [name: "idx_Profiles_15_1"]
+  }
+}
+
+Table "app"."Settings_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+}
+
+Table "app"."Products_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Products_17_1"]
+  }
+}
+
+Table "app"."Logs_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" decimal(8,2)
+  "name" decimal(8,2)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" nvarchar(500)
+  "count" int
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_17_1"]
+  }
+}
+
+Table "app"."Categories_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_18_1"]
+  }
+}
+
+Table "app"."Transactions_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" decimal(23,15)
+  "name" nvarchar(500)
+  "description" decimal(23,15)
+  "status" nvarchar(500)
+  "type" decimal(23,15)
+  "value" decimal(23,15)
+  "count" decimal(23,15)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" float
+
+  Indexes {
+    geom [name: "idx_Transactions_18_1"]
+  }
+}
+
+Table "app"."Logs_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+}
+
+Table "app"."Inventory_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" int
+
+  Indexes {
+    geom [name: "idx_Inventory_19_1"]
+  }
+}
+
+Table "app"."Metrics_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" bigint
+  "type" bigint
+}
+
+Table "app"."Users_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Users_21_1"]
+  }
+}
+
+Table "app"."Inventory_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" bigint
+  "data" date
+  "ref_id" bigint
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" date
+  "date" date
+  "timestamp" date
+  "is_active" nvarchar(500)
+  "category" bigint
+
+  Indexes {
+    geom [name: "idx_Inventory_21_1"]
+  }
+}
+
+Table "app"."Settings_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_21_1"]
+  }
+}
+
+Table "app"."Users_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_22_1"]
+  }
+}
+
+Table "app"."Categories_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" float
+  "data" float
+
+  Indexes {
+    geom [name: "idx_Categories_22_1"]
+  }
+}
+
+Table "app"."Profiles_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_22_1"]
+  }
+}
+
+Table "app"."Users_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" decimal(8,2)
+  "name" decimal(8,2)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" nvarchar(500)
+  "count" int
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_23_1"]
+  }
+}
+
+Table "app"."Orders_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Orders_23_1"]
+  }
+}
+
+Table "app"."Metrics_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" datetime
+  "date" datetime
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" float
+  "field_21" float
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_23_1"]
+  }
+}
+
+Table "app"."Users_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" float
+  "value" float
+  "count" float
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_24_1"]
+  }
+}
+
+Table "app"."Products_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" bigint
+  "type" bigint
+  "value" bigint
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_25_1"]
+  }
+}
+
+Table "app"."Orders_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+}
+
+Table "app"."Products_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Products_26_1"]
+  }
+}
+
+Table "app"."Metrics_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" nvarchar(500)
+  "code" int
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_27_1"]
+  }
+}
+
+Table "app"."Transactions_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" bigint
+  "data" bigint
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_28_1"]
+  }
+}
+
+Table "app"."Settings_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_28_1"]
+  }
+}
+
+Table "app"."Categories_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" nvarchar(500)
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+  "date" float
+  "timestamp" float
+  "is_active" float
+  "category" float
+
+  Indexes {
+    geom [name: "idx_Categories_30_1"]
+  }
+}
+
+Table "app"."Products_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" float
+  "data" float
+
+  Indexes {
+    geom [name: "idx_Products_31_1"]
+  }
+}
+
+Table "app"."Orders_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Orders_31_1"]
+  }
+}
+
+Table "app"."Categories_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+}
+
+Table "app"."Logs_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" nvarchar(500)
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Logs_33_1"]
+  }
+}
+
+Table "app"."Settings_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" float
+  "description" nvarchar(500)
+  "status" int
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_33_1"]
+  }
+}
+
+Table "app"."Logs_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Logs_34_1"]
+  }
+}
+
+Table "app"."Metrics_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+
+  Indexes {
+    geom [name: "idx_Metrics_34_1"]
+  }
+}
+
+Table "app"."Users_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" date
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_35_1"]
+  }
+}
+
+Table "app"."Products_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_36_1"]
+  }
+}
+
+Table "app"."Inventory_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+  "data" bigint
+
+  Indexes {
+    geom [name: "idx_Inventory_36_1"]
+  }
+}
+
+Table "data"."Inventory" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_1"]
+  }
+}
+
+Table "data"."Metrics" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_1"]
+  }
+}
+
+Table "data"."Products_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" int
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" int
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" int
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" int
+  "field_26" float
+  "field_27" float
+  "field_28" float
+
+  Indexes {
+    geom [name: "idx_Products_2_1"]
+  }
+}
+
+Table "data"."Inventory_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" nvarchar(500)
+  "status" float
+
+  Indexes {
+    geom [name: "idx_Inventory_2_1"]
+  }
+}
+
+Table "data"."Products_3" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" float
+  "description" int
+  "status" nvarchar(500) [not null]
+
+  Indexes {
+    geom [name: "idx_Products_3_1"]
+  }
+}
+
+Table "data"."Inventory_4" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" float
+  "description" float
+  "status" nchar
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" int
+  "code" float
+  "data" nvarchar(500) [not null]
+
+  Indexes {
+    geom [name: "idx_Inventory_4_1"]
+  }
+}
+
+Table "data"."Metrics_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" ntext
+
+  Indexes {
+    geom [name: "idx_Metrics_4_1"]
+  }
+}
+
+Table "data"."Products_5" {
+  "id" int [pk, not null]
+  "created_at" varchar(500)
+  "updated_at" varchar(500)
+  "name" varchar(500)
+  "description" varchar(500)
+  "status" text
+  "type" text
+  "value" int
+  "count" text
+  "code" varchar(500)
+  "data" text
+  "ref_id" datetime
+  "foreign_key" varchar(500)
+}
+
+Table "data"."Orders_5" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [not null]
+  "name" nvarchar(500)
+  "description" char(1) [not null]
+  "status" float [not null]
+  "type" char(1) [not null]
+  "value" float [not null]
+  "count" float [not null]
+  "code" int
+  "data" float
+  "ref_id" float [not null]
+  "foreign_key" nvarchar(500)
+  "amount" char(1) [not null, default: 'N']
+  "quantity" char(1) [not null, default: 'N']
+  "date" char(1) [not null, default: 'N']
+  "timestamp" int [not null, default: 0]
+  "is_active" char(1) [not null, default: 'N']
+  "category" char(1) [not null, default: 'N']
+  "tag" char(1) [not null, default: '0']
+  "field_20" char(1) [not null, default: 'N']
+  "field_21" char(1) [not null, default: 'N']
+  "field_22" char(1) [not null, default: 'N']
+
+  Indexes {
+    geom [name: "idx_Orders_5_1"]
+  }
+}
+
+Table "data"."Inventory_5" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" decimal(18,11)
+  "type" decimal(18,11)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" date
+  "field_20" date
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_5_1"]
+  }
+}
+
+Table "data"."Transactions_5" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" ntext
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" int
+  "foreign_key" nvarchar(500)
+  "amount" text
+  "quantity" text
+  "date" text
+  "timestamp" text
+  "is_active" text
+
+  Indexes {
+    geom [name: "idx_Transactions_5_1"]
+  }
+}
+
+Table "data"."Categories_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_6_1"]
+  }
+}
+
+Table "data"."Profiles_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" datetime
+  "type" datetime
+  "value" datetime
+  "count" nvarchar(500)
+  "code" int
+  "data" int
+  "ref_id" int
+  "foreign_key" int
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_6_1"]
+  }
+}
+
+Table "data"."Inventory_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_7_1"]
+  }
+}
+
+Table "data"."Logs_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" decimal(3,2)
+  "foreign_key" date
+  "amount" float
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_7_1"]
+  }
+}
+
+Table "data"."Products_8" {
+  "id" int [pk, not null]
+  "created_at" nvarchar(500) [unique]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" ntext
+  "count" float
+  "code" nvarchar(500)
+  "data" ntext
+  "ref_id" nvarchar(500)
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+
+  Indexes {
+    created_at [unique, name: "idx_Products_8_1"]
+  }
+}
+
+Table "data"."Categories_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_8_1"]
+  }
+}
+
+Table "data"."Metrics_8" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_8_1"]
+  }
+}
+
+Table "data"."Transactions_10" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" ntext
+
+  Indexes {
+    geom [name: "idx_Transactions_10_1"]
+  }
+}
+
+Table "data"."Settings_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_10_1"]
+  }
+}
+
+Table "data"."Metrics_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" int
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" int
+  "code" int
+  "data" int
+  "ref_id" int
+  "foreign_key" int
+  "amount" int
+  "quantity" int
+  "date" int
+  "timestamp" int
+  "is_active" nvarchar(500)
+  "category" int
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" date
+  "field_29" date
+  "field_30" date
+  "field_31" int
+  "field_32" int
+  "field_33" int
+  "field_34" int
+  "field_35" int
+  "field_36" int
+  "field_37" int
+  "field_38" int
+  "field_39" nvarchar(500)
+  "field_40" nvarchar(500)
+  "field_41" int
+  "field_42" date
+  "field_43" date
+  "field_44" date
+
+  Indexes {
+    geom [name: "idx_Metrics_10_1"]
+  }
+}
+
+Table "data"."Products_11" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [not null]
+  "name" nvarchar(500)
+  "description" date
+  "status" ntext
+  "type" int
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_11_1"]
+  }
+}
+
+Table "data"."Inventory_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" bigint
+  "type" bigint
+  "value" bigint
+  "count" bigint
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Inventory_11_1"]
+  }
+}
+
+Table "data"."Orders_12" {
+  "id" int [pk, not null]
+  "created_at" nvarchar(500)
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" ntext
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" float
+}
+
+Table "data"."Transactions_12" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nchar
+  "type" nvarchar(500)
+  "value" int
+
+  Indexes {
+    geom [name: "idx_Transactions_12_1"]
+  }
+}
+
+Table "data"."Logs_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" int
+  "value" float
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Logs_12_1"]
+  }
+}
+
+Table "data"."Transactions_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_13_1"]
+  }
+}
+
+Table "data"."Settings_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" int
+  "value" bigint
+  "count" bigint
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_14_1"]
+  }
+}
+
+Table "data"."Categories_15" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" ntext
+
+  Indexes {
+    geom [name: "idx_Categories_15_1"]
+  }
+}
+
+Table "data"."Profiles_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" bigint
+  "type" bigint
+  "value" bigint
+  "count" bigint
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Profiles_16_1"]
+  }
+}
+
+Table "data"."Transactions_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+
+  Indexes {
+    geom [name: "idx_Transactions_17_1"]
+  }
+}
+
+Table "data"."Metrics_17" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_17_1"]
+  }
+}
+
+Table "data"."Orders_18" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" ntext
+  "description" int
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_18_1"]
+  }
+}
+
+Table "data"."Metrics_18" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nchar
+  "code" decimal(10,2)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_18_1"]
+  }
+}
+
+Table "data"."Orders_19" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" ntext
+  "type" nvarchar(500)
+  "value" char(1)
+  "count" nvarchar(500)
+  "code" nchar
+  "data" int
+
+  Indexes {
+    geom [name: "idx_Orders_19_1"]
+  }
+}
+
+Table "data"."Settings_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" float
+  "count" float
+  "code" float
+
+  Indexes {
+    geom [name: "idx_Settings_19_1"]
+  }
+}
+
+Table "data"."Metrics_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_19_1"]
+  }
+}
+
+Table "data"."Products_20" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [unique, not null]
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nchar
+  "foreign_key" nchar
+  "amount" nchar
+  "quantity" nchar
+  "date" nchar
+  "timestamp" decimal(10,3)
+  "is_active" decimal(5,2)
+  "category" char(1)
+  "tag" decimal(10,3)
+  "field_20" decimal(10,3)
+  "field_21" decimal(7,3)
+  "field_22" decimal(7,3)
+  "field_23" decimal(7,3)
+  "field_24" decimal(7,3)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" int
+  "field_28" float
+  "field_29" int
+  "field_30" float
+  "field_31" float
+  "field_32" text
+
+  Indexes {
+    updated_at [unique, name: "idx_Products_20_1"]
+    updated_at [unique, name: "idx_Products_20_2"]
+    geom [name: "idx_Products_20_3"]
+  }
+}
+
+Table "data"."Categories_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_20_1"]
+  }
+}
+
+Table "data"."Profiles_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" nvarchar(500)
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" date
+  "quantity" float
+  "date" float
+
+  Indexes {
+    geom [name: "idx_Profiles_21_1"]
+  }
+}
+
+Table "data"."Profiles_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" bigint
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+  "category" float
+  "tag" nvarchar(500)
+  "field_20" float
+  "field_21" float
+  "field_22" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_25_1"]
+  }
+}
+
+Table "data"."Metrics_25" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" nvarchar(500)
+}
+
+Table "data"."Inventory_26" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" date
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+
+  Indexes {
+    geom [name: "idx_Inventory_26_1"]
+  }
+}
+
+Table "data"."Users_27" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" float
+  "value" nvarchar(500)
+  "count" int
+  "code" int
+  "data" int
+  "ref_id" char(1)
+  "foreign_key" char(1)
+  "amount" char(1)
+  "quantity" char(1)
+  "date" char(1)
+  "timestamp" float
+  "is_active" float
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" float
+  "field_21" float
+  "field_22" float
+  "field_23" char(1)
+  "field_24" nvarchar(500)
+  "field_25" int
+
+  Indexes {
+    name [name: "idx_Users_27_1"]
+    updated_at [name: "idx_Users_27_2"]
+    geom [name: "idx_Users_27_3"]
+  }
+}
+
+Table "data"."Orders_27" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" int
+  "type" int
+  "value" int
+
+  Indexes {
+    name [name: "idx_Orders_27_1"]
+    geom [name: "idx_Orders_27_2"]
+  }
+}
+
+Table "data"."Categories_27" {
+  "qgs_fid" int [pk, not null]
+  "created_at" nvarchar(500)
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+}
+
+Table "data"."Logs_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_27_1"]
+  }
+}
+
+Table "data"."Products_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_28_1"]
+  }
+}
+
+Table "data"."Orders_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [not null]
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_30_1"]
+  }
+}
+
+Table "data"."Transactions_30" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nchar
+  "type" nchar
+  "value" nchar
+  "count" ntext
+
+  Indexes {
+    geom [name: "idx_Transactions_30_1"]
+  }
+}
+
+Table "data"."Inventory_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_31_1"]
+  }
+}
+
+Table "data"."Profiles_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" date
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" int
+  "amount" bigint
+  "quantity" bigint
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" int
+  "field_22" int
+  "field_23" int
+  "field_24" int
+  "field_25" int
+  "field_26" date
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_31_1"]
+  }
+}
+
+Table "data"."Users_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" float
+  "field_27" float
+  "field_28" float
+  "field_29" float
+
+  Indexes {
+    geom [name: "idx_Users_33_1"]
+  }
+}
+
+Table "data"."Categories_33" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" ntext
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" float
+  "foreign_key" int
+
+  Indexes {
+    geom [name: "idx_Categories_33_1"]
+  }
+}
+
+Table "data"."Transactions_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" nvarchar(500)
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" date
+  "quantity" float
+  "date" float
+
+  Indexes {
+    geom [name: "idx_Transactions_33_1"]
+  }
+}
+
+Table "data"."Settings_34" {
+  "id" varchar(500) [not null]
+  "created_at" varchar(500) [not null]
+  "updated_at" varchar(500) [not null]
+  "name" varchar(500) [not null]
+  "description" int [not null]
+  "status" int [not null]
+  "type" varchar(500) [not null]
+
+  Indexes {
+    (id, created_at, updated_at, name) [pk]
+  }
+}
+
+Table "data"."Profiles_34" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [not null]
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" ntext
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_34_1"]
+  }
+}
+
+Table "data"."Profiles_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_35_1"]
+  }
+}
+
+Table "data"."Settings_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_36_1"]
+  }
+}
+
+Table "data"."Profiles_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Profiles_36_1"]
+  }
+}
+
+Table "data"."Metrics_36" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nchar
+  "description" nvarchar(500)
+  "status" nchar
+  "type" int
+
+  Indexes {
+    geom [name: "idx_Metrics_36_1"]
+  }
+}
+
+Table "analytics"."Categories" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" bigint
+  "value" bigint
+  "count" nvarchar(500)
+  "code" bigint
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+
+  Indexes {
+    geom [name: "idx_Categories_1"]
+  }
+}
+
+Table "analytics"."Users_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+  "is_active" int
+  "category" int
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" float
+  "field_22" float
+  "field_23" float
+  "field_24" float
+  "field_25" float
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_1_1"]
+  }
+}
+
+Table "analytics"."Products_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Products_1_1"]
+  }
+}
+
+Table "analytics"."Categories_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" float
+  "data" bigint
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" bigint
+
+  Indexes {
+    geom [name: "idx_Categories_1_1"]
+  }
+}
+
+Table "analytics"."Logs_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Logs_2_1"]
+  }
+}
+
+Table "analytics"."Settings_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" int
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" date
+  "quantity" date
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" int
+  "category" int
+  "tag" int
+  "field_20" int
+  "field_21" int
+  "field_22" date
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_2_1"]
+  }
+}
+
+Table "analytics"."Inventory_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_3_1"]
+  }
+}
+
+Table "analytics"."Settings_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" datetime
+  "status" datetime
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_3_1"]
+  }
+}
+
+Table "analytics"."Profiles_3" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+}
+
+Table "analytics"."Settings_4" {
+  "qgs_fid" int [pk, not null]
+  "created_at" bigint
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+}
+
+Table "analytics"."Settings_5" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" datetime
+  "amount" datetime
+  "quantity" date
+  "date" date
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" float
+
+  Indexes {
+    geom [name: "idx_Settings_5_1"]
+  }
+}
+
+Table "analytics"."Users_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" int
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_6_1"]
+  }
+}
+
+Table "analytics"."Products_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Products_6_1"]
+  }
+}
+
+Table "analytics"."Logs_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+  "code" bigint
+  "data" bigint
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_6_1"]
+  }
+}
+
+Table "analytics"."Metrics_6" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+  "date" float
+
+  Indexes {
+    geom [name: "idx_Metrics_6_1"]
+  }
+}
+
+Table "analytics"."Products_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Products_7_1"]
+  }
+}
+
+Table "analytics"."Orders_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+}
+
+Table "analytics"."Users_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" int
+  "field_23" int
+  "field_24" int
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" int
+  "field_31" int
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" nvarchar(500)
+  "field_39" nvarchar(500)
+  "field_40" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_8_1"]
+  }
+}
+
+Table "analytics"."Settings_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+}
+
+Table "analytics"."Products_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" int
+
+  Indexes {
+    geom [name: "idx_Products_9_1"]
+  }
+}
+
+Table "analytics"."Logs_11" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_11_1"]
+  }
+}
+
+Table "analytics"."Users_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_12_1"]
+  }
+}
+
+Table "analytics"."Metrics_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+  "amount" float
+
+  Indexes {
+    geom [name: "idx_Metrics_12_1"]
+  }
+}
+
+Table "analytics"."Users_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Users_13_1"]
+  }
+}
+
+Table "analytics"."Products_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" datetime
+  "type" datetime
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+}
+
+Table "analytics"."Settings_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+}
+
+Table "analytics"."Metrics_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_13_1"]
+  }
+}
+
+Table "analytics"."Products_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" int
+  "timestamp" int
+  "is_active" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_14_1"]
+  }
+}
+
+Table "analytics"."Orders_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" bigint
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" nvarchar(500)
+  "amount" bigint
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+
+  Indexes {
+    geom [name: "idx_Orders_14_1"]
+  }
+}
+
+Table "analytics"."Metrics_14" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Metrics_14_1"]
+  }
+}
+
+Table "analytics"."Transactions_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_15_1"]
+  }
+}
+
+Table "analytics"."Orders_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_16_1"]
+  }
+}
+
+Table "analytics"."Categories_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+}
+
+Table "analytics"."Orders_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_17_1"]
+  }
+}
+
+Table "analytics"."Inventory_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" date
+  "quantity" date
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" float
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_17_1"]
+  }
+}
+
+Table "analytics"."Users_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+
+  Indexes {
+    geom [name: "idx_Users_18_1"]
+  }
+}
+
+Table "analytics"."Settings_18" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" bigint
+  "description" nvarchar(500)
+  "status" bigint
+  "type" bigint
+  "value" bigint
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" bigint
+  "field_24" bigint
+  "field_25" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_18_1"]
+  }
+}
+
+Table "analytics"."Inventory_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" date
+  "quantity" date
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Inventory_20_1"]
+  }
+}
+
+Table "analytics"."Products_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" nvarchar(500)
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" float
+  "data" bigint
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" bigint
+
+  Indexes {
+    geom [name: "idx_Products_21_1"]
+  }
+}
+
+Table "analytics"."Categories_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+
+  Indexes {
+    geom [name: "idx_Categories_21_1"]
+  }
+}
+
+Table "analytics"."Metrics_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" datetime
+  "type" datetime
+  "value" date
+  "count" date
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+
+  Indexes {
+    geom [name: "idx_Metrics_21_1"]
+  }
+}
+
+Table "analytics"."Products_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_22_1"]
+  }
+}
+
+Table "analytics"."Transactions_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_22_1"]
+  }
+}
+
+Table "analytics"."Logs_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" datetime
+  "status" datetime
+  "type" date
+  "value" date
+  "count" float
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+
+  Indexes {
+    geom [name: "idx_Logs_22_1"]
+  }
+}
+
+Table "analytics"."Settings_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Settings_22_1"]
+  }
+}
+
+Table "analytics"."Inventory_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" float
+  "timestamp" float
+  "is_active" float
+  "category" float
+  "tag" nvarchar(500)
+  "field_20" float
+
+  Indexes {
+    geom [name: "idx_Inventory_23_1"]
+  }
+}
+
+Table "analytics"."Categories_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+}
+
+Table "analytics"."Transactions_25" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" bigint
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_25_1"]
+  }
+}
+
+Table "analytics"."Categories_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_26_1"]
+  }
+}
+
+Table "analytics"."Transactions_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" datetime
+  "value" datetime
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+  "amount" float
+
+  Indexes {
+    geom [name: "idx_Transactions_26_1"]
+  }
+}
+
+Table "analytics"."Products_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" bigint
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" bigint
+  "code" bigint
+  "data" bigint
+  "ref_id" bigint
+  "foreign_key" nvarchar(500)
+  "amount" bigint
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" nvarchar(500)
+  "field_39" float
+  "field_40" float
+  "field_41" float
+  "field_42" float
+  "field_43" nvarchar(500)
+  "field_44" nvarchar(500)
+  "field_45" nvarchar(500)
+  "field_46" nvarchar(500)
+  "field_47" nvarchar(500)
+  "field_48" nvarchar(500)
+  "field_49" nvarchar(500)
+  "field_50" nvarchar(500)
+  "field_51" nvarchar(500)
+  "field_52" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_27_1"]
+  }
+}
+
+Table "analytics"."Transactions_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" bigint
+  "description" bigint
+  "status" bigint
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" int
+  "field_21" int
+  "field_22" int
+  "field_23" int
+  "field_24" int
+  "field_25" int
+  "field_26" int
+  "field_27" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_27_1"]
+  }
+}
+
+Table "analytics"."Settings_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+
+  Indexes {
+    geom [name: "idx_Settings_27_1"]
+  }
+}
+
+Table "analytics"."Profiles_27" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+  "is_active" float
+  "category" float
+
+  Indexes {
+    geom [name: "idx_Profiles_27_1"]
+  }
+}
+
+Table "analytics"."Inventory_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" int
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+
+  Indexes {
+    geom [name: "idx_Inventory_28_1"]
+  }
+}
+
+Table "analytics"."Metrics_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Metrics_28_1"]
+  }
+}
+
+Table "analytics"."Users_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" datetime
+  "amount" datetime
+  "quantity" date
+  "date" date
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" float
+  "tag" int
+  "field_20" int
+  "field_21" int
+  "field_22" int
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" int
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_29_1"]
+  }
+}
+
+Table "analytics"."Profiles_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" datetime
+  "type" datetime
+  "value" date
+  "count" date
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_29_1"]
+  }
+}
+
+Table "analytics"."Users_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Users_30_1"]
+  }
+}
+
+Table "analytics"."Profiles_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Profiles_30_1"]
+  }
+}
+
+Table "analytics"."Users_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" datetime
+  "foreign_key" datetime
+  "amount" date
+  "quantity" date
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" float
+
+  Indexes {
+    geom [name: "idx_Users_31_1"]
+  }
+}
+
+Table "analytics"."Transactions_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" datetime
+  "status" datetime
+  "type" date
+  "value" date
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" int
+  "foreign_key" int
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_31_1"]
+  }
+}
+
+Table "analytics"."Metrics_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" float
+  "date" int
+  "timestamp" nvarchar(500)
+  "is_active" int
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_31_1"]
+  }
+}
+
+Table "analytics"."Inventory_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" int
+
+  Indexes {
+    geom [name: "idx_Inventory_32_1"]
+  }
+}
+
+Table "analytics"."Logs_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" datetime
+  "data" datetime
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" int
+  "is_active" int
+  "category" float
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" float
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_32_1"]
+  }
+}
+
+Table "analytics"."Products_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" float
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_33_1"]
+  }
+}
+
+Table "analytics"."Inventory_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" datetime
+  "ref_id" datetime
+  "foreign_key" date
+  "amount" date
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" float
+
+  Indexes {
+    geom [name: "idx_Inventory_33_1"]
+  }
+}
+
+Table "analytics"."Inventory_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" bigint
+  "status" bigint
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" bigint
+  "data" bigint
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" nvarchar(500)
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+  "category" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_34_1"]
+  }
+}
+
+Table "analytics"."Categories_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" datetime
+  "quantity" datetime
+  "date" date
+  "timestamp" date
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" float
+  "field_20" float
+  "field_21" int
+  "field_22" float
+  "field_23" int
+  "field_24" int
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" int
+  "field_29" int
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" float
+  "field_35" float
+  "field_36" float
+  "field_37" float
+  "field_38" float
+  "field_39" int
+  "field_40" nvarchar(500)
+  "field_41" nvarchar(500)
+  "field_42" nvarchar(500)
+  "field_43" nvarchar(500)
+  "field_44" nvarchar(500)
+  "field_45" nvarchar(500)
+  "field_46" nvarchar(500)
+  "field_47" nvarchar(500)
+  "field_48" nvarchar(500)
+  "field_49" nvarchar(500)
+  "field_50" nvarchar(500)
+  "field_51" date
+  "field_52" nvarchar(500)
+  "field_53" nvarchar(500)
+  "field_54" nvarchar(500)
+  "field_55" nvarchar(500)
+  "field_56" nvarchar(500)
+  "field_57" nvarchar(500)
+  "field_58" nvarchar(500)
+  "field_59" nvarchar(500)
+  "field_60" nvarchar(500)
+  "field_61" nvarchar(500)
+  "field_62" nvarchar(500)
+  "field_63" nvarchar(500)
+  "field_64" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_34_1"]
+  }
+}
+
+Table "analytics"."Inventory_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+}
+
+Table "analytics"."Metrics_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" datetime
+  "count" datetime
+  "code" date
+  "data" date
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_35_1"]
+  }
+}
+
+Table "analytics"."Logs_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+
+  Indexes {
+    geom [name: "idx_Logs_36_1"]
+  }
+}
+
+Table "analytics"."Products_37" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" datetime
+  "code" datetime
+  "data" date
+  "ref_id" date
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" float
+
+  Indexes {
+    geom [name: "idx_Products_37_1"]
+  }
+}
+
+Table "auth"."Transactions" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" ntext
+
+  Indexes {
+    geom [name: "idx_Transactions_1"]
+  }
+}
+
+Table "auth"."Transactions_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Transactions_1_1"]
+  }
+}
+
+Table "auth"."Metrics_1" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+}
+
+Table "auth"."Users_4" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" int
+
+  Indexes {
+    geom [name: "idx_Users_4_1"]
+  }
+}
+
+Table "auth"."Logs_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" float
+  "value" float
+  "count" char(1)
+  "code" real
+  "data" real
+
+  Indexes {
+    name [name: "idx_Logs_4_1"]
+    geom [name: "idx_Logs_4_2"]
+  }
+}
+
+Table "auth"."Profiles_4" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_4_1"]
+  }
+}
+
+Table "auth"."Categories_5" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" int
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+}
+
+Table "auth"."Logs_5" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_5_1"]
+  }
+}
+
+Table "auth"."Transactions_7" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" date
+  "quantity" date
+
+  Indexes {
+    geom [name: "idx_Transactions_7_1"]
+  }
+}
+
+Table "auth"."Profiles_7" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_7_1"]
+  }
+}
+
+Table "auth"."Metrics_7" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Metrics_7_1"]
+  }
+}
+
+Table "auth"."Users_9" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_9_1"]
+  }
+}
+
+Table "auth"."Products_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" date
+  "quantity" date
+
+  Indexes {
+    geom [name: "idx_Products_10_1"]
+  }
+}
+
+Table "auth"."Orders_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" int
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" int
+}
+
+Table "auth"."Logs_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" int
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_10_1"]
+  }
+}
+
+Table "auth"."Users_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" date
+  "status" int
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" int
+}
+
+Table "auth"."Metrics_11" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Metrics_11_1"]
+  }
+}
+
+Table "auth"."Inventory_12" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_12_1"]
+  }
+}
+
+Table "auth"."Categories_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" date
+  "quantity" date
+
+  Indexes {
+    geom [name: "idx_Categories_12_1"]
+  }
+}
+
+Table "auth"."Settings_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" date
+  "description" nvarchar(500)
+  "status" int
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+}
+
+Table "auth"."Inventory_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+
+  Indexes {
+    geom [name: "idx_Inventory_13_1"]
+  }
+}
+
+Table "auth"."Logs_13" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" bigint
+  "status" float
+
+  Indexes {
+    geom [name: "idx_Logs_13_1"]
+  }
+}
+
+Table "auth"."Profiles_13" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" float
+
+  Indexes {
+    geom [name: "idx_Profiles_13_1"]
+  }
+}
+
+Table "auth"."Inventory_14" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" int
+
+  Indexes {
+    geom [name: "idx_Inventory_14_1"]
+  }
+}
+
+Table "auth"."Profiles_14" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" date
+  "name" ntext
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_14_1"]
+  }
+}
+
+Table "auth"."Users_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" nvarchar(500)
+  "count" int
+  "code" nvarchar(500)
+  "data" int
+}
+
+Table "auth"."Orders_15" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nchar
+  "description" ntext
+  "status" date
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_15_1"]
+  }
+}
+
+Table "auth"."Users_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" date
+  "quantity" date
+
+  Indexes {
+    geom [name: "idx_Users_16_1"]
+  }
+}
+
+Table "auth"."Transactions_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" int
+  "name" nvarchar(500)
+}
+
+Table "auth"."Logs_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" date
+  "ref_id" decimal(23,15)
+  "foreign_key" decimal(23,15)
+  "amount" int
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+}
+
+Table "auth"."Metrics_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+}
+
+Table "auth"."Users_17" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" int
+  "status" char(1)
+
+  Indexes {
+    geom [name: "idx_Users_17_1"]
+  }
+}
+
+Table "auth"."Settings_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" int
+
+  Indexes {
+    geom [name: "idx_Settings_17_1"]
+  }
+}
+
+Table "auth"."Products_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Products_18_1"]
+  }
+}
+
+Table "auth"."Profiles_18" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_18_1"]
+  }
+}
+
+Table "auth"."Users_19" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" float
+
+  Indexes {
+    geom [name: "idx_Users_19_1"]
+  }
+}
+
+Table "auth"."Transactions_19" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" int
+  "foreign_key" nvarchar(500)
+}
+
+Table "auth"."Users_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" ntext
+
+  Indexes {
+    geom [name: "idx_Users_20_1"]
+  }
+}
+
+Table "auth"."Orders_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" int
+  "foreign_key" nvarchar(500)
+}
+
+Table "auth"."Logs_20" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_20_1"]
+  }
+}
+
+Table "auth"."Logs_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_21_1"]
+  }
+}
+
+Table "auth"."Orders_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" int
+  "status" bigint
+  "type" char(1)
+  "value" float
+  "count" int
+  "code" float
+
+  Indexes {
+    updated_at [name: "idx_Orders_22_1"]
+    geom [name: "idx_Orders_22_2"]
+  }
+}
+
+Table "auth"."Inventory_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" date
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+}
+
+Table "auth"."Metrics_22" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" date
+  "quantity" date
+
+  Indexes {
+    geom [name: "idx_Metrics_22_1"]
+  }
+}
+
+Table "auth"."Profiles_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+
+  Indexes {
+    name [name: "idx_Profiles_23_1"]
+    geom [name: "idx_Profiles_23_2"]
+  }
+}
+
+Table "auth"."Logs_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" date
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+}
+
+Table "auth"."Settings_24" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+  "code" float
+  "data" nvarchar(500)
+}
+
+Table "auth"."Profiles_24" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" ntext
+  "description" real
+
+  Indexes {
+    geom [name: "idx_Profiles_24_1"]
+  }
+}
+
+Table "auth"."Metrics_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" float
+  "name" nvarchar(500)
+  "description" int
+  "status" int
+  "type" real
+  "value" real
+
+  Indexes {
+    geom [name: "idx_Metrics_24_1"]
+  }
+}
+
+Table "auth"."Users_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" char(1)
+  "name" real
+  "description" char(1)
+
+  Indexes {
+    geom [name: "idx_Users_26_1"]
+  }
+}
+
+Table "auth"."Orders_26" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" float
+  "field_21" float
+  "field_22" nvarchar(500)
+  "field_23" float
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" float
+  "field_31" nvarchar(500)
+  "field_32" float
+  "field_33" float
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" float
+  "field_39" nvarchar(500)
+  "field_40" float
+
+  Indexes {
+    geom [name: "idx_Orders_26_1"]
+  }
+}
+
+Table "auth"."Settings_26" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" varchar(500)
+  "name" int
+  "description" int
+
+  Indexes {
+    geom [name: "idx_Settings_26_1"]
+  }
+}
+
+Table "auth"."Profiles_26" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" int
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_26_1"]
+  }
+}
+
+Table "auth"."Metrics_26" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" bigint
+  "code" bigint
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_26_1"]
+  }
+}
+
+Table "auth"."Users_28" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Users_28_1"]
+  }
+}
+
+Table "auth"."Categories_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_28_1"]
+  }
+}
+
+Table "auth"."Inventory_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" int
+  "description" nvarchar(500)
+  "status" text
+  "type" text
+  "value" float
+  "count" int
+  "code" float
+  "data" text
+  "ref_id" float
+
+  Indexes {
+    geom [name: "idx_Inventory_29_1"]
+  }
+}
+
+Table "auth"."Transactions_29" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Transactions_29_1"]
+  }
+}
+
+Table "auth"."Logs_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" float
+  "count" float
+  "code" float
+  "data" nvarchar(500)
+  "ref_id" float
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" float
+  "timestamp" float
+  "is_active" float
+  "category" float
+  "tag" float
+  "field_20" float
+  "field_21" float
+  "field_22" float
+  "field_23" float
+  "field_24" float
+  "field_25" float
+  "field_26" float
+  "field_27" float
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_29_1"]
+  }
+}
+
+Table "auth"."Metrics_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" int
+  "name" nvarchar(500)
+  "description" date
+  "status" int
+  "type" nvarchar(500)
+  "value" int
+}
+
+Table "auth"."Products_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+
+  Indexes {
+    geom [name: "idx_Products_30_1"]
+  }
+}
+
+Table "auth"."Inventory_30" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_30_1"]
+  }
+}
+
+Table "auth"."Metrics_30" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_30_1"]
+  }
+}
+
+Table "auth"."Users_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" int
+  "value" nvarchar(500)
+  "count" decimal(9,2)
+  "code" int
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" int
+  "amount" int
+
+  Indexes {
+    geom [name: "idx_Users_32_1"]
+  }
+}
+
+Table "auth"."Orders_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" date
+  "code" date
+  "data" nvarchar(500)
+  "ref_id" int
+  "foreign_key" nvarchar(500)
+}
+
+Table "auth"."Transactions_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" int
+  "status" float
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Transactions_32_1"]
+  }
+}
+
+Table "auth"."Profiles_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" date
+  "ref_id" decimal(23,15)
+  "foreign_key" decimal(23,15)
+  "amount" int
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+}
+
+Table "auth"."Metrics_32" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+}
+
+Table "auth"."Profiles_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" int
+  "name" nvarchar(500)
+  "description" int
+  "status" date
+  "type" date
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+}
+
+Table "auth"."Metrics_33" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" bigint
+  "status" bigint
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_33_1"]
+  }
+}
+
+Table "auth"."Orders_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" float
+  "description" nvarchar(500)
+  "status" float
+  "type" float
+  "value" nvarchar(500)
+  "count" float
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" float
+  "tag" float
+  "field_20" float
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" float
+  "field_24" nvarchar(500)
+  "field_25" float
+  "field_26" float
+  "field_27" float
+  "field_28" float
+  "field_29" float
+  "field_30" nvarchar(500)
+  "field_31" float
+  "field_32" nvarchar(500)
+  "field_33" float
+  "field_34" nvarchar(500)
+  "field_35" float
+  "field_36" float
+  "field_37" nvarchar(500)
+  "field_38" float
+  "field_39" nvarchar(500)
+  "field_40" float
+  "field_41" nvarchar(500)
+  "field_42" float
+  "field_43" nvarchar(500)
+  "field_44" nvarchar(500)
+  "field_45" float
+  "field_46" float
+  "field_47" nvarchar(500)
+  "field_48" float
+  "field_49" float
+  "field_50" nvarchar(500)
+  "field_51" nvarchar(500)
+  "field_52" nvarchar(500)
+  "field_53" float
+
+  Indexes {
+    geom [name: "idx_Orders_34_1"]
+  }
+}
+
+Table "auth"."Transactions_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" int
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" int
+  "ref_id" date
+  "foreign_key" date
+  "amount" nvarchar(500)
+  "quantity" int
+}
+
+Table "auth"."Transactions_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" date
+  "name" date
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" int
+}
+
+Table "auth"."Logs_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_35_1"]
+  }
+}
+
+Table "auth"."Settings_35" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" int
+  "name" date
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" int
+}
+
+Table "auth"."Users_36" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" date
+  "data" date
+  "ref_id" decimal(23,15)
+  "foreign_key" decimal(23,15)
+  "amount" int
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+}
+
+Table "auth"."Orders_36" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+
+  Indexes {
+    geom [name: "idx_Orders_36_1"]
+  }
+}
+
+Table "admin"."Logs" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" float
+  "count" float
+  "code" float
+
+  Indexes {
+    geom [name: "idx_Logs_1"]
+  }
+}
+
+Table "admin"."Profiles_1" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" date
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" float
+  "data" float
+  "ref_id" float
+  "foreign_key" float
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_1_1"]
+  }
+}
+
+Table "admin"."Users_2" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" bigint
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_2_1"]
+  }
+}
+
+Table "admin"."Transactions_2" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500) [unique, not null]
+  "name" nvarchar(500)
+  "description" date
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" text
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" char(1)
+  "amount" nvarchar(500)
+
+  Indexes {
+    updated_at [unique, name: "idx_Transactions_2_1"]
+    geom [name: "idx_Transactions_2_2"]
+  }
+}
+
+Table "admin"."Products_4" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" int
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" int
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" int
+  "field_28" nvarchar(500)
+  "field_29" bigint
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" int
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" int
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" float
+  "field_39" float
+  "field_40" nvarchar(500)
+  "field_41" date
+  "field_42" date
+  "field_43" date
+  "field_44" date
+  "field_45" nvarchar(500)
+}
+
+Table "admin"."Orders_8" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" int
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" float
+  "amount" float
+  "quantity" float
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" float
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_8_1"]
+  }
+}
+
+Table "admin"."Inventory_9" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_9_1"]
+  }
+}
+
+Table "admin"."Logs_9" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" float
+
+  Indexes {
+    geom [name: "idx_Logs_9_1"]
+  }
+}
+
+Table "admin"."Metrics_9" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" bigint
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" bigint
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+
+  Indexes {
+    geom [name: "idx_Metrics_9_1"]
+  }
+}
+
+Table "admin"."Categories_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_10_1"]
+  }
+}
+
+Table "admin"."Profiles_10" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" int
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" int
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" int
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" int
+  "field_28" nvarchar(500)
+  "field_29" bigint
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" int
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" int
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" float
+  "field_39" float
+  "field_40" nvarchar(500)
+  "field_41" date
+  "field_42" date
+  "field_43" date
+  "field_44" date
+  "field_45" nvarchar(500)
+}
+
+Table "admin"."Categories_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500) [not null]
+}
+
+Table "admin"."Transactions_11" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" bigint
+  "name" varchar(500)
+  "description" varchar(500)
+
+  Indexes {
+    geom [name: "idx_Transactions_11_1"]
+  }
+}
+
+Table "admin"."Products_12" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" float
+
+  Indexes {
+    geom [name: "idx_Products_12_1"]
+  }
+}
+
+Table "admin"."Profiles_12" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" bigint
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" bigint
+  "amount" bigint
+  "quantity" bigint
+  "date" bigint
+  "timestamp" bigint
+  "is_active" bigint
+
+  Indexes {
+    geom [name: "idx_Profiles_12_1"]
+  }
+}
+
+Table "admin"."Transactions_14" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500) [unique]
+  "name" float
+  "description" float
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" int
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" char(1)
+  "field_21" char(1)
+  "field_22" int
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" nvarchar(500)
+  "field_29" nvarchar(500)
+  "field_30" date
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" date
+  "field_39" nvarchar(500)
+  "field_40" nvarchar(500)
+  "field_41" nvarchar(500)
+  "field_42" nvarchar(500)
+  "field_43" nvarchar(500)
+  "field_44" text
+  "field_45" nvarchar(500)
+  "field_46" float
+  "field_47" nvarchar(500)
+  "field_48" nvarchar(500)
+  "field_49" nvarchar(500)
+  "field_50" nvarchar(500)
+  "field_51" char(1)
+  "field_52" char(1)
+  "field_53" char(1)
+  "field_54" char(1)
+  "field_55" char(1)
+  "field_56" char(1)
+  "field_57" char(1)
+  "field_58" char(1)
+  "field_59" char(1)
+  "field_60" char(1)
+  "field_61" text
+  "field_62" nvarchar(500)
+  "field_63" nvarchar(500)
+  "field_64" nvarchar(500)
+  "field_65" date
+
+  Indexes {
+    updated_at [unique, name: "idx_Transactions_14_1"]
+    geom [name: "idx_Transactions_14_2"]
+  }
+}
+
+Table "admin"."Settings_15" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_15_1"]
+  }
+}
+
+Table "admin"."Metrics_15" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "qgs_fid" int
+  "description" bigint
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Metrics_15_1"]
+  }
+}
+
+Table "admin"."Inventory_16" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Inventory_16_1"]
+  }
+}
+
+Table "admin"."Categories_17" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_17_1"]
+  }
+}
+
+Table "admin"."Profiles_19" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" int
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Profiles_19_1"]
+  }
+}
+
+Table "admin"."Settings_20" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" nvarchar(500)
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_20_1"]
+  }
+}
+
+Table "admin"."Orders_21" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" nvarchar(500)
+  "name" int
+  "description" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_21_1"]
+  }
+}
+
+Table "admin"."Logs_23" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" float
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" float
+  "category" float
+  "tag" float
+  "field_20" float
+
+  Indexes {
+    geom [name: "idx_Logs_23_1"]
+  }
+}
+
+Table "admin"."Transactions_24" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" float
+  "timestamp" float
+
+  Indexes {
+    geom [name: "idx_Transactions_24_1"]
+  }
+}
+
+Table "admin"."Orders_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" decimal(23,15)
+  "description" decimal(23,15)
+  "status" nvarchar(500)
+  "type" bigint
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" bigint
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" decimal(23,15)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Orders_28_1"]
+  }
+}
+
+Table "admin"."Logs_28" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry [not null]
+  "updated_at" date
+  "name" text
+
+  Indexes {
+    geom [name: "idx_Logs_28_1"]
+  }
+}
+
+Table "admin"."Settings_29" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Settings_29_1"]
+  }
+}
+
+Table "admin"."Logs_30" {
+  "id" int [pk, not null]
+  "geom" geometry [not null]
+  "qgs_fid" int
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Logs_30_1"]
+  }
+}
+
+Table "admin"."Categories_31" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Categories_31_1"]
+  }
+}
+
+Table "admin"."Orders_33" {
+  "id" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "qgs_fid" int
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" nvarchar(500)
+  "field_20" nvarchar(500)
+  "field_21" nvarchar(500)
+  "field_22" nvarchar(500)
+  "field_23" nvarchar(500)
+  "field_24" nvarchar(500)
+  "field_25" nvarchar(500)
+  "field_26" nvarchar(500)
+  "field_27" nvarchar(500)
+  "field_28" bigint
+  "field_29" bigint
+  "field_30" nvarchar(500)
+  "field_31" bigint
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" nvarchar(500)
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" nvarchar(500)
+  "field_39" nvarchar(500)
+  "field_40" nvarchar(500)
+  "field_41" nvarchar(500)
+  "field_42" char(1)
+  "field_43" char(1)
+  "field_44" text
+  "field_45" text
+  "field_46" text
+  "field_47" text
+  "field_48" text
+  "field_49" text
+  "field_50" text
+  "field_51" text
+  "field_52" text
+  "field_53" text
+  "field_54" text
+  "field_55" text
+  "field_56" decimal(10,2)
+  "field_57" text
+  "field_58" text
+
+  Indexes {
+    geom [name: "idx_Orders_33_1"]
+  }
+}
+
+Table "admin"."Users_34" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" bigint
+  "name" bigint
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" nvarchar(500)
+  "value" nvarchar(500)
+  "count" nvarchar(500)
+  "code" nvarchar(500)
+  "data" nvarchar(500)
+  "ref_id" nvarchar(500)
+  "foreign_key" nvarchar(500)
+  "amount" nvarchar(500)
+  "quantity" nvarchar(500)
+
+  Indexes {
+    geom [name: "idx_Users_34_1"]
+  }
+}
+
+Table "admin"."Orders_37" {
+  "qgs_fid" int [pk, not null]
+  "geom" geometry
+  "updated_at" float
+  "name" nvarchar(500)
+  "description" nvarchar(500)
+  "status" nvarchar(500)
+  "type" bigint
+  "value" bigint
+  "count" bigint
+  "code" bigint
+  "data" nvarchar(500)
+  "ref_id" bigint
+  "foreign_key" bigint
+  "amount" bigint
+  "quantity" bigint
+  "date" nvarchar(500)
+  "timestamp" nvarchar(500)
+  "is_active" nvarchar(500)
+  "category" nvarchar(500)
+  "tag" decimal(23,15)
+  "field_20" decimal(23,15)
+  "field_21" bigint
+  "field_22" bigint
+  "field_23" bigint
+  "field_24" bigint
+  "field_25" nvarchar(500)
+  "field_26" decimal(23,15)
+  "field_27" decimal(23,15)
+  "field_28" decimal(23,15)
+  "field_29" decimal(23,15)
+  "field_30" nvarchar(500)
+  "field_31" nvarchar(500)
+  "field_32" nvarchar(500)
+  "field_33" nvarchar(500)
+  "field_34" bigint
+  "field_35" nvarchar(500)
+  "field_36" nvarchar(500)
+  "field_37" nvarchar(500)
+  "field_38" nvarchar(500)
+  "field_39" bigint
+  "field_40" nvarchar(500)
+  "field_41" nvarchar(500)
+  "field_42" nvarchar(500)
+  "field_43" nvarchar(500)
+  "field_44" nvarchar(500)
+  "field_45" bigint
+  "field_46" bigint
+  "field_47" bigint
+  "field_48" bigint
+  "field_49" bigint
+  "field_50" nvarchar(500)
+  "field_51" bigint
+  "field_52" bigint
+  "field_53" bigint
+  "field_54" bigint
+  "field_55" bigint
+  "field_56" bigint
+  "field_57" bigint
+  "field_58" bigint
+  "field_59" bigint
+  "field_60" bigint
+  "field_61" bigint
+  "field_62" bigint
+  "field_63" bigint
+  "field_64" nvarchar(500)
+  "field_65" nvarchar(500)
+  "field_66" decimal(23,15)
+  "field_67" decimal(23,15)
+  "field_68" decimal(23,15)
+  "field_69" decimal(23,15)
+  "field_70" decimal(23,15)
+  "field_71" decimal(23,15)
+  "field_72" decimal(23,15)
+  "field_73" decimal(23,15)
+  "field_74" decimal(23,15)
+  "field_75" decimal(23,15)
+  "field_76" nvarchar(500)
+  "field_77" nvarchar(500)
+  "field_78" bigint
+  "field_79" nvarchar(500)
+  "field_80" nvarchar(500)
+  "field_81" nvarchar(500)
+  "field_82" nvarchar(500)
+  "field_83" nvarchar(500)
+  "field_84" nvarchar(500)
+  "field_85" decimal(23,15)
+  "field_86" decimal(23,15)
+
+  Indexes {
+    geom [name: "idx_Orders_37_1"]
+  }
+}
