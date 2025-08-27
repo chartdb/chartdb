@@ -614,7 +614,7 @@ const fixMultilineTableNames = (dbml: string): string => {
     // - Table name that might be broken across lines (until the opening brace)
     return dbml.replace(
         /Table\s+((?:"[^"]*"\.)?"[^"]*(?:\n[^"]*)*")\s*\{/g,
-        (match, tableName) => {
+        (_, tableName) => {
             // Remove line breaks within the table name
             const fixedTableName = tableName.replace(/\n\s*/g, '');
             return `Table ${fixedTableName} {`;
