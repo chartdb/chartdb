@@ -106,7 +106,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should contain composite primary key syntax
-            expect(sql).toContain('PRIMARY KEY (spell_id, component_id)');
+            expect(sql).toContain('PRIMARY KEY ("spell_id", "component_id")');
             // Should NOT contain individual PRIMARY KEY constraints
             expect(sql).not.toMatch(/spell_id\s+uuid\s+NOT NULL\s+PRIMARY KEY/);
             expect(sql).not.toMatch(
@@ -192,7 +192,7 @@ describe('DBML Export - SQL Generation Tests', () => {
 
             // Should contain composite primary key constraint
             expect(sql).toContain(
-                'PRIMARY KEY (master_user_id, tenant_id, tenant_user_id)'
+                'PRIMARY KEY ("master_user_id", "tenant_id", "tenant_user_id")'
             );
 
             // Should NOT contain the duplicate index for the primary key fields
@@ -245,7 +245,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should contain inline PRIMARY KEY
-            expect(sql).toMatch(/id\s+uuid\s+NOT NULL\s+PRIMARY KEY/);
+            expect(sql).toMatch(/"id"\s+uuid\s+NOT NULL\s+PRIMARY KEY/);
             // Should NOT contain separate PRIMARY KEY constraint
             expect(sql).not.toContain('PRIMARY KEY (id)');
         });
@@ -306,8 +306,8 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).not.toContain('DEFAULT has default');
             expect(sql).not.toContain('DEFAULT DEFAULT has default');
             // The fields should still be in the table
-            expect(sql).toContain('is_active boolean');
-            expect(sql).toContain('stock_count integer NOT NULL'); // integer gets simplified to int
+            expect(sql).toContain('"is_active" boolean');
+            expect(sql).toContain('"stock_count" integer NOT NULL'); // integer gets simplified to int
         });
 
         it('should handle valid default values correctly', () => {
@@ -429,8 +429,8 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should convert NOW to NOW() and ('now') to now()
-            expect(sql).toContain('created_at timestamp DEFAULT NOW');
-            expect(sql).toContain('updated_at timestamp DEFAULT now()');
+            expect(sql).toContain('"created_at" timestamp DEFAULT NOW');
+            expect(sql).toContain('"updated_at" timestamp DEFAULT now()');
         });
     });
 
@@ -485,9 +485,9 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should handle char with explicit length
-            expect(sql).toContain('element_code char(2)');
+            expect(sql).toContain('"element_code" char(2)');
             // Should add default length for char without length
-            expect(sql).toContain('status char(1)');
+            expect(sql).toContain('"status" char(1)');
         });
 
         it('should not have spaces between char and parentheses', () => {
@@ -715,7 +715,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('CREATE TABLE "guild_members"');
             // Should create foreign key
             expect(sql).toContain(
-                'ALTER TABLE "guild_members" ADD CONSTRAINT fk_guild_members_guild FOREIGN KEY (guild_id) REFERENCES "guilds" (id);'
+                'ALTER TABLE "guild_members" ADD CONSTRAINT fk_guild_members_guild FOREIGN KEY ("guild_id") REFERENCES "guilds" ("id");'
             );
         });
     });
@@ -939,9 +939,9 @@ describe('DBML Export - SQL Generation Tests', () => {
             });
 
             // Should include precision and scale
-            expect(sql).toContain('amount numeric(15, 2)');
+            expect(sql).toContain('"amount" numeric(15, 2)');
             // Should include precision only when scale is not provided
-            expect(sql).toContain('interest_rate numeric(5)');
+            expect(sql).toContain('"interest_rate" numeric(5)');
         });
     });
 });
