@@ -17,6 +17,7 @@ import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 import type {
+    AreaContext,
     GroupingMode,
     NodeContext,
     NodeType,
@@ -192,6 +193,52 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         [fitView, setNodes]
     );
 
+    const tablesByArea = useMemo(() => {
+        const map = new Map<string, string[]>();
+        tables.forEach((table) => {
+            if (table.parentAreaId) {
+                if (!map.has(table.parentAreaId)) {
+                    map.set(table.parentAreaId, []);
+                }
+                map.get(table.parentAreaId)!.push(table.id);
+            }
+        });
+        return map;
+    }, [tables]);
+
+    const focusOnArea = useCallback(
+        (areaId: string) => {
+            const areaTableIds = tablesByArea.get(areaId) || [];
+            const areaTableIdsSet = new Set(areaTableIds);
+
+            // Select the area and all its tables, deselect others
+            setNodes((nodes) =>
+                nodes.map((node) => {
+                    const shouldSelect =
+                        node.id === areaId || areaTableIdsSet.has(node.id);
+                    return {
+                        ...node,
+                        selected: shouldSelect,
+                    };
+                })
+            );
+
+            // Focus on the area and all its tables for proper centering
+            setTimeout(() => {
+                fitView({
+                    duration: 500,
+                    maxZoom: 1,
+                    minZoom: 1,
+                    nodes: [
+                        { id: areaId },
+                        ...areaTableIds.map((tableId) => ({ id: tableId })),
+                    ],
+                });
+            }, 100);
+        },
+        [fitView, setNodes, tablesByArea]
+    );
+
     // Handle node click
     const handleNodeClick = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => {
@@ -203,9 +250,18 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 if (isTableVisible) {
                     focusOnTable(node.id);
                 }
+            } else if (node.type === 'area') {
+                const context = node.context as AreaContext;
+                const isAreaVisible = context.visible;
+
+                // Only focus if area is visible and not ungrouped
+                if (isAreaVisible && !context.isUngrouped) {
+                    // Use the actual area ID from context, not the tree node ID
+                    focusOnArea(context.id);
+                }
             }
         },
-        [focusOnTable]
+        [focusOnTable, focusOnArea]
     );
 
     // Animate in on mount and focus search input
