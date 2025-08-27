@@ -15,12 +15,12 @@ export interface DBCustomTypeField {
 
 export interface DBCustomType {
     id: string;
-    schema?: string;
+    schema?: string | null;
     name: string;
     kind: DBCustomTypeKind;
-    values?: string[]; // For enum types
-    fields?: DBCustomTypeField[]; // For composite types
-    order?: number;
+    values?: string[] | null; // For enum types
+    fields?: DBCustomTypeField[] | null; // For composite types
+    order?: number | null;
 }
 
 export const dbCustomTypeFieldSchema = z.object({
@@ -30,11 +30,12 @@ export const dbCustomTypeFieldSchema = z.object({
 
 export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     id: z.string(),
-    schema: z.string(),
+    schema: z.string().or(z.null()).optional(),
     name: z.string(),
     kind: z.nativeEnum(DBCustomTypeKind),
-    values: z.array(z.string()).optional(),
-    fields: z.array(dbCustomTypeFieldSchema).optional(),
+    values: z.array(z.string()).or(z.null()).optional(),
+    fields: z.array(dbCustomTypeFieldSchema).or(z.null()).optional(),
+    order: z.number().or(z.null()).optional(),
 });
 
 export const createCustomTypesFromMetadata = ({
