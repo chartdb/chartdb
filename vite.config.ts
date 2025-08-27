@@ -32,6 +32,7 @@ export default defineConfig({
     },
     build: {
         rollupOptions: {
+            external: (id) => /__test__/.test(id),
             output: {
                 assetFileNames: (assetInfo) => {
                     if (
