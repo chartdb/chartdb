@@ -223,7 +223,7 @@ export const importDBMLToDiagram = async (
             };
         }
 
-        const parsedData = parser.parse(sanitizedContent, 'dbml');
+        const parsedData = parser.parse(sanitizedContent, 'dbmlv2');
 
         // Handle case where no schemas are found
         if (!parsedData.schemas || parsedData.schemas.length === 0) {

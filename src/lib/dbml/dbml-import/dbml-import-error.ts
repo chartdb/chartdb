@@ -1,3 +1,5 @@
+import type { CompilerError } from '@dbml/core/types/parse/error';
+
 export interface DBMLError {
     message: string;
     line: number;
@@ -9,28 +11,12 @@ export function parseDBMLError(error: unknown): DBMLError | null {
         if (typeof error === 'string') {
             const parsed = JSON.parse(error);
             if (parsed.diags?.[0]) {
-                const diag = parsed.diags[0];
-
-                return {
-                    message: diag.message,
-                    line: diag.location.start.line,
-                    column: diag.location.start.column,
-                };
+                const parsedError = parsed as CompilerError;
+                return getFirstErrorFromCompileError(parsedError);
             }
         } else if (error && typeof error === 'object' && 'diags' in error) {
-            const parsed = error as {
-                diags: Array<{
-                    message: string;
-                    location: { start: { line: number; column: number } };
-                }>;
-            };
-            if (parsed.diags?.[0]) {
-                return {
-                    message: parsed.diags[0].message,
-                    line: parsed.diags[0].location.start.line,
-                    column: parsed.diags[0].location.start.column,
-                };
-            }
+            const parsed = error as CompilerError;
+            return getFirstErrorFromCompileError(parsed);
         }
     } catch (e) {
         console.error('Error parsing DBML error:', e);
@@ -38,3 +24,25 @@ export function parseDBMLError(error: unknown): DBMLError | null {
 
     return null;
 }
+
+const getFirstErrorFromCompileError = (
+    error: CompilerError
+): DBMLError | null => {
+    const diags = (error.diags ?? []).sort((a, b) => {
+        if (a.location.start.line === b.location.start.line) {
+            return a.location.start.column - b.location.start.column;
+        }
+        return a.location.start.line - b.location.start.line;
+    });
+
+    if (diags.length > 0) {
+        const firstDiag = diags[0];
+        return {
+            message: firstDiag.message,
+            line: firstDiag.location.start.line,
+            column: firstDiag.location.start.column,
+        };
+    }
+
+    return null;
+};

@@ -132,7 +132,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 const preprocessedContent = preprocessDBML(content);
                 const sanitizedContent = sanitizeDBML(preprocessedContent);
                 const parser = new Parser();
-                parser.parse(sanitizedContent, 'dbml');
+                parser.parse(sanitizedContent, 'dbmlv2');
             } catch (e) {
                 const parsedError = parseDBMLError(e);
                 if (parsedError) {
