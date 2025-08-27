@@ -424,7 +424,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             });
 
             expect(sql).toContain(
-                'ALTER TABLE "user-profiles" ADD CONSTRAINT fk_profiles_accounts FOREIGN KEY (account_id) REFERENCES "user-accounts" (id)'
+                'ALTER TABLE "user-profiles" ADD CONSTRAINT fk_profiles_accounts FOREIGN KEY ("account_id") REFERENCES "user-accounts" ("id")'
             );
         });
 
@@ -493,7 +493,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             });
 
             expect(sql).toContain(
-                'ALTER TABLE "app-data"."user profiles" ADD CONSTRAINT fk_profiles_accounts FOREIGN KEY (account_id) REFERENCES "auth-db"."user accounts" (id)'
+                'ALTER TABLE "app-data"."user profiles" ADD CONSTRAINT fk_profiles_accounts FOREIGN KEY ("account_id") REFERENCES "auth-db"."user accounts" ("id")'
             );
         });
     });
