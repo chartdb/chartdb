@@ -19,6 +19,7 @@ import {
     SquareDot,
     SquarePlus,
     SquareMinus,
+    Pencil,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import {
@@ -291,16 +292,34 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         useKeyPressEvent('Enter', editTableName);
         useKeyPressEvent('Escape', abortEdit);
 
-        const enterEditMode = useCallback((e: React.MouseEvent) => {
-            e.stopPropagation();
-            setEditMode(true);
-        }, []);
+        const enterEditMode = useCallback(
+            (e: React.MouseEvent) => {
+                e.stopPropagation();
+                setTableName(table.name); // Reset to current name
+                setEditMode(true);
+            },
+            [table.name]
+        );
 
         React.useEffect(() => {
             if (table.name.trim()) {
                 setTableName(table.name.trim());
             }
         }, [table.name]);
+
+        useEffect(() => {
+            if (editMode) {
+                // Small delay to ensure the input is rendered
+                const timeoutId = setTimeout(() => {
+                    if (inputRef.current) {
+                        inputRef.current.focus();
+                        inputRef.current.select();
+                    }
+                }, 50); // Slightly longer delay to ensure DOM is ready
+
+                return () => clearTimeout(timeoutId);
+            }
+        }, [editMode]);
 
         const tableClassName = useMemo(
             () =>
@@ -474,19 +493,30 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     </Button>
                                 </>
                             ) : (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Label
-                                            className="text-editable truncate px-2 py-0.5 text-sm font-bold"
-                                            onDoubleClick={enterEditMode}
-                                        >
-                                            {table.name}
-                                        </Label>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t('tool_tips.double_click_to_edit')}
-                                    </TooltipContent>
-                                </Tooltip>
+                                <div className="flex min-w-0 items-center">
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Label
+                                                className="text-editable truncate px-2 py-0.5 text-sm font-bold"
+                                                onDoubleClick={enterEditMode}
+                                            >
+                                                {table.name}
+                                            </Label>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t(
+                                                'tool_tips.double_click_to_edit'
+                                            )}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <Button
+                                        variant="ghost"
+                                        className="ml-1 size-5 shrink-0 p-0 opacity-0 transition-opacity hover:bg-primary-foreground group-hover:opacity-100"
+                                        onClick={enterEditMode}
+                                    >
+                                        <Pencil className="size-3 text-slate-500 dark:text-slate-400" />
+                                    </Button>
+                                </div>
                             )}
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">

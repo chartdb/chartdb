@@ -490,6 +490,11 @@ export const fr: LanguageTranslation = {
             add_relationship: 'Ajouter une Relation',
         },
 
+        area_node_context_menu: {
+            edit_area_name: 'Modifier le Nom de la Zone',
+            delete_area: 'Supprimer la Zone',
+        },
+
         snap_to_grid_tooltip:
             'Aligner sur la grille (maintenir la touche {{key}})',
 

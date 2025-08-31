@@ -489,6 +489,11 @@ export const ko_KR: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
         },
 
+        area_node_context_menu: {
+            edit_area_name: '영역 이름 편집',
+            delete_area: '영역 삭제',
+        },
+
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',
 
         tool_tips: {
