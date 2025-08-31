@@ -1,0 +1,2 @@
+#!/bin/sh
+npm run lint || { echo "lint failed, please run \"npm run lint:fix\" to fix the errors." ; exit 1; }

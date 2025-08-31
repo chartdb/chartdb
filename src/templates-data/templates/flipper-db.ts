@@ -1,0 +1,215 @@
+import { DatabaseType } from '@/lib/domain/database-type';
+import type { Template } from '../templates-data';
+import image from '@/assets/templates/flipper-db.png';
+import imageDark from '@/assets/templates/flipper-db-dark.png';
+
+const now = Date.now();
+
+export const flipperDb: Template = {
+    slug: 'flipper-database',
+    name: 'Flipper',
+    shortDescription: 'Feature flags for Ruby',
+    description: 'Beautiful, performant feature flags for Ruby and Rails.',
+    image,
+    imageDark,
+    tags: ['MySQL', 'Open Source', 'Rails'],
+    featured: true,
+    url: 'https://github.com/flippercloud/flipper',
+    diagram: {
+        id: 'flipper_db',
+        name: 'flipper-database',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        databaseType: DatabaseType.MYSQL,
+        tables: [
+            {
+                id: 'fm94fes2cxfjjyxf7cop8r6iy',
+                name: 'flipper_features',
+                schema: 't_flipper_db',
+                x: 490.8536539472756,
+                y: 97.95898875223355,
+                fields: [
+                    {
+                        id: 'kzvapep4sezv1ehvx9jut4msa',
+                        name: 'id',
+                        type: {
+                            id: 'bigint',
+                            name: 'bigint',
+                        },
+                        primaryKey: true,
+                        unique: true,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                    {
+                        id: 'nhyf4lcb6wavevyf57lf5sgg6',
+                        name: 'key',
+                        type: {
+                            id: 'varchar',
+                            name: 'varchar',
+                        },
+                        primaryKey: false,
+                        unique: true,
+                        nullable: false,
+                        collation: 'utf8mb4_0900_ai_ci',
+                        createdAt: now,
+                    },
+                    {
+                        id: 'j767ltyzmrue9da0834y51dm2',
+                        name: 'created_at',
+                        type: {
+                            id: 'datetime',
+                            name: 'datetime',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                    {
+                        id: 'jxv356syc9l7pn70o5ypjsvu2',
+                        name: 'updated_at',
+                        type: {
+                            id: 'datetime',
+                            name: 'datetime',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                ],
+                indexes: [
+                    {
+                        id: '171wmmejcsoekydukvqf7f8as',
+                        name: 'flipper_features_key_unique',
+                        unique: true,
+                        fieldIds: ['nhyf4lcb6wavevyf57lf5sgg6'],
+                        createdAt: now,
+                    },
+                    {
+                        id: '688euilbvac7l4g4td0f4ope0',
+                        name: 'PRIMARY',
+                        unique: true,
+                        fieldIds: ['kzvapep4sezv1ehvx9jut4msa'],
+                        createdAt: now,
+                    },
+                ],
+                color: '#8eb7ff',
+                isView: false,
+                isMaterializedView: false,
+                createdAt: now,
+            },
+            {
+                id: 'k3fi60h438pnhfit52zds2y22',
+                name: 'flipper_gates',
+                schema: 't_flipper_db',
+                x: 189.76629033949916,
+                y: 100,
+                fields: [
+                    {
+                        id: 'pqq0xmwknc6byigyseyh8r9q8',
+                        name: 'id',
+                        type: {
+                            id: 'bigint',
+                            name: 'bigint',
+                        },
+                        primaryKey: true,
+                        unique: true,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                    {
+                        id: 'hyk3w9a3cj48338mma85vm4vn',
+                        name: 'feature_key',
+                        type: {
+                            id: 'varchar',
+                            name: 'varchar',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        collation: 'utf8mb4_0900_ai_ci',
+                        createdAt: now,
+                    },
+                    {
+                        id: 'pss1gs5xz19bm3nbldxq4qgyc',
+                        name: 'key',
+                        type: {
+                            id: 'varchar',
+                            name: 'varchar',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        collation: 'utf8mb4_0900_ai_ci',
+                        createdAt: now,
+                    },
+                    {
+                        id: 'shzigzjrhv0m3mlb5mvjit3up',
+                        name: 'value',
+                        type: {
+                            id: 'varchar',
+                            name: 'varchar',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: true,
+                        collation: 'utf8mb4_0900_ai_ci',
+                        createdAt: now,
+                    },
+                    {
+                        id: 'v92wmlsa70mbcgdlz5pz50xx1',
+                        name: 'created_at',
+                        type: {
+                            id: 'datetime',
+                            name: 'datetime',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                    {
+                        id: 'atxf546zsrtvq8mzavfc8gm3e',
+                        name: 'updated_at',
+                        type: {
+                            id: 'datetime',
+                            name: 'datetime',
+                        },
+                        primaryKey: false,
+                        unique: false,
+                        nullable: false,
+                        createdAt: now,
+                    },
+                ],
+                indexes: [
+                    {
+                        id: '1jpbmppoqifibrackarznx19q',
+                        name: 'flipper_gates_feature_key_key_value_unique',
+                        unique: true,
+                        fieldIds: [
+                            'hyk3w9a3cj48338mma85vm4vn',
+                            'pss1gs5xz19bm3nbldxq4qgyc',
+                            'shzigzjrhv0m3mlb5mvjit3up',
+                        ],
+                        createdAt: now,
+                    },
+                    {
+                        id: 'canhlx66b19z1ota9z9l353ou',
+                        name: 'PRIMARY',
+                        unique: true,
+                        fieldIds: ['pqq0xmwknc6byigyseyh8r9q8'],
+                        createdAt: now,
+                    },
+                ],
+                color: '#4dee8a',
+                isView: false,
+                isMaterializedView: false,
+                createdAt: now,
+            },
+        ],
+        relationships: [],
+        dependencies: [],
+    },
+};

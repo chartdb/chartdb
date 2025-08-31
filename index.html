@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="noindex, max-image-preview:large" />
+        <title>ChartDB - Create & Visualize Database Schema Diagrams</title>
+        <link rel="canonical" href="https://chartdb.io" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <script src="/config.js"></script>
+        <script>
+            // Load analytics only if not disabled
+            (function () {
+                const disableAnalytics =
+                    (window.env && window.env.DISABLE_ANALYTICS === 'true') ||
+                    (typeof process !== 'undefined' &&
+                        process.env &&
+                        process.env.VITE_DISABLE_ANALYTICS === 'true');
+
+                if (!disableAnalytics) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.usefathom.com/script.js';
+                    script.setAttribute('data-site', 'PRHIVBNN');
+                    script.setAttribute('data-canonical', 'false');
+                    script.setAttribute('data-spa', 'auto');
+                    script.defer = true;
+                    document.head.appendChild(script);
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

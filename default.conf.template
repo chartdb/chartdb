@@ -1,0 +1,26 @@
+server {
+    listen       80;
+    listen  [::]:80;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+	    try_files  $uri $uri/ /index.html;
+    }
+
+    location /config.js {
+        default_type application/javascript;
+        return 200 "window.env = {
+            OPENAI_API_KEY: \"$OPENAI_API_KEY\",
+            OPENAI_API_ENDPOINT: \"$OPENAI_API_ENDPOINT\",
+            LLM_MODEL_NAME: \"$LLM_MODEL_NAME\",
+            HIDE_CHARTDB_CLOUD: \"$HIDE_CHARTDB_CLOUD\",
+            DISABLE_ANALYTICS: \"$DISABLE_ANALYTICS\"
+        };";
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}

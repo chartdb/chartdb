@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .react-flow.canvas-cursor-default .react-flow__pane {
+        @apply cursor-default;
+    }
+
+    .react-flow.nodes-animated .react-flow__node {
+        @apply transition-[width];
+        @apply duration-100;
+    }
+
+    .monaco-editor .monaco-editor-overlaymessage {
+        @apply hidden !important;
+    }
+
+    .marker-definitions {
+    }
+}
