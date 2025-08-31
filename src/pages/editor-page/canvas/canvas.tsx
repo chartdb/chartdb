@@ -95,6 +95,7 @@ import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useDiff } from '@/context/diff-context/use-diff';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -124,15 +125,32 @@ const tableToTableNode = (
         databaseType,
         filterLoading,
         showDBViews,
+        forceShow,
     }: {
         filter?: DiagramFilter;
         databaseType: DatabaseType;
         filterLoading: boolean;
         showDBViews?: boolean;
+        forceShow?: boolean;
     }
 ): TableNodeType => {
     // Always use absolute position for now
     const position = { x: table.x, y: table.y };
+
+    let hidden = false;
+
+    if (forceShow) {
+        hidden = false;
+    } else {
+        hidden =
+            !filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: { defaultSchema: defaultSchemas[databaseType] },
+            }) ||
+            filterLoading ||
+            (!showDBViews && table.isView);
+    }
 
     return {
         id: table.id,
@@ -143,14 +161,7 @@ const tableToTableNode = (
             isOverlapping: false,
         },
         width: table.width ?? MIN_TABLE_SIZE,
-        hidden:
-            !filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            }) ||
-            filterLoading ||
-            (!showDBViews && table.isView),
+        hidden,
     };
 };
 
@@ -244,6 +255,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setShowFilter,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
+    const { checkIfNewTable } = useDiff();
+
+    const shouldForceShowTable = useCallback(
+        (tableId: string) => {
+            return checkIfNewTable({ tableId });
+        },
+        [checkIfNewTable]
+    );
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
@@ -254,6 +273,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 databaseType,
                 filterLoading,
                 showDBViews,
+                forceShow: shouldForceShowTable(table.id),
             })
         )
     );
@@ -273,6 +293,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 databaseType,
                 filterLoading,
                 showDBViews,
+                forceShow: shouldForceShowTable(table.id),
             })
         );
         if (equal(initialNodes, nodes)) {
@@ -285,6 +306,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         databaseType,
         filterLoading,
         showDBViews,
+        shouldForceShowTable,
     ]);
 
     useEffect(() => {
@@ -445,6 +467,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         databaseType,
                         filterLoading,
                         showDBViews,
+                        forceShow: shouldForceShowTable(table.id),
                     });
 
                     // Check if table uses the highlighted custom type
@@ -495,6 +518,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         highlightedCustomType,
         filterLoading,
         showDBViews,
+        shouldForceShowTable,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
