@@ -320,6 +320,7 @@ export const zh_CN: LanguageTranslation = {
                 tables_count: '表数量',
             },
             cancel: '取消',
+            start_new: 'Start with a new diagram',
             open: '打开',
 
             diagram_actions: {

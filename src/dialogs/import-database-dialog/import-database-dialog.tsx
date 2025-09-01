@@ -289,19 +289,15 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
 
         if (!(await shouldRemove)) return;
 
-        await Promise.all([
-            removeTables(tableIdsToRemove, { updateHistory: false }),
-            removeRelationships(relationshipIdsToRemove, {
-                updateHistory: false,
-            }),
-        ]);
+        await removeTables(tableIdsToRemove, { updateHistory: false });
+        await removeRelationships(relationshipIdsToRemove, {
+            updateHistory: false,
+        });
 
-        await Promise.all([
-            addTables(diagram.tables ?? [], { updateHistory: false }),
-            addRelationships(diagram.relationships ?? [], {
-                updateHistory: false,
-            }),
-        ]);
+        await addTables(diagram.tables ?? [], { updateHistory: false });
+        await addRelationships(diagram.relationships ?? [], {
+            updateHistory: false,
+        });
 
         if (currentDatabaseType === DatabaseType.GENERIC) {
             await updateDatabaseType(databaseType);

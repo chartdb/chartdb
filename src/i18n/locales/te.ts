@@ -326,6 +326,7 @@ export const te: LanguageTranslation = {
                 tables_count: 'పట్టికలు',
             },
             cancel: 'రద్దు',
+            start_new: 'Start with a new diagram',
             open: 'తెరవు',
 
             diagram_actions: {

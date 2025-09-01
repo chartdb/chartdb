@@ -315,6 +315,7 @@ export const en = {
                 tables_count: 'Tables',
             },
             cancel: 'Cancel',
+            start_new: 'Start with a new diagram',
             open: 'Open',
 
             diagram_actions: {

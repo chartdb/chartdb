@@ -319,6 +319,7 @@ export const zh_TW: LanguageTranslation = {
                 tables_count: '表格數',
             },
             cancel: '取消',
+            start_new: 'Start with a new diagram',
             open: '開啟',
 
             diagram_actions: {

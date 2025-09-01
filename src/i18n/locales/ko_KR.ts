@@ -323,6 +323,7 @@ export const ko_KR: LanguageTranslation = {
                 tables_count: '테이블 갯수',
             },
             cancel: '취소',
+            start_new: 'Start with a new diagram',
             open: '열기',
 
             diagram_actions: {
