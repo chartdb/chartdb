@@ -996,7 +996,7 @@ export async function fromPostgres(
         }
     }
 
-    // Fourth pass: process ALTER TABLE statements for foreign keys
+    // Fourth pass: process ALTER TABLE statements for foreign keys and ADD COLUMN
     for (const stmt of statements) {
         if (stmt.type === 'alter' && stmt.parsed) {
             const alterTableStmt = stmt.parsed as AlterTableStatement;
@@ -1026,13 +1026,435 @@ export async function fromPostgres(
             );
             if (!table) continue;
 
-            // Process foreign key constraints in ALTER TABLE
+            // Process ALTER TABLE expressions
             if (alterTableStmt.expr && Array.isArray(alterTableStmt.expr)) {
                 alterTableStmt.expr.forEach((expr: AlterTableExprItem) => {
-                    if (expr.action === 'add' && expr.create_definitions) {
+                    // Handle ALTER COLUMN TYPE
+                    if (expr.action === 'alter' && expr.resource === 'column') {
+                        // Extract column name
+                        let columnName: string | undefined;
+                        if (
+                            typeof expr.column === 'object' &&
+                            'column' in expr.column
+                        ) {
+                            const innerColumn = expr.column.column;
+                            if (
+                                typeof innerColumn === 'object' &&
+                                'expr' in innerColumn &&
+                                innerColumn.expr?.value
+                            ) {
+                                columnName = innerColumn.expr.value;
+                            } else if (typeof innerColumn === 'string') {
+                                columnName = innerColumn;
+                            }
+                        } else if (typeof expr.column === 'string') {
+                            columnName = expr.column;
+                        }
+
+                        // Check if it's a TYPE change
+                        if (
+                            columnName &&
+                            expr.type === 'alter' &&
+                            expr.definition?.dataType
+                        ) {
+                            // Find the column in the table and update its type
+                            const column = table.columns.find(
+                                (col) => (col as SQLColumn).name === columnName
+                            );
+                            if (column) {
+                                const definition = expr.definition;
+                                const rawDataType = String(definition.dataType);
+
+                                // console.log('ALTER TYPE expr:', JSON.stringify(expr, null, 2));
+
+                                // Normalize the type
+                                let normalizedType =
+                                    normalizePostgreSQLType(rawDataType);
+
+                                // Handle type parameters
+                                if (
+                                    definition.scale !== undefined &&
+                                    definition.scale !== null
+                                ) {
+                                    // For NUMERIC/DECIMAL with scale, length is actually precision
+                                    const precision =
+                                        definition.length ||
+                                        definition.precision;
+                                    normalizedType = `${normalizedType}(${precision},${definition.scale})`;
+                                } else if (
+                                    definition.length !== undefined &&
+                                    definition.length !== null
+                                ) {
+                                    normalizedType = `${normalizedType}(${definition.length})`;
+                                } else if (definition.precision !== undefined) {
+                                    normalizedType = `${normalizedType}(${definition.precision})`;
+                                } else if (
+                                    definition.suffix &&
+                                    Array.isArray(definition.suffix) &&
+                                    definition.suffix.length > 0
+                                ) {
+                                    const params = definition.suffix
+                                        .map((s: unknown) => {
+                                            if (
+                                                typeof s === 'object' &&
+                                                s !== null &&
+                                                'value' in s
+                                            ) {
+                                                return String(s.value);
+                                            }
+                                            return String(s);
+                                        })
+                                        .join(',');
+                                    normalizedType = `${normalizedType}(${params})`;
+                                }
+
+                                // Update the column type
+                                (column as SQLColumn).type = normalizedType;
+
+                                // Update typeArgs if applicable
+                                if (
+                                    definition.scale !== undefined &&
+                                    definition.scale !== null
+                                ) {
+                                    // For NUMERIC/DECIMAL with scale
+                                    const precision =
+                                        definition.length ||
+                                        definition.precision;
+                                    (column as SQLColumn).typeArgs = {
+                                        precision: precision,
+                                        scale: definition.scale,
+                                    };
+                                } else if (definition.length) {
+                                    (column as SQLColumn).typeArgs = {
+                                        length: definition.length,
+                                    };
+                                } else if (definition.precision) {
+                                    (column as SQLColumn).typeArgs = {
+                                        precision: definition.precision,
+                                    };
+                                }
+                            }
+                        }
+                        // Handle ADD COLUMN
+                    } else if (
+                        expr.action === 'add' &&
+                        expr.resource === 'column'
+                    ) {
+                        // Handle ADD COLUMN directly from expr structure
+                        // Extract column name from the nested structure
+                        let columnName: string | undefined;
+                        if (
+                            typeof expr.column === 'object' &&
+                            'column' in expr.column
+                        ) {
+                            const innerColumn = expr.column.column;
+                            if (
+                                typeof innerColumn === 'object' &&
+                                'expr' in innerColumn &&
+                                innerColumn.expr?.value
+                            ) {
+                                columnName = innerColumn.expr.value;
+                            } else if (typeof innerColumn === 'string') {
+                                columnName = innerColumn;
+                            }
+                        } else if (typeof expr.column === 'string') {
+                            columnName = expr.column;
+                        }
+
+                        if (columnName && typeof columnName === 'string') {
+                            const definition = expr.definition || {};
+                            const rawDataType = String(
+                                definition?.dataType || 'TEXT'
+                            );
+                            // console.log('expr:', JSON.stringify(expr, null, 2));
+
+                            // Normalize the type
+                            let normalizedBaseType =
+                                normalizePostgreSQLType(rawDataType);
+
+                            // Check if it's a serial type
+                            const upperType = rawDataType.toUpperCase();
+                            const isSerialType = [
+                                'SERIAL',
+                                'SERIAL2',
+                                'SERIAL4',
+                                'SERIAL8',
+                                'BIGSERIAL',
+                                'SMALLSERIAL',
+                            ].includes(upperType.split('(')[0]);
+
+                            if (isSerialType) {
+                                const typeLength = definition?.length as
+                                    | number
+                                    | undefined;
+                                if (upperType === 'SERIAL') {
+                                    if (typeLength === 2) {
+                                        normalizedBaseType = 'SMALLINT';
+                                    } else if (typeLength === 8) {
+                                        normalizedBaseType = 'BIGINT';
+                                    } else {
+                                        normalizedBaseType = 'INTEGER';
+                                    }
+                                }
+                            }
+
+                            // Handle type parameters
+                            let finalDataType = normalizedBaseType;
+                            const isNormalizedIntegerType =
+                                ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
+                                    normalizedBaseType
+                                ) &&
+                                (upperType === 'INT' || upperType === 'SERIAL');
+
+                            if (!isSerialType && !isNormalizedIntegerType) {
+                                const precision = definition?.precision;
+                                const scale = definition?.scale;
+                                const length = definition?.length;
+                                const suffix =
+                                    (definition?.suffix as unknown[]) || [];
+
+                                if (suffix.length > 0) {
+                                    const params = suffix
+                                        .map((s: unknown) => {
+                                            if (
+                                                typeof s === 'object' &&
+                                                s !== null &&
+                                                'value' in s
+                                            ) {
+                                                return String(
+                                                    (s as { value: unknown })
+                                                        .value
+                                                );
+                                            }
+                                            return String(s);
+                                        })
+                                        .join(',');
+                                    finalDataType = `${normalizedBaseType}(${params})`;
+                                } else if (precision !== undefined) {
+                                    if (scale !== undefined) {
+                                        finalDataType = `${normalizedBaseType}(${precision},${scale})`;
+                                    } else {
+                                        finalDataType = `${normalizedBaseType}(${precision})`;
+                                    }
+                                } else if (
+                                    length !== undefined &&
+                                    length !== null
+                                ) {
+                                    finalDataType = `${normalizedBaseType}(${length})`;
+                                }
+                            }
+
+                            // Check for nullable constraint
+                            let nullable = true;
+                            if (isSerialType) {
+                                nullable = false;
+                            } else if (
+                                expr.nullable &&
+                                expr.nullable.type === 'not null'
+                            ) {
+                                nullable = false;
+                            } else if (
+                                definition?.nullable &&
+                                definition.nullable.type === 'not null'
+                            ) {
+                                nullable = false;
+                            }
+
+                            // Check for unique constraint
+                            const isUnique =
+                                expr.unique === 'unique' ||
+                                definition?.unique === 'unique';
+
+                            // Check for default value
+                            const hasDefault =
+                                expr.default_val || definition?.default_val;
+
+                            // Create the new column object
+                            const newColumn: SQLColumn = {
+                                name: columnName,
+                                type: finalDataType,
+                                nullable: nullable,
+                                primaryKey:
+                                    definition?.primary_key === 'primary key' ||
+                                    definition?.constraint === 'primary key' ||
+                                    isSerialType,
+                                unique: isUnique,
+                                default: isSerialType
+                                    ? undefined
+                                    : hasDefault
+                                      ? 'has default'
+                                      : undefined,
+                                increment:
+                                    isSerialType ||
+                                    definition?.auto_increment ===
+                                        'auto_increment' ||
+                                    (stmt.sql
+                                        .toUpperCase()
+                                        .includes('GENERATED') &&
+                                        stmt.sql
+                                            .toUpperCase()
+                                            .includes('IDENTITY')),
+                            };
+
+                            // Add the column to the table if it doesn't already exist
+                            const tableColumns = table.columns as SQLColumn[];
+                            if (
+                                !tableColumns.some(
+                                    (col) => col.name === columnName
+                                )
+                            ) {
+                                tableColumns.push(newColumn);
+                            }
+                        }
+                    } else if (
+                        expr.action === 'add' &&
+                        expr.create_definitions
+                    ) {
                         const createDefs = expr.create_definitions;
 
-                        if (
+                        // Check if it's adding a column (legacy structure)
+                        if (createDefs.resource === 'column') {
+                            const columnDef =
+                                createDefs as unknown as ColumnDefinition;
+                            const columnName = extractColumnName(
+                                columnDef.column
+                            );
+
+                            if (columnName) {
+                                // Extract the column type and properties
+                                const definition =
+                                    columnDef.definition as Record<
+                                        string,
+                                        unknown
+                                    >;
+                                const rawDataType = String(
+                                    definition?.dataType || 'TEXT'
+                                );
+
+                                // Normalize the type
+                                let normalizedBaseType =
+                                    normalizePostgreSQLType(rawDataType);
+
+                                // Check if it's a serial type
+                                const upperType = rawDataType.toUpperCase();
+                                const isSerialType = [
+                                    'SERIAL',
+                                    'SERIAL2',
+                                    'SERIAL4',
+                                    'SERIAL8',
+                                    'BIGSERIAL',
+                                    'SMALLSERIAL',
+                                ].includes(upperType.split('(')[0]);
+
+                                if (isSerialType) {
+                                    const typeLength = definition?.length as
+                                        | number
+                                        | undefined;
+                                    if (upperType === 'SERIAL') {
+                                        if (typeLength === 2) {
+                                            normalizedBaseType = 'SMALLINT';
+                                        } else if (typeLength === 8) {
+                                            normalizedBaseType = 'BIGINT';
+                                        } else {
+                                            normalizedBaseType = 'INTEGER';
+                                        }
+                                    }
+                                }
+
+                                // Handle type parameters
+                                let finalDataType = normalizedBaseType;
+                                const isNormalizedIntegerType =
+                                    ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
+                                        normalizedBaseType
+                                    ) &&
+                                    (upperType === 'INT' ||
+                                        upperType === 'SERIAL');
+
+                                if (!isSerialType && !isNormalizedIntegerType) {
+                                    const precision =
+                                        columnDef.definition?.precision;
+                                    const scale = columnDef.definition?.scale;
+                                    const length = columnDef.definition?.length;
+                                    const suffix =
+                                        (definition?.suffix as unknown[]) || [];
+
+                                    if (suffix.length > 0) {
+                                        const params = suffix
+                                            .map((s: unknown) => {
+                                                if (
+                                                    typeof s === 'object' &&
+                                                    s !== null &&
+                                                    'value' in s
+                                                ) {
+                                                    return String(
+                                                        (
+                                                            s as {
+                                                                value: unknown;
+                                                            }
+                                                        ).value
+                                                    );
+                                                }
+                                                return String(s);
+                                            })
+                                            .join(',');
+                                        finalDataType = `${normalizedBaseType}(${params})`;
+                                    } else if (precision !== undefined) {
+                                        if (scale !== undefined) {
+                                            finalDataType = `${normalizedBaseType}(${precision},${scale})`;
+                                        } else {
+                                            finalDataType = `${normalizedBaseType}(${precision})`;
+                                        }
+                                    } else if (
+                                        length !== undefined &&
+                                        length !== null
+                                    ) {
+                                        finalDataType = `${normalizedBaseType}(${length})`;
+                                    }
+                                }
+
+                                // Create the new column object
+                                const newColumn: SQLColumn = {
+                                    name: columnName,
+                                    type: finalDataType,
+                                    nullable: isSerialType
+                                        ? false
+                                        : columnDef.nullable?.type !==
+                                          'not null',
+                                    primaryKey:
+                                        columnDef.primary_key ===
+                                            'primary key' ||
+                                        columnDef.definition?.constraint ===
+                                            'primary key' ||
+                                        isSerialType,
+                                    unique: columnDef.unique === 'unique',
+                                    typeArgs: getTypeArgs(columnDef.definition),
+                                    default: isSerialType
+                                        ? undefined
+                                        : getDefaultValueString(columnDef),
+                                    increment:
+                                        isSerialType ||
+                                        columnDef.auto_increment ===
+                                            'auto_increment' ||
+                                        (stmt.sql
+                                            .toUpperCase()
+                                            .includes('GENERATED') &&
+                                            stmt.sql
+                                                .toUpperCase()
+                                                .includes('IDENTITY')),
+                                };
+
+                                // Add the column to the table if it doesn't already exist
+                                const tableColumns2 =
+                                    table.columns as SQLColumn[];
+                                if (
+                                    !tableColumns2.some(
+                                        (col) => col.name === columnName
+                                    )
+                                ) {
+                                    tableColumns2.push(newColumn);
+                                }
+                            }
+                        } else if (
                             createDefs.constraint_type === 'FOREIGN KEY' ||
                             createDefs.constraint_type === 'foreign key'
                         ) {
@@ -1143,6 +1565,105 @@ export async function fromPostgres(
             }
         } else if (stmt.type === 'alter' && !stmt.parsed) {
             // Handle ALTER TABLE statements that failed to parse
+
+            // First try to extract ALTER COLUMN TYPE statements
+            const alterTypeMatch = stmt.sql.match(
+                /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s+ALTER\s+COLUMN\s+(?:"([^"]+)"|([^"\s]+))\s+TYPE\s+([\w_]+(?:\([^)]*\))?(?:\[\])?)/i
+            );
+
+            if (alterTypeMatch) {
+                const schemaName =
+                    alterTypeMatch[1] || alterTypeMatch[2] || 'public';
+                const tableName = alterTypeMatch[3] || alterTypeMatch[4];
+                const columnName = alterTypeMatch[5] || alterTypeMatch[6];
+                let columnType = alterTypeMatch[7];
+
+                const table = findTableWithSchemaSupport(
+                    tables,
+                    tableName,
+                    schemaName
+                );
+                if (table && columnName) {
+                    const column = (table.columns as SQLColumn[]).find(
+                        (col) => col.name === columnName
+                    );
+                    if (column) {
+                        // Normalize and update the type
+                        columnType = normalizePostgreSQLType(columnType);
+                        column.type = columnType;
+
+                        // Extract and update typeArgs if present
+                        const typeMatch = columnType.match(
+                            /^(\w+)(?:\(([^)]+)\))?$/
+                        );
+                        if (typeMatch && typeMatch[2]) {
+                            const params = typeMatch[2]
+                                .split(',')
+                                .map((p) => p.trim());
+                            if (params.length === 1) {
+                                column.typeArgs = {
+                                    length: parseInt(params[0]),
+                                };
+                            } else if (params.length === 2) {
+                                column.typeArgs = {
+                                    precision: parseInt(params[0]),
+                                    scale: parseInt(params[1]),
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Then try to extract ADD COLUMN statements
+            const alterColumnMatch = stmt.sql.match(
+                /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s+ADD\s+COLUMN\s+(?:"([^"]+)"|([^"\s]+))\s+([\w_]+(?:\([^)]*\))?(?:\[\])?)/i
+            );
+
+            if (alterColumnMatch) {
+                const schemaName =
+                    alterColumnMatch[1] || alterColumnMatch[2] || 'public';
+                const tableName = alterColumnMatch[3] || alterColumnMatch[4];
+                const columnName = alterColumnMatch[5] || alterColumnMatch[6];
+                let columnType = alterColumnMatch[7];
+
+                const table = findTableWithSchemaSupport(
+                    tables,
+                    tableName,
+                    schemaName
+                );
+                if (table && columnName) {
+                    const tableColumns = table.columns as SQLColumn[];
+                    if (!tableColumns.some((col) => col.name === columnName)) {
+                        // Normalize the type
+                        columnType = normalizePostgreSQLType(columnType);
+
+                        // Check for constraints in the statement
+                        const columnDefPart = stmt.sql.substring(
+                            stmt.sql.indexOf(columnName)
+                        );
+                        const isPrimary =
+                            columnDefPart.match(/PRIMARY\s+KEY/i) !== null;
+                        const isNotNull =
+                            columnDefPart.match(/NOT\s+NULL/i) !== null;
+                        const isUnique =
+                            columnDefPart.match(/\bUNIQUE\b/i) !== null;
+                        const hasDefault =
+                            columnDefPart.match(/DEFAULT\s+/i) !== null;
+
+                        tableColumns.push({
+                            name: columnName,
+                            type: columnType,
+                            nullable: !isNotNull && !isPrimary,
+                            primaryKey: isPrimary,
+                            unique: isUnique || isPrimary,
+                            default: hasDefault ? 'has default' : undefined,
+                            increment: false,
+                        });
+                    }
+                }
+            }
+
             // Extract foreign keys using regex as fallback
             // Updated regex to handle quoted identifiers properly
             const alterFKMatch = stmt.sql.match(
