@@ -16,7 +16,10 @@ import { useTranslation } from 'react-i18next';
 import { FileUploader } from '@/components/file-uploader/file-uploader';
 import { useStorage } from '@/hooks/use-storage';
 import { useNavigate } from 'react-router-dom';
-import { diagramFromJSONInput } from '@/lib/export-import-utils';
+import {
+    diagramFromJSONInput,
+    getInitialFilterForLargeDiagram,
+} from '@/lib/export-import-utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
 import { AlertCircle } from 'lucide-react';
 
@@ -27,7 +30,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
-    const { addDiagram } = useStorage();
+    const { addDiagram, updateDiagramFilter } = useStorage();
     const navigate = useNavigate();
     const [error, setError] = useState(false);
 
@@ -58,7 +61,15 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
             try {
                 const diagram = diagramFromJSONInput(json);
 
+                // Check if we need to apply a filter for large diagrams
+                const initialFilter = getInitialFilterForLargeDiagram(diagram);
+
                 await addDiagram({ diagram });
+
+                // Apply the filter if needed (to hide isolated tables)
+                if (initialFilter) {
+                    await updateDiagramFilter(diagram.id, initialFilter);
+                }
 
                 closeImportDiagramDialog();
                 closeCreateDiagramDialog();
@@ -74,6 +85,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     }, [
         file,
         addDiagram,
+        updateDiagramFilter,
         navigate,
         closeImportDiagramDialog,
         closeCreateDiagramDialog,

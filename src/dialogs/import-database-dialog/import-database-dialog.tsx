@@ -69,7 +69,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
 
-            diagram = await loadFromDatabaseMetadata({
+            const result = await loadFromDatabaseMetadata({
                 databaseType,
                 databaseMetadata,
                 databaseEdition:
@@ -77,6 +77,9 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                         ? undefined
                         : databaseEdition,
             });
+            diagram = result.diagram;
+            // Note: For importing into existing diagram, we don't apply the filter
+            // as it would affect the existing tables too
         }
 
         const tableIdsToRemove = tables
