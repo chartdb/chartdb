@@ -19,6 +19,7 @@ export interface DBField {
     unique: boolean;
     nullable: boolean;
     increment?: boolean | null;
+    array?: boolean | null;
     createdAt: number;
     characterMaximumLength?: string | null;
     precision?: number | null;
@@ -36,6 +37,7 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
     unique: z.boolean(),
     nullable: z.boolean(),
     increment: z.boolean().or(z.null()).optional(),
+    array: z.boolean().or(z.null()).optional(),
     createdAt: z.number(),
     characterMaximumLength: z.string().or(z.null()).optional(),
     precision: z.number().or(z.null()).optional(),
@@ -71,13 +73,48 @@ export const createFieldsFromMetadata = ({
         pk.column.trim()
     );
 
-    return sortedColumns.map(
-        (col: ColumnInfo): DBField => ({
+    return sortedColumns.map((col: ColumnInfo): DBField => {
+        // Check if type is an array (ends with [])
+        const isArrayType = col.type.endsWith('[]');
+        let baseType = col.type;
+
+        // Extract base type and any parameters if it's an array
+        if (isArrayType) {
+            baseType = col.type.slice(0, -2); // Remove the [] suffix
+        }
+
+        // Extract parameters from types like "character varying(100)" or "numeric(10,2)"
+        let charMaxLength = col.character_maximum_length;
+        let precision = col.precision?.precision;
+        let scale = col.precision?.scale;
+
+        // Handle types with single parameter like varchar(100)
+        const singleParamMatch = baseType.match(/^(.+?)\((\d+)\)$/);
+        if (singleParamMatch) {
+            baseType = singleParamMatch[1];
+            if (!charMaxLength || charMaxLength === 'null') {
+                charMaxLength = singleParamMatch[2];
+            }
+        }
+
+        // Handle types with two parameters like numeric(10,2)
+        const twoParamMatch = baseType.match(/^(.+?)\((\d+),\s*(\d+)\)$/);
+        if (twoParamMatch) {
+            baseType = twoParamMatch[1];
+            if (!precision) {
+                precision = parseInt(twoParamMatch[2]);
+            }
+            if (!scale) {
+                scale = parseInt(twoParamMatch[3]);
+            }
+        }
+
+        return {
             id: generateId(),
             name: col.name,
             type: {
-                id: col.type.split(' ').join('_').toLowerCase(),
-                name: col.type.toLowerCase(),
+                id: baseType.split(' ').join('_').toLowerCase(),
+                name: baseType.toLowerCase(),
             },
             primaryKey: tablePrimaryKeysColumns.includes(col.name),
             unique: Object.values(aggregatedIndexes).some(
@@ -87,20 +124,18 @@ export const createFieldsFromMetadata = ({
                     idx.columns[0].name === col.name
             ),
             nullable: Boolean(col.nullable),
-            ...(col.character_maximum_length &&
-            col.character_maximum_length !== 'null'
-                ? { characterMaximumLength: col.character_maximum_length }
+            ...(isArrayType ? { array: true } : {}),
+            ...(charMaxLength && charMaxLength !== 'null'
+                ? { characterMaximumLength: charMaxLength }
                 : {}),
-            ...(col.precision?.precision
-                ? { precision: col.precision.precision }
-                : {}),
-            ...(col.precision?.scale ? { scale: col.precision.scale } : {}),
+            ...(precision ? { precision } : {}),
+            ...(scale ? { scale } : {}),
             ...(col.default ? { default: col.default } : {}),
             ...(col.collation ? { collation: col.collation } : {}),
             createdAt: Date.now(),
             comments: col.comment ? col.comment : undefined,
-        })
-    );
+        };
+    });
 };
 
 export const generateDBFieldSuffix = (

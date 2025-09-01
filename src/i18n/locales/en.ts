@@ -143,6 +143,7 @@ export const en = {
                         title: 'Field Attributes',
                         unique: 'Unique',
                         auto_increment: 'Auto Increment',
+                        array: 'Declare Array',
                         character_length: 'Max Length',
                         precision: 'Precision',
                         scale: 'Scale',

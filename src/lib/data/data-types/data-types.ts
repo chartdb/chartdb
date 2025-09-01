@@ -165,3 +165,21 @@ export const supportsAutoIncrementDataType = (
         'decimal',
     ].includes(dataTypeName.toLocaleLowerCase());
 };
+
+export const supportsArrayDataType = (dataTypeName: string): boolean => {
+    // Types that do NOT support arrays in PostgreSQL
+    const unsupportedTypes = [
+        'serial',
+        'bigserial',
+        'smallserial',
+        'serial2',
+        'serial4',
+        'serial8',
+        'xml',
+        'money',
+    ];
+
+    // Check if the type is in the unsupported list
+    const normalizedType = dataTypeName.toLowerCase();
+    return !unsupportedTypes.includes(normalizedType);
+};

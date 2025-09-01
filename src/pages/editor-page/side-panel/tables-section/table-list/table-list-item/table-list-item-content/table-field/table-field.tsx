@@ -7,6 +7,7 @@ import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import {
     dataTypeDataToDataType,
     sortedDataTypeMap,
+    supportsArrayDataType,
 } from '@/lib/data/data-types/data-types';
 import {
     Tooltip,
@@ -175,6 +176,13 @@ export const TableField: React.FC<TableFieldProps> = ({
                 }
             }
 
+            // Check if the new type supports arrays - if not, clear the array property
+            const newTypeName = dataType?.name ?? (value as string);
+            const shouldClearArray =
+                databaseType === 'postgresql' &&
+                !supportsArrayDataType(newTypeName) &&
+                field.array;
+
             updateField({
                 characterMaximumLength,
                 precision,
@@ -185,6 +193,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         name: value as string,
                     }
                 ),
+                ...(shouldClearArray ? { array: false } : {}),
             });
         },
         [
@@ -193,6 +202,7 @@ export const TableField: React.FC<TableFieldProps> = ({
             field.characterMaximumLength,
             field.precision,
             field.scale,
+            field.array,
         ]
     );
 
