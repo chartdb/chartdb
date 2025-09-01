@@ -1029,8 +1029,117 @@ export async function fromPostgres(
             // Process ALTER TABLE expressions
             if (alterTableStmt.expr && Array.isArray(alterTableStmt.expr)) {
                 alterTableStmt.expr.forEach((expr: AlterTableExprItem) => {
-                    // Handle both 'add' action and 'add column' type
-                    if (expr.action === 'add' && expr.resource === 'column') {
+                    // Handle ALTER COLUMN TYPE
+                    if (expr.action === 'alter' && expr.resource === 'column') {
+                        // Extract column name
+                        let columnName: string | undefined;
+                        if (
+                            typeof expr.column === 'object' &&
+                            'column' in expr.column
+                        ) {
+                            const innerColumn = expr.column.column;
+                            if (
+                                typeof innerColumn === 'object' &&
+                                'expr' in innerColumn &&
+                                innerColumn.expr?.value
+                            ) {
+                                columnName = innerColumn.expr.value;
+                            } else if (typeof innerColumn === 'string') {
+                                columnName = innerColumn;
+                            }
+                        } else if (typeof expr.column === 'string') {
+                            columnName = expr.column;
+                        }
+
+                        // Check if it's a TYPE change
+                        if (
+                            columnName &&
+                            expr.type === 'alter' &&
+                            expr.definition?.dataType
+                        ) {
+                            // Find the column in the table and update its type
+                            const column = table.columns.find(
+                                (col) => (col as SQLColumn).name === columnName
+                            );
+                            if (column) {
+                                const definition = expr.definition;
+                                const rawDataType = String(definition.dataType);
+
+                                // console.log('ALTER TYPE expr:', JSON.stringify(expr, null, 2));
+
+                                // Normalize the type
+                                let normalizedType =
+                                    normalizePostgreSQLType(rawDataType);
+
+                                // Handle type parameters
+                                if (
+                                    definition.scale !== undefined &&
+                                    definition.scale !== null
+                                ) {
+                                    // For NUMERIC/DECIMAL with scale, length is actually precision
+                                    const precision =
+                                        definition.length ||
+                                        definition.precision;
+                                    normalizedType = `${normalizedType}(${precision},${definition.scale})`;
+                                } else if (
+                                    definition.length !== undefined &&
+                                    definition.length !== null
+                                ) {
+                                    normalizedType = `${normalizedType}(${definition.length})`;
+                                } else if (definition.precision !== undefined) {
+                                    normalizedType = `${normalizedType}(${definition.precision})`;
+                                } else if (
+                                    definition.suffix &&
+                                    Array.isArray(definition.suffix) &&
+                                    definition.suffix.length > 0
+                                ) {
+                                    const params = definition.suffix
+                                        .map((s: unknown) => {
+                                            if (
+                                                typeof s === 'object' &&
+                                                s !== null &&
+                                                'value' in s
+                                            ) {
+                                                return String(s.value);
+                                            }
+                                            return String(s);
+                                        })
+                                        .join(',');
+                                    normalizedType = `${normalizedType}(${params})`;
+                                }
+
+                                // Update the column type
+                                (column as SQLColumn).type = normalizedType;
+
+                                // Update typeArgs if applicable
+                                if (
+                                    definition.scale !== undefined &&
+                                    definition.scale !== null
+                                ) {
+                                    // For NUMERIC/DECIMAL with scale
+                                    const precision =
+                                        definition.length ||
+                                        definition.precision;
+                                    (column as SQLColumn).typeArgs = {
+                                        precision: precision,
+                                        scale: definition.scale,
+                                    };
+                                } else if (definition.length) {
+                                    (column as SQLColumn).typeArgs = {
+                                        length: definition.length,
+                                    };
+                                } else if (definition.precision) {
+                                    (column as SQLColumn).typeArgs = {
+                                        precision: definition.precision,
+                                    };
+                                }
+                            }
+                        }
+                        // Handle ADD COLUMN
+                    } else if (
+                        expr.action === 'add' &&
+                        expr.resource === 'column'
+                    ) {
                         // Handle ADD COLUMN directly from expr structure
                         // Extract column name from the nested structure
                         let columnName: string | undefined;
@@ -1457,7 +1566,56 @@ export async function fromPostgres(
         } else if (stmt.type === 'alter' && !stmt.parsed) {
             // Handle ALTER TABLE statements that failed to parse
 
-            // First try to extract ADD COLUMN statements
+            // First try to extract ALTER COLUMN TYPE statements
+            const alterTypeMatch = stmt.sql.match(
+                /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s+ALTER\s+COLUMN\s+(?:"([^"]+)"|([^"\s]+))\s+TYPE\s+([\w_]+(?:\([^)]*\))?(?:\[\])?)/i
+            );
+
+            if (alterTypeMatch) {
+                const schemaName =
+                    alterTypeMatch[1] || alterTypeMatch[2] || 'public';
+                const tableName = alterTypeMatch[3] || alterTypeMatch[4];
+                const columnName = alterTypeMatch[5] || alterTypeMatch[6];
+                let columnType = alterTypeMatch[7];
+
+                const table = findTableWithSchemaSupport(
+                    tables,
+                    tableName,
+                    schemaName
+                );
+                if (table && columnName) {
+                    const column = (table.columns as SQLColumn[]).find(
+                        (col) => col.name === columnName
+                    );
+                    if (column) {
+                        // Normalize and update the type
+                        columnType = normalizePostgreSQLType(columnType);
+                        column.type = columnType;
+
+                        // Extract and update typeArgs if present
+                        const typeMatch = columnType.match(
+                            /^(\w+)(?:\(([^)]+)\))?$/
+                        );
+                        if (typeMatch && typeMatch[2]) {
+                            const params = typeMatch[2]
+                                .split(',')
+                                .map((p) => p.trim());
+                            if (params.length === 1) {
+                                column.typeArgs = {
+                                    length: parseInt(params[0]),
+                                };
+                            } else if (params.length === 2) {
+                                column.typeArgs = {
+                                    precision: parseInt(params[0]),
+                                    scale: parseInt(params[1]),
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Then try to extract ADD COLUMN statements
             const alterColumnMatch = stmt.sql.match(
                 /ALTER\s+TABLE\s+(?:ONLY\s+)?(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))\s+ADD\s+COLUMN\s+(?:"([^"]+)"|([^"\s]+))\s+([\w_]+(?:\([^)]*\))?(?:\[\])?)/i
             );
