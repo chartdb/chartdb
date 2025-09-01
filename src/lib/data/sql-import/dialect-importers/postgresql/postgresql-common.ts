@@ -91,6 +91,7 @@ export interface AlterTableExprItem {
     action: string;
     resource?: string;
     type?: string;
+    keyword?: string;
     constraint?: { constraint_type?: string };
     // Properties for ADD COLUMN
     column?:
