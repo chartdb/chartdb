@@ -179,6 +179,8 @@ export const TableField: React.FC<TableFieldProps> = ({
                 characterMaximumLength,
                 precision,
                 scale,
+                increment: undefined,
+                default: undefined,
                 type: dataTypeDataToDataType(
                     dataType ?? {
                         id: value as string,
