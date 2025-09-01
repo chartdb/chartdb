@@ -92,6 +92,36 @@ export interface AlterTableExprItem {
     resource?: string;
     type?: string;
     constraint?: { constraint_type?: string };
+    // Properties for ADD COLUMN
+    column?:
+        | {
+              column?:
+                  | {
+                        expr?: {
+                            value?: string;
+                        };
+                    }
+                  | string;
+          }
+        | string
+        | ColumnReference;
+    definition?: {
+        dataType?: string;
+        length?: number;
+        precision?: number;
+        scale?: number;
+        suffix?: unknown[];
+        nullable?: { type: string };
+        unique?: string;
+        primary_key?: string;
+        constraint?: string;
+        default_val?: unknown;
+        auto_increment?: string;
+    };
+    nullable?: { type: string; value?: string };
+    unique?: string;
+    default_val?: unknown;
+    // Properties for constraints
     create_definitions?:
         | AlterTableConstraintDefinition
         | {
