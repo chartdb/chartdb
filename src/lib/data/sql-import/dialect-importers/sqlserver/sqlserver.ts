@@ -342,6 +342,35 @@ function parseCreateTableManually(
 
     // Process each part (column or constraint)
     for (const part of parts) {
+        // Handle standalone FOREIGN KEY definitions (without CONSTRAINT keyword)
+        // Format: FOREIGN KEY (column) REFERENCES Table(column)
+        if (part.match(/^\s*FOREIGN\s+KEY/i)) {
+            const fkMatch = part.match(
+                /FOREIGN\s+KEY\s*\(([^)]+)\)\s+REFERENCES\s+(?:\[?(\w+)\]?\.)??\[?(\w+)\]?\s*\(([^)]+)\)/i
+            );
+            if (fkMatch) {
+                const [
+                    ,
+                    sourceCol,
+                    targetSchema = 'dbo',
+                    targetTable,
+                    targetCol,
+                ] = fkMatch;
+                relationships.push({
+                    name: `FK_${tableName}_${sourceCol.trim().replace(/\[|\]/g, '')}`,
+                    sourceTable: tableName,
+                    sourceSchema: schema,
+                    sourceColumn: sourceCol.trim().replace(/\[|\]/g, ''),
+                    targetTable: targetTable || targetSchema,
+                    targetSchema: targetTable ? targetSchema : 'dbo',
+                    targetColumn: targetCol.trim().replace(/\[|\]/g, ''),
+                    sourceTableId: tableId,
+                    targetTableId: '', // Will be filled later
+                });
+            }
+            continue;
+        }
+
         // Handle constraint definitions
         if (part.match(/^\s*CONSTRAINT/i)) {
             // Parse constraints
@@ -435,6 +464,13 @@ function parseCreateTableManually(
             columnMatch = part.match(/^\s*(\w+)\s+(\w+)\s+([\d,\s]+)\s+(.*)$/i);
         }
 
+        // Handle unusual format: [COLUMN_NAME] (VARCHAR)(32)
+        if (!columnMatch) {
+            columnMatch = part.match(
+                /^\s*\[?(\w+)\]?\s+\((\w+)\)\s*\(([\d,\s]+|max)\)(.*)$/i
+            );
+        }
+
         if (columnMatch) {
             const [, colName, baseType, typeArgs, rest] = columnMatch;
 
@@ -446,7 +482,37 @@ function parseCreateTableManually(
                 const inlineFkMatch = rest.match(
                     /FOREIGN\s+KEY\s+REFERENCES\s+(?:\[?(\w+)\]?\.)??\[?(\w+)\]?\s*\(([^)]+)\)/i
                 );
-                if (inlineFkMatch) {
+
+                // Also check if there's a FOREIGN KEY after a comma with column name
+                // Format: , FOREIGN KEY (columnname) REFERENCES Table(column)
+                if (!inlineFkMatch && rest.includes('FOREIGN KEY')) {
+                    const fkWithColumnMatch = rest.match(
+                        /,\s*FOREIGN\s+KEY\s*\((\w+)\)\s+REFERENCES\s+(?:\[?(\w+)\]?\.)??\[?(\w+)\]?\s*\(([^)]+)\)/i
+                    );
+                    if (fkWithColumnMatch) {
+                        const [, srcCol, targetSchema, targetTable, targetCol] =
+                            fkWithColumnMatch;
+                        // Only process if srcCol matches current colName (case-insensitive)
+                        if (srcCol.toLowerCase() === colName.toLowerCase()) {
+                            // Create FK relationship
+                            relationships.push({
+                                name: `FK_${tableName}_${colName}`,
+                                sourceTable: tableName,
+                                sourceSchema: schema,
+                                sourceColumn: colName,
+                                targetTable: targetTable || targetSchema,
+                                targetSchema: targetTable
+                                    ? targetSchema || 'dbo'
+                                    : 'dbo',
+                                targetColumn: targetCol
+                                    .trim()
+                                    .replace(/\[|\]/g, ''),
+                                sourceTableId: tableId,
+                                targetTableId: '', // Will be filled later
+                            });
+                        }
+                    }
+                } else if (inlineFkMatch) {
                     const [, targetSchema = 'dbo', targetTable, targetCol] =
                         inlineFkMatch;
                     relationships.push({
@@ -536,9 +602,35 @@ export async function fromSQLServer(
     try {
         // First, handle ALTER TABLE statements for foreign keys
         // Split by GO or semicolon for SQL Server
-        const statements = sqlContent
+        let statements = sqlContent
             .split(/(?:GO\s*$|;\s*$)/im)
             .filter((stmt) => stmt.trim().length > 0);
+
+        // Additional splitting for CREATE TABLE statements that might not be separated by semicolons
+        // If we have a statement with multiple CREATE TABLE, split them
+        const expandedStatements: string[] = [];
+        for (const stmt of statements) {
+            // Check if this statement contains multiple CREATE TABLE statements
+            if ((stmt.match(/CREATE\s+TABLE/gi) || []).length > 1) {
+                // Split by ") ON [PRIMARY]" followed by CREATE TABLE
+                const parts = stmt.split(
+                    /\)\s*ON\s*\[PRIMARY\]\s*(?=CREATE\s+TABLE)/gi
+                );
+                for (let i = 0; i < parts.length; i++) {
+                    let part = parts[i].trim();
+                    // Re-add ") ON [PRIMARY]" to all parts except the last (which should already have it)
+                    if (i < parts.length - 1 && part.length > 0) {
+                        part += ') ON [PRIMARY]';
+                    }
+                    if (part.trim().length > 0) {
+                        expandedStatements.push(part);
+                    }
+                }
+            } else {
+                expandedStatements.push(stmt);
+            }
+        }
+        statements = expandedStatements;
 
         const alterTableStatements = statements.filter(
             (stmt) =>
