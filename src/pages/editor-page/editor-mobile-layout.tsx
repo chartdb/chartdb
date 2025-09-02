@@ -17,11 +17,16 @@ import { EditorSidebar } from './editor-sidebar/editor-sidebar';
 
 export interface EditorMobileLayoutProps {
     initialDiagram?: Diagram;
+    clean?: boolean;
 }
 export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
     initialDiagram,
+    clean,
 }) => {
     const { isSidePanelShowed, hideSidePanel } = useLayout();
+    if (clean) {
+        return <Canvas initialTables={initialDiagram?.tables ?? []} clean />;
+    }
     return (
         <>
             <SidebarProvider

@@ -324,6 +324,7 @@ export const bn: LanguageTranslation = {
                 tables_count: 'টেবিল',
             },
             cancel: 'বাতিল করুন',
+            start_new: 'Start with a new diagram',
             open: 'খুলুন',
 
             diagram_actions: {

@@ -329,6 +329,7 @@ export const mr: LanguageTranslation = {
                 tables_count: 'टेबल्स',
             },
             cancel: 'रद्द करा',
+            start_new: 'Start with a new diagram',
             open: 'उघडा',
 
             diagram_actions: {

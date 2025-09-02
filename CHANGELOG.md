@@ -3,6 +3,10 @@
 ## [1.15.1](https://github.com/chartdb/chartdb/compare/v1.15.0...v1.15.1) (2025-08-27)
 
 
+### Features
+
+* add "Start with a new diagram" option to open diagram dialog
+
 ### Bug Fixes
 
 * add actions menu to diagram list + add duplicate diagram ([#876](https://github.com/chartdb/chartdb/issues/876)) ([abd2a6c](https://github.com/chartdb/chartdb/commit/abd2a6ccbe1aa63db44ec28b3eff525cc5d3f8b0))

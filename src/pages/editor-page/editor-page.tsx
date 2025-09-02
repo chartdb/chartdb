@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Toaster } from '@/components/toast/toaster';
@@ -38,7 +39,13 @@ export const EditorMobileLayoutLazy = React.lazy(
     () => import('./editor-mobile-layout')
 );
 
-const EditorPageComponent: React.FC = () => {
+interface EditorPageComponentProps {
+    clean?: boolean;
+}
+
+const EditorPageComponent: React.FC<EditorPageComponentProps> = ({
+    clean = false,
+}) => {
     const { diagramName, currentDiagram } = useChartDB();
     const { openStarUsDialog } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -47,7 +54,7 @@ const EditorPageComponent: React.FC = () => {
     const { initialDiagram } = useDiagramLoader();
 
     useEffect(() => {
-        if (HIDE_CHARTDB_CLOUD) {
+        if (clean || HIDE_CHARTDB_CLOUD) {
             return;
         }
 
@@ -64,6 +71,7 @@ const EditorPageComponent: React.FC = () => {
             setTimeout(openStarUsDialog, OPEN_STAR_US_AFTER_SECONDS * 1000);
         }
     }, [
+        clean,
         currentDiagram?.id,
         githubRepoOpened,
         openStarUsDialog,
@@ -86,7 +94,7 @@ const EditorPageComponent: React.FC = () => {
                 <Suspense
                     fallback={
                         <>
-                            <TopNavbarMock />
+                            {!clean && <TopNavbarMock />}
                             <div className="flex flex-1 items-center justify-center">
                                 <Spinner
                                     size={isDesktop ? 'large' : 'medium'}
@@ -98,53 +106,64 @@ const EditorPageComponent: React.FC = () => {
                     {isDesktop ? (
                         <EditorDesktopLayoutLazy
                             initialDiagram={initialDiagram}
+                            clean={clean}
                         />
                     ) : (
                         <EditorMobileLayoutLazy
                             initialDiagram={initialDiagram}
+                            clean={clean}
                         />
                     )}
                 </Suspense>
             </section>
-            <Toaster />
+            {!clean && <Toaster />}
         </>
     );
 };
 
-export const EditorPage: React.FC = () => (
-    <LocalConfigProvider>
-        <ThemeProvider>
-            <FullScreenLoaderProvider>
-                <LayoutProvider>
-                    <StorageProvider>
-                        <ConfigProvider>
-                            <RedoUndoStackProvider>
-                                <DiffProvider>
-                                    <ChartDBProvider>
-                                        <DiagramFilterProvider>
-                                            <HistoryProvider>
-                                                <ReactFlowProvider>
-                                                    <CanvasProvider>
-                                                        <ExportImageProvider>
-                                                            <AlertProvider>
-                                                                <DialogProvider>
-                                                                    <KeyboardShortcutsProvider>
-                                                                        <EditorPageComponent />
-                                                                    </KeyboardShortcutsProvider>
-                                                                </DialogProvider>
-                                                            </AlertProvider>
-                                                        </ExportImageProvider>
-                                                    </CanvasProvider>
-                                                </ReactFlowProvider>
-                                            </HistoryProvider>
-                                        </DiagramFilterProvider>
-                                    </ChartDBProvider>
-                                </DiffProvider>
-                            </RedoUndoStackProvider>
-                        </ConfigProvider>
-                    </StorageProvider>
-                </LayoutProvider>
-            </FullScreenLoaderProvider>
-        </ThemeProvider>
-    </LocalConfigProvider>
-);
+export const EditorPage: React.FC = () => {
+    const [searchParams] = useSearchParams();
+    const clean = searchParams.get('clean') === 'true';
+
+    return (
+        <LocalConfigProvider>
+            <ThemeProvider>
+                <FullScreenLoaderProvider>
+                    <LayoutProvider>
+                        <StorageProvider>
+                            <ConfigProvider>
+                                <RedoUndoStackProvider>
+                                    <DiffProvider>
+                                        <ChartDBProvider readonly={clean}>
+                                            <DiagramFilterProvider>
+                                                <HistoryProvider>
+                                                    <ReactFlowProvider>
+                                                        <CanvasProvider>
+                                                            <ExportImageProvider>
+                                                                <AlertProvider>
+                                                                    <DialogProvider>
+                                                                        <KeyboardShortcutsProvider>
+                                                                            <EditorPageComponent
+                                                                                clean={
+                                                                                    clean
+                                                                                }
+                                                                            />
+                                                                        </KeyboardShortcutsProvider>
+                                                                    </DialogProvider>
+                                                                </AlertProvider>
+                                                            </ExportImageProvider>
+                                                        </CanvasProvider>
+                                                    </ReactFlowProvider>
+                                                </HistoryProvider>
+                                            </DiagramFilterProvider>
+                                        </ChartDBProvider>
+                                    </DiffProvider>
+                                </RedoUndoStackProvider>
+                            </ConfigProvider>
+                        </StorageProvider>
+                    </LayoutProvider>
+                </FullScreenLoaderProvider>
+            </ThemeProvider>
+        </LocalConfigProvider>
+    );
+};

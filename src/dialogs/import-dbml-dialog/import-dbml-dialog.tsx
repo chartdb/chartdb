@@ -223,23 +223,19 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                 })
                 .map((relationship) => relationship.id);
 
-            // Remove existing items
-            await Promise.all([
-                removeTables(tableIdsToRemove, { updateHistory: false }),
-                removeRelationships(relationshipIdsToRemove, {
-                    updateHistory: false,
-                }),
-            ]);
+            // Remove existing items sequentially to avoid race conditions
+            await removeTables(tableIdsToRemove, { updateHistory: false });
+            await removeRelationships(relationshipIdsToRemove, {
+                updateHistory: false,
+            });
 
-            // Add new items
-            await Promise.all([
-                addTables(importedDiagram.tables ?? [], {
-                    updateHistory: false,
-                }),
-                addRelationships(importedDiagram.relationships ?? [], {
-                    updateHistory: false,
-                }),
-            ]);
+            // Add new items sequentially so diagram writes don't clobber each other
+            await addTables(importedDiagram.tables ?? [], {
+                updateHistory: false,
+            });
+            await addRelationships(importedDiagram.relationships ?? [], {
+                updateHistory: false,
+            });
             setReorder(true);
             closeImportDBMLDialog();
         } catch (e) {

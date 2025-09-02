@@ -319,6 +319,7 @@ export const hr: LanguageTranslation = {
                 tables_count: 'Tablice',
             },
             cancel: 'Odustani',
+            start_new: 'Start with a new diagram',
             open: 'Otvori',
 
             diagram_actions: {
