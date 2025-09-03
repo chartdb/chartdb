@@ -77,13 +77,15 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                     }
                 }}
             >
-                <NodeResizer
-                    isVisible={focused}
-                    lineClassName="!border-4 !border-transparent"
-                    handleClassName="!h-[10px] !w-[10px] !rounded-full !bg-pink-600"
-                    minHeight={100}
-                    minWidth={100}
-                />
+                {!readonly ? (
+                    <NodeResizer
+                        isVisible={focused}
+                        lineClassName="!border-4 !border-transparent"
+                        handleClassName="!h-[10px] !w-[10px] !rounded-full !bg-pink-600"
+                        minHeight={100}
+                        minWidth={100}
+                    />
+                ) : null}
                 <div className="group flex h-8 items-center justify-between rounded-t-md px-2">
                     <div className="flex w-full items-center gap-1">
                         <GripVertical className="size-4 shrink-0 text-slate-700 opacity-60 dark:text-slate-300" />

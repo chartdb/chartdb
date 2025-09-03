@@ -41,6 +41,7 @@ export const CustomTypeListItemContent: React.FC<
         highlightedCustomType,
         highlightCustomTypeId,
         tables,
+        readonly,
     } = useChartDB();
     const { t } = useTranslation();
 
@@ -157,6 +158,7 @@ export const CustomTypeListItemContent: React.FC<
                     <Select
                         value={customType.kind}
                         onValueChange={updateCustomTypeKind}
+                        disabled={readonly}
                     >
                         <SelectTrigger className="h-8">
                             <SelectValue />
@@ -212,18 +214,20 @@ export const CustomTypeListItemContent: React.FC<
                 ) : (
                     renderHighlightButton()
                 )}
-                <Button
-                    variant="ghost"
-                    className="flex h-8 w-full items-center justify-center p-2 text-xs"
-                    onClick={deleteCustomTypeHandler}
-                >
-                    <Trash2 className="mr-1 size-3.5 text-red-700" />
-                    <div className="text-red-700">
-                        {t(
-                            'side_panel.custom_types_section.custom_type.delete_custom_type'
-                        )}
-                    </div>
-                </Button>
+                {!readonly ? (
+                    <Button
+                        variant="ghost"
+                        className="flex h-8 w-full items-center justify-center p-2 text-xs"
+                        onClick={deleteCustomTypeHandler}
+                    >
+                        <Trash2 className="mr-1 size-3.5 text-red-700" />
+                        <div className="text-red-700">
+                            {t(
+                                'side_panel.custom_types_section.custom_type.delete_custom_type'
+                            )}
+                        </div>
+                    </Button>
+                ) : null}
             </div>
         </div>
     );

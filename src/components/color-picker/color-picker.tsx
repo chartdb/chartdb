@@ -5,21 +5,33 @@ import {
     PopoverTrigger,
 } from '@/components/popover/popover';
 import { colorOptions } from '@/lib/colors';
+import { cn } from '@/lib/utils';
 
 export interface ColorPickerProps {
     color: string;
     onChange: (color: string) => void;
+    disabled?: boolean;
 }
 
 export const ColorPicker = React.forwardRef<
     React.ElementRef<typeof PopoverTrigger>,
     ColorPickerProps
->(({ color, onChange }, ref) => {
+>(({ color, onChange, disabled }, ref) => {
     return (
         <Popover>
-            <PopoverTrigger asChild ref={ref}>
+            <PopoverTrigger
+                asChild
+                ref={ref}
+                disabled={disabled}
+                {...(disabled ? { onClick: (e) => e.preventDefault() } : {})}
+            >
                 <div
-                    className="h-6 w-8 cursor-pointer rounded-md border-2 border-muted transition-shadow hover:shadow-md"
+                    className={cn(
+                        'h-6 w-8 cursor-pointer rounded-md border-2 border-muted transition-shadow hover:shadow-md',
+                        {
+                            'hover:shadow-none cursor-default': disabled,
+                        }
+                    )}
                     style={{
                         backgroundColor: color,
                     }}

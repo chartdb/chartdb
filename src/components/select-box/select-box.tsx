@@ -53,6 +53,7 @@ export interface SelectBoxProps {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     popoverClassName?: string;
+    readonly?: boolean;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -78,6 +79,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             open,
             onOpenChange: setOpen,
             popoverClassName,
+            readonly,
         },
         ref
     ) => {
@@ -152,18 +154,20 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             className={`inline-flex min-w-0 shrink-0 items-center gap-1 rounded-md border py-0.5 pl-2 pr-1 text-xs font-medium text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${oneLine ? 'mx-0.5' : ''}`}
                         >
                             <span>{option.label}</span>
-                            <span
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleSelect(option.value);
-                                }}
-                                className="flex items-center rounded-sm px-px text-muted-foreground/60 hover:bg-accent hover:text-muted-foreground"
-                            >
-                                <Cross2Icon />
-                            </span>
+                            {!readonly ? (
+                                <span
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleSelect(option.value);
+                                    }}
+                                    className="flex items-center rounded-sm px-px text-muted-foreground/60 hover:bg-accent hover:text-muted-foreground"
+                                >
+                                    <Cross2Icon />
+                                </span>
+                            ) : null}
                         </span>
                     )),
-            [options, value, handleSelect, oneLine, keepOrder]
+            [options, value, handleSelect, oneLine, keepOrder, readonly]
         );
 
         const isAllSelected = React.useMemo(
@@ -284,7 +288,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                 <PopoverTrigger asChild tabIndex={0} onKeyDown={handleKeyDown}>
                     <div
                         className={cn(
-                            `flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring ${disabled ? 'bg-muted pointer-events-none' : ''}`,
+                            `flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border px-3 py-1 data-[state=open]:border-ring ${disabled ? 'bg-muted pointer-events-none' : ''} ${readonly ? 'pointer-events-none' : ''}`,
                             className
                         )}
                     >

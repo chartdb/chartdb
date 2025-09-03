@@ -36,7 +36,7 @@ export interface Ref {
 export interface RefsSectionProps {}
 
 export const RefsSection: React.FC<RefsSectionProps> = () => {
-    const { relationships, dependencies, databaseType, getTable } =
+    const { relationships, dependencies, databaseType, getTable, readonly } =
         useChartDB();
     const { filter } = useDiagramFilter();
     const [filterText, setFilterText] = React.useState('');
@@ -194,14 +194,16 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
-                <Button
-                    variant="secondary"
-                    className="h-8 p-2 text-xs"
-                    onClick={handleCreateRelationship}
-                >
-                    <Workflow className="h-4" />
-                    {t('side_panel.refs_section.add_relationship')}
-                </Button>
+                {!readonly ? (
+                    <Button
+                        variant="secondary"
+                        className="h-8 p-2 text-xs"
+                        onClick={handleCreateRelationship}
+                    >
+                        <Workflow className="h-4" />
+                        {t('side_panel.refs_section.add_relationship')}
+                    </Button>
+                ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">

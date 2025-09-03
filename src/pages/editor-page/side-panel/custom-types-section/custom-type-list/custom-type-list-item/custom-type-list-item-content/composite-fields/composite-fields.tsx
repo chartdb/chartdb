@@ -43,7 +43,7 @@ export const CustomTypeCompositeFields: React.FC<
     CustomTypeCompositeFieldsProps
 > = ({ fields, addField, removeField, reorderFields }) => {
     const { t } = useTranslation();
-    const { currentDiagram, customTypes } = useChartDB();
+    const { currentDiagram, customTypes, readonly } = useChartDB();
     const [newFieldName, setNewFieldName] = useState('');
     const [newFieldType, setNewFieldType] = useState('');
 
@@ -162,70 +162,76 @@ export const CustomTypeCompositeFields: React.FC<
                 </DndContext>
             )}
 
-            <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
-                    <Input
-                        placeholder={t(
-                            'side_panel.custom_types_section.custom_type.field_name_placeholder'
-                        )}
-                        value={newFieldName}
-                        onChange={(e) => setNewFieldName(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        className="h-8 flex-1 text-xs"
-                    />
-                    <Select
-                        value={newFieldType}
-                        onValueChange={setNewFieldType}
+            {!readonly ? (
+                <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                        <Input
+                            placeholder={t(
+                                'side_panel.custom_types_section.custom_type.field_name_placeholder'
+                            )}
+                            value={newFieldName}
+                            onChange={(e) => setNewFieldName(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="h-8 flex-1 text-xs"
+                        />
+                        <Select
+                            value={newFieldType}
+                            onValueChange={setNewFieldType}
+                        >
+                            <SelectTrigger className="h-8 w-32 text-xs">
+                                <SelectValue
+                                    placeholder={t(
+                                        'side_panel.custom_types_section.custom_type.field_type_placeholder'
+                                    )}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Standard Types</SelectLabel>
+                                    {dataTypes.map((dataType) => (
+                                        <SelectItem
+                                            key={dataType.id}
+                                            value={dataType.name}
+                                        >
+                                            {dataType.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                                {customDataTypes.length > 0 ? (
+                                    <>
+                                        <SelectSeparator />
+                                        <SelectGroup>
+                                            <SelectLabel>
+                                                Custom Types
+                                            </SelectLabel>
+                                            {customDataTypes.map((dataType) => (
+                                                <SelectItem
+                                                    key={dataType.id}
+                                                    value={dataType.name}
+                                                >
+                                                    {dataType.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </>
+                                ) : null}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 gap-1 self-start text-xs"
+                        onClick={handleAddField}
+                        disabled={!newFieldName.trim() || !newFieldType.trim()}
                     >
-                        <SelectTrigger className="h-8 w-32 text-xs">
-                            <SelectValue
-                                placeholder={t(
-                                    'side_panel.custom_types_section.custom_type.field_type_placeholder'
-                                )}
-                            />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Standard Types</SelectLabel>
-                                {dataTypes.map((dataType) => (
-                                    <SelectItem
-                                        key={dataType.id}
-                                        value={dataType.name}
-                                    >
-                                        {dataType.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectGroup>
-                            {customDataTypes.length > 0 ? (
-                                <>
-                                    <SelectSeparator />
-                                    <SelectGroup>
-                                        <SelectLabel>Custom Types</SelectLabel>
-                                        {customDataTypes.map((dataType) => (
-                                            <SelectItem
-                                                key={dataType.id}
-                                                value={dataType.name}
-                                            >
-                                                {dataType.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </>
-                            ) : null}
-                        </SelectContent>
-                    </Select>
+                        <Plus className="size-3" />
+                        {t(
+                            'side_panel.custom_types_section.custom_type.add_field'
+                        )}
+                    </Button>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 gap-1 self-start text-xs"
-                    onClick={handleAddField}
-                    disabled={!newFieldName.trim() || !newFieldType.trim()}
-                >
-                    <Plus className="size-3" />
-                    {t('side_panel.custom_types_section.custom_type.add_field')}
-                </Button>
-            </div>
+            ) : null}
         </div>
     );
 };

@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export interface EnumValuesProps {
     values: string[];
@@ -17,6 +18,7 @@ export const CustomTypeEnumValues: React.FC<EnumValuesProps> = ({
 }) => {
     const { t } = useTranslation();
     const [newValue, setNewValue] = useState('');
+    const { readonly } = useChartDB();
 
     const handleAddValue = useCallback(() => {
         if (newValue.trim() && !values.includes(newValue.trim())) {
@@ -55,36 +57,46 @@ export const CustomTypeEnumValues: React.FC<EnumValuesProps> = ({
                         <span className="flex-1 truncate text-sm font-medium">
                             {value}
                         </span>
-                        <Button
-                            variant="ghost"
-                            className="size-6 p-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => removeValue(value)}
-                        >
-                            <X className="size-3.5" />
-                        </Button>
+                        {!readonly ? (
+                            <Button
+                                variant="ghost"
+                                className="size-6 p-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                onClick={() => removeValue(value)}
+                            >
+                                <X className="size-3.5" />
+                            </Button>
+                        ) : null}
                     </div>
                 ))}
             </div>
 
-            <div className="flex items-center gap-1">
-                <Input
-                    value={newValue}
-                    onChange={(e) => setNewValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Add enum value..."
-                    className="h-8 flex-1 text-xs focus-visible:ring-0"
-                />
-                <Button
-                    variant="outline"
-                    className="h-8 px-2 text-xs"
-                    onClick={handleAddValue}
-                    disabled={
-                        !newValue.trim() || values.includes(newValue.trim())
-                    }
-                >
-                    <Plus className="size-3.5" />
-                </Button>
-            </div>
+            {values.length === 0 ? (
+                <div className="py-2 text-muted-foreground">
+                    {t('side_panel.custom_types_section.custom_type.no_values')}
+                </div>
+            ) : null}
+
+            {!readonly ? (
+                <div className="flex items-center gap-1">
+                    <Input
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Add enum value..."
+                        className="h-8 flex-1 text-xs focus-visible:ring-0"
+                    />
+                    <Button
+                        variant="outline"
+                        className="h-8 px-2 text-xs"
+                        onClick={handleAddValue}
+                        disabled={
+                            !newValue.trim() || values.includes(newValue.trim())
+                        }
+                    >
+                        <Plus className="size-3.5" />
+                    </Button>
+                </div>
+            ) : null}
         </div>
     );
 };
