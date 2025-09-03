@@ -14,13 +14,13 @@ export const ja: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'アクション',
-                new: '新しいダイアグラム',
+                new: '新規...',
                 browse: '参照...',
                 save: '保存',
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
-                delete_diagram: 'ダイアグラムを削除',
+                delete_diagram: '削除',
             },
             edit: {
                 edit: '編集',
@@ -320,7 +320,7 @@ export const ja: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'ダイアグラムを開く',
+            title: 'データベースを開く',
             description: '以下のリストからダイアグラムを選択してください。',
             table_columns: {
                 name: '名前',
@@ -334,7 +334,7 @@ export const ja: LanguageTranslation = {
             diagram_actions: {
                 open: '開く',
                 duplicate: '複製',
-                delete: 'ダイアグラムを削除',
+                delete: '削除',
             },
         },
 

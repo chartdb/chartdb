@@ -14,13 +14,13 @@ export const hi: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'कार्य',
-                new: 'नया आरेख',
+                new: 'नया...',
                 browse: 'ब्राउज़ करें...',
                 save: 'सहेजें',
                 import: 'डेटाबेस आयात करें',
                 export_sql: 'SQL निर्यात करें',
                 export_as: 'के रूप में निर्यात करें',
-                delete_diagram: 'आरेख हटाएँ',
+                delete_diagram: 'हटाएँ',
             },
             edit: {
                 edit: 'संपादित करें',
@@ -318,7 +318,7 @@ export const hi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'आरेख खोलें',
+            title: 'डेटाबेस खोलें',
             description: 'नीचे दी गई सूची से एक आरेख चुनें।',
             table_columns: {
                 name: 'नाम',
@@ -332,7 +332,7 @@ export const hi: LanguageTranslation = {
             diagram_actions: {
                 open: 'खोलें',
                 duplicate: 'डुप्लिकेट',
-                delete: 'डायग्राम हटाएं',
+                delete: 'हटाएं',
             },
         },
 

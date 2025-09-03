@@ -14,13 +14,13 @@ export const es: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Acciones',
-                new: 'Nuevo Diagrama',
+                new: 'Nuevo...',
                 browse: 'Examinar...',
                 save: 'Guardar',
                 import: 'Importar Base de Datos',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
-                delete_diagram: 'Eliminar Diagrama',
+                delete_diagram: 'Eliminar',
             },
             edit: {
                 edit: 'Editar',
@@ -316,7 +316,7 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Abrir Diagrama',
+            title: 'Abrir Base de Datos',
             description:
                 'Selecciona un diagrama para abrir de la lista a continuación.',
             table_columns: {
@@ -331,7 +331,7 @@ export const es: LanguageTranslation = {
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
-                delete: 'Eliminar Diagrama',
+                delete: 'Eliminar',
             },
         },
 

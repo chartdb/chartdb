@@ -14,13 +14,13 @@ export const bn: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'কার্য',
-                new: 'নতুন ডায়াগ্রাম',
+                new: 'নতুন...',
                 browse: 'ব্রাউজ করুন...',
                 save: 'সংরক্ষণ করুন',
                 import: 'ডাটাবেস আমদানি করুন',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
-                delete_diagram: 'ডায়াগ্রাম মুছুন',
+                delete_diagram: 'মুছুন',
             },
             edit: {
                 edit: 'সম্পাদনা',
@@ -316,7 +316,7 @@ export const bn: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'চিত্র খুলুন',
+            title: 'ডেটাবেস খুলুন',
             description: 'নিচের তালিকা থেকে একটি চিত্র নির্বাচন করুন।',
             table_columns: {
                 name: 'নাম',
@@ -330,7 +330,7 @@ export const bn: LanguageTranslation = {
             diagram_actions: {
                 open: 'খুলুন',
                 duplicate: 'ডুপ্লিকেট',
-                delete: 'ডায়াগ্রাম মুছুন',
+                delete: 'মুছুন',
             },
         },
 

@@ -14,13 +14,13 @@ export const uk: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Дії',
-                new: 'Нова діаграма',
+                new: 'Нова...',
                 browse: 'Огляд...',
                 save: 'Зберегти',
                 import: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',
-                delete_diagram: 'Видалити діаграму',
+                delete_diagram: 'Видалити',
             },
             edit: {
                 edit: 'Редагувати',
@@ -314,7 +314,7 @@ export const uk: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Відкрити діаграму',
+            title: 'Відкрити базу даних',
             description:
                 'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
             table_columns: {
@@ -329,7 +329,7 @@ export const uk: LanguageTranslation = {
             diagram_actions: {
                 open: 'Відкрити',
                 duplicate: 'Дублювати',
-                delete: 'Видалити діаграму',
+                delete: 'Видалити',
             },
         },
 

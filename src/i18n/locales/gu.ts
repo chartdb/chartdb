@@ -14,13 +14,13 @@ export const gu: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'ક્રિયાઓ',
-                new: 'નવું ડાયાગ્રામ',
+                new: 'નવું...',
                 browse: 'બ્રાઉજ કરો...',
                 save: 'સાચવો',
                 import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
-                delete_diagram: 'ડાયાગ્રામ કાઢી નાખો',
+                delete_diagram: 'કાઢી નાખો',
             },
             edit: {
                 edit: 'ફેરફાર',
@@ -316,7 +316,7 @@ export const gu: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'ડાયાગ્રામ ખોલો',
+            title: 'ડેટાબેસ ખોલો',
             description: 'નીચેની યાદીમાંથી એક ડાયાગ્રામ પસંદ કરો.',
             table_columns: {
                 name: 'નામ',
@@ -330,7 +330,7 @@ export const gu: LanguageTranslation = {
             diagram_actions: {
                 open: 'ખોલો',
                 duplicate: 'ડુપ્લિકેટ',
-                delete: 'ડાયાગ્રામ કાઢી નાખો',
+                delete: 'કાઢી નાખો',
             },
         },
 

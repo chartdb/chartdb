@@ -14,13 +14,13 @@ export const hr: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Akcije',
-                new: 'Novi Dijagram',
+                new: 'Novi...',
                 browse: 'Pregledaj...',
                 save: 'Spremi',
                 import: 'Uvezi',
                 export_sql: 'Izvezi SQL',
                 export_as: 'Izvezi kao',
-                delete_diagram: 'Izbriši dijagram',
+                delete_diagram: 'Izbriši',
             },
             edit: {
                 edit: 'Uredi',
@@ -311,7 +311,7 @@ export const hr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Otvori dijagram',
+            title: 'Otvori bazu podataka',
             description: 'Odaberite dijagram za otvaranje iz popisa ispod.',
             table_columns: {
                 name: 'Naziv',
@@ -325,7 +325,7 @@ export const hr: LanguageTranslation = {
             diagram_actions: {
                 open: 'Otvori',
                 duplicate: 'Dupliciraj',
-                delete: 'Obriši dijagram',
+                delete: 'Obriši',
             },
         },
 
