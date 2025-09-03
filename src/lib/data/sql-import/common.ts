@@ -86,7 +86,7 @@ export interface SQLBinaryExpr extends SQLASTNode {
 
 export interface SQLFunctionNode extends SQLASTNode {
     type: 'function';
-    name: string;
+    name: string | { name: Array<{ value: string }> };
     args?: {
         value: SQLASTArg[];
     };
@@ -106,6 +106,31 @@ export interface SQLExprList extends SQLASTNode {
 export interface SQLStringLiteral extends SQLASTNode {
     type: 'single_quote_string' | 'double_quote_string';
     value: string;
+}
+
+export interface SQLDefaultNode extends SQLASTNode {
+    type: 'default';
+    value: SQLASTNode;
+}
+
+export interface SQLCastNode extends SQLASTNode {
+    type: 'cast';
+    expr: SQLASTNode;
+    target: Array<{ dataType: string }>;
+}
+
+export interface SQLBooleanNode extends SQLASTNode {
+    type: 'bool';
+    value: boolean;
+}
+
+export interface SQLNullNode extends SQLASTNode {
+    type: 'null';
+}
+
+export interface SQLNumberNode extends SQLASTNode {
+    type: 'number';
+    value: number;
 }
 
 export type SQLASTArg =
@@ -146,6 +171,22 @@ export function buildSQLFromAST(
 ): string {
     if (!ast) return '';
 
+    // Handle default value wrapper
+    if (ast.type === 'default' && 'value' in ast) {
+        const defaultNode = ast as SQLDefaultNode;
+        return buildSQLFromAST(defaultNode.value, dbType);
+    }
+
+    // Handle PostgreSQL cast expressions (e.g., 'value'::type)
+    if (ast.type === 'cast' && 'expr' in ast && 'target' in ast) {
+        const castNode = ast as SQLCastNode;
+        const expr = buildSQLFromAST(castNode.expr, dbType);
+        if (castNode.target.length > 0 && castNode.target[0].dataType) {
+            return `${expr}::${castNode.target[0].dataType.toLowerCase()}`;
+        }
+        return expr;
+    }
+
     if (ast.type === 'binary_expr') {
         const expr = ast as SQLBinaryExpr;
         const leftSQL = buildSQLFromAST(expr.left, dbType);
@@ -155,7 +196,59 @@ export function buildSQLFromAST(
 
     if (ast.type === 'function') {
         const func = ast as SQLFunctionNode;
-        let expr = func.name;
+        let funcName = '';
+
+        // Handle nested function name structure
+        if (typeof func.name === 'object' && func.name && 'name' in func.name) {
+            const nameObj = func.name as { name: Array<{ value: string }> };
+            if (nameObj.name.length > 0) {
+                funcName = nameObj.name[0].value || '';
+            }
+        } else if (typeof func.name === 'string') {
+            funcName = func.name;
+        }
+
+        if (!funcName) return '';
+
+        // Normalize PostgreSQL function names to uppercase for consistency
+        if (dbType === DatabaseType.POSTGRESQL) {
+            const pgFunctions = [
+                'now',
+                'current_timestamp',
+                'current_date',
+                'current_time',
+                'gen_random_uuid',
+                'random',
+                'nextval',
+                'currval',
+            ];
+            if (pgFunctions.includes(funcName.toLowerCase())) {
+                funcName = funcName.toUpperCase();
+            }
+        }
+
+        // Some PostgreSQL functions don't have parentheses (like CURRENT_TIMESTAMP)
+        if (funcName === 'CURRENT_TIMESTAMP' && !func.args) {
+            return funcName;
+        }
+
+        // Handle SQL Server function defaults that were preprocessed as strings
+        // The preprocessor converts NEWID() to 'newid', GETDATE() to 'getdate', etc.
+        if (dbType === DatabaseType.SQL_SERVER) {
+            const sqlServerFunctions: Record<string, string> = {
+                newid: 'NEWID()',
+                newsequentialid: 'NEWSEQUENTIALID()',
+                getdate: 'GETDATE()',
+                sysdatetime: 'SYSDATETIME()',
+            };
+
+            const lowerFuncName = funcName.toLowerCase();
+            if (sqlServerFunctions[lowerFuncName]) {
+                return sqlServerFunctions[lowerFuncName];
+            }
+        }
+
+        let expr = funcName;
         if (func.args) {
             expr +=
                 '(' +
@@ -175,12 +268,31 @@ export function buildSQLFromAST(
                     })
                     .join(', ') +
                 ')';
+        } else {
+            expr += '()';
         }
         return expr;
     } else if (ast.type === 'column_ref') {
         return quoteIdentifier((ast as SQLColumnRef).column, dbType);
     } else if (ast.type === 'expr_list') {
         return (ast as SQLExprList).value.map((v) => v.value).join(' AND ');
+    } else if (ast.type === 'single_quote_string') {
+        // String literal with single quotes
+        const strNode = ast as SQLStringLiteral;
+        return `'${strNode.value}'`;
+    } else if (ast.type === 'double_quote_string') {
+        // String literal with double quotes
+        const strNode = ast as SQLStringLiteral;
+        return `"${strNode.value}"`;
+    } else if (ast.type === 'bool') {
+        // Boolean value
+        const boolNode = ast as SQLBooleanNode;
+        return boolNode.value ? 'TRUE' : 'FALSE';
+    } else if (ast.type === 'null') {
+        return 'NULL';
+    } else if (ast.type === 'number') {
+        const numNode = ast as SQLNumberNode;
+        return String(numNode.value);
     } else {
         const valueNode = ast as { type: string; value: string | number };
         return typeof valueNode.value === 'string'

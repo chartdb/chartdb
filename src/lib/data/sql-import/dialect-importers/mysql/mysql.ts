@@ -101,12 +101,28 @@ function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
             const typeMatch = definition.match(/^([^\s(]+)(?:\(([^)]+)\))?/);
             const dataType = typeMatch ? typeMatch[1] : '';
 
+            // Extract default value
+            let defaultValue: string | undefined;
+            const defaultMatch = definition.match(
+                /DEFAULT\s+('[^']*'|"[^"]*"|NULL|CURRENT_TIMESTAMP|\S+)/i
+            );
+            if (defaultMatch) {
+                defaultValue = defaultMatch[1];
+            }
+
+            // Check for AUTO_INCREMENT
+            const increment = definition
+                .toUpperCase()
+                .includes('AUTO_INCREMENT');
+
             columns.push({
                 name: columnName,
                 type: dataType,
                 nullable,
                 primaryKey,
                 unique: definition.toUpperCase().includes('UNIQUE'),
+                default: defaultValue,
+                increment,
             });
         }
     }
@@ -721,7 +737,28 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         parseError
                     );
 
-                    // Error handling without logging
+                    // Try fallback parser when main parser fails
+                    const tableMatch = trimmedStmt.match(
+                        /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?`?([^`\s(]+)`?\s*\(/i
+                    );
+                    if (tableMatch) {
+                        const tableName = tableMatch[1];
+                        const tableId = generateId();
+                        tableMap[tableName] = tableId;
+
+                        const extractedColumns =
+                            extractColumnsFromCreateTable(trimmedStmt);
+                        if (extractedColumns.length > 0) {
+                            tables.push({
+                                id: tableId,
+                                name: tableName,
+                                schema: undefined,
+                                columns: extractedColumns,
+                                indexes: [],
+                                order: tables.length,
+                            });
+                        }
+                    }
                 }
             }
         }
