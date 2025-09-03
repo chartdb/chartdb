@@ -21,7 +21,7 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, databaseType } = useChartDB();
+    const { createTable, tables, databaseType, readonly } = useChartDB();
     const { filter, schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
@@ -145,31 +145,33 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
-                <ButtonWithAlternatives
-                    variant="secondary"
-                    className="h-8 p-2 text-xs"
-                    onClick={() => handleCreateTable({ view: false })}
-                    dropdownTriggerClassName="px-1"
-                    chevronDownIconClassName="!size-3.5"
-                    alternatives={
-                        showDBViews
-                            ? [
-                                  {
-                                      label: t(
-                                          'side_panel.tables_section.add_view'
-                                      ),
-                                      onClick: () =>
-                                          handleCreateTable({ view: true }),
-                                      icon: <View className="size-4" />,
-                                      className: 'text-xs',
-                                  },
-                              ]
-                            : []
-                    }
-                >
-                    <Table className="h-4" />
-                    {t('side_panel.tables_section.add_table')}
-                </ButtonWithAlternatives>
+                {!readonly ? (
+                    <ButtonWithAlternatives
+                        variant="secondary"
+                        className="h-8 p-2 text-xs"
+                        onClick={() => handleCreateTable({ view: false })}
+                        dropdownTriggerClassName="px-1"
+                        chevronDownIconClassName="!size-3.5"
+                        alternatives={
+                            showDBViews
+                                ? [
+                                      {
+                                          label: t(
+                                              'side_panel.tables_section.add_view'
+                                          ),
+                                          onClick: () =>
+                                              handleCreateTable({ view: true }),
+                                          icon: <View className="size-4" />,
+                                          className: 'text-xs',
+                                      },
+                                  ]
+                                : []
+                        }
+                    >
+                        <Table className="h-4" />
+                        {t('side_panel.tables_section.add_table')}
+                    </ButtonWithAlternatives>
+                ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">

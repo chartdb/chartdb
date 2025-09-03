@@ -245,6 +245,7 @@ export const hr: LanguageTranslation = {
                     enum_values: 'Enum vrijednosti',
                     composite_fields: 'Polja',
                     no_fields: 'Nema definiranih polja',
+                    no_values: 'Nema definiranih enum vrijednosti',
                     field_name_placeholder: 'Naziv polja',
                     field_type_placeholder: 'Odaberi tip',
                     add_field: 'Dodaj polje',

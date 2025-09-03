@@ -250,6 +250,7 @@ export const gu: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'કોઈ enum મૂલ્યો વ્યાખ્યાયિત નથી',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',

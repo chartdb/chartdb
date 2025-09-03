@@ -45,7 +45,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
     removeIndex,
 }) => {
     const { t } = useTranslation();
-    const { databaseType } = useChartDB();
+    const { databaseType, readonly } = useChartDB();
     const fieldOptions = fields.map((field) => ({
         label: field.name,
         value: field.id,
@@ -107,6 +107,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 )}
                 keepOrder
                 disabled={index.isPrimaryKey ?? false}
+                readonly={readonly}
             />
             <div className="flex shrink-0 gap-1">
                 {index.isPrimaryKey ? (
@@ -133,6 +134,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             unique: !!value,
                                         })
                                     }
+                                    disabled={readonly}
                                 >
                                     U
                                 </TableIndexToggle>
@@ -178,6 +180,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             name: value.target.value,
                                         })
                                     }
+                                    readOnly={readonly}
                                 />
                             </div>
                             {!index.isPrimaryKey ? (
@@ -198,6 +201,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                                     unique: !!value,
                                                 })
                                             }
+                                            disabled={readonly}
                                         />
                                     </div>
                                     {indexTypeOptions.length > 0 ? (
@@ -214,20 +218,25 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                                 options={indexTypeOptions}
                                                 value={index.type || 'btree'}
                                                 onChange={updateIndexType}
+                                                readonly={readonly}
                                             />
                                         </div>
                                     ) : null}
-                                    <Separator orientation="horizontal" />
-                                    <Button
-                                        variant="outline"
-                                        className="flex gap-2 !text-red-700"
-                                        onClick={removeIndex}
-                                    >
-                                        <Trash2 className="size-3.5 text-red-700" />
-                                        {t(
-                                            'side_panel.tables_section.table.index_actions.delete_index'
-                                        )}
-                                    </Button>
+                                    {!readonly ? (
+                                        <>
+                                            <Separator orientation="horizontal" />
+                                            <Button
+                                                variant="outline"
+                                                className="flex gap-2 !text-red-700"
+                                                onClick={removeIndex}
+                                            >
+                                                <Trash2 className="size-3.5 text-red-700" />
+                                                {t(
+                                                    'side_panel.tables_section.table.index_actions.delete_index'
+                                                )}
+                                            </Button>
+                                        </>
+                                    ) : null}
                                 </>
                             ) : null}
                         </div>

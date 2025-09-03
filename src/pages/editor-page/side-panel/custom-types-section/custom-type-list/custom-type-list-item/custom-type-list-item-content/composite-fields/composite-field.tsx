@@ -4,6 +4,7 @@ import { Button } from '@/components/button/button';
 import type { DBCustomTypeField } from '@/lib/domain/db-custom-type';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useChartDB } from '@/hooks/use-chartdb';
 
 export interface CompositeFieldProps {
     field: DBCustomTypeField;
@@ -22,6 +23,7 @@ export const CompositeField: React.FC<{
         transition,
         isDragging,
     } = useSortable({ id: field.field });
+    const { readonly } = useChartDB();
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -35,23 +37,27 @@ export const CompositeField: React.FC<{
             style={style}
             className="flex items-center gap-2 rounded-md border p-2"
         >
-            <div
-                className="flex cursor-move items-center justify-center"
-                {...attributes}
-                {...listeners}
-            >
-                <GripVertical className="size-3 text-muted-foreground" />
-            </div>
+            {!readonly ? (
+                <div
+                    className="flex cursor-move items-center justify-center"
+                    {...attributes}
+                    {...listeners}
+                >
+                    <GripVertical className="size-3 text-muted-foreground" />
+                </div>
+            ) : null}
             <div className="flex-1 text-sm">{field.field}</div>
             <div className="text-xs text-muted-foreground">{field.type}</div>
-            <Button
-                variant="ghost"
-                size="sm"
-                className="size-6 p-0 text-muted-foreground hover:text-red-500"
-                onClick={onRemove}
-            >
-                <X className="size-3" />
-            </Button>
+            {!readonly ? (
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="size-6 p-0 text-muted-foreground hover:text-red-500"
+                    onClick={onRemove}
+                >
+                    <X className="size-3" />
+                </Button>
+            ) : null}
         </div>
     );
 };

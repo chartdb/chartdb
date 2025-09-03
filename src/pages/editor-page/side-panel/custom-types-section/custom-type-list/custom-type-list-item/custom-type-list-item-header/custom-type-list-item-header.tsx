@@ -51,6 +51,7 @@ export const CustomTypeListItemHeader: React.FC<
         highlightCustomTypeId,
         tables,
         databaseType,
+        readonly,
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { t } = useTranslation();
@@ -142,15 +143,17 @@ export const CustomTypeListItemHeader: React.FC<
                             )}
                             <Highlighter className="size-3.5" />
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={deleteCustomTypeHandler}
-                            className="flex justify-between !text-red-700"
-                        >
-                            {t(
-                                'side_panel.custom_types_section.custom_type.custom_type_actions.delete_custom_type'
-                            )}
-                            <Trash2 className="size-3.5 text-red-700" />
-                        </DropdownMenuItem>
+                        {!readonly ? (
+                            <DropdownMenuItem
+                                onClick={deleteCustomTypeHandler}
+                                className="flex justify-between !text-red-700"
+                            >
+                                {t(
+                                    'side_panel.custom_types_section.custom_type.custom_type_actions.delete_custom_type'
+                                )}
+                                <Trash2 className="size-3.5 text-red-700" />
+                            </DropdownMenuItem>
+                        ) : null}
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -161,6 +164,7 @@ export const CustomTypeListItemHeader: React.FC<
         toggleHighlightCustomType,
         canHighlight,
         isHighlighted,
+        readonly,
     ]);
 
     const schemaToDisplay = useMemo(() => {
@@ -171,12 +175,14 @@ export const CustomTypeListItemHeader: React.FC<
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div
-                className="flex cursor-move items-center justify-center"
-                {...listeners}
-            >
-                <GripVertical className="size-4 text-muted-foreground" />
-            </div>
+            {!readonly ? (
+                <div
+                    className="flex cursor-move items-center justify-center"
+                    {...listeners}
+                >
+                    <GripVertical className="size-4 text-muted-foreground" />
+                </div>
+            ) : null}
             <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input
@@ -189,7 +195,7 @@ export const CustomTypeListItemHeader: React.FC<
                         onChange={(e) => setCustomTypeName(e.target.value)}
                         className="h-7 w-full focus-visible:ring-0"
                     />
-                ) : (
+                ) : !readonly ? (
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <div
@@ -208,6 +214,13 @@ export const CustomTypeListItemHeader: React.FC<
                             {t('tool_tips.double_click_to_edit')}
                         </TooltipContent>
                     </Tooltip>
+                ) : (
+                    <div className="truncate px-2 py-0.5">
+                        {customType.name}
+                        <span className="text-xs text-muted-foreground">
+                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
+                        </span>
+                    </div>
                 )}
             </div>
             <div className="flex flex-row-reverse items-center">
@@ -222,11 +235,13 @@ export const CustomTypeListItemHeader: React.FC<
                                 {customTypeKindToLabel[customType.kind]}
                             </Badge>
                         ) : null}
-                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
-                            <ListItemHeaderButton onClick={enterEditMode}>
-                                <Pencil />
-                            </ListItemHeaderButton>
-                        </div>
+                        {!readonly ? (
+                            <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
+                                <ListItemHeaderButton onClick={enterEditMode}>
+                                    <Pencil />
+                                </ListItemHeaderButton>
+                            </div>
+                        ) : null}
                     </>
                 ) : (
                     <ListItemHeaderButton onClick={editCustomTypeName}>

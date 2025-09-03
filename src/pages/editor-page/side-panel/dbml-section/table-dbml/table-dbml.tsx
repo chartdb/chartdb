@@ -42,7 +42,8 @@ const getEditorTheme = (theme: EffectiveTheme) => {
 };
 
 export const TableDBML: React.FC<TableDBMLProps> = () => {
-    const { currentDiagram, updateDiagramData, databaseType } = useChartDB();
+    const { currentDiagram, updateDiagramData, databaseType, readonly } =
+        useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
     const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
@@ -368,15 +369,21 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                                     icon: ArrowLeftRight,
                                     onClick: toggleFormat,
                                 },
-                                {
-                                    label: 'Edit',
-                                    icon: Pencil,
-                                    onClick: () =>
-                                        setIsEditMode((prev) => !prev),
-                                    className: isEditButtonEmphasized
-                                        ? 'dbml-edit-button-emphasis'
-                                        : undefined,
-                                },
+                                ...(!readonly
+                                    ? [
+                                          {
+                                              label: 'Edit',
+                                              icon: Pencil,
+                                              onClick: () =>
+                                                  setIsEditMode(
+                                                      (prev) => !prev
+                                                  ),
+                                              className: isEditButtonEmphasized
+                                                  ? 'dbml-edit-button-emphasis'
+                                                  : undefined,
+                                          },
+                                      ]
+                                    : []),
                             ]
                 }
                 editorProps={{
