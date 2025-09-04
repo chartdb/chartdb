@@ -7,6 +7,8 @@ import type {
     SQLForeignKey,
     SQLEnumType,
 } from '../../common';
+import { buildSQLFromAST } from '../../common';
+import { DatabaseType } from '@/lib/domain/database-type';
 import type {
     TableReference,
     ColumnReference,
@@ -347,13 +349,20 @@ function extractColumnsFromSQL(sql: string): SQLColumn[] {
 
         // Try to extract column definition
         // Match: column_name TYPE[(params)][array]
-        // Updated regex to handle complex types like GEOGRAPHY(POINT, 4326) and custom types like subscription_status
-        const columnMatch = trimmedLine.match(
-            /^\s*["']?(\w+)["']?\s+([\w_]+(?:\([^)]+\))?(?:\[\])?)/i
-        );
+        // First extract column name and everything after it
+        const columnMatch = trimmedLine.match(/^\s*["']?(\w+)["']?\s+(.+)/i);
         if (columnMatch) {
             const columnName = columnMatch[1];
-            let columnType = columnMatch[2];
+            const restOfLine = columnMatch[2];
+
+            // Now extract the type from the rest of the line
+            // Match type which could be multi-word (like CHARACTER VARYING) with optional params
+            const typeMatch = restOfLine.match(
+                /^((?:CHARACTER\s+VARYING|DOUBLE\s+PRECISION|[\w]+)(?:\([^)]+\))?(?:\[\])?)/i
+            );
+
+            if (!typeMatch) continue;
+            let columnType = typeMatch[1].trim();
 
             // Normalize PostGIS types
             if (columnType.toUpperCase().startsWith('GEOGRAPHY')) {
@@ -380,7 +389,65 @@ function extractColumnsFromSQL(sql: string): SQLColumn[] {
             const isPrimary = trimmedLine.match(/PRIMARY\s+KEY/i) !== null;
             const isNotNull = trimmedLine.match(/NOT\s+NULL/i) !== null;
             const isUnique = trimmedLine.match(/\bUNIQUE\b/i) !== null;
-            const hasDefault = trimmedLine.match(/DEFAULT\s+/i) !== null;
+
+            // Extract default value
+            let defaultValue: string | undefined;
+            // Updated regex to handle casting with :: operator
+            const defaultMatch = trimmedLine.match(
+                /DEFAULT\s+((?:'[^']*'|"[^"]*"|\S+)(?:::\w+)?)/i
+            );
+            if (defaultMatch) {
+                let defVal = defaultMatch[1].trim();
+                // Remove trailing comma if present
+                defVal = defVal.replace(/,$/, '').trim();
+                // Handle string literals
+                if (defVal.startsWith("'") && defVal.endsWith("'")) {
+                    // Keep the quotes for string literals
+                    defaultValue = defVal;
+                } else if (defVal.match(/^\d+(\.\d+)?$/)) {
+                    // Numeric value
+                    defaultValue = defVal;
+                } else if (
+                    defVal.toUpperCase() === 'TRUE' ||
+                    defVal.toUpperCase() === 'FALSE'
+                ) {
+                    // Boolean value
+                    defaultValue = defVal.toUpperCase();
+                } else if (defVal.toUpperCase() === 'NULL') {
+                    // NULL value
+                    defaultValue = 'NULL';
+                } else if (defVal.includes('(') && defVal.includes(')')) {
+                    // Function call (like gen_random_uuid())
+                    // Normalize PostgreSQL function names to uppercase
+                    const funcMatch = defVal.match(/^(\w+)\(/);
+                    if (funcMatch) {
+                        const funcName = funcMatch[1];
+                        const pgFunctions = [
+                            'now',
+                            'current_timestamp',
+                            'current_date',
+                            'current_time',
+                            'gen_random_uuid',
+                            'random',
+                            'nextval',
+                            'currval',
+                        ];
+                        if (pgFunctions.includes(funcName.toLowerCase())) {
+                            defaultValue = defVal.replace(
+                                funcName,
+                                funcName.toUpperCase()
+                            );
+                        } else {
+                            defaultValue = defVal;
+                        }
+                    } else {
+                        defaultValue = defVal;
+                    }
+                } else {
+                    // Other expressions
+                    defaultValue = defVal;
+                }
+            }
 
             columns.push({
                 name: columnName,
@@ -388,7 +455,7 @@ function extractColumnsFromSQL(sql: string): SQLColumn[] {
                 nullable: !isNotNull && !isPrimary,
                 primaryKey: isPrimary,
                 unique: isUnique || isPrimary,
-                default: hasDefault ? 'has default' : undefined,
+                default: defaultValue,
                 increment:
                     isSerialType ||
                     trimmedLine.includes('gen_random_uuid()') ||
@@ -1266,8 +1333,17 @@ export async function fromPostgres(
                                 definition?.unique === 'unique';
 
                             // Check for default value
-                            const hasDefault =
+                            let defaultValue: string | undefined;
+                            const defaultVal =
                                 expr.default_val || definition?.default_val;
+                            if (defaultVal && !isSerialType) {
+                                // Create a temporary columnDef to use the getDefaultValueString function
+                                const tempColumnDef = {
+                                    default_val: defaultVal,
+                                } as ColumnDefinition;
+                                defaultValue =
+                                    getDefaultValueString(tempColumnDef);
+                            }
 
                             // Create the new column object
                             const newColumn: SQLColumn = {
@@ -1279,11 +1355,7 @@ export async function fromPostgres(
                                     definition?.constraint === 'primary key' ||
                                     isSerialType,
                                 unique: isUnique,
-                                default: isSerialType
-                                    ? undefined
-                                    : hasDefault
-                                      ? 'has default'
-                                      : undefined,
+                                default: defaultValue,
                                 increment:
                                     isSerialType ||
                                     definition?.auto_increment ===
@@ -1648,8 +1720,74 @@ export async function fromPostgres(
                             columnDefPart.match(/NOT\s+NULL/i) !== null;
                         const isUnique =
                             columnDefPart.match(/\bUNIQUE\b/i) !== null;
-                        const hasDefault =
-                            columnDefPart.match(/DEFAULT\s+/i) !== null;
+                        // Extract default value
+                        let defaultValue: string | undefined;
+                        // Updated regex to handle casting with :: operator
+                        const defaultMatch = columnDefPart.match(
+                            /DEFAULT\s+((?:'[^']*'|"[^"]*"|\S+)(?:::\w+)?)/i
+                        );
+                        if (defaultMatch) {
+                            let defVal = defaultMatch[1].trim();
+                            // Remove trailing comma or semicolon if present
+                            defVal = defVal.replace(/[,;]$/, '').trim();
+                            // Handle string literals
+                            if (
+                                defVal.startsWith("'") &&
+                                defVal.endsWith("'")
+                            ) {
+                                // Keep the quotes for string literals
+                                defaultValue = defVal;
+                            } else if (defVal.match(/^\d+(\.\d+)?$/)) {
+                                // Numeric value
+                                defaultValue = defVal;
+                            } else if (
+                                defVal.toUpperCase() === 'TRUE' ||
+                                defVal.toUpperCase() === 'FALSE'
+                            ) {
+                                // Boolean value
+                                defaultValue = defVal.toUpperCase();
+                            } else if (defVal.toUpperCase() === 'NULL') {
+                                // NULL value
+                                defaultValue = 'NULL';
+                            } else if (
+                                defVal.includes('(') &&
+                                defVal.includes(')')
+                            ) {
+                                // Function call
+                                // Normalize PostgreSQL function names to uppercase
+                                const funcMatch = defVal.match(/^(\w+)\(/);
+                                if (funcMatch) {
+                                    const funcName = funcMatch[1];
+                                    const pgFunctions = [
+                                        'now',
+                                        'current_timestamp',
+                                        'current_date',
+                                        'current_time',
+                                        'gen_random_uuid',
+                                        'random',
+                                        'nextval',
+                                        'currval',
+                                    ];
+                                    if (
+                                        pgFunctions.includes(
+                                            funcName.toLowerCase()
+                                        )
+                                    ) {
+                                        defaultValue = defVal.replace(
+                                            funcName,
+                                            funcName.toUpperCase()
+                                        );
+                                    } else {
+                                        defaultValue = defVal;
+                                    }
+                                } else {
+                                    defaultValue = defVal;
+                                }
+                            } else {
+                                // Other expressions
+                                defaultValue = defVal;
+                            }
+                        }
 
                         tableColumns.push({
                             name: columnName,
@@ -1657,7 +1795,7 @@ export async function fromPostgres(
                             nullable: !isNotNull && !isPrimary,
                             primaryKey: isPrimary,
                             unique: isUnique || isPrimary,
-                            default: hasDefault ? 'has default' : undefined,
+                            default: defaultValue,
                             increment: false,
                         });
                     }
@@ -1814,58 +1952,10 @@ export async function fromPostgres(
 function getDefaultValueString(
     columnDef: ColumnDefinition
 ): string | undefined {
-    let defVal = columnDef.default_val;
-
-    if (
-        defVal &&
-        typeof defVal === 'object' &&
-        defVal.type === 'default' &&
-        'value' in defVal
-    ) {
-        defVal = defVal.value;
-    }
+    const defVal = columnDef.default_val;
 
     if (defVal === undefined || defVal === null) return undefined;
 
-    let value: string | undefined;
-
-    switch (typeof defVal) {
-        case 'string':
-            value = defVal;
-            break;
-        case 'number':
-            value = String(defVal);
-            break;
-        case 'boolean':
-            value = defVal ? 'TRUE' : 'FALSE';
-            break;
-        case 'object':
-            if ('value' in defVal && typeof defVal.value === 'string') {
-                value = defVal.value;
-            } else if ('raw' in defVal && typeof defVal.raw === 'string') {
-                value = defVal.raw;
-            } else if (defVal.type === 'bool') {
-                value = defVal.value ? 'TRUE' : 'FALSE';
-            } else if (defVal.type === 'function' && defVal.name) {
-                const fnName = defVal.name;
-                if (
-                    fnName &&
-                    typeof fnName === 'object' &&
-                    Array.isArray(fnName.name) &&
-                    fnName.name.length > 0 &&
-                    fnName.name[0].value
-                ) {
-                    value = fnName.name[0].value.toUpperCase();
-                } else if (typeof fnName === 'string') {
-                    value = fnName.toUpperCase();
-                } else {
-                    value = 'UNKNOWN_FUNCTION';
-                }
-            }
-            break;
-        default:
-            value = undefined;
-    }
-
-    return value;
+    // Use buildSQLFromAST to reconstruct the default value
+    return buildSQLFromAST(defVal, DatabaseType.POSTGRESQL);
 }

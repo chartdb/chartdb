@@ -130,7 +130,7 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
             (col) => col.name === 'price'
         );
         expect(priceColumn).toBeDefined();
-        expect(priceColumn?.default).toBe('has default');
+        expect(priceColumn?.default).toBe('0');
     });
 
     it('should not add duplicate columns', async () => {
