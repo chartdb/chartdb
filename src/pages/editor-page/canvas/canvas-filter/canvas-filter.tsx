@@ -204,7 +204,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         return node;
                     })
                 );
-            }, 1000);
+            }, 600);
         },
         [setNodes]
     );
