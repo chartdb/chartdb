@@ -14,13 +14,13 @@ export const vi: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Hành động',
-                new: 'Sơ đồ mới',
+                new: 'Mới...',
                 browse: 'Duyệt...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
-                delete_diagram: 'Xóa sơ đồ',
+                delete_diagram: 'Xóa',
             },
             edit: {
                 edit: 'Sửa',
@@ -248,6 +248,7 @@ export const vi: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'Không có giá trị enum được định nghĩa',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -314,7 +315,7 @@ export const vi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Mở sơ đồ',
+            title: 'Mở cơ sở dữ liệu',
             description: 'Chọn sơ đồ để mở từ danh sách bên dưới.',
             table_columns: {
                 name: 'Tên',
@@ -328,7 +329,7 @@ export const vi: LanguageTranslation = {
             diagram_actions: {
                 open: 'Mở',
                 duplicate: 'Nhân bản',
-                delete: 'Xóa sơ đồ',
+                delete: 'Xóa',
             },
         },
 

@@ -14,13 +14,13 @@ export const zh_TW: LanguageTranslation = {
         menu: {
             actions: {
                 actions: '操作',
-                new: '新增圖表',
+                new: '新增...',
                 browse: '瀏覽...',
                 save: '儲存',
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
-                delete_diagram: '刪除圖表',
+                delete_diagram: '刪除',
             },
             edit: {
                 edit: '編輯',
@@ -245,6 +245,7 @@ export const zh_TW: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: '沒有定義列舉值',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -310,7 +311,7 @@ export const zh_TW: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: '開啟圖表',
+            title: '開啟資料庫',
             description: '請從以下列表中選擇一個圖表。',
             table_columns: {
                 name: '名稱',
@@ -324,7 +325,7 @@ export const zh_TW: LanguageTranslation = {
             diagram_actions: {
                 open: '開啟',
                 duplicate: '複製',
-                delete: '刪除圖表',
+                delete: '刪除',
             },
         },
 

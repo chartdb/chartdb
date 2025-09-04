@@ -14,13 +14,13 @@ export const zh_CN: LanguageTranslation = {
         menu: {
             actions: {
                 actions: '操作',
-                new: '新建关系图',
+                new: '新建...',
                 browse: '浏览...',
                 save: '保存',
                 import: '导入数据库',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
-                delete_diagram: '删除关系图',
+                delete_diagram: '删除',
             },
             edit: {
                 edit: '编辑',
@@ -245,6 +245,7 @@ export const zh_CN: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: '没有定义枚举值',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -311,7 +312,7 @@ export const zh_CN: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: '打开关系图',
+            title: '打开数据库',
             description: '从下面的列表中选择一个图表打开。',
             table_columns: {
                 name: '名称',
@@ -325,7 +326,7 @@ export const zh_CN: LanguageTranslation = {
             diagram_actions: {
                 open: '打开',
                 duplicate: '复制',
-                delete: '删除图表',
+                delete: '删除',
             },
         },
 

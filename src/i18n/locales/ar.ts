@@ -14,13 +14,13 @@ export const ar: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'الإجراءات',
-                new: 'مخطط جديد',
+                new: 'جديد...',
                 browse: 'تصفح...',
                 save: 'حفظ',
                 import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
                 export_as: 'تصدير كـ',
-                delete_diagram: 'حذف الرسم البياني',
+                delete_diagram: 'حذف',
             },
             edit: {
                 edit: 'تحرير',
@@ -248,6 +248,7 @@ export const ar: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'لم يتم تحديد قيم التعداد',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -313,7 +314,7 @@ export const ar: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'فتح مخطط',
+            title: 'فتح قاعدة بيانات',
             description: 'اختر مخططًا لفتحه من القائمة ادناه',
             table_columns: {
                 name: 'الإسم',
@@ -327,7 +328,7 @@ export const ar: LanguageTranslation = {
             diagram_actions: {
                 open: 'فتح',
                 duplicate: 'تكرار',
-                delete: 'حذف الرسم التخطيطي',
+                delete: 'حذف',
             },
         },
 

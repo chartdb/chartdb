@@ -32,7 +32,7 @@ export interface RelationshipListItemHeaderProps {
 export const RelationshipListItemHeader: React.FC<
     RelationshipListItemHeaderProps
 > = ({ relationship }) => {
-    const { updateRelationship, removeRelationship } = useChartDB();
+    const { updateRelationship, removeRelationship, readonly } = useChartDB();
     const { fitView, deleteElements, setEdges } = useReactFlow();
     const { t } = useTranslation();
     const { hideSidePanel } = useLayout();
@@ -175,11 +175,13 @@ export const RelationshipListItemHeader: React.FC<
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
-                        <div>{renderDropDownMenu()}</div>
+                        {!readonly ? <div>{renderDropDownMenu()}</div> : null}
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
-                            <ListItemHeaderButton onClick={enterEditMode}>
-                                <Pencil />
-                            </ListItemHeaderButton>
+                            {!readonly ? (
+                                <ListItemHeaderButton onClick={enterEditMode}>
+                                    <Pencil />
+                                </ListItemHeaderButton>
+                            ) : null}
                             <ListItemHeaderButton onClick={focusOnRelationship}>
                                 <CircleDotDashed />
                             </ListItemHeaderButton>

@@ -83,7 +83,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     updateField,
     removeField,
 }) => {
-    const { databaseType, customTypes } = useChartDB();
+    const { databaseType, customTypes, readonly } = useChartDB();
     const { t } = useTranslation();
 
     // Only calculate primary key fields, not just count
@@ -247,12 +247,14 @@ export const TableField: React.FC<TableFieldProps> = ({
             {...attributes}
         >
             <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">
-                <div
-                    className="flex w-4 shrink-0 cursor-move items-center justify-center"
-                    {...listeners}
-                >
-                    <GripVertical className="size-3.5  text-muted-foreground" />
-                </div>
+                {!readonly ? (
+                    <div
+                        className="flex w-4 shrink-0 cursor-move items-center justify-center"
+                        {...listeners}
+                    >
+                        <GripVertical className="size-3.5  text-muted-foreground" />
+                    </div>
+                ) : null}
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span className="min-w-0 flex-1">
@@ -264,6 +266,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 )}
                                 value={field.name}
                                 onChange={handleNameChange}
+                                readOnly={readonly}
                             />
                         </span>
                     </TooltipTrigger>
@@ -292,6 +295,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 emptyPlaceholder={t(
                                     'side_panel.tables_section.table.no_types_found'
                                 )}
+                                readonly={readonly}
                             />
                         </span>
                     </TooltipTrigger>
@@ -310,6 +314,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <TableFieldToggle
                                 pressed={field.nullable}
                                 onPressedChange={handleNullableToggle}
+                                disabled={readonly}
                             >
                                 N
                             </TableFieldToggle>
@@ -325,6 +330,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <TableFieldToggle
                                 pressed={field.primaryKey}
                                 onPressedChange={handlePrimaryKeyToggle}
+                                disabled={readonly}
                             >
                                 <KeyRound className="h-3.5" />
                             </TableFieldToggle>

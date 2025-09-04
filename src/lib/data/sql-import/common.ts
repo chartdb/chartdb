@@ -779,10 +779,10 @@ export function convertToChartDBDiagram(
         }
 
         const sourceField = sourceTable.fields.find(
-            (f) => f.name === rel.sourceColumn
+            (f) => f.name.toLowerCase() === rel.sourceColumn.toLowerCase()
         );
         const targetField = targetTable.fields.find(
-            (f) => f.name === rel.targetColumn
+            (f) => f.name.toLowerCase() === rel.targetColumn.toLowerCase()
         );
 
         if (!sourceField || !targetField) {

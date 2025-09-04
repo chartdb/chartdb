@@ -14,13 +14,13 @@ export const de: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Aktionen',
-                new: 'Neues Diagramm',
+                new: 'Neu...',
                 browse: 'Durchsuchen...',
                 save: 'Speichern',
                 import: 'Datenbank importieren',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
-                delete_diagram: 'Diagramm löschen',
+                delete_diagram: 'Löschen',
             },
             edit: {
                 edit: 'Bearbeiten',
@@ -250,6 +250,7 @@ export const de: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'Keine Enum-Werte definiert',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -318,7 +319,7 @@ export const de: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Diagramm öffnen',
+            title: 'Datenbank öffnen',
             description: 'Wählen Sie ein Diagramm aus der Liste unten aus.',
             table_columns: {
                 name: 'Name',
@@ -332,7 +333,7 @@ export const de: LanguageTranslation = {
             diagram_actions: {
                 open: 'Öffnen',
                 duplicate: 'Duplizieren',
-                delete: 'Diagramm löschen',
+                delete: 'Löschen',
             },
         },
 

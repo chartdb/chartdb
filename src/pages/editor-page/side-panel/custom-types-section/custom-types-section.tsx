@@ -7,17 +7,14 @@ import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import { CustomTypeList } from './custom-type-list/custom-type-list';
-import { DatabaseType } from '@/lib/domain/database-type';
 
 export interface CustomTypesSectionProps {}
 
 export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
     const { t } = useTranslation();
-    const { customTypes, createCustomType, databaseType } = useChartDB();
+    const { customTypes, createCustomType, readonly } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const filterInputRef = React.useRef<HTMLInputElement>(null);
-
-    const isPostgres = databaseType === DatabaseType.POSTGRESQL;
 
     const filteredCustomTypes = useMemo(() => {
         return customTypes.filter(
@@ -53,7 +50,7 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                         onChange={(e) => setFilterText(e.target.value)}
                     />
                 </div>
-                {isPostgres && (
+                {!readonly ? (
                     <Button
                         variant="secondary"
                         size="sm"
@@ -63,7 +60,7 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                         <Plus className="mr-1 size-4" />
                         New Type
                     </Button>
-                )}
+                ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">

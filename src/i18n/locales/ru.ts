@@ -14,13 +14,13 @@ export const ru: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Действия',
-                new: 'Новая диаграмма',
+                new: 'Новая...',
                 browse: 'Обзор...',
                 save: 'Сохранить',
                 import: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
-                delete_diagram: 'Удалить диаграмму',
+                delete_diagram: 'Удалить',
             },
             edit: {
                 edit: 'Изменение',
@@ -246,6 +246,7 @@ export const ru: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'Значения перечисления не определены',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -312,7 +313,7 @@ export const ru: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Открыть диаграмму',
+            title: 'Открыть базу данных',
             description:
                 'Выберите диаграмму, которую нужно открыть, из списка ниже.',
             table_columns: {
@@ -327,7 +328,7 @@ export const ru: LanguageTranslation = {
             diagram_actions: {
                 open: 'Открыть',
                 duplicate: 'Дублировать',
-                delete: 'Удалить диаграмму',
+                delete: 'Удалить',
             },
         },
 

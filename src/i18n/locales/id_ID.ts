@@ -14,13 +14,13 @@ export const id_ID: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'Aksi',
-                new: 'Diagram Baru',
+                new: 'Baru...',
                 browse: 'Jelajahi...',
                 save: 'Simpan',
                 import: 'Impor Database',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
-                delete_diagram: 'Hapus Diagram',
+                delete_diagram: 'Hapus',
             },
             edit: {
                 edit: 'Ubah',
@@ -248,6 +248,7 @@ export const id_ID: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'Tidak ada nilai enum yang ditentukan',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -314,7 +315,7 @@ export const id_ID: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Buka Diagram',
+            title: 'Buka Database',
             description: 'Pilih diagram untuk dibuka dari daftar di bawah.',
             table_columns: {
                 name: 'Name',
@@ -328,7 +329,7 @@ export const id_ID: LanguageTranslation = {
             diagram_actions: {
                 open: 'Buka',
                 duplicate: 'Duplikat',
-                delete: 'Hapus Diagram',
+                delete: 'Hapus',
             },
         },
 

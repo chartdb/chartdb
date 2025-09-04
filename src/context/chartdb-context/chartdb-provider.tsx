@@ -41,8 +41,7 @@ export const ChartDBProvider: React.FC<
     React.PropsWithChildren<ChartDBProviderProps>
 > = ({ children, diagram, readonly: readonlyProp }) => {
     const { hasDiff } = useDiff();
-    const dbStorage = useStorage();
-    let db = dbStorage;
+    const storageDB = useStorage();
     const events = useEventEmitter<ChartDBEvent>();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
@@ -102,10 +101,6 @@ export const ChartDBProvider: React.FC<
         [readonlyProp, hasDiff]
     );
 
-    if (readonly) {
-        db = storageInitialValue;
-    }
-
     const schemas = useMemo(
         () =>
             databasesWithSchemas.includes(databaseType)
@@ -132,6 +127,11 @@ export const ChartDBProvider: React.FC<
                       )
                 : [],
         [tables, defaultSchemaName, databaseType]
+    );
+
+    const db = useMemo(
+        () => (readonly ? storageInitialValue : storageDB),
+        [storageDB, readonly]
     );
 
     const currentDiagram: Diagram = useMemo(
@@ -1580,17 +1580,17 @@ export const ChartDBProvider: React.FC<
 
     const updateDiagramData: ChartDBContext['updateDiagramData'] = useCallback(
         async (diagram, options) => {
-            const st = options?.forceUpdateStorage ? dbStorage : db;
+            const st = options?.forceUpdateStorage ? storageDB : db;
             await st.deleteDiagram(diagram.id);
             await st.addDiagram({ diagram });
             loadDiagramFromData(diagram);
         },
-        [db, dbStorage, loadDiagramFromData]
+        [db, storageDB, loadDiagramFromData]
     );
 
     const loadDiagram: ChartDBContext['loadDiagram'] = useCallback(
         async (diagramId: string) => {
-            const diagram = await db.getDiagram(diagramId, {
+            const diagram = await storageDB.getDiagram(diagramId, {
                 includeRelationships: true,
                 includeTables: true,
                 includeDependencies: true,
@@ -1604,7 +1604,7 @@ export const ChartDBProvider: React.FC<
 
             return diagram;
         },
-        [db, loadDiagramFromData]
+        [storageDB, loadDiagramFromData]
     );
 
     // Custom type operations

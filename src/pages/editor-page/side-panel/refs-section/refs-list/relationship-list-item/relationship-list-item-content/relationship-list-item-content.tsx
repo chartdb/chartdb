@@ -38,8 +38,13 @@ export interface RelationshipListItemContentProps {
 export const RelationshipListItemContent: React.FC<
     RelationshipListItemContentProps
 > = ({ relationship }) => {
-    const { getTable, getField, updateRelationship, removeRelationship } =
-        useChartDB();
+    const {
+        getTable,
+        getField,
+        updateRelationship,
+        removeRelationship,
+        readonly,
+    } = useChartDB();
     const { deleteElements } = useReactFlow();
     const { t } = useTranslation();
     const relationshipType = useMemo(
@@ -83,7 +88,7 @@ export const RelationshipListItemContent: React.FC<
     }, [relationship.id, removeRelationship, deleteElements]);
 
     return (
-        <div className="my-1 flex flex-col rounded-b-md px-1">
+        <div className="my-1 flex flex-col rounded-b-md px-1 py-2">
             <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between gap-1 text-xs">
                     <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
@@ -152,6 +157,7 @@ export const RelationshipListItemContent: React.FC<
                     <Select
                         value={relationshipType}
                         onValueChange={updateCardinalities}
+                        disabled={readonly}
                     >
                         <SelectTrigger className="h-8">
                             <SelectValue />
@@ -175,20 +181,22 @@ export const RelationshipListItemContent: React.FC<
                     </Select>
                 </div>
             </div>
-            <div className="flex flex-1 items-center justify-center pt-2">
-                <Button
-                    variant="ghost"
-                    className="h-8 p-2 text-xs"
-                    onClick={deleteRelationshipHandler}
-                >
-                    <Trash2 className="mr-1 size-3.5 text-red-700" />
-                    <div className="text-red-700">
-                        {t(
-                            'side_panel.refs_section.relationship.delete_relationship'
-                        )}
-                    </div>
-                </Button>
-            </div>
+            {!readonly ? (
+                <div className="flex flex-1 items-center justify-center pt-2">
+                    <Button
+                        variant="ghost"
+                        className="h-8 p-2 text-xs"
+                        onClick={deleteRelationshipHandler}
+                    >
+                        <Trash2 className="mr-1 size-3.5 text-red-700" />
+                        <div className="text-red-700">
+                            {t(
+                                'side_panel.refs_section.relationship.delete_relationship'
+                            )}
+                        </div>
+                    </Button>
+                </div>
+            ) : null}
         </div>
     );
 };

@@ -14,13 +14,13 @@ export const ne: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'कार्यहरू',
-                new: 'नयाँ डायाग्राम',
+                new: 'नयाँ...',
                 browse: 'ब्राउज गर्नुहोस्...',
                 save: 'सुरक्षित गर्नुहोस्',
                 import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
-                delete_diagram: 'डायाग्राम हटाउनुहोस्',
+                delete_diagram: 'हटाउनुहोस्',
             },
             edit: {
                 edit: 'सम्पादन',
@@ -249,6 +249,7 @@ export const ne: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'कुनै enum मानहरू परिभाषित छैनन्',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -316,7 +317,7 @@ export const ne: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'डायाग्राम खोल्नुहोस्',
+            title: 'डाटाबेस खोल्नुहोस्',
             description:
                 'तलको सूचीबाट खोल्नका लागि एक डायाग्राम चयन गर्नुहोस्।',
             table_columns: {
@@ -331,7 +332,7 @@ export const ne: LanguageTranslation = {
             diagram_actions: {
                 open: 'खोल्नुहोस्',
                 duplicate: 'डुप्लिकेट',
-                delete: 'डायग्राम मेटाउनुहोस्',
+                delete: 'मेटाउनुहोस्',
             },
         },
 

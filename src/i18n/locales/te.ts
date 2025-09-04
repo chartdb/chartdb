@@ -14,13 +14,13 @@ export const te: LanguageTranslation = {
         menu: {
             actions: {
                 actions: 'చర్యలు',
-                new: 'కొత్త డైగ్రాం',
+                new: 'కొత్తది...',
                 browse: 'బ్రాఉజ్ చేయండి...',
                 save: 'సేవ్',
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
                 export_as: 'వగా ఎగుమతి చేయండి',
-                delete_diagram: 'చిత్రాన్ని తొలగించండి',
+                delete_diagram: 'తొలగించండి',
             },
             edit: {
                 edit: 'సవరించు',
@@ -250,6 +250,7 @@ export const te: LanguageTranslation = {
                     enum_values: 'Enum Values',
                     composite_fields: 'Fields',
                     no_fields: 'No fields defined',
+                    no_values: 'ఏ enum విలువలు నిర్వచించబడలేదు',
                     field_name_placeholder: 'Field name',
                     field_type_placeholder: 'Select type',
                     add_field: 'Add Field',
@@ -317,7 +318,7 @@ export const te: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'చిత్రం తెరవండి',
+            title: 'డేటాబేస్ తెరవండి',
             description: 'కింద ఉన్న జాబితా నుండి చిత్రాన్ని ఎంచుకోండి.',
             table_columns: {
                 name: 'పేరు',
@@ -331,7 +332,7 @@ export const te: LanguageTranslation = {
             diagram_actions: {
                 open: 'తెరవు',
                 duplicate: 'నకలు',
-                delete: 'డైగ్రామ్ తొలగించు',
+                delete: 'తొలగించు',
             },
         },
 

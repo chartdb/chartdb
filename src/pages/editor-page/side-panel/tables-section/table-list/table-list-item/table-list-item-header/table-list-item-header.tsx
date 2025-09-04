@@ -57,6 +57,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         createTable,
         schemas,
         databaseType,
+        readonly,
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
@@ -280,12 +281,14 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div
-                className="flex cursor-move items-center justify-center"
-                {...listeners}
-            >
-                <GripVertical className="size-4 text-muted-foreground" />
-            </div>
+            {!readonly ? (
+                <div
+                    className="flex cursor-move items-center justify-center"
+                    {...listeners}
+                >
+                    <GripVertical className="size-4 text-muted-foreground" />
+                </div>
+            ) : null}
             <div className="flex min-w-0 flex-1 px-1">
                 {editMode ? (
                     <Input
@@ -298,7 +301,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         onChange={(e) => setTableName(e.target.value)}
                         className="h-7 w-full focus-visible:ring-0"
                     />
-                ) : (
+                ) : !readonly ? (
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <div
@@ -317,16 +320,25 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             {t('tool_tips.double_click_to_edit')}
                         </TooltipContent>
                     </Tooltip>
+                ) : (
+                    <div className="truncate px-2 py-0.5">
+                        {table.name}
+                        <span className="text-xs text-muted-foreground">
+                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
+                        </span>
+                    </div>
                 )}
             </div>
             <div className="flex flex-row-reverse">
                 {!editMode ? (
                     <>
-                        <div>{renderDropDownMenu()}</div>
+                        {!readonly ? <div>{renderDropDownMenu()}</div> : null}
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
-                            <ListItemHeaderButton onClick={enterEditMode}>
-                                <Pencil />
-                            </ListItemHeaderButton>
+                            {!readonly ? (
+                                <ListItemHeaderButton onClick={enterEditMode}>
+                                    <Pencil />
+                                </ListItemHeaderButton>
+                            ) : null}
                             <ListItemHeaderButton onClick={focusOnTable}>
                                 <CircleDotDashed />
                             </ListItemHeaderButton>
