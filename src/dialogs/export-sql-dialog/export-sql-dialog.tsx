@@ -17,7 +17,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import {
     exportBaseSQL,
     exportSQL,
-} from '@/lib/data/export-metadata/export-sql-script';
+} from '@/lib/data/sql-export/export-sql-script';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { Annoyed, Sparkles } from 'lucide-react';

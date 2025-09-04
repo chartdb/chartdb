@@ -1,5 +1,5 @@
 import { importer } from '@dbml/core';
-import { exportBaseSQL } from '@/lib/data/export-metadata/export-sql-script';
+import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import type { Diagram } from '@/lib/domain/diagram';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';

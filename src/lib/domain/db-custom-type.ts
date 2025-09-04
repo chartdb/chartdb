@@ -1,7 +1,4 @@
 import { z } from 'zod';
-import type { DBCustomTypeInfo } from '@/lib/data/import-metadata/metadata-types/custom-type-info';
-import { generateId } from '../utils';
-import { schemaNameToDomainSchemaName } from './db-schema';
 
 export enum DBCustomTypeKind {
     enum = 'enum',
@@ -37,23 +34,6 @@ export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     fields: z.array(dbCustomTypeFieldSchema).or(z.null()).optional(),
     order: z.number().or(z.null()).optional(),
 });
-
-export const createCustomTypesFromMetadata = ({
-    customTypes,
-}: {
-    customTypes: DBCustomTypeInfo[];
-}): DBCustomType[] => {
-    return customTypes.map((customType) => {
-        return {
-            id: generateId(),
-            schema: schemaNameToDomainSchemaName(customType.schema),
-            name: customType.type,
-            kind: customType.kind as DBCustomTypeKind,
-            values: customType.values,
-            fields: customType.fields,
-        };
-    });
-};
 
 export const customTypeKindToLabel: Record<DBCustomTypeKind, string> = {
     enum: 'Enum',

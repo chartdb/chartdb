@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { importDBMLToDiagram } from '../dbml-import';
-import { exportPostgreSQL } from '@/lib/data/export-metadata/export-per-type/postgresql';
-import { exportMySQL } from '@/lib/data/export-metadata/export-per-type/mysql';
-import { exportMSSQL } from '@/lib/data/export-metadata/export-per-type/mssql';
+import { exportPostgreSQL } from '@/lib/data/sql-export/export-per-type/postgresql';
+import { exportMySQL } from '@/lib/data/sql-export/export-per-type/mysql';
+import { exportMSSQL } from '@/lib/data/sql-export/export-per-type/mssql';
 import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('Composite Primary Key with Name', () => {

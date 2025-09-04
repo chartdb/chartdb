@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createTablesFromMetadata } from '../db-table';
+import { createTablesFromMetadata } from '@/lib/data/import-metadata/import/tables';
 import { DatabaseType } from '../database-type';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 
