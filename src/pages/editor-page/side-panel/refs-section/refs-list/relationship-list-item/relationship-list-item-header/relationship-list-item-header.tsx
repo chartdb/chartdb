@@ -10,6 +10,7 @@ import { ListItemHeaderButton } from '../../../../list-item-header-button/list-i
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useFocusOn } from '@/hooks/use-focus-on';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import {
     DropdownMenu,
@@ -21,8 +22,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Input } from '@/components/input/input';
-import { useLayout } from '@/hooks/use-layout';
-import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useTranslation } from 'react-i18next';
 
 export interface RelationshipListItemHeaderProps {
@@ -33,11 +32,10 @@ export const RelationshipListItemHeader: React.FC<
     RelationshipListItemHeaderProps
 > = ({ relationship }) => {
     const { updateRelationship, removeRelationship, readonly } = useChartDB();
-    const { fitView, deleteElements, setEdges } = useReactFlow();
+    const { deleteElements } = useReactFlow();
     const { t } = useTranslation();
-    const { hideSidePanel } = useLayout();
+    const { focusOnRelationship } = useFocusOn();
     const [editMode, setEditMode] = React.useState(false);
-    const { isMd: isDesktop } = useBreakpoint('md');
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
     );
@@ -70,48 +68,20 @@ export const RelationshipListItemHeader: React.FC<
         setEditMode(true);
     };
 
-    const focusOnRelationship = useCallback(
+    const handleFocusOnRelationship = useCallback(
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             event.stopPropagation();
-            setEdges((edges) =>
-                edges.map((edge) =>
-                    edge.id == relationship.id
-                        ? {
-                              ...edge,
-                              selected: true,
-                          }
-                        : {
-                              ...edge,
-                              selected: false,
-                          }
-                )
+            focusOnRelationship(
+                relationship.id,
+                relationship.sourceTableId,
+                relationship.targetTableId
             );
-            fitView({
-                duration: 500,
-                maxZoom: 1,
-                minZoom: 1,
-                nodes: [
-                    {
-                        id: relationship.sourceTableId,
-                    },
-                    {
-                        id: relationship.targetTableId,
-                    },
-                ],
-            });
-
-            if (!isDesktop) {
-                hideSidePanel();
-            }
         },
         [
-            fitView,
+            focusOnRelationship,
+            relationship.id,
             relationship.sourceTableId,
             relationship.targetTableId,
-            setEdges,
-            relationship.id,
-            isDesktop,
-            hideSidePanel,
         ]
     );
 
@@ -182,7 +152,9 @@ export const RelationshipListItemHeader: React.FC<
                                     <Pencil />
                                 </ListItemHeaderButton>
                             ) : null}
-                            <ListItemHeaderButton onClick={focusOnRelationship}>
+                            <ListItemHeaderButton
+                                onClick={handleFocusOnRelationship}
+                            >
                                 <CircleDotDashed />
                             </ListItemHeaderButton>
                         </div>

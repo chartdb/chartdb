@@ -54,6 +54,7 @@ export type TableNodeType = Node<
         isOverlapping: boolean;
         highlightOverlappingTables?: boolean;
         hasHighlightedCustomType?: boolean;
+        highlightTable?: boolean;
     },
     'table'
 >;
@@ -68,6 +69,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             isOverlapping,
             highlightOverlappingTables,
             hasHighlightedCustomType,
+            highlightTable,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -321,6 +323,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     hasHighlightedCustomType
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-yellow-500 ring-offset-2 animate-scale'
                         : '',
+                    highlightTable
+                        ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2 animate-scale-2'
+                        : '',
                     isDiffTableChanged &&
                         !isSummaryOnly &&
                         !isDiffNewTable &&
@@ -339,6 +344,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isOverlapping,
                 highlightOverlappingTables,
                 hasHighlightedCustomType,
+                highlightTable,
                 isSummaryOnly,
                 isDiffTableChanged,
                 isDiffNewTable,

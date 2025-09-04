@@ -47,7 +47,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         addTablesToFilter,
         removeTablesFromFilter,
     } = useDiagramFilter();
-    const { fitView, setNodes } = useReactFlow();
+    const { setNodes } = useReactFlow();
     const [searchQuery, setSearchQuery] = useState('');
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
     const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -160,39 +160,53 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         ]
     );
 
-    const focusOnTable = useCallback(
+    const selectTable = useCallback(
         (tableId: string) => {
-            // Make sure the table is visible
+            // Make sure the table is visible, selected and trigger animation
             setNodes((nodes) =>
-                nodes.map((node) =>
-                    node.id === tableId
-                        ? {
-                              ...node,
-                              hidden: false,
-                              selected: true,
-                          }
-                        : {
-                              ...node,
-                              selected: false,
-                          }
-                )
+                nodes.map((node) => {
+                    if (node.id === tableId) {
+                        return {
+                            ...node,
+                            selected: true,
+                            data: {
+                                ...node.data,
+                                highlightTable: true,
+                            },
+                        };
+                    }
+
+                    return {
+                        ...node,
+                        selected: false,
+                        data: {
+                            ...node.data,
+                            highlightTable: false,
+                        },
+                    };
+                })
             );
 
-            // Focus on the table
+            // Remove the highlight flag after animation completes
             setTimeout(() => {
-                fitView({
-                    duration: 500,
-                    maxZoom: 1,
-                    minZoom: 1,
-                    nodes: [
-                        {
-                            id: tableId,
-                        },
-                    ],
-                });
-            }, 100);
+                setNodes((nodes) =>
+                    nodes.map((node) => {
+                        if (node.id === tableId) {
+                            return {
+                                ...node,
+                                data: {
+                                    ...node.data,
+                                    highlightTable: false,
+                                },
+                            };
+                        }
+
+                        return node;
+                    })
+                );
+            }, 600);
         },
-        [fitView, setNodes]
+        [setNodes]
     );
 
     // Handle node click
@@ -202,13 +216,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 const context = node.context as TableContext;
                 const isTableVisible = context.visible;
 
-                // Only focus if table is visible
+                // Only select if table is visible
                 if (isTableVisible) {
-                    focusOnTable(node.id);
+                    selectTable(node.id);
                 }
             }
         },
-        [focusOnTable]
+        [selectTable]
     );
 
     // Animate in on mount and focus search input

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, CircleDotDashed } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { TreeNode } from '@/components/tree-view/tree';
 import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
+import { useFocusOn } from '@/hooks/use-focus-on';
 import type {
     AreaContext,
     NodeContext,
@@ -12,6 +13,7 @@ import type {
     TableContext,
 } from './types';
 import type { FilterTableInfo } from '@/lib/domain/diagram-filter/diagram-filter';
+import { cn } from '@/lib/utils';
 
 interface FilterItemActionsProps {
     node: TreeNode<NodeType, NodeContext>;
@@ -40,6 +42,7 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
     addTablesToFilter,
     removeTablesFromFilter,
 }) => {
+    const { focusOnArea, focusOnTable } = useFocusOn();
     if (node.type === 'schema') {
         const context = node.context as SchemaContext;
         const schemaVisible = context.visible;
@@ -50,7 +53,7 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
             <Button
                 variant="ghost"
                 size="sm"
-                className="size-7 h-fit p-0"
+                className="h-fit w-6 p-0"
                 onClick={(e) => {
                     e.stopPropagation();
 
@@ -67,9 +70,9 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
                 }}
             >
                 {!schemaVisible ? (
-                    <EyeOff className="size-3.5 text-muted-foreground" />
+                    <EyeOff className="!size-3.5 text-muted-foreground" />
                 ) : (
-                    <Eye className="size-3.5" />
+                    <Eye className="!size-3.5" />
                 )}
             </Button>
         );
@@ -81,37 +84,60 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
         const isUngrouped = context.isUngrouped;
         const areaId = context.id;
 
+        const handleZoomToArea = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            if (!isUngrouped) {
+                focusOnArea(areaId);
+            }
+        };
+
         return (
-            <Button
-                variant="ghost"
-                size="sm"
-                className="size-7 h-fit p-0"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    // Toggle all tables in this area
-                    if (areaVisible) {
-                        // Hide all tables in this area
-                        removeTablesFromFilter({
-                            filterCallback: (table) =>
-                                (isUngrouped && !table.areaId) ||
-                                (!isUngrouped && table.areaId === areaId),
-                        });
-                    } else {
-                        // Show all tables in this area
-                        addTablesToFilter({
-                            filterCallback: (table) =>
-                                (isUngrouped && !table.areaId) ||
-                                (!isUngrouped && table.areaId === areaId),
-                        });
-                    }
-                }}
-            >
-                {!areaVisible ? (
-                    <EyeOff className="size-3.5 text-muted-foreground" />
-                ) : (
-                    <Eye className="size-3.5" />
-                )}
-            </Button>
+            <div className="flex h-full items-center gap-0.5">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                        'flex h-fit w-6 items-center justify-center p-0 opacity-0 transition-opacity group-hover:opacity-100',
+                        {
+                            '!opacity-0': !areaVisible,
+                        }
+                    )}
+                    onClick={handleZoomToArea}
+                    disabled={!areaVisible}
+                >
+                    <CircleDotDashed className="!size-3.5" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex h-fit w-6 items-center justify-center p-0"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // Toggle all tables in this area
+                        if (areaVisible) {
+                            // Hide all tables in this area
+                            removeTablesFromFilter({
+                                filterCallback: (table) =>
+                                    (isUngrouped && !table.areaId) ||
+                                    (!isUngrouped && table.areaId === areaId),
+                            });
+                        } else {
+                            // Show all tables in this area
+                            addTablesToFilter({
+                                filterCallback: (table) =>
+                                    (isUngrouped && !table.areaId) ||
+                                    (!isUngrouped && table.areaId === areaId),
+                            });
+                        }
+                    }}
+                >
+                    {!areaVisible ? (
+                        <EyeOff className="!size-3.5 text-muted-foreground" />
+                    ) : (
+                        <Eye className="!size-3.5" />
+                    )}
+                </Button>
+            </div>
         );
     }
 
@@ -120,22 +146,43 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
         const context = node.context as TableContext;
         const tableVisible = context.visible;
 
+        const handleZoomToTable = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            focusOnTable(tableId);
+        };
+
         return (
-            <Button
-                variant="ghost"
-                size="sm"
-                className="size-7 h-fit p-0"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    toggleTableFilter(tableId);
-                }}
-            >
-                {!tableVisible ? (
-                    <EyeOff className="size-3.5 text-muted-foreground" />
-                ) : (
-                    <Eye className="size-3.5" />
-                )}
-            </Button>
+            <div className="flex h-full items-center gap-0.5">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                        'flex h-fit w-6 items-center justify-center p-0 opacity-0 transition-opacity group-hover:opacity-100',
+                        {
+                            '!opacity-0': !tableVisible,
+                        }
+                    )}
+                    onClick={handleZoomToTable}
+                    disabled={!tableVisible}
+                >
+                    <CircleDotDashed className="!size-3.5" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex w-6 items-center justify-center p-0"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleTableFilter(tableId);
+                    }}
+                >
+                    {!tableVisible ? (
+                        <EyeOff className="!size-3.5 text-muted-foreground" />
+                    ) : (
+                        <Eye className="!size-3.5" />
+                    )}
+                </Button>
+            </div>
         );
     }
 
