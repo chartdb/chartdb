@@ -164,44 +164,47 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         (tableId: string) => {
             // Make sure the table is visible, selected and trigger animation
             setNodes((nodes) =>
-                nodes.map((node) =>
-                    node.id === tableId
-                        ? {
-                              ...node,
-                              hidden: false,
-                              selected: true,
-                              data: {
-                                  ...node.data,
-                                  highlightTable: true,
-                              },
-                          }
-                        : {
-                              ...node,
-                              selected: false,
-                              data: {
-                                  ...node.data,
-                                  highlightTable: false,
-                              },
-                          }
-                )
+                nodes.map((node) => {
+                    if (node.id === tableId) {
+                        return {
+                            ...node,
+                            selected: true,
+                            data: {
+                                ...node.data,
+                                highlightTable: true,
+                            },
+                        };
+                    }
+
+                    return {
+                        ...node,
+                        selected: false,
+                        data: {
+                            ...node.data,
+                            highlightTable: false,
+                        },
+                    };
+                })
             );
 
             // Remove the highlight flag after animation completes
             setTimeout(() => {
                 setNodes((nodes) =>
-                    nodes.map((node) =>
-                        node.id === tableId
-                            ? {
-                                  ...node,
-                                  data: {
-                                      ...node.data,
-                                      highlightTable: false,
-                                  },
-                              }
-                            : node
-                    )
+                    nodes.map((node) => {
+                        if (node.id === tableId) {
+                            return {
+                                ...node,
+                                data: {
+                                    ...node.data,
+                                    highlightTable: false,
+                                },
+                            };
+                        }
+
+                        return node;
+                    })
                 );
-            }, 600);
+            }, 1000);
         },
         [setNodes]
     );
