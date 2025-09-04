@@ -7,7 +7,7 @@ import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import type { Diagram } from '@/lib/domain/diagram';
-import { loadFromDatabaseMetadata } from '@/lib/domain/diagram';
+import { loadFromDatabaseMetadata } from '@/lib/data/import-metadata/import';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { Trans, useTranslation } from 'react-i18next';
