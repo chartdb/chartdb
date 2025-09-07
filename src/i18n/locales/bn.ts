@@ -75,10 +75,10 @@ export const bn: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
+            title: 'স্বয়ংক্রিয় ডায়াগ্রাম সাজান',
             description:
                 'এই কাজটি ডায়াগ্রামের সমস্ত টেবিল পুনর্বিন্যাস করবে। আপনি কি চালিয়ে যেতে চান?',
-            reorder: 'পুনর্বিন্যাস করুন',
+            reorder: 'স্বয়ংক্রিয় সাজান',
             cancel: 'বাতিল করুন',
         },
 
@@ -272,7 +272,7 @@ export const bn: LanguageTranslation = {
             show_all: 'সব দেখান',
             undo: 'পূর্বাবস্থায় ফিরুন',
             redo: 'পুনরায় করুন',
-            reorder_diagram: 'ডায়াগ্রাম পুনর্বিন্যাস করুন',
+            reorder_diagram: 'স্বয়ংক্রিয় ডায়াগ্রাম সাজান',
             highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
 
             // TODO: Translate

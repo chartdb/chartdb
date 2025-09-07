@@ -74,10 +74,10 @@ export const ko_KR: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: '다이어그램 재정렬',
+            title: '다이어그램 자동 정렬',
             description:
                 '이 작업은 모든 다이어그램이 재정렬됩니다. 계속하시겠습니까?',
-            reorder: '재정렬',
+            reorder: '자동 정렬',
             cancel: '취소',
         },
 
@@ -271,7 +271,7 @@ export const ko_KR: LanguageTranslation = {
             show_all: '전체 저장',
             undo: '실행 취소',
             redo: '다시 실행',
-            reorder_diagram: '다이어그램 재정렬',
+            reorder_diagram: '다이어그램 자동 정렬',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

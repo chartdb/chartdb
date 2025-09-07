@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
-import { ZoomIn, ZoomOut, Funnel, Redo, Undo, Scan } from 'lucide-react';
+import {
+    ZoomIn,
+    ZoomOut,
+    Funnel,
+    Redo,
+    Undo,
+    Scan,
+    LayoutGrid,
+} from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
@@ -17,6 +25,7 @@ import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/key
 import { useCanvas } from '@/hooks/use-canvas';
 import { cn } from '@/lib/utils';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
 
@@ -24,13 +33,14 @@ export interface ToolbarProps {
     readonly?: boolean;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = () => {
+export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
-    const { setShowFilter } = useCanvas();
+    const { setShowFilter, reorderTables } = useCanvas();
     const { hasActiveFilter } = useDiagramFilter();
+    const { showAlert } = useAlert();
 
     const toggleFilter = useCallback(() => {
         setShowFilter((prev) => !prev);
@@ -66,6 +76,16 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
             maxZoom: 0.8,
         });
     }, [fitView]);
+
+    const showReorderConfirmation = useCallback(() => {
+        showAlert({
+            title: t('reorder_diagram_alert.title'),
+            description: t('reorder_diagram_alert.description'),
+            actionLabel: t('reorder_diagram_alert.reorder'),
+            closeLabel: t('reorder_diagram_alert.cancel'),
+            onAction: reorderTables,
+        });
+    }, [t, showAlert, reorderTables]);
 
     return (
         <div className="px-1">
@@ -148,6 +168,25 @@ export const Toolbar: React.FC<ToolbarProps> = () => {
                         <TooltipContent>{t('toolbar.zoom_in')}</TooltipContent>
                     </Tooltip>
                     <Separator orientation="vertical" />
+                    {!readonly ? (
+                        <>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        <ToolbarButton
+                                            onClick={showReorderConfirmation}
+                                        >
+                                            <LayoutGrid />
+                                        </ToolbarButton>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t('toolbar.reorder_diagram')}
+                                </TooltipContent>
+                            </Tooltip>
+                            <Separator orientation="vertical" />
+                        </>
+                    ) : null}
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

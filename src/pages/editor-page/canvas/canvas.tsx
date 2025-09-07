@@ -40,13 +40,7 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import {
-    Pencil,
-    LayoutGrid,
-    AlertTriangle,
-    Magnet,
-    Highlighter,
-} from 'lucide-react';
+import { Pencil, AlertTriangle, Magnet, Highlighter } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -81,7 +75,6 @@ import {
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node/table-node-dependency-indicator';
 import type { DatabaseType } from '@/lib/domain/database-type';
-import { useAlert } from '@/context/alert-context/alert-context';
 import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
@@ -242,12 +235,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
     const { scrollAction, showDBViews, showMiniMapOnCanvas } = useLocalConfig();
-    const { showAlert } = useAlert();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
     const {
-        reorderTables,
         fitView,
         setOverlapGraph,
         overlapGraph,
@@ -1209,16 +1200,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const isLoadingDOM =
         tables.length > 0 ? !getInternalNode(tables[0].id) : false;
 
-    const showReorderConfirmation = useCallback(() => {
-        showAlert({
-            title: t('reorder_diagram_alert.title'),
-            description: t('reorder_diagram_alert.description'),
-            actionLabel: t('reorder_diagram_alert.reorder'),
-            closeLabel: t('reorder_diagram_alert.cancel'),
-            onAction: reorderTables,
-        });
-    }, [t, showAlert, reorderTables]);
-
     const hasOverlappingTables = useMemo(
         () =>
             Array.from(overlapGraph.graph).some(
@@ -1285,24 +1266,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         <div className="flex flex-col items-center gap-2 md:flex-row">
                             {!readonly ? (
                                 <>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <span>
-                                                <Button
-                                                    variant="secondary"
-                                                    className="size-8 p-1 shadow-none"
-                                                    onClick={
-                                                        showReorderConfirmation
-                                                    }
-                                                >
-                                                    <LayoutGrid className="size-4" />
-                                                </Button>
-                                            </span>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {t('toolbar.reorder_diagram')}
-                                        </TooltipContent>
-                                    </Tooltip>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <span>
