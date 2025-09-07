@@ -75,10 +75,10 @@ export const de: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Diagramm neu anordnen',
+            title: 'Diagramm automatisch anordnen',
             description:
                 'Diese Aktion wird alle Tabellen im Diagramm neu anordnen. Möchten Sie fortfahren?',
-            reorder: 'Neu anordnen',
+            reorder: 'Automatisch anordnen',
             cancel: 'Abbrechen',
         },
 
@@ -273,7 +273,7 @@ export const de: LanguageTranslation = {
             show_all: 'Alle anzeigen',
             undo: 'Rückgängig',
             redo: 'Wiederholen',
-            reorder_diagram: 'Diagramm neu anordnen',
+            reorder_diagram: 'Diagramm automatisch anordnen',
 
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',

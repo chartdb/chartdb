@@ -75,10 +75,10 @@ export const gu: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'ડાયાગ્રામ ફરી વ્યવસ્થિત કરો',
+            title: 'ડાયાગ્રામ ઑટોમેટિક ગોઠવો',
             description:
                 'આ ક્રિયા ડાયાગ્રામમાં બધી ટેબલ્સને ફરીથી વ્યવસ્થિત કરશે. શું તમે ચાલુ રાખવા માંગો છો?',
-            reorder: 'ફરી વ્યવસ્થિત કરો',
+            reorder: 'ઑટોમેટિક ગોઠવો',
             cancel: 'રદ કરો',
         },
 
@@ -273,7 +273,7 @@ export const gu: LanguageTranslation = {
             show_all: 'બધું બતાવો',
             undo: 'અનડુ',
             redo: 'રીડુ',
-            reorder_diagram: 'ડાયાગ્રામ ફરીથી વ્યવસ્થિત કરો',
+            reorder_diagram: 'ડાયાગ્રામ ઑટોમેટિક ગોઠવો',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

@@ -76,10 +76,10 @@ export const ja: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'ダイアグラムを並べ替え',
+            title: 'ダイアグラムを自動配置',
             description:
                 'この操作によりダイアグラム内のすべてのテーブルが再配置されます。続行しますか？',
-            reorder: '並べ替え',
+            reorder: '自動配置',
             cancel: 'キャンセル',
         },
 
@@ -276,7 +276,7 @@ export const ja: LanguageTranslation = {
             show_all: 'すべて表示',
             undo: '元に戻す',
             redo: 'やり直し',
-            reorder_diagram: 'ダイアグラムを並べ替え',
+            reorder_diagram: 'ダイアグラムを自動配置',
             // TODO: Translate
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',

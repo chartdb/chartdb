@@ -73,10 +73,10 @@ export const ru: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Переупорядочить диаграмму',
+            title: 'Автоматическая расстановка диаграммы',
             description:
                 'Это действие переставит все таблицы на диаграмме. Хотите продолжить?',
-            reorder: 'Изменить порядок',
+            reorder: 'Автоматическая расстановка',
             cancel: 'Отменить',
         },
 
@@ -269,7 +269,7 @@ export const ru: LanguageTranslation = {
             show_all: 'Показать все',
             undo: 'Отменить',
             redo: 'Вернуть',
-            reorder_diagram: 'Переупорядочить диаграмму',
+            reorder_diagram: 'Автоматическая расстановка диаграммы',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

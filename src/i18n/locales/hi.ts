@@ -74,10 +74,10 @@ export const hi: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'आरेख पुनः व्यवस्थित करें',
+            title: 'आरेख स्वचालित व्यवस्थित करें',
             description:
                 'यह क्रिया आरेख में सभी तालिकाओं को पुनः व्यवस्थित कर देगी। क्या आप जारी रखना चाहते हैं?',
-            reorder: 'पुनः व्यवस्थित करें',
+            reorder: 'स्वचालित व्यवस्थित करें',
             cancel: 'रद्द करें',
         },
 
@@ -272,7 +272,7 @@ export const hi: LanguageTranslation = {
             show_all: 'सभी दिखाएँ',
             undo: 'पूर्ववत करें',
             redo: 'पुनः करें',
-            reorder_diagram: 'आरेख पुनः व्यवस्थित करें',
+            reorder_diagram: 'आरेख स्वचालित व्यवस्थित करें',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

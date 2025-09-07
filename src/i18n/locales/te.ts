@@ -75,10 +75,10 @@ export const te: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'చిత్రాన్ని పునఃసరిచేయండి',
+            title: 'చిత్రాన్ని స్వయంచాలకంగా అమర్చండి',
             description:
                 'ఈ చర్య చిత్రంలోని అన్ని పట్టికలను పునఃస్థాపిస్తుంది. మీరు కొనసాగించాలనుకుంటున్నారా?',
-            reorder: 'పునఃసరిచేయండి',
+            reorder: 'స్వయంచాలకంగా అమర్చండి',
             cancel: 'రద్దు',
         },
 
@@ -273,7 +273,7 @@ export const te: LanguageTranslation = {
             show_all: 'అన్ని చూపించు',
             undo: 'తిరిగి చేయు',
             redo: 'మరలా చేయు',
-            reorder_diagram: 'చిత్రాన్ని పునఃసరిచేయండి',
+            reorder_diagram: 'చిత్రాన్ని స్వయంచాలకంగా అమర్చండి',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

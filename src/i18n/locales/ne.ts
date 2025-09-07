@@ -75,10 +75,10 @@ export const ne: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'डायाग्राम पुनः क्रमबद्ध गर्नुहोस्',
+            title: 'डायाग्राम स्वचालित मिलाउनुहोस्',
             description:
                 'यो कार्य पूर्ववत गर्न सकिँदैन। यो डायाग्राम स्थायी रूपमा हटाउनेछ।',
-            reorder: 'पुनः क्रमबद्ध गर्नुहोस्',
+            reorder: 'स्वचालित मिलाउनुहोस्',
             cancel: 'रद्द गर्नुहोस्',
         },
 
@@ -272,7 +272,7 @@ export const ne: LanguageTranslation = {
             show_all: 'सबै देखाउनुहोस्',
             undo: 'पूर्ववत',
             redo: 'पुनः गर्नुहोस्',
-            reorder_diagram: 'पुनः क्रमबद्ध गर्नुहोस्',
+            reorder_diagram: 'डायाग्राम स्वचालित मिलाउनुहोस्',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

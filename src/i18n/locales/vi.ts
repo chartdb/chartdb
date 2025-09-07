@@ -74,10 +74,10 @@ export const vi: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Sắp xếp lại sơ đồ',
+            title: 'Tự động sắp xếp sơ đồ',
             description:
                 'Hành động này sẽ sắp xếp lại tất cả các bảng trong sơ đồ. Bạn có muốn tiếp tục không?',
-            reorder: 'Sắp xếp',
+            reorder: 'Tự động sắp xếp',
             cancel: 'Hủy',
         },
 
@@ -271,7 +271,7 @@ export const vi: LanguageTranslation = {
             show_all: 'Hiển thị tất cả',
             undo: 'Hoàn tác',
             redo: 'Làm lại',
-            reorder_diagram: 'Sắp xếp lại sơ đồ',
+            reorder_diagram: 'Tự động sắp xếp sơ đồ',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

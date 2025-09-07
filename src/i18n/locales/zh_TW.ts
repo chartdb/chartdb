@@ -72,9 +72,9 @@ export const zh_TW: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: '重新排列圖表',
+            title: '自動排列圖表',
             description: '此操作將重新排列圖表中的所有表格。是否繼續？',
-            reorder: '重新排列',
+            reorder: '自動排列',
             cancel: '取消',
         },
 
@@ -268,7 +268,7 @@ export const zh_TW: LanguageTranslation = {
             show_all: '顯示全部',
             undo: '復原',
             redo: '重做',
-            reorder_diagram: '重新排列圖表',
+            reorder_diagram: '自動排列圖表',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

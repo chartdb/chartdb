@@ -73,10 +73,10 @@ export const hr: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Preuredi dijagram',
+            title: 'Automatski preuredi dijagram',
             description:
                 'Ova radnja će preurediti sve tablice u dijagramu. Želite li nastaviti?',
-            reorder: 'Preuredi',
+            reorder: 'Automatski preuredi',
             cancel: 'Odustani',
         },
 
@@ -269,7 +269,7 @@ export const hr: LanguageTranslation = {
             show_all: 'Prikaži sve',
             undo: 'Poništi',
             redo: 'Ponovi',
-            reorder_diagram: 'Preuredi dijagram',
+            reorder_diagram: 'Automatski preuredi dijagram',
             highlight_overlapping_tables: 'Istakni preklapajuće tablice',
             clear_custom_type_highlight: 'Ukloni isticanje za "{{typeName}}"',
             custom_type_highlight_tooltip:

@@ -75,10 +75,10 @@ export const tr: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Diyagramı Yeniden Sırala',
+            title: 'Diyagramı Otomatik Düzenle',
             description:
                 'Bu işlem tüm tabloları yeniden düzenleyecektir. Devam etmek istiyor musunuz?',
-            reorder: 'Yeniden Sırala',
+            reorder: 'Otomatik Düzenle',
             cancel: 'İptal',
         },
 
@@ -271,7 +271,7 @@ export const tr: LanguageTranslation = {
             show_all: 'Hepsini Gör',
             undo: 'Geri Al',
             redo: 'Yinele',
-            reorder_diagram: 'Diyagramı Yeniden Sırala',
+            reorder_diagram: 'Diyagramı Otomatik Düzenle',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

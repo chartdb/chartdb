@@ -74,10 +74,10 @@ export const ar: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'إعادة ترتيب الرسم البياني',
+            title: 'ترتيب تلقائي للرسم البياني',
             description:
                 'هذا الإجراء سيقوم بإعادة ترتيب الجداول في المخطط بشكل تلقائي. هل تريد المتابعة؟',
-            reorder: 'إعادة ترتيب',
+            reorder: 'ترتيب تلقائي',
             cancel: 'إلغاء',
         },
 
@@ -271,7 +271,7 @@ export const ar: LanguageTranslation = {
             show_all: 'عرض الكل',
             undo: 'تراجع',
             redo: 'إعادة',
-            reorder_diagram: 'إعادة ترتيب الرسم البياني',
+            reorder_diagram: 'ترتيب تلقائي للرسم البياني',
             highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
             // TODO: Translate
             filter: 'Filter Tables',

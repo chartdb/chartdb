@@ -74,10 +74,10 @@ export const id_ID: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Atur Ulang Diagram',
+            title: 'Atur Otomatis Diagram',
             description:
                 'Tindakan ini akan mengatur ulang semua tabel di diagram. Apakah Anda ingin melanjutkan?',
-            reorder: 'Atur Ulang',
+            reorder: 'Atur Otomatis',
             cancel: 'Batal',
         },
 
@@ -271,7 +271,7 @@ export const id_ID: LanguageTranslation = {
             show_all: 'Tampilkan Semua',
             undo: 'Undo',
             redo: 'Redo',
-            reorder_diagram: 'Atur Ulang Diagram',
+            reorder_diagram: 'Atur Otomatis Diagram',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

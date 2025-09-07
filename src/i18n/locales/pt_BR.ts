@@ -75,10 +75,10 @@ export const pt_BR: LanguageTranslation = {
         },
 
         reorder_diagram_alert: {
-            title: 'Reordenar Diagrama',
+            title: 'Organizar Diagrama Automaticamente',
             description:
                 'Esta ação reorganizará todas as tabelas no diagrama. Deseja continuar?',
-            reorder: 'Reordenar',
+            reorder: 'Organizar Automaticamente',
             cancel: 'Cancelar',
         },
 
@@ -272,7 +272,7 @@ export const pt_BR: LanguageTranslation = {
             show_all: 'Mostrar Tudo',
             undo: 'Desfazer',
             redo: 'Refazer',
-            reorder_diagram: 'Reordenar Diagrama',
+            reorder_diagram: 'Organizar Diagrama Automaticamente',
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:

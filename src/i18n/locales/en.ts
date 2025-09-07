@@ -73,10 +73,10 @@ export const en = {
         },
 
         reorder_diagram_alert: {
-            title: 'Reorder Diagram',
+            title: 'Auto Arrange Diagram',
             description:
                 'This action will rearrange all tables in the diagram. Do you want to continue?',
-            reorder: 'Reorder',
+            reorder: 'Auto Arrange',
             cancel: 'Cancel',
         },
 
@@ -265,7 +265,7 @@ export const en = {
             show_all: 'Show All',
             undo: 'Undo',
             redo: 'Redo',
-            reorder_diagram: 'Reorder Diagram',
+            reorder_diagram: 'Auto Arrange Diagram',
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
