@@ -190,6 +190,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
         const fieldInputRefs = useRef<{
             [key: string]: HTMLInputElement | null;
         }>({});
+        const hasInitialFocusedRef = useRef(false);
 
         // Use refs to get latest state values in callbacks
         const tableNameRef = useRef(tableName);
@@ -255,6 +256,13 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
 
         // Focus on specific field when opened from pencil click, or table name when double-clicked
         useEffect(() => {
+            // Only perform initial focus once
+            if (hasInitialFocusedRef.current) {
+                return;
+            }
+
+            hasInitialFocusedRef.current = true;
+
             if (focusFieldId && scrollContainerRef.current) {
                 // Find the field index to calculate scroll position
                 const fieldIndex = localFields.findIndex(
@@ -278,7 +286,8 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                     }, 300);
                 }
             } else if (!focusFieldId && tableNameInputRef.current) {
-                // No specific field, so focus and select the table name
+                // Only focus table name on initial mount when no specific field is targeted
+                // This prevents focus jumping when typing in field names
                 setTimeout(() => {
                     if (tableNameInputRef.current) {
                         tableNameInputRef.current.focus();
