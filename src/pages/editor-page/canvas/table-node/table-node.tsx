@@ -92,6 +92,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const inputRef = React.useRef<HTMLInputElement>(null);
         const [isHovering, setIsHovering] = useState(false);
         const [isTableEditMode, setIsTableEditMode] = useState(false);
+        const [focusFieldId, setFocusFieldId] = useState<string | undefined>(
+            undefined
+        );
         const { setNodes } = useReactFlow();
 
         const connection = useConnection();
@@ -426,7 +429,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             <TableEditMode
                                 table={table}
                                 color={tableColor}
-                                onClose={() => setIsTableEditMode(false)}
+                                focusFieldId={focusFieldId}
+                                onClose={() => {
+                                    setIsTableEditMode(false);
+                                    setFocusFieldId(undefined);
+                                }}
                             />
                         </>
                     )}
@@ -622,6 +629,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                             )}
                                             visible={true}
                                             isConnectable={!table.isView}
+                                            onOpenEditMode={() => {
+                                                if (!readonly) {
+                                                    setFocusFieldId(field.id);
+                                                    setIsTableEditMode(true);
+                                                    setTimeout(() => {
+                                                        closeAllTablesInSidebar();
+                                                    }, 50);
+                                                }
+                                            }}
                                         />
                                     ))}
                                 </div>

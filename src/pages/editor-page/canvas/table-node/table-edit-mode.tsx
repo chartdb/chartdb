@@ -13,13 +13,10 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { generateId } from '@/lib/utils';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/select/select';
+import type { SelectBoxOption } from '@/components/select-box/select-box';
+import { SelectBox } from '@/components/select-box/select-box';
+import { generateDBFieldSuffix } from '@/lib/domain/db-field';
+import { dataTypeDataToDataType } from '@/lib/data/data-types/data-types';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import { sortedDataTypeMap } from '@/lib/data/data-types/data-types';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -30,32 +27,37 @@ import './table-edit-mode.css';
 interface TableEditModeProps {
     table: DBTable;
     color?: string;
+    focusFieldId?: string;
     onClose: () => void;
 }
 
 interface FieldRowProps {
     field: DBField;
-    dataTypes: readonly DataTypeData[];
+    dataTypeOptions: SelectBoxOption[];
+    databaseType: DatabaseType;
+    onTypeChange: (
+        fieldId: string,
+        value: string,
+        regexMatches?: string[]
+    ) => void;
     onNameChange: (
         fieldId: string,
         e: React.ChangeEvent<HTMLInputElement>
     ) => void;
-    onTypeChange: (fieldId: string, value: string) => void;
     onPrimaryKeyChange: (fieldId: string, checked: boolean) => void;
     onRemove: (fieldId: string) => void;
-    onSelectOpenChange?: (open: boolean) => void;
     inputRef?: (el: HTMLInputElement | null) => void;
 }
 
 const FieldRow = memo<FieldRowProps>(
     ({
         field,
-        dataTypes,
-        onNameChange,
+        dataTypeOptions,
+        databaseType,
         onTypeChange,
+        onNameChange,
         onPrimaryKeyChange,
         onRemove,
-        onSelectOpenChange,
         inputRef,
     }) => {
         return (
@@ -68,37 +70,31 @@ const FieldRow = memo<FieldRowProps>(
                     placeholder="Field name"
                 />
 
-                <Select
+                <SelectBox
+                    className="h-9 min-h-9 w-[150px] text-sm"
+                    popoverClassName="min-w-[350px]"
+                    options={dataTypeOptions}
                     value={field.type.id}
-                    onValueChange={(value) => onTypeChange(field.id, value)}
-                    onOpenChange={(open) => onSelectOpenChange?.(open)}
-                >
-                    <SelectTrigger
-                        className="h-9 text-sm"
-                        onClick={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
-                    >
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent
-                        className="max-h-[300px]"
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {dataTypes.map((dt) => (
-                            <SelectItem key={dt.id} value={dt.id}>
-                                <span
-                                    className={cn(
-                                        'text-sm',
-                                        dt.usageLevel === 1 && 'font-semibold'
-                                    )}
-                                >
-                                    {dt.name}
-                                </span>
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    valueSuffix={generateDBFieldSuffix(field)}
+                    optionSuffix={(option) =>
+                        generateDBFieldSuffix(field, {
+                            databaseType,
+                            forceExtended: true,
+                            typeId: option.value,
+                        })
+                    }
+                    onChange={(value, regexMatches) =>
+                        onTypeChange(
+                            field.id,
+                            value as string,
+                            Array.isArray(regexMatches)
+                                ? regexMatches
+                                : undefined
+                        )
+                    }
+                    placeholder="Select type"
+                    emptyPlaceholder="No types found"
+                />
 
                 <div className="flex justify-center">
                     <Checkbox
@@ -125,9 +121,55 @@ const FieldRow = memo<FieldRowProps>(
 
 FieldRow.displayName = 'FieldRow';
 
+// Helper function to generate field regex patterns
+const generateFieldRegexPatterns = (
+    dataType: DataTypeData
+): {
+    regex?: string;
+    extractRegex?: RegExp;
+} => {
+    if (!dataType.fieldAttributes) {
+        return { regex: undefined, extractRegex: undefined };
+    }
+
+    const typeName = dataType.name;
+    const fieldAttributes = dataType.fieldAttributes;
+
+    if (fieldAttributes.hasCharMaxLength) {
+        if (fieldAttributes.hasCharMaxLengthOption) {
+            return {
+                regex: `^${typeName}\\((\\d+|[mM][aA][xX])\\)$`,
+                extractRegex: /\((\d+|max)\)/i,
+            };
+        }
+        return {
+            regex: `^${typeName}\\(\\d+\\)$`,
+            extractRegex: /\((\d+)\)/,
+        };
+    }
+
+    if (fieldAttributes.precision && fieldAttributes.scale) {
+        return {
+            regex: `^${typeName}\\s*\\(\\s*\\d+\\s*(?:,\\s*\\d+\\s*)?\\)$`,
+            extractRegex: new RegExp(
+                `${typeName}\\s*\\(\\s*(\\d+)\\s*(?:,\\s*(\\d+)\\s*)?\\)`
+            ),
+        };
+    }
+
+    if (fieldAttributes.precision) {
+        return {
+            regex: `^${typeName}\\s*\\(\\s*\\d+\\s*\\)$`,
+            extractRegex: /\((\d+)\)/,
+        };
+    }
+
+    return { regex: undefined, extractRegex: undefined };
+};
+
 export const TableEditMode: React.FC<TableEditModeProps> = memo(
-    ({ table, color, onClose }) => {
-        const { updateTable, databaseType } = useChartDB();
+    ({ table, color, focusFieldId, onClose }) => {
+        const { updateTable, databaseType, customTypes } = useChartDB();
         const [tableName, setTableName] = useState(() => table.name);
         const [localFields, setLocalFields] = useState<DBField[]>(() =>
             (table.fields || []).map((field) => ({
@@ -142,9 +184,9 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
             () => []
         );
         const [newFieldId, setNewFieldId] = useState<string | null>(null);
-        const [isSelectOpen, setIsSelectOpen] = useState(false);
         const containerRef = useRef<HTMLDivElement>(null);
         const scrollContainerRef = useRef<HTMLDivElement>(null);
+        const tableNameInputRef = useRef<HTMLInputElement>(null);
         const fieldInputRefs = useRef<{
             [key: string]: HTMLInputElement | null;
         }>({});
@@ -177,6 +219,74 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                 sortedDataTypeMap[DatabaseType.GENERIC],
             [databaseType]
         );
+
+        // Generate options for SelectBox similar to side panel
+        const dataTypeOptions = useMemo(() => {
+            const standardTypes: SelectBoxOption[] = dataTypes.map((type) => {
+                const regexPatterns = generateFieldRegexPatterns(type);
+                return {
+                    label: type.name,
+                    value: type.id,
+                    regex: regexPatterns.regex,
+                    extractRegex: regexPatterns.extractRegex,
+                    group: customTypes?.length ? 'Standard Types' : undefined,
+                };
+            });
+
+            if (!customTypes?.length) {
+                return standardTypes;
+            }
+
+            // Add custom types as options
+            const customTypeOptions: SelectBoxOption[] = customTypes.map(
+                (type) => ({
+                    label: type.name,
+                    value: type.name,
+                    description:
+                        type.kind === 'enum'
+                            ? `${type.values?.join(' | ')}`
+                            : '',
+                    group: 'Custom Types',
+                })
+            );
+
+            return [...standardTypes, ...customTypeOptions];
+        }, [dataTypes, customTypes]);
+
+        // Focus on specific field when opened from pencil click, or table name when double-clicked
+        useEffect(() => {
+            if (focusFieldId && scrollContainerRef.current) {
+                // Find the field index to calculate scroll position
+                const fieldIndex = localFields.findIndex(
+                    (f) => f.id === focusFieldId
+                );
+                if (fieldIndex !== -1) {
+                    // Scroll to the field (each field is approximately 56px height)
+                    const scrollPosition = fieldIndex * 56;
+                    scrollContainerRef.current.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth',
+                    });
+
+                    // Focus and select the field name after scroll
+                    setTimeout(() => {
+                        const input = fieldInputRefs.current[focusFieldId];
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }, 300);
+                }
+            } else if (!focusFieldId && tableNameInputRef.current) {
+                // No specific field, so focus and select the table name
+                setTimeout(() => {
+                    if (tableNameInputRef.current) {
+                        tableNameInputRef.current.focus();
+                        tableNameInputRef.current.select();
+                    }
+                }, 100);
+            }
+        }, [focusFieldId, localFields]);
 
         // Focus and select text when a new field is added
         useEffect(() => {
@@ -341,8 +451,8 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                         target.closest('[data-state="open"]') ||
                         target.closest('[data-radix-select-content]');
 
-                    // Don't close if clicking on select dropdown or if select is open
-                    if (isSelectPortal || isSelectOpen) {
+                    // Don't close if clicking on select dropdown
+                    if (isSelectPortal) {
                         return;
                     }
 
@@ -396,7 +506,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                 );
                 document.removeEventListener('wheel', handleWheel, true);
             };
-        }, [onClose, saveAllChanges, isSelectOpen]);
+        }, [onClose, saveAllChanges]);
 
         const handleTableNameChange = useCallback(
             (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -424,25 +534,71 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
         );
 
         const handleFieldTypeChange = useCallback(
-            (fieldId: string, typeId: string) => {
-                const newType = dataTypes.find((dt) => dt.id === typeId);
-                if (newType) {
-                    setLocalFields((prev) =>
-                        prev.map((field) =>
-                            field.id === fieldId
-                                ? {
-                                      ...field,
-                                      type: {
-                                          id: newType.id,
-                                          name: newType.name,
-                                      },
-                                  }
-                                : field
-                        )
-                    );
+            (fieldId: string, typeId: string, regexMatches?: string[]) => {
+                const field = localFields.find((f) => f.id === fieldId);
+                if (!field) return;
+
+                const dataType = dataTypes.find((v) => v.id === typeId) ?? {
+                    id: typeId,
+                    name: typeId,
+                };
+
+                let characterMaximumLength: string | undefined = undefined;
+                let precision: number | undefined = undefined;
+                let scale: number | undefined = undefined;
+
+                if (regexMatches?.length) {
+                    if (dataType?.fieldAttributes?.hasCharMaxLength) {
+                        characterMaximumLength = regexMatches[1]?.toLowerCase();
+                    } else if (
+                        dataType?.fieldAttributes?.precision &&
+                        dataType?.fieldAttributes?.scale
+                    ) {
+                        precision = parseInt(regexMatches[1]);
+                        scale = regexMatches[2]
+                            ? parseInt(regexMatches[2])
+                            : undefined;
+                    } else if (dataType?.fieldAttributes?.precision) {
+                        precision = parseInt(regexMatches[1]);
+                    }
+                } else {
+                    // Preserve existing values if compatible
+                    if (
+                        dataType?.fieldAttributes?.hasCharMaxLength &&
+                        field.characterMaximumLength
+                    ) {
+                        characterMaximumLength = field.characterMaximumLength;
+                    }
+
+                    if (
+                        dataType?.fieldAttributes?.precision &&
+                        field.precision
+                    ) {
+                        precision = field.precision;
+                    }
+
+                    if (dataType?.fieldAttributes?.scale && field.scale) {
+                        scale = field.scale;
+                    }
                 }
+
+                setLocalFields((prev) =>
+                    prev.map((f) =>
+                        f.id === fieldId
+                            ? {
+                                  ...f,
+                                  type: dataTypeDataToDataType(dataType),
+                                  characterMaximumLength,
+                                  precision,
+                                  scale,
+                                  increment: undefined,
+                                  default: undefined,
+                              }
+                            : f
+                    )
+                );
             },
-            [dataTypes]
+            [dataTypes, localFields]
         );
 
         const handleFieldPrimaryKeyChange = useCallback(
@@ -460,11 +616,18 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
 
         const handleAddField = useCallback(() => {
             // Create a temporary field locally without saving to database
-            const defaultType = dataTypes[0] || { id: 'text', name: 'text' };
+            // Default to varchar(100) if available, otherwise use first type
+            const varcharType = dataTypes.find(
+                (dt) => dt.id === 'varchar' || dt.id === 'character_varying'
+            );
+            const defaultType = varcharType ||
+                dataTypes[0] || { id: 'text', name: 'text' };
+
             const tempField: DBField = {
                 id: `temp-${generateId()}`, // Temporary ID
                 name: `field${localFields.length + 1}`,
-                type: defaultType,
+                type: dataTypeDataToDataType(defaultType),
+                characterMaximumLength: varcharType ? '100' : undefined,
                 nullable: true,
                 unique: false,
                 primaryKey: false,
@@ -568,6 +731,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                     />
                     <div className="flex items-center justify-between border-b bg-slate-100 p-4 dark:bg-slate-900">
                         <Input
+                            ref={tableNameInputRef}
                             value={tableName}
                             onChange={handleTableNameChange}
                             className="mr-3 h-10 flex-1 text-base font-bold"
@@ -629,14 +793,14 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                                         <FieldRow
                                             key={field.id}
                                             field={field}
-                                            dataTypes={dataTypes}
+                                            dataTypeOptions={dataTypeOptions}
+                                            databaseType={databaseType}
                                             onNameChange={handleFieldNameChange}
                                             onTypeChange={handleFieldTypeChange}
                                             onPrimaryKeyChange={
                                                 handleFieldPrimaryKeyChange
                                             }
                                             onRemove={handleRemoveField}
-                                            onSelectOpenChange={setIsSelectOpen}
                                             inputRef={(el) => {
                                                 if (el)
                                                     fieldInputRefs.current[
@@ -659,16 +823,22 @@ export const TableEditMode: React.FC<TableEditModeProps> = memo(
                             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-slate-950" />
                         )}
 
-                        <div className="relative z-10 border-t bg-slate-50 p-4 dark:bg-slate-900">
+                        <div className="relative z-10 flex items-center justify-between gap-4 border-t bg-slate-50 p-4 dark:bg-slate-900">
                             <Button
                                 variant="outline"
                                 size="default"
-                                className="h-10 w-full"
+                                className="h-11 max-w-[45%] flex-1 text-base"
                                 onClick={handleAddField}
                             >
-                                <Plus className="mr-2 size-4" />
+                                <Plus className="mr-2 size-5" />
                                 Add Field
                             </Button>
+                            <span className="mr-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                {localFields.length}{' '}
+                                {localFields.length === 1
+                                    ? 'Column'
+                                    : 'Columns'}
+                            </span>
                         </div>
                     </div>
                 </div>

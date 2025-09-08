@@ -19,7 +19,7 @@ import {
     SquareDot,
     SquareMinus,
     SquarePlus,
-    Trash2,
+    Pencil,
 } from 'lucide-react';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -49,6 +49,7 @@ export interface TableNodeFieldProps {
     highlighted: boolean;
     visible: boolean;
     isConnectable: boolean;
+    onOpenEditMode?: () => void;
 }
 
 const arePropsEqual = (
@@ -72,19 +73,23 @@ const arePropsEqual = (
         prevProps.highlighted === nextProps.highlighted &&
         prevProps.visible === nextProps.visible &&
         prevProps.isConnectable === nextProps.isConnectable &&
-        prevProps.tableNodeId === nextProps.tableNodeId
+        prevProps.tableNodeId === nextProps.tableNodeId &&
+        prevProps.onOpenEditMode === nextProps.onOpenEditMode
     );
 };
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
-    ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
-        const {
-            removeField,
-            relationships,
-            readonly,
-            updateField,
-            highlightedCustomType,
-        } = useChartDB();
+    ({
+        field,
+        focused,
+        tableNodeId,
+        highlighted,
+        visible,
+        isConnectable,
+        onOpenEditMode,
+    }) => {
+        const { relationships, readonly, updateField, highlightedCustomType } =
+            useChartDB();
         const [editMode, setEditMode] = useState(false);
         const [fieldName, setFieldName] = useState(field.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
@@ -514,20 +519,21 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 )}
                             </span>
                         </div>
-                        {readonly ? null : (
-                            <div className="hidden flex-row group-hover:flex">
+                        {!readonly && onOpenEditMode ? (
+                            <div className="hidden items-center group-hover:flex">
                                 <Button
                                     variant="ghost"
-                                    className="size-6 p-0 hover:bg-primary-foreground"
+                                    className="size-6 p-0.5 hover:bg-slate-200 dark:hover:bg-slate-700"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        removeField(tableNodeId, field.id);
+                                        e.preventDefault();
+                                        onOpenEditMode();
                                     }}
                                 >
-                                    <Trash2 className="size-3.5 text-red-700" />
+                                    <Pencil className="size-3.5 text-slate-600 dark:text-slate-400" />
                                 </Button>
                             </div>
-                        )}
+                        ) : null}
                     </div>
                 )}
             </div>
