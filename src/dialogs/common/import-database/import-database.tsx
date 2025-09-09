@@ -32,6 +32,7 @@ import {
 } from '@/components/resizable/resizable';
 import { useTheme } from '@/hooks/use-theme';
 import type { OnChange } from '@monaco-editor/react';
+import { useMonaco } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
@@ -42,6 +43,12 @@ import {
     type ValidationResult,
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
+import { Parser } from '@dbml/core';
+import {
+    preprocessDBML,
+    sanitizeDBML,
+} from '@/lib/dbml/dbml-import/dbml-import';
+import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 
 const calculateContentSizeMB = (content: string): number => {
     return content.length / (1024 * 1024); // Convert to MB
@@ -55,9 +62,29 @@ const calculateIsLargeFile = (content: string): boolean => {
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
 
-// Helper to detect if content is likely SQL DDL or JSON
-const detectContentType = (content: string): 'query' | 'ddl' | null => {
+// Helper to detect if content is likely SQL DDL, JSON, or DBML
+const detectContentType = (
+    content: string
+): 'query' | 'ddl' | 'dbml' | null => {
     if (!content || content.trim().length === 0) return null;
+
+    const upperContent = content.toUpperCase();
+
+    // Check for DBML patterns first (case sensitive)
+    const dbmlPatterns = [
+        /^Table\s+\w+\s*{/m,
+        /^Ref:\s*\w+/m,
+        /^Enum\s+\w+\s*{/m,
+        /^TableGroup\s+/m,
+        /^Note\s+\w+\s*{/m,
+        /\[pk\]/,
+        /\[ref:\s*[<>-]/,
+    ];
+
+    const hasDBMLPatterns = dbmlPatterns.some((pattern) =>
+        pattern.test(content)
+    );
+    if (hasDBMLPatterns) return 'dbml';
 
     // Common SQL DDL keywords
     const ddlKeywords = [
@@ -71,8 +98,6 @@ const detectContentType = (content: string): 'query' | 'ddl' | null => {
         'CREATE SCHEMA',
         'CREATE DATABASE',
     ];
-
-    const upperContent = content.toUpperCase();
 
     // Check for SQL DDL patterns
     const hasDDLKeywords = ddlKeywords.some((keyword) =>
@@ -111,8 +136,8 @@ export interface ImportDatabaseProps {
     >;
     keepDialogAfterImport?: boolean;
     title: string;
-    importMethod: 'query' | 'ddl';
-    setImportMethod: (method: 'query' | 'ddl') => void;
+    importMethod: 'query' | 'ddl' | 'dbml';
+    setImportMethod: (method: 'query' | 'ddl' | 'dbml') => void;
 }
 
 export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
@@ -130,7 +155,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     setImportMethod,
 }) => {
     const { effectiveTheme } = useTheme();
+    const monaco = useMonaco();
     const [errorMessage, setErrorMessage] = useState('');
+    const [editorMounted, setEditorMounted] = useState(false);
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const pasteDisposableRef = useRef<IDisposable | null>(null);
 
@@ -152,9 +179,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setShowCheckJsonButton(false);
     }, [importMethod, setScriptResult]);
 
-    // Check if the ddl is valid
+    // Check if the ddl or dbml is valid
     useEffect(() => {
-        if (importMethod !== 'ddl') {
+        if (importMethod === 'query') {
             setSqlValidation(null);
             setShowAutoFixButton(false);
             return;
@@ -163,9 +190,60 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (!scriptResult.trim()) {
             setSqlValidation(null);
             setShowAutoFixButton(false);
+            setErrorMessage('');
             return;
         }
 
+        if (importMethod === 'dbml') {
+            // Validate DBML by parsing it
+            try {
+                const preprocessedContent = preprocessDBML(scriptResult);
+                const sanitizedContent = sanitizeDBML(preprocessedContent);
+                const parser = new Parser();
+                parser.parse(sanitizedContent, 'dbml');
+                setErrorMessage('');
+                setSqlValidation({
+                    isValid: true,
+                    errors: [],
+                    warnings: [],
+                });
+            } catch (e) {
+                // Parser failed, use error from parser
+                let errorMsg = 'Invalid DBML syntax';
+                let line: number | undefined;
+
+                if (e && typeof e === 'object' && 'diags' in e) {
+                    const error = e as {
+                        diags: Array<{
+                            message: string;
+                            location?: { start?: { line: number } };
+                        }>;
+                    };
+                    if (error.diags && error.diags[0]) {
+                        errorMsg = error.diags[0].message;
+                        line = error.diags[0].location?.start?.line;
+                    }
+                }
+
+                setSqlValidation({
+                    isValid: false,
+                    errors: [
+                        {
+                            message: errorMsg,
+                            line: line || 1,
+                            type: 'syntax' as const,
+                        },
+                    ],
+                    warnings: [],
+                });
+                setErrorMessage(errorMsg);
+            }
+
+            setShowAutoFixButton(false);
+            return;
+        }
+
+        // SQL validation
         // First run our validation based on database type
         const validation = validateSQL(scriptResult, databaseType);
         setSqlValidation(validation);
@@ -317,9 +395,38 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         };
     }, []);
 
+    // Setup DBML language and theme when import method or theme changes
+    useEffect(() => {
+        if (!monaco || !editorMounted || !editorRef.current) return;
+
+        if (importMethod === 'dbml') {
+            // First ensure DBML language is set up
+            setupDBMLLanguage(monaco);
+
+            // Get the current model and set its language to DBML
+            const model = editorRef.current.getModel();
+            if (model) {
+                monaco.editor.setModelLanguage(model, 'dbml');
+            }
+
+            // Then apply the theme with a small delay to ensure it takes effect
+            setTimeout(() => {
+                const themeName =
+                    effectiveTheme === 'dark' ? 'dbml-dark' : 'dbml-light';
+                monaco.editor.setTheme(themeName);
+            }, 50);
+        } else {
+            // Reset to default theme when not DBML
+            monaco.editor.setTheme(
+                effectiveTheme === 'dark' ? 'vs-dark' : 'vs'
+            );
+        }
+    }, [monaco, editorMounted, importMethod, effectiveTheme]);
+
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
+            setEditorMounted(true);
 
             // Cleanup previous disposable if it exists
             if (pasteDisposableRef.current) {
@@ -352,7 +459,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode, do NOT format as it can break the SQL
+                    // For DDL and DBML modes, do NOT format as it can break the syntax
                 } else {
                     // Content type didn't change, apply formatting based on current mode
                     if (importMethod === 'query' && !isLargeFile) {
@@ -363,7 +470,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 ?.run();
                         }, 100);
                     }
-                    // For DDL mode or large files, do NOT format
+                    // For DDL and DBML modes or large files, do NOT format
                 }
             });
 
@@ -410,27 +517,35 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 <div className="w-full text-center text-xs text-muted-foreground">
                     {importMethod === 'query'
                         ? 'Smart Query Output'
-                        : 'SQL Script'}
+                        : importMethod === 'dbml'
+                          ? 'DBML Script'
+                          : 'SQL Script'}
                 </div>
                 <div className="flex-1 overflow-hidden">
                     <Suspense fallback={<Spinner />}>
                         <Editor
                             value={scriptResult}
                             onChange={debouncedHandleInputChange}
-                            language={importMethod === 'query' ? 'json' : 'sql'}
+                            language={
+                                importMethod === 'query'
+                                    ? 'json'
+                                    : importMethod === 'dbml'
+                                      ? 'dbml'
+                                      : 'sql'
+                            }
                             loading={<Spinner />}
                             onMount={handleEditorDidMount}
-                            theme={
-                                effectiveTheme === 'dark'
-                                    ? 'dbml-dark'
-                                    : 'dbml-light'
+                            beforeMount={
+                                importMethod === 'dbml'
+                                    ? setupDBMLLanguage
+                                    : undefined
                             }
                             options={{
                                 formatOnPaste: false, // Never format on paste - we handle it manually
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,
-                                glyphMargin: false,
+                                glyphMargin: importMethod === 'dbml', // Enable glyph margin for DBML to show error indicators
                                 lineNumbers: 'on',
                                 guides: {
                                     indentation: false,
@@ -455,7 +570,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     </Suspense>
                 </div>
 
-                {errorMessage || (importMethod === 'ddl' && sqlValidation) ? (
+                {errorMessage ||
+                ((importMethod === 'ddl' || importMethod === 'dbml') &&
+                    sqlValidation) ? (
                     <SQLValidationStatus
                         validation={sqlValidation}
                         errorMessage={errorMessage}
@@ -469,7 +586,6 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             errorMessage,
             scriptResult,
             importMethod,
-            effectiveTheme,
             debouncedHandleInputChange,
             handleEditorDidMount,
             sqlValidation,
@@ -560,7 +676,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 )
                             )}
                         </Button>
-                    ) : showAutoFixButton && importMethod === 'ddl' ? (
+                    ) : showAutoFixButton &&
+                      (importMethod === 'ddl' || importMethod === 'dbml') ? (
                         <Button
                             type="button"
                             variant="secondary"

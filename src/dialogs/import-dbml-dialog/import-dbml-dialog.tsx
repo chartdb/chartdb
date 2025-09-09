@@ -93,6 +93,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         relationships,
         removeTables,
         removeRelationships,
+        databaseType,
     } = useChartDB();
     const { reorderTables } = useCanvas();
     const [reorder, setReorder] = useState(false);
@@ -126,7 +127,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             setErrorMessage(undefined);
             clearDecorations();
 
-            if (!content.trim()) return;
+            if (!content.trim()) {
+                return;
+            }
 
             try {
                 const preprocessedContent = preprocessDBML(content);
@@ -188,7 +191,10 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            const importedDiagram = await importDBMLToDiagram(dbmlContent);
+            // Import DBML content
+            const importedDiagram = await importDBMLToDiagram(dbmlContent, {
+                databaseType,
+            });
             const tableIdsToRemove = tables
                 .filter((table) =>
                     importedDiagram.tables?.some(
@@ -267,6 +273,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         toast,
         setReorder,
         t,
+        databaseType,
     ]);
 
     return (

@@ -314,11 +314,27 @@ export const exportBaseSQL = ({
                 sqlScript += `(1)`;
             }
 
-            // Add precision and scale for numeric types
-            if (field.precision && field.scale) {
-                sqlScript += `(${field.precision}, ${field.scale})`;
-            } else if (field.precision) {
-                sqlScript += `(${field.precision})`;
+            // Add precision and scale for numeric types only
+            const numericTypes = [
+                'numeric',
+                'decimal',
+                'number',
+                'float',
+                'double',
+                'real',
+            ];
+            const isNumericType = numericTypes.some(
+                (t) =>
+                    field.type.name.toLowerCase().includes(t) ||
+                    typeName.toLowerCase().includes(t)
+            );
+
+            if (isNumericType) {
+                if (field.precision && field.scale) {
+                    sqlScript += `(${field.precision}, ${field.scale})`;
+                } else if (field.precision) {
+                    sqlScript += `(${field.precision})`;
+                }
             }
 
             // Handle NOT NULL constraint
