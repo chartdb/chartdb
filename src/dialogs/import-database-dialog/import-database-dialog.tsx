@@ -15,6 +15,7 @@ import { useReactFlow } from '@xyflow/react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
@@ -24,7 +25,9 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     dialog,
     databaseType,
 }) => {
-    const [importMethod, setImportMethod] = useState<'query' | 'ddl'>('query');
+    const [importMethod, setImportMethod] = useState<'query' | 'ddl' | 'dbml'>(
+        'query'
+    );
     const { closeImportDatabaseDialog } = useDialog();
     const { showAlert } = useAlert();
     const {
@@ -65,6 +68,12 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                 sourceDatabaseType: databaseType,
                 targetDatabaseType: databaseType,
             });
+        } else if (importMethod === 'dbml') {
+            diagram = await importDBMLToDiagram(scriptResult, {
+                databaseType,
+            });
+            // Keep the existing diagram name
+            diagram.name = diagramName;
         } else {
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
@@ -339,6 +348,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         showAlert,
         setNodes,
         t,
+        diagramName,
     ]);
 
     return (
