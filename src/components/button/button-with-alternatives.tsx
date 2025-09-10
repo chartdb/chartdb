@@ -11,18 +11,26 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+
+export interface ButtonAlternative {
+    label: string;
+    onClick: () => void;
+    disabled?: boolean;
+    icon?: React.ReactNode;
+    className?: string;
+    tooltip?: string;
+}
 
 export interface ButtonWithAlternativesProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
-    alternatives: Array<{
-        label: string;
-        onClick: () => void;
-        disabled?: boolean;
-        icon?: React.ReactNode;
-        className?: string;
-    }>;
+    alternatives: Array<ButtonAlternative>;
     dropdownTriggerClassName?: string;
     chevronDownIconClassName?: string;
 }
@@ -87,19 +95,36 @@ const ButtonWithAlternatives = React.forwardRef<
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            {alternatives.map((alternative, index) => (
-                                <DropdownMenuItem
-                                    key={index}
-                                    onClick={alternative.onClick}
-                                    disabled={alternative.disabled}
-                                    className={cn(alternative.className)}
-                                >
-                                    <span className="flex w-full items-center justify-between gap-2">
-                                        {alternative.label}
-                                        {alternative.icon}
-                                    </span>
-                                </DropdownMenuItem>
-                            ))}
+                            {alternatives.map((alternative, index) => {
+                                const menuItem = (
+                                    <DropdownMenuItem
+                                        key={index}
+                                        onClick={alternative.onClick}
+                                        disabled={alternative.disabled}
+                                        className={cn(alternative.className)}
+                                    >
+                                        <span className="flex w-full items-center justify-between gap-2">
+                                            {alternative.label}
+                                            {alternative.icon}
+                                        </span>
+                                    </DropdownMenuItem>
+                                );
+
+                                if (alternative.tooltip) {
+                                    return (
+                                        <Tooltip key={index}>
+                                            <TooltipTrigger asChild>
+                                                {menuItem}
+                                            </TooltipTrigger>
+                                            <TooltipContent side="left">
+                                                {alternative.tooltip}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    );
+                                }
+
+                                return menuItem;
+                            })}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ) : null}
