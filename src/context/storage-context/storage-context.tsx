@@ -45,6 +45,10 @@ export interface StorageContext {
         id: string;
         attributes: Partial<Diagram>;
     }) => Promise<void>;
+    modifyDiagram: (
+        diagramId: string,
+        modifyFn: (diagram: Diagram) => void
+    ) => Promise<void>;
     deleteDiagram: (id: string) => Promise<void>;
 
     // Table operations
@@ -149,6 +153,7 @@ export const storageInitialValue: StorageContext = {
     listDiagrams: emptyFn,
     getDiagram: emptyFn,
     updateDiagram: emptyFn,
+    modifyDiagram: emptyFn,
     deleteDiagram: emptyFn,
 
     addTable: emptyFn,

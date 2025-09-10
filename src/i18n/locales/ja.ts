@@ -39,14 +39,11 @@ export const ja: LanguageTranslation = {
                 zoom_on_scroll: 'スクロールでズーム',
                 show_views: 'データベースビュー',
                 theme: 'テーマ',
-                // TODO: Translate
                 show_dependencies: 'Show Dependencies',
                 hide_dependencies: 'Hide Dependencies',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'ミニマップを表示',
+                hide_minimap: 'ミニマップを非表示',
             },
-            // TODO: Translate
             backup: {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
@@ -114,9 +111,14 @@ export const ja: LanguageTranslation = {
         clear: 'クリア',
         show_more: 'さらに表示',
         show_less: '表示を減らす',
-        // TODO: Translate
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
+
+        share_table_dialog: {
+            title: 'テーブルを共有します',
+            description: '以下のリンクをコピーして、このテーブルを共有します。',
+            close: '近い',
+        },
 
         side_panel: {
             view_all_options: 'すべてのオプションを表示...',
@@ -126,12 +128,11 @@ export const ja: LanguageTranslation = {
                 add_view: 'ビューを追加',
                 filter: 'フィルタ',
                 collapse: 'すべて折りたたむ',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'クリアフィルター',
+                no_results:
+                    'フィルターに一致するテーブルは見つかりませんでした。',
+                show_list: 'テーブルリストを表示します',
+                show_dbml: 'DBMLエディターを表示します',
 
                 table: {
                     fields: 'フィールド',
@@ -153,10 +154,8 @@ export const ja: LanguageTranslation = {
                         comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: '精度',
                         scale: '小数点以下桁数',
@@ -173,7 +172,7 @@ export const ja: LanguageTranslation = {
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: '複製テーブル',
                         delete_table: 'テーブルを削除',
                     },
                 },
@@ -216,55 +215,54 @@ export const ja: LanguageTranslation = {
                         '開始するためにリレーションシップを作成してください',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'エリア',
+                add_area: 'エリアを追加します',
+                filter: 'フィルター',
+                clear: 'クリアフィルター',
+                no_results: 'フィルターに一致する領域は見つかりませんでした。',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'エリアアクション',
+                        edit_name: '名前を編集します',
+                        delete_area: 'エリアを削除します',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'エリアはありません',
+                    description: '開始するエリアを作成します',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'カスタムタイプ',
+                filter: 'フィルター',
+                clear: 'クリアフィルター',
+                no_results:
+                    'フィルターに一致するカスタムタイプは見つかりませんでした。',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'カスタムタイプはありません',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'カスタムタイプは、データベースで使用できるときにここに表示されます',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: '親切',
+                    enum_values: '列挙値',
+                    composite_fields: 'フィールド',
+                    no_fields: '定義されたフィールドはありません',
                     no_values: '列挙値が定義されていません',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'フィールド名',
+                    field_type_placeholder: '[タイプ]を選択します',
+                    add_field: 'フィールドを追加します',
+                    no_fields_tooltip:
+                        'このカスタムタイプのフィールドは定義されていません',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'アクション',
+                        highlight_fields: 'フィールドを強調表示します',
+                        delete_custom_type: '消去',
+                        clear_field_highlight: 'クリアハイライト',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'タイプを削除します',
                 },
             },
         },
@@ -281,7 +279,7 @@ export const ja: LanguageTranslation = {
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to clear', // TODO: Translate
+                'Highlighting "{{typeName}}" - Click to clear',
             filter: 'Filter Tables',
         },
 
@@ -305,14 +303,12 @@ export const ja: LanguageTranslation = {
                     step_1: 'ツール > オプション > クエリ結果 > SQL Serverに移動します。',
                     step_2: '「グリッドへの結果」を使用している場合、XML以外のデータの最大取得文字数を変更してください（9999999に設定）。',
                 },
-                // TODO: Translate
                 instructions_link: 'Need help? Watch how',
                 check_script_result: 'Check Script Result',
             },
 
             cancel: 'キャンセル',
             back: '戻る',
-            // TODO: Translate
             import_from_file: 'Import from File',
             empty_diagram: '空のダイアグラム',
             continue: '続行',
@@ -329,6 +325,7 @@ export const ja: LanguageTranslation = {
                 tables_count: 'テーブル数',
             },
             cancel: 'キャンセル',
+            start_new: '新しいダイアグラムで開始',
             open: '開く',
 
             diagram_actions: {
@@ -399,7 +396,6 @@ export const ja: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'キャンセル',
             export: 'エクスポート',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -437,7 +433,6 @@ export const ja: LanguageTranslation = {
             close: '今はしない',
             confirm: 'もちろん！',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',
@@ -450,19 +445,16 @@ export const ja: LanguageTranslation = {
                     'Something went wrong. Need help? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
+            title: 'インポート図',
             description: 'Paste the diagram JSON below:',
             cancel: 'Cancel',
             import: 'Import',
             error: {
-                title: 'Error importing diagram',
-                description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                title: '図のインポートエラー',
+                description: '図JSONは無効です。 ',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -487,18 +479,15 @@ export const ja: LanguageTranslation = {
             new_table: '新しいテーブル',
             new_view: '新しいビュー',
             new_relationship: '新しいリレーションシップ',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
         table_node_context_menu: {
             edit_table: 'テーブルを編集',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: '複製テーブル',
             delete_table: 'テーブルを削除',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: '関係を追加します',
         },
-
-        // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         tool_tips: {

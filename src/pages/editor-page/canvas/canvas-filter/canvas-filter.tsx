@@ -28,7 +28,6 @@ import { FilterItemActions } from './filter-item-actions';
 import { databasesWithSchemas } from '@/lib/domain';
 import { getOperatingSystem } from '@/lib/utils';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { useDiff } from '@/context/diff-context/use-diff';
 
 export interface CanvasFilterProps {
     onClose: () => void;
@@ -37,7 +36,6 @@ export interface CanvasFilterProps {
 export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const { tables, databaseType, areas } = useChartDB();
-    const { checkIfNewTable } = useDiff();
     const {
         filter,
         toggleSchemaFilter,
@@ -60,14 +58,13 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         () =>
             tables
                 .filter((table) => (showDBViews ? true : !table.isView))
-                .filter((table) => !checkIfNewTable({ tableId: table.id }))
                 .map((table) => ({
                     id: table.id,
                     name: table.name,
                     schema: table.schema,
                     parentAreaId: table.parentAreaId,
                 })),
-        [tables, showDBViews, checkIfNewTable]
+        [tables, showDBViews]
     );
 
     const databaseWithSchemas = useMemo(

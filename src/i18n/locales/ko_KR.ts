@@ -41,9 +41,8 @@ export const ko_KR: LanguageTranslation = {
                 theme: '테마',
                 show_dependencies: '종속성 보이기',
                 hide_dependencies: '종속성 숨기기',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: '미니 맵 표시',
+                hide_minimap: '미니 맵 숨기기',
             },
             backup: {
                 backup: '백업',
@@ -114,6 +113,12 @@ export const ko_KR: LanguageTranslation = {
         copy_to_clipboard: '클립보드에 복사',
         copied: '복사됨!',
 
+        share_table_dialog: {
+            title: '공유 테이블',
+            description: '이 표를 공유하려면 아래 링크를 복사하십시오.',
+            close: '닫다',
+        },
+
         side_panel: {
             view_all_options: '전체 옵션 보기...',
             tables_section: {
@@ -122,12 +127,10 @@ export const ko_KR: LanguageTranslation = {
                 add_view: '뷰 추가',
                 filter: '필터',
                 collapse: '모두 접기',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: '클리어 필터',
+                no_results: '필터와 일치하는 테이블이 없습니다.',
+                show_list: '표시 테이블 목록',
+                show_dbml: 'DBML 편집기를 보여줍니다',
 
                 table: {
                     fields: '필드',
@@ -149,10 +152,8 @@ export const ko_KR: LanguageTranslation = {
                         comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: '정밀도',
                         scale: '소수점 자릿수',
@@ -211,55 +212,53 @@ export const ko_KR: LanguageTranslation = {
                     description: '연관 관계를 만들어 시작하세요.',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: '지역',
+                add_area: '영역을 추가하십시오',
+                filter: '필터',
+                clear: '클리어 필터',
+                no_results: '필터와 일치하는 영역이 없습니다.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: '지역 행동',
+                        edit_name: '이름 편집',
+                        delete_area: '영역 삭제',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: '영역이 없습니다',
+                    description: '시작할 영역을 만듭니다',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: '사용자 정의 유형',
+                filter: '필터',
+                clear: '클리어 필터',
+                no_results: '필터와 일치하는 사용자 지정 유형이 없습니다.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: '사용자 정의 유형이 없습니다',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        '데이터베이스에서 사용할 수있는 경우 사용자 정의 유형이 여기에 나타납니다.',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: '친절한',
+                    enum_values: '열거적인 값',
+                    composite_fields: '전지',
+                    no_fields: '정의 된 필드가 없습니다',
                     no_values: '정의된 열거형 값이 없습니다',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: '필드 이름',
+                    field_type_placeholder: '유형을 선택하십시오',
+                    add_field: '필드를 추가하십시오',
+                    no_fields_tooltip:
+                        '이 사용자 정의 유형에 대해 정의 된 필드는 없습니다',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: '행위',
+                        highlight_fields: '하이라이트 필드',
+                        delete_custom_type: '삭제',
+                        clear_field_highlight: '명확한 하이라이트',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: '삭제 유형',
                 },
             },
         },
@@ -277,7 +276,6 @@ export const ko_KR: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -324,6 +322,7 @@ export const ko_KR: LanguageTranslation = {
                 tables_count: '테이블 갯수',
             },
             cancel: '취소',
+            start_new: '새 다이어그램으로 시작',
             open: '열기',
 
             diagram_actions: {
@@ -393,7 +392,6 @@ export const ko_KR: LanguageTranslation = {
             scale_4x: '4x',
             cancel: '취소',
             export: '내보내기',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -454,7 +452,6 @@ export const ko_KR: LanguageTranslation = {
                     '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -479,7 +476,6 @@ export const ko_KR: LanguageTranslation = {
             new_table: '새 테이블',
             new_view: '새 뷰',
             new_relationship: '새 연관관계',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
@@ -487,7 +483,7 @@ export const ko_KR: LanguageTranslation = {
             edit_table: '테이블 수정',
             duplicate_table: '테이블 복제',
             delete_table: '테이블 삭제',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: '관계를 추가하십시오',
         },
 
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',

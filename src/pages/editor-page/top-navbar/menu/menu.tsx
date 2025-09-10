@@ -13,6 +13,7 @@ import {
     MenubarTrigger,
 } from '@/components/menubar/menubar';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useSaveDiagram } from '@/hooks/use-save-diagram';
 import { useDialog } from '@/hooks/use-dialog';
 import { useExportImage } from '@/hooks/use-export-image';
 import { databaseTypeToLabelMap } from '@/lib/databases';
@@ -32,12 +33,8 @@ import { useAlert } from '@/context/alert-context/alert-context';
 export interface MenuProps {}
 
 export const Menu: React.FC<MenuProps> = () => {
-    const {
-        clearDiagramData,
-        deleteDiagram,
-        updateDiagramUpdatedAt,
-        databaseType,
-    } = useChartDB();
+    const { clearDiagramData, deleteDiagram, databaseType } = useChartDB();
+    const { saveDiagram } = useSaveDiagram();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -166,7 +163,7 @@ export const Menu: React.FC<MenuProps> = () => {
                             }
                         </MenubarShortcut>
                     </MenubarItem>
-                    <MenubarItem onClick={updateDiagramUpdatedAt}>
+                    <MenubarItem onClick={saveDiagram}>
                         {t('menu.actions.save')}
                         <MenubarShortcut>
                             {

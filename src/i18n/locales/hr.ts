@@ -113,6 +113,13 @@ export const hr: LanguageTranslation = {
         copy_to_clipboard: 'Kopiraj u međuspremnik',
         copied: 'Kopirano!',
 
+        share_table_dialog: {
+            title: 'Dijeljenje stola',
+            description:
+                'Kopirajte donju vezu da biste podijelili ovu tablicu.',
+            close: 'Zatvoriti',
+        },
+
         side_panel: {
             view_all_options: 'Prikaži sve opcije...',
             tables_section: {
@@ -320,6 +327,7 @@ export const hr: LanguageTranslation = {
                 tables_count: 'Tablice',
             },
             cancel: 'Odustani',
+            start_new: 'Započni s novim dijagramom',
             open: 'Otvori',
 
             diagram_actions: {

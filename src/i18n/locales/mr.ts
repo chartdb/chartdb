@@ -41,12 +41,10 @@ export const mr: LanguageTranslation = {
                 theme: 'थीम',
                 show_dependencies: 'डिपेंडेन्सि दाखवा',
                 hide_dependencies: 'डिपेंडेन्सि लपवा',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'मिनी नकाशा दाखवा',
+                hide_minimap: 'मिनी नकाशा लपवा',
             },
             backup: {
-                // TODO: Add translations
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
                 restore_diagram: 'Restore Diagram',
@@ -112,10 +110,14 @@ export const mr: LanguageTranslation = {
         clear: 'साफ करा',
         show_more: 'अधिक दाखवा',
         show_less: 'कमी दाखवा',
-        // TODO: Add translations
         copy_to_clipboard: 'Copy to Clipboard',
-        // TODO: Add translations
         copied: 'Copied!',
+
+        share_table_dialog: {
+            title: 'सामायिक सारणी',
+            description: 'हे सारणी सामायिक करण्यासाठी खालील दुवा कॉपी करा.',
+            close: 'बंद',
+        },
 
         side_panel: {
             view_all_options: 'सर्व पर्याय पहा...',
@@ -125,12 +127,11 @@ export const mr: LanguageTranslation = {
                 add_view: 'व्ह्यू जोडा',
                 filter: 'फिल्टर',
                 collapse: 'सर्व संकुचित करा',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'क्लियर फिल्टर',
+                no_results:
+                    'आपल्या फिल्टरशी जुळणारी कोणतीही सारण्या आढळल्या नाहीत.',
+                show_list: 'सारणी यादी दर्शवा',
+                show_dbml: 'डीबीएमएल संपादक दर्शवा',
 
                 table: {
                     fields: 'फील्ड्स',
@@ -152,10 +153,8 @@ export const mr: LanguageTranslation = {
                         comments: 'टिप्पण्या',
                         no_comments: 'कोणत्याही टिप्पणी नाहीत',
                         delete_field: 'फील्ड हटवा',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'अचूकता',
                         scale: 'प्रमाण',
@@ -173,8 +172,7 @@ export const mr: LanguageTranslation = {
                         add_field: 'फील्ड जोडा',
                         add_index: 'इंडेक्स जोडा',
                         delete_table: 'टेबल हटवा',
-                        // TODO: Add translations
-                        duplicate_table: 'Duplicate Table',
+                        duplicate_table: 'डुप्लिकेट टेबल',
                     },
                 },
                 empty_state: {
@@ -215,55 +213,55 @@ export const mr: LanguageTranslation = {
                     description: 'सुरू करण्यासाठी एक रिलेशनशिप तयार करा',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'क्षेत्रे',
+                add_area: 'क्षेत्र जोडा',
+                filter: 'फिल्टर',
+                clear: 'क्लियर फिल्टर',
+                no_results:
+                    'आपल्या फिल्टरशी जुळणारी कोणतीही क्षेत्रे आढळली नाहीत.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'क्षेत्र क्रिया',
+                        edit_name: 'नाव संपादित करा',
+                        delete_area: 'क्षेत्र हटवा',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'कोणतेही क्षेत्र नाही',
+                    description: 'प्रारंभ करण्यासाठी एक क्षेत्र तयार करा',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'सानुकूल प्रकार',
+                filter: 'फिल्टर',
+                clear: 'क्लियर फिल्टर',
+                no_results:
+                    'आपल्या फिल्टरशी जुळणारे कोणतेही सानुकूल प्रकार आढळले नाहीत.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'सानुकूल प्रकार नाहीत',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'जेव्हा ते आपल्या डेटाबेसमध्ये उपलब्ध असतील तेव्हा सानुकूल प्रकार येथे दिसतील',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'प्रकार',
+                    enum_values: 'एनम मूल्ये',
+                    composite_fields: 'फील्ड्स',
+                    no_fields: 'कोणतीही फील्ड परिभाषित केलेली नाही',
                     no_values: 'कोणतीही enum मूल्ये परिभाषित नाहीत',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'फील्ड नाव',
+                    field_type_placeholder: 'प्रकार निवडा',
+                    add_field: 'फील्ड जोडा',
+                    no_fields_tooltip:
+                        'या सानुकूल प्रकारासाठी कोणतीही फील्ड परिभाषित केलेली नाहीत',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'क्रिया',
+                        highlight_fields: 'हायलाइट फील्ड',
+                        delete_custom_type: 'हटवा',
+                        clear_field_highlight: 'स्पष्ट हायलाइट',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'प्रकार हटवा',
                 },
             },
         },
@@ -281,7 +279,6 @@ export const mr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'ओव्हरलॅपिंग टेबल्स हायलाइट करा',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -306,13 +303,11 @@ export const mr: LanguageTranslation = {
                     step_1: 'टूल्स > पर्याय > क्वेरी परिणाम > SQL सर्व्हर वर जा.',
                     step_2: 'जर तुम्ही "ग्रिडला परिणाम" वापरत असाल, तर नॉन-XML डेटासाठी जास्तीत जास्त वर्ण पुनर्प्राप्ती बदला (9999999 वर सेट करा).',
                 },
-                // TODO: Add translations
                 instructions_link: 'Need help? Watch how',
                 check_script_result: 'Check Script Result',
             },
 
             cancel: 'रद्द करा',
-            // TODO: Add translations
             import_from_file: 'Import from File',
             back: 'मागे',
             empty_diagram: 'रिक्त आरेख',
@@ -330,6 +325,7 @@ export const mr: LanguageTranslation = {
                 tables_count: 'टेबल्स',
             },
             cancel: 'रद्द करा',
+            start_new: 'नवीन आरेखासह प्रारंभ करा',
             open: 'उघडा',
 
             diagram_actions: {
@@ -400,7 +396,6 @@ export const mr: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'रद्द करा',
             export: 'निर्यात करा',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -438,8 +433,6 @@ export const mr: LanguageTranslation = {
             close: 'आता नाही',
             confirm: 'नक्कीच!',
         },
-
-        // TODO: Add translations
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',
@@ -455,17 +448,15 @@ export const mr: LanguageTranslation = {
 
         // TO
         import_diagram_dialog: {
-            title: 'Import Diagram',
+            title: 'आयात आकृती',
             description: 'Paste the diagram JSON below:',
             cancel: 'Cancel',
             import: 'Import',
             error: {
-                title: 'Error importing diagram',
-                description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                title: 'आकृती आयात करणारी त्रुटी',
+                description: 'आकृती जेएसओएन अवैध आहे. ',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -491,21 +482,16 @@ export const mr: LanguageTranslation = {
             new_table: 'नवीन टेबल',
             new_view: 'नवीन व्ह्यू',
             new_relationship: 'नवीन रिलेशनशिप',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
         table_node_context_menu: {
             edit_table: 'टेबल संपादित करा',
             delete_table: 'टेबल हटवा',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
-            add_relationship: 'Add Relationship', // TODO: Translate
+            duplicate_table: 'डुप्लिकेट टेबल',
+            add_relationship: 'संबंध जोडा',
         },
-
-        // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
-
-        // TODO: Add translations
         tool_tips: {
             double_click_to_edit: 'Double-click to edit',
         },

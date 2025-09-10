@@ -41,9 +41,8 @@ export const id_ID: LanguageTranslation = {
                 theme: 'Tema',
                 show_dependencies: 'Tampilkan Dependensi',
                 hide_dependencies: 'Sembunyikan Dependensi',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Tampilkan Peta Mini',
+                hide_minimap: 'Sembunyikan Peta Mini',
             },
             backup: {
                 backup: 'Cadangan',
@@ -114,6 +113,13 @@ export const id_ID: LanguageTranslation = {
         copy_to_clipboard: 'Salin ke Clipboard',
         copied: 'Tersalin!',
 
+        share_table_dialog: {
+            title: 'Tabel berbagi',
+            description:
+                'Salin tautan di bawah ini untuk membagikan tabel ini.',
+            close: 'Menutup',
+        },
+
         side_panel: {
             view_all_options: 'Tampilkan Semua Pilihan...',
             tables_section: {
@@ -122,12 +128,11 @@ export const id_ID: LanguageTranslation = {
                 add_view: 'Tambah Tampilan',
                 filter: 'Saring',
                 collapse: 'Lipat Semua',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'CLEAR FILTER',
+                no_results:
+                    'Tidak ada tabel yang ditemukan cocok dengan filter Anda.',
+                show_list: 'Tampilkan daftar tabel',
+                show_dbml: 'Tampilkan editor DBML',
 
                 table: {
                     fields: 'Kolom',
@@ -149,10 +154,8 @@ export const id_ID: LanguageTranslation = {
                         comments: 'Komentar',
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Presisi',
                         scale: 'Skala',
@@ -211,55 +214,55 @@ export const id_ID: LanguageTranslation = {
                     description: 'Buat hubungan untuk memulai',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Area',
+                add_area: 'Tambahkan area',
+                filter: 'Menyaring',
+                clear: 'CLEAR FILTER',
+                no_results:
+                    'Tidak ada area yang ditemukan cocok dengan filter Anda.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Tindakan Area',
+                        edit_name: 'Edit nama',
+                        delete_area: 'Hapus area',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Tidak ada area',
+                    description: 'Buat area untuk memulai',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Jenis Kustom',
+                filter: 'Menyaring',
+                clear: 'CLEAR FILTER',
+                no_results:
+                    'Tidak ada tipe khusus yang ditemukan sesuai dengan filter Anda.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Tidak ada tipe khusus',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Jenis kustom akan muncul di sini saat tersedia di database Anda',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Baik',
+                    enum_values: 'Nilai enum',
+                    composite_fields: 'Bidang',
+                    no_fields: 'Tidak ada bidang yang ditentukan',
                     no_values: 'Tidak ada nilai enum yang ditentukan',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nama Lapangan',
+                    field_type_placeholder: 'Pilih Jenis',
+                    add_field: 'Tambahkan bidang',
+                    no_fields_tooltip:
+                        'Tidak ada bidang yang ditentukan untuk jenis khusus ini',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Tindakan',
+                        highlight_fields: 'Sorotan bidang',
+                        delete_custom_type: 'Menghapus',
+                        clear_field_highlight: 'Sorotan yang jelas',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Jenis Hapus',
                 },
             },
         },
@@ -277,7 +280,6 @@ export const id_ID: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -324,6 +326,7 @@ export const id_ID: LanguageTranslation = {
                 tables_count: 'Tabel',
             },
             cancel: 'Batal',
+            start_new: 'Mulai dengan diagram baru',
             open: 'Buka',
 
             diagram_actions: {
@@ -393,7 +396,6 @@ export const id_ID: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Batal',
             export: 'Ekspor',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -456,7 +458,6 @@ export const id_ID: LanguageTranslation = {
                     'Diagram JSON tidak valid. Silakan cek JSON dan coba lagi. Butuh bantuan? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -482,7 +483,6 @@ export const id_ID: LanguageTranslation = {
             new_table: 'Tabel Baru',
             new_view: 'Tampilan Baru',
             new_relationship: 'Hubungan Baru',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
@@ -490,7 +490,7 @@ export const id_ID: LanguageTranslation = {
             edit_table: 'Ubah Tabel',
             delete_table: 'Hapus Tabel',
             duplicate_table: 'Duplikat Tabel',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'Tambahkan hubungan',
         },
 
         snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',
