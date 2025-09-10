@@ -1,0 +1,8 @@
+Table "public"."guy_table" {
+  "id" integer [pk, not null]
+  "created_at" timestamp [not null]
+  "column3" text
+  "arrayfield" text[]
+  "field_5" "character varying"
+  "field_6" "character varying(100)"
+}
