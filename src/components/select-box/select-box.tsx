@@ -27,6 +27,7 @@ export interface SelectBoxOption {
     regex?: string;
     extractRegex?: RegExp;
     group?: string;
+    icon?: React.ReactNode;
 }
 
 export interface SelectBoxProps {
@@ -54,6 +55,7 @@ export interface SelectBoxProps {
     onOpenChange?: (open: boolean) => void;
     popoverClassName?: string;
     readonly?: boolean;
+    footerButtons?: React.ReactNode;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -80,6 +82,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             onOpenChange: setOpen,
             popoverClassName,
             readonly,
+            footerButtons,
         },
         ref
     ) => {
@@ -254,6 +257,11 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             </div>
                         )}
                         <div className="flex flex-1 items-center truncate">
+                            {option.icon ? (
+                                <span className="mr-2 shrink-0">
+                                    {option.icon}
+                                </span>
+                            ) : null}
                             <span>
                                 {isRegexMatch ? searchTerm : option.label}
                                 {!isRegexMatch && optionSuffix
@@ -447,6 +455,9 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                             </div>
                         </ScrollArea>
                     </Command>
+                    {footerButtons ? (
+                        <div className="border-t">{footerButtons}</div>
+                    ) : null}
                 </PopoverContent>
             </Popover>
         );
