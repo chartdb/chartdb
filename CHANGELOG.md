@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.16.0](https://github.com/chartdb/chartdb/compare/v1.15.1...v1.16.0) (2025-09-11)
+
+
+### Features
+
+* add zoom navigation buttons to canvas filter for tables and areas ([#903](https://github.com/chartdb/chartdb/issues/903)) ([a0fb1ed](https://github.com/chartdb/chartdb/commit/a0fb1ed08ba18b66354fa3498d610097a83d4afc))
+
+
+### Bug Fixes
+
+* add support for ALTER TABLE ADD COLUMN in PostgreSQL importer ([#892](https://github.com/chartdb/chartdb/issues/892)) ([ec6e46f](https://github.com/chartdb/chartdb/commit/ec6e46fe81ea1806c179c50a4c5779d8596008aa))
+* **dbml:** export array fields without quotes ([#911](https://github.com/chartdb/chartdb/issues/911)) ([5e81c18](https://github.com/chartdb/chartdb/commit/5e81c1848aaa911990e1e881d62525f5254d6d34))
+* export dbml issues after upgrade version ([#883](https://github.com/chartdb/chartdb/issues/883)) ([07937a2](https://github.com/chartdb/chartdb/commit/07937a2f51708b1c10b45c2bd1f9a9acf5c3f708))
+* export sql + import metadata lib ([#902](https://github.com/chartdb/chartdb/issues/902)) ([ffddcdc](https://github.com/chartdb/chartdb/commit/ffddcdcc987bacb0e0d7e8dea27d08d3a8c5a8c8))
+* improve SQL default value parsing for PostgreSQL, MySQL, and SQL Server with proper type handling and casting support ([#900](https://github.com/chartdb/chartdb/issues/900)) ([fe9ef27](https://github.com/chartdb/chartdb/commit/fe9ef275b8619dcfd7e57541a62a6237a16d29a8))
+* move auto arrange to toolbar ([#904](https://github.com/chartdb/chartdb/issues/904)) ([b016a70](https://github.com/chartdb/chartdb/commit/b016a70691bc22af5720b4de683e8c9353994fcc))
+* remove general db creation ([#901](https://github.com/chartdb/chartdb/issues/901)) ([df89f0b](https://github.com/chartdb/chartdb/commit/df89f0b6b9ba3fcc8b05bae4f60c0dc4ad1d2215))
+* reset increment and default when change field ([#896](https://github.com/chartdb/chartdb/issues/896)) ([e5e1d59](https://github.com/chartdb/chartdb/commit/e5e1d5932762422ea63acfd6cf9fe4f03aa822f7))
+* **sql-import:** handle SQL Server DDL with multiple tables, inline foreign keys, and case-insensitive field matching ([#897](https://github.com/chartdb/chartdb/issues/897)) ([2a64dee](https://github.com/chartdb/chartdb/commit/2a64deebb87a11ee3892024c3273d682bb86f7ef))
+* **sql-import:** support ALTER TABLE ALTER COLUMN TYPE in PostgreSQL importer ([#895](https://github.com/chartdb/chartdb/issues/895)) ([aa29061](https://github.com/chartdb/chartdb/commit/aa290615caf806d7d0374c848d50b4636fde7e96))
+* update deps vulns ([#909](https://github.com/chartdb/chartdb/issues/909)) ([2bd9ca2](https://github.com/chartdb/chartdb/commit/2bd9ca25b2c7b1f053ff4fdc8c5cfc1b0e65901d))
+* upgrade dbml lib ([#880](https://github.com/chartdb/chartdb/issues/880)) ([d8e0bc7](https://github.com/chartdb/chartdb/commit/d8e0bc7db8881971ddaea7177bcebee13cc865f6))
+
 ## [1.15.1](https://github.com/chartdb/chartdb/compare/v1.15.0...v1.15.1) (2025-08-27)
 
 
