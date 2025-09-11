@@ -9,11 +9,12 @@
         "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npm run lint -- --fix",
         "preview": "vite preview",
-        "prepare": "husky",
+        "prepare": "husky || true",
         "test": "vitest",
         "test:ci": "vitest run --reporter=verbose --bail=1",
         "test:ui": "vitest --ui",
-        "test:coverage": "vitest --coverage"
+        "test:coverage": "vitest --coverage",
+        "start": "node server.mjs"
     },
     "dependencies": {
         "@ai-sdk/openai": "^0.0.51",
@@ -72,7 +73,8 @@
         "tailwindcss-animate": "^1.0.7",
         "timeago-react": "^3.0.6",
         "vaul": "^0.9.1",
-        "zod": "^3.23.8"
+        "zod": "^3.23.8",
+        "express": "^4.19.2"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.4",

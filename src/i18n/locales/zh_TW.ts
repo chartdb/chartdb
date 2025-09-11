@@ -41,9 +41,8 @@ export const zh_TW: LanguageTranslation = {
                 theme: '主題',
                 show_dependencies: '顯示相依性',
                 hide_dependencies: '隱藏相依性',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: '顯示小地圖',
+                hide_minimap: '隱藏小地圖',
             },
             backup: {
                 backup: '備份',
@@ -111,6 +110,12 @@ export const zh_TW: LanguageTranslation = {
         copy_to_clipboard: '複製到剪貼簿',
         copied: '已複製！',
 
+        share_table_dialog: {
+            title: '共享表',
+            description: '複製下面的鏈接以共享此表。',
+            close: '關閉',
+        },
+
         side_panel: {
             view_all_options: '顯示所有選項...',
             tables_section: {
@@ -119,12 +124,10 @@ export const zh_TW: LanguageTranslation = {
                 add_view: '新增檢視',
                 filter: '篩選',
                 collapse: '全部摺疊',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: '清除過濾器',
+                no_results: '找不到與您的過濾器匹配的桌子。',
+                show_list: '顯示表列表',
+                show_dbml: '顯示DBML編輯器',
 
                 table: {
                     fields: '欄位',
@@ -146,10 +149,8 @@ export const zh_TW: LanguageTranslation = {
                         comments: '註解',
                         no_comments: '無註解',
                         delete_field: '刪除欄位',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: '精度',
                         scale: '小數位',
@@ -166,7 +167,7 @@ export const zh_TW: LanguageTranslation = {
                         change_schema: '變更 Schema',
                         add_field: '新增欄位',
                         add_index: '新增索引',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: '複製表',
                         delete_table: '刪除表格',
                     },
                 },
@@ -208,55 +209,51 @@ export const zh_TW: LanguageTranslation = {
                     description: '請建立關聯以開始',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: '區域',
+                add_area: '添加區域',
+                filter: '篩選',
+                clear: '清除過濾器',
+                no_results: '沒有發現與您的過濾器相匹配的區域。',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: '區域行動',
+                        edit_name: '編輯名稱',
+                        delete_area: '刪除區域',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: '沒有區域',
+                    description: '創建一個開始的區域',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: '自定義類型',
+                filter: '篩選',
+                clear: '清除過濾器',
+                no_results: '沒有發現與您的過濾器匹配的自定義類型。',
                 empty_state: {
-                    title: 'No custom types',
-                    description:
-                        'Custom types will appear here when they are available in your database',
+                    title: '沒有自定義類型',
+                    description: '自定義類型將在您的數據庫中可用時出現在此處',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: '種類',
+                    enum_values: '枚舉值',
+                    composite_fields: '字段',
+                    no_fields: '沒有定義字段',
                     no_values: '沒有定義列舉值',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: '字段名稱',
+                    field_type_placeholder: '選擇類型',
+                    add_field: '添加字段',
+                    no_fields_tooltip: '該自定義類型沒有定義的字段',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: '動作',
+                        highlight_fields: '突出顯示字段',
+                        delete_custom_type: '刪除',
+                        clear_field_highlight: '清晰的亮點',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: '刪除類型',
                 },
             },
         },
@@ -274,7 +271,6 @@ export const zh_TW: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '突出顯示重疊表格',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -320,6 +316,7 @@ export const zh_TW: LanguageTranslation = {
                 tables_count: '表格數',
             },
             cancel: '取消',
+            start_new: '從新圖表開始',
             open: '開啟',
 
             diagram_actions: {
@@ -389,7 +386,6 @@ export const zh_TW: LanguageTranslation = {
             scale_4x: '4x',
             cancel: '取消',
             export: '匯出',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -431,7 +427,6 @@ export const zh_TW: LanguageTranslation = {
             format_json: 'JSON',
             cancel: '取消',
             export: '匯出',
-            // TODO: Translate
             error: {
                 title: 'Error exporting diagram',
                 description:
@@ -450,7 +445,6 @@ export const zh_TW: LanguageTranslation = {
                     '圖表的 JSON 無效。請檢查 JSON 並再試一次。如需幫助，請聯繫 support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -475,15 +469,14 @@ export const zh_TW: LanguageTranslation = {
             new_table: '新建表格',
             new_view: '新檢視',
             new_relationship: '新建關聯',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
         table_node_context_menu: {
             edit_table: '編輯表格',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: '複製表',
             delete_table: '刪除表格',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: '添加關係',
         },
 
         snap_to_grid_tooltip: '對齊網格（按住 {{key}}）',

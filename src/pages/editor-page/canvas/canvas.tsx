@@ -58,6 +58,7 @@ import {
 import { MarkerDefinitions } from './marker-definitions';
 import { CanvasContextMenu } from './canvas-context-menu';
 import { areFieldTypesCompatible } from '@/lib/data/data-types/data-types';
+import { useFocusOn } from '@/hooks/use-focus-on';
 import {
     calcTableHeight,
     findOverlappingTables,
@@ -88,7 +89,6 @@ import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { useDiff } from '@/context/diff-context/use-diff';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -118,32 +118,15 @@ const tableToTableNode = (
         databaseType,
         filterLoading,
         showDBViews,
-        forceShow,
     }: {
         filter?: DiagramFilter;
         databaseType: DatabaseType;
         filterLoading: boolean;
         showDBViews?: boolean;
-        forceShow?: boolean;
     }
 ): TableNodeType => {
     // Always use absolute position for now
     const position = { x: table.x, y: table.y };
-
-    let hidden = false;
-
-    if (forceShow) {
-        hidden = false;
-    } else {
-        hidden =
-            !filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            }) ||
-            filterLoading ||
-            (!showDBViews && table.isView);
-    }
 
     return {
         id: table.id,
@@ -154,7 +137,14 @@ const tableToTableNode = (
             isOverlapping: false,
         },
         width: table.width ?? MIN_TABLE_SIZE,
-        hidden,
+        hidden:
+            !filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: { defaultSchema: defaultSchemas[databaseType] },
+            }) ||
+            filterLoading ||
+            (!showDBViews && table.isView),
     };
 };
 
@@ -202,9 +192,15 @@ const areaToAreaNode = (
 
 export interface CanvasProps {
     initialTables: DBTable[];
+    clean?: boolean;
+    tableId?: string;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
+export const Canvas: React.FC<CanvasProps> = ({
+    initialTables,
+    clean = false,
+    tableId,
+}) => {
     const { getEdge, getInternalNode, getNode } = useReactFlow();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
     const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
@@ -219,6 +215,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         relationships,
         createRelationship,
         createDependency,
+        updateTable,
         updateTablesState,
         removeRelationships,
         removeDependencies,
@@ -246,14 +243,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setShowFilter,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
-    const { checkIfNewTable } = useDiff();
-
-    const shouldForceShowTable = useCallback(
-        (tableId: string) => {
-            return checkIfNewTable({ tableId });
-        },
-        [checkIfNewTable]
-    );
+    const { focusOnTable } = useFocusOn();
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
@@ -264,7 +254,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 databaseType,
                 filterLoading,
                 showDBViews,
-                forceShow: shouldForceShowTable(table.id),
             })
         )
     );
@@ -284,7 +273,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 databaseType,
                 filterLoading,
                 showDBViews,
-                forceShow: shouldForceShowTable(table.id),
             })
         );
         if (equal(initialNodes, nodes)) {
@@ -297,11 +285,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         databaseType,
         filterLoading,
         showDBViews,
-        shouldForceShowTable,
     ]);
 
     useEffect(() => {
-        if (!isInitialLoadingNodes) {
+        if (!isInitialLoadingNodes && !(clean && tableId)) {
             debounce(() => {
                 fitView({
                     duration: 200,
@@ -310,7 +297,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 });
             }, 500)();
         }
-    }, [isInitialLoadingNodes, fitView]);
+    }, [isInitialLoadingNodes, fitView, clean, tableId]);
+
+    useEffect(() => {
+        if (clean && tableId) {
+            const node = getNode(tableId);
+            if (node) {
+                focusOnTable(tableId, { select: false });
+                const tableNode = node as TableNodeType;
+                if (!tableNode.data.table.expanded) {
+                    updateTable(tableId, { expanded: true });
+                }
+            }
+        }
+    }, [clean, tableId, nodes, focusOnTable, getNode, updateTable]);
 
     useEffect(() => {
         const targetIndexes: Record<string, number> = relationships.reduce(
@@ -341,6 +341,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
                     type: 'relationship-edge',
                     data: { relationship },
+                    hidden: clean && !!tableId,
                 })
             ),
             ...dependencies.map(
@@ -352,11 +353,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
                     type: 'dependency-edge',
                     data: { dependency: dep },
-                    hidden: !showDBViews,
+                    hidden: clean && !!tableId ? true : !showDBViews,
                 })
             ),
         ]);
-    }, [relationships, dependencies, setEdges, showDBViews]);
+    }, [relationships, dependencies, setEdges, showDBViews, clean, tableId]);
 
     useEffect(() => {
         const selectedNodesIds = nodes
@@ -458,7 +459,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         databaseType,
                         filterLoading,
                         showDBViews,
-                        forceShow: shouldForceShowTable(table.id),
                     });
 
                     // Check if table uses the highlighted custom type
@@ -478,16 +478,23 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             highlightOverlappingTables,
                             hasHighlightedCustomType,
                         },
+                        hidden:
+                            clean && tableId
+                                ? node.id !== tableId
+                                : node.hidden,
                     };
                 }),
-                ...areas.map((area) =>
-                    areaToAreaNode(area, {
+                ...areas.map((area) => {
+                    const areaNode = areaToAreaNode(area, {
                         tables,
                         filter,
                         databaseType,
                         filterLoading,
-                    })
-                ),
+                    });
+                    return clean && tableId
+                        ? { ...areaNode, hidden: true }
+                        : areaNode;
+                }),
             ];
 
             // Check if nodes actually changed
@@ -509,7 +516,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         highlightedCustomType,
         filterLoading,
         showDBViews,
-        shouldForceShowTable,
+        clean,
+        tableId,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
@@ -1230,7 +1238,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     return (
         <CanvasContextMenu>
-            <div className="relative flex h-full" id="canvas">
+            <div className="relative flex size-full" id="canvas">
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
@@ -1356,7 +1364,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </div>
                         </div>
                     </Controls>
-                    {isLoadingDOM ? (
+                    {!clean && isLoadingDOM ? (
                         <Controls
                             position="top-center"
                             orientation="horizontal"
@@ -1374,7 +1382,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         </Controls>
                     ) : null}
 
-                    {!isDesktop && !readonly ? (
+                    {!clean && !isDesktop && !readonly ? (
                         <Controls
                             position="bottom-left"
                             orientation="horizontal"
@@ -1391,7 +1399,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </Button>
                         </Controls>
                     ) : null}
-                    {isLostInCanvas ? (
+                    {!clean && isLostInCanvas ? (
                         <Controls
                             position={
                                 isDesktop ? 'bottom-center' : 'top-center'
@@ -1410,17 +1418,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             <ShowAllButton />
                         </Controls>
                     ) : null}
-                    <Controls
-                        position={isDesktop ? 'bottom-center' : 'top-center'}
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Toolbar readonly={readonly} />
-                    </Controls>
-                    {showMiniMapOnCanvas && (
+                    {!clean && (
+                        <Controls
+                            position={
+                                isDesktop ? 'bottom-center' : 'top-center'
+                            }
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <Toolbar readonly={readonly} />
+                        </Controls>
+                    )}
+                    {!clean && showMiniMapOnCanvas && (
                         <MiniMap
                             style={{
                                 width: isDesktop ? 100 : 60,
@@ -1433,7 +1445,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         gap={16}
                         size={1}
                     />
-                    {showFilter ? (
+                    {!clean && showFilter ? (
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}
                 </ReactFlow>

@@ -41,9 +41,8 @@ export const bn: LanguageTranslation = {
                 theme: 'থিম',
                 show_dependencies: 'নির্ভরতাগুলি দেখান',
                 hide_dependencies: 'নির্ভরতাগুলি লুকান',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'মিনি মানচিত্র দেখান',
+                hide_minimap: 'মিনি মানচিত্র লুকান',
             },
 
             backup: {
@@ -115,6 +114,12 @@ export const bn: LanguageTranslation = {
         copy_to_clipboard: 'ক্লিপবোর্ডে অনুলিপি করুন',
         copied: 'অনুলিপি সম্পন্ন!',
 
+        share_table_dialog: {
+            title: 'টেবিল ভাগ করুন',
+            description: 'এই টেবিলটি ভাগ করতে নীচের লিঙ্কটি অনুলিপি করুন।',
+            close: 'বন্ধ',
+        },
+
         side_panel: {
             view_all_options: 'সমস্ত বিকল্প দেখুন...',
             tables_section: {
@@ -123,12 +128,11 @@ export const bn: LanguageTranslation = {
                 add_view: 'ভিউ যোগ করুন',
                 filter: 'ফিল্টার',
                 collapse: 'সব ভাঁজ করুন',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results:
+                    'আপনার ফিল্টারটির সাথে মিলে যাওয়ার কোনও টেবিল পাওয়া যায় নি।',
+                show_list: 'টেবিল তালিকা দেখান',
+                show_dbml: 'ডিবিএমএল সম্পাদক দেখান',
 
                 table: {
                     fields: 'ফিল্ড',
@@ -150,10 +154,8 @@ export const bn: LanguageTranslation = {
                         comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'নির্ভুলতা',
                         scale: 'স্কেল',
@@ -212,55 +214,55 @@ export const bn: LanguageTranslation = {
                     description: 'শুরু করতে একটি সম্পর্ক তৈরি করুন',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'অঞ্চল',
+                add_area: 'অঞ্চল যুক্ত করুন',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results:
+                    'আপনার ফিল্টারটির সাথে মিলে যাওয়া কোনও অঞ্চলই পাওয়া যায় নি।',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'অঞ্চল ক্রিয়া',
+                        edit_name: 'নাম সম্পাদনা করুন',
+                        delete_area: 'অঞ্চল মুছুন',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'কোন অঞ্চল নেই',
+                    description: 'শুরু করার জন্য একটি অঞ্চল তৈরি করুন',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'কাস্টম প্রকার',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results:
+                    'কোনও কাস্টম প্রকার আপনার ফিল্টারটির সাথে মিলে যায় না।',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'কোন কাস্টম প্রকার নেই',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'কাস্টম প্রকারগুলি এখানে আপনার ডাটাবেসে উপলব্ধ থাকলে এখানে উপস্থিত হবে',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'দয়ালু',
+                    enum_values: 'এনাম মান',
+                    composite_fields: 'ক্ষেত্র',
+                    no_fields: 'কোনও ক্ষেত্র সংজ্ঞায়িত করা হয়নি',
                     no_values: 'কোন enum মান সংজ্ঞায়িত নেই',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'মাঠের নাম',
+                    field_type_placeholder: 'প্রকার নির্বাচন করুন',
+                    add_field: 'ক্ষেত্র যুক্ত করুন',
+                    no_fields_tooltip:
+                        'এই কাস্টম প্রকারের জন্য কোনও ক্ষেত্র সংজ্ঞায়িত করা হয়নি',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'ক্রিয়া',
+                        highlight_fields: 'ক্ষেত্রগুলি হাইলাইট করুন',
+                        delete_custom_type: 'মুছুন',
+                        clear_field_highlight: 'পরিষ্কার হাইলাইট',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'টাইপ মুছুন',
                 },
             },
         },
@@ -274,8 +276,6 @@ export const bn: LanguageTranslation = {
             redo: 'পুনরায় করুন',
             reorder_diagram: 'স্বয়ংক্রিয় ডায়াগ্রাম সাজান',
             highlight_overlapping_tables: 'ওভারল্যাপিং টেবিল হাইলাইট করুন',
-
-            // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
@@ -325,6 +325,7 @@ export const bn: LanguageTranslation = {
                 tables_count: 'টেবিল',
             },
             cancel: 'বাতিল করুন',
+            start_new: 'নতুন ডায়াগ্রাম দিয়ে শুরু করুন',
             open: 'খুলুন',
 
             diagram_actions: {
@@ -395,7 +396,6 @@ export const bn: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'বাতিল করুন',
             export: 'রপ্তানি করুন',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -457,7 +457,6 @@ export const bn: LanguageTranslation = {
                     'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -482,7 +481,6 @@ export const bn: LanguageTranslation = {
             new_table: 'নতুন টেবিল',
             new_view: 'নতুন ভিউ',
             new_relationship: 'নতুন সম্পর্ক',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
@@ -490,7 +488,7 @@ export const bn: LanguageTranslation = {
             edit_table: 'টেবিল সম্পাদনা করুন',
             duplicate_table: 'টেবিল নকল করুন',
             delete_table: 'টেবিল মুছে ফেলুন',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'সম্পর্ক যুক্ত করুন',
         },
 
         snap_to_grid_tooltip: 'গ্রিডে স্ন্যাপ করুন (অবস্থান {{key}})',

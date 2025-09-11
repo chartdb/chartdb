@@ -147,7 +147,6 @@ export const ru: LanguageTranslation = {
                         comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
                         character_length: 'Макс. длина',
@@ -230,34 +229,35 @@ export const ru: LanguageTranslation = {
                     description: 'Создайте область, чтобы начать',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Пользовательские типы',
+                filter: 'Фильтр',
+                clear: 'Чистый фильтр',
+                no_results:
+                    'Нет пользовательских типов, которые соответствуют вашему фильтру.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Нет пользовательских типов',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Пользовательские типы появятся здесь, когда они доступны в вашей базе данных',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Добрый',
+                    enum_values: 'Enum значения',
+                    composite_fields: 'Поля',
+                    no_fields: 'Поля не определены',
                     no_values: 'Значения перечисления не определены',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Имя поля',
+                    field_type_placeholder: 'Выберите тип',
+                    add_field: 'Добавить поле',
+                    no_fields_tooltip:
+                        'Поля не определены для этого пользовательского типа',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Действия',
+                        highlight_fields: 'Выделите поля',
+                        delete_custom_type: 'Удалить',
+                        clear_field_highlight: 'Ясная выделение',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Удалить тип',
                 },
             },
         },
@@ -275,7 +275,6 @@ export const ru: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -323,6 +322,7 @@ export const ru: LanguageTranslation = {
                 tables_count: 'Таблицы',
             },
             cancel: 'Отмена',
+            start_new: 'Начать с новой диаграммы',
             open: 'Открыть',
 
             diagram_actions: {
@@ -393,7 +393,6 @@ export const ru: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Отменить',
             export: 'Экспортировать',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -492,6 +491,14 @@ export const ru: LanguageTranslation = {
 
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
+
+        share_table_dialog: {
+            title: 'Поделиться таблицей',
+            description:
+                'Скопируйте ссылку ниже, чтобы поделиться этой таблицей.',
+            close: 'Закрывать',
+        },
+
         snap_to_grid_tooltip: 'Выравнивание по сетке (Удерживайте {{key}})',
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',

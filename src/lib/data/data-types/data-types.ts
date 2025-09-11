@@ -12,6 +12,8 @@ import { oracleDataTypes } from './oracle-data-types';
 export interface DataType {
     id: string;
     name: string;
+    usageLevel?: 1 | 2;
+    fieldAttributes?: FieldAttributes;
 }
 
 export interface FieldAttributeRange {
@@ -20,7 +22,7 @@ export interface FieldAttributeRange {
     default: number;
 }
 
-interface FieldAttributes {
+export interface FieldAttributes {
     hasCharMaxLength?: boolean;
     hasCharMaxLengthOption?: boolean;
     precision?: FieldAttributeRange;
@@ -28,15 +30,36 @@ interface FieldAttributes {
     maxLength?: number;
 }
 
-export interface DataTypeData extends DataType {
-    usageLevel?: 1 | 2; // Level 1 is most common, Level 2 is second most common
-    fieldAttributes?: FieldAttributes;
-}
+export interface DataTypeData extends DataType {}
 
-export const dataTypeSchema: z.ZodType<DataType> = z.object({
-    id: z.string(),
-    name: z.string(),
-});
+export const dataTypeSchema: z.ZodType<DataType> = z
+    .object({
+        id: z.string(),
+        name: z.string(),
+        usageLevel: z.union([z.literal(1), z.literal(2)]).optional(),
+        fieldAttributes: z
+            .object({
+                hasCharMaxLength: z.boolean().optional(),
+                hasCharMaxLengthOption: z.boolean().optional(),
+                precision: z
+                    .object({
+                        max: z.number(),
+                        min: z.number(),
+                        default: z.number(),
+                    })
+                    .optional(),
+                scale: z
+                    .object({
+                        max: z.number(),
+                        min: z.number(),
+                        default: z.number(),
+                    })
+                    .optional(),
+                maxLength: z.number().optional(),
+            })
+            .optional(),
+    })
+    .passthrough();
 
 export const dataTypeMap: Record<DatabaseType, readonly DataTypeData[]> = {
     [DatabaseType.GENERIC]: genericDataTypes,

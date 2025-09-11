@@ -41,11 +41,9 @@ export const pt_BR: LanguageTranslation = {
                 theme: 'Tema',
                 show_dependencies: 'Mostrar Dependências',
                 hide_dependencies: 'Ocultar Dependências',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Mostrar Mini Mapa',
+                hide_minimap: 'Ocultar Mini Mapa',
             },
-            // TODO: Translate
             backup: {
                 backup: 'Backup',
                 export_diagram: 'Exportar Diagrama',
@@ -115,6 +113,12 @@ export const pt_BR: LanguageTranslation = {
         copy_to_clipboard: 'Copiar para a Área de Transferência',
         copied: 'Copiado!',
 
+        share_table_dialog: {
+            title: 'Compartilhe a tabela',
+            description: 'Copie o link abaixo para compartilhar esta tabela.',
+            close: 'Fechar',
+        },
+
         side_panel: {
             view_all_options: 'Ver todas as Opções...',
             tables_section: {
@@ -123,12 +127,10 @@ export const pt_BR: LanguageTranslation = {
                 add_view: 'Adicionar Visualização',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todas',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'Filtro transparente',
+                no_results: 'Nenhuma mesa encontrou combinando seu filtro.',
+                show_list: 'Mostrar lista de tabela',
+                show_dbml: 'Mostrar editor DBML',
 
                 table: {
                     fields: 'Campos',
@@ -150,10 +152,8 @@ export const pt_BR: LanguageTranslation = {
                         comments: 'Comentários',
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Precisão',
                         scale: 'Escala',
@@ -170,7 +170,7 @@ export const pt_BR: LanguageTranslation = {
                         change_schema: 'Alterar Esquema',
                         add_field: 'Adicionar Campo',
                         add_index: 'Adicionar Índice',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Tabela duplicada',
                         delete_table: 'Excluir Tabela',
                     },
                 },
@@ -212,55 +212,55 @@ export const pt_BR: LanguageTranslation = {
                     description: 'Crie um relacionamento para começar',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Áreas',
+                add_area: 'Adicione área',
+                filter: 'Filtro',
+                clear: 'Filtro transparente',
+                no_results:
+                    'Nenhuma área encontrou correspondendo ao seu filtro.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Ações da área',
+                        edit_name: 'Nome de edição',
+                        delete_area: 'Excluir área',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Sem áreas',
+                    description: 'Crie uma área para começar',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Tipos personalizados',
+                filter: 'Filtro',
+                clear: 'Filtro transparente',
+                no_results:
+                    'Não há tipos personalizados encontrados correspondendo ao seu filtro.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Sem tipos personalizados',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Os tipos personalizados aparecerão aqui quando estiverem disponíveis em seu banco de dados',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Tipo',
+                    enum_values: 'Valores da enumeração',
+                    composite_fields: 'Campos',
+                    no_fields: 'Nenhum campo definido',
                     no_values: 'Nenhum valor de enum definido',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nome do campo',
+                    field_type_placeholder: 'Selecione Tipo',
+                    add_field: 'Adicione o campo',
+                    no_fields_tooltip:
+                        'Nenhum campo definido para este tipo personalizado',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Ações',
+                        highlight_fields: 'Destaque campos',
+                        delete_custom_type: 'Excluir',
+                        clear_field_highlight: 'Destaque claro',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Excluir tipo',
                 },
             },
         },
@@ -278,7 +278,6 @@ export const pt_BR: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Destacar Tabelas Sobrepostas',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -309,7 +308,6 @@ export const pt_BR: LanguageTranslation = {
 
             cancel: 'Cancelar',
             back: 'Voltar',
-            // TODO: Translate
             import_from_file: 'Import from File',
             empty_diagram: 'Diagrama vazio',
             continue: 'Continuar',
@@ -326,6 +324,7 @@ export const pt_BR: LanguageTranslation = {
                 tables_count: 'Tabelas',
             },
             cancel: 'Cancelar',
+            start_new: 'Começar com um novo diagrama',
             open: 'Abrir',
 
             diagram_actions: {
@@ -396,7 +395,6 @@ export const pt_BR: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Cancelar',
             export: 'Exportar',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -434,7 +432,6 @@ export const pt_BR: LanguageTranslation = {
             close: 'Agora não',
             confirm: 'Claro!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',
@@ -447,19 +444,16 @@ export const pt_BR: LanguageTranslation = {
                     'Something went wrong. Need help? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
+            title: 'Diagrama de importação',
             description: 'Paste the diagram JSON below:',
             cancel: 'Cancel',
             import: 'Import',
             error: {
-                title: 'Error importing diagram',
-                description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                title: 'Erro de importação de diagrama',
+                description: 'O diagrama JSON é inválido. ',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -484,18 +478,15 @@ export const pt_BR: LanguageTranslation = {
             new_table: 'Nova Tabela',
             new_view: 'Nova Visualização',
             new_relationship: 'Novo Relacionamento',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
         table_node_context_menu: {
             edit_table: 'Editar Tabela',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Tabela duplicada',
             delete_table: 'Excluir Tabela',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'Adicionar relacionamento',
         },
-
-        // TODO: Add translations
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         tool_tips: {

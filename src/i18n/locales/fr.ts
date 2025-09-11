@@ -13,7 +13,7 @@ export const fr: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'Actions',
+                actions: 'Actes',
                 new: 'Nouveau...',
                 browse: 'Parcourir...',
                 save: 'Enregistrer',
@@ -113,6 +113,12 @@ export const fr: LanguageTranslation = {
         copy_to_clipboard: 'Copier dans le presse-papiers',
         copied: 'Copié !',
 
+        share_table_dialog: {
+            title: 'Table de partage',
+            description: 'Copiez le lien ci-dessous pour partager ce tableau.',
+            close: 'Fermer',
+        },
+
         side_panel: {
             view_all_options: 'Voir toutes les Options...',
             tables_section: {
@@ -147,10 +153,8 @@ export const fr: LanguageTranslation = {
                         comments: 'Commentaires',
                         no_comments: 'Pas de commentaires',
                         delete_field: 'Supprimer le Champ',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Précision',
                         scale: 'Échelle',
@@ -190,7 +194,7 @@ export const fr: LanguageTranslation = {
                     cardinality: 'Cardinalité',
                     delete_relationship: 'Supprimer',
                     relationship_actions: {
-                        title: 'Actions',
+                        title: 'Actes',
                         delete_relationship: 'Supprimer',
                     },
                 },
@@ -200,7 +204,7 @@ export const fr: LanguageTranslation = {
                     dependent_table: 'Vue Dépendante',
                     delete_dependency: 'Supprimer',
                     dependency_actions: {
-                        title: 'Actions',
+                        title: 'Actes',
                         delete_dependency: 'Supprimer',
                     },
                 },
@@ -209,55 +213,54 @@ export const fr: LanguageTranslation = {
                     description: 'Créez une relation pour commencer',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Zones',
+                add_area: 'Ajouter une zone',
+                filter: 'Filtre',
+                clear: 'Filtre effacer',
+                no_results: 'Aucune zone ne correspond à votre filtre.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Actions de la région',
+                        edit_name: 'Modifier le nom',
+                        delete_area: 'Supprimer la zone',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Pas de zones',
+                    description: 'Créer une zone pour commencer',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Types personnalisés',
+                filter: 'Filtre',
+                clear: 'Filtre effacer',
+                no_results:
+                    'Aucun type personnalisé trouvé correspondant à votre filtre.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Pas de types personnalisés',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        "Les types personnalisés apparaîtront ici lorsqu'ils seront disponibles dans votre base de données",
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Gentil',
+                    enum_values: "Valeurs d'énumération",
+                    composite_fields: 'Champs',
+                    no_fields: 'Aucun champ défini',
                     no_values: "Aucune valeur d'énumération définie",
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nom de champ',
+                    field_type_placeholder: 'Sélectionner le type',
+                    add_field: 'Ajouter un champ',
+                    no_fields_tooltip:
+                        'Aucun champ défini pour ce type personnalisé',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Actes',
+                        highlight_fields: 'Mettre en surbrillance les champs',
+                        delete_custom_type: 'Supprimer',
+                        clear_field_highlight: 'Point culminant clair',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Supprimer le type',
                 },
             },
         },
@@ -275,7 +278,6 @@ export const fr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Surligner les tables chevauchées',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -323,6 +325,7 @@ export const fr: LanguageTranslation = {
                 tables_count: 'Tables',
             },
             cancel: 'Annuler',
+            start_new: 'Commencer avec un nouveau diagramme',
             open: 'Ouvrir',
 
             diagram_actions: {
@@ -359,7 +362,6 @@ export const fr: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Annuler',
             export: 'Exporter',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -480,7 +482,6 @@ export const fr: LanguageTranslation = {
             new_table: 'Nouvelle Table',
             new_view: 'Nouvelle Vue',
             new_relationship: 'Nouvelle Relation',
-            // TODO: Translate
             new_area: 'New Area',
         },
 

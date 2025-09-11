@@ -41,9 +41,8 @@ export const vi: LanguageTranslation = {
                 theme: 'Chủ đề',
                 show_dependencies: 'Hiển thị các phụ thuộc',
                 hide_dependencies: 'Ẩn các phụ thuộc',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Hiển thị bản đồ nhỏ',
+                hide_minimap: 'Ẩn bản đồ nhỏ',
             },
             backup: {
                 backup: 'Hỗ trợ',
@@ -114,6 +113,12 @@ export const vi: LanguageTranslation = {
         copy_to_clipboard: 'Sao chép vào bảng tạm',
         copied: 'Đã sao chép!',
 
+        share_table_dialog: {
+            title: 'Bảng chia sẻ',
+            description: 'Sao chép liên kết dưới đây để chia sẻ bảng này.',
+            close: 'Đóng',
+        },
+
         side_panel: {
             view_all_options: 'Xem tất cả tùy chọn...',
             tables_section: {
@@ -122,12 +127,10 @@ export const vi: LanguageTranslation = {
                 add_view: 'Thêm Chế độ xem',
                 filter: 'Lọc',
                 collapse: 'Thu gọn tất cả',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'Xóa bộ lọc',
+                no_results: 'Không tìm thấy bảng phù hợp với bộ lọc của bạn.',
+                show_list: 'Hiển thị danh sách bảng',
+                show_dbml: 'Hiển thị biên tập DBML',
 
                 table: {
                     fields: 'Trường',
@@ -149,10 +152,8 @@ export const vi: LanguageTranslation = {
                         comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'Độ chính xác',
                         scale: 'Tỷ lệ',
@@ -211,55 +212,55 @@ export const vi: LanguageTranslation = {
                     description: 'Tạo một quan hệ để bắt đầu',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Khu vực',
+                add_area: 'Thêm khu vực',
+                filter: 'Lọc',
+                clear: 'Xóa bộ lọc',
+                no_results:
+                    'Không có khu vực nào được tìm thấy phù hợp với bộ lọc của bạn.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Hành động khu vực',
+                        edit_name: 'Chỉnh sửa tên',
+                        delete_area: 'Xóa khu vực',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Không có khu vực',
+                    description: 'Tạo một khu vực để bắt đầu',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Các loại tùy chỉnh',
+                filter: 'Lọc',
+                clear: 'Xóa bộ lọc',
+                no_results:
+                    'Không có loại tùy chỉnh nào được tìm thấy phù hợp với bộ lọc của bạn.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Không có loại tùy chỉnh',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Các loại tùy chỉnh sẽ xuất hiện ở đây khi chúng có sẵn trong cơ sở dữ liệu của bạn',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Loại',
+                    enum_values: 'Giá trị enum',
+                    composite_fields: 'Cánh đồng',
+                    no_fields: 'Không có trường được xác định',
                     no_values: 'Không có giá trị enum được định nghĩa',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Tên hiện trường',
+                    field_type_placeholder: 'Chọn Loại',
+                    add_field: 'Thêm trường',
+                    no_fields_tooltip:
+                        'Không có trường được xác định cho loại tùy chỉnh này',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Hành động',
+                        highlight_fields: 'Làm nổi bật các trường',
+                        delete_custom_type: 'Xóa bỏ',
+                        clear_field_highlight: 'Điểm nổi bật rõ ràng',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Xóa loại',
                 },
             },
         },
@@ -277,7 +278,6 @@ export const vi: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -324,6 +324,7 @@ export const vi: LanguageTranslation = {
                 tables_count: 'Số bảng',
             },
             cancel: 'Hủy',
+            start_new: 'Bắt đầu với sơ đồ mới',
             open: 'Mở',
 
             diagram_actions: {
@@ -393,7 +394,6 @@ export const vi: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Hủy',
             export: 'Xuất',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -455,7 +455,6 @@ export const vi: LanguageTranslation = {
                     'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -480,7 +479,6 @@ export const vi: LanguageTranslation = {
             new_table: 'Tạo bảng mới',
             new_view: 'Chế độ xem Mới',
             new_relationship: 'Tạo quan hệ mới',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
@@ -488,7 +486,7 @@ export const vi: LanguageTranslation = {
             edit_table: 'Sửa bảng',
             duplicate_table: 'Nhân đôi bảng',
             delete_table: 'Xóa bảng',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'Thêm mối quan hệ',
         },
 
         snap_to_grid_tooltip: 'Căn lưới (Giữ phím {{key}})',

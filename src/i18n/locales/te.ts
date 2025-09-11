@@ -41,11 +41,9 @@ export const te: LanguageTranslation = {
                 theme: 'థీమ్',
                 show_dependencies: 'ఆధారాలు చూపించండి',
                 hide_dependencies: 'ఆధారాలను దాచండి',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'మినీ మ్యాప్ చూపించు',
+                hide_minimap: 'మినీ మ్యాప్ దాచు',
             },
-            // TODO: Translate
             backup: {
                 backup: 'Backup',
                 export_diagram: 'Export Diagram',
@@ -115,6 +113,13 @@ export const te: LanguageTranslation = {
         copy_to_clipboard: 'క్లిప్బోర్డుకు కాపీ చేయండి',
         copied: 'కాపీ చేయబడింది!',
 
+        share_table_dialog: {
+            title: 'షేర్ పట్టిక',
+            description:
+                'ఈ పట్టికను భాగస్వామ్యం చేయడానికి క్రింది లింక్‌ను కాపీ చేయండి.',
+            close: 'దగ్గరగా',
+        },
+
         side_panel: {
             view_all_options: 'అన్ని ఎంపికలను చూడండి...',
             tables_section: {
@@ -123,12 +128,10 @@ export const te: LanguageTranslation = {
                 add_view: 'వ్యూ జోడించండి',
                 filter: 'ఫిల్టర్',
                 collapse: 'అన్ని కూల్ చేయి',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
+                clear: 'క్లియర్ ఫిల్టర్',
+                no_results: 'మీ ఫిల్టర్‌కు సరిపోయే పట్టికలు కనుగొనబడలేదు.',
+                show_list: 'పట్టిక జాబితాను చూపించు',
+                show_dbml: 'DBML ఎడిటర్ చూపించు',
 
                 table: {
                     fields: 'ఫీల్డులు',
@@ -150,10 +153,8 @@ export const te: LanguageTranslation = {
                         comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
-                        // TODO: Translate
                         default_value: 'Default Value',
                         no_default: 'No default',
-                        // TODO: Translate
                         character_length: 'Max Length',
                         precision: 'సూక్ష్మత',
                         scale: 'స్కేల్',
@@ -170,8 +171,7 @@ export const te: LanguageTranslation = {
                         change_schema: 'స్కీమాను మార్చు',
                         add_field: 'ఫీల్డ్ జోడించు',
                         add_index: 'ఇండెక్స్ జోడించు',
-                        // TODO: Translate
-                        duplicate_table: 'Duplicate Table',
+                        duplicate_table: 'నకిలీ పట్టిక',
                         delete_table: 'పట్టికను తొలగించు',
                     },
                 },
@@ -213,55 +213,54 @@ export const te: LanguageTranslation = {
                     description: 'ప్రారంభించడానికి ఒక సంబంధం సృష్టించండి',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'ప్రాంతాలు',
+                add_area: 'ప్రాంతాన్ని జోడించండి',
+                filter: 'ఫిల్టర్',
+                clear: 'క్లియర్ ఫిల్టర్',
+                no_results: 'మీ ఫిల్టర్‌కు సరిపోయే ప్రాంతాలు ఏవీ కనుగొనబడలేదు.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'ప్రాంత చర్యలు',
+                        edit_name: 'పేరును సవరించండి',
+                        delete_area: 'ప్రాంతం తొలగించు',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'ప్రాంతాలు లేవు',
+                    description: 'ప్రారంభించడానికి ఒక ప్రాంతాన్ని సృష్టించండి',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'అనుకూల రకాలు',
+                filter: 'ఫిల్టర్',
+                clear: 'క్లియర్ ఫిల్టర్',
+                no_results:
+                    'మీ ఫిల్టర్‌కు సరిపోయే కస్టమ్ రకాలు ఏవీ కనుగొనబడలేదు.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'అనుకూల రకాలు లేవు',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'మీ డేటాబేస్లో అందుబాటులో ఉన్నప్పుడు అనుకూల రకాలు ఇక్కడ కనిపిస్తాయి',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'రకమైన',
+                    enum_values: 'ENUM విలువలు',
+                    composite_fields: 'ఫీల్డ్స్',
+                    no_fields: 'ఏ ఫీల్డ్‌లు నిర్వచించబడలేదు',
                     no_values: 'ఏ enum విలువలు నిర్వచించబడలేదు',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'ఫీల్డ్ పేరు',
+                    field_type_placeholder: 'రకాన్ని ఎంచుకోండి',
+                    add_field: 'ఫీల్డ్ జోడించండి',
+                    no_fields_tooltip:
+                        'ఈ కస్టమ్ రకం కోసం ఫీల్డ్‌లు నిర్వచించబడలేదు',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'చర్యలు',
+                        highlight_fields: 'ఫీల్డ్‌లను హైలైట్ చేయండి',
+                        delete_custom_type: 'తొలగించు',
+                        clear_field_highlight: 'క్లియర్ హైలైట్',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'రకాన్ని తొలగించండి',
                 },
             },
         },
@@ -279,7 +278,6 @@ export const te: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'అవకాశించు పట్టికలను హైలైట్ చేయండి',
-            // TODO: Translate
             filter: 'Filter Tables',
         },
 
@@ -309,7 +307,6 @@ export const te: LanguageTranslation = {
             },
 
             cancel: 'రద్దు',
-            // TODO: Translate
             import_from_file: 'Import from File',
             back: 'తిరుగు',
             empty_diagram: 'ఖాళీ చిత్రము',
@@ -327,6 +324,7 @@ export const te: LanguageTranslation = {
                 tables_count: 'పట్టికలు',
             },
             cancel: 'రద్దు',
+            start_new: 'కొత్త డయాగ్రామ్‌తో ప్రారంభించండి',
             open: 'తెరవు',
 
             diagram_actions: {
@@ -397,7 +395,6 @@ export const te: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'రద్దు',
             export: 'ఎగుమతి',
-            // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
             pattern_description: 'Add subtle grid pattern to background.',
@@ -435,8 +432,6 @@ export const te: LanguageTranslation = {
             close: 'ఇప్పుడు కాదు',
             confirm: 'ఖచ్చితంగా!',
         },
-
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',
@@ -449,20 +444,16 @@ export const te: LanguageTranslation = {
                     'Something went wrong. Need help? support@chartdb.io',
             },
         },
-
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
+            title: 'దిగుమతి రేఖాచిత్రం',
             description: 'Paste the diagram JSON below:',
             cancel: 'Cancel',
             import: 'Import',
             error: {
-                title: 'Error importing diagram',
-                description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                title: 'రేఖాచిత్రాన్ని దిగుమతి చేయడంలో లోపం',
+                description: 'రేఖాచిత్రం JSON చెల్లదు. ',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
             example_title: 'Import Example DBML',
             title: 'Import DBML',
@@ -488,21 +479,16 @@ export const te: LanguageTranslation = {
             new_table: 'కొత్త పట్టిక',
             new_view: 'కొత్త వ్యూ',
             new_relationship: 'కొత్త సంబంధం',
-            // TODO: Translate
             new_area: 'New Area',
         },
 
         table_node_context_menu: {
             edit_table: 'పట్టికను సవరించు',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'నకిలీ పట్టిక',
             delete_table: 'పట్టికను తొలగించు',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'సంబంధాన్ని జోడించండి',
         },
-
-        // TODO: Translate
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
-
-        // TODO: Translate
         tool_tips: {
             double_click_to_edit: 'Double-click to edit',
         },

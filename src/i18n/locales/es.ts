@@ -41,9 +41,8 @@ export const es: LanguageTranslation = {
                 theme: 'Tema',
                 show_dependencies: 'Mostrar dependencias',
                 hide_dependencies: 'Ocultar dependencias',
-                // TODO: Translate
-                show_minimap: 'Show Mini Map',
-                hide_minimap: 'Hide Mini Map',
+                show_minimap: 'Mostrar minimapa',
+                hide_minimap: 'Ocultar minimapa',
             },
             backup: {
                 backup: 'Respaldo',
@@ -56,7 +55,6 @@ export const es: LanguageTranslation = {
                 join_discord: 'Únete a nosotros en Discord',
             },
         },
-
         delete_diagram_alert: {
             title: 'Eliminar Diagrama',
             description:
@@ -64,7 +62,6 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             delete: 'Eliminar',
         },
-
         clear_diagram_alert: {
             title: 'Limpiar Diagrama',
             description:
@@ -72,7 +69,6 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             clear: 'Limpiar',
         },
-
         reorder_diagram_alert: {
             title: 'Organizar Diagrama Automáticamente',
             description:
@@ -80,7 +76,6 @@ export const es: LanguageTranslation = {
             reorder: 'Organizar Automáticamente',
             cancel: 'Cancelar',
         },
-
         copy_to_clipboard_toast: {
             unsupported: {
                 title: 'Copia fallida',
@@ -91,18 +86,15 @@ export const es: LanguageTranslation = {
                 description: 'Algo salió mal. Por favor, inténtelo de nuevo.',
             },
         },
-
         theme: {
             system: 'Sistema',
             light: 'Claro',
             dark: 'Oscuro',
         },
-
         zoom: {
             on: 'Encendido',
             off: 'Apagado',
         },
-
         last_saved: 'Último guardado',
         saved: 'Guardado',
         loading_diagram: 'Cargando diagrama...',
@@ -111,9 +103,13 @@ export const es: LanguageTranslation = {
         clear: 'Limpiar',
         show_more: 'Mostrar más',
         show_less: 'Mostrar menos',
-        copy_to_clipboard: 'Copy to Clipboard',
-        copied: 'Copied!',
-
+        copy_to_clipboard: 'Copiar en el portapapeles',
+        copied: '¡Copiado!',
+        share_table_dialog: {
+            title: 'Compartir tabla',
+            description: 'Copia el siguiente enlace para compartir esta tabla.',
+            close: 'Cerrar',
+        },
         side_panel: {
             view_all_options: 'Ver todas las opciones...',
             tables_section: {
@@ -122,13 +118,11 @@ export const es: LanguageTranslation = {
                 add_view: 'Agregar Vista',
                 filter: 'Filtrar',
                 collapse: 'Colapsar Todo',
-                // TODO: Translate
-                clear: 'Clear Filter',
-                no_results: 'No tables found matching your filter.',
-                // TODO: Translate
-                show_list: 'Show Table List',
-                show_dbml: 'Show DBML Editor',
-
+                clear: 'Limpiar filtro',
+                no_results:
+                    'No se han encontrado tablas que coincidan con tu filtro.',
+                show_list: 'Mostrar lista de tablas',
+                show_dbml: 'Mostrar editor DBML',
                 table: {
                     fields: 'Campos',
                     nullable: '¿Opcional?',
@@ -149,11 +143,9 @@ export const es: LanguageTranslation = {
                         comments: 'Comentarios',
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
-                        // TODO: Translate
-                        default_value: 'Default Value',
-                        no_default: 'No default',
-                        // TODO: Translate
-                        character_length: 'Max Length',
+                        default_value: 'Valor por defecto',
+                        no_default: 'Ningún valor predeterminado',
+                        character_length: 'Longitud máxima',
                         precision: 'Precisión',
                         scale: 'Escala',
                     },
@@ -169,7 +161,7 @@ export const es: LanguageTranslation = {
                         change_schema: 'Cambiar Esquema',
                         add_field: 'Agregar Campo',
                         add_index: 'Agregar Índice',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Duplicar Tabla',
                         delete_table: 'Eliminar Tabla',
                     },
                 },
@@ -211,59 +203,57 @@ export const es: LanguageTranslation = {
                     description: 'Crea una relación para comenzar',
                 },
             },
-
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
-
+                areas: 'Áreas',
+                add_area: 'Agregar Área',
+                filter: 'Filtrar',
+                clear: 'Limpiar filtro',
+                no_results:
+                    'No se han encontrado áreas que coincidan con tu filtro.',
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Acciones de área',
+                        edit_name: 'Editar nombre',
+                        delete_area: 'Eliminar área',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'No hay áreas',
+                    description: 'Crea un área para empezar',
                 },
             },
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Tipos personalizados',
+                filter: 'Filtrar',
+                clear: 'Limpiar filtro',
+                no_results:
+                    'No se han encontrado tipos personalizados que coincidan con tu filtro.',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'No hay tipos personalizados',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Los tipos personalizados aparecerán aquí cuando estén disponibles en su base de datos',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Tipo',
+                    enum_values: 'Valores Enum',
+                    composite_fields: 'Campos',
+                    no_fields: 'Campo no definido.',
                     no_values: 'No hay valores de enum definidos',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nombre del campo',
+                    field_type_placeholder: 'Seleccionar tipo',
+                    add_field: 'Añadir Campo',
+                    no_fields_tooltip:
+                        'No hay campos definidos para este tipo personalizado',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Acciones',
+                        highlight_fields: 'Resaltar campos',
+                        delete_custom_type: 'Eliminar',
+                        clear_field_highlight: 'Borrar resaltado',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Eliminar tipo',
                 },
             },
         },
-
         toolbar: {
             zoom_in: 'Acercar',
             zoom_out: 'Alejar',
@@ -275,12 +265,10 @@ export const es: LanguageTranslation = {
             // TODO: Translate
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to clear',
+                'Resaltado "{{typeName}}" - Haga clic para borrar',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Filtrar tablas',
         },
-
         new_diagram_dialog: {
             database_selection: {
                 title: '¿Cuál es tu Base de Datos?',
@@ -289,7 +277,6 @@ export const es: LanguageTranslation = {
                 check_examples_long: 'Ver Ejemplos',
                 check_examples_short: 'Ejemplos',
             },
-
             import_database: {
                 title: 'Importa tu Base de Datos',
                 database_edition: 'Edición de Base de Datos:',
@@ -305,16 +292,13 @@ export const es: LanguageTranslation = {
                 instructions_link: '¿Necesitas ayuda? mira cómo',
                 check_script_result: 'Revisa el resultado del script',
             },
-
             cancel: 'Cancelar',
             back: 'Atrás',
-            // TODO: Translate
-            import_from_file: 'Import from File',
+            import_from_file: 'Importar desde Archivo',
             empty_diagram: 'Diagrama vacío',
             continue: 'Continuar',
             import: 'Importar',
         },
-
         open_diagram_dialog: {
             title: 'Abrir Base de Datos',
             description:
@@ -326,15 +310,14 @@ export const es: LanguageTranslation = {
                 tables_count: 'Tablas',
             },
             cancel: 'Cancelar',
+            start_new: 'Empezar con un nuevo diagrama',
             open: 'Abrir',
-
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
                 delete: 'Eliminar',
             },
         },
-
         export_sql_dialog: {
             title: 'Exportar SQL',
             description:
@@ -351,7 +334,6 @@ export const es: LanguageTranslation = {
                     'Siéntete libre de usar tu OPENAI_TOKEN, consulta el manual <0>aquí</0>.',
             },
         },
-
         create_relationship_dialog: {
             cancel: 'Cancelar',
             create: 'Crear',
@@ -367,7 +349,6 @@ export const es: LanguageTranslation = {
             referenced_table_placeholder: 'Seleccionar tabla',
             title: 'Crear Relación',
         },
-
         import_database_dialog: {
             title: 'Importar a Diagrama Actual',
             override_alert: {
@@ -386,7 +367,6 @@ export const es: LanguageTranslation = {
                 cancel: 'Cancelar',
             },
         },
-
         export_image_dialog: {
             title: 'Exportar imagen',
             description: 'Escoge el factor de escalamiento para exportar:',
@@ -396,14 +376,13 @@ export const es: LanguageTranslation = {
             scale_4x: '4x',
             cancel: 'Cancelar',
             export: 'Exportar',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
+            advanced_options: 'Opciones avanzadas',
+            pattern: 'Incluir patrón de fondo',
+            pattern_description:
+                'Añade un patrón de cuadrícula sutil al fondo.',
+            transparent: 'Fondo transparente',
+            transparent_description: 'Elimina el color de fondo de la imagen.',
         },
-
         new_table_schema_dialog: {
             title: 'Seleccionar Esquema',
             description:
@@ -411,7 +390,6 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             confirm: 'Confirmar',
         },
-
         update_table_schema_dialog: {
             title: 'Cambiar Esquema',
             description: 'Actualizar esquema de la tabla "{{tableName}}"',
@@ -425,7 +403,6 @@ export const es: LanguageTranslation = {
             create: 'Crear',
             cancel: 'Cancelar',
         },
-
         star_us_dialog: {
             title: '¡Ayúdanos a mejorar!',
             description:
@@ -433,44 +410,41 @@ export const es: LanguageTranslation = {
             close: 'Ahora no',
             confirm: '¡Claro!',
         },
-
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Exportar diagrama',
+            description: 'Elija el formato para la exportación:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Cancelar',
+            export: 'Exportar',
             error: {
-                title: 'Error exporting diagram',
+                title: 'Error al exportar el diagrama',
                 description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                    'Se ha producido un error. ¿Necesitas ayuda? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
-            cancel: 'Cancel',
-            import: 'Import',
+            title: 'Importar diagrama',
+            description: 'Pega el JSON del diagrama a continuación:',
+            cancel: 'Cancelar',
+            import: 'Importar',
             error: {
-                title: 'Error importing diagram',
+                title: 'Error al importar el diagrama',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                    'El JSON del diagrama no es válido. Compruebe el JSON e inténtelo de nuevo. ¿Necesitas ayuda? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_dbml_dialog: {
-            example_title: 'Import Example DBML',
-            title: 'Import DBML',
-            description: 'Import a database schema from DBML format.',
-            import: 'Import',
-            cancel: 'Cancel',
-            skip_and_empty: 'Skip & Empty',
-            show_example: 'Show Example',
+            example_title: 'Importar Ejemplo DBML',
+            title: 'Importar DBML',
+            description:
+                'Importar un esquema de base de datos desde el formato DBML.',
+            import: 'Importar',
+            cancel: 'Cancelar',
+            skip_and_empty: 'Saltar y vaciar',
+            show_example: 'Mostrar ejemplo',
             error: {
                 title: 'Error',
-                description: 'Failed to parse DBML. Please check the syntax.',
+                description: 'Error al analizar DBML. Comprueba la sintaxis.',
             },
         },
         relationship_type: {
@@ -479,33 +453,25 @@ export const es: LanguageTranslation = {
             many_to_one: 'Muchos a Uno',
             many_to_many: 'Muchos a Muchos',
         },
-
         canvas_context_menu: {
             new_table: 'Nueva Tabla',
             new_view: 'Nueva Vista',
             new_relationship: 'Nueva Relación',
-            // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Nueva Área',
         },
-
         table_node_context_menu: {
             edit_table: 'Editar Tabla',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Duplicar Tabla',
             delete_table: 'Eliminar Tabla',
-            add_relationship: 'Add Relationship', // TODO: Translate
+            add_relationship: 'Agregar Relación',
         },
-
-        // TODO: Add translations
-        snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
-
+        snap_to_grid_tooltip: 'Ajustar a la cuadrícula (mantener {{key}})',
         tool_tips: {
             double_click_to_edit: 'Doble clic para editar',
         },
-
         language_select: {
             change_language: 'Idioma',
         },
-
         on: 'Encendido',
         off: 'Apagado',
     },
