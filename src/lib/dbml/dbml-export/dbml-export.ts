@@ -596,6 +596,13 @@ const normalizeCharTypeFormat = (dbml: string): string => {
         .replace(/character \(([0-9]+)\)/g, 'character($1)');
 };
 
+// Fix array types that are incorrectly quoted by DBML importer
+const fixArrayTypes = (dbml: string): string => {
+    // Remove quotes around array types like "text[]" -> text[]
+    // Matches patterns like: "fieldname" "type[]" and replaces with "fieldname" type[]
+    return dbml.replace(/(\s+"[^"]+"\s+)"([^"\s]+\[\])"/g, '$1$2');
+};
+
 // Fix table definitions with incorrect bracket syntax
 const fixTableBracketSyntax = (dbml: string): string => {
     // Fix patterns like Table [schema].[table] to Table "schema"."table"
@@ -985,12 +992,14 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             );
         }
 
-        standard = normalizeCharTypeFormat(
-            fixMultilineTableNames(
-                fixTableBracketSyntax(
-                    importer.import(
-                        baseScript,
-                        databaseTypeToImportFormat(diagram.databaseType)
+        standard = fixArrayTypes(
+            normalizeCharTypeFormat(
+                fixMultilineTableNames(
+                    fixTableBracketSyntax(
+                        importer.import(
+                            baseScript,
+                            databaseTypeToImportFormat(diagram.databaseType)
+                        )
                     )
                 )
             )
@@ -1007,7 +1016,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             standard = enumsDBML + '\n\n' + standard;
         }
 
-        inline = normalizeCharTypeFormat(convertToInlineRefs(standard));
+        inline = fixArrayTypes(
+            normalizeCharTypeFormat(convertToInlineRefs(standard))
+        );
 
         // Clean up excessive empty lines in both outputs
         standard = standard.replace(/\n\s*\n\s*\n/g, '\n\n');

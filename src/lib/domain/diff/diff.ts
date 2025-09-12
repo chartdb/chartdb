@@ -57,3 +57,40 @@ export type DiffObject<
     | FieldDiff<TField>['object']
     | IndexDiff<TIndex>['object']
     | RelationshipDiff<TRelationship>['object'];
+
+type ExtractDiffKind<T> = T extends { object: infer O; type: infer Type }
+    ? T extends { attribute: infer A }
+        ? { object: O; type: Type; attribute: A }
+        : { object: O; type: Type }
+    : never;
+
+export type DiffKind<
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+> = ExtractDiffKind<ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
+
+export const isDiffOfKind = <
+    TTable = DBTable,
+    TField = DBField,
+    TIndex = DBIndex,
+    TRelationship = DBRelationship,
+>(
+    diff: ChartDBDiff<TTable, TField, TIndex, TRelationship>,
+    kind: DiffKind<TTable, TField, TIndex, TRelationship>
+): boolean => {
+    if ('attribute' in kind) {
+        return (
+            diff.object === kind.object &&
+            diff.type === kind.type &&
+            diff.attribute === kind.attribute
+        );
+    }
+
+    if ('attribute' in diff) {
+        return false;
+    }
+
+    return diff.object === kind.object && diff.type === kind.type;
+};
