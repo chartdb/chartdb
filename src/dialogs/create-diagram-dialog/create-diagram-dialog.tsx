@@ -34,7 +34,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog, openImportDBMLDialog } = useDialog();
+    const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
     const [databaseEdition, setDatabaseEdition] = useState<
@@ -152,10 +152,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         await updateConfig({ config: { defaultDiagramId: diagram.id } });
         closeCreateDiagramDialog();
         navigate(`/diagrams/${diagram.id}`);
-        setTimeout(
-            () => openImportDBMLDialog({ withCreateEmptyDiagram: true }),
-            700
-        );
     }, [
         databaseType,
         addDiagram,
@@ -164,7 +160,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         navigate,
         updateConfig,
         diagramNumber,
-        openImportDBMLDialog,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {
