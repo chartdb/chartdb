@@ -33,6 +33,10 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
     const { fitView } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
+    const [editTableModeTable, setEditTableModeTable] = useState<{
+        tableId: string;
+        fieldId?: string;
+    } | null>(null);
 
     const [showFilter, setShowFilter] = useState(false);
     const diagramIdActiveFilterRef = useRef<string>();
@@ -127,6 +131,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 overlapGraph,
                 setShowFilter,
                 showFilter,
+                editTableModeTable,
+                setEditTableModeTable,
             }}
         >
             {children}

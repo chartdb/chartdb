@@ -14,6 +14,16 @@ export interface CanvasContext {
     overlapGraph: Graph<string>;
     setShowFilter: React.Dispatch<React.SetStateAction<boolean>>;
     showFilter: boolean;
+    editTableModeTable: {
+        tableId: string;
+        fieldId?: string;
+    } | null;
+    setEditTableModeTable: React.Dispatch<
+        React.SetStateAction<{
+            tableId: string;
+            fieldId?: string;
+        } | null>
+    >;
 }
 
 export const canvasContext = createContext<CanvasContext>({
@@ -23,4 +33,6 @@ export const canvasContext = createContext<CanvasContext>({
     overlapGraph: createGraph(),
     setShowFilter: emptyFn,
     showFilter: false,
+    editTableModeTable: null,
+    setEditTableModeTable: emptyFn,
 });
