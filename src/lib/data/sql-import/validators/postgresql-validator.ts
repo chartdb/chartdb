@@ -3,6 +3,8 @@
  * Provides user-friendly error messages for common SQL syntax issues
  */
 
+import { detectForeignDialect } from './dialect-detection';
+
 export interface ValidationResult {
     isValid: boolean;
     errors: ValidationError[];
@@ -212,7 +214,13 @@ export function validatePostgreSQLDialect(sql: string): ValidationResult {
         });
     }
 
-    // 9. Count CREATE TABLE statements
+    // 9. Check for foreign SQL dialects
+    const foreignDialectError = detectForeignDialect(lines, 'PostgreSQL');
+    if (foreignDialectError) {
+        errors.push(foreignDialectError);
+    }
+
+    // 10. Count CREATE TABLE statements
     let tableCount = 0;
     const createTableRegex =
         /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?[^"\s.]+?"?\.)?["'`]?[^"'`\s.(]+["'`]?/gi;
