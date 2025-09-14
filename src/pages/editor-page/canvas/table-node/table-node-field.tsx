@@ -35,6 +35,7 @@ import {
     TOP_SOURCE_HANDLE_ID_PREFIX,
 } from './table-node-dependency-indicator';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useLayout } from '@/hooks/use-layout';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -250,13 +251,20 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         }, [highlightedCustomType, field.type.name]);
         const { showFieldAttributes } = useLocalConfig();
 
+        const { closeAllTablesInSidebar } = useLayout();
         const { setEditTableModeTable } = useCanvas();
         const openEditTableOnField = useCallback(() => {
+            closeAllTablesInSidebar();
             setEditTableModeTable({
                 tableId: tableNodeId,
                 fieldId: field.id,
             });
-        }, [setEditTableModeTable, tableNodeId, field.id]);
+        }, [
+            setEditTableModeTable,
+            closeAllTablesInSidebar,
+            tableNodeId,
+            field.id,
+        ]);
 
         return (
             <div

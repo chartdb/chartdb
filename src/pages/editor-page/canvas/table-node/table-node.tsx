@@ -366,12 +366,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             ]
         );
 
-        const enterEditTableMode = useCallback(
-            (fieldId?: string) => {
-                setEditTableModeTable({ tableId: table.id, fieldId });
-            },
-            [table.id, setEditTableModeTable]
-        );
+        const enterEditTableMode = useCallback(() => {
+            closeAllTablesInSidebar();
+            setEditTableModeTable({ tableId: table.id });
+        }, [table.id, setEditTableModeTable, closeAllTablesInSidebar]);
 
         const exitEditTableMode = useCallback(() => {
             setEditTableModeTable(null);
@@ -393,9 +391,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     className={tableClassName}
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
-                            // openTableInEditor();
                             enterEditTableMode();
-                            closeAllTablesInSidebar();
                         }
                     }}
                     onMouseEnter={() => setIsHovering(true)}
