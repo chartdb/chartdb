@@ -367,9 +367,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         );
 
         const enterEditTableMode = useCallback(() => {
+            if (readonly) {
+                return;
+            }
+
             closeAllTablesInSidebar();
             setEditTableModeTable({ tableId: table.id });
-        }, [table.id, setEditTableModeTable, closeAllTablesInSidebar]);
+        }, [
+            table.id,
+            setEditTableModeTable,
+            closeAllTablesInSidebar,
+            readonly,
+        ]);
 
         const exitEditTableMode = useCallback(() => {
             setEditTableModeTable(null);

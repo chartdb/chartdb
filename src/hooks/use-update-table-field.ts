@@ -67,6 +67,7 @@ export const useUpdateTableField = (
         databaseType,
         customTypes,
         updateField: chartDBUpdateField,
+        removeField: chartDBRemoveField,
     } = useChartDB();
 
     // Local state for responsive UI
@@ -299,6 +300,10 @@ export const useUpdateTableField = (
         [field, databaseType]
     );
 
+    const removeField = useCallback(() => {
+        chartDBRemoveField(table.id, field.id);
+    }, [chartDBRemoveField, table.id, field.id]);
+
     return {
         dataFieldOptions,
         handleDataTypeChange,
@@ -310,5 +315,6 @@ export const useUpdateTableField = (
         fieldName: localFieldName,
         nullable: localNullable,
         primaryKey: localPrimaryKey,
+        removeField,
     };
 };

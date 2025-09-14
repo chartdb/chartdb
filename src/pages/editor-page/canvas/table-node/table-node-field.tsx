@@ -254,6 +254,10 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const { closeAllTablesInSidebar } = useLayout();
         const { setEditTableModeTable } = useCanvas();
         const openEditTableOnField = useCallback(() => {
+            if (readonly) {
+                return;
+            }
+
             closeAllTablesInSidebar();
             setEditTableModeTable({
                 tableId: tableNodeId,
@@ -264,6 +268,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             closeAllTablesInSidebar,
             tableNodeId,
             field.id,
+            readonly,
         ]);
 
         return (

@@ -31,9 +31,13 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
         const [focusFieldId, setFocusFieldId] = useState<string | undefined>(
             focusFieldIdProp
         );
+        const inputRef = useRef<HTMLInputElement>(null);
 
         useEffect(() => {
             setFocusFieldId(focusFieldIdProp);
+            if (!focusFieldIdProp) {
+                inputRef.current?.select();
+            }
         }, [focusFieldIdProp]);
 
         // Callback to store field refs
@@ -100,7 +104,6 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
             const field = await createField(table.id);
 
             if (field.id) {
-                // scrollToFieldId(field.id);
                 setFocusFieldId(field.id);
             }
         }, [createField, table.id]);
@@ -144,6 +147,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                             popoverOnClick={(e) => e.stopPropagation()}
                         />
                         <Input
+                            ref={inputRef}
                             className="h-6 flex-1 rounded-sm border-slate-600 bg-background text-sm"
                             placeholder="Table name"
                             value={tableName}

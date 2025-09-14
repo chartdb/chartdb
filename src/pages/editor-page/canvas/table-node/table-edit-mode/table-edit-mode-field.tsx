@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { KeyRound } from 'lucide-react';
+import { KeyRound, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import type { DBTable } from '@/lib/domain';
@@ -51,6 +51,7 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
             fieldName,
             nullable,
             primaryKey,
+            removeField,
         } = useUpdateTableField(table, field);
 
         const inputRef = React.useRef<HTMLInputElement>(null);
@@ -169,6 +170,21 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                         </TooltipTrigger>
                         <TooltipContent>
                             {t('side_panel.tables_section.table.primary_key')}
+                        </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <TableFieldToggle onPressedChange={removeField}>
+                                    <Trash2 className="h-3.5 text-red-700" />
+                                </TableFieldToggle>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t(
+                                'side_panel.tables_section.table.field_actions.delete_field'
+                            )}
                         </TooltipContent>
                     </Tooltip>
                 </div>
