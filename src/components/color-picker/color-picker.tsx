@@ -11,12 +11,14 @@ export interface ColorPickerProps {
     color: string;
     onChange: (color: string) => void;
     disabled?: boolean;
+    popoverOnMouseDown?: (e: React.MouseEvent) => void;
+    popoverOnClick?: (e: React.MouseEvent) => void;
 }
 
 export const ColorPicker = React.forwardRef<
     React.ElementRef<typeof PopoverTrigger>,
     ColorPickerProps
->(({ color, onChange, disabled }, ref) => {
+>(({ color, onChange, disabled, popoverOnMouseDown, popoverOnClick }, ref) => {
     return (
         <Popover>
             <PopoverTrigger
@@ -37,7 +39,11 @@ export const ColorPicker = React.forwardRef<
                     }}
                 />
             </PopoverTrigger>
-            <PopoverContent className="w-fit">
+            <PopoverContent
+                className="w-fit"
+                onMouseDown={popoverOnMouseDown}
+                onClick={popoverOnClick}
+            >
                 <div className="grid grid-cols-4 gap-2">
                     {colorOptions.map((option) => (
                         <div

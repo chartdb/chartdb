@@ -89,6 +89,7 @@ import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-f
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useClickAway } from 'react-use';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -244,6 +245,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         overlapGraph,
         showFilter,
         setShowFilter,
+        setEditTableModeTable,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
@@ -1213,6 +1215,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setTimeout(() => setHighlightOverlappingTables(false), 600);
     }, []);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+    const exitEditTableMode = useCallback(
+        () => setEditTableModeTable(null),
+        [setEditTableModeTable]
+    );
+    useClickAway(containerRef, exitEditTableMode);
+
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
@@ -1230,7 +1239,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     return (
         <CanvasContextMenu>
-            <div className="relative flex h-full" id="canvas">
+            <div
+                className="relative flex h-full"
+                id="canvas"
+                ref={containerRef}
+            >
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
@@ -1255,6 +1268,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
+                    onPaneClick={exitEditTableMode}
                 >
                     <Controls
                         position="top-left"
