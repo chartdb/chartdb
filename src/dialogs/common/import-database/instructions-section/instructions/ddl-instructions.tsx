@@ -43,8 +43,8 @@ const DDLInstructionsMap: Record<DatabaseType, DDLInstruction[]> = {
         },
         {
             text: 'Execute the following command in your terminal:',
-            code: `sqlite3 <database_file_path>\n.dump > <output_file_path>`,
-            example: `sqlite3 my_db.db\n.dump > schema_export.sql`,
+            code: `sqlite3 <database_file_path>\n".schema" > <output_file_path>`,
+            example: `sqlite3 my_db.db\n".schema" > schema_export.sql`,
         },
         {
             text: 'Open the exported SQL file, copy its contents, and paste them here.',
