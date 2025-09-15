@@ -56,6 +56,8 @@ export interface SelectBoxProps {
     popoverClassName?: string;
     readonly?: boolean;
     footerButtons?: React.ReactNode;
+    commandOnMouseDown?: (e: React.MouseEvent) => void;
+    commandOnClick?: (e: React.MouseEvent) => void;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -83,6 +85,8 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             popoverClassName,
             readonly,
             footerButtons,
+            commandOnMouseDown,
+            commandOnClick,
         },
         ref
     ) => {
@@ -243,6 +247,8 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                                 matches?.map((match) => match?.toString())
                             )
                         }
+                        onMouseDown={commandOnMouseDown}
+                        onClick={commandOnClick}
                     >
                         {multiple && (
                             <div
@@ -288,7 +294,15 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     </CommandItem>
                 );
             },
-            [value, multiple, searchTerm, handleSelect, optionSuffix]
+            [
+                value,
+                multiple,
+                searchTerm,
+                handleSelect,
+                optionSuffix,
+                commandOnClick,
+                commandOnMouseDown,
+            ]
         );
 
         return (
@@ -366,6 +380,8 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         popoverClassName
                     )}
                     align="center"
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                 >
                     <Command
                         filter={(value, search, keywords) => {

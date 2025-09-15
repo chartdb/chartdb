@@ -14,7 +14,6 @@ import {
     Table2,
     ChevronDown,
     ChevronUp,
-    Check,
     CircleDotDashed,
     SquareDot,
     SquarePlus,
@@ -38,8 +37,6 @@ import { TableNodeContextMenu } from './table-node-context-menu';
 import { cn } from '@/lib/utils';
 import { TableNodeDependencyIndicator } from './table-node-dependency-indicator';
 import type { EdgeType } from '../canvas';
-import { Input } from '@/components/input/input';
-import { useClickAway, useKeyPressEvent } from 'react-use';
 import {
     Tooltip,
     TooltipContent,
@@ -47,6 +44,8 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { TableNodeStatus } from './table-node-status/table-node-status';
+import { TableEditMode } from './table-edit-mode/table-edit-mode';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export type TableNodeType = Node<
     {
@@ -74,13 +73,29 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
-        const { openTableFromSidebar, selectSidebarSection } = useLayout();
+        const {
+            openTableFromSidebar,
+            selectSidebarSection,
+            closeAllTablesInSidebar,
+        } = useLayout();
         const [expanded, setExpanded] = useState(table.expanded ?? false);
         const { t } = useTranslation();
-        const [editMode, setEditMode] = useState(false);
-        const [tableName, setTableName] = useState(table.name);
-        const inputRef = React.useRef<HTMLInputElement>(null);
         const [isHovering, setIsHovering] = useState(false);
+        const { setEditTableModeTable, editTableModeTable } = useCanvas();
+
+        // Get edit mode state directly from context
+        const editTableMode = useMemo(
+            () => editTableModeTable?.tableId === table.id,
+            [editTableModeTable, table.id]
+        );
+        const editTableModeFieldId = useMemo(
+            () => (editTableMode ? editTableModeTable?.fieldId : null),
+            [editTableMode, editTableModeTable]
+        );
+
+        // Store the initial field count when entering edit mode to keep table height fixed
+        const [editModeInitialFieldCount, setEditModeInitialFieldCount] =
+            useState<number | null>(null);
 
         const connection = useConnection();
 
@@ -100,6 +115,17 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         } = useDiff();
 
         const fields = useMemo(() => table.fields, [table.fields]);
+
+        // Effect to manage field count when entering/exiting edit mode
+        useEffect(() => {
+            if (editTableMode && editModeInitialFieldCount === null) {
+                // Entering edit mode - capture current field count
+                setEditModeInitialFieldCount(fields.length);
+            } else if (!editTableMode && editModeInitialFieldCount !== null) {
+                // Exiting edit mode - reset
+                setEditModeInitialFieldCount(null);
+            }
+        }, [editTableMode, fields.length, editModeInitialFieldCount]);
 
         const tableChangedName = useMemo(
             () => getTableNewName({ tableId: table.id }),
@@ -235,14 +261,20 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         }, [relationships]);
 
         const visibleFields = useMemo(() => {
-            if (expanded || fields.length <= TABLE_MINIMIZED_FIELDS) {
-                return fields;
+            // If in edit mode, use the initial field count to keep consistent height
+            const fieldsToConsider =
+                editTableMode && editModeInitialFieldCount !== null
+                    ? fields.slice(0, editModeInitialFieldCount)
+                    : fields;
+
+            if (expanded || fieldsToConsider.length <= TABLE_MINIMIZED_FIELDS) {
+                return fieldsToConsider;
             }
 
             const mustDisplayedFields: DBField[] = [];
             const nonMustDisplayedFields: DBField[] = [];
 
-            for (const field of fields) {
+            for (const field of fieldsToConsider) {
                 if (relatedFieldIds.has(field.id) || field.primaryKey) {
                     mustDisplayedFields.push(field);
                 } else {
@@ -269,40 +301,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 ...visibleMustDisplayedFields,
                 ...visibleNonMustDisplayedFields,
             ]);
-            const result = fields.filter((field) =>
+            const result = fieldsToConsider.filter((field) =>
                 visibleFieldsSet.has(field)
             );
 
             return result;
-        }, [expanded, fields, relatedFieldIds]);
-
-        const editTableName = useCallback(() => {
-            if (!editMode) return;
-            if (tableName.trim()) {
-                updateTable(table.id, { name: tableName.trim() });
-            }
-            setEditMode(false);
-        }, [tableName, table.id, updateTable, editMode]);
-
-        const abortEdit = useCallback(() => {
-            setEditMode(false);
-            setTableName(table.name);
-        }, [table.name]);
-
-        useClickAway(inputRef, editTableName);
-        useKeyPressEvent('Enter', editTableName);
-        useKeyPressEvent('Escape', abortEdit);
-
-        const enterEditMode = useCallback((e: React.MouseEvent) => {
-            e.stopPropagation();
-            setEditMode(true);
-        }, []);
-
-        React.useEffect(() => {
-            if (table.name.trim()) {
-                setTableName(table.name.trim());
-            }
-        }, [table.name]);
+        }, [
+            expanded,
+            fields,
+            relatedFieldIds,
+            editTableMode,
+            editModeInitialFieldCount,
+        ]);
 
         const tableClassName = useMemo(
             () =>
@@ -337,7 +347,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         : '',
                     isDiffTableRemoved
                         ? 'outline outline-[3px] outline-red-500 dark:outline-red-900 outline-offset-[5px]'
-                        : ''
+                        : editTableMode
+                          ? 'invisible'
+                          : ''
                 ),
             [
                 selected,
@@ -350,16 +362,45 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isDiffNewTable,
                 isDiffTableRemoved,
                 isTarget,
+                editTableMode,
             ]
         );
 
+        const enterEditTableMode = useCallback(() => {
+            if (readonly) {
+                return;
+            }
+
+            closeAllTablesInSidebar();
+            setEditTableModeTable({ tableId: table.id });
+        }, [
+            table.id,
+            setEditTableModeTable,
+            closeAllTablesInSidebar,
+            readonly,
+        ]);
+
+        const exitEditTableMode = useCallback(() => {
+            setEditTableModeTable(null);
+        }, [setEditTableModeTable]);
+
         return (
             <TableNodeContextMenu table={table}>
+                {editTableMode ? (
+                    <TableEditMode
+                        table={table}
+                        color={tableColor}
+                        focusFieldId={editTableModeFieldId ?? undefined}
+                        onClose={() => {
+                            exitEditTableMode();
+                        }}
+                    />
+                ) : null}
                 <div
                     className={tableClassName}
                     onClick={(e) => {
-                        if (e.detail === 2) {
-                            openTableInEditor();
+                        if (e.detail === 2 && !readonly) {
+                            enterEditTableMode();
                         }
                     }}
                     onMouseEnter={() => setIsHovering(true)}
@@ -456,47 +497,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
                                     {table.name}
                                 </Label>
-                            ) : editMode && !readonly ? (
-                                <>
-                                    <Input
-                                        ref={inputRef}
-                                        onBlur={editTableName}
-                                        placeholder={table.name}
-                                        autoFocus
-                                        type="text"
-                                        value={tableName}
-                                        onClick={(e) => e.stopPropagation()}
-                                        onChange={(e) =>
-                                            setTableName(e.target.value)
-                                        }
-                                        className="h-6 w-full border-[0.5px] border-blue-400 bg-slate-100 focus-visible:ring-0 dark:bg-slate-900"
-                                    />
-                                    <Button
-                                        variant="ghost"
-                                        className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                        onClick={editTableName}
-                                    >
-                                        <Check className="size-4" />
-                                    </Button>
-                                </>
                             ) : (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Label
-                                            className="text-editable truncate px-2 py-0.5 text-sm font-bold"
-                                            onDoubleClick={enterEditMode}
-                                        >
-                                            {table.name}
-                                        </Label>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t('tool_tips.double_click_to_edit')}
-                                    </TooltipContent>
-                                </Tooltip>
+                                <Label className="truncate px-2 py-0.5 text-sm font-bold">
+                                    {table.name}
+                                </Label>
                             )}
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
-                            {readonly || editMode ? null : (
+                            {readonly ? null : (
                                 <Button
                                     variant="ghost"
                                     className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
@@ -505,30 +513,28 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     <CircleDotDashed className="size-4" />
                                 </Button>
                             )}
-                            {editMode ? null : (
-                                <Button
-                                    variant="ghost"
-                                    className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                    onClick={
-                                        table.width !== MAX_TABLE_SIZE
-                                            ? expandTable
-                                            : shrinkTable
-                                    }
-                                >
-                                    {table.width !== MAX_TABLE_SIZE ? (
-                                        <ChevronsLeftRight className="size-4" />
-                                    ) : (
-                                        <ChevronsRightLeft className="size-4" />
-                                    )}
-                                </Button>
-                            )}
+                            <Button
+                                variant="ghost"
+                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                onClick={
+                                    table.width !== MAX_TABLE_SIZE
+                                        ? expandTable
+                                        : shrinkTable
+                                }
+                            >
+                                {table.width !== MAX_TABLE_SIZE ? (
+                                    <ChevronsLeftRight className="size-4" />
+                                ) : (
+                                    <ChevronsRightLeft className="size-4" />
+                                )}
+                            </Button>
                         </div>
                     </div>
                     <div
                         className="transition-[max-height] duration-200 ease-in-out"
                         style={{
                             maxHeight: expanded
-                                ? `${fields.length * 2}rem` // h-8 per field
+                                ? `${(editTableMode && editModeInitialFieldCount !== null ? editModeInitialFieldCount : fields.length) * 2}rem` // h-8 per field
                                 : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                         }}
                     >
@@ -544,7 +550,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             />
                         ))}
                     </div>
-                    {fields.length > TABLE_MINIMIZED_FIELDS && (
+                    {(editTableMode && editModeInitialFieldCount !== null
+                        ? editModeInitialFieldCount
+                        : fields.length) > TABLE_MINIMIZED_FIELDS && (
                         <div
                             className="z-10 flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                             onClick={toggleExpand}

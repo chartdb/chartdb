@@ -15,6 +15,8 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 
+export const defaultDBMLDiagramName = 'DBML Import';
+
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
     let processed = content;
@@ -196,7 +198,7 @@ export const importDBMLToDiagram = async (
         if (!dbmlContent.trim()) {
             return {
                 id: generateDiagramId(),
-                name: 'DBML Import',
+                name: defaultDBMLDiagramName,
                 databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
@@ -214,7 +216,7 @@ export const importDBMLToDiagram = async (
         if (!sanitizedContent.trim()) {
             return {
                 id: generateDiagramId(),
-                name: 'DBML Import',
+                name: defaultDBMLDiagramName,
                 databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
@@ -229,7 +231,7 @@ export const importDBMLToDiagram = async (
         if (!parsedData.schemas || parsedData.schemas.length === 0) {
             return {
                 id: generateDiagramId(),
-                name: 'DBML Import',
+                name: defaultDBMLDiagramName,
                 databaseType: options?.databaseType ?? DatabaseType.GENERIC,
                 tables: [],
                 relationships: [],
@@ -734,7 +736,7 @@ export const importDBMLToDiagram = async (
 
         return {
             id: generateDiagramId(),
-            name: 'DBML Import',
+            name: defaultDBMLDiagramName,
             databaseType: options?.databaseType ?? DatabaseType.GENERIC,
             tables,
             relationships,
