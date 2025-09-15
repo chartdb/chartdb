@@ -184,9 +184,6 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem onClick={openImportDiagramDialog}>
                                 .json
                             </MenubarItem>
-                            <MenubarItem onClick={createNewDiagram}>
-                                Database Script (SQL/DBML)
-                            </MenubarItem>
                             <MenubarSeparator />
                             <MenubarItem
                                 onClick={() =>
