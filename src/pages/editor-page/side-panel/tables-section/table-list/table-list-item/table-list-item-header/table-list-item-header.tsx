@@ -15,7 +15,8 @@ import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-h
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useClickAway, useKeyPressEvent } from 'react-use';
+import { useEditClickOutside } from '@/hooks/use-click-outside';
+import { useKeyPressEvent } from 'react-use';
 import { useSortable } from '@dnd-kit/sortable';
 import {
     DropdownMenu,
@@ -67,27 +68,30 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { listeners } = useSortable({ id: table.id });
 
     const editTableName = useCallback(() => {
-        if (!editMode) return;
         if (tableName.trim()) {
             updateTable(table.id, { name: tableName.trim() });
         }
-
         setEditMode(false);
-    }, [tableName, table.id, updateTable, editMode]);
+    }, [tableName, table.id, updateTable]);
 
     const abortEdit = useCallback(() => {
         setEditMode(false);
         setTableName(table.name);
     }, [table.name]);
 
-    useClickAway(inputRef, editTableName);
+    // Handle click outside to save and exit edit mode
+    useEditClickOutside(inputRef, editMode, editTableName);
     useKeyPressEvent('Enter', editTableName);
     useKeyPressEvent('Escape', abortEdit);
 
-    const enterEditMode = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setEditMode(true);
-    };
+    const enterEditMode = useCallback(
+        (e: React.MouseEvent) => {
+            e.stopPropagation();
+            setTableName(table.name);
+            setEditMode(true);
+        },
+        [table.name]
+    );
 
     const handleFocusOnTable = useCallback(
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -248,6 +252,20 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             setTableName(table.name.trim());
         }
     }, [table.name]);
+
+    useEffect(() => {
+        if (editMode) {
+            // Small delay to ensure the input is rendered
+            const timeoutId = setTimeout(() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                    inputRef.current.select();
+                }
+            }, 50);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [editMode]);
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
