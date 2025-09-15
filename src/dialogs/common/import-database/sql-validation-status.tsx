@@ -73,7 +73,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
 
             {hasErrors ? (
                 <div className="rounded-md border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
-                    <ScrollArea className="h-24">
+                    <ScrollArea className="h-fit max-h-24">
                         <div className="space-y-3 p-3 pt-2 text-red-700 dark:text-red-300">
                             {validation?.errors
                                 .slice(0, 3)
@@ -137,7 +137,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
 
             {hasWarnings && !hasErrors ? (
                 <div className="rounded-md border border-sky-200 bg-sky-50 dark:border-sky-800 dark:bg-sky-950">
-                    <ScrollArea className="h-24">
+                    <ScrollArea className="h-fit max-h-24">
                         <div className="space-y-3 p-3 pt-2 text-sky-700 dark:text-sky-300">
                             <div className="flex items-start gap-2">
                                 <AlertTriangle className="mt-0.5 size-4 shrink-0 text-sky-700 dark:text-sky-300" />

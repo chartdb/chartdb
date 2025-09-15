@@ -26,6 +26,7 @@ import {
     defaultDBMLDiagramName,
     importDBMLToDiagram,
 } from '@/lib/dbml/dbml-import/dbml-import';
+import type { ImportMethod } from '@/lib/import-method/import-method';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -34,9 +35,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
-    const [importMethod, setImportMethod] = useState<'query' | 'ddl' | 'dbml'>(
-        'query'
-    );
+    const [importMethod, setImportMethod] = useState<ImportMethod>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );

@@ -32,7 +32,6 @@ import {
 } from '@/components/resizable/resizable';
 import { useTheme } from '@/hooks/use-theme';
 import type { OnChange } from '@monaco-editor/react';
-import { useMonaco } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
@@ -43,12 +42,10 @@ import {
     type ValidationResult,
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
-import { Parser } from '@dbml/core';
-import {
-    preprocessDBML,
-    sanitizeDBML,
-} from '@/lib/dbml/dbml-import/dbml-import';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import type { ImportMethod } from '@/lib/import-method/import-method';
+import { detectImportMethod } from '@/lib/import-method/detect-import-method';
+import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
 
 const calculateContentSizeMB = (content: string): number => {
     return content.length / (1024 * 1024); // Convert to MB
@@ -61,67 +58,6 @@ const calculateIsLargeFile = (content: string): boolean => {
 
 const errorScriptOutputMessage =
     'Invalid JSON. Please correct it or contact us at support@chartdb.io for help.';
-
-// Helper to detect if content is likely SQL DDL, JSON, or DBML
-const detectContentType = (
-    content: string
-): 'query' | 'ddl' | 'dbml' | null => {
-    if (!content || content.trim().length === 0) return null;
-
-    const upperContent = content.toUpperCase();
-
-    // Check for DBML patterns first (case sensitive)
-    const dbmlPatterns = [
-        /^Table\s+\w+\s*{/m,
-        /^Ref:\s*\w+/m,
-        /^Enum\s+\w+\s*{/m,
-        /^TableGroup\s+/m,
-        /^Note\s+\w+\s*{/m,
-        /\[pk\]/,
-        /\[ref:\s*[<>-]/,
-    ];
-
-    const hasDBMLPatterns = dbmlPatterns.some((pattern) =>
-        pattern.test(content)
-    );
-    if (hasDBMLPatterns) return 'dbml';
-
-    // Common SQL DDL keywords
-    const ddlKeywords = [
-        'CREATE TABLE',
-        'ALTER TABLE',
-        'DROP TABLE',
-        'CREATE INDEX',
-        'CREATE VIEW',
-        'CREATE PROCEDURE',
-        'CREATE FUNCTION',
-        'CREATE SCHEMA',
-        'CREATE DATABASE',
-    ];
-
-    // Check for SQL DDL patterns
-    const hasDDLKeywords = ddlKeywords.some((keyword) =>
-        upperContent.includes(keyword)
-    );
-    if (hasDDLKeywords) return 'ddl';
-
-    // Check if it looks like JSON
-    try {
-        // Just check structure, don't need full parse for detection
-        if (
-            (content.trim().startsWith('{') && content.trim().endsWith('}')) ||
-            (content.trim().startsWith('[') && content.trim().endsWith(']'))
-        ) {
-            return 'query';
-        }
-    } catch (error) {
-        // Not valid JSON, might be partial
-        console.error('Error detecting content type:', error);
-    }
-
-    // If we can't confidently detect, return null
-    return null;
-};
 
 export interface ImportDatabaseProps {
     goBack?: () => void;
@@ -136,8 +72,8 @@ export interface ImportDatabaseProps {
     >;
     keepDialogAfterImport?: boolean;
     title: string;
-    importMethod: 'query' | 'ddl' | 'dbml';
-    setImportMethod: (method: 'query' | 'ddl' | 'dbml') => void;
+    importMethod: ImportMethod;
+    setImportMethod: (method: ImportMethod) => void;
 }
 
 export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
@@ -155,9 +91,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     setImportMethod,
 }) => {
     const { effectiveTheme } = useTheme();
-    const monaco = useMonaco();
     const [errorMessage, setErrorMessage] = useState('');
-    const [editorMounted, setEditorMounted] = useState(false);
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const pasteDisposableRef = useRef<IDisposable | null>(null);
 
@@ -196,33 +130,21 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
         if (importMethod === 'dbml') {
             // Validate DBML by parsing it
-            try {
-                const preprocessedContent = preprocessDBML(scriptResult);
-                const sanitizedContent = sanitizeDBML(preprocessedContent);
-                const parser = new Parser();
-                parser.parse(sanitizedContent, 'dbml');
+            const validateResponse = verifyDBML(scriptResult);
+            if (!validateResponse.hasError) {
                 setErrorMessage('');
                 setSqlValidation({
                     isValid: true,
                     errors: [],
                     warnings: [],
                 });
-            } catch (e) {
-                // Parser failed, use error from parser
+            } else {
                 let errorMsg = 'Invalid DBML syntax';
-                let line: number | undefined;
+                let line: number = 1;
 
-                if (e && typeof e === 'object' && 'diags' in e) {
-                    const error = e as {
-                        diags: Array<{
-                            message: string;
-                            location?: { start?: { line: number } };
-                        }>;
-                    };
-                    if (error.diags && error.diags[0]) {
-                        errorMsg = error.diags[0].message;
-                        line = error.diags[0].location?.start?.line;
-                    }
+                if (validateResponse.parsedError) {
+                    errorMsg = validateResponse.parsedError.message;
+                    line = validateResponse.parsedError.line;
                 }
 
                 setSqlValidation({
@@ -230,7 +152,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     errors: [
                         {
                             message: errorMsg,
-                            line: line || 1,
+                            line: line,
                             type: 'syntax' as const,
                         },
                     ],
@@ -395,38 +317,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         };
     }, []);
 
-    // Setup DBML language and theme when import method or theme changes
-    useEffect(() => {
-        if (!monaco || !editorMounted || !editorRef.current) return;
-
-        if (importMethod === 'dbml') {
-            // First ensure DBML language is set up
-            setupDBMLLanguage(monaco);
-
-            // Get the current model and set its language to DBML
-            const model = editorRef.current.getModel();
-            if (model) {
-                monaco.editor.setModelLanguage(model, 'dbml');
-            }
-
-            // Then apply the theme with a small delay to ensure it takes effect
-            setTimeout(() => {
-                const themeName =
-                    effectiveTheme === 'dark' ? 'dbml-dark' : 'dbml-light';
-                monaco.editor.setTheme(themeName);
-            }, 50);
-        } else {
-            // Reset to default theme when not DBML
-            monaco.editor.setTheme(
-                effectiveTheme === 'dark' ? 'vs-dark' : 'vs'
-            );
-        }
-    }, [monaco, editorMounted, importMethod, effectiveTheme]);
-
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
-            setEditorMounted(true);
 
             // Cleanup previous disposable if it exists
             if (pasteDisposableRef.current) {
@@ -445,7 +338,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 const isLargeFile = calculateIsLargeFile(content);
 
                 // First, detect content type to determine if we should switch modes
-                const detectedType = detectContentType(content);
+                const detectedType = detectImportMethod(content);
                 if (detectedType && detectedType !== importMethod) {
                     // Switch to the detected mode immediately
                     setImportMethod(detectedType);
@@ -535,17 +428,17 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                             }
                             loading={<Spinner />}
                             onMount={handleEditorDidMount}
-                            beforeMount={
-                                importMethod === 'dbml'
-                                    ? setupDBMLLanguage
-                                    : undefined
+                            beforeMount={setupDBMLLanguage}
+                            theme={
+                                effectiveTheme === 'dark'
+                                    ? 'dbml-dark'
+                                    : 'dbml-light'
                             }
                             options={{
                                 formatOnPaste: false, // Never format on paste - we handle it manually
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
                                 automaticLayout: true,
-                                glyphMargin: importMethod === 'dbml', // Enable glyph margin for DBML to show error indicators
                                 lineNumbers: 'on',
                                 guides: {
                                     indentation: false,
@@ -586,6 +479,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             errorMessage,
             scriptResult,
             importMethod,
+            effectiveTheme,
             debouncedHandleInputChange,
             handleEditorDidMount,
             sqlValidation,
@@ -676,8 +570,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 )
                             )}
                         </Button>
-                    ) : showAutoFixButton &&
-                      (importMethod === 'ddl' || importMethod === 'dbml') ? (
+                    ) : showAutoFixButton && importMethod === 'ddl' ? (
                         <Button
                             type="button"
                             variant="secondary"
