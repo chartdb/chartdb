@@ -2,6 +2,7 @@ import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain';
 import { FileType2, X } from 'lucide-react';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useClickOutside } from '@/hooks/use-click-outside';
 import { TableEditModeField } from './table-edit-mode-field';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
@@ -32,6 +33,9 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
             focusFieldIdProp
         );
         const inputRef = useRef<HTMLInputElement>(null);
+
+        // Handle click outside to close edit mode
+        useClickOutside([containerRef], onClose, true, 200);
 
         useEffect(() => {
             setFocusFieldId(focusFieldIdProp);

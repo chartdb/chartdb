@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { useEditClickOutside } from '@/hooks/use-click-outside';
 import {
     CircleDotDashed,
     GripVertical,
@@ -15,7 +16,7 @@ import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-h
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useClickAway, useKeyPressEvent } from 'react-use';
+import { useKeyPressEvent } from 'react-use';
 import { useSortable } from '@dnd-kit/sortable';
 import {
     DropdownMenu,
@@ -29,6 +30,7 @@ import {
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
+import { useLayout } from '@/hooks/use-layout';
 import {
     Tooltip,
     TooltipContent,
@@ -61,26 +63,27 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { openTableSchemaDialog } = useDialog();
     const { t } = useTranslation();
     const { focusOnTable } = useFocusOn();
+    const { openedTableInSidebar } = useLayout();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const { listeners } = useSortable({ id: table.id });
 
     const editTableName = useCallback(() => {
-        if (!editMode) return;
         if (tableName.trim()) {
             updateTable(table.id, { name: tableName.trim() });
         }
-
         setEditMode(false);
-    }, [tableName, table.id, updateTable, editMode]);
+    }, [tableName, table.id, updateTable]);
 
     const abortEdit = useCallback(() => {
         setEditMode(false);
         setTableName(table.name);
     }, [table.name]);
 
-    useClickAway(inputRef, editTableName);
+    // Handle click outside to save and exit edit mode
+    useEditClickOutside(inputRef, editMode, editTableName);
+
     useKeyPressEvent('Enter', editTableName);
     useKeyPressEvent('Escape', abortEdit);
 
@@ -248,6 +251,23 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             setTableName(table.name.trim());
         }
     }, [table.name]);
+
+    // Auto-select table name for newly created tables when opened in sidebar
+    useEffect(() => {
+        // Check if this is a new table that was just opened in the sidebar
+        if (
+            table.name.startsWith('table_') &&
+            openedTableInSidebar === table.id
+        ) {
+            setEditMode(true);
+            // Select all text when input is ready
+            setTimeout(() => {
+                if (inputRef.current) {
+                    inputRef.current.select();
+                }
+            }, 100);
+        }
+    }, [table.name, openedTableInSidebar, table.id]);
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
