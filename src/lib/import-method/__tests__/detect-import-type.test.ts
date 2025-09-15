@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectImportMethod } from './detect-import-method';
+import { detectImportMethod } from '../detect-import-method';
 
 describe('detectImportMethod', () => {
     describe('DBML detection', () => {
