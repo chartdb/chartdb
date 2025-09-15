@@ -46,6 +46,10 @@ import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-lang
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { detectImportMethod } from '@/lib/import-method/detect-import-method';
 import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
+import {
+    clearErrorHighlight,
+    highlightErrorLine,
+} from '@/components/code-snippet/dbml/utils';
 
 const calculateContentSizeMB = (content: string): number => {
     return content.length / (1024 * 1024); // Convert to MB
@@ -93,6 +97,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const decorationsCollection = useRef<editor.IEditorDecorationsCollection>();
     const pasteDisposableRef = useRef<IDisposable | null>(null);
 
     const { t } = useTranslation();
@@ -107,6 +112,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const [isAutoFixing, setIsAutoFixing] = useState(false);
     const [showAutoFixButton, setShowAutoFixButton] = useState(false);
 
+    const clearDecorations = useCallback(() => {
+        clearErrorHighlight(decorationsCollection.current);
+    }, []);
+
     useEffect(() => {
         setScriptResult('');
         setErrorMessage('');
@@ -115,6 +124,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     // Check if the ddl or dbml is valid
     useEffect(() => {
+        clearDecorations();
         if (importMethod === 'query') {
             setSqlValidation(null);
             setShowAutoFixButton(false);
@@ -145,6 +155,12 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 if (validateResponse.parsedError) {
                     errorMsg = validateResponse.parsedError.message;
                     line = validateResponse.parsedError.line;
+                    highlightErrorLine({
+                        error: validateResponse.parsedError,
+                        model: editorRef.current?.getModel(),
+                        editorDecorationsCollection:
+                            decorationsCollection.current,
+                    });
                 }
 
                 setSqlValidation({
@@ -192,7 +208,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 setErrorMessage(result.error);
             }
         });
-    }, [importMethod, scriptResult, databaseType]);
+    }, [importMethod, scriptResult, databaseType, clearDecorations]);
 
     // Check if the script result is a valid JSON
     useEffect(() => {
@@ -320,6 +336,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
+            decorationsCollection.current =
+                editor.createDecorationsCollection();
 
             // Cleanup previous disposable if it exists
             if (pasteDisposableRef.current) {

@@ -7,7 +7,6 @@ import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/expor
 import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
-import type { ImportDBMLDialogProps } from '@/dialogs/import-dbml-dialog/import-dbml-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 
@@ -67,12 +66,6 @@ export interface DialogContext {
         params: Omit<ImportDiagramDialogProps, 'dialog'>
     ) => void;
     closeImportDiagramDialog: () => void;
-
-    // Import DBML dialog
-    openImportDBMLDialog: (
-        params?: Omit<ImportDBMLDialogProps, 'dialog'>
-    ) => void;
-    closeImportDBMLDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -96,6 +89,4 @@ export const dialogContext = createContext<DialogContext>({
     closeExportDiagramDialog: emptyFn,
     openImportDiagramDialog: emptyFn,
     closeImportDiagramDialog: emptyFn,
-    openImportDBMLDialog: emptyFn,
-    closeImportDBMLDialog: emptyFn,
 });

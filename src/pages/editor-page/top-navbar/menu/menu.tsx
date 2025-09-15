@@ -46,7 +46,6 @@ export const Menu: React.FC<MenuProps> = () => {
         openExportImageDialog,
         openExportDiagramDialog,
         openImportDiagramDialog,
-        openImportDBMLDialog,
     } = useDialog();
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
@@ -184,9 +183,6 @@ export const Menu: React.FC<MenuProps> = () => {
                         <MenubarSubContent>
                             <MenubarItem onClick={openImportDiagramDialog}>
                                 .json
-                            </MenubarItem>
-                            <MenubarItem onClick={() => openImportDBMLDialog()}>
-                                .dbml
                             </MenubarItem>
                             <MenubarSeparator />
                             <MenubarItem
