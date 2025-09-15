@@ -15,9 +15,11 @@ import {
     AvatarImage,
 } from '@/components/avatar/avatar';
 import { useTranslation } from 'react-i18next';
-import { Code } from 'lucide-react';
+import { Code, FileCode } from 'lucide-react';
 import { SmartQueryInstructions } from './instructions/smart-query-instructions';
 import { DDLInstructions } from './instructions/ddl-instructions';
+import { DBMLInstructions } from './instructions/dbml-instructions';
+import type { ImportMethod } from '@/lib/import-method/import-method';
 
 const DatabasesWithoutDDLInstructions: DatabaseType[] = [
     DatabaseType.CLICKHOUSE,
@@ -30,8 +32,8 @@ export interface InstructionsSectionProps {
     setDatabaseEdition: React.Dispatch<
         React.SetStateAction<DatabaseEdition | undefined>
     >;
-    importMethod: 'query' | 'ddl';
-    setImportMethod: (method: 'query' | 'ddl') => void;
+    importMethod: ImportMethod;
+    setImportMethod: (method: ImportMethod) => void;
     showSSMSInfoDialog: boolean;
     setShowSSMSInfoDialog: (show: boolean) => void;
 }
@@ -125,9 +127,9 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                         className="ml-1 flex-wrap justify-start gap-2"
                         value={importMethod}
                         onValueChange={(value) => {
-                            let selectedImportMethod: 'query' | 'ddl' = 'query';
+                            let selectedImportMethod: ImportMethod = 'query';
                             if (value) {
-                                selectedImportMethod = value as 'query' | 'ddl';
+                                selectedImportMethod = value as ImportMethod;
                             }
 
                             setImportMethod(selectedImportMethod);
@@ -150,9 +152,19 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                             className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
                         >
                             <Avatar className="size-4 rounded-none">
-                                <Code size={16} />
+                                <FileCode size={16} />
                             </Avatar>
                             SQL Script
+                        </ToggleGroupItem>
+                        <ToggleGroupItem
+                            value="dbml"
+                            variant="outline"
+                            className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
+                        >
+                            <Avatar className="size-4 rounded-none">
+                                <Code size={16} />
+                            </Avatar>
+                            DBML
                         </ToggleGroupItem>
                     </ToggleGroup>
                 </div>
@@ -167,8 +179,13 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                         showSSMSInfoDialog={showSSMSInfoDialog}
                         setShowSSMSInfoDialog={setShowSSMSInfoDialog}
                     />
-                ) : (
+                ) : importMethod === 'ddl' ? (
                     <DDLInstructions
+                        databaseType={databaseType}
+                        databaseEdition={databaseEdition}
+                    />
+                ) : (
+                    <DBMLInstructions
                         databaseType={databaseType}
                         databaseEdition={databaseEdition}
                     />

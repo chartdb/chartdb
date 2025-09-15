@@ -23,24 +23,19 @@ import { useTranslation } from 'react-i18next';
 import { Editor } from '@/components/code-snippet/code-snippet';
 import { useTheme } from '@/hooks/use-theme';
 import { AlertCircle } from 'lucide-react';
-import {
-    importDBMLToDiagram,
-    sanitizeDBML,
-    preprocessDBML,
-} from '@/lib/dbml/dbml-import/dbml-import';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { Parser } from '@dbml/core';
 import { useCanvas } from '@/hooks/use-canvas';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useToast } from '@/components/toast/use-toast';
 import { Spinner } from '@/components/spinner/spinner';
 import { debounce } from '@/lib/utils';
-import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
 import {
     clearErrorHighlight,
     highlightErrorLine,
 } from '@/components/code-snippet/dbml/utils';
+import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
 
 export interface ImportDBMLDialogProps extends BaseDialogProps {
     withCreateEmptyDiagram?: boolean;
@@ -93,6 +88,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         relationships,
         removeTables,
         removeRelationships,
+        databaseType,
     } = useChartDB();
     const { reorderTables } = useCanvas();
     const [reorder, setReorder] = useState(false);
@@ -126,16 +122,15 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
             setErrorMessage(undefined);
             clearDecorations();
 
-            if (!content.trim()) return;
+            if (!content.trim()) {
+                return;
+            }
 
-            try {
-                const preprocessedContent = preprocessDBML(content);
-                const sanitizedContent = sanitizeDBML(preprocessedContent);
-                const parser = new Parser();
-                parser.parse(sanitizedContent, 'dbmlv2');
-            } catch (e) {
-                const parsedError = parseDBMLError(e);
-                if (parsedError) {
+            const validateResponse = verifyDBML(content);
+
+            if (validateResponse.hasError) {
+                if (validateResponse.parsedError) {
+                    const parsedError = validateResponse.parsedError;
                     setErrorMessage(
                         t('import_dbml_dialog.error.description') +
                             ` (1 error found - in line ${parsedError.line})`
@@ -147,9 +142,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
                             decorationsCollection.current,
                     });
                 } else {
-                    setErrorMessage(
-                        e instanceof Error ? e.message : JSON.stringify(e)
-                    );
+                    setErrorMessage(validateResponse.errorText);
                 }
             }
         },
@@ -188,7 +181,9 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            const importedDiagram = await importDBMLToDiagram(dbmlContent);
+            const importedDiagram = await importDBMLToDiagram(dbmlContent, {
+                databaseType,
+            });
             const tableIdsToRemove = tables
                 .filter((table) =>
                     importedDiagram.tables?.some(
@@ -267,6 +262,7 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         toast,
         setReorder,
         t,
+        databaseType,
     ]);
 
     return (
