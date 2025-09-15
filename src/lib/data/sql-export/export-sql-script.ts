@@ -5,7 +5,7 @@ import {
     databaseTypesWithCommentSupport,
 } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
-import type { DataType } from '../data-types/data-types';
+import { dataTypeMap, type DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
 import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
@@ -315,15 +315,14 @@ export const exportBaseSQL = ({
             }
 
             // Add precision and scale for numeric types only
-            const numericTypes = [
-                'numeric',
-                'decimal',
-                'number',
-                'float',
-                'double',
-                'real',
-            ];
-            const isNumericType = numericTypes.some(
+            const precisionAndScaleTypes = dataTypeMap[targetDatabaseType]
+                .filter(
+                    (t) =>
+                        t.fieldAttributes?.precision && t.fieldAttributes?.scale
+                )
+                .map((t) => t.name);
+
+            const isNumericType = precisionAndScaleTypes.some(
                 (t) =>
                     field.type.name.toLowerCase().includes(t) ||
                     typeName.toLowerCase().includes(t)

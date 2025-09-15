@@ -72,8 +72,6 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             diagram = await importDBMLToDiagram(scriptResult, {
                 databaseType,
             });
-            // Keep the existing diagram name
-            diagram.name = diagramName;
         } else {
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
@@ -348,7 +346,6 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         showAlert,
         setNodes,
         t,
-        diagramName,
     ]);
 
     return (

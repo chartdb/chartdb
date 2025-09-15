@@ -22,7 +22,10 @@ import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
-import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
+import {
+    defaultDBMLDiagramName,
+    importDBMLToDiagram,
+} from '@/lib/dbml/dbml-import/dbml-import';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -97,7 +100,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     databaseType,
                 });
                 // Update the diagram name if it's the default
-                if (diagram.name === 'DBML Import') {
+                if (diagram.name === defaultDBMLDiagramName) {
                     diagram.name = `Diagram ${diagramNumber}`;
                 }
             } else {

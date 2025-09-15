@@ -191,7 +191,6 @@ Ref: comments.user_id > users.id // Each comment is written by one user`;
         if (!dbmlContent.trim() || errorMessage) return;
 
         try {
-            // Import DBML content
             const importedDiagram = await importDBMLToDiagram(dbmlContent, {
                 databaseType,
             });
