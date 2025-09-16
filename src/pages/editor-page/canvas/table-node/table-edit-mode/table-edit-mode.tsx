@@ -11,6 +11,7 @@ import { Separator } from '@/components/separator/separator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useUpdateTable } from '@/hooks/use-update-table';
 import { useTranslation } from 'react-i18next';
+import { useClickOutside } from '@/hooks/use-click-outside';
 
 export interface TableEditModeProps {
     table: DBTable;
@@ -107,6 +108,9 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                 setFocusFieldId(field.id);
             }
         }, [createField, table.id]);
+
+        // Close edit mode when clicking outside
+        useClickOutside(containerRef, onClose, isVisible);
 
         const handleColorChange = useCallback(
             (newColor: string) => {

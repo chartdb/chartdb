@@ -11,7 +11,8 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFocusOn } from '@/hooks/use-focus-on';
-import { useClickAway, useKeyPressEvent } from 'react-use';
+import { useEditClickOutside } from '@/hooks/use-click-outside';
+import { useKeyPressEvent } from 'react-use';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -42,31 +43,37 @@ export const RelationshipListItemHeader: React.FC<
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     const editRelationshipName = useCallback(() => {
-        if (!editMode) return;
         if (relationshipName.trim() && relationshipName !== relationship.name) {
             updateRelationship(relationship.id, {
                 name: relationshipName.trim(),
             });
         }
-
         setEditMode(false);
     }, [
         relationshipName,
         relationship.id,
         updateRelationship,
-        editMode,
         relationship.name,
     ]);
 
-    useClickAway(inputRef, editRelationshipName);
-    useKeyPressEvent('Enter', editRelationshipName);
+    const abortEdit = useCallback(() => {
+        setEditMode(false);
+        setRelationshipName(relationship.name);
+    }, [relationship.name]);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
-        setEditMode(true);
-    };
+    // Handle click outside to save and exit edit mode
+    useEditClickOutside(inputRef, editMode, editRelationshipName);
+    useKeyPressEvent('Enter', editRelationshipName);
+    useKeyPressEvent('Escape', abortEdit);
+
+    const enterEditMode = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.stopPropagation();
+            setRelationshipName(relationship.name);
+            setEditMode(true);
+        },
+        [relationship.name]
+    );
 
     const handleFocusOnRelationship = useCallback(
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
