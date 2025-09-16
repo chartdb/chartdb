@@ -13,6 +13,7 @@ import { Copy, Pencil, Trash2, Workflow } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
@@ -22,10 +23,11 @@ export const TableNodeContextMenu: React.FC<
     React.PropsWithChildren<TableNodeContextMenuProps>
 > = ({ children, table }) => {
     const { removeTable, readonly, createTable } = useChartDB();
-    const { openTableFromSidebar } = useLayout();
+    const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { openCreateRelationshipDialog } = useDialog();
+    const { setEditTableModeTable } = useCanvas();
 
     const duplicateTableHandler = useCallback(() => {
         const clonedTable = cloneTable(table);
@@ -38,8 +40,13 @@ export const TableNodeContextMenu: React.FC<
     }, [createTable, table]);
 
     const editTableHandler = useCallback(() => {
-        openTableFromSidebar(table.id);
-    }, [openTableFromSidebar, table.id]);
+        if (readonly) {
+            return;
+        }
+
+        closeAllTablesInSidebar();
+        setEditTableModeTable({ tableId: table.id });
+    }, [table.id, setEditTableModeTable, closeAllTablesInSidebar, readonly]);
 
     const removeTableHandler = useCallback(() => {
         removeTable(table.id);
