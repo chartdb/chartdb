@@ -1,0 +1,7 @@
+Table "table_3" {
+  "id" bigint [pk]
+}
+
+Table "table_2" {
+  "id" bigint [pk, not null, ref: < "table_3"."id"]
+}
