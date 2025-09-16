@@ -63,7 +63,10 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         };
 
         return (
-            <AreaNodeContextMenu area={area} onEditName={enterEditMode}>
+            <AreaNodeContextMenu
+                area={area}
+                onEditName={() => setEditMode(true)}
+            >
                 <div
                     className={cn(
                         'flex h-full flex-col rounded-md border-2 shadow-sm',

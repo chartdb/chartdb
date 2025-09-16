@@ -86,7 +86,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                 />
                 <div className="flex flex-row items-center gap-1">
                     {editMode ? (
-                        <div className="flex items-center">
+                        <>
                             <Input
                                 ref={inputRef}
                                 autoFocus
@@ -97,12 +97,11 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                                 onChange={(e) =>
                                     setEditedDiagramName(e.target.value)
                                 }
-                                className="ml-1 h-7 focus-visible:ring-0"
+                                className="h-7 max-w-[300px] focus-visible:ring-0"
                                 style={{
-                                    width: `${Math.max(
-                                        editedDiagramName.length * 8 + 20,
-                                        100
-                                    )}px`,
+                                    width: `${
+                                        editedDiagramName.length * 8 + 30
+                                    }px`,
                                 }}
                             />
                             <Button
@@ -112,7 +111,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                             >
                                 <Check />
                             </Button>
-                        </div>
+                        </>
                     ) : (
                         <>
                             <Tooltip>
@@ -120,7 +119,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                                     <h1
                                         className={cn(
                                             labelVariants(),
-                                            'group-hover:underline'
+                                            'group-hover:underline max-w-[300px] truncate'
                                         )}
                                         onDoubleClick={(e) => {
                                             enterEditMode(e);
@@ -135,10 +134,13 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                             </Tooltip>
                             <Button
                                 variant="ghost"
-                                className="ml-1 size-5 p-0 opacity-0 transition-opacity hover:bg-primary-foreground group-hover:opacity-100"
+                                className="ml-1 hidden size-5 p-0 hover:bg-background/50 group-hover:flex"
                                 onClick={enterEditMode}
                             >
-                                <Pencil className="size-3 text-slate-500 dark:text-slate-400" />
+                                <Pencil
+                                    strokeWidth="1.5"
+                                    className="!size-3.5 text-slate-600 dark:text-slate-400"
+                                />
                             </Button>
                         </>
                     )}

@@ -32,7 +32,7 @@ export const AreaNodeContextMenu: React.FC<
         <ContextMenu>
             <ContextMenuTrigger>{children}</ContextMenuTrigger>
             <ContextMenuContent>
-                {onEditName && (
+                {onEditName ? (
                     <ContextMenuItem
                         onClick={onEditName}
                         className="flex justify-between gap-3"
@@ -40,7 +40,7 @@ export const AreaNodeContextMenu: React.FC<
                         <span>Edit Area Name</span>
                         <Pencil className="size-3.5" />
                     </ContextMenuItem>
-                )}
+                ) : null}
                 <ContextMenuItem
                     onClick={removeAreaHandler}
                     className="flex justify-between gap-3"
