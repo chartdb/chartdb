@@ -1,0 +1,7 @@
+Table "public"."orders" {
+  "order_id" integer [pk, not null]
+  "customer_id" integer [not null]
+  "order_date" date [not null, default: `CURRENT_DATE`]
+  "total_amount" numeric [not null, default: 0]
+  "status" varchar(50) [not null, default: 'Pending']
+}
