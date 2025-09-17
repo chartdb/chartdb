@@ -5,6 +5,7 @@ import React, {
     useCallback,
     useRef,
 } from 'react';
+import { useDebounceFn } from 'ahooks';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTheme } from '@/hooks/use-theme';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
@@ -25,7 +26,6 @@ import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import { applyDBMLChanges } from '@/lib/dbml/apply-dbml/apply-dbml';
-import { useDebounce } from '@/hooks/use-debounce';
 import { parseDBMLError } from '@/lib/dbml/dbml-import/dbml-import-error';
 import {
     clearErrorHighlight,
@@ -113,6 +113,17 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
     const { hideLoader, showLoader } = useFullScreenLoader();
     const emphasisTimeoutRef = useRef<NodeJS.Timeout>();
     const readOnlyDisposableRef = useRef<monaco.IDisposable>();
+    const currentDiagramRef = useRef<Diagram>(currentDiagram);
+    const originalDiagramRef = useRef<Diagram | null>(originalDiagram);
+
+    // Keep refs updated
+    useEffect(() => {
+        currentDiagramRef.current = currentDiagram;
+    }, [currentDiagram]);
+
+    useEffect(() => {
+        originalDiagramRef.current = originalDiagram;
+    }, [originalDiagram]);
 
     // --- Check for empty field name warnings only on mount ---
     useEffect(() => {
@@ -190,7 +201,7 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                 );
 
                 const sourceDiagram: Diagram =
-                    originalDiagram ?? currentDiagram;
+                    originalDiagramRef.current ?? currentDiagramRef.current;
 
                 const targetDiagram: Diagram = {
                     ...sourceDiagram,
@@ -204,9 +215,9 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                     targetDiagram,
                 });
 
-                if (originalDiagram) {
+                if (originalDiagramRef.current) {
                     resetDiff();
-                    loadDiagramFromData(originalDiagram);
+                    loadDiagramFromData(originalDiagramRef.current);
                 }
 
                 calculateDiff({
@@ -232,18 +243,12 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                 }
             }
         },
-        [
-            t,
-            originalDiagram,
-            currentDiagram,
-            resetDiff,
-            loadDiagramFromData,
-            calculateDiff,
-            databaseType,
-        ]
+        [t, resetDiff, loadDiagramFromData, calculateDiff, databaseType]
     );
 
-    const debouncedShowDiff = useDebounce(showDiff, 1000);
+    const { run: debouncedShowDiff } = useDebounceFn(showDiff, {
+        wait: 1000,
+    });
 
     useEffect(() => {
         if (!isEditMode || !editedDbml) {
@@ -359,8 +364,10 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                                 {
                                     label: 'View',
                                     icon: PencilOff,
-                                    onClick: () =>
-                                        setIsEditMode((prev) => !prev),
+                                    onClick: () => {
+                                        resetDiff();
+                                        setIsEditMode((prev) => !prev);
+                                    },
                                 },
                             ]
                           : [
