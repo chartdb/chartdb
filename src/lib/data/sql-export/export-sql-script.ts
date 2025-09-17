@@ -469,10 +469,16 @@ export const exportBaseSQL = ({
                 .join(', ');
 
             if (fieldNames) {
-                const indexName =
+                const rawIndexName =
                     table.schema && !isDBMLFlow
                         ? `${table.schema}_${index.name}`
                         : index.name;
+                // Quote index name if it contains special characters
+                // For DBML flow, also quote if contains special characters
+                const needsQuoting = /[^a-zA-Z0-9_]/.test(rawIndexName);
+                const indexName = needsQuoting
+                    ? `"${rawIndexName}"`
+                    : rawIndexName;
                 sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
             }
         });

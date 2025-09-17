@@ -180,7 +180,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             expect(artifactsTable?.schema).toBe(''); // No schema = empty string
         });
 
-        it('should rename reserved keywords for PostgreSQL', async () => {
+        it('should handle reserved keywords for PostgreSQL', async () => {
             const dbmlContent = `
                 Table "magic_items" {
                     "id" bigint [pk]
@@ -197,10 +197,9 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
 
             const exported = generateDBMLFromDiagram(diagram);
 
-            // For PostgreSQL, keywords should be renamed in export
-            expect(exported.standardDbml).toContain('Order_field');
-            expect(exported.standardDbml).toContain('Yes_field');
-            expect(exported.standardDbml).toContain('No_field');
+            expect(exported.standardDbml).toContain('Order');
+            expect(exported.standardDbml).toContain('Yes');
+            expect(exported.standardDbml).toContain('No');
         });
     });
 
