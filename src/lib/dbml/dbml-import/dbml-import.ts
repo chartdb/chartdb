@@ -482,7 +482,7 @@ export const importDBMLToDiagram = async (
                     }),
                     nullable: !field.not_null,
                     primaryKey: field.pk || false,
-                    unique: field.unique || false,
+                    unique: field.unique || field.pk || false, // Primary keys are always unique
                     createdAt: Date.now(),
                     characterMaximumLength: field.characterMaximumLength,
                     precision: field.precision,
