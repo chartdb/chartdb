@@ -1,0 +1,129 @@
+Enum "cbhpm_entradas_tipo" {
+    "grupo"
+    "subgrupo"
+    "procedimento"
+}
+
+Enum "cid_entradas_tipo" {
+    "capitulo"
+    "agrupamento"
+    "categoria"
+    "subcategoria"
+}
+
+Enum "digital_signature_provider" {
+    "soluti"
+    "valid"
+}
+
+Enum "impresso_posicao" {
+    "start"
+    "center"
+    "end"
+}
+
+Enum "otp_provider" {
+    "clinic"
+    "soluti_bird_id"
+}
+
+Enum "tipo_cobranca" {
+    "valor"
+    "porte"
+}
+
+Enum "tipo_contato_movel" {
+    "celular"
+    "telefone_residencial"
+    "telefone_comercial"
+}
+
+Enum "tipo_contrato" {
+    "trial"
+    "common"
+}
+
+Enum "tipo_endereco" {
+    "residencial"
+    "comercial"
+    "cobranca"
+}
+
+Enum "tipo_espectro_autista" {
+    "leve"
+    "moderado"
+    "severo"
+}
+
+Enum "tipo_estado_civil" {
+    "nao_infomado"
+    "solteiro"
+    "casado"
+    "divorciado"
+    "viuvo"
+}
+
+Enum "tipo_etnia" {
+    "nao_infomado"
+    "branca"
+    "preta"
+    "parda"
+    "amarela"
+    "indigena"
+}
+
+Enum "tipo_excecao" {
+    "bloqueio"
+    "compromisso"
+}
+
+Enum "tipo_metodo_reajuste" {
+    "percentual"
+    "valor"
+}
+
+Enum "tipo_pessoa" {
+    "fisica"
+    "juridica"
+}
+
+Enum "tipo_procedimento" {
+    "consulta"
+    "exame_laboratorial"
+    "exame_imagem"
+    "procedimento_clinico"
+    "procedimento_cirurgico"
+    "terapia"
+    "outros"
+}
+
+Enum "tipo_relacionamento" {
+    "pai"
+    "mae"
+    "conjuge"
+    "filho_a"
+    "tutor_legal"
+    "contato_emergencia"
+    "outro"
+}
+
+Enum "tipo_sexo" {
+    "nao_infomado"
+    "masculino"
+    "feminino"
+    "intersexo"
+}
+
+Enum "tipo_status_agendamento" {
+    "em espera"
+    "faltou"
+    "ok"
+}
+
+Table "public"."organizacao_cfg_impressos" {
+  "id_organizacao" integer [pk, not null, ref: < "public"."organizacao"."id"]
+}
+
+Table "public"."organizacao" {
+  "id" integer [pk, not null]
+}
