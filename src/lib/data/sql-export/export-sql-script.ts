@@ -381,6 +381,16 @@ export const exportBaseSQL = ({
                         fieldDefault = `now()`;
                     }
 
+                    // Fix CURRENT_DATE() for PostgreSQL in DBML flow - PostgreSQL uses CURRENT_DATE without parentheses
+                    if (
+                        isDBMLFlow &&
+                        targetDatabaseType === DatabaseType.POSTGRESQL
+                    ) {
+                        if (fieldDefault.toUpperCase() === 'CURRENT_DATE()') {
+                            fieldDefault = 'CURRENT_DATE';
+                        }
+                    }
+
                     sqlScript += ` DEFAULT ${fieldDefault}`;
                 }
             }
