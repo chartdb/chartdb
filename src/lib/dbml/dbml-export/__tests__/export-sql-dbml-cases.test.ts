@@ -14,14 +14,36 @@ const testCase = (caseNumber: string) => {
 
     // Generate DBML from the diagram
     const result = generateDBMLFromDiagram(diagram);
-    const generatedDBML = result.standardDbml;
 
-    // Read the expected DBML file
-    const dbmlPath = path.join(__dirname, 'cases', `${caseNumber}.dbml`);
-    const expectedDBML = fs.readFileSync(dbmlPath, 'utf-8');
+    // Check for both regular and inline DBML files
+    const regularDbmlPath = path.join(__dirname, 'cases', `${caseNumber}.dbml`);
+    const inlineDbmlPath = path.join(
+        __dirname,
+        'cases',
+        `${caseNumber}.inline.dbml`
+    );
 
-    // Compare the generated DBML with the expected DBML
-    expect(generatedDBML).toBe(expectedDBML);
+    const hasRegularDbml = fs.existsSync(regularDbmlPath);
+    const hasInlineDbml = fs.existsSync(inlineDbmlPath);
+
+    // Test regular DBML if file exists
+    if (hasRegularDbml) {
+        const expectedRegularDBML = fs.readFileSync(regularDbmlPath, 'utf-8');
+        expect(result.standardDbml).toBe(expectedRegularDBML);
+    }
+
+    // Test inline DBML if file exists
+    if (hasInlineDbml) {
+        const expectedInlineDBML = fs.readFileSync(inlineDbmlPath, 'utf-8');
+        expect(result.inlineDbml).toBe(expectedInlineDBML);
+    }
+
+    // Ensure at least one DBML file exists
+    if (!hasRegularDbml && !hasInlineDbml) {
+        throw new Error(
+            `No DBML file found for test case ${caseNumber}. Expected either ${caseNumber}.dbml or ${caseNumber}.inline.dbml`
+        );
+    }
 };
 
 describe('DBML Export cases', () => {
@@ -39,5 +61,9 @@ describe('DBML Export cases', () => {
 
     it('should handle case 4 diagram', { timeout: 30000 }, async () => {
         testCase('4');
+    });
+
+    it('should handle case 5 diagram', { timeout: 30000 }, async () => {
+        testCase('5');
     });
 });

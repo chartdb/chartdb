@@ -506,15 +506,30 @@ const deduplicateRelationships = (diagram: Diagram): Diagram => {
     if (!diagram.relationships) return diagram;
 
     const seenRelationships = new Set<string>();
+    const seenBidirectional = new Set<string>();
     const uniqueRelationships = diagram.relationships.filter((rel) => {
         // Create a unique key based on the relationship endpoints
         const relationshipKey = `${rel.sourceTableId}-${rel.sourceFieldId}->${rel.targetTableId}-${rel.targetFieldId}`;
 
+        // Create a normalized key that's the same for both directions
+        const normalizedKey = [
+            `${rel.sourceTableId}-${rel.sourceFieldId}`,
+            `${rel.targetTableId}-${rel.targetFieldId}`,
+        ]
+            .sort()
+            .join('<->');
+
         if (seenRelationships.has(relationshipKey)) {
-            return false; // Skip duplicate
+            return false; // Skip exact duplicate
+        }
+
+        if (seenBidirectional.has(normalizedKey)) {
+            // This is a bidirectional relationship, skip the second one
+            return false;
         }
 
         seenRelationships.add(relationshipKey);
+        seenBidirectional.add(normalizedKey);
         return true; // Keep unique relationship
     });
 
