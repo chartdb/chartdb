@@ -114,13 +114,7 @@ export function validateSQLiteDialect(sql: string): ValidationResult {
             });
         }
 
-        // BOOLEAN type (SQLite stores as INTEGER)
-        if (trimmedLine.match(/\bBOOLEAN\b/i)) {
-            warnings.push({
-                message: `BOOLEAN type will be stored as INTEGER in SQLite (0 for false, 1 for true).`,
-                type: 'compatibility',
-            });
-        }
+        // BOOLEAN type - handled in auto-fix section
 
         // UUID type not natively supported
         if (trimmedLine.match(/\bUUID\b/i)) {
@@ -138,13 +132,7 @@ export function validateSQLiteDialect(sql: string): ValidationResult {
             });
         }
 
-        // SERIAL/AUTO_INCREMENT differences
-        if (trimmedLine.match(/\bSERIAL\b/i)) {
-            warnings.push({
-                message: `SERIAL type is not supported in SQLite. Use INTEGER PRIMARY KEY AUTOINCREMENT instead.`,
-                type: 'compatibility',
-            });
-        }
+        // SERIAL/AUTO_INCREMENT differences - handled in auto-fix section
     });
 
     // 3. Check for unsupported ALTER TABLE operations
@@ -242,11 +230,24 @@ export function validateSQLiteDialect(sql: string): ValidationResult {
 
     // Fix SERIAL to INTEGER PRIMARY KEY AUTOINCREMENT
     if (/\bSERIAL\b/i.test(sql)) {
+        // Handle both "SERIAL PRIMARY KEY" and standalone "SERIAL"
+        fixedSQL = fixedSQL.replace(
+            /\bSERIAL\s+PRIMARY\s+KEY\b/gi,
+            'INTEGER PRIMARY KEY AUTOINCREMENT'
+        );
         fixedSQL = fixedSQL.replace(
             /\bSERIAL\b/gi,
             'INTEGER PRIMARY KEY AUTOINCREMENT'
         );
         hasAutoFixes = true;
+        errors.push({
+            line:
+                sql.split('\n').findIndex((line) => /\bSERIAL\b/i.test(line)) +
+                1,
+            message: 'SERIAL type is not supported in SQLite',
+            type: 'syntax',
+            suggestion: 'Use INTEGER PRIMARY KEY AUTOINCREMENT instead',
+        });
         warnings.push({
             message:
                 'Auto-fixed SERIAL type to INTEGER PRIMARY KEY AUTOINCREMENT.',
@@ -257,14 +258,71 @@ export function validateSQLiteDialect(sql: string): ValidationResult {
     // Fix BOOLEAN to INTEGER with CHECK constraint
     const booleanRegex = /(\w+)\s+BOOLEAN/gi;
     if (booleanRegex.test(sql)) {
+        const booleanLineIndex = sql
+            .split('\n')
+            .findIndex((line) => /\bBOOLEAN\b/i.test(line));
         fixedSQL = fixedSQL.replace(
             booleanRegex,
             '$1 INTEGER CHECK($1 IN (0, 1))'
         );
         hasAutoFixes = true;
+        errors.push({
+            line: booleanLineIndex + 1,
+            message: 'BOOLEAN type is not natively supported in SQLite',
+            type: 'syntax',
+            suggestion: 'Use INTEGER with CHECK constraint instead',
+        });
         warnings.push({
             message:
                 'Auto-fixed BOOLEAN type to INTEGER with CHECK constraint.',
+            type: 'compatibility',
+        });
+    }
+
+    // Fix CURRENT_DATE to date('now') for SQLite
+    if (/DEFAULT\s+CURRENT_DATE/i.test(sql)) {
+        fixedSQL = fixedSQL.replace(
+            /DEFAULT\s+CURRENT_DATE/gi,
+            "DEFAULT (date('now'))"
+        );
+        hasAutoFixes = true;
+        errors.push({
+            line:
+                sql
+                    .split('\n')
+                    .findIndex((line) => /DEFAULT\s+CURRENT_DATE/i.test(line)) +
+                1,
+            message: 'CURRENT_DATE is not supported in SQLite DEFAULT clauses',
+            type: 'syntax',
+            suggestion: "Use DEFAULT (date('now')) instead",
+        });
+        warnings.push({
+            message: "Auto-fixed CURRENT_DATE to DEFAULT (date('now')).",
+            type: 'compatibility',
+        });
+    }
+
+    // Fix INT to INTEGER for better SQLite compatibility
+    if (/\bINT\b(?=\s+REFERENCES)/i.test(sql)) {
+        fixedSQL = fixedSQL.replace(/\bINT\b(?=\s+REFERENCES)/gi, 'INTEGER');
+        hasAutoFixes = true;
+        warnings.push({
+            message:
+                'Auto-fixed INT to INTEGER for better SQLite compatibility.',
+            type: 'compatibility',
+        });
+    }
+
+    // Add PRAGMA foreign_keys = ON; if foreign keys are used
+    if (
+        /REFERENCES\s+\w+\s*\(/i.test(sql) &&
+        !/PRAGMA\s+foreign_keys/i.test(sql)
+    ) {
+        fixedSQL = 'PRAGMA foreign_keys = ON;\n\n' + fixedSQL;
+        hasAutoFixes = true;
+        warnings.push({
+            message:
+                'Added PRAGMA foreign_keys = ON; to enable foreign key constraints.',
             type: 'compatibility',
         });
     }

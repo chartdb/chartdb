@@ -82,7 +82,7 @@ describe('SQLite Validator', () => {
             );
         });
 
-        it('should warn about BOOLEAN type', () => {
+        it('should detect and auto-fix BOOLEAN type', () => {
             const sql = `
                 CREATE TABLE users (
                     id INTEGER PRIMARY KEY,
@@ -90,11 +90,18 @@ describe('SQLite Validator', () => {
                 );
             `;
             const result = validateSQLiteDialect(sql);
-            expect(result.isValid).toBe(true);
-            expect(result.warnings.length).toBeGreaterThanOrEqual(1);
+            expect(result.isValid).toBe(false); // Has errors that can be auto-fixed
+            expect(result.errors.length).toBe(1);
+            expect(result.errors[0].message).toBe(
+                'BOOLEAN type is not natively supported in SQLite'
+            );
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain(
+                'INTEGER CHECK(is_active IN (0, 1))'
+            );
             expect(
                 result.warnings.some((w) =>
-                    w.message.includes('BOOLEAN type will be stored as INTEGER')
+                    w.message.includes('Auto-fixed BOOLEAN type')
                 )
             ).toBe(true);
         });
@@ -129,7 +136,7 @@ describe('SQLite Validator', () => {
             );
         });
 
-        it('should warn about SERIAL type', () => {
+        it('should detect and auto-fix SERIAL type', () => {
             const sql = `
                 CREATE TABLE users (
                     id SERIAL PRIMARY KEY,
@@ -137,13 +144,77 @@ describe('SQLite Validator', () => {
                 );
             `;
             const result = validateSQLiteDialect(sql);
-            expect(result.isValid).toBe(true);
-            expect(result.warnings.length).toBeGreaterThanOrEqual(1);
+            expect(result.isValid).toBe(false); // Has errors that can be auto-fixed
+            expect(result.errors.length).toBe(1);
+            expect(result.errors[0].message).toBe(
+                'SERIAL type is not supported in SQLite'
+            );
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain(
+                'INTEGER PRIMARY KEY AUTOINCREMENT'
+            );
+            expect(result.fixedSQL).not.toContain('PRIMARY KEY PRIMARY KEY'); // No duplicates
             expect(
                 result.warnings.some((w) =>
-                    w.message.includes('SERIAL type is not supported')
+                    w.message.includes('Auto-fixed SERIAL type')
                 )
             ).toBe(true);
+        });
+
+        it('should handle SERIAL PRIMARY KEY without duplicating PRIMARY KEY', () => {
+            const sql = `
+                CREATE TABLE departments (
+                    department_id SERIAL PRIMARY KEY,
+                    department_name VARCHAR(100) NOT NULL
+                );
+            `;
+            const result = validateSQLiteDialect(sql);
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain(
+                'department_id INTEGER PRIMARY KEY AUTOINCREMENT,'
+            );
+            expect(result.fixedSQL).not.toContain('PRIMARY KEY PRIMARY KEY');
+            expect(result.fixedSQL).not.toContain('AUTOINCREMENT PRIMARY KEY');
+        });
+
+        it('should auto-fix CURRENT_DATE to date function', () => {
+            const sql = `
+                CREATE TABLE employees (
+                    id INTEGER PRIMARY KEY,
+                    hire_date DATE NOT NULL DEFAULT CURRENT_DATE
+                );
+            `;
+            const result = validateSQLiteDialect(sql);
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain("DEFAULT (date('now'))");
+            expect(result.fixedSQL).not.toContain('DEFAULT CURRENT_DATE');
+        });
+
+        it('should add PRAGMA foreign_keys when foreign keys are used', () => {
+            const sql = `
+                CREATE TABLE departments (id INTEGER PRIMARY KEY);
+                CREATE TABLE employees (
+                    id INTEGER PRIMARY KEY,
+                    dept_id INTEGER REFERENCES departments(id)
+                );
+            `;
+            const result = validateSQLiteDialect(sql);
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain('PRAGMA foreign_keys = ON;');
+        });
+
+        it('should fix INT to INTEGER for foreign key references', () => {
+            const sql = `
+                CREATE TABLE employees (
+                    id INTEGER PRIMARY KEY,
+                    department_id INT REFERENCES departments(id)
+                );
+            `;
+            const result = validateSQLiteDialect(sql);
+            expect(result.fixedSQL).toBeDefined();
+            expect(result.fixedSQL).toContain(
+                'department_id INTEGER REFERENCES'
+            );
         });
 
         it('should detect ALTER TABLE MODIFY COLUMN as unsupported', () => {
@@ -211,10 +282,12 @@ describe('SQLite Validator', () => {
             `;
             const result = validateSQLiteDialect(sql);
             expect(result.isValid).toBe(true);
-            expect(result.warnings).toHaveLength(1);
-            expect(result.warnings[0].message).toContain(
-                'Foreign key constraints found'
-            );
+            expect(result.warnings.length).toBeGreaterThanOrEqual(1);
+            expect(
+                result.warnings.some((w) =>
+                    w.message.includes('Foreign key constraints found')
+                )
+            ).toBe(true);
         });
 
         it('should warn about PRAGMA statements', () => {
@@ -228,46 +301,6 @@ describe('SQLite Validator', () => {
             expect(result.warnings[0].message).toContain(
                 'PRAGMA statements found'
             );
-        });
-
-        it('should auto-fix SERIAL type', () => {
-            const sql = `
-                CREATE TABLE users (
-                    id SERIAL,
-                    name TEXT
-                );
-            `;
-            const result = validateSQLiteDialect(sql);
-            expect(result.isValid).toBe(true);
-            expect(result.fixedSQL).toBeDefined();
-            expect(result.fixedSQL).toContain(
-                'INTEGER PRIMARY KEY AUTOINCREMENT'
-            );
-            expect(
-                result.warnings.some((w) =>
-                    w.message.includes('Auto-fixed SERIAL type')
-                )
-            ).toBe(true);
-        });
-
-        it('should auto-fix BOOLEAN type', () => {
-            const sql = `
-                CREATE TABLE users (
-                    id INTEGER PRIMARY KEY,
-                    is_active BOOLEAN
-                );
-            `;
-            const result = validateSQLiteDialect(sql);
-            expect(result.isValid).toBe(true);
-            expect(result.fixedSQL).toBeDefined();
-            expect(result.fixedSQL).toContain(
-                'INTEGER CHECK(is_active IN (0, 1))'
-            );
-            expect(
-                result.warnings.some((w) =>
-                    w.message.includes('Auto-fixed BOOLEAN type')
-                )
-            ).toBe(true);
         });
 
         it('should count CREATE TABLE statements correctly', () => {
