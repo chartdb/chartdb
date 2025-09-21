@@ -269,6 +269,46 @@ function compareTables({
 
                 changedTables.set(oldTable.id, true);
             }
+
+            if (attributesToCheck.includes('x') && oldTable.x !== newTable.x) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'table',
+                        objectId: oldTable.id,
+                        attribute: 'x',
+                    }),
+                    {
+                        object: 'table',
+                        type: 'changed',
+                        tableId: oldTable.id,
+                        attribute: 'x',
+                        newValue: newTable.x,
+                        oldValue: oldTable.x,
+                    }
+                );
+
+                changedTables.set(oldTable.id, true);
+            }
+
+            if (attributesToCheck.includes('y') && oldTable.y !== newTable.y) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'table',
+                        objectId: oldTable.id,
+                        attribute: 'y',
+                    }),
+                    {
+                        object: 'table',
+                        type: 'changed',
+                        tableId: oldTable.id,
+                        attribute: 'y',
+                        newValue: newTable.y,
+                        oldValue: oldTable.y,
+                    }
+                );
+
+                changedTables.set(oldTable.id, true);
+            }
         }
     }
 }
@@ -784,6 +824,44 @@ function compareAreas({
                         attribute: 'color',
                         newValue: newArea.color,
                         oldValue: oldArea.color,
+                    }
+                );
+                changedAreas.set(oldArea.id, true);
+            }
+
+            if (attributesToCheck.includes('x') && oldArea.x !== newArea.x) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'area',
+                        objectId: oldArea.id,
+                        attribute: 'x',
+                    }),
+                    {
+                        object: 'area',
+                        type: 'changed',
+                        areaId: oldArea.id,
+                        attribute: 'x',
+                        newValue: newArea.x,
+                        oldValue: oldArea.x,
+                    }
+                );
+                changedAreas.set(oldArea.id, true);
+            }
+
+            if (attributesToCheck.includes('y') && oldArea.y !== newArea.y) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'area',
+                        objectId: oldArea.id,
+                        attribute: 'y',
+                    }),
+                    {
+                        object: 'area',
+                        type: 'changed',
+                        areaId: oldArea.id,
+                        attribute: 'y',
+                        newValue: newArea.y,
+                        oldValue: oldArea.y,
                     }
                 );
                 changedAreas.set(oldArea.id, true);
