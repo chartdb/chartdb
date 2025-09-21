@@ -1,6 +1,9 @@
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { Area } from '@/lib/domain/area';
 import type { ChartDBDiff, DiffMap, DiffObject } from '@/lib/domain/diff/diff';
 import type {
     FieldDiff,
@@ -43,20 +46,22 @@ export interface GenerateDiffOptions {
         relationships?: RelationshipDiff['type'][];
         areas?: AreaDiff['type'][];
     };
+    matchers?: {
+        table?: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
+        field?: (field: DBField, fields: DBField[]) => DBField | undefined;
+        index?: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
+        relationship?: (
+            relationship: DBRelationship,
+            relationships: DBRelationship[]
+        ) => DBRelationship | undefined;
+        area?: (area: Area, areas: Area[]) => Area | undefined;
+    };
 }
 
 export function generateDiff({
     diagram,
     newDiagram,
-    options = {
-        includeTables: true,
-        includeFields: true,
-        includeIndexes: true,
-        includeRelationships: true,
-        includeAreas: false,
-        attributes: {},
-        changeTypes: {},
-    },
+    options = {},
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
@@ -67,20 +72,41 @@ export function generateDiff({
     changedFields: Map<string, boolean>;
     changedAreas: Map<string, boolean>;
 } {
+    // Merge with default options
+    const mergedOptions: GenerateDiffOptions = {
+        includeTables: options.includeTables ?? true,
+        includeFields: options.includeFields ?? true,
+        includeIndexes: options.includeIndexes ?? true,
+        includeRelationships: options.includeRelationships ?? true,
+        includeAreas: options.includeAreas ?? false,
+        attributes: options.attributes ?? {},
+        changeTypes: options.changeTypes ?? {},
+        matchers: options.matchers ?? {},
+    };
+
     const newDiffs = new Map<string, ChartDBDiff>();
     const changedTables = new Map<string, boolean>();
     const changedFields = new Map<string, boolean>();
     const changedAreas = new Map<string, boolean>();
 
+    // Use provided matchers or default ones
+    const tableMatcher = mergedOptions.matchers?.table ?? defaultTableMatcher;
+    const fieldMatcher = mergedOptions.matchers?.field ?? defaultFieldMatcher;
+    const indexMatcher = mergedOptions.matchers?.index ?? defaultIndexMatcher;
+    const relationshipMatcher =
+        mergedOptions.matchers?.relationship ?? defaultRelationshipMatcher;
+    const areaMatcher = mergedOptions.matchers?.area ?? defaultAreaMatcher;
+
     // Compare tables
-    if (options.includeTables) {
+    if (mergedOptions.includeTables) {
         compareTables({
             diagram,
             newDiagram,
             diffMap: newDiffs,
             changedTables,
-            attributes: options.attributes?.tables,
-            changeTypes: options.changeTypes?.tables,
+            attributes: mergedOptions.attributes?.tables,
+            changeTypes: mergedOptions.changeTypes?.tables,
+            tableMatcher,
         });
     }
 
@@ -91,28 +117,33 @@ export function generateDiff({
         diffMap: newDiffs,
         changedTables,
         changedFields,
-        options,
+        options: mergedOptions,
+        tableMatcher,
+        fieldMatcher,
+        indexMatcher,
     });
 
     // Compare relationships
-    if (options.includeRelationships) {
+    if (mergedOptions.includeRelationships) {
         compareRelationships({
             diagram,
             newDiagram,
             diffMap: newDiffs,
-            changeTypes: options.changeTypes?.relationships,
+            changeTypes: mergedOptions.changeTypes?.relationships,
+            relationshipMatcher,
         });
     }
 
     // Compare areas if enabled
-    if (options.includeAreas) {
+    if (mergedOptions.includeAreas) {
         compareAreas({
             diagram,
             newDiagram,
             diffMap: newDiffs,
             changedAreas,
-            attributes: options.attributes?.areas,
-            changeTypes: options.changeTypes?.areas,
+            attributes: mergedOptions.attributes?.areas,
+            changeTypes: mergedOptions.changeTypes?.areas,
+            areaMatcher,
         });
     }
 
@@ -127,6 +158,7 @@ function compareTables({
     changedTables,
     attributes,
     changeTypes,
+    tableMatcher,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
@@ -134,6 +166,7 @@ function compareTables({
     changedTables: Map<string, boolean>;
     attributes?: TableDiffAttribute[];
     changeTypes?: TableDiff['type'][];
+    tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
 }) {
     const oldTables = diagram.tables || [];
     const newTables = newDiagram.tables || [];
@@ -149,7 +182,7 @@ function compareTables({
     // Check for added tables
     if (typesToCheck.includes('added')) {
         for (const newTable of newTables) {
-            if (!oldTables.find((t) => t.id === newTable.id)) {
+            if (!tableMatcher(newTable, oldTables)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'table',
@@ -169,7 +202,7 @@ function compareTables({
     // Check for removed tables
     if (typesToCheck.includes('removed')) {
         for (const oldTable of oldTables) {
-            if (!newTables.find((t) => t.id === oldTable.id)) {
+            if (!tableMatcher(oldTable, newTables)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'table',
@@ -189,7 +222,7 @@ function compareTables({
     // Check for table name, comments and color changes
     if (typesToCheck.includes('changed')) {
         for (const oldTable of oldTables) {
-            const newTable = newTables.find((t) => t.id === oldTable.id);
+            const newTable = tableMatcher(oldTable, newTables);
 
             if (!newTable) continue;
 
@@ -321,6 +354,9 @@ function compareTableContents({
     changedTables,
     changedFields,
     options,
+    tableMatcher,
+    fieldMatcher,
+    indexMatcher,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
@@ -328,13 +364,16 @@ function compareTableContents({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     options?: GenerateDiffOptions;
+    tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
+    fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
+    indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
 }) {
     const oldTables = diagram.tables || [];
     const newTables = newDiagram.tables || [];
 
     // For each table that exists in both diagrams
     for (const oldTable of oldTables) {
-        const newTable = newTables.find((t) => t.id === oldTable.id);
+        const newTable = tableMatcher(oldTable, newTables);
         if (!newTable) continue;
 
         // Compare fields
@@ -348,6 +387,7 @@ function compareTableContents({
                 changedFields,
                 attributes: options?.attributes?.fields,
                 changeTypes: options?.changeTypes?.fields,
+                fieldMatcher,
             });
         }
 
@@ -360,6 +400,7 @@ function compareTableContents({
                 diffMap,
                 changedTables,
                 changeTypes: options?.changeTypes?.indexes,
+                indexMatcher,
             });
         }
     }
@@ -375,6 +416,7 @@ function compareFields({
     changedFields,
     attributes,
     changeTypes,
+    fieldMatcher,
 }: {
     tableId: string;
     oldFields: DBField[];
@@ -384,6 +426,7 @@ function compareFields({
     changedFields: Map<string, boolean>;
     attributes?: FieldDiffAttribute[];
     changeTypes?: FieldDiff['type'][];
+    fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
 }) {
     // If changeTypes is empty array, don't check any changes
     if (changeTypes && changeTypes.length === 0) {
@@ -395,7 +438,7 @@ function compareFields({
     // Check for added fields
     if (typesToCheck.includes('added')) {
         for (const newField of newFields) {
-            if (!oldFields.find((f) => f.id === newField.id)) {
+            if (!fieldMatcher(newField, oldFields)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'field',
@@ -417,7 +460,7 @@ function compareFields({
     // Check for removed fields
     if (typesToCheck.includes('removed')) {
         for (const oldField of oldFields) {
-            if (!newFields.find((f) => f.id === oldField.id)) {
+            if (!fieldMatcher(oldField, newFields)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'field',
@@ -440,7 +483,7 @@ function compareFields({
     // Check for field changes
     if (typesToCheck.includes('changed')) {
         for (const oldField of oldFields) {
-            const newField = newFields.find((f) => f.id === oldField.id);
+            const newField = fieldMatcher(oldField, newFields);
             if (!newField) continue;
 
             // Compare basic field properties
@@ -586,6 +629,7 @@ function compareIndexes({
     diffMap,
     changedTables,
     changeTypes,
+    indexMatcher,
 }: {
     tableId: string;
     oldIndexes: DBIndex[];
@@ -593,6 +637,7 @@ function compareIndexes({
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
     changeTypes?: IndexDiff['type'][];
+    indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
 }) {
     // If changeTypes is empty array, don't check any changes
     if (changeTypes && changeTypes.length === 0) {
@@ -604,7 +649,7 @@ function compareIndexes({
     // Check for added indexes
     if (typesToCheck.includes('added')) {
         for (const newIndex of newIndexes) {
-            if (!oldIndexes.find((i) => i.id === newIndex.id)) {
+            if (!indexMatcher(newIndex, oldIndexes)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'index',
@@ -625,7 +670,7 @@ function compareIndexes({
     // Check for removed indexes
     if (typesToCheck.includes('removed')) {
         for (const oldIndex of oldIndexes) {
-            if (!newIndexes.find((i) => i.id === oldIndex.id)) {
+            if (!indexMatcher(oldIndex, newIndexes)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'index',
@@ -650,11 +695,16 @@ function compareRelationships({
     newDiagram,
     diffMap,
     changeTypes,
+    relationshipMatcher,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
     diffMap: DiffMap;
     changeTypes?: RelationshipDiff['type'][];
+    relationshipMatcher: (
+        relationship: DBRelationship,
+        relationships: DBRelationship[]
+    ) => DBRelationship | undefined;
 }) {
     // If changeTypes is empty array, don't check any changes
     if (changeTypes && changeTypes.length === 0) {
@@ -669,7 +719,7 @@ function compareRelationships({
     // Check for added relationships
     if (typesToCheck.includes('added')) {
         for (const newRelationship of newRelationships) {
-            if (!oldRelationships.find((r) => r.id === newRelationship.id)) {
+            if (!relationshipMatcher(newRelationship, oldRelationships)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'relationship',
@@ -688,7 +738,7 @@ function compareRelationships({
     // Check for removed relationships
     if (typesToCheck.includes('removed')) {
         for (const oldRelationship of oldRelationships) {
-            if (!newRelationships.find((r) => r.id === oldRelationship.id)) {
+            if (!relationshipMatcher(oldRelationship, newRelationships)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'relationship',
@@ -713,6 +763,7 @@ function compareAreas({
     changedAreas,
     attributes,
     changeTypes,
+    areaMatcher,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
@@ -720,6 +771,7 @@ function compareAreas({
     changedAreas: Map<string, boolean>;
     attributes?: AreaDiffAttribute[];
     changeTypes?: AreaDiff['type'][];
+    areaMatcher: (area: Area, areas: Area[]) => Area | undefined;
 }) {
     const oldAreas = diagram.areas || [];
     const newAreas = newDiagram.areas || [];
@@ -735,7 +787,7 @@ function compareAreas({
     // Check for added areas
     if (typesToCheck.includes('added')) {
         for (const newArea of newAreas) {
-            if (!oldAreas.find((a) => a.id === newArea.id)) {
+            if (!areaMatcher(newArea, oldAreas)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'area',
@@ -755,7 +807,7 @@ function compareAreas({
     // Check for removed areas
     if (typesToCheck.includes('removed')) {
         for (const oldArea of oldAreas) {
-            if (!newAreas.find((a) => a.id === oldArea.id)) {
+            if (!areaMatcher(oldArea, newAreas)) {
                 diffMap.set(
                     getDiffMapKey({
                         diffObject: 'area',
@@ -775,7 +827,7 @@ function compareAreas({
     // Check for area name and color changes
     if (typesToCheck.includes('changed')) {
         for (const oldArea of oldAreas) {
-            const newArea = newAreas.find((a) => a.id === oldArea.id);
+            const newArea = areaMatcher(oldArea, newAreas);
 
             if (!newArea) continue;
 
@@ -869,3 +921,35 @@ function compareAreas({
         }
     }
 }
+
+const defaultTableMatcher = (
+    table: DBTable,
+    tables: DBTable[]
+): DBTable | undefined => {
+    return tables.find((t) => t.id === table.id);
+};
+
+const defaultFieldMatcher = (
+    field: DBField,
+    fields: DBField[]
+): DBField | undefined => {
+    return fields.find((f) => f.id === field.id);
+};
+
+const defaultIndexMatcher = (
+    index: DBIndex,
+    indexes: DBIndex[]
+): DBIndex | undefined => {
+    return indexes.find((i) => i.id === index.id);
+};
+
+const defaultRelationshipMatcher = (
+    relationship: DBRelationship,
+    relationships: DBRelationship[]
+): DBRelationship | undefined => {
+    return relationships.find((r) => r.id === relationship.id);
+};
+
+const defaultAreaMatcher = (area: Area, areas: Area[]): Area | undefined => {
+    return areas.find((a) => a.id === area.id);
+};
