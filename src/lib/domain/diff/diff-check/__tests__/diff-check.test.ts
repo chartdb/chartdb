@@ -7,6 +7,8 @@ import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
 import { DatabaseType } from '@/lib/domain/database-type';
+import type { TableDiffChanged } from '../../table-diff';
+import type { FieldDiffChanged } from '../../field-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -133,7 +135,7 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('table-name-table-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('changed');
-            expect(diff?.attribute).toBe('name');
+            expect((diff as TableDiffChanged)?.attribute).toBe('name');
         });
 
         it('should detect table position changes', () => {
@@ -241,7 +243,7 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('field-type-field-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('changed');
-            expect(diff?.attribute).toBe('type');
+            expect((diff as FieldDiffChanged)?.attribute).toBe('type');
         });
     });
 
@@ -405,7 +407,9 @@ describe('generateDiff', () => {
             const nullableChange = result.diffMap.get('field-nullable-field-1');
             expect(nullableChange).toBeDefined();
             expect(nullableChange?.type).toBe('changed');
-            expect(nullableChange?.attribute).toBe('nullable');
+            expect((nullableChange as FieldDiffChanged)?.attribute).toBe(
+                'nullable'
+            );
         });
 
         it('should use case-insensitive custom matcher', () => {
@@ -437,9 +441,9 @@ describe('generateDiff', () => {
             const nameChange = result.diffMap.get('table-name-table-1');
             expect(nameChange).toBeDefined();
             expect(nameChange?.type).toBe('changed');
-            expect(nameChange?.attribute).toBe('name');
-            expect(nameChange?.oldValue).toBe('Users');
-            expect(nameChange?.newValue).toBe('users');
+            expect((nameChange as TableDiffChanged)?.attribute).toBe('name');
+            expect((nameChange as TableDiffChanged)?.oldValue).toBe('Users');
+            expect((nameChange as TableDiffChanged)?.newValue).toBe('users');
         });
     });
 
