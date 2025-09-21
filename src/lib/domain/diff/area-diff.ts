@@ -1,11 +1,13 @@
 import { z } from 'zod';
 import type { Area } from '../area';
 
-export type AreaDiffAttribute = keyof Pick<Area, 'name' | 'color'>;
+export type AreaDiffAttribute = keyof Pick<Area, 'name' | 'color' | 'x' | 'y'>;
 
 const areaDiffAttributeSchema: z.ZodType<AreaDiffAttribute> = z.union([
     z.literal('name'),
     z.literal('color'),
+    z.literal('x'),
+    z.literal('y'),
 ]);
 
 export interface AreaDiffChanged {
@@ -13,8 +15,8 @@ export interface AreaDiffChanged {
     type: 'changed';
     areaId: string;
     attribute: AreaDiffAttribute;
-    oldValue?: string | null;
-    newValue?: string | null;
+    oldValue?: string | number | null;
+    newValue?: string | number | null;
 }
 
 export const AreaDiffChangedSchema: z.ZodType<AreaDiffChanged> = z.object({
@@ -22,8 +24,8 @@ export const AreaDiffChangedSchema: z.ZodType<AreaDiffChanged> = z.object({
     type: z.literal('changed'),
     areaId: z.string(),
     attribute: areaDiffAttributeSchema,
-    oldValue: z.string().or(z.null()).optional(),
-    newValue: z.string().or(z.null()).optional(),
+    oldValue: z.union([z.string(), z.number(), z.null()]).optional(),
+    newValue: z.union([z.string(), z.number(), z.null()]).optional(),
 });
 
 export interface AreaDiffRemoved {
