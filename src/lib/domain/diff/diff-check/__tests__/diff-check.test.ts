@@ -9,7 +9,7 @@ import type { Area } from '@/lib/domain/area';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { TableDiffChanged } from '../../table-diff';
 import type { FieldDiffChanged } from '../../field-diff';
-import type { AreaDiffChanged as AreaDiffChangedType } from '../../area-diff';
+import type { AreaDiffChanged } from '../../area-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -402,9 +402,9 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('area-width-area-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('changed');
-            expect((diff as AreaDiffChangedType)?.attribute).toBe('width');
-            expect((diff as AreaDiffChangedType)?.oldValue).toBe(100);
-            expect((diff as AreaDiffChangedType)?.newValue).toBe(200);
+            expect((diff as AreaDiffChanged)?.attribute).toBe('width');
+            expect((diff as AreaDiffChanged)?.oldValue).toBe(100);
+            expect((diff as AreaDiffChanged)?.newValue).toBe(200);
         });
 
         it('should detect area height changes', () => {
@@ -430,9 +430,9 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('area-height-area-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('changed');
-            expect((diff as AreaDiffChangedType)?.attribute).toBe('height');
-            expect((diff as AreaDiffChangedType)?.oldValue).toBe(100);
-            expect((diff as AreaDiffChangedType)?.newValue).toBe(300);
+            expect((diff as AreaDiffChanged)?.attribute).toBe('height');
+            expect((diff as AreaDiffChanged)?.oldValue).toBe(100);
+            expect((diff as AreaDiffChanged)?.newValue).toBe(300);
         });
 
         it('should detect multiple area dimension changes', () => {
@@ -778,12 +778,12 @@ describe('generateDiff', () => {
             expect((tableWidthDiff as TableDiffChanged)?.newValue).toBe(120);
 
             const areaWidthDiff = result.diffMap.get('area-width-area-1');
-            expect((areaWidthDiff as AreaDiffChangedType)?.oldValue).toBe(200);
-            expect((areaWidthDiff as AreaDiffChangedType)?.newValue).toBe(250);
+            expect((areaWidthDiff as AreaDiffChanged)?.oldValue).toBe(200);
+            expect((areaWidthDiff as AreaDiffChanged)?.newValue).toBe(250);
 
             const areaHeightDiff = result.diffMap.get('area-height-area-1');
-            expect((areaHeightDiff as AreaDiffChangedType)?.oldValue).toBe(150);
-            expect((areaHeightDiff as AreaDiffChangedType)?.newValue).toBe(175);
+            expect((areaHeightDiff as AreaDiffChanged)?.oldValue).toBe(150);
+            expect((areaHeightDiff as AreaDiffChanged)?.newValue).toBe(175);
         });
 
         it('should handle multiple simultaneous changes', () => {
