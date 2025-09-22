@@ -8,36 +8,43 @@ import type { RelationshipDiff } from './relationship-diff';
 import { createRelationshipDiffSchema } from './relationship-diff';
 import type { TableDiff } from './table-diff';
 import { createTableDiffSchema } from './table-diff';
-import type { DBField, DBIndex, DBRelationship, DBTable } from '..';
+import type { AreaDiff } from './area-diff';
+import { createAreaDiffSchema } from './area-diff';
+import type { DBField, DBIndex, DBRelationship, DBTable, Area } from '..';
 
 export type ChartDBDiff<
     TTable = DBTable,
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
+    TArea = Area,
 > =
     | TableDiff<TTable>
     | FieldDiff<TField>
     | IndexDiff<TIndex>
-    | RelationshipDiff<TRelationship>;
+    | RelationshipDiff<TRelationship>
+    | AreaDiff<TArea>;
 
 export const createChartDBDiffSchema = <
     TTable = DBTable,
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
+    TArea = Area,
 >(
     tableSchema: z.ZodType<TTable>,
     fieldSchema: z.ZodType<TField>,
     indexSchema: z.ZodType<TIndex>,
-    relationshipSchema: z.ZodType<TRelationship>
-): z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship>> => {
+    relationshipSchema: z.ZodType<TRelationship>,
+    areaSchema: z.ZodType<TArea>
+): z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship, TArea>> => {
     return z.union([
         createTableDiffSchema(tableSchema),
         createFieldDiffSchema(fieldSchema),
         createIndexDiffSchema(indexSchema),
         createRelationshipDiffSchema(relationshipSchema),
-    ]) as z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
+        createAreaDiffSchema(areaSchema),
+    ]) as z.ZodType<ChartDBDiff<TTable, TField, TIndex, TRelationship, TArea>>;
 };
 
 export type DiffMap<
@@ -45,18 +52,21 @@ export type DiffMap<
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
-> = Map<string, ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
+    TArea = Area,
+> = Map<string, ChartDBDiff<TTable, TField, TIndex, TRelationship, TArea>>;
 
 export type DiffObject<
     TTable = DBTable,
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
+    TArea = Area,
 > =
     | TableDiff<TTable>['object']
     | FieldDiff<TField>['object']
     | IndexDiff<TIndex>['object']
-    | RelationshipDiff<TRelationship>['object'];
+    | RelationshipDiff<TRelationship>['object']
+    | AreaDiff<TArea>['object'];
 
 type ExtractDiffKind<T> = T extends { object: infer O; type: infer Type }
     ? T extends { attribute: infer A }
@@ -69,16 +79,18 @@ export type DiffKind<
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
-> = ExtractDiffKind<ChartDBDiff<TTable, TField, TIndex, TRelationship>>;
+    TArea = Area,
+> = ExtractDiffKind<ChartDBDiff<TTable, TField, TIndex, TRelationship, TArea>>;
 
 export const isDiffOfKind = <
     TTable = DBTable,
     TField = DBField,
     TIndex = DBIndex,
     TRelationship = DBRelationship,
+    TArea = Area,
 >(
-    diff: ChartDBDiff<TTable, TField, TIndex, TRelationship>,
-    kind: DiffKind<TTable, TField, TIndex, TRelationship>
+    diff: ChartDBDiff<TTable, TField, TIndex, TRelationship, TArea>,
+    kind: DiffKind<TTable, TField, TIndex, TRelationship, TArea>
 ): boolean => {
     if ('attribute' in kind) {
         return (
