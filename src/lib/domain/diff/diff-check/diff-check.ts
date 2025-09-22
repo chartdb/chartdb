@@ -342,6 +342,29 @@ function compareTables({
 
                 changedTables.set(oldTable.id, true);
             }
+
+            if (
+                attributesToCheck.includes('width') &&
+                oldTable.width !== newTable.width
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'table',
+                        objectId: oldTable.id,
+                        attribute: 'width',
+                    }),
+                    {
+                        object: 'table',
+                        type: 'changed',
+                        tableId: oldTable.id,
+                        attribute: 'width',
+                        newValue: newTable.width,
+                        oldValue: oldTable.width,
+                    }
+                );
+
+                changedTables.set(oldTable.id, true);
+            }
         }
     }
 }
@@ -914,6 +937,50 @@ function compareAreas({
                         attribute: 'y',
                         newValue: newArea.y,
                         oldValue: oldArea.y,
+                    }
+                );
+                changedAreas.set(oldArea.id, true);
+            }
+
+            if (
+                attributesToCheck.includes('width') &&
+                oldArea.width !== newArea.width
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'area',
+                        objectId: oldArea.id,
+                        attribute: 'width',
+                    }),
+                    {
+                        object: 'area',
+                        type: 'changed',
+                        areaId: oldArea.id,
+                        attribute: 'width',
+                        newValue: newArea.width,
+                        oldValue: oldArea.width,
+                    }
+                );
+                changedAreas.set(oldArea.id, true);
+            }
+
+            if (
+                attributesToCheck.includes('height') &&
+                oldArea.height !== newArea.height
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'area',
+                        objectId: oldArea.id,
+                        attribute: 'height',
+                    }),
+                    {
+                        object: 'area',
+                        type: 'changed',
+                        areaId: oldArea.id,
+                        attribute: 'height',
+                        newValue: newArea.height,
+                        oldValue: oldArea.height,
                     }
                 );
                 changedAreas.set(oldArea.id, true);
