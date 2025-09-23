@@ -1,13 +1,18 @@
 import { z } from 'zod';
 import type { Area } from '../area';
 
-export type AreaDiffAttribute = keyof Pick<Area, 'name' | 'color' | 'x' | 'y'>;
+export type AreaDiffAttribute = keyof Pick<
+    Area,
+    'name' | 'color' | 'x' | 'y' | 'width' | 'height'
+>;
 
 const areaDiffAttributeSchema: z.ZodType<AreaDiffAttribute> = z.union([
     z.literal('name'),
     z.literal('color'),
     z.literal('x'),
     z.literal('y'),
+    z.literal('width'),
+    z.literal('height'),
 ]);
 
 export interface AreaDiffChanged {
