@@ -173,9 +173,11 @@ export const RelationshipListItemContent: React.FC<
                                 <SelectItem value="many_to_one">
                                     {t('relationship_type.many_to_one')}
                                 </SelectItem>
-                                <SelectItem value="many_to_many">
-                                    {t('relationship_type.many_to_many')}
-                                </SelectItem>
+                                {relationshipType === 'many_to_many' ? (
+                                    <SelectItem value="many_to_many">
+                                        {t('relationship_type.many_to_many')}
+                                    </SelectItem>
+                                ) : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
