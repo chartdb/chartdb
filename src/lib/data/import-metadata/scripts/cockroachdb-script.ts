@@ -127,7 +127,13 @@ cols AS (
                                             ',"default":"', null,
                                             '","collation":"', COALESCE(cols.COLLATION_NAME::TEXT, ''),
                                             '","comment":"', COALESCE(replace(replace(dsc.description::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
-                                            '"}')), ',') AS cols_metadata
+                                            '","is_identity":', CASE 
+                                                WHEN cols.is_identity = 'YES' THEN 'true'
+                                                WHEN cols.column_default IS NOT NULL AND cols.column_default LIKE 'nextval(%' THEN 'true'
+                                                WHEN cols.column_default LIKE 'unique_rowid()%' THEN 'true'
+                                                ELSE 'false'
+                                            END,
+                                            '}')), ',') AS cols_metadata
     FROM information_schema.columns cols
     LEFT JOIN pg_catalog.pg_class c
         ON c.relname = cols.table_name

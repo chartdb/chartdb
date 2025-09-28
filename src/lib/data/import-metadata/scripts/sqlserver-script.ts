@@ -91,6 +91,11 @@ cols AS (
                             WHEN cols.COLLATION_NAME IS NULL THEN 'null'
                             ELSE '"' + STRING_ESCAPE(cols.COLLATION_NAME, 'json') + '"'
                         END +
+                        ', "is_identity": ' + CASE 
+                            WHEN COLUMNPROPERTY(OBJECT_ID(cols.TABLE_SCHEMA + '.' + cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') = 1 
+                            THEN 'true' 
+                            ELSE 'false' 
+                        END +
                     N'}') COLLATE DATABASE_DEFAULT
                 ), N','
             ) +
