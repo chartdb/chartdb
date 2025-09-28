@@ -138,7 +138,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         );
         const tableColor = useMemo(() => {
             if (tableChangedColor) {
-                return tableChangedColor;
+                return tableChangedColor.new;
             }
 
             return table.color;
@@ -476,13 +476,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             {tableChangedName ? (
                                 <Label className="flex h-5 items-center justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
                                     <span className="truncate">
-                                        {table.name}
+                                        {tableChangedName.old}
                                     </span>
                                     <span className="mx-1 font-semibold">
                                         →
                                     </span>
                                     <span className="truncate">
-                                        {tableChangedName}
+                                        {tableChangedName.new}
                                     </span>
                                 </Label>
                             ) : isDiffNewTable ? (
