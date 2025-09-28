@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.16.1](https://github.com/chartdb/chartdb/compare/v1.16.0...v1.16.1) (2025-09-28)
+
+
+### Bug Fixes
+
+* add auto-increment field detection in smart-query import ([#935](https://github.com/chartdb/chartdb/issues/935)) ([57b3b87](https://github.com/chartdb/chartdb/commit/57b3b8777fd0a445abf0ba6603faab612d469d5c))
+* add rels export dbml ([#937](https://github.com/chartdb/chartdb/issues/937)) ([c3c646b](https://github.com/chartdb/chartdb/commit/c3c646bf7cbb1328f4b2eb85c9a7e929f0fcd3b9))
+* dbml diff fields types preview ([#934](https://github.com/chartdb/chartdb/issues/934)) ([bb03309](https://github.com/chartdb/chartdb/commit/bb033091b1f64b888822be1423a80f16f5314f6b))
+
 ## [1.16.0](https://github.com/chartdb/chartdb/compare/v1.15.1...v1.16.0) (2025-09-24)
 
 
