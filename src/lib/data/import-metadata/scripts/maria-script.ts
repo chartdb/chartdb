@@ -69,7 +69,9 @@ SELECT CAST(CONCAT(
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                ',"default":"', ${withExtras ? withDefault : withoutDefault},
-               '","collation":"', IFNULL(cols.collation_name, ''), '"}')
+               '","collation":"', IFNULL(cols.collation_name, ''),
+               '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
+               '"}')
     ) FROM (
         SELECT cols.table_schema,
                cols.table_name,
@@ -81,7 +83,8 @@ SELECT CAST(CONCAT(
                cols.ordinal_position,
                cols.is_nullable,
                cols.column_default,
-               cols.collation_name
+               cols.collation_name,
+               cols.extra
         FROM information_schema.columns cols
         WHERE cols.table_schema = DATABASE()
     ) AS cols), ''),

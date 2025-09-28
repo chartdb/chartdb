@@ -92,7 +92,9 @@ export const getMySQLQuery = (
                 ',"ordinal_position":', cols.ordinal_position,
                 ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                 ',"default":"', ${withExtras ? withDefault : withoutDefault},
-                '","collation":"', IFNULL(cols.collation_name, ''), '"}'
+                '","collation":"', IFNULL(cols.collation_name, ''),
+                '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
+                '}'
             )))))
 ), indexes as (
   (SELECT (@indexes:=NULL),

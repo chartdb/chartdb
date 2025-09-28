@@ -119,7 +119,13 @@ WITH fk_info AS (
                       END
                   ELSE null
               END,
-              'default', ${withExtras ? withDefault : withoutDefault}
+              'default', ${withExtras ? withDefault : withoutDefault},
+              'is_identity', 
+              CASE 
+                  WHEN p.pk = 1 AND LOWER(p.type) LIKE '%int%' THEN json('true')
+                  WHEN LOWER((SELECT sql FROM sqlite_master WHERE name = m.name)) LIKE '%' || p.name || '%autoincrement%' THEN json('true')
+                  ELSE json('false')
+              END
           )
       ) AS cols_metadata
   FROM
@@ -292,7 +298,13 @@ WITH fk_info AS (
                       END
                   ELSE null
               END,
-              'default', ${withExtras ? withDefault : withoutDefault}
+              'default', ${withExtras ? withDefault : withoutDefault},
+              'is_identity', 
+              CASE 
+                  WHEN p.pk = 1 AND LOWER(p.type) LIKE '%int%' THEN json('true')
+                  WHEN LOWER((SELECT sql FROM sqlite_master WHERE name = m.name)) LIKE '%' || p.name || '%autoincrement%' THEN json('true')
+                  ELSE json('false')
+              END
           )
       ) AS cols_metadata
   FROM
