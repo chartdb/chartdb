@@ -159,13 +159,17 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const [diffState, setDiffState] = useState<{
             isDiffFieldRemoved: boolean;
             isDiffNewField: boolean;
-            fieldDiffChangedName: string | null;
-            fieldDiffChangedType: DBField['type'] | null;
-            fieldDiffChangedNullable: boolean | null;
-            fieldDiffChangedCharacterMaximumLength: string | null;
-            fieldDiffChangedScale: number | null;
-            fieldDiffChangedPrecision: number | null;
-            fieldDiffChangedPrimaryKey: boolean | null;
+            fieldDiffChangedName: ReturnType<typeof getFieldNewName>;
+            fieldDiffChangedType: ReturnType<typeof getFieldNewType>;
+            fieldDiffChangedNullable: ReturnType<typeof getFieldNewNullable>;
+            fieldDiffChangedCharacterMaximumLength: ReturnType<
+                typeof getFieldNewCharacterMaximumLength
+            >;
+            fieldDiffChangedScale: ReturnType<typeof getFieldNewScale>;
+            fieldDiffChangedPrecision: ReturnType<typeof getFieldNewPrecision>;
+            fieldDiffChangedPrimaryKey: ReturnType<
+                typeof getFieldNewPrimaryKey
+            >;
             isDiffFieldChanged: boolean;
         }>({
             isDiffFieldRemoved: false,
@@ -368,9 +372,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     >
                         {fieldDiffChangedName ? (
                             <>
-                                {field.name}{' '}
+                                {fieldDiffChangedName.old}{' '}
                                 <span className="font-medium">→</span>{' '}
-                                {fieldDiffChangedName}
+                                {fieldDiffChangedName.new}
                             </>
                         ) : (
                             field.name
@@ -389,9 +393,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 </div>
 
                 <div className="ml-2 flex shrink-0 items-center justify-end gap-1.5">
-                    {(field.primaryKey &&
-                        fieldDiffChangedPrimaryKey === null) ||
-                    fieldDiffChangedPrimaryKey ? (
+                    {(field.primaryKey && !fieldDiffChangedPrimaryKey?.old) ||
+                    fieldDiffChangedPrimaryKey?.new ? (
                         <div
                             className={cn(
                                 'text-muted-foreground',
@@ -437,9 +440,17 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             {fieldDiffChangedType ? (
                                 <>
                                     <span className="line-through">
-                                        {field.type.name.split(' ')[0]}
+                                        {
+                                            fieldDiffChangedType.old.name.split(
+                                                ' '
+                                            )[0]
+                                        }
                                     </span>{' '}
-                                    {fieldDiffChangedType.name.split(' ')[0]}
+                                    {
+                                        fieldDiffChangedType.new.name.split(
+                                            ' '
+                                        )[0]
+                                    }
                                 </>
                             ) : (
                                 `${field.type.name.split(' ')[0]}${
@@ -448,21 +459,21 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                               ...field,
                                               ...{
                                                   precision:
-                                                      fieldDiffChangedPrecision ??
+                                                      fieldDiffChangedPrecision?.new ??
                                                       field.precision,
                                                   scale:
-                                                      fieldDiffChangedScale ??
+                                                      fieldDiffChangedScale?.new ??
                                                       field.scale,
                                                   characterMaximumLength:
-                                                      fieldDiffChangedCharacterMaximumLength ??
+                                                      fieldDiffChangedCharacterMaximumLength?.new ??
                                                       field.characterMaximumLength,
                                               },
                                           })
                                         : ''
                                 }`
                             )}
-                            {fieldDiffChangedNullable !== null ? (
-                                fieldDiffChangedNullable ? (
+                            {fieldDiffChangedNullable ? (
+                                fieldDiffChangedNullable.new ? (
                                     <span className="font-semibold">?</span>
                                 ) : (
                                     <span className="line-through">?</span>
