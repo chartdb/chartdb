@@ -9,6 +9,7 @@ import type { Area } from '@/lib/domain/area';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { TableDiffChanged } from '../../table-diff';
 import type { FieldDiffChanged } from '../../field-diff';
+import type { AreaDiffChanged } from '../../area-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -159,6 +160,62 @@ describe('generateDiff', () => {
             expect(result.diffMap.size).toBe(2);
             expect(result.diffMap.has('table-x-table-1')).toBe(true);
             expect(result.diffMap.has('table-y-table-1')).toBe(true);
+        });
+
+        it('should detect table width changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [createMockTable({ width: 150 })],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [createMockTable({ width: 250 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    attributes: {
+                        tables: ['width'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('table-width-table-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as TableDiffChanged)?.attribute).toBe('width');
+            expect((diff as TableDiffChanged)?.oldValue).toBe(150);
+            expect((diff as TableDiffChanged)?.newValue).toBe(250);
+        });
+
+        it('should detect multiple table dimension changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [createMockTable({ x: 0, y: 0, width: 100 })],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [createMockTable({ x: 50, y: 75, width: 200 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    attributes: {
+                        tables: ['x', 'y', 'width'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(3);
+            expect(result.diffMap.has('table-x-table-1')).toBe(true);
+            expect(result.diffMap.has('table-y-table-1')).toBe(true);
+            expect(result.diffMap.has('table-width-table-1')).toBe(true);
+
+            const widthDiff = result.diffMap.get('table-width-table-1');
+            expect(widthDiff?.type).toBe('changed');
+            expect((widthDiff as TableDiffChanged)?.oldValue).toBe(100);
+            expect((widthDiff as TableDiffChanged)?.newValue).toBe(200);
         });
     });
 
@@ -320,6 +377,92 @@ describe('generateDiff', () => {
             });
 
             expect(result.diffMap.size).toBe(0);
+        });
+
+        it('should detect area width changes', () => {
+            const oldDiagram = createMockDiagram({
+                areas: [createMockArea({ width: 100 })],
+            });
+            const newDiagram = createMockDiagram({
+                areas: [createMockArea({ width: 200 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeAreas: true,
+                    attributes: {
+                        areas: ['width'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('area-width-area-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as AreaDiffChanged)?.attribute).toBe('width');
+            expect((diff as AreaDiffChanged)?.oldValue).toBe(100);
+            expect((diff as AreaDiffChanged)?.newValue).toBe(200);
+        });
+
+        it('should detect area height changes', () => {
+            const oldDiagram = createMockDiagram({
+                areas: [createMockArea({ height: 100 })],
+            });
+            const newDiagram = createMockDiagram({
+                areas: [createMockArea({ height: 300 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeAreas: true,
+                    attributes: {
+                        areas: ['height'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('area-height-area-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as AreaDiffChanged)?.attribute).toBe('height');
+            expect((diff as AreaDiffChanged)?.oldValue).toBe(100);
+            expect((diff as AreaDiffChanged)?.newValue).toBe(300);
+        });
+
+        it('should detect multiple area dimension changes', () => {
+            const oldDiagram = createMockDiagram({
+                areas: [
+                    createMockArea({ x: 0, y: 0, width: 100, height: 100 }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                areas: [
+                    createMockArea({ x: 50, y: 50, width: 200, height: 300 }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeAreas: true,
+                    attributes: {
+                        areas: ['x', 'y', 'width', 'height'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(4);
+            expect(result.diffMap.has('area-x-area-1')).toBe(true);
+            expect(result.diffMap.has('area-y-area-1')).toBe(true);
+            expect(result.diffMap.has('area-width-area-1')).toBe(true);
+            expect(result.diffMap.has('area-height-area-1')).toBe(true);
         });
     });
 
@@ -565,6 +708,84 @@ describe('generateDiff', () => {
     });
 
     describe('Complex Scenarios', () => {
+        it('should detect all dimensional changes for tables and areas', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        id: 'table-1',
+                        x: 0,
+                        y: 0,
+                        width: 100,
+                    }),
+                ],
+                areas: [
+                    createMockArea({
+                        id: 'area-1',
+                        x: 0,
+                        y: 0,
+                        width: 200,
+                        height: 150,
+                    }),
+                ],
+            });
+
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        id: 'table-1',
+                        x: 10,
+                        y: 20,
+                        width: 120,
+                    }),
+                ],
+                areas: [
+                    createMockArea({
+                        id: 'area-1',
+                        x: 25,
+                        y: 35,
+                        width: 250,
+                        height: 175,
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeAreas: true,
+                    attributes: {
+                        tables: ['x', 'y', 'width'],
+                        areas: ['x', 'y', 'width', 'height'],
+                    },
+                },
+            });
+
+            // Table dimensional changes
+            expect(result.diffMap.has('table-x-table-1')).toBe(true);
+            expect(result.diffMap.has('table-y-table-1')).toBe(true);
+            expect(result.diffMap.has('table-width-table-1')).toBe(true);
+
+            // Area dimensional changes
+            expect(result.diffMap.has('area-x-area-1')).toBe(true);
+            expect(result.diffMap.has('area-y-area-1')).toBe(true);
+            expect(result.diffMap.has('area-width-area-1')).toBe(true);
+            expect(result.diffMap.has('area-height-area-1')).toBe(true);
+
+            // Verify the correct values
+            const tableWidthDiff = result.diffMap.get('table-width-table-1');
+            expect((tableWidthDiff as TableDiffChanged)?.oldValue).toBe(100);
+            expect((tableWidthDiff as TableDiffChanged)?.newValue).toBe(120);
+
+            const areaWidthDiff = result.diffMap.get('area-width-area-1');
+            expect((areaWidthDiff as AreaDiffChanged)?.oldValue).toBe(200);
+            expect((areaWidthDiff as AreaDiffChanged)?.newValue).toBe(250);
+
+            const areaHeightDiff = result.diffMap.get('area-height-area-1');
+            expect((areaHeightDiff as AreaDiffChanged)?.oldValue).toBe(150);
+            expect((areaHeightDiff as AreaDiffChanged)?.newValue).toBe(175);
+        });
+
         it('should handle multiple simultaneous changes', () => {
             const oldDiagram = createMockDiagram({
                 tables: [

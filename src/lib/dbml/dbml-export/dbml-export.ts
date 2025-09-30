@@ -732,9 +732,17 @@ const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
     return result;
 };
 
+// Function to extract only Ref statements from DBML
+const extractRelationshipsDbml = (dbml: string): string => {
+    const lines = dbml.split('\n');
+    const refLines = lines.filter((line) => line.trim().startsWith('Ref '));
+    return refLines.join('\n').trim();
+};
+
 export interface DBMLExportResult {
     standardDbml: string;
     inlineDbml: string;
+    relationshipsDbml: string;
     error?: string;
 }
 
@@ -923,5 +931,13 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         }
     }
 
-    return { standardDbml: standard, inlineDbml: inline, error: errorMsg };
+    // Extract relationships DBML from standard output
+    const relationshipsDbml = extractRelationshipsDbml(standard);
+
+    return {
+        standardDbml: standard,
+        inlineDbml: inline,
+        relationshipsDbml,
+        error: errorMsg,
+    };
 }

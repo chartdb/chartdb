@@ -79,7 +79,10 @@ import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
-import { updateTablesParentAreas, getTablesInArea } from './area-utils';
+import {
+    updateTablesParentAreas,
+    getTablesInArea,
+} from '@/lib/utils/area-utils';
 import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { ShowAllButton } from './show-all-button';

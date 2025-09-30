@@ -57,6 +57,9 @@ export const createFieldsFromMetadata = ({
             ...(col.precision?.scale ? { scale: col.precision.scale } : {}),
             ...(col.default ? { default: col.default } : {}),
             ...(col.collation ? { collation: col.collation } : {}),
+            ...(col.is_identity !== undefined
+                ? { increment: col.is_identity }
+                : {}),
             createdAt: Date.now(),
             comments: col.comment ? col.comment : undefined,
         })

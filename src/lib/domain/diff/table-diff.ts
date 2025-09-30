@@ -3,7 +3,7 @@ import type { DBTable } from '../db-table';
 
 export type TableDiffAttribute = keyof Pick<
     DBTable,
-    'name' | 'comments' | 'color' | 'x' | 'y'
+    'name' | 'comments' | 'color' | 'x' | 'y' | 'width'
 >;
 
 const tableDiffAttributeSchema: z.ZodType<TableDiffAttribute> = z.union([
@@ -12,6 +12,7 @@ const tableDiffAttributeSchema: z.ZodType<TableDiffAttribute> = z.union([
     z.literal('color'),
     z.literal('x'),
     z.literal('y'),
+    z.literal('width'),
 ]);
 
 export interface TableDiffChanged {
