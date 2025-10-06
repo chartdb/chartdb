@@ -17,11 +17,12 @@ import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
+    onStartRelationshipCreation?: () => void;
 }
 
 export const TableNodeContextMenu: React.FC<
     React.PropsWithChildren<TableNodeContextMenuProps>
-> = ({ children, table }) => {
+> = ({ children, table, onStartRelationshipCreation }) => {
     const { removeTable, readonly, createTable } = useChartDB();
     const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -53,10 +54,30 @@ export const TableNodeContextMenu: React.FC<
     }, [removeTable, table.id]);
 
     const addRelationshipHandler = useCallback(() => {
-        openCreateRelationshipDialog({
-            sourceTableId: table.id,
+        console.log('[TableNodeContextMenu] Add relationship clicked', {
+            tableId: table.id,
+            tableName: table.name,
+            hasStartHandler: !!onStartRelationshipCreation,
         });
-    }, [openCreateRelationshipDialog, table.id]);
+
+        // Use the programmatic handle drag if available, otherwise fall back to dialog
+        if (onStartRelationshipCreation) {
+            console.log(
+                '[TableNodeContextMenu] Calling onStartRelationshipCreation'
+            );
+            onStartRelationshipCreation();
+        } else {
+            console.log('[TableNodeContextMenu] Falling back to dialog');
+            openCreateRelationshipDialog({
+                sourceTableId: table.id,
+            });
+        }
+    }, [
+        onStartRelationshipCreation,
+        openCreateRelationshipDialog,
+        table.id,
+        table.name,
+    ]);
 
     if (!isDesktop || readonly) {
         return <>{children}</>;

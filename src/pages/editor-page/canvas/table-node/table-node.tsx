@@ -6,7 +6,13 @@ import React, {
     useEffect,
 } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
-import { NodeResizer, useConnection, useStore } from '@xyflow/react';
+import {
+    NodeResizer,
+    useConnection,
+    useStore,
+    Handle,
+    Position,
+} from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
     ChevronsLeftRight,
@@ -47,6 +53,9 @@ import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
 
+export const TABLE_RELATIONSHIP_HANDLE_ID_PREFIX = 'table_rel_';
+export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
+
 export type TableNodeType = Node<
     {
         table: DBTable;
@@ -54,6 +63,11 @@ export type TableNodeType = Node<
         highlightOverlappingTables?: boolean;
         hasHighlightedCustomType?: boolean;
         highlightTable?: boolean;
+        onStartRelationship?: (sourceTableId: string) => void;
+        isPendingRelationshipTarget?: boolean;
+        isDialogSource?: boolean;
+        isDialogTarget?: boolean;
+        isPendingRelationshipSource?: boolean;
     },
     'table'
 >;
@@ -69,6 +83,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             highlightOverlappingTables,
             hasHighlightedCustomType,
             highlightTable,
+            onStartRelationship,
+            isPendingRelationshipTarget,
+            isDialogSource,
+            isDialogTarget,
+            isPendingRelationshipSource,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -104,6 +123,17 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
             return connection.inProgress && connection.fromNode.id !== table.id;
         }, [connection, table.id, isHovering]);
+
+        // Check if this is a target for table-level relationship (right-click flow)
+        const isTableRelationshipTarget = useMemo(() => {
+            return (
+                connection.inProgress &&
+                connection.fromNode.id !== table.id &&
+                connection.fromHandle.id?.startsWith(
+                    TABLE_RELATIONSHIP_HANDLE_ID_PREFIX
+                )
+            );
+        }, [connection, table.id]);
 
         const {
             getTableNewName,
@@ -318,9 +348,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () =>
                 cn(
                     'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
-                    selected || isTarget
-                        ? 'border-pink-600'
-                        : 'border-slate-500 dark:border-slate-700',
+                    // Highlight both source and target in blue when dialog is open
+                    isDialogSource || isDialogTarget
+                        ? 'border-blue-600 ring-2 ring-blue-600/20'
+                        : // Use blue border for pending relationship targets, pink for normal selection
+                          isPendingRelationshipTarget && isHovering
+                          ? 'border-blue-600'
+                          : selected || isTarget
+                            ? 'border-pink-600'
+                            : 'border-slate-500 dark:border-slate-700',
                     isOverlapping
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
                         : '',
@@ -363,6 +399,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isDiffTableRemoved,
                 isTarget,
                 editTableMode,
+                isPendingRelationshipTarget,
+                isHovering,
+                isDialogSource,
+                isDialogTarget,
             ]
         );
 
@@ -384,8 +424,85 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             setEditTableModeTable(null);
         }, [setEditTableModeTable]);
 
+        const startRelationshipCreation = useCallback(() => {
+            console.log('[TableNode] startRelationshipCreation called', {
+                tableId: table.id,
+                tableName: table.name,
+                readonly,
+            });
+
+            if (readonly) {
+                console.log('[TableNode] Readonly mode, aborting');
+                return;
+            }
+
+            // Check if we have a direct callback from canvas to open the dialog
+            if (onStartRelationship) {
+                console.log(
+                    '[TableNode] Using direct callback to start relationship'
+                );
+                onStartRelationship(table.id);
+                return;
+            }
+
+            // Fallback: Try to simulate the drag (keeping old implementation as fallback)
+            const handleId = `${TABLE_RELATIONSHIP_HANDLE_ID_PREFIX}${table.id}`;
+            console.log(
+                '[TableNode] Falling back to drag simulation for handle:',
+                handleId
+            );
+
+            const handle = document.querySelector(
+                `[data-handleid="${handleId}"]`
+            ) as HTMLElement;
+
+            if (!handle) {
+                console.error(
+                    '[TableNode] Could not find relationship handle',
+                    {
+                        tableId: table.id,
+                        handleId,
+                    }
+                );
+                return;
+            }
+
+            const rect = handle.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Simplified event dispatch - directly trigger mousedown on handle
+            const mouseDownEvent = new MouseEvent('mousedown', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+                clientX: centerX,
+                clientY: centerY,
+                button: 0,
+                buttons: 1,
+            });
+
+            handle.dispatchEvent(mouseDownEvent);
+
+            // Small movement to start drag
+            setTimeout(() => {
+                const mouseMoveEvent = new MouseEvent('mousemove', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                    clientX: centerX + 10,
+                    clientY: centerY + 10,
+                    buttons: 1,
+                });
+                document.dispatchEvent(mouseMoveEvent);
+            }, 10);
+        }, [readonly, table.id, table.name, onStartRelationship]);
+
         return (
-            <TableNodeContextMenu table={table}>
+            <TableNodeContextMenu
+                table={table}
+                onStartRelationshipCreation={startRelationshipCreation}
+            >
                 {editTableMode ? (
                     <TableEditMode
                         table={table}
@@ -417,6 +534,29 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     <TableNodeDependencyIndicator
                         table={table}
                         focused={focused}
+                    />
+                    {/* Hidden handles for right-click "Add Relationship" functionality */}
+                    <Handle
+                        id={`${TABLE_RELATIONSHIP_HANDLE_ID_PREFIX}${table.id}`}
+                        type="source"
+                        position={Position.Right}
+                        className="!pointer-events-auto !absolute !right-0 !top-1/2 !opacity-0"
+                        style={{ width: '1px', height: '1px' }}
+                    />
+                    {/* Target handle for receiving table-level connections */}
+                    <Handle
+                        id={`${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${table.id}`}
+                        type="target"
+                        position={Position.Left}
+                        className={
+                            isTableRelationshipTarget
+                                ? '!pointer-events-auto !absolute !left-0 !top-0 !z-[100] !h-full !w-full !transform-none !rounded-none !border-none !opacity-0'
+                                : '!pointer-events-none !absolute !left-0 !top-0 !opacity-0'
+                        }
+                        style={{
+                            width: isTableRelationshipTarget ? '100%' : '1px',
+                            height: isTableRelationshipTarget ? '100%' : '1px',
+                        }}
                     />
                     <TableNodeStatus
                         status={
@@ -541,7 +681,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         {visibleFields.map((field: DBField) => (
                             <TableNodeField
                                 key={field.id}
-                                focused={focused}
+                                focused={
+                                    focused &&
+                                    !isPendingRelationshipTarget &&
+                                    !isDialogSource &&
+                                    !isPendingRelationshipSource
+                                }
                                 tableNodeId={id}
                                 field={field}
                                 highlighted={highlightedFieldIds.has(field.id)}

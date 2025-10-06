@@ -58,6 +58,7 @@ export interface SelectBoxProps {
     footerButtons?: React.ReactNode;
     commandOnMouseDown?: (e: React.MouseEvent) => void;
     commandOnClick?: (e: React.MouseEvent) => void;
+    onSearchChange?: (search: string) => void;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -87,6 +88,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             footerButtons,
             commandOnMouseDown,
             commandOnClick,
+            onSearchChange,
         },
         ref
     ) => {
@@ -404,7 +406,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         <div className="relative">
                             <CommandInput
                                 value={searchTerm}
-                                onValueChange={(e) => setSearchTerm(e)}
+                                onValueChange={(e) => {
+                                    setSearchTerm(e);
+                                    onSearchChange?.(e);
+                                }}
                                 ref={ref}
                                 placeholder={inputPlaceholder ?? 'Search...'}
                                 className="h-9"

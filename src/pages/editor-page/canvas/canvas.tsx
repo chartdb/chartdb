@@ -93,6 +93,8 @@ import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
+import { SelectRelationshipFieldsOverlay } from './select-relationship-fields-overlay/select-relationship-fields-overlay';
+import { TABLE_RELATIONSHIP_HANDLE_ID_PREFIX } from './table-node/table-node';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -123,12 +125,21 @@ const tableToTableNode = (
         filterLoading,
         showDBViews,
         forceShow,
+        onStartRelationship,
+        pendingRelationshipSource,
+        fieldSelectionDialog,
     }: {
         filter?: DiagramFilter;
         databaseType: DatabaseType;
         filterLoading: boolean;
         showDBViews?: boolean;
         forceShow?: boolean;
+        onStartRelationship?: (sourceTableId: string) => void;
+        pendingRelationshipSource?: string | null;
+        fieldSelectionDialog?: {
+            sourceTableId: string;
+            targetTableId: string;
+        } | null;
     }
 ): TableNodeType => {
     // Always use absolute position for now
@@ -149,6 +160,13 @@ const tableToTableNode = (
             (!showDBViews && table.isView);
     }
 
+    // Check if this table is the source or target in the field selection dialog
+    const isDialogSource = fieldSelectionDialog?.sourceTableId === table.id;
+    const isDialogTarget = fieldSelectionDialog?.targetTableId === table.id;
+
+    // Check if this table is the source during pending relationship selection
+    const isPendingRelationshipSource = pendingRelationshipSource === table.id;
+
     return {
         id: table.id,
         type: 'table',
@@ -156,6 +174,13 @@ const tableToTableNode = (
         data: {
             table,
             isOverlapping: false,
+            onStartRelationship,
+            isPendingRelationshipTarget:
+                pendingRelationshipSource !== null &&
+                pendingRelationshipSource !== table.id,
+            isDialogSource,
+            isDialogTarget,
+            isPendingRelationshipSource,
         },
         width: table.width ?? MIN_TABLE_SIZE,
         hidden,
@@ -256,6 +281,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { filter, loading: filterLoading } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
 
+    // State for field selection dialog when using right-click "Add Relationship"
+    const [fieldSelectionDialog, setFieldSelectionDialog] = useState<{
+        sourceTableId: string;
+        targetTableId: string;
+    } | null>(null);
+
+    // State to track pending relationship source when user clicks "Add Relationship"
+    const [pendingRelationshipSource, setPendingRelationshipSource] = useState<
+        string | null
+    >(null);
+
+    // Track if a connection is in progress
+    const [isConnecting, setIsConnecting] = useState(false);
+
     const shouldForceShowTable = useCallback(
         (tableId: string) => {
             return checkIfNewTable({ tableId });
@@ -265,6 +304,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
+    // Initialize nodes without the callback first
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) =>
             tableToTableNode(table, {
@@ -273,11 +313,57 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
+                onStartRelationship: undefined, // Will be set later
             })
         )
     );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
+
+    // Callback to handle "Add Relationship" from context menu
+    const handleStartRelationship = useCallback(
+        (sourceTableId: string) => {
+            console.log(
+                '[Canvas] handleStartRelationship called for table:',
+                sourceTableId
+            );
+
+            // Close filter if it's open
+            if (showFilter) {
+                setShowFilter(false);
+            }
+
+            setPendingRelationshipSource(sourceTableId);
+
+            // Add a temporary visual edge to show the pending connection
+            const tempEdgeId = 'temp-pending-relationship';
+            setEdges((edges) => [
+                ...edges.filter((e) => e.id !== tempEdgeId),
+
+                {
+                    id: tempEdgeId,
+                    source: sourceTableId,
+                    target: sourceTableId, // Initially point to self, will update on mouse move
+                    type: 'default',
+                    animated: true,
+                    style: {
+                        stroke: '#3b82f6',
+                        strokeWidth: 2,
+                        strokeDasharray: '5 5',
+                    },
+                    interactionWidth: 0, // Make it non-interactive
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } as any,
+            ]);
+
+            // Show instruction to user
+            toast({
+                title: 'Select Target Table',
+                description: 'Click on the table you want to connect to',
+            });
+        },
+        [toast, setEdges, showFilter, setShowFilter]
+    );
 
     const [snapToGridEnabled, setSnapToGridEnabled] = useState(false);
 
@@ -293,6 +379,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
+                onStartRelationship: handleStartRelationship,
             })
         );
         if (equal(initialNodes, nodes)) {
@@ -306,6 +393,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
+        handleStartRelationship,
     ]);
 
     useEffect(() => {
@@ -339,31 +427,39 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             {} as Record<string, number>
         );
 
-        setEdges([
-            ...relationships.map(
-                (relationship): RelationshipEdgeType => ({
-                    id: relationship.id,
-                    source: relationship.sourceTableId,
-                    target: relationship.targetTableId,
-                    sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                    targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                    type: 'relationship-edge',
-                    data: { relationship },
-                })
-            ),
-            ...dependencies.map(
-                (dep): DependencyEdgeType => ({
-                    id: dep.id,
-                    source: dep.dependentTableId,
-                    target: dep.tableId,
-                    sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
-                    targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
-                    type: 'dependency-edge',
-                    data: { dependency: dep },
-                    hidden: !showDBViews,
-                })
-            ),
-        ]);
+        setEdges((prevEdges) => {
+            // Preserve temporary edge if it exists
+            const tempEdge = prevEdges.find(
+                (e) => e.id === 'temp-relationship-edge'
+            );
+
+            return [
+                ...relationships.map(
+                    (relationship): RelationshipEdgeType => ({
+                        id: relationship.id,
+                        source: relationship.sourceTableId,
+                        target: relationship.targetTableId,
+                        sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                        targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                        type: 'relationship-edge',
+                        data: { relationship },
+                    })
+                ),
+                ...dependencies.map(
+                    (dep): DependencyEdgeType => ({
+                        id: dep.id,
+                        source: dep.dependentTableId,
+                        target: dep.tableId,
+                        sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
+                        targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
+                        type: 'dependency-edge',
+                        data: { dependency: dep },
+                        hidden: !showDBViews,
+                    })
+                ),
+                ...(tempEdge ? [tempEdge] : []),
+            ];
+        });
     }, [relationships, dependencies, setEdges, showDBViews]);
 
     useEffect(() => {
@@ -467,6 +563,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         filterLoading,
                         showDBViews,
                         forceShow: shouldForceShowTable(table.id),
+                        onStartRelationship: handleStartRelationship,
+                        pendingRelationshipSource,
+                        fieldSelectionDialog,
                     });
 
                     // Check if table uses the highlighted custom type
@@ -518,6 +617,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
+        pendingRelationshipSource,
+        fieldSelectionDialog,
+        handleStartRelationship,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
@@ -625,6 +727,52 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 return;
             }
 
+            // Check if this connection is from right-click "Add Relationship"
+            if (
+                params.sourceHandle?.startsWith?.(
+                    TABLE_RELATIONSHIP_HANDLE_ID_PREFIX
+                )
+            ) {
+                const sourceTableId = params.source;
+                const targetTableId = params.target;
+
+                console.log(
+                    '[Canvas] Table-level relationship connection detected:',
+                    {
+                        sourceTableId,
+                        targetTableId,
+                        sourceHandle: params.sourceHandle,
+                        targetHandle: params.targetHandle,
+                        params,
+                    }
+                );
+
+                // Close filter when showing relationship dialog
+                if (showFilter) {
+                    setShowFilter(false);
+                }
+
+                // Show field selection dialog instead of auto-creating
+                // Ensure we don't have multiple dialogs
+                setFieldSelectionDialog((prev) => {
+                    if (prev) {
+                        console.warn(
+                            '[Canvas] Dialog already open, replacing with new one'
+                        );
+                    }
+                    console.log('[Canvas] Setting field selection dialog:', {
+                        sourceTableId,
+                        targetTableId,
+                    });
+                    return {
+                        sourceTableId,
+                        targetTableId,
+                    };
+                });
+
+                return;
+            }
+
             const sourceTableId = params.source;
             const targetTableId = params.target;
             const sourceFieldId = params.sourceHandle?.split('_')?.pop() ?? '';
@@ -659,8 +807,71 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 targetFieldId,
             });
         },
-        [createRelationship, createDependency, getField, toast, databaseType]
+        [
+            createRelationship,
+            createDependency,
+            getField,
+            toast,
+            databaseType,
+            showFilter,
+            setShowFilter,
+        ]
     );
+
+    const onConnectStart = useCallback((_event: unknown, params: unknown) => {
+        console.log('[Canvas] onConnectStart:', params);
+        setIsConnecting(true);
+    }, []);
+
+    const onConnectEnd = useCallback(
+        (_event: unknown) => {
+            console.log('[Canvas] onConnectEnd:', _event);
+            setIsConnecting(false);
+
+            // Clean up any lingering React Flow connection edges
+            setTimeout(() => {
+                setEdges((edges) =>
+                    edges.filter((e) => !e.id.includes('reactflow__edge'))
+                );
+            }, 50);
+        },
+        [setEdges]
+    );
+
+    // Handle ESC key to cancel connection during drag or pending relationship
+    useEffect(() => {
+        if (!isConnecting && !pendingRelationshipSource) return;
+
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                if (pendingRelationshipSource) {
+                    setPendingRelationshipSource(null);
+                    // Clean up temporary edge
+                    setEdges((edges) =>
+                        edges.filter(
+                            (e) => e.id !== 'temp-pending-relationship'
+                        )
+                    );
+                    toast({
+                        title: 'Cancelled',
+                        description: 'Relationship creation cancelled',
+                    });
+                }
+                setIsConnecting(false);
+
+                // Simulate releasing the mouse to cancel the connection
+                const event = new MouseEvent('mouseup', {
+                    bubbles: true,
+                    cancelable: true,
+                });
+                document.dispatchEvent(event);
+            }
+        };
+
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, [isConnecting, pendingRelationshipSource, toast, setEdges]);
 
     const onEdgesChangeHandler: OnEdgesChange<EdgeType> = useCallback(
         (changes) => {
@@ -1253,7 +1464,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
-                    className="canvas-cursor-default nodes-animated"
+                    className={`${pendingRelationshipSource ? 'cursor-crosshair' : ''} nodes-animated`}
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChangeHandler}
@@ -1261,6 +1472,73 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     maxZoom={5}
                     minZoom={0.1}
                     onConnect={onConnectHandler}
+                    onConnectStart={onConnectStart}
+                    onConnectEnd={onConnectEnd}
+                    onNodeClick={(_event, node) => {
+                        // Handle pending relationship creation
+                        if (
+                            pendingRelationshipSource &&
+                            node.type === 'table'
+                        ) {
+                            console.log(
+                                '[Canvas] Table clicked while pending relationship:',
+                                {
+                                    source: pendingRelationshipSource,
+                                    target: node.id,
+                                }
+                            );
+
+                            if (pendingRelationshipSource !== node.id) {
+                                // Close filter when opening the relationship dialog
+                                if (showFilter) {
+                                    setShowFilter(false);
+                                }
+
+                                setFieldSelectionDialog({
+                                    sourceTableId: pendingRelationshipSource,
+                                    targetTableId: node.id,
+                                });
+                            }
+
+                            // Clean up temporary edge
+                            setEdges((edges) =>
+                                edges.filter(
+                                    (e) => e.id !== 'temp-pending-relationship'
+                                )
+                            );
+                            setPendingRelationshipSource(null);
+                        }
+                    }}
+                    onNodeMouseEnter={(_event, node) => {
+                        // Update temporary edge to point to hovered node
+                        if (
+                            pendingRelationshipSource &&
+                            node.type === 'table'
+                        ) {
+                            setEdges((edges) =>
+                                edges.map((edge) =>
+                                    edge.id === 'temp-pending-relationship'
+                                        ? { ...edge, target: node.id }
+                                        : edge
+                                )
+                            );
+                        }
+                    }}
+                    onNodeMouseLeave={() => {
+                        // Reset temporary edge when leaving a node
+                        if (pendingRelationshipSource) {
+                            setEdges((edges) =>
+                                edges.map((edge) =>
+                                    edge.id === 'temp-pending-relationship'
+                                        ? {
+                                              ...edge,
+                                              target: pendingRelationshipSource,
+                                          }
+                                        : edge
+                                )
+                            );
+                        }
+                    }}
                     proOptions={{
                         hideAttribution: true,
                     }}
@@ -1270,6 +1548,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     defaultEdgeOptions={{
                         animated: false,
                         type: 'relationship-edge',
+                    }}
+                    connectionLineStyle={{
+                        stroke: '#3b82f6',
+                        strokeWidth: 2,
                     }}
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={shiftPressed || snapToGridEnabled}
@@ -1457,6 +1739,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}
                 </ReactFlow>
+                {/* Render overlay outside ReactFlow but inside canvas container to ensure proper z-index */}
+                {fieldSelectionDialog && (
+                    <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{ zIndex: 100 }}
+                    >
+                        <SelectRelationshipFieldsOverlay
+                            key={`${fieldSelectionDialog.sourceTableId}-${fieldSelectionDialog.targetTableId}`}
+                            sourceTableId={fieldSelectionDialog.sourceTableId}
+                            targetTableId={fieldSelectionDialog.targetTableId}
+                            onClose={() => setFieldSelectionDialog(null)}
+                        />
+                    </div>
+                )}
                 <MarkerDefinitions />
             </div>
         </CanvasContextMenu>
