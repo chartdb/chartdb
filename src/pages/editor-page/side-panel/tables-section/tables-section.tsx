@@ -17,6 +17,7 @@ import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { ButtonWithAlternatives } from '@/components/button/button-with-alternatives';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TablesSectionProps {}
 
@@ -26,10 +27,11 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
-    const { openTableFromSidebar } = useLayout();
+    const { closeAllTablesInSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
+    const { setEditTableModeTable } = useCanvas();
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -73,9 +75,16 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 y: centerY,
                 schema: schema?.name,
             });
-            openTableFromSidebar(table.id);
+            // Close any open tables in sidebar and enter edit mode on canvas
+            closeAllTablesInSidebar();
+            setEditTableModeTable({ tableId: table.id });
         },
-        [createTable, openTableFromSidebar, getCenterLocation]
+        [
+            createTable,
+            closeAllTablesInSidebar,
+            getCenterLocation,
+            setEditTableModeTable,
+        ]
     );
 
     const createViewWithLocation = useCallback(
@@ -87,9 +96,16 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 schema: schema?.name,
                 isView: true,
             });
-            openTableFromSidebar(table.id);
+            // Close any open tables in sidebar and enter edit mode on canvas
+            closeAllTablesInSidebar();
+            setEditTableModeTable({ tableId: table.id });
         },
-        [createTable, openTableFromSidebar, getCenterLocation]
+        [
+            createTable,
+            closeAllTablesInSidebar,
+            getCenterLocation,
+            setEditTableModeTable,
+        ]
     );
 
     const handleCreateTable = useCallback(

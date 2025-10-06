@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Table, Workflow, Group, View } from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
@@ -23,11 +24,12 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
+    const { setEditTableModeTable } = useCanvas();
 
     const { isMd: isDesktop } = useBreakpoint('md');
 
     const createTableHandler = useCallback(
-        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
@@ -35,12 +37,15 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
             if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
-                    onConfirm: ({ schema }) =>
-                        createTable({
+                    onConfirm: async ({ schema }) => {
+                        const newTable = await createTable({
                             x: position.x,
                             y: position.y,
                             schema: schema.name,
-                        }),
+                        });
+                        // Automatically enter edit mode for the newly created table
+                        setEditTableModeTable({ tableId: newTable.id });
+                    },
                     schemas: schemasDisplayed,
                 });
             } else {
@@ -48,11 +53,13 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     schemasDisplayed?.length === 1
                         ? schemasDisplayed[0]?.name
                         : undefined;
-                createTable({
+                const newTable = await createTable({
                     x: position.x,
                     y: position.y,
                     schema,
                 });
+                // Automatically enter edit mode for the newly created table
+                setEditTableModeTable({ tableId: newTable.id });
             }
         },
         [
@@ -60,11 +67,12 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             screenToFlowPosition,
             openTableSchemaDialog,
             schemasDisplayed,
+            setEditTableModeTable,
         ]
     );
 
     const createViewHandler = useCallback(
-        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
@@ -72,13 +80,16 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
             if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
-                    onConfirm: ({ schema }) =>
-                        createTable({
+                    onConfirm: async ({ schema }) => {
+                        const newView = await createTable({
                             x: position.x,
                             y: position.y,
                             schema: schema.name,
                             isView: true,
-                        }),
+                        });
+                        // Automatically enter edit mode for the newly created view
+                        setEditTableModeTable({ tableId: newView.id });
+                    },
                     schemas: schemasDisplayed,
                 });
             } else {
@@ -86,12 +97,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     schemasDisplayed?.length === 1
                         ? schemasDisplayed[0]?.name
                         : undefined;
-                createTable({
+                const newView = await createTable({
                     x: position.x,
                     y: position.y,
                     schema,
                     isView: true,
                 });
+                // Automatically enter edit mode for the newly created view
+                setEditTableModeTable({ tableId: newView.id });
             }
         },
         [
@@ -99,6 +112,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             screenToFlowPosition,
             openTableSchemaDialog,
             schemasDisplayed,
+            setEditTableModeTable,
         ]
     );
 
