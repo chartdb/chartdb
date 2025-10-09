@@ -75,7 +75,6 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 y: centerY,
                 schema: schema?.name,
             });
-            // Close any open tables in sidebar and enter edit mode on canvas
             closeAllTablesInSidebar();
             setEditTableModeTable({ tableId: table.id });
         },
@@ -96,7 +95,6 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 schema: schema?.name,
                 isView: true,
             });
-            // Close any open tables in sidebar and enter edit mode on canvas
             closeAllTablesInSidebar();
             setEditTableModeTable({ tableId: table.id });
         },

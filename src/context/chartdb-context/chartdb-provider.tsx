@@ -350,6 +350,7 @@ export const ChartDBProvider: React.FC<
                 isView: false,
                 order: tables.length,
                 ...attributes,
+                schema: attributes?.schema ?? defaultSchemas[databaseType],
             };
 
             table.indexes = getTableIndexesWithPrimaryKey({
