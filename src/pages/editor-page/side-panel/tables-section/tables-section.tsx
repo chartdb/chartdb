@@ -17,7 +17,6 @@ import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { ButtonWithAlternatives } from '@/components/button/button-with-alternatives';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TablesSectionProps {}
 
@@ -27,11 +26,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
-    const { closeAllTablesInSidebar } = useLayout();
+    const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
-    const { setEditTableModeTable } = useCanvas();
 
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
@@ -75,15 +73,9 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 y: centerY,
                 schema: schema?.name,
             });
-            closeAllTablesInSidebar();
-            setEditTableModeTable({ tableId: table.id });
+            openTableFromSidebar(table.id);
         },
-        [
-            createTable,
-            closeAllTablesInSidebar,
-            getCenterLocation,
-            setEditTableModeTable,
-        ]
+        [createTable, openTableFromSidebar, getCenterLocation]
     );
 
     const createViewWithLocation = useCallback(
@@ -95,15 +87,9 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 schema: schema?.name,
                 isView: true,
             });
-            closeAllTablesInSidebar();
-            setEditTableModeTable({ tableId: table.id });
+            openTableFromSidebar(table.id);
         },
-        [
-            createTable,
-            closeAllTablesInSidebar,
-            getCenterLocation,
-            setEditTableModeTable,
-        ]
+        [createTable, openTableFromSidebar, getCenterLocation]
     );
 
     const handleCreateTable = useCallback(
