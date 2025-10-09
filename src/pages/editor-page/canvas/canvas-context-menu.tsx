@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 import { Table, Workflow, Group, View } from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { useCanvas } from '@/hooks/use-canvas';
+import type { DBTable } from '@/lib/domain';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
@@ -23,24 +25,28 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
+    const { setEditTableModeTable } = useCanvas();
 
     const { isMd: isDesktop } = useBreakpoint('md');
 
     const createTableHandler = useCallback(
-        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
             });
 
+            let newTable: DBTable | null = null;
+
             if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
-                    onConfirm: ({ schema }) =>
-                        createTable({
+                    onConfirm: async ({ schema }) => {
+                        newTable = await createTable({
                             x: position.x,
                             y: position.y,
                             schema: schema.name,
-                        }),
+                        });
+                    },
                     schemas: schemasDisplayed,
                 });
             } else {
@@ -48,11 +54,15 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     schemasDisplayed?.length === 1
                         ? schemasDisplayed[0]?.name
                         : undefined;
-                createTable({
+                newTable = await createTable({
                     x: position.x,
                     y: position.y,
                     schema,
                 });
+            }
+
+            if (newTable) {
+                setEditTableModeTable({ tableId: newTable.id });
             }
         },
         [
@@ -60,25 +70,29 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             screenToFlowPosition,
             openTableSchemaDialog,
             schemasDisplayed,
+            setEditTableModeTable,
         ]
     );
 
     const createViewHandler = useCallback(
-        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
             });
 
+            let newView: DBTable | null = null;
+
             if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
-                    onConfirm: ({ schema }) =>
-                        createTable({
+                    onConfirm: async ({ schema }) => {
+                        newView = await createTable({
                             x: position.x,
                             y: position.y,
                             schema: schema.name,
                             isView: true,
-                        }),
+                        });
+                    },
                     schemas: schemasDisplayed,
                 });
             } else {
@@ -86,19 +100,24 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     schemasDisplayed?.length === 1
                         ? schemasDisplayed[0]?.name
                         : undefined;
-                createTable({
+                newView = await createTable({
                     x: position.x,
                     y: position.y,
                     schema,
                     isView: true,
                 });
             }
+
+            if (newView) {
+                setEditTableModeTable({ tableId: newView.id });
+            }
         },
         [
             createTable,
             screenToFlowPosition,
             openTableSchemaDialog,
             schemasDisplayed,
+            setEditTableModeTable,
         ]
     );
 
