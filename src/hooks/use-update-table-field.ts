@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { useChartDB } from './use-chartdb';
 import { useDebounce } from './use-debounce-v2';
 import type { DBField, DBTable } from '@/lib/domain';
@@ -75,12 +75,20 @@ export const useUpdateTableField = (
     const [localNullable, setLocalNullable] = useState(field.nullable);
     const [localPrimaryKey, setLocalPrimaryKey] = useState(field.primaryKey);
 
+    const lastFieldNameRef = useRef<string>(field.name);
+
+    useEffect(() => {
+        if (localFieldName === lastFieldNameRef.current) {
+            lastFieldNameRef.current = field.name;
+            setLocalFieldName(field.name);
+        }
+    }, [field.name, localFieldName]);
+
     // Update local state when field properties change externally
     useEffect(() => {
-        setLocalFieldName(field.name);
         setLocalNullable(field.nullable);
         setLocalPrimaryKey(field.primaryKey);
-    }, [field.name, field.nullable, field.primaryKey]);
+    }, [field.nullable, field.primaryKey]);
 
     // Use custom updateField if provided, otherwise use the chartDB one
     const updateField = useMemo(
