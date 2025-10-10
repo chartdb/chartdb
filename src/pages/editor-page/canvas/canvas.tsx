@@ -200,6 +200,9 @@ const areaToAreaNode = (
         width: area.width,
         height: area.height,
         zIndex: -10,
+        style: {
+            zIndex: -10,
+        },
         hidden: !hasVisibleTable || filterLoading,
     };
 };
