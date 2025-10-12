@@ -425,45 +425,24 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         }, [setEditTableModeTable]);
 
         const startRelationshipCreation = useCallback(() => {
-            console.log('[TableNode] startRelationshipCreation called', {
-                tableId: table.id,
-                tableName: table.name,
-                readonly,
-            });
-
             if (readonly) {
-                console.log('[TableNode] Readonly mode, aborting');
                 return;
             }
 
             // Check if we have a direct callback from canvas to open the dialog
             if (onStartRelationship) {
-                console.log(
-                    '[TableNode] Using direct callback to start relationship'
-                );
                 onStartRelationship(table.id);
                 return;
             }
 
             // Fallback: Try to simulate the drag (keeping old implementation as fallback)
             const handleId = `${TABLE_RELATIONSHIP_HANDLE_ID_PREFIX}${table.id}`;
-            console.log(
-                '[TableNode] Falling back to drag simulation for handle:',
-                handleId
-            );
 
             const handle = document.querySelector(
                 `[data-handleid="${handleId}"]`
             ) as HTMLElement;
 
             if (!handle) {
-                console.error(
-                    '[TableNode] Could not find relationship handle',
-                    {
-                        tableId: table.id,
-                        handleId,
-                    }
-                );
                 return;
             }
 
@@ -496,7 +475,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 });
                 document.dispatchEvent(mouseMoveEvent);
             }, 10);
-        }, [readonly, table.id, table.name, onStartRelationship]);
+        }, [readonly, table.id, onStartRelationship]);
 
         return (
             <TableNodeContextMenu

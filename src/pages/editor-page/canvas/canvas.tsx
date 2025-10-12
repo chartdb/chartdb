@@ -323,11 +323,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     // Callback to handle "Add Relationship" from context menu
     const handleStartRelationship = useCallback(
         (sourceTableId: string) => {
-            console.log(
-                '[Canvas] handleStartRelationship called for table:',
-                sourceTableId
-            );
-
             // Close filter if it's open
             if (showFilter) {
                 setShowFilter(false);
@@ -736,17 +731,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 const sourceTableId = params.source;
                 const targetTableId = params.target;
 
-                console.log(
-                    '[Canvas] Table-level relationship connection detected:',
-                    {
-                        sourceTableId,
-                        targetTableId,
-                        sourceHandle: params.sourceHandle,
-                        targetHandle: params.targetHandle,
-                        params,
-                    }
-                );
-
                 // Close filter when showing relationship dialog
                 if (showFilter) {
                     setShowFilter(false);
@@ -754,16 +738,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
                 // Show field selection dialog instead of auto-creating
                 // Ensure we don't have multiple dialogs
-                setFieldSelectionDialog((prev) => {
-                    if (prev) {
-                        console.warn(
-                            '[Canvas] Dialog already open, replacing with new one'
-                        );
-                    }
-                    console.log('[Canvas] Setting field selection dialog:', {
-                        sourceTableId,
-                        targetTableId,
-                    });
+                setFieldSelectionDialog(() => {
                     return {
                         sourceTableId,
                         targetTableId,
@@ -818,25 +793,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         ]
     );
 
-    const onConnectStart = useCallback((_event: unknown, params: unknown) => {
-        console.log('[Canvas] onConnectStart:', params);
+    const onConnectStart = useCallback(() => {
         setIsConnecting(true);
     }, []);
 
-    const onConnectEnd = useCallback(
-        (_event: unknown) => {
-            console.log('[Canvas] onConnectEnd:', _event);
-            setIsConnecting(false);
+    const onConnectEnd = useCallback(() => {
+        setIsConnecting(false);
 
-            // Clean up any lingering React Flow connection edges
-            setTimeout(() => {
-                setEdges((edges) =>
-                    edges.filter((e) => !e.id.includes('reactflow__edge'))
-                );
-            }, 50);
-        },
-        [setEdges]
-    );
+        // Clean up any lingering React Flow connection edges
+        setTimeout(() => {
+            setEdges((edges) =>
+                edges.filter((e) => !e.id.includes('reactflow__edge'))
+            );
+        }, 50);
+    }, [setEdges]);
 
     // Handle ESC key to cancel connection during drag or pending relationship
     useEffect(() => {
@@ -1480,14 +1450,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             pendingRelationshipSource &&
                             node.type === 'table'
                         ) {
-                            console.log(
-                                '[Canvas] Table clicked while pending relationship:',
-                                {
-                                    source: pendingRelationshipSource,
-                                    target: node.id,
-                                }
-                            );
-
                             if (pendingRelationshipSource !== node.id) {
                                 // Close filter when opening the relationship dialog
                                 if (showFilter) {

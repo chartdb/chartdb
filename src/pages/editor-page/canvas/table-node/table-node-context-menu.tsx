@@ -54,30 +54,15 @@ export const TableNodeContextMenu: React.FC<
     }, [removeTable, table.id]);
 
     const addRelationshipHandler = useCallback(() => {
-        console.log('[TableNodeContextMenu] Add relationship clicked', {
-            tableId: table.id,
-            tableName: table.name,
-            hasStartHandler: !!onStartRelationshipCreation,
-        });
-
         // Use the programmatic handle drag if available, otherwise fall back to dialog
         if (onStartRelationshipCreation) {
-            console.log(
-                '[TableNodeContextMenu] Calling onStartRelationshipCreation'
-            );
             onStartRelationshipCreation();
         } else {
-            console.log('[TableNodeContextMenu] Falling back to dialog');
             openCreateRelationshipDialog({
                 sourceTableId: table.id,
             });
         }
-    }, [
-        onStartRelationshipCreation,
-        openCreateRelationshipDialog,
-        table.id,
-        table.name,
-    ]);
+    }, [onStartRelationshipCreation, openCreateRelationshipDialog, table.id]);
 
     if (!isDesktop || readonly) {
         return <>{children}</>;
