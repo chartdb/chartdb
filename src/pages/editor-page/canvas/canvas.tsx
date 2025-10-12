@@ -549,6 +549,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         filterLoading,
                     })
                 ),
+                ...prevNodes.filter(
+                    (n) =>
+                        n.type === 'temp-cursor' ||
+                        n.type === 'create-relationship'
+                ),
             ];
 
             // Check if nodes actually changed
@@ -1281,6 +1286,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         [setEditTableModeTable]
     );
     useClickAway(containerRef, exitEditTableMode);
+    useClickAway(containerRef, hideCreateRelationshipNode);
 
     const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
