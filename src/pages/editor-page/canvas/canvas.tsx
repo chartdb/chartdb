@@ -30,10 +30,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
 import type { TableNodeType } from './table-node/table-node';
-import {
-    TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX,
-    TableNode,
-} from './table-node/table-node';
+import { TableNode } from './table-node/table-node';
 import type { RelationshipEdgeType } from './relationship-edge/relationship-edge';
 import { RelationshipEdge } from './relationship-edge/relationship-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -84,7 +81,6 @@ import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
 import type { TempCursorNodeType } from './temp-cursor-node/temp-cursor-node';
 import {
-    TEMP_CURSOR_HANDLE_ID,
     TEMP_CURSOR_NODE_ID,
     TempCursorNode,
 } from './temp-cursor-node/temp-cursor-node';
@@ -93,6 +89,9 @@ import {
     TEMP_FLOATING_EDGE_ID,
     TempFloatingEdge,
 } from './temp-floating-edge/temp-floating-edge';
+import type { CreateRelationshipNodeType } from './create-relationship-node/create-relationship-node';
+import { CreateRelationshipNode } from './create-relationship-node/create-relationship-node';
+import { ConnectionLine } from './connection-line/connection-line';
 import {
     updateTablesParentAreas,
     getTablesInArea,
@@ -116,7 +115,11 @@ export type EdgeType =
     | DependencyEdgeType
     | TempFloatingEdgeType;
 
-export type NodeType = TableNodeType | AreaNodeType | TempCursorNodeType;
+export type NodeType =
+    | TableNodeType
+    | AreaNodeType
+    | TempCursorNodeType
+    | CreateRelationshipNodeType;
 
 type AddEdgeParams = Parameters<typeof addEdge<EdgeType>>[0];
 
@@ -130,6 +133,7 @@ const nodeTypes: NodeTypes = {
     table: TableNode,
     area: AreaNode,
     'temp-cursor': TempCursorNode,
+    'create-relationship': CreateRelationshipNode,
 };
 
 const initialEdges: EdgeType[] = [];
@@ -275,8 +279,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         setShowFilter,
         setEditTableModeTable,
         programmaticEdge,
-        setProgrammaticEdge,
+        endProgrammaticEdgeCreation,
         hoveringTableId,
+        hideCreateRelationshipNode,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
@@ -1311,13 +1316,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape' && programmaticEdge) {
-                setProgrammaticEdge(null);
+                endProgrammaticEdgeCreation();
                 setCursorPosition(null);
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [programmaticEdge, setProgrammaticEdge]);
+    }, [programmaticEdge, endProgrammaticEdgeCreation]);
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
@@ -1341,23 +1346,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         if (!programmaticEdge || !cursorPosition) return edges;
 
         let target = TEMP_CURSOR_NODE_ID;
-        let targetHandle = TEMP_CURSOR_HANDLE_ID;
 
-        if (
+        if (programmaticEdge.targetNodeId) {
+            target = programmaticEdge.targetNodeId;
+        } else if (
             hoveringTableId &&
             hoveringTableId !== programmaticEdge.sourceNodeId
         ) {
             target = hoveringTableId;
-            targetHandle =
-                TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX + hoveringTableId;
         }
 
         const tempEdge: TempFloatingEdgeType = {
             id: TEMP_FLOATING_EDGE_ID,
             source: programmaticEdge.sourceNodeId,
             target,
-            sourceHandle: programmaticEdge.sourceHandle,
-            targetHandle,
             type: 'temp-floating-edge',
         };
 
@@ -1366,12 +1368,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onPaneClickHandler = useCallback(() => {
         if (programmaticEdge) {
-            setProgrammaticEdge(null);
+            endProgrammaticEdgeCreation();
             setCursorPosition(null);
         }
 
+        // Close CreateRelationshipNode if it exists
+        hideCreateRelationshipNode();
+
+        // Exit edit table mode
         exitEditTableMode();
-    }, [programmaticEdge, exitEditTableMode, setProgrammaticEdge]);
+    }, [
+        programmaticEdge,
+        exitEditTableMode,
+        endProgrammaticEdgeCreation,
+        hideCreateRelationshipNode,
+    ]);
 
     return (
         <CanvasContextMenu>
@@ -1406,6 +1417,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
                     onPaneClick={onPaneClickHandler}
+                    connectionLineComponent={ConnectionLine}
                 >
                     <Controls
                         position="top-left"

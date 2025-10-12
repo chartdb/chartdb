@@ -13,7 +13,6 @@ import { Copy, Pencil, Trash2, Workflow } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCanvas } from '@/hooks/use-canvas';
-import { TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX } from './table-node';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
@@ -29,35 +28,54 @@ export const TableNodeContextMenu: React.FC<
     const { setEditTableModeTable, startProgrammaticEdgeCreation } =
         useCanvas();
 
-    const duplicateTableHandler = useCallback(() => {
-        const clonedTable = cloneTable(table);
+    const duplicateTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                const clonedTable = cloneTable(table);
 
-        clonedTable.name = `${clonedTable.name}_copy`;
-        clonedTable.x += 30;
-        clonedTable.y += 50;
+                clonedTable.name = `${clonedTable.name}_copy`;
+                clonedTable.x += 30;
+                clonedTable.y += 50;
 
-        createTable(clonedTable);
-    }, [createTable, table]);
-
-    const editTableHandler = useCallback(() => {
-        if (readonly) {
-            return;
-        }
-
-        closeAllTablesInSidebar();
-        setEditTableModeTable({ tableId: table.id });
-    }, [table.id, setEditTableModeTable, closeAllTablesInSidebar, readonly]);
-
-    const removeTableHandler = useCallback(() => {
-        removeTable(table.id);
-    }, [removeTable, table.id]);
-
-    const addRelationshipHandler = useCallback(() => {
-        startProgrammaticEdgeCreation(
-            table.id,
-            `${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${table.id}`
+                createTable(clonedTable);
+            },
+            [createTable, table]
         );
-    }, [startProgrammaticEdgeCreation, table.id]);
+
+    const editTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                if (readonly) {
+                    return;
+                }
+
+                closeAllTablesInSidebar();
+                setEditTableModeTable({ tableId: table.id });
+            },
+            [table.id, setEditTableModeTable, closeAllTablesInSidebar, readonly]
+        );
+
+    const removeTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                removeTable(table.id);
+            },
+            [removeTable, table.id]
+        );
+
+    const addRelationshipHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                startProgrammaticEdgeCreation({
+                    sourceNodeId: table.id,
+                });
+            },
+            [startProgrammaticEdgeCreation, table.id]
+        );
 
     if (!isDesktop || readonly) {
         return <>{children}</>;

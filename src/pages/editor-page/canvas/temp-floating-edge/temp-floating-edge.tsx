@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath, Position } from '@xyflow/react';
-import { cn } from '@/lib/utils';
 
 export const TEMP_FLOATING_EDGE_ID = '__temp_programmatic_edge__';
 
@@ -30,22 +29,29 @@ export const TempFloatingEdge: React.FC<EdgeProps<TempFloatingEdgeType>> =
                 targetX,
                 targetY,
                 targetPosition,
+                borderRadius: 14,
             });
 
             return (
                 <g>
                     <path
                         id={id}
-                        className={cn([
-                            'react-flow__edge-path',
-                            `!stroke-2 !stroke-slate-400`,
-                        ])}
-                        d={edgePath}
-                        strokeWidth={2}
-                        stroke="#6366f1"
-                        strokeDasharray="5,5"
-                        opacity={1}
                         fill="none"
+                        stroke="#ec4899"
+                        strokeWidth={2}
+                        strokeDasharray="5,5"
+                        d={edgePath}
+                        style={{
+                            pointerEvents: 'none',
+                        }}
+                    />
+                    <circle
+                        cx={targetX}
+                        cy={targetY}
+                        fill="#fff"
+                        r={3}
+                        stroke="#ec4899"
+                        strokeWidth={1.5}
                         style={{
                             pointerEvents: 'none',
                         }}

@@ -96,6 +96,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             setEditTableModeTable,
             editTableModeTable,
             setHoveringTableId,
+            showCreateRelationshipNode,
+            programmaticEdge,
         } = useCanvas();
 
         // Get edit mode state directly from context
@@ -329,11 +331,20 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             editModeInitialFieldCount,
         ]);
 
+        const isPartOfCreatingRelationship = useMemo(
+            () =>
+                programmaticEdge?.sourceNodeId === id ||
+                (isRelationshipCreatingTarget &&
+                    programmaticEdge?.targetNodeId === id) ||
+                isHovering,
+            [programmaticEdge, id, isRelationshipCreatingTarget, isHovering]
+        );
+
         const tableClassName = useMemo(
             () =>
                 cn(
                     'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
-                    selected || isTarget
+                    selected || isTarget || isPartOfCreatingRelationship
                         ? 'border-pink-600'
                         : 'border-slate-500 dark:border-slate-700',
                     isOverlapping
@@ -378,6 +389,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isDiffTableRemoved,
                 isTarget,
                 editTableMode,
+                isPartOfCreatingRelationship,
             ]
         );
 
@@ -416,6 +428,22 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
                             enterEditTableMode();
+                        } else if (e.detail === 1 && !readonly) {
+                            // Handle single click
+                            if (
+                                isRelationshipCreatingTarget &&
+                                programmaticEdge
+                            ) {
+                                // gets cursor position
+
+                                showCreateRelationshipNode({
+                                    sourceTableId:
+                                        programmaticEdge.sourceNodeId,
+                                    targetTableId: table.id,
+                                    x: e.clientX,
+                                    y: e.clientY,
+                                });
+                            }
                         }
                     }}
                     onMouseEnter={() => {
