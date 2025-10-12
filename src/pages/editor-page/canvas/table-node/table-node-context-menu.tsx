@@ -12,8 +12,8 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { Copy, Pencil, Trash2, Workflow } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDialog } from '@/hooks/use-dialog';
 import { useCanvas } from '@/hooks/use-canvas';
+import { TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX } from './table-node';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
@@ -26,8 +26,8 @@ export const TableNodeContextMenu: React.FC<
     const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { openCreateRelationshipDialog } = useDialog();
-    const { setEditTableModeTable } = useCanvas();
+    const { setEditTableModeTable, startProgrammaticEdgeCreation } =
+        useCanvas();
 
     const duplicateTableHandler = useCallback(() => {
         const clonedTable = cloneTable(table);
@@ -53,10 +53,11 @@ export const TableNodeContextMenu: React.FC<
     }, [removeTable, table.id]);
 
     const addRelationshipHandler = useCallback(() => {
-        openCreateRelationshipDialog({
-            sourceTableId: table.id,
-        });
-    }, [openCreateRelationshipDialog, table.id]);
+        startProgrammaticEdgeCreation(
+            table.id,
+            `${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${table.id}`
+        );
+    }, [startProgrammaticEdgeCreation, table.id]);
 
     if (!isDesktop || readonly) {
         return <>{children}</>;

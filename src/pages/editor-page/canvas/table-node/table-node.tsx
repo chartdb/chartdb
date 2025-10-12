@@ -6,7 +6,13 @@ import React, {
     useEffect,
 } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
-import { NodeResizer, useConnection, useStore } from '@xyflow/react';
+import {
+    NodeResizer,
+    useConnection,
+    useStore,
+    Handle,
+    Position,
+} from '@xyflow/react';
 import { Button } from '@/components/button/button';
 import {
     ChevronsLeftRight,
@@ -47,6 +53,9 @@ import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
 
+export const TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX = 'table_rel_source_';
+export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
+
 export type TableNodeType = Node<
     {
         table: DBTable;
@@ -54,6 +63,7 @@ export type TableNodeType = Node<
         highlightOverlappingTables?: boolean;
         hasHighlightedCustomType?: boolean;
         highlightTable?: boolean;
+        isRelationshipCreatingTarget?: boolean;
     },
     'table'
 >;
@@ -69,6 +79,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             highlightOverlappingTables,
             hasHighlightedCustomType,
             highlightTable,
+            isRelationshipCreatingTarget,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -81,7 +92,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const [expanded, setExpanded] = useState(table.expanded ?? false);
         const { t } = useTranslation();
         const [isHovering, setIsHovering] = useState(false);
-        const { setEditTableModeTable, editTableModeTable } = useCanvas();
+        const {
+            setEditTableModeTable,
+            editTableModeTable,
+            setHoveringTableId,
+        } = useCanvas();
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
@@ -403,8 +418,14 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             enterEditTableMode();
                         }
                     }}
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
+                    onMouseEnter={() => {
+                        setIsHovering(true);
+                        setHoveringTableId(table.id);
+                    }}
+                    onMouseLeave={() => {
+                        setIsHovering(false);
+                        setHoveringTableId(null);
+                    }}
                 >
                     <NodeResizer
                         isVisible={focused}
@@ -414,6 +435,24 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         shouldResize={(event) => event.dy === 0}
                         handleClassName="!hidden"
                     />
+                    {/* Center handle for programmatic edge creation */}
+                    {!readonly && (
+                        <Handle
+                            id={`${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
+                            type="source"
+                            position={Position.Top}
+                            className="!invisible !left-1/2 !top-1/2 !h-1 !w-1 !-translate-x-1/2 !-translate-y-1/2 !transform"
+                        />
+                    )}
+                    {/* Target handle covering entire table for programmatic edge creation */}
+                    {!readonly && isRelationshipCreatingTarget && (
+                        <Handle
+                            id={`${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${table.id}`}
+                            type="target"
+                            position={Position.Top}
+                            className="!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0"
+                        />
+                    )}
                     <TableNodeDependencyIndicator
                         table={table}
                         focused={focused}

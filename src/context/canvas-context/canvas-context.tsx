@@ -24,6 +24,22 @@ export interface CanvasContext {
             fieldId?: string;
         } | null>
     >;
+    programmaticEdge: {
+        sourceNodeId: string;
+        sourceHandle: string;
+    } | null;
+    setProgrammaticEdge: React.Dispatch<
+        React.SetStateAction<{
+            sourceNodeId: string;
+            sourceHandle: string;
+        } | null>
+    >;
+    startProgrammaticEdgeCreation: (
+        sourceNodeId: string,
+        sourceHandle: string
+    ) => void;
+    hoveringTableId: string | null;
+    setHoveringTableId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const canvasContext = createContext<CanvasContext>({
@@ -35,4 +51,9 @@ export const canvasContext = createContext<CanvasContext>({
     showFilter: false,
     editTableModeTable: null,
     setEditTableModeTable: emptyFn,
+    programmaticEdge: null,
+    setProgrammaticEdge: emptyFn,
+    startProgrammaticEdgeCreation: emptyFn,
+    hoveringTableId: null,
+    setHoveringTableId: emptyFn,
 });

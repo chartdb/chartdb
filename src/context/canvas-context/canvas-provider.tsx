@@ -39,6 +39,15 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
     } | null>(null);
 
     const [showFilter, setShowFilter] = useState(false);
+
+    // Programmatic edge creation state
+    const [programmaticEdge, setProgrammaticEdge] = useState<{
+        sourceNodeId: string;
+        sourceHandle: string;
+    } | null>(null);
+
+    const [hoveringTableId, setHoveringTableId] = useState<string | null>(null);
+
     const diagramIdActiveFilterRef = useRef<string>();
 
     useEffect(() => {
@@ -122,6 +131,16 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         ]
     );
 
+    const startProgrammaticEdgeCreation = useCallback(
+        (sourceNodeId: string, sourceHandle: string) => {
+            setProgrammaticEdge({
+                sourceNodeId,
+                sourceHandle,
+            });
+        },
+        []
+    );
+
     return (
         <canvasContext.Provider
             value={{
@@ -133,6 +152,11 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 showFilter,
                 editTableModeTable,
                 setEditTableModeTable,
+                programmaticEdge,
+                setProgrammaticEdge,
+                startProgrammaticEdgeCreation,
+                hoveringTableId,
+                setHoveringTableId,
             }}
         >
             {children}
