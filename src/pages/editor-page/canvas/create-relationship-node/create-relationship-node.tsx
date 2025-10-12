@@ -15,6 +15,8 @@ import { useCanvas } from '@/hooks/use-canvas';
 
 export const CREATE_RELATIONSHIP_NODE_ID = '__create-relationship-node__';
 
+const CREATE_NEW_FIELD_VALUE = 'CREATE_NEW';
+
 export type CreateRelationshipNodeType = Node<
     {
         sourceTableId: string;
@@ -86,7 +88,7 @@ export const CreateRelationshipNode: React.FC<
         ) {
             compatibleFields.push({
                 label: `Create "${searchTerm}"`,
-                value: 'CREATE_NEW',
+                value: CREATE_NEW_FIELD_VALUE,
                 description: `(${sourcePKField.type.name})`,
             });
         }
@@ -129,7 +131,7 @@ export const CreateRelationshipNode: React.FC<
             let finalTargetFieldId = targetFieldId;
 
             // If user selected "CREATE_NEW", create the field first
-            if (targetFieldId === 'CREATE_NEW' && searchTerm) {
+            if (targetFieldId === CREATE_NEW_FIELD_VALUE && searchTerm) {
                 const newField: DBField = {
                     id: generateId(),
                     name: searchTerm,
@@ -199,7 +201,7 @@ export const CreateRelationshipNode: React.FC<
     return (
         <div
             className={cn(
-                'pointer-events-auto flex cursor-auto flex-col rounded-lg border border-slate-300 bg-white shadow-xl transition-all duration-100 ease-out dark:border-slate-600 dark:bg-slate-800',
+                'pointer-events-auto flex cursor-auto flex-col rounded-lg border border-slate-300 bg-white shadow-xl transition-all duration-150 ease-out dark:border-slate-600 dark:bg-slate-800',
                 {
                     'scale-100 opacity-100': isVisible,
                     'scale-95 opacity-0': !isVisible,
