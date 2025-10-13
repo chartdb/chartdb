@@ -1452,7 +1452,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
-                    className={`${tempFloatingEdge ? 'cursor-crosshair' : 'canvas-cursor-default'} nodes-animated`}
+                    className="canvas-cursor-default nodes-animated"
                     nodes={nodesWithCursor}
                     edges={edgesWithFloating}
                     onNodesChange={onNodesChangeHandler}

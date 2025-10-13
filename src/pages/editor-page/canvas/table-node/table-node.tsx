@@ -427,6 +427,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     className={tableClassName}
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
+                            e.stopPropagation();
                             enterEditTableMode();
                         } else if (e.detail === 1 && !readonly) {
                             // Handle single click
@@ -434,6 +435,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 isRelationshipCreatingTarget &&
                                 tempFloatingEdge
                             ) {
+                                e.stopPropagation();
                                 showCreateRelationshipNode({
                                     sourceTableId:
                                         tempFloatingEdge.sourceNodeId,
