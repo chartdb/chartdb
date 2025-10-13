@@ -5,6 +5,7 @@ import React, {
     useEffect,
     useRef,
 } from 'react';
+import type { CanvasContext } from './canvas-context';
 import { canvasContext } from './canvas-context';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { adjustTablePositions } from '@/lib/domain/db-table';
@@ -15,6 +16,10 @@ import { createGraph } from '@/lib/graph';
 import { useDiagramFilter } from '../diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import {
+    CREATE_RELATIONSHIP_NODE_ID,
+    type CreateRelationshipNodeType,
+} from '@/pages/editor-page/canvas/create-relationship-node/create-relationship-node';
 
 interface CanvasProviderProps {
     children: ReactNode;
@@ -30,7 +35,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         diagramId,
     } = useChartDB();
     const { filter, loading: filterLoading } = useDiagramFilter();
-    const { fitView } = useReactFlow();
+    const { fitView, screenToFlowPosition, setNodes } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
     const [editTableModeTable, setEditTableModeTable] = useState<{
@@ -39,6 +44,12 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
     } | null>(null);
 
     const [showFilter, setShowFilter] = useState(false);
+
+    const [tempFloatingEdge, setTempFloatingEdge] =
+        useState<CanvasContext['tempFloatingEdge']>(null);
+
+    const [hoveringTableId, setHoveringTableId] = useState<string | null>(null);
+
     const diagramIdActiveFilterRef = useRef<string>();
 
     useEffect(() => {
@@ -122,6 +133,66 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         ]
     );
 
+    const startFloatingEdgeCreation: CanvasContext['startFloatingEdgeCreation'] =
+        useCallback(({ sourceNodeId }) => {
+            setShowFilter(false);
+            setTempFloatingEdge({
+                sourceNodeId,
+            });
+        }, []);
+
+    const endFloatingEdgeCreation: CanvasContext['endFloatingEdgeCreation'] =
+        useCallback(() => {
+            setTempFloatingEdge(null);
+        }, []);
+
+    const hideCreateRelationshipNode: CanvasContext['hideCreateRelationshipNode'] =
+        useCallback(() => {
+            setNodes((nds) =>
+                nds.filter((n) => n.id !== CREATE_RELATIONSHIP_NODE_ID)
+            );
+            endFloatingEdgeCreation();
+        }, [setNodes, endFloatingEdgeCreation]);
+
+    const showCreateRelationshipNode: CanvasContext['showCreateRelationshipNode'] =
+        useCallback(
+            ({ sourceTableId, targetTableId, x, y }) => {
+                setTempFloatingEdge((edge) =>
+                    edge
+                        ? {
+                              ...edge,
+                              targetNodeId: targetTableId,
+                          }
+                        : null
+                );
+                const cursorPos = screenToFlowPosition({
+                    x,
+                    y,
+                });
+
+                const newNode: CreateRelationshipNodeType = {
+                    id: CREATE_RELATIONSHIP_NODE_ID,
+                    type: 'create-relationship',
+                    position: cursorPos,
+                    data: {
+                        sourceTableId,
+                        targetTableId,
+                    },
+                    draggable: true,
+                    selectable: false,
+                    zIndex: 1000,
+                };
+
+                setNodes((nds) => {
+                    const nodesWithoutOldCreateRelationshipNode = nds.filter(
+                        (n) => n.id !== CREATE_RELATIONSHIP_NODE_ID
+                    );
+                    return [...nodesWithoutOldCreateRelationshipNode, newNode];
+                });
+            },
+            [screenToFlowPosition, setNodes]
+        );
+
     return (
         <canvasContext.Provider
             value={{
@@ -133,6 +204,14 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 showFilter,
                 editTableModeTable,
                 setEditTableModeTable,
+                tempFloatingEdge: tempFloatingEdge,
+                setTempFloatingEdge: setTempFloatingEdge,
+                startFloatingEdgeCreation: startFloatingEdgeCreation,
+                endFloatingEdgeCreation: endFloatingEdgeCreation,
+                hoveringTableId,
+                setHoveringTableId,
+                showCreateRelationshipNode,
+                hideCreateRelationshipNode,
             }}
         >
             {children}

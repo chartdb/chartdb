@@ -12,7 +12,6 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { Copy, Pencil, Trash2, Workflow } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDialog } from '@/hooks/use-dialog';
 import { useCanvas } from '@/hooks/use-canvas';
 
 export interface TableNodeContextMenuProps {
@@ -26,37 +25,56 @@ export const TableNodeContextMenu: React.FC<
     const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { openCreateRelationshipDialog } = useDialog();
-    const { setEditTableModeTable } = useCanvas();
+    const { setEditTableModeTable, startFloatingEdgeCreation } = useCanvas();
 
-    const duplicateTableHandler = useCallback(() => {
-        const clonedTable = cloneTable(table);
+    const duplicateTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                const clonedTable = cloneTable(table);
 
-        clonedTable.name = `${clonedTable.name}_copy`;
-        clonedTable.x += 30;
-        clonedTable.y += 50;
+                clonedTable.name = `${clonedTable.name}_copy`;
+                clonedTable.x += 30;
+                clonedTable.y += 50;
 
-        createTable(clonedTable);
-    }, [createTable, table]);
+                createTable(clonedTable);
+            },
+            [createTable, table]
+        );
 
-    const editTableHandler = useCallback(() => {
-        if (readonly) {
-            return;
-        }
+    const editTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                if (readonly) {
+                    return;
+                }
 
-        closeAllTablesInSidebar();
-        setEditTableModeTable({ tableId: table.id });
-    }, [table.id, setEditTableModeTable, closeAllTablesInSidebar, readonly]);
+                closeAllTablesInSidebar();
+                setEditTableModeTable({ tableId: table.id });
+            },
+            [table.id, setEditTableModeTable, closeAllTablesInSidebar, readonly]
+        );
 
-    const removeTableHandler = useCallback(() => {
-        removeTable(table.id);
-    }, [removeTable, table.id]);
+    const removeTableHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                removeTable(table.id);
+            },
+            [removeTable, table.id]
+        );
 
-    const addRelationshipHandler = useCallback(() => {
-        openCreateRelationshipDialog({
-            sourceTableId: table.id,
-        });
-    }, [openCreateRelationshipDialog, table.id]);
+    const addRelationshipHandler: React.MouseEventHandler<HTMLDivElement> =
+        useCallback(
+            (e) => {
+                e.stopPropagation();
+                startFloatingEdgeCreation({
+                    sourceNodeId: table.id,
+                });
+            },
+            [startFloatingEdgeCreation, table.id]
+        );
 
     if (!isDesktop || readonly) {
         return <>{children}</>;
