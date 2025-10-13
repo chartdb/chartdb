@@ -434,8 +434,6 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 isRelationshipCreatingTarget &&
                                 tempFloatingEdge
                             ) {
-                                // gets cursor position
-
                                 showCreateRelationshipNode({
                                     sourceTableId:
                                         tempFloatingEdge.sourceNodeId,
@@ -464,23 +462,24 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         handleClassName="!hidden"
                     />
                     {/* Center handle for floating edge creation */}
-                    {!readonly && (
+                    {!readonly ? (
                         <Handle
                             id={`${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
                             type="source"
                             position={Position.Top}
                             className="!invisible !left-1/2 !top-1/2 !h-1 !w-1 !-translate-x-1/2 !-translate-y-1/2 !transform"
                         />
-                    )}
+                    ) : null}
                     {/* Target handle covering entire table for floating edge creation */}
-                    {!readonly && isRelationshipCreatingTarget && (
+                    {!readonly ? (
                         <Handle
                             id={`${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${table.id}`}
                             type="target"
                             position={Position.Top}
                             className="!absolute !left-0 !top-0 !h-full !w-full !transform-none !rounded-none !border-none !opacity-0"
+                            isConnectable={isRelationshipCreatingTarget}
                         />
-                    )}
+                    ) : null}
                     <TableNodeDependencyIndicator
                         table={table}
                         focused={focused}

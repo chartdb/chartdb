@@ -59,6 +59,14 @@ export const CreateRelationshipNode: React.FC<
     }, [sourceTable]);
 
     // Get compatible target fields (FK columns)
+    // Reset state when source or target table changes
+    useEffect(() => {
+        setTargetFieldId(undefined);
+        setSearchTerm('');
+        setErrorMessage('');
+        setSelectOpen(true);
+    }, [sourceTableId, targetTableId]);
+
     const targetFieldOptions = useMemo(() => {
         if (!targetTable || !sourcePKField) return [];
 
@@ -113,7 +121,14 @@ export const CreateRelationshipNode: React.FC<
                     : sourcePKField.name;
             setSearchTerm(suggestedName);
         }
-    }, [targetFieldOptions.length, sourceTable, sourcePKField]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [
+        targetFieldOptions.length,
+        sourceTable,
+        sourcePKField,
+        searchTerm,
+        targetFieldId,
+        targetFieldOptions,
+    ]);
 
     // Auto-open the select immediately and trigger animation
     useEffect(() => {
@@ -142,11 +157,20 @@ export const CreateRelationshipNode: React.FC<
                     createdAt: Date.now(),
                 };
 
-                await addField(targetTableId, newField);
-                finalTargetFieldId = newField.id;
+                try {
+                    await addField(targetTableId, newField);
+                    finalTargetFieldId = newField.id;
+                } catch (fieldError) {
+                    console.error('Failed to create field:', fieldError);
+                    setErrorMessage('Failed to create new field');
+                    return;
+                }
             }
 
-            if (!finalTargetFieldId) return;
+            if (!finalTargetFieldId) {
+                setErrorMessage('Please select a target field');
+                return;
+            }
 
             const relationship = await createRelationship({
                 sourceTableId,
@@ -182,17 +206,7 @@ export const CreateRelationshipNode: React.FC<
         hideCreateRelationshipNode,
     ]);
 
-    // Handle ESC key to cancel
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                hideCreateRelationshipNode();
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [hideCreateRelationshipNode]);
+    // Note: Escape key handling is done in canvas.tsx to avoid duplicate listeners
 
     if (!sourceTable || !targetTable || !sourcePKField) {
         return null;

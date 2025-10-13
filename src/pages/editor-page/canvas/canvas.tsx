@@ -30,7 +30,11 @@ import {
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
 import type { TableNodeType } from './table-node/table-node';
-import { TableNode } from './table-node/table-node';
+import {
+    TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX,
+    TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX,
+    TableNode,
+} from './table-node/table-node';
 import type { RelationshipEdgeType } from './relationship-edge/relationship-edge';
 import { RelationshipEdge } from './relationship-edge/relationship-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -81,6 +85,7 @@ import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
 import type { TempCursorNodeType } from './temp-cursor-node/temp-cursor-node';
 import {
+    TEMP_CURSOR_HANDLE_ID,
     TEMP_CURSOR_NODE_ID,
     TempCursorNode,
 } from './temp-cursor-node/temp-cursor-node';
@@ -303,9 +308,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
-                isRelationshipCreatingTarget:
-                    !!tempFloatingEdge?.sourceNodeId &&
-                    tempFloatingEdge.sourceNodeId !== table.id,
+                isRelationshipCreatingTarget: false,
             })
         )
     );
@@ -331,9 +334,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
-                isRelationshipCreatingTarget:
-                    !!tempFloatingEdge?.sourceNodeId &&
-                    tempFloatingEdge.sourceNodeId !== table.id,
+                isRelationshipCreatingTarget: false,
             })
         );
         if (equal(initialNodes, nodes)) {
@@ -347,7 +348,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
-        tempFloatingEdge?.sourceNodeId,
     ]);
 
     useEffect(() => {
@@ -443,10 +443,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             const newEdges = prevEdges
                 .filter((e) => e.type !== 'temp-floating-edge')
                 .map((edge): EdgeType => {
-                    if (edge.type === 'temp-floating-edge') {
-                        return edge;
-                    }
-
                     const shouldBeHighlighted =
                         selectedRelationshipIdsSet.has(edge.id) ||
                         selectedTableIdsSet.has(edge.source) ||
@@ -517,9 +513,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         filterLoading,
                         showDBViews,
                         forceShow: shouldForceShowTable(table.id),
-                        isRelationshipCreatingTarget:
-                            !!tempFloatingEdge?.sourceNodeId &&
-                            tempFloatingEdge.sourceNodeId !== table.id,
+                        isRelationshipCreatingTarget: false,
                     });
 
                     // Check if table uses the highlighted custom type
@@ -576,8 +570,38 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
-        tempFloatingEdge?.sourceNodeId,
     ]);
+
+    // Surgical update for relationship creation target highlighting
+    // This avoids expensive full node recalculation when only the visual state changes
+    useEffect(() => {
+        setNodes((nds) => {
+            let hasChanges = false;
+            const updatedNodes = nds.map((node) => {
+                if (node.type !== 'table') return node;
+
+                const shouldBeTarget =
+                    !!tempFloatingEdge?.sourceNodeId &&
+                    node.id !== tempFloatingEdge.sourceNodeId;
+                const isCurrentlyTarget =
+                    node.data.isRelationshipCreatingTarget ?? false;
+
+                if (shouldBeTarget !== isCurrentlyTarget) {
+                    hasChanges = true;
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            isRelationshipCreatingTarget: shouldBeTarget,
+                        },
+                    };
+                }
+                return node;
+            });
+
+            return hasChanges ? updatedNodes : nds;
+        });
+    }, [tempFloatingEdge?.sourceNodeId, setNodes]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
     useEffect(() => {
@@ -1305,30 +1329,52 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     // Handle mouse move to update cursor position for floating edge
     const { screenToFlowPosition } = useReactFlow();
+    const rafIdRef = useRef<number>();
     const handleMouseMove = useCallback(
         (event: React.MouseEvent) => {
             if (tempFloatingEdge) {
-                const position = screenToFlowPosition({
-                    x: event.clientX,
-                    y: event.clientY,
+                // Throttle using requestAnimationFrame
+                if (rafIdRef.current) {
+                    return;
+                }
+
+                rafIdRef.current = requestAnimationFrame(() => {
+                    const position = screenToFlowPosition({
+                        x: event.clientX,
+                        y: event.clientY,
+                    });
+                    setCursorPosition(position);
+                    rafIdRef.current = undefined;
                 });
-                setCursorPosition(position);
             }
         },
         [tempFloatingEdge, screenToFlowPosition]
     );
 
-    // Handle escape key to cancel floating edge creation
+    // Cleanup RAF on unmount
+    useEffect(() => {
+        return () => {
+            if (rafIdRef.current) {
+                cancelAnimationFrame(rafIdRef.current);
+            }
+        };
+    }, []);
+
+    // Handle escape key to cancel floating edge creation and close relationship node
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && tempFloatingEdge) {
-                endFloatingEdgeCreation();
-                setCursorPosition(null);
+            if (event.key === 'Escape') {
+                if (tempFloatingEdge) {
+                    endFloatingEdgeCreation();
+                    setCursorPosition(null);
+                }
+                // Also close CreateRelationshipNode if present
+                hideCreateRelationshipNode();
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [tempFloatingEdge, endFloatingEdgeCreation]);
+    }, [tempFloatingEdge, endFloatingEdgeCreation, hideCreateRelationshipNode]);
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
@@ -1352,20 +1398,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         if (!tempFloatingEdge || !cursorPosition) return edges;
 
         let target = TEMP_CURSOR_NODE_ID;
+        let targetHandle: string | undefined = TEMP_CURSOR_HANDLE_ID;
 
         if (tempFloatingEdge.targetNodeId) {
             target = tempFloatingEdge.targetNodeId;
+            targetHandle = `${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${tempFloatingEdge.targetNodeId}`;
         } else if (
             hoveringTableId &&
             hoveringTableId !== tempFloatingEdge.sourceNodeId
         ) {
             target = hoveringTableId;
+            targetHandle = `${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${hoveringTableId}`;
         }
 
         const tempEdge: TempFloatingEdgeType = {
             id: TEMP_FLOATING_EDGE_ID,
             source: tempFloatingEdge.sourceNodeId,
+            sourceHandle: `${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${tempFloatingEdge.sourceNodeId}`,
             target,
+            targetHandle,
             type: 'temp-floating-edge',
         };
 

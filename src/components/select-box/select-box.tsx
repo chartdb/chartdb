@@ -242,6 +242,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                     <CommandItem
                         className="flex items-center"
                         key={option.value}
+                        value={option.label}
                         keywords={option.regex ? [option.regex] : undefined}
                         onSelect={() =>
                             handleSelect(
