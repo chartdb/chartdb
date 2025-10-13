@@ -25,8 +25,7 @@ export const TableNodeContextMenu: React.FC<
     const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { setEditTableModeTable, startProgrammaticEdgeCreation } =
-        useCanvas();
+    const { setEditTableModeTable, startFloatingEdgeCreation } = useCanvas();
 
     const duplicateTableHandler: React.MouseEventHandler<HTMLDivElement> =
         useCallback(
@@ -70,11 +69,11 @@ export const TableNodeContextMenu: React.FC<
         useCallback(
             (e) => {
                 e.stopPropagation();
-                startProgrammaticEdgeCreation({
+                startFloatingEdgeCreation({
                     sourceNodeId: table.id,
                 });
             },
-            [startProgrammaticEdgeCreation, table.id]
+            [startFloatingEdgeCreation, table.id]
         );
 
     if (!isDesktop || readonly) {

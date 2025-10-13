@@ -24,22 +24,22 @@ export interface CanvasContext {
             fieldId?: string;
         } | null>
     >;
-    programmaticEdge: {
+    tempFloatingEdge: {
         sourceNodeId: string;
         targetNodeId?: string;
     } | null;
-    setProgrammaticEdge: React.Dispatch<
+    setTempFloatingEdge: React.Dispatch<
         React.SetStateAction<{
             sourceNodeId: string;
             targetNodeId?: string;
         } | null>
     >;
-    startProgrammaticEdgeCreation: ({
+    startFloatingEdgeCreation: ({
         sourceNodeId,
     }: {
         sourceNodeId: string;
     }) => void;
-    endProgrammaticEdgeCreation: () => void;
+    endFloatingEdgeCreation: () => void;
     hoveringTableId: string | null;
     setHoveringTableId: React.Dispatch<React.SetStateAction<string | null>>;
     showCreateRelationshipNode: (params: {
@@ -60,10 +60,10 @@ export const canvasContext = createContext<CanvasContext>({
     showFilter: false,
     editTableModeTable: null,
     setEditTableModeTable: emptyFn,
-    programmaticEdge: null,
-    setProgrammaticEdge: emptyFn,
-    startProgrammaticEdgeCreation: emptyFn,
-    endProgrammaticEdgeCreation: emptyFn,
+    tempFloatingEdge: null,
+    setTempFloatingEdge: emptyFn,
+    startFloatingEdgeCreation: emptyFn,
+    endFloatingEdgeCreation: emptyFn,
     hoveringTableId: null,
     setHoveringTableId: emptyFn,
     showCreateRelationshipNode: emptyFn,

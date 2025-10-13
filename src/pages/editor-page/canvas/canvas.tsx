@@ -278,8 +278,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showFilter,
         setShowFilter,
         setEditTableModeTable,
-        programmaticEdge,
-        endProgrammaticEdgeCreation,
+        tempFloatingEdge,
+        endFloatingEdgeCreation,
         hoveringTableId,
         hideCreateRelationshipNode,
     } = useCanvas();
@@ -304,8 +304,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget:
-                    !!programmaticEdge?.sourceNodeId &&
-                    programmaticEdge.sourceNodeId !== table.id,
+                    !!tempFloatingEdge?.sourceNodeId &&
+                    tempFloatingEdge.sourceNodeId !== table.id,
             })
         )
     );
@@ -332,8 +332,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget:
-                    !!programmaticEdge?.sourceNodeId &&
-                    programmaticEdge.sourceNodeId !== table.id,
+                    !!tempFloatingEdge?.sourceNodeId &&
+                    tempFloatingEdge.sourceNodeId !== table.id,
             })
         );
         if (equal(initialNodes, nodes)) {
@@ -347,7 +347,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
-        programmaticEdge?.sourceNodeId,
+        tempFloatingEdge?.sourceNodeId,
     ]);
 
     useEffect(() => {
@@ -518,8 +518,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         showDBViews,
                         forceShow: shouldForceShowTable(table.id),
                         isRelationshipCreatingTarget:
-                            !!programmaticEdge?.sourceNodeId &&
-                            programmaticEdge.sourceNodeId !== table.id,
+                            !!tempFloatingEdge?.sourceNodeId &&
+                            tempFloatingEdge.sourceNodeId !== table.id,
                     });
 
                     // Check if table uses the highlighted custom type
@@ -576,7 +576,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
-        programmaticEdge?.sourceNodeId,
+        tempFloatingEdge?.sourceNodeId,
     ]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
@@ -1303,11 +1303,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         []
     );
 
-    // Handle mouse move to update cursor position for programmatic edge
+    // Handle mouse move to update cursor position for floating edge
     const { screenToFlowPosition } = useReactFlow();
     const handleMouseMove = useCallback(
         (event: React.MouseEvent) => {
-            if (programmaticEdge) {
+            if (tempFloatingEdge) {
                 const position = screenToFlowPosition({
                     x: event.clientX,
                     y: event.clientY,
@@ -1315,24 +1315,24 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 setCursorPosition(position);
             }
         },
-        [programmaticEdge, screenToFlowPosition]
+        [tempFloatingEdge, screenToFlowPosition]
     );
 
-    // Handle escape key to cancel programmatic edge creation
+    // Handle escape key to cancel floating edge creation
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && programmaticEdge) {
-                endProgrammaticEdgeCreation();
+            if (event.key === 'Escape' && tempFloatingEdge) {
+                endFloatingEdgeCreation();
                 setCursorPosition(null);
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [programmaticEdge, endProgrammaticEdgeCreation]);
+    }, [tempFloatingEdge, endFloatingEdgeCreation]);
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
-        if (!programmaticEdge || !cursorPosition) {
+        if (!tempFloatingEdge || !cursorPosition) {
             return nodes;
         }
 
@@ -1346,35 +1346,35 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
 
         return [...nodes, tempNode];
-    }, [nodes, programmaticEdge, cursorPosition]);
+    }, [nodes, tempFloatingEdge, cursorPosition]);
 
-    const edgesWithProgrammatic = useMemo(() => {
-        if (!programmaticEdge || !cursorPosition) return edges;
+    const edgesWithFloating = useMemo(() => {
+        if (!tempFloatingEdge || !cursorPosition) return edges;
 
         let target = TEMP_CURSOR_NODE_ID;
 
-        if (programmaticEdge.targetNodeId) {
-            target = programmaticEdge.targetNodeId;
+        if (tempFloatingEdge.targetNodeId) {
+            target = tempFloatingEdge.targetNodeId;
         } else if (
             hoveringTableId &&
-            hoveringTableId !== programmaticEdge.sourceNodeId
+            hoveringTableId !== tempFloatingEdge.sourceNodeId
         ) {
             target = hoveringTableId;
         }
 
         const tempEdge: TempFloatingEdgeType = {
             id: TEMP_FLOATING_EDGE_ID,
-            source: programmaticEdge.sourceNodeId,
+            source: tempFloatingEdge.sourceNodeId,
             target,
             type: 'temp-floating-edge',
         };
 
         return [...edges, tempEdge];
-    }, [edges, programmaticEdge, cursorPosition, hoveringTableId]);
+    }, [edges, tempFloatingEdge, cursorPosition, hoveringTableId]);
 
     const onPaneClickHandler = useCallback(() => {
-        if (programmaticEdge) {
-            endProgrammaticEdgeCreation();
+        if (tempFloatingEdge) {
+            endFloatingEdgeCreation();
             setCursorPosition(null);
         }
 
@@ -1384,9 +1384,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         // Exit edit table mode
         exitEditTableMode();
     }, [
-        programmaticEdge,
+        tempFloatingEdge,
         exitEditTableMode,
-        endProgrammaticEdgeCreation,
+        endFloatingEdgeCreation,
         hideCreateRelationshipNode,
     ]);
 
@@ -1401,9 +1401,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
-                    className={`${programmaticEdge ? 'cursor-crosshair' : 'canvas-cursor-default'} nodes-animated`}
+                    className={`${tempFloatingEdge ? 'cursor-crosshair' : 'canvas-cursor-default'} nodes-animated`}
                     nodes={nodesWithCursor}
-                    edges={edgesWithProgrammatic}
+                    edges={edgesWithFloating}
                     onNodesChange={onNodesChangeHandler}
                     onEdgesChange={onEdgesChangeHandler}
                     maxZoom={5}

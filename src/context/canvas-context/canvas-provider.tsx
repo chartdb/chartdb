@@ -45,9 +45,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
 
     const [showFilter, setShowFilter] = useState(false);
 
-    // Programmatic edge creation state
-    const [programmaticEdge, setProgrammaticEdge] =
-        useState<CanvasContext['programmaticEdge']>(null);
+    const [tempFloatingEdge, setTempFloatingEdge] =
+        useState<CanvasContext['tempFloatingEdge']>(null);
 
     const [hoveringTableId, setHoveringTableId] = useState<string | null>(null);
 
@@ -134,17 +133,17 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         ]
     );
 
-    const startProgrammaticEdgeCreation: CanvasContext['startProgrammaticEdgeCreation'] =
+    const startFloatingEdgeCreation: CanvasContext['startFloatingEdgeCreation'] =
         useCallback(({ sourceNodeId }) => {
             setShowFilter(false);
-            setProgrammaticEdge({
+            setTempFloatingEdge({
                 sourceNodeId,
             });
         }, []);
 
-    const endProgrammaticEdgeCreation: CanvasContext['endProgrammaticEdgeCreation'] =
+    const endFloatingEdgeCreation: CanvasContext['endFloatingEdgeCreation'] =
         useCallback(() => {
-            setProgrammaticEdge(null);
+            setTempFloatingEdge(null);
         }, []);
 
     const hideCreateRelationshipNode: CanvasContext['hideCreateRelationshipNode'] =
@@ -152,13 +151,13 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
             setNodes((nds) =>
                 nds.filter((n) => n.id !== CREATE_RELATIONSHIP_NODE_ID)
             );
-            endProgrammaticEdgeCreation();
-        }, [setNodes, endProgrammaticEdgeCreation]);
+            endFloatingEdgeCreation();
+        }, [setNodes, endFloatingEdgeCreation]);
 
     const showCreateRelationshipNode: CanvasContext['showCreateRelationshipNode'] =
         useCallback(
             ({ sourceTableId, targetTableId, x, y }) => {
-                setProgrammaticEdge((edge) =>
+                setTempFloatingEdge((edge) =>
                     edge
                         ? {
                               ...edge,
@@ -205,10 +204,10 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 showFilter,
                 editTableModeTable,
                 setEditTableModeTable,
-                programmaticEdge,
-                setProgrammaticEdge,
-                startProgrammaticEdgeCreation,
-                endProgrammaticEdgeCreation,
+                tempFloatingEdge: tempFloatingEdge,
+                setTempFloatingEdge: setTempFloatingEdge,
+                startFloatingEdgeCreation: startFloatingEdgeCreation,
+                endFloatingEdgeCreation: endFloatingEdgeCreation,
                 hoveringTableId,
                 setHoveringTableId,
                 showCreateRelationshipNode,

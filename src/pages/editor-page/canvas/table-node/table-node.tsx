@@ -97,7 +97,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             editTableModeTable,
             setHoveringTableId,
             showCreateRelationshipNode,
-            programmaticEdge,
+            tempFloatingEdge,
         } = useCanvas();
 
         // Get edit mode state directly from context
@@ -333,11 +333,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         const isPartOfCreatingRelationship = useMemo(
             () =>
-                programmaticEdge?.sourceNodeId === id ||
+                tempFloatingEdge?.sourceNodeId === id ||
                 (isRelationshipCreatingTarget &&
-                    programmaticEdge?.targetNodeId === id) ||
+                    tempFloatingEdge?.targetNodeId === id) ||
                 isHovering,
-            [programmaticEdge, id, isRelationshipCreatingTarget, isHovering]
+            [tempFloatingEdge, id, isRelationshipCreatingTarget, isHovering]
         );
 
         const tableClassName = useMemo(
@@ -432,13 +432,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             // Handle single click
                             if (
                                 isRelationshipCreatingTarget &&
-                                programmaticEdge
+                                tempFloatingEdge
                             ) {
                                 // gets cursor position
 
                                 showCreateRelationshipNode({
                                     sourceTableId:
-                                        programmaticEdge.sourceNodeId,
+                                        tempFloatingEdge.sourceNodeId,
                                     targetTableId: table.id,
                                     x: e.clientX,
                                     y: e.clientY,
@@ -463,7 +463,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         shouldResize={(event) => event.dy === 0}
                         handleClassName="!hidden"
                     />
-                    {/* Center handle for programmatic edge creation */}
+                    {/* Center handle for floating edge creation */}
                     {!readonly && (
                         <Handle
                             id={`${TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX}${table.id}`}
@@ -472,7 +472,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             className="!invisible !left-1/2 !top-1/2 !h-1 !w-1 !-translate-x-1/2 !-translate-y-1/2 !transform"
                         />
                     )}
-                    {/* Target handle covering entire table for programmatic edge creation */}
+                    {/* Target handle covering entire table for floating edge creation */}
                     {!readonly && isRelationshipCreatingTarget && (
                         <Handle
                             id={`${TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX}${table.id}`}
