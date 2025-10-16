@@ -14,14 +14,14 @@ import { Table, Workflow, Group, View } from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
-import type { DBTable } from '@/lib/domain';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, readonly, createArea } = useChartDB();
+    const { createTable, readonly, createArea, databaseType } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
-    const { openCreateRelationshipDialog, openTableSchemaDialog } = useDialog();
+    const { openCreateRelationshipDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
@@ -36,30 +36,23 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            let newTable: DBTable | null = null;
-
-            if (schemasDisplayed.length > 1) {
-                openTableSchemaDialog({
-                    onConfirm: async ({ schema }) => {
-                        newTable = await createTable({
-                            x: position.x,
-                            y: position.y,
-                            schema: schema.name,
-                        });
-                    },
-                    schemas: schemasDisplayed,
-                });
-            } else {
-                const schema =
-                    schemasDisplayed?.length === 1
-                        ? schemasDisplayed[0]?.name
-                        : undefined;
-                newTable = await createTable({
-                    x: position.x,
-                    y: position.y,
-                    schema,
-                });
+            // Auto-select schema with priority: default schema > first displayed schema > undefined
+            let schema: string | undefined = undefined;
+            if (schemasDisplayed.length > 0) {
+                const defaultSchemaName = defaultSchemas[databaseType];
+                const defaultSchemaInList = schemasDisplayed.find(
+                    (s) => s.name === defaultSchemaName
+                );
+                schema = defaultSchemaInList
+                    ? defaultSchemaInList.name
+                    : schemasDisplayed[0]?.name;
             }
+
+            const newTable = await createTable({
+                x: position.x,
+                y: position.y,
+                schema,
+            });
 
             if (newTable) {
                 setEditTableModeTable({ tableId: newTable.id });
@@ -68,9 +61,9 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         [
             createTable,
             screenToFlowPosition,
-            openTableSchemaDialog,
             schemasDisplayed,
             setEditTableModeTable,
+            databaseType,
         ]
     );
 
@@ -81,32 +74,24 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            let newView: DBTable | null = null;
-
-            if (schemasDisplayed.length > 1) {
-                openTableSchemaDialog({
-                    onConfirm: async ({ schema }) => {
-                        newView = await createTable({
-                            x: position.x,
-                            y: position.y,
-                            schema: schema.name,
-                            isView: true,
-                        });
-                    },
-                    schemas: schemasDisplayed,
-                });
-            } else {
-                const schema =
-                    schemasDisplayed?.length === 1
-                        ? schemasDisplayed[0]?.name
-                        : undefined;
-                newView = await createTable({
-                    x: position.x,
-                    y: position.y,
-                    schema,
-                    isView: true,
-                });
+            // Auto-select schema with priority: default schema > first displayed schema > undefined
+            let schema: string | undefined = undefined;
+            if (schemasDisplayed.length > 0) {
+                const defaultSchemaName = defaultSchemas[databaseType];
+                const defaultSchemaInList = schemasDisplayed.find(
+                    (s) => s.name === defaultSchemaName
+                );
+                schema = defaultSchemaInList
+                    ? defaultSchemaInList.name
+                    : schemasDisplayed[0]?.name;
             }
+
+            const newView = await createTable({
+                x: position.x,
+                y: position.y,
+                schema,
+                isView: true,
+            });
 
             if (newView) {
                 setEditTableModeTable({ tableId: newView.id });
@@ -115,9 +100,9 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         [
             createTable,
             screenToFlowPosition,
-            openTableSchemaDialog,
             schemasDisplayed,
             setEditTableModeTable,
+            databaseType,
         ]
     );
 
