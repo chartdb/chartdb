@@ -13,6 +13,55 @@ import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
 import { escapeSQLComment } from './export-per-type/common';
 
+// Function to format default values with proper quoting
+const formatDefaultValue = (value: string): string => {
+    const trimmed = value.trim();
+
+    // SQL keywords and function-like keywords that don't need quotes
+    const keywords = [
+        'TRUE',
+        'FALSE',
+        'NULL',
+        'CURRENT_TIMESTAMP',
+        'CURRENT_DATE',
+        'CURRENT_TIME',
+        'NOW',
+        'GETDATE',
+        'NEWID',
+        'UUID',
+    ];
+    if (keywords.includes(trimmed.toUpperCase())) {
+        return trimmed;
+    }
+
+    // Function calls (contain parentheses) don't need quotes
+    if (trimmed.includes('(') && trimmed.includes(')')) {
+        return trimmed;
+    }
+
+    // Numbers don't need quotes
+    if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+        return trimmed;
+    }
+
+    // Already quoted strings - keep as is
+    if (
+        (trimmed.startsWith("'") && trimmed.endsWith("'")) ||
+        (trimmed.startsWith('"') && trimmed.endsWith('"'))
+    ) {
+        return trimmed;
+    }
+
+    // Check if it's a simple identifier (alphanumeric, no spaces) that might be a currency or enum
+    // These typically don't have spaces and are short (< 10 chars)
+    if (/^[A-Z][A-Z0-9_]*$/i.test(trimmed) && trimmed.length <= 10) {
+        return trimmed; // Treat as unquoted identifier (e.g., EUR, USD)
+    }
+
+    // Everything else needs to be quoted and escaped
+    return `'${trimmed.replace(/'/g, "''")}'`;
+};
+
 // Function to simplify verbose data type names
 const simplifyDataType = (typeName: string): string => {
     const typeMap: Record<string, string> = {};
@@ -391,7 +440,9 @@ export const exportBaseSQL = ({
                         }
                     }
 
-                    sqlScript += ` DEFAULT ${fieldDefault}`;
+                    // Format default value with proper quoting
+                    const formattedDefault = formatDefaultValue(fieldDefault);
+                    sqlScript += ` DEFAULT ${formattedDefault}`;
                 }
             }
 
