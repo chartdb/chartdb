@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.17.0](https://github.com/chartdb/chartdb/compare/v1.16.0...v1.17.0) (2025-10-16)
+
+
+### Features
+
+* create relationships on canvas modal ([#946](https://github.com/chartdb/chartdb/issues/946)) ([34475ad](https://github.com/chartdb/chartdb/commit/34475add32f11323589ef092ccf2a8e9152ff272))
+
+
+### Bug Fixes
+
+* add auto-increment field detection in smart-query import ([#935](https://github.com/chartdb/chartdb/issues/935)) ([57b3b87](https://github.com/chartdb/chartdb/commit/57b3b8777fd0a445abf0ba6603faab612d469d5c))
+* add rels export dbml ([#937](https://github.com/chartdb/chartdb/issues/937)) ([c3c646b](https://github.com/chartdb/chartdb/commit/c3c646bf7cbb1328f4b2eb85c9a7e929f0fcd3b9))
+* add support for parsing default values in DBML ([#948](https://github.com/chartdb/chartdb/issues/948)) ([459698b](https://github.com/chartdb/chartdb/commit/459698b5d0a1ff23a3719c2e55e4ab2e2384c4fe))
+* add timestampz and int as datatypes to postgres ([#940](https://github.com/chartdb/chartdb/issues/940)) ([b15bc94](https://github.com/chartdb/chartdb/commit/b15bc945acb96d7cb3832b3b1b607dfcaef9e5ca))
+* auto-enter edit mode when creating new tables from canvas ([#943](https://github.com/chartdb/chartdb/issues/943)) ([bcd8aa9](https://github.com/chartdb/chartdb/commit/bcd8aa9378aa563f40a2b6802cc503be4c882356))
+* dbml diff fields types preview ([#934](https://github.com/chartdb/chartdb/issues/934)) ([bb03309](https://github.com/chartdb/chartdb/commit/bb033091b1f64b888822be1423a80f16f5314f6b))
+* exit table edit on area click ([#945](https://github.com/chartdb/chartdb/issues/945)) ([38fedce](https://github.com/chartdb/chartdb/commit/38fedcec0c10ea2b3f0b7fc92ca1f5ac9e540389))
+* manipulate schema directly from the canvas ([#947](https://github.com/chartdb/chartdb/issues/947)) ([7ad0e77](https://github.com/chartdb/chartdb/commit/7ad0e7712de975a23b2a337dc0a4a7fb4b122bd1))
+* prevent text input glitch when editing table field names ([#944](https://github.com/chartdb/chartdb/issues/944)) ([498655e](https://github.com/chartdb/chartdb/commit/498655e7b77e57eaf641ba86263ce1ef60b93e16))
+
 ## [1.16.0](https://github.com/chartdb/chartdb/compare/v1.15.1...v1.16.0) (2025-09-24)
 
 
