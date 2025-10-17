@@ -42,7 +42,7 @@ Note note_test {
             expect(result).toContain('Table users');
         });
 
-        it('should convert array types to text', () => {
+        it('should remove array syntax while preserving base type', () => {
             const dbml = `
 Table users {
   tags text[]
@@ -50,7 +50,7 @@ Table users {
 }`;
             const result = preprocessDBML(dbml);
             expect(result).toContain('tags text');
-            expect(result).toContain('domains text');
+            expect(result).toContain('domains varchar');
             expect(result).not.toContain('[]');
         });
 

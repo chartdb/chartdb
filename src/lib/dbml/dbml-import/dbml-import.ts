@@ -14,12 +14,19 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
+import { validateArrayTypesForDatabase } from './dbml-import-error';
 
 export const defaultDBMLDiagramName = 'DBML Import';
+
+// Track array fields across preprocessing
+const arrayFieldsMap = new Map<string, Set<string>>(); // Map<tableName, Set<fieldName>>
 
 // Preprocess DBML to handle unsupported features
 export const preprocessDBML = (content: string): string => {
     let processed = content;
+
+    // Clear the array fields map for this preprocessing run
+    arrayFieldsMap.clear();
 
     // Remove TableGroup blocks (not supported by parser)
     processed = processed.replace(/TableGroup\s+[^{]*\{[^}]*\}/gs, '');
@@ -30,8 +37,37 @@ export const preprocessDBML = (content: string): string => {
     // Don't remove enum definitions - we'll parse them
     // processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
 
-    // Handle array types by converting them to text
-    processed = processed.replace(/(\w+)\[\]/g, 'text');
+    // Handle array types by tracking them and converting syntax for DBML parser
+    // Note: DBML doesn't officially support array syntax, so we convert type[] to type
+    // but track which fields should be arrays
+
+    // First, find all array field declarations and track them
+    const tablePattern =
+        /Table\s+(?:"([^"]+)"\.)?(?:"([^"]+)"|(\w+))\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}/gs;
+    let match;
+
+    while ((match = tablePattern.exec(content)) !== null) {
+        const schema = match[1] || '';
+        const tableName = match[2] || match[3];
+        const tableBody = match[4];
+        const fullTableName = schema ? `${schema}.${tableName}` : tableName;
+
+        // Find array field declarations within this table
+        const fieldPattern = /"?(\w+)"?\s+(\w+(?:\([^)]+\))?)\[\]/g;
+        let fieldMatch;
+
+        while ((fieldMatch = fieldPattern.exec(tableBody)) !== null) {
+            const fieldName = fieldMatch[1];
+
+            if (!arrayFieldsMap.has(fullTableName)) {
+                arrayFieldsMap.set(fullTableName, new Set());
+            }
+            arrayFieldsMap.get(fullTableName)!.add(fieldName);
+        }
+    }
+
+    // Now convert array syntax for DBML parser (keep the base type, remove [])
+    processed = processed.replace(/(\w+(?:\(\d+(?:,\s*\d+)?\))?)\[\]/g, '$1');
 
     // Handle inline enum types without values by converting to varchar
     processed = processed.replace(
@@ -85,6 +121,7 @@ interface DBMLField {
     pk?: boolean;
     not_null?: boolean;
     increment?: boolean;
+    isArray?: boolean;
     characterMaximumLength?: string | null;
     precision?: number | null;
     scale?: number | null;
@@ -206,6 +243,11 @@ export const importDBMLToDiagram = async (
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
+        }
+
+        // Validate array types BEFORE preprocessing (preprocessing removes [])
+        if (options?.databaseType) {
+            validateArrayTypesForDatabase(dbmlContent, options.databaseType);
         }
 
         const parser = new Parser();
@@ -344,9 +386,22 @@ export const importDBMLToDiagram = async (
                                 const rawDefault = String(
                                     field.dbdefault.value
                                 );
-                                // Remove ALL quotes (single, double, backticks) to clean the value
-                                // The SQL export layer will handle adding proper quotes when needed
                                 defaultValue = rawDefault.replace(/['"`]/g, '');
+                            }
+
+                            // Check if this field should be an array
+                            const fullTableName = schemaName
+                                ? `${schemaName}.${table.name}`
+                                : table.name;
+
+                            let isArray = arrayFieldsMap
+                                .get(fullTableName)
+                                ?.has(field.name);
+
+                            if (!isArray && schemaName) {
+                                isArray = arrayFieldsMap
+                                    .get(table.name)
+                                    ?.has(field.name);
                             }
 
                             return {
@@ -356,6 +411,7 @@ export const importDBMLToDiagram = async (
                                 pk: field.pk,
                                 not_null: field.not_null,
                                 increment: field.increment,
+                                isArray: isArray || undefined,
                                 note: field.note,
                                 default: defaultValue,
                                 ...getFieldExtraAttributes(field, allEnums),
@@ -503,6 +559,8 @@ export const importDBMLToDiagram = async (
                     characterMaximumLength: field.characterMaximumLength,
                     precision: field.precision,
                     scale: field.scale,
+                    ...(field.increment ? { increment: field.increment } : {}),
+                    ...(field.isArray ? { isArray: field.isArray } : {}),
                     ...(fieldComment ? { comments: fieldComment } : {}),
                     ...(field.default ? { default: field.default } : {}),
                 };

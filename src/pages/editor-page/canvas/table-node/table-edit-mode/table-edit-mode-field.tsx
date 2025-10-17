@@ -119,9 +119,7 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                         </TooltipTrigger>
                         <TooltipContent>
                             {field.type.name}
-                            {field.characterMaximumLength
-                                ? `(${field.characterMaximumLength})`
-                                : ''}
+                            {generateDBFieldSuffix(field)}
                         </TooltipContent>
                     </Tooltip>
                 </div>

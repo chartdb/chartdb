@@ -343,6 +343,7 @@ export const exportBaseSQL = ({
             }
 
             const quotedFieldName = getQuotedFieldName(field.name, isDBMLFlow);
+
             sqlScript += `  ${quotedFieldName} ${typeName}`;
 
             // Add size for character types
@@ -383,6 +384,11 @@ export const exportBaseSQL = ({
                 } else if (field.precision) {
                     sqlScript += `(${field.precision})`;
                 }
+            }
+
+            // Add array suffix if field is an array (after type size and precision)
+            if (field.isArray) {
+                sqlScript += '[]';
             }
 
             // Handle NOT NULL constraint

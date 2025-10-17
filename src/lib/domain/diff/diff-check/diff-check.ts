@@ -552,6 +552,7 @@ function compareFieldProperties({
         'characterMaximumLength',
         'scale',
         'precision',
+        'isArray',
     ];
 
     const changedAttributes: FieldDiffAttribute[] = [];
@@ -618,6 +619,13 @@ function compareFieldProperties({
         oldField.precision !== newField.precision
     ) {
         changedAttributes.push('precision');
+    }
+
+    if (
+        attributesToCheck.includes('isArray') &&
+        !!oldField.isArray !== !!newField.isArray
+    ) {
+        changedAttributes.push('isArray');
     }
 
     if (changedAttributes.length > 0) {

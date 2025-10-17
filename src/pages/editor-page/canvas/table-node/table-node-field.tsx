@@ -67,6 +67,7 @@ const arePropsEqual = (
             nextProps.field.characterMaximumLength &&
         prevProps.field.precision === nextProps.field.precision &&
         prevProps.field.scale === nextProps.field.scale &&
+        prevProps.field.isArray === nextProps.field.isArray &&
         prevProps.focused === nextProps.focused &&
         prevProps.highlighted === nextProps.highlighted &&
         prevProps.visible === nextProps.visible &&
@@ -152,6 +153,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             getFieldNewCharacterMaximumLength,
             getFieldNewPrecision,
             getFieldNewScale,
+            getFieldNewIsArray,
             checkIfFieldHasChange,
             isSummaryOnly,
         } = useDiff();
@@ -170,6 +172,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedPrimaryKey: ReturnType<
                 typeof getFieldNewPrimaryKey
             >;
+            fieldDiffChangedIsArray: ReturnType<typeof getFieldNewIsArray>;
             isDiffFieldChanged: boolean;
         }>({
             isDiffFieldRemoved: false,
@@ -181,6 +184,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedScale: null,
             fieldDiffChangedPrecision: null,
             fieldDiffChangedPrimaryKey: null,
+            fieldDiffChangedIsArray: null,
             isDiffFieldChanged: false,
         });
 
@@ -214,6 +218,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     fieldDiffChangedPrecision: getFieldNewPrecision({
                         fieldId: field.id,
                     }),
+                    fieldDiffChangedIsArray: getFieldNewIsArray({
+                        fieldId: field.id,
+                    }),
                     isDiffFieldChanged: checkIfFieldHasChange({
                         fieldId: field.id,
                         tableId: tableNodeId,
@@ -232,6 +239,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             getFieldNewCharacterMaximumLength,
             getFieldNewPrecision,
             getFieldNewScale,
+            getFieldNewIsArray,
             field.id,
             tableNodeId,
         ]);
@@ -247,6 +255,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             fieldDiffChangedCharacterMaximumLength,
             fieldDiffChangedScale,
             fieldDiffChangedPrecision,
+            fieldDiffChangedIsArray,
         } = diffState;
 
         const isCustomTypeHighlighted = useMemo(() => {
@@ -452,6 +461,48 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                         )[0]
                                     }
                                 </>
+                            ) : fieldDiffChangedIsArray ? (
+                                <>
+                                    <span className="line-through">
+                                        {field.type.name.split(' ')[0]}
+                                        {showFieldAttributes
+                                            ? generateDBFieldSuffix({
+                                                  ...field,
+                                                  ...{
+                                                      precision:
+                                                          field.precision,
+                                                      scale: field.scale,
+                                                      characterMaximumLength:
+                                                          field.characterMaximumLength,
+                                                      isArray: field.isArray,
+                                                  },
+                                              })
+                                            : field.isArray
+                                              ? '[]'
+                                              : ''}
+                                    </span>{' '}
+                                    {field.type.name.split(' ')[0]}
+                                    {showFieldAttributes
+                                        ? generateDBFieldSuffix({
+                                              ...field,
+                                              ...{
+                                                  precision:
+                                                      fieldDiffChangedPrecision?.new ??
+                                                      field.precision,
+                                                  scale:
+                                                      fieldDiffChangedScale?.new ??
+                                                      field.scale,
+                                                  characterMaximumLength:
+                                                      fieldDiffChangedCharacterMaximumLength?.new ??
+                                                      field.characterMaximumLength,
+                                                  isArray:
+                                                      fieldDiffChangedIsArray.new,
+                                              },
+                                          })
+                                        : fieldDiffChangedIsArray.new
+                                          ? '[]'
+                                          : ''}
+                                </>
                             ) : (
                                 `${field.type.name.split(' ')[0]}${
                                     showFieldAttributes
@@ -469,7 +520,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                                       field.characterMaximumLength,
                                               },
                                           })
-                                        : ''
+                                        : field.isArray
+                                          ? '[]'
+                                          : ''
                                 }`
                             )}
                             {fieldDiffChangedNullable ? (

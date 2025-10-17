@@ -165,3 +165,26 @@ export const supportsAutoIncrementDataType = (
         'decimal',
     ].includes(dataTypeName.toLocaleLowerCase());
 };
+
+export const supportsArrayDataType = (
+    dataTypeName: string,
+    databaseType: DatabaseType
+): boolean => {
+    // Arrays are primarily supported in PostgreSQL and CockroachDB
+    if (
+        databaseType !== DatabaseType.POSTGRESQL &&
+        databaseType !== DatabaseType.COCKROACHDB
+    ) {
+        return false;
+    }
+
+    // Most PostgreSQL types support arrays, except for a few special types
+    const unsupportedTypes = [
+        'serial',
+        'bigserial',
+        'smallserial',
+        // Add other types that don't support arrays if needed
+    ];
+
+    return !unsupportedTypes.includes(dataTypeName.toLocaleLowerCase());
+};
