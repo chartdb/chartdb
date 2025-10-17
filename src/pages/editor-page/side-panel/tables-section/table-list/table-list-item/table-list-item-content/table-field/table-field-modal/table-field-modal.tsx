@@ -8,6 +8,7 @@ import type { FieldAttributeRange } from '@/lib/data/data-types/data-types';
 import {
     findDataTypeDataById,
     supportsAutoIncrementDataType,
+    supportsArrayDataType,
 } from '@/lib/data/data-types/data-types';
 import {
     Popover,
@@ -89,6 +90,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                 unique: localField.unique,
                 default: localField.default,
                 increment: localField.increment,
+                isArray: localField.isArray,
             });
         }
         prevFieldRef.current = localField;
@@ -102,6 +104,11 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     const supportsAutoIncrement = useMemo(
         () => supportsAutoIncrementDataType(field.type.name),
         [field.type.name]
+    );
+
+    const supportsArray = useMemo(
+        () => supportsArrayDataType(field.type.name, databaseType),
+        [field.type.name, databaseType]
     );
 
     return (
@@ -167,6 +174,26 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                         setLocalField((current) => ({
                                             ...current,
                                             increment: !!value,
+                                        }))
+                                    }
+                                />
+                            </div>
+                        ) : null}
+                        {supportsArray ? (
+                            <div className="flex items-center justify-between">
+                                <Label
+                                    htmlFor="isArray"
+                                    className="text-subtitle"
+                                >
+                                    Array
+                                </Label>
+                                <Checkbox
+                                    checked={localField.isArray ?? false}
+                                    disabled={readonly}
+                                    onCheckedChange={(value) =>
+                                        setLocalField((current) => ({
+                                            ...current,
+                                            isArray: !!value,
                                         }))
                                     }
                                 />

@@ -28,6 +28,10 @@ export function getDiffMapKey({
         : `${diffObject}-${objectId}`;
 }
 
+function normalizeBoolean(value: boolean | undefined | null): boolean {
+    return value === true;
+}
+
 export interface GenerateDiffOptions {
     includeTables?: boolean;
     includeFields?: boolean;
@@ -552,6 +556,7 @@ function compareFieldProperties({
         'characterMaximumLength',
         'scale',
         'precision',
+        'isArray',
     ];
 
     const changedAttributes: FieldDiffAttribute[] = [];
@@ -618,6 +623,14 @@ function compareFieldProperties({
         oldField.precision !== newField.precision
     ) {
         changedAttributes.push('precision');
+    }
+
+    if (
+        attributesToCheck.includes('isArray') &&
+        normalizeBoolean(oldField.isArray) !==
+            normalizeBoolean(newField.isArray)
+    ) {
+        changedAttributes.push('isArray');
     }
 
     if (changedAttributes.length > 0) {

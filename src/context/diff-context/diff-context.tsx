@@ -105,6 +105,11 @@ export interface DiffContext {
     }: {
         fieldId: string;
     }) => { old: number; new: number } | null;
+    getFieldNewIsArray: ({
+        fieldId,
+    }: {
+        fieldId: string;
+    }) => { old: boolean; new: boolean } | null;
 
     // relationship diff
     checkIfNewRelationship: ({

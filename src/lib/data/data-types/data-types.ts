@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DatabaseType } from '../../domain/database-type';
+import { databaseSupportsArrays } from '../../domain/database-capabilities';
 import { clickhouseDataTypes } from './clickhouse-data-types';
 import { genericDataTypes } from './generic-data-types';
 import { mariadbDataTypes } from './mariadb-data-types';
@@ -164,4 +165,23 @@ export const supportsAutoIncrementDataType = (
         'numeric',
         'decimal',
     ].includes(dataTypeName.toLocaleLowerCase());
+};
+
+const ARRAY_INCOMPATIBLE_TYPES = [
+    'serial',
+    'bigserial',
+    'smallserial',
+] as const;
+
+export const supportsArrayDataType = (
+    dataTypeName: string,
+    databaseType: DatabaseType
+): boolean => {
+    if (!databaseSupportsArrays(databaseType)) {
+        return false;
+    }
+
+    return !ARRAY_INCOMPATIBLE_TYPES.includes(
+        dataTypeName.toLowerCase() as (typeof ARRAY_INCOMPATIBLE_TYPES)[number]
+    );
 };

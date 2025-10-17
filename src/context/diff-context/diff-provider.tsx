@@ -447,6 +447,30 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const getFieldNewIsArray = useCallback<DiffContext['getFieldNewIsArray']>(
+        ({ fieldId }) => {
+            const fieldKey = getDiffMapKey({
+                diffObject: 'field',
+                objectId: fieldId,
+                attribute: 'isArray',
+            });
+
+            if (diffMap.has(fieldKey)) {
+                const diff = diffMap.get(fieldKey);
+
+                if (diff?.type === 'changed') {
+                    return {
+                        old: diff.oldValue as boolean,
+                        new: diff.newValue as boolean,
+                    };
+                }
+            }
+
+            return null;
+        },
+        [diffMap]
+    );
+
     const checkIfNewRelationship = useCallback<
         DiffContext['checkIfNewRelationship']
     >(
@@ -520,6 +544,7 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 getFieldNewCharacterMaximumLength,
                 getFieldNewScale,
                 getFieldNewPrecision,
+                getFieldNewIsArray,
 
                 // relationship diff
                 checkIfNewRelationship,
