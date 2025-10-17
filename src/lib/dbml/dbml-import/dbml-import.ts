@@ -89,6 +89,7 @@ interface DBMLField {
     precision?: number | null;
     scale?: number | null;
     note?: string | { value: string } | null;
+    default?: string | null;
 }
 
 interface DBMLIndexColumn {
@@ -335,6 +336,20 @@ export const importDBMLToDiagram = async (
                         schema: schemaName,
                         note: table.note,
                         fields: table.fields.map((field): DBMLField => {
+                            // Extract default value and remove all quotes
+                            let defaultValue: string | undefined;
+                            if (
+                                field.dbdefault !== undefined &&
+                                field.dbdefault !== null
+                            ) {
+                                const rawDefault = String(
+                                    field.dbdefault.value
+                                );
+                                // Remove ALL quotes (single, double, backticks) to clean the value
+                                // The SQL export layer will handle adding proper quotes when needed
+                                defaultValue = rawDefault.replace(/['"`]/g, '');
+                            }
+
                             return {
                                 name: field.name,
                                 type: field.type,
@@ -343,6 +358,7 @@ export const importDBMLToDiagram = async (
                                 not_null: field.not_null,
                                 increment: field.increment,
                                 note: field.note,
+                                default: defaultValue,
                                 ...getFieldExtraAttributes(field, allEnums),
                             } satisfies DBMLField;
                         }),
@@ -489,6 +505,7 @@ export const importDBMLToDiagram = async (
                     precision: field.precision,
                     scale: field.scale,
                     ...(fieldComment ? { comments: fieldComment } : {}),
+                    ...(field.default ? { default: field.default } : {}),
                 };
             });
 
