@@ -268,7 +268,7 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
             // Process only CREATE TABLE statements
             if (trimmedStmt.toUpperCase().startsWith('CREATE TABLE')) {
                 try {
-                    const { Parser } = await import('node-sql-parser');
+                    const { Parser } = await import('node-sql-parser-etypes');
                     const parser = new Parser();
                     // Parse with SQL parser
                     const ast = parser.astify(trimmedStmt, parserOpts);

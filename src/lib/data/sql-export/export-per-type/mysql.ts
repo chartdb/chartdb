@@ -1,6 +1,6 @@
 import {
-    exportFieldComment,
     escapeSQLComment,
+    exportFieldComment,
     formatTableComment,
     isFunction,
     isKeyword,
@@ -98,6 +98,9 @@ function mapMySQLType(typeName: string): string {
         case 'char':
         case 'character':
             return 'CHAR';
+
+        case 'vector':
+            return 'VECTOR';
 
         case 'varchar':
         case 'character varying':
@@ -242,6 +245,11 @@ export function exportMySQL({
                                 typeName.toLowerCase() === 'char' ||
                                 typeName.toLowerCase() === 'varbinary'
                             ) {
+                                typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                            }
+                        }
+                        if (field.characterMaximumLength) {
+                            if (typeName.toLowerCase() === 'vector') {
                                 typeWithSize = `${typeName}(${field.characterMaximumLength})`;
                             }
                         }

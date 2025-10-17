@@ -1,5 +1,5 @@
 import { generateId } from '@/lib/utils';
-import type { AST } from 'node-sql-parser';
+import type { AST } from 'node-sql-parser-etypes';
 import type { DBDependency, DBTable } from '@/lib/domain';
 import { DatabaseType, schemaNameToDomainSchemaName } from '@/lib/domain';
 import type { ViewInfo } from '../metadata-types/view-info';
@@ -8,6 +8,7 @@ import { decodeViewDefinition } from './tables';
 const astDatabaseTypes: Record<DatabaseType, string> = {
     [DatabaseType.POSTGRESQL]: 'postgresql',
     [DatabaseType.MYSQL]: 'postgresql',
+    [DatabaseType.TIDB]: 'postgresql',
     [DatabaseType.MARIADB]: 'postgresql',
     [DatabaseType.GENERIC]: 'postgresql',
     [DatabaseType.SQLITE]: 'postgresql',
@@ -30,7 +31,7 @@ export const createDependenciesFromMetadata = async ({
         return [];
     }
 
-    const { Parser } = await import('node-sql-parser');
+    const { Parser } = await import('node-sql-parser-etypes');
     const parser = new Parser();
 
     const dependencies = views

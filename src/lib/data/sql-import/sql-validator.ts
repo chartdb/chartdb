@@ -6,8 +6,8 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
     validatePostgreSQLDialect,
-    type ValidationResult,
     type ValidationError,
+    type ValidationResult,
     type ValidationWarning,
 } from './validators/postgresql-validator';
 import { validateMySQLDialect } from './validators/mysql-validator';
@@ -32,6 +32,9 @@ export function validateSQL(
             return validatePostgreSQLDialect(sql);
 
         case DatabaseType.MYSQL:
+            return validateMySQLDialect(sql);
+
+        case DatabaseType.TIDB:
             return validateMySQLDialect(sql);
 
         case DatabaseType.SQL_SERVER:

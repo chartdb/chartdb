@@ -147,7 +147,7 @@ function preprocessSQLServerScript(sqlContent: string): string {
 
 /**
  * Manual parsing of ALTER TABLE ADD CONSTRAINT statements
- * This is a fallback for when the node-sql-parser fails to properly parse the constraints
+ * This is a fallback for when the node-sql-parser-etypes fails to properly parse the constraints
  */
 function parseAlterTableAddConstraint(statements: string[]): SQLForeignKey[] {
     const fkData: SQLForeignKey[] = [];
@@ -289,7 +289,7 @@ function normalizeSQLServerDataType(dataType: string): string {
 }
 
 /**
- * Manual parsing of CREATE TABLE statements when node-sql-parser fails
+ * Manual parsing of CREATE TABLE statements when node-sql-parser-etypes fails
  */
 function parseCreateTableManually(
     statement: string,
@@ -653,12 +653,12 @@ export async function fromSQLServer(
             parseCreateTableManually(stmt, tables, tableMap, relationships);
         }
 
-        // Preprocess the SQL content for node-sql-parser
+        // Preprocess the SQL content for node-sql-parser-etypes
         const preprocessedSQL = preprocessSQLServerScript(sqlContent);
 
-        // Try to use node-sql-parser for additional parsing
+        // Try to use node-sql-parser-etypes for additional parsing
         try {
-            const { Parser } = await import('node-sql-parser');
+            const { Parser } = await import('node-sql-parser-etypes');
             const parser = new Parser();
             let ast;
             try {
@@ -710,7 +710,7 @@ export async function fromSQLServer(
         } catch (parserError) {
             // If parser fails completely, continue with manual parsing results
             console.warn(
-                'node-sql-parser failed, using manual parsing only:',
+                'node-sql-parser-etypes failed, using manual parsing only:',
                 parserError
             );
         }

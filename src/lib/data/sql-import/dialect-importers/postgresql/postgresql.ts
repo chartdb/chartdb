@@ -643,7 +643,7 @@ export async function fromPostgres(
     const { statements, warnings } = preprocessSQL(sqlContent);
 
     // Import parser
-    const { Parser } = await import('node-sql-parser');
+    const { Parser } = await import('node-sql-parser-etypes');
     const parser = new Parser();
 
     // First pass: collect all table names and custom types

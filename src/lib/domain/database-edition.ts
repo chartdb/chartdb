@@ -57,6 +57,7 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
             DatabaseEdition.POSTGRESQL_TIMESCALE,
         ],
         [DatabaseType.MYSQL]: [DatabaseEdition.MYSQL_5_7],
+        [DatabaseType.TIDB]: [],
         [DatabaseType.SQL_SERVER]: [DatabaseEdition.SQL_SERVER_2016_AND_BELOW],
         [DatabaseType.SQLITE]: [DatabaseEdition.SQLITE_CLOUDFLARE_D1],
         [DatabaseType.GENERIC]: [],

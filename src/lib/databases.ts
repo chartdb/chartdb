@@ -1,4 +1,7 @@
 import MysqlLogo from '@/assets/mysql_logo.png';
+import TiDBLogo from '@/assets/tidb_logo.png';
+import TiDBLogoDark from '@/assets/tidb_logo_dark.png';
+import TiDBSecondaryLogo from '@/assets/tidb_secondary_logo.png';
 import MysqlLogoDark from '@/assets/mysql_logo_dark.png';
 import PostgresqlLogo from '@/assets/postgresql_logo.png';
 import PostgresqlLogoDark from '@/assets/postgresql_logo_dark.png';
@@ -30,6 +33,7 @@ export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: 'Generic',
     [DatabaseType.POSTGRESQL]: 'PostgreSQL',
     [DatabaseType.MYSQL]: 'MySQL',
+    [DatabaseType.TIDB]: 'TIDB',
     [DatabaseType.SQL_SERVER]: 'SQL Server',
     [DatabaseType.MARIADB]: 'MariaDB',
     [DatabaseType.SQLITE]: 'SQLite',
@@ -40,6 +44,7 @@ export const databaseTypeToLabelMap: Record<DatabaseType, string> = {
 
 export const databaseLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MYSQL]: MysqlLogo,
+    [DatabaseType.TIDB]: TiDBLogo,
     [DatabaseType.POSTGRESQL]: PostgresqlLogo,
     [DatabaseType.MARIADB]: MariaDBLogo,
     [DatabaseType.SQLITE]: SqliteLogo,
@@ -52,6 +57,7 @@ export const databaseLogoMap: Record<DatabaseType, string> = {
 
 export const databaseDarkLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MYSQL]: MysqlLogoDark,
+    [DatabaseType.TIDB]: TiDBLogoDark,
     [DatabaseType.POSTGRESQL]: PostgresqlLogoDark,
     [DatabaseType.MARIADB]: MariaDBLogoDark,
     [DatabaseType.SQLITE]: SqliteLogoDark,
@@ -72,6 +78,7 @@ export const getDatabaseLogo = (
 
 export const databaseSecondaryLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.MYSQL]: MysqlLogo2,
+    [DatabaseType.TIDB]: TiDBSecondaryLogo,
     [DatabaseType.POSTGRESQL]: PostgresqlLogo2,
     [DatabaseType.MARIADB]: MariaDBLogo2,
     [DatabaseType.SQLITE]: SqliteLogo2,

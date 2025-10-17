@@ -9,10 +9,10 @@ import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
-import { getTableIndexesWithPrimaryKey, type DBIndex } from '@/lib/domain';
+import { type DBIndex, getTableIndexesWithPrimaryKey } from '@/lib/domain';
 import {
-    DBCustomTypeKind,
     type DBCustomType,
+    DBCustomTypeKind,
 } from '@/lib/domain/db-custom-type';
 
 export const defaultDBMLDiagramName = 'DBML Import';
@@ -287,8 +287,9 @@ export const importDBMLToDiagram = async (
                 baseTypeName.includes('varchar') ||
                 baseTypeName === 'text' ||
                 baseTypeName === 'string';
+            const isVectorType = baseTypeName === 'vector';
 
-            if (isCharType && args[0]) {
+            if ((isVectorType || isCharType) && args[0]) {
                 return {
                     characterMaximumLength: args[0],
                 };

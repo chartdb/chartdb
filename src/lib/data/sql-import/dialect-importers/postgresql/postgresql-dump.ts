@@ -583,7 +583,7 @@ export async function fromPostgresDump(
         // Phase 1: Process CREATE TABLE statements individually
         for (const statement of createTableStatements) {
             try {
-                const { Parser } = await import('node-sql-parser');
+                const { Parser } = await import('node-sql-parser-etypes');
                 const parser = new Parser();
                 // Parse just this statement with the SQL parser
                 const ast = parser.astify(statement, parserOpts);
