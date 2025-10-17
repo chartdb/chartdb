@@ -28,6 +28,10 @@ export function getDiffMapKey({
         : `${diffObject}-${objectId}`;
 }
 
+function normalizeBoolean(value: boolean | undefined | null): boolean {
+    return value === true;
+}
+
 export interface GenerateDiffOptions {
     includeTables?: boolean;
     includeFields?: boolean;
@@ -623,7 +627,8 @@ function compareFieldProperties({
 
     if (
         attributesToCheck.includes('isArray') &&
-        !!oldField.isArray !== !!newField.isArray
+        normalizeBoolean(oldField.isArray) !==
+            normalizeBoolean(newField.isArray)
     ) {
         changedAttributes.push('isArray');
     }

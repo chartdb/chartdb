@@ -26,7 +26,7 @@ export const verifyDBML = (
             validateArrayTypesForDatabase(content, databaseType);
         }
 
-        const preprocessedContent = preprocessDBML(content);
+        const { content: preprocessedContent } = preprocessDBML(content);
         const sanitizedContent = sanitizeDBML(preprocessedContent);
 
         const parser = new Parser();

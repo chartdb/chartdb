@@ -18,15 +18,16 @@ import { validateArrayTypesForDatabase } from './dbml-import-error';
 
 export const defaultDBMLDiagramName = 'DBML Import';
 
-// Track array fields across preprocessing
-const arrayFieldsMap = new Map<string, Set<string>>(); // Map<tableName, Set<fieldName>>
+interface PreprocessDBMLResult {
+    content: string;
+    arrayFields: Map<string, Set<string>>;
+}
 
-// Preprocess DBML to handle unsupported features
-export const preprocessDBML = (content: string): string => {
+export const preprocessDBML = (content: string): PreprocessDBMLResult => {
     let processed = content;
 
-    // Clear the array fields map for this preprocessing run
-    arrayFieldsMap.clear();
+    // Track array fields found during preprocessing
+    const arrayFields = new Map<string, Set<string>>();
 
     // Remove TableGroup blocks (not supported by parser)
     processed = processed.replace(/TableGroup\s+[^{]*\{[^}]*\}/gs, '');
@@ -59,10 +60,10 @@ export const preprocessDBML = (content: string): string => {
         while ((fieldMatch = fieldPattern.exec(tableBody)) !== null) {
             const fieldName = fieldMatch[1];
 
-            if (!arrayFieldsMap.has(fullTableName)) {
-                arrayFieldsMap.set(fullTableName, new Set());
+            if (!arrayFields.has(fullTableName)) {
+                arrayFields.set(fullTableName, new Set());
             }
-            arrayFieldsMap.get(fullTableName)!.add(fieldName);
+            arrayFields.get(fullTableName)!.add(fieldName);
         }
     }
 
@@ -82,7 +83,7 @@ export const preprocessDBML = (content: string): string => {
         'Table $1 {'
     );
 
-    return processed;
+    return { content: processed, arrayFields };
 };
 
 // Simple function to replace Spanish special characters
@@ -252,7 +253,8 @@ export const importDBMLToDiagram = async (
 
         const parser = new Parser();
         // Preprocess and sanitize DBML content
-        const preprocessedContent = preprocessDBML(dbmlContent);
+        const { content: preprocessedContent, arrayFields } =
+            preprocessDBML(dbmlContent);
         const sanitizedContent = sanitizeDBML(preprocessedContent);
 
         // Handle content that becomes empty after preprocessing
@@ -394,12 +396,12 @@ export const importDBMLToDiagram = async (
                                 ? `${schemaName}.${table.name}`
                                 : table.name;
 
-                            let isArray = arrayFieldsMap
+                            let isArray = arrayFields
                                 .get(fullTableName)
                                 ?.has(field.name);
 
                             if (!isArray && schemaName) {
-                                isArray = arrayFieldsMap
+                                isArray = arrayFields
                                     .get(table.name)
                                     ?.has(field.name);
                             }

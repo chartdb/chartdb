@@ -1,5 +1,6 @@
 import type { CompilerError } from '@dbml/core/types/parse/error';
-import { DatabaseType } from '@/lib/domain/database-type';
+import type { DatabaseType } from '@/lib/domain/database-type';
+import { databaseSupportsArrays } from '@/lib/domain/database-capabilities';
 
 export interface DBMLError {
     message: string;
@@ -17,24 +18,23 @@ export class DBMLValidationError extends Error {
     }
 }
 
-/**
- * Validates that array types are not used in databases that don't support them.
- * Arrays are only supported in PostgreSQL and CockroachDB.
- * This should be called BEFORE preprocessing, as preprocessing removes the [] syntax.
- *
- * @param content - The DBML content to validate
- * @param databaseType - The target database type
- * @throws {DBMLValidationError} If array types are found in unsupported databases
- */
+export const getPositionFromIndex = (
+    content: string,
+    matchIndex: number
+): { line: number; column: number } => {
+    const lines = content.substring(0, matchIndex).split('\n');
+    return {
+        line: lines.length,
+        column: lines[lines.length - 1].length + 1,
+    };
+};
+
 export const validateArrayTypesForDatabase = (
     content: string,
     databaseType: DatabaseType
 ): void => {
-    // Only validate if database doesn't support arrays (skip for PostgreSQL/CockroachDB)
-    if (
-        databaseType === DatabaseType.POSTGRESQL ||
-        databaseType === DatabaseType.COCKROACHDB
-    ) {
+    // Only validate if database doesn't support arrays
+    if (databaseSupportsArrays(databaseType)) {
         return;
     }
 
@@ -44,14 +44,12 @@ export const validateArrayTypesForDatabase = (
     for (const match of matches) {
         const fieldName = match[1];
         const dataType = match[2];
-        const lines = content.substring(0, match.index).split('\n');
-        const lineNumber = lines.length;
-        const columnNumber = lines[lines.length - 1].length + 1;
+        const { line, column } = getPositionFromIndex(content, match.index!);
 
         throw new DBMLValidationError(
             `Array types are not supported for ${databaseType} database. Field "${fieldName}" has array type "${dataType}[]" which is not allowed.`,
-            lineNumber,
-            columnNumber
+            line,
+            column
         );
     }
 };

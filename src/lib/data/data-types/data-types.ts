@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DatabaseType } from '../../domain/database-type';
+import { databaseSupportsArrays } from '../../domain/database-capabilities';
 import { clickhouseDataTypes } from './clickhouse-data-types';
 import { genericDataTypes } from './generic-data-types';
 import { mariadbDataTypes } from './mariadb-data-types';
@@ -166,25 +167,21 @@ export const supportsAutoIncrementDataType = (
     ].includes(dataTypeName.toLocaleLowerCase());
 };
 
+const ARRAY_INCOMPATIBLE_TYPES = [
+    'serial',
+    'bigserial',
+    'smallserial',
+] as const;
+
 export const supportsArrayDataType = (
     dataTypeName: string,
     databaseType: DatabaseType
 ): boolean => {
-    // Arrays are primarily supported in PostgreSQL and CockroachDB
-    if (
-        databaseType !== DatabaseType.POSTGRESQL &&
-        databaseType !== DatabaseType.COCKROACHDB
-    ) {
+    if (!databaseSupportsArrays(databaseType)) {
         return false;
     }
 
-    // Most PostgreSQL types support arrays, except for a few special types
-    const unsupportedTypes = [
-        'serial',
-        'bigserial',
-        'smallserial',
-        // Add other types that don't support arrays if needed
-    ];
-
-    return !unsupportedTypes.includes(dataTypeName.toLocaleLowerCase());
+    return !ARRAY_INCOMPATIBLE_TYPES.includes(
+        dataTypeName.toLowerCase() as (typeof ARRAY_INCOMPATIBLE_TYPES)[number]
+    );
 };
