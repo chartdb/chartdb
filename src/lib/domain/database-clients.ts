@@ -21,6 +21,7 @@ export const databaseTypeToClientsMap: Record<DatabaseType, DatabaseClient[]> =
     {
         [DatabaseType.POSTGRESQL]: [DatabaseClient.POSTGRESQL_PSQL],
         [DatabaseType.MYSQL]: [],
+        [DatabaseType.TIDB]: [],
         [DatabaseType.SQLITE]: [],
         [DatabaseType.GENERIC]: [],
         [DatabaseType.SQL_SERVER]: [],

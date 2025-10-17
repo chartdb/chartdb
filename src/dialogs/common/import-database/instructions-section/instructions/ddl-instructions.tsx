@@ -91,6 +91,19 @@ const DDLInstructionsMap: Record<DatabaseType, DDLInstruction[]> = {
             text: 'Open the exported SQL file, copy its contents, and paste them here.',
         },
     ],
+    [DatabaseType.TIDB]: [
+        {
+            text: 'Install mysqldump.',
+        },
+        {
+            text: 'Execute the following command in your terminal (prefix with sudo on Linux if needed):',
+            code: `mysqldump -h <host> -u <username>\n-P <port> -p --no-data\n<database_name> > <output_path>`,
+            example: `mysqldump -h localhost -u root -P\n3306 -p --no-data my_db >\nschema_export.sql`,
+        },
+        {
+            text: 'Open the exported SQL file, copy its contents, and paste them here.',
+        },
+    ],
     [DatabaseType.ORACLE]: [],
 };
 

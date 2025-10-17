@@ -75,7 +75,7 @@ export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
         const preprocessedSQL = preprocessSQLiteDDL(sqlContent);
 
         // Parse the SQL DDL statements
-        const { Parser } = await import('node-sql-parser');
+        const { Parser } = await import('node-sql-parser-etypes');
         const parser = new Parser();
 
         const ast = parser.astify(

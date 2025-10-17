@@ -23,6 +23,7 @@ const SUPPORTED_DB_TYPES: DatabaseType[] = [
     DatabaseType.ORACLE,
     DatabaseType.COCKROACHDB,
     DatabaseType.CLICKHOUSE,
+    DatabaseType.TIDB,
 ];
 
 export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({

@@ -197,6 +197,7 @@ export async function sqlImportToDiagram({
                 parserResult = await fromPostgres(sqlContent);
             }
             break;
+        case DatabaseType.TIDB:
         case DatabaseType.MYSQL:
         case DatabaseType.MARIADB:
             // Check if the SQL is from MySQL dump and use the appropriate parser
@@ -270,6 +271,7 @@ export async function parseSQLError({
                     await fromPostgres(sqlContent);
                 }
                 break;
+            case DatabaseType.TIDB:
             case DatabaseType.MYSQL:
             case DatabaseType.MARIADB:
                 await fromMySQL(sqlContent);

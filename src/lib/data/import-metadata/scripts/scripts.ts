@@ -22,6 +22,7 @@ export const importMetadataScripts: ImportMetadataScripts = {
     [DatabaseType.GENERIC]: () => '',
     [DatabaseType.POSTGRESQL]: getPostgresQuery,
     [DatabaseType.MYSQL]: getMySQLQuery,
+    [DatabaseType.TIDB]: getMySQLQuery,
     [DatabaseType.SQLITE]: getSQLiteQuery,
     [DatabaseType.SQL_SERVER]: getSqlServerQuery,
     [DatabaseType.MARIADB]: () => mariaDBQuery,

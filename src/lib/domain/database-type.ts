@@ -2,6 +2,7 @@ export enum DatabaseType {
     GENERIC = 'generic',
     POSTGRESQL = 'postgresql',
     MYSQL = 'mysql',
+    TIDB = 'tidb',
     SQL_SERVER = 'sql_server',
     MARIADB = 'mariadb',
     SQLITE = 'sqlite',

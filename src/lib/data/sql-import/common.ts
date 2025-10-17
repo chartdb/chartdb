@@ -623,6 +623,7 @@ export function convertToChartDBDiagram(
             }
             // Handle MySQL/MariaDB integer types specifically
             else if (
+                sourceDatabaseType === DatabaseType.TIDB ||
                 sourceDatabaseType === DatabaseType.MYSQL ||
                 sourceDatabaseType === DatabaseType.MARIADB
             ) {
@@ -645,6 +646,8 @@ export function convertToChartDBDiagram(
                     mappedType = { id: 'mediumint', name: 'mediumint' };
                 } else if (normalizedType === 'bigint') {
                     mappedType = { id: 'bigint', name: 'bigint' };
+                } else if (normalizedType === 'vector') {
+                    mappedType = { id: 'vector', name: 'vector' };
                 } else {
                     // Use the standard mapping for other types
                     mappedType = mapSQLTypeToGenericType(
@@ -776,6 +779,15 @@ export function convertToChartDBDiagram(
                         typeArgsObj.length !== undefined &&
                         (field.type.id === 'varchar' ||
                             field.type.id === 'char')
+                    ) {
+                        field.characterMaximumLength =
+                            typeArgsObj.length.toString();
+                    }
+
+                    // Transfer length for vector type
+                    if (
+                        typeArgsObj.length !== undefined &&
+                        field.type.id === 'vector'
                     ) {
                         field.characterMaximumLength =
                             typeArgsObj.length.toString();

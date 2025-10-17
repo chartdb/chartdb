@@ -8,6 +8,7 @@ import { postgresDataTypes } from './postgres-data-types';
 import { sqlServerDataTypes } from './sql-server-data-types';
 import { sqliteDataTypes } from './sqlite-data-types';
 import { oracleDataTypes } from './oracle-data-types';
+import { tidbDataTypes } from '@/lib/data/data-types/tidb-data-types.ts';
 
 export interface DataType {
     id: string;
@@ -42,6 +43,7 @@ export const dataTypeMap: Record<DatabaseType, readonly DataTypeData[]> = {
     [DatabaseType.GENERIC]: genericDataTypes,
     [DatabaseType.POSTGRESQL]: postgresDataTypes,
     [DatabaseType.MYSQL]: mysqlDataTypes,
+    [DatabaseType.TIDB]: tidbDataTypes,
     [DatabaseType.SQL_SERVER]: sqlServerDataTypes,
     [DatabaseType.MARIADB]: mariadbDataTypes,
     [DatabaseType.SQLITE]: sqliteDataTypes,
@@ -72,6 +74,7 @@ export const sortedDataTypeMap: Record<DatabaseType, readonly DataTypeData[]> =
         [DatabaseType.MYSQL]: sortDataTypes([
             ...dataTypeMap[DatabaseType.MYSQL],
         ]),
+        [DatabaseType.TIDB]: sortDataTypes([...dataTypeMap[DatabaseType.TIDB]]),
         [DatabaseType.SQL_SERVER]: sortDataTypes([
             ...dataTypeMap[DatabaseType.SQL_SERVER],
         ]),
@@ -102,6 +105,7 @@ const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
         int: ['integer'],
         tinyint: ['boolean'],
     },
+    [DatabaseType.TIDB]: {},
     [DatabaseType.SQL_SERVER]: {},
     [DatabaseType.MARIADB]: {},
     [DatabaseType.SQLITE]: {},
