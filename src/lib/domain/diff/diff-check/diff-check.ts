@@ -28,9 +28,15 @@ export function getDiffMapKey({
         : `${diffObject}-${objectId}`;
 }
 
-function normalizeBoolean(value: boolean | undefined | null): boolean {
+const isOneOfDefined = (
+    ...values: (string | number | boolean | undefined | null)[]
+): boolean => {
+    return values.some((value) => value !== undefined && value !== null);
+};
+
+const normalizeBoolean = (value: boolean | undefined | null): boolean => {
     return value === true;
-}
+};
 
 export interface GenerateDiffOptions {
     includeTables?: boolean;
@@ -556,6 +562,7 @@ function compareFieldProperties({
         'characterMaximumLength',
         'scale',
         'precision',
+        'increment',
         'isArray',
     ];
 
@@ -626,7 +633,17 @@ function compareFieldProperties({
     }
 
     if (
+        attributesToCheck.includes('increment') &&
+        isOneOfDefined(newField.increment, oldField.increment) &&
+        normalizeBoolean(oldField.increment) !==
+            normalizeBoolean(newField.increment)
+    ) {
+        changedAttributes.push('increment');
+    }
+
+    if (
         attributesToCheck.includes('isArray') &&
+        isOneOfDefined(newField.isArray, oldField.isArray) &&
         normalizeBoolean(oldField.isArray) !==
             normalizeBoolean(newField.isArray)
     ) {

@@ -97,7 +97,6 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'tsvector', id: 'tsvector' },
     { name: 'tsquery', id: 'tsquery' },
     { name: 'xml', id: 'xml' },
-    { name: 'array', id: 'array' },
     { name: 'int4range', id: 'int4range' },
     { name: 'int8range', id: 'int8range' },
     { name: 'numrange', id: 'numrange' },

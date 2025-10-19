@@ -1,9 +1,6 @@
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
-import {
-    DatabaseType,
-    databaseTypesWithCommentSupport,
-} from '@/lib/domain/database-type';
+import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import { dataTypeMap, type DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
@@ -12,6 +9,7 @@ import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
 import { escapeSQLComment } from './export-per-type/common';
+import { databaseTypesWithCommentSupport } from '@/lib/domain/database-capabilities';
 
 // Function to format default values with proper quoting
 const formatDefaultValue = (value: string): string => {

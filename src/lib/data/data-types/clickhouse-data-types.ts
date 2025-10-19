@@ -129,9 +129,6 @@ export const clickhouseDataTypes: readonly DataTypeData[] = [
     { name: 'enum', id: 'enum' },
     { name: 'lowcardinality', id: 'lowcardinality' },
 
-    // Array Type
-    { name: 'array', id: 'array' },
-
     // Tuple Type
     { name: 'tuple', id: 'tuple' },
     { name: 'map', id: 'map' },

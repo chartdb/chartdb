@@ -2,9 +2,10 @@ import { z } from 'zod';
 import {
     dataTypeSchema,
     findDataTypeDataById,
+    supportsArrayDataType,
     type DataType,
 } from '../data/data-types/data-types';
-import type { DatabaseType } from './database-type';
+import { DatabaseType } from './database-type';
 
 export interface DBField {
     id: string;
@@ -63,7 +64,13 @@ export const generateDBFieldSuffix = (
     }
 
     // Add array notation if field is an array
-    if (field.isArray) {
+    if (
+        field.isArray &&
+        supportsArrayDataType(
+            typeId ?? field.type.id,
+            databaseType ?? DatabaseType.GENERIC
+        )
+    ) {
         suffix += '[]';
     }
 

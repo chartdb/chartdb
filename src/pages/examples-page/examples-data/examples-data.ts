@@ -2418,9 +2418,10 @@ export const examples: Example[] = [
                             id: 'yqrnjmizqeu2w7mpfhze3clbj',
                             name: 'special_features',
                             type: {
-                                id: 'array',
-                                name: 'array',
+                                id: 'text',
+                                name: 'text',
                             },
+                            isArray: true,
                             primaryKey: false,
                             unique: false,
                             nullable: true,
