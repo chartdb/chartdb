@@ -9,7 +9,11 @@ import type { DatabaseType } from '@/lib/domain/database-type';
 
 export const verifyDBML = (
     content: string,
-    databaseType?: DatabaseType
+    {
+        databaseType,
+    }: {
+        databaseType: DatabaseType;
+    }
 ):
     | {
           hasError: true;
@@ -22,9 +26,7 @@ export const verifyDBML = (
       } => {
     try {
         // Validate array types BEFORE preprocessing (preprocessing removes [])
-        if (databaseType) {
-            validateArrayTypesForDatabase(content, databaseType);
-        }
+        validateArrayTypesForDatabase(content, databaseType);
 
         const { content: preprocessedContent } = preprocessDBML(content);
         const sanitizedContent = sanitizeDBML(preprocessedContent);

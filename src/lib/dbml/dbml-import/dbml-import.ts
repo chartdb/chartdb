@@ -228,8 +228,8 @@ const determineCardinality = (
 
 export const importDBMLToDiagram = async (
     dbmlContent: string,
-    options?: {
-        databaseType?: DatabaseType;
+    options: {
+        databaseType: DatabaseType;
     }
 ): Promise<Diagram> => {
     try {
@@ -247,9 +247,7 @@ export const importDBMLToDiagram = async (
         }
 
         // Validate array types BEFORE preprocessing (preprocessing removes [])
-        if (options?.databaseType) {
-            validateArrayTypesForDatabase(dbmlContent, options.databaseType);
-        }
+        validateArrayTypesForDatabase(dbmlContent, options.databaseType);
 
         const parser = new Parser();
         // Preprocess and sanitize DBML content
