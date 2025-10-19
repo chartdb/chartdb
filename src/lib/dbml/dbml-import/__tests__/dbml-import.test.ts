@@ -5,6 +5,7 @@ import {
     importDBMLToDiagram,
 } from '../dbml-import';
 import { Parser } from '@dbml/core';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('DBML Import', () => {
     describe('preprocessDBML', () => {
@@ -105,7 +106,9 @@ Note note_test {
   'This is a test note'
 }`;
 
-            const diagram = await importDBMLToDiagram(complexDBML);
+            const diagram = await importDBMLToDiagram(complexDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(2);
             expect(diagram.relationships).toHaveLength(1);

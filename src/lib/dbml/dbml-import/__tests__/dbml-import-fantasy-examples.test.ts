@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { importDBMLToDiagram } from '../dbml-import';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('DBML Import - Fantasy Examples', () => {
     describe('Magical Academy System', () => {
@@ -149,7 +150,9 @@ Table ranks {
   max_spell_level integer [not null]
 }`;
 
-            const diagram = await importDBMLToDiagram(magicalAcademyDBML);
+            const diagram = await importDBMLToDiagram(magicalAcademyDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify tables
             expect(diagram.tables).toHaveLength(8);
@@ -366,7 +369,9 @@ Note marketplace_note {
   'This marketplace handles both standard purchases and barter trades'
 }`;
 
-            const diagram = await importDBMLToDiagram(marketplaceDBML);
+            const diagram = await importDBMLToDiagram(marketplaceDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify tables
             expect(diagram.tables).toHaveLength(7);
@@ -567,7 +572,9 @@ Note quest_system_note {
   'Quest difficulty and status use enums that will be converted to varchar'
 }`;
 
-            const diagram = await importDBMLToDiagram(questSystemDBML);
+            const diagram = await importDBMLToDiagram(questSystemDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify tables
             expect(diagram.tables).toHaveLength(7);
@@ -657,7 +664,9 @@ Table projects {
   priority enum // inline enum without values - will be converted to varchar
 }`;
 
-            const diagram = await importDBMLToDiagram(dbmlWithEnums);
+            const diagram = await importDBMLToDiagram(dbmlWithEnums, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify customTypes are created for enums
             expect(diagram.customTypes).toBeDefined();
@@ -744,7 +753,9 @@ Table orders {
   status order_status [not null]
 }`;
 
-            const diagram = await importDBMLToDiagram(dbmlWithEnumNotes);
+            const diagram = await importDBMLToDiagram(dbmlWithEnumNotes, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify enum is created
             expect(diagram.customTypes).toHaveLength(1);
@@ -788,7 +799,9 @@ Table admin.users {
   status admin.status
 }`;
 
-            const diagram = await importDBMLToDiagram(dbmlWithSameEnumNames);
+            const diagram = await importDBMLToDiagram(dbmlWithSameEnumNames, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify both enums are created
             expect(diagram.customTypes).toHaveLength(2);
@@ -891,7 +904,9 @@ Note dragon_note {
   'Dragons are very protective of their hoards!'
 }`;
 
-            const diagram = await importDBMLToDiagram(edgeCaseDBML);
+            const diagram = await importDBMLToDiagram(edgeCaseDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify preprocessing worked
             expect(diagram.tables).toHaveLength(2);
@@ -956,7 +971,9 @@ Note dragon_note {
 
         it('should handle empty DBML gracefully', async () => {
             const emptyDBML = '';
-            const diagram = await importDBMLToDiagram(emptyDBML);
+            const diagram = await importDBMLToDiagram(emptyDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(0);
             expect(diagram.relationships).toHaveLength(0);
@@ -969,7 +986,9 @@ Note dragon_note {
 /* Multi-line
    comment */
 `;
-            const diagram = await importDBMLToDiagram(commentOnlyDBML);
+            const diagram = await importDBMLToDiagram(commentOnlyDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(0);
             expect(diagram.relationships).toHaveLength(0);
@@ -980,7 +999,9 @@ Note dragon_note {
 Table empty_table {
   id int
 }`;
-            const diagram = await importDBMLToDiagram(minimalDBML);
+            const diagram = await importDBMLToDiagram(minimalDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(1);
             expect(diagram.tables?.[0]?.fields).toHaveLength(1);
@@ -996,7 +1017,9 @@ Table "aa"."users" {
 Table "bb"."users" {
   id integer [primary key]
 }`;
-            const diagram = await importDBMLToDiagram(dbml);
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(2);
 
@@ -1071,7 +1094,9 @@ Table "public_3"."comments" {
     id [unique, name: "public_3_index_1"]
   }
 }`;
-            const diagram = await importDBMLToDiagram(dbml);
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             // Verify tables
             expect(diagram.tables).toHaveLength(3);
@@ -1256,7 +1281,9 @@ Table products {
   Note: 'This table stores product information'
 }`;
 
-            const diagram = await importDBMLToDiagram(dbmlWithTableNote);
+            const diagram = await importDBMLToDiagram(dbmlWithTableNote, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(1);
             const productsTable = diagram.tables?.[0];
@@ -1273,7 +1300,9 @@ Table orders {
   total numeric(10,2) [note: 'Order total including tax']
 }`;
 
-            const diagram = await importDBMLToDiagram(dbmlWithFieldNote);
+            const diagram = await importDBMLToDiagram(dbmlWithFieldNote, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(1);
             const ordersTable = diagram.tables?.[0];

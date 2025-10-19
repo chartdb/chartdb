@@ -51,3 +51,7 @@ export const databaseTypesWithCommentSupport: DatabaseType[] = Object.keys(
 ).filter(
     (dbType) => DATABASE_CAPABILITIES[dbType as DatabaseType].supportsComments
 ) as DatabaseType[];
+
+export const supportsCustomTypes = (databaseType: DatabaseType): boolean => {
+    return getDatabaseCapabilities(databaseType).supportsCustomTypes ?? false;
+};
