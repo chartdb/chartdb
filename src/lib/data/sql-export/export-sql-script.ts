@@ -9,7 +9,10 @@ import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
 import { escapeSQLComment } from './export-per-type/common';
-import { databaseTypesWithCommentSupport } from '@/lib/domain/database-capabilities';
+import {
+    databaseTypesWithCommentSupport,
+    supportsCustomTypes,
+} from '@/lib/domain/database-capabilities';
 
 // Function to format default values with proper quoting
 const formatDefaultValue = (value: string): string => {
@@ -198,10 +201,7 @@ export const exportBaseSQL = ({
                 // or if we rely on the DBML generator to create Enums separately (as currently done)
                 // For now, let's assume PostgreSQL-style for demonstration if isDBMLFlow is false.
                 // If isDBMLFlow is true, we let TableDBML.tsx handle Enum syntax directly.
-                if (
-                    targetDatabaseType === DatabaseType.POSTGRESQL &&
-                    !isDBMLFlow
-                ) {
+                if (supportsCustomTypes(targetDatabaseType) && !isDBMLFlow) {
                     const enumValues = customType.values
                         .map((v) => `'${v.replace(/'/g, "''")}'`)
                         .join(', ');
@@ -214,10 +214,7 @@ export const exportBaseSQL = ({
             ) {
                 // For PostgreSQL, generate CREATE TYPE ... AS (...)
                 // This is crucial for composite types to be recognized by the DBML importer
-                if (
-                    targetDatabaseType === DatabaseType.POSTGRESQL ||
-                    isDBMLFlow
-                ) {
+                if (supportsCustomTypes(targetDatabaseType) || isDBMLFlow) {
                     // Assume other DBs might not support this or DBML flow needs it
                     const compositeFields = customType.fields
                         .map((f) => `${f.field} ${simplifyDataType(f.type)}`)
@@ -232,13 +229,12 @@ export const exportBaseSQL = ({
                     (ct.kind === 'enum' &&
                         ct.values &&
                         ct.values.length > 0 &&
-                        targetDatabaseType === DatabaseType.POSTGRESQL &&
+                        supportsCustomTypes(targetDatabaseType) &&
                         !isDBMLFlow) ||
                     (ct.kind === 'composite' &&
                         ct.fields &&
                         ct.fields.length > 0 &&
-                        (targetDatabaseType === DatabaseType.POSTGRESQL ||
-                            isDBMLFlow))
+                        (supportsCustomTypes(targetDatabaseType) || isDBMLFlow))
             )
         ) {
             sqlScript += '\n';
@@ -298,7 +294,7 @@ export const exportBaseSQL = ({
 
             if (
                 customEnumType &&
-                targetDatabaseType === DatabaseType.POSTGRESQL &&
+                supportsCustomTypes(targetDatabaseType) &&
                 !isDBMLFlow
             ) {
                 typeName = customEnumType.schema

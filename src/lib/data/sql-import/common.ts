@@ -10,6 +10,7 @@ import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
+import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 
 // Common interfaces for SQL entities
 export interface SQLColumn {
@@ -663,7 +664,7 @@ export function convertToChartDBDiagram(
                 // Ensure integer types are preserved
                 mappedType = { id: 'integer', name: 'integer' };
             } else if (
-                sourceDatabaseType === DatabaseType.POSTGRESQL &&
+                supportsCustomTypes(sourceDatabaseType) &&
                 parserResult.enums &&
                 parserResult.enums.some(
                     (e) => e.name.toLowerCase() === column.type.toLowerCase()

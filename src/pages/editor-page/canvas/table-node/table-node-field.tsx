@@ -459,64 +459,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         )}
                     >
                         <span className="block truncate">
-                            {
-                                // fieldDiffChangedType ? (
-                                //     <>
-                                //         <span className="line-through">
-                                //             {
-                                //                 fieldDiffChangedType.old.name.split(
-                                //                     ' '
-                                //                 )[0]
-                                //             }
-                                //         </span>{' '}
-                                //         {
-                                //             fieldDiffChangedType.new.name.split(
-                                //                 ' '
-                                //             )[0]
-                                //         }
-                                //     </>
-                                // ) :
-                                isFieldAttributeChanged ||
-                                fieldDiffChangedType ? (
-                                    <>
-                                        <span className="line-through">
-                                            {
-                                                (
-                                                    fieldDiffChangedType?.old
-                                                        ?.name ??
-                                                    field.type.name
-                                                ).split(' ')[0]
-                                            }
-                                            {showFieldAttributes
-                                                ? generateDBFieldSuffix(
-                                                      {
-                                                          ...field,
-                                                          ...{
-                                                              precision:
-                                                                  fieldDiffChangedPrecision?.old ??
-                                                                  field.precision,
-                                                              scale:
-                                                                  fieldDiffChangedScale?.old ??
-                                                                  field.scale,
-                                                              characterMaximumLength:
-                                                                  fieldDiffChangedCharacterMaximumLength?.old ??
-                                                                  field.characterMaximumLength,
-                                                              isArray:
-                                                                  fieldDiffChangedIsArray?.old ??
-                                                                  field.isArray,
-                                                          },
-                                                      },
-                                                      {
-                                                          databaseType,
-                                                      }
-                                                  )
-                                                : field.isArray
-                                                  ? '[]'
-                                                  : ''}
-                                        </span>{' '}
+                            {isFieldAttributeChanged || fieldDiffChangedType ? (
+                                <>
+                                    <span className="line-through">
                                         {
                                             (
-                                                fieldDiffChangedType?.new
+                                                fieldDiffChangedType?.old
                                                     ?.name ?? field.type.name
                                             ).split(' ')[0]
                                         }
@@ -526,16 +474,16 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                                       ...field,
                                                       ...{
                                                           precision:
-                                                              fieldDiffChangedPrecision?.new ??
+                                                              fieldDiffChangedPrecision?.old ??
                                                               field.precision,
                                                           scale:
-                                                              fieldDiffChangedScale?.new ??
+                                                              fieldDiffChangedScale?.old ??
                                                               field.scale,
                                                           characterMaximumLength:
-                                                              fieldDiffChangedCharacterMaximumLength?.new ??
+                                                              fieldDiffChangedCharacterMaximumLength?.old ??
                                                               field.characterMaximumLength,
                                                           isArray:
-                                                              fieldDiffChangedIsArray?.new ??
+                                                              fieldDiffChangedIsArray?.old ??
                                                               field.isArray,
                                                       },
                                                   },
@@ -543,23 +491,55 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                                       databaseType,
                                                   }
                                               )
-                                            : (fieldDiffChangedIsArray?.new ??
-                                                field.isArray)
-                                              ? '[]'
-                                              : ''}
-                                    </>
-                                ) : (
-                                    `${field.type.name.split(' ')[0]}${
-                                        showFieldAttributes
-                                            ? generateDBFieldSuffix(field, {
-                                                  databaseType,
-                                              })
                                             : field.isArray
                                               ? '[]'
-                                              : ''
-                                    }`
-                                )
-                            }
+                                              : ''}
+                                    </span>{' '}
+                                    {
+                                        (
+                                            fieldDiffChangedType?.new?.name ??
+                                            field.type.name
+                                        ).split(' ')[0]
+                                    }
+                                    {showFieldAttributes
+                                        ? generateDBFieldSuffix(
+                                              {
+                                                  ...field,
+                                                  ...{
+                                                      precision:
+                                                          fieldDiffChangedPrecision?.new ??
+                                                          field.precision,
+                                                      scale:
+                                                          fieldDiffChangedScale?.new ??
+                                                          field.scale,
+                                                      characterMaximumLength:
+                                                          fieldDiffChangedCharacterMaximumLength?.new ??
+                                                          field.characterMaximumLength,
+                                                      isArray:
+                                                          fieldDiffChangedIsArray?.new ??
+                                                          field.isArray,
+                                                  },
+                                              },
+                                              {
+                                                  databaseType,
+                                              }
+                                          )
+                                        : (fieldDiffChangedIsArray?.new ??
+                                            field.isArray)
+                                          ? '[]'
+                                          : ''}
+                                </>
+                            ) : (
+                                `${field.type.name.split(' ')[0]}${
+                                    showFieldAttributes
+                                        ? generateDBFieldSuffix(field, {
+                                              databaseType,
+                                          })
+                                        : field.isArray
+                                          ? '[]'
+                                          : ''
+                                }`
+                            )}
                             {fieldDiffChangedNullable ? (
                                 fieldDiffChangedNullable.new ? (
                                     <span className="font-semibold">?</span>

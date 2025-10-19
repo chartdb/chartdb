@@ -27,7 +27,7 @@ import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { DatabaseType } from '@/lib/domain/database-type';
+import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 
@@ -110,7 +110,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'areas',
             },
-            ...(databaseType === DatabaseType.POSTGRESQL
+            ...(supportsCustomTypes(databaseType)
                 ? [
                       {
                           title: t('editor_sidebar.custom_types'),
