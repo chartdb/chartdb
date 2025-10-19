@@ -38,7 +38,9 @@ Note test_note {
   'This is a test note'
 }`;
 
-        const diagram = await importDBMLToDiagram(dbmlContent);
+        const diagram = await importDBMLToDiagram(dbmlContent, {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
 
         // Verify basic structure
         expect(diagram).toBeDefined();
@@ -96,7 +98,9 @@ Table products [headercolor: #FF0000] {
 
 Ref: products.id < users.favorite_product_id`;
 
-        const diagram = await importDBMLToDiagram(dbmlContent);
+        const diagram = await importDBMLToDiagram(dbmlContent, {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
 
         expect(diagram.tables).toHaveLength(2);
 
@@ -119,12 +123,16 @@ Ref: products.id < users.favorite_product_id`;
 
     it('should handle empty or invalid DBML gracefully', async () => {
         // Empty DBML
-        const emptyDiagram = await importDBMLToDiagram('');
+        const emptyDiagram = await importDBMLToDiagram('', {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
         expect(emptyDiagram.tables).toHaveLength(0);
         expect(emptyDiagram.relationships).toHaveLength(0);
 
         // Only comments
-        const commentDiagram = await importDBMLToDiagram('// Just a comment');
+        const commentDiagram = await importDBMLToDiagram('// Just a comment', {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
         expect(commentDiagram.tables).toHaveLength(0);
         expect(commentDiagram.relationships).toHaveLength(0);
     });
@@ -133,7 +141,9 @@ Ref: products.id < users.favorite_product_id`;
         const dbmlContent = `Table test {
   id int [pk]
 }`;
-        const diagram = await importDBMLToDiagram(dbmlContent);
+        const diagram = await importDBMLToDiagram(dbmlContent, {
+            databaseType: DatabaseType.GENERIC,
+        });
 
         // Default values
         expect(diagram.name).toBe('DBML Import');

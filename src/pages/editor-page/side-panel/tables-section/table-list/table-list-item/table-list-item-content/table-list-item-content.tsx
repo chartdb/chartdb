@@ -49,6 +49,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         updateIndex,
         updateTable,
         readonly,
+        databaseType,
     } = useChartDB();
     const { t } = useTranslation();
     const { color } = table;
@@ -183,6 +184,8 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                         removeField={() =>
                                             removeField(table.id, field.id)
                                         }
+                                        databaseType={databaseType}
+                                        readonly={readonly}
                                     />
                                 ))}
                             </SortableContext>

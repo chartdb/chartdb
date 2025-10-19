@@ -300,6 +300,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                                 table={table}
                                 field={field}
                                 focused={focusFieldId === field.id}
+                                databaseType={databaseType}
                             />
                         </div>
                     ))}
