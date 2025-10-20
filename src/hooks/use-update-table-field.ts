@@ -10,6 +10,7 @@ import {
     dataTypeDataToDataType,
     sortedDataTypeMap,
     supportsArrayDataType,
+    autoIncrementAlwaysOn,
 } from '@/lib/data/data-types/data-types';
 import { generateDBFieldSuffix } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
@@ -224,12 +225,19 @@ export const useUpdateTableField = (
                 }
             }
 
+            // Determine increment value based on type
+            // If the new type is SERIAL/BIGSERIAL/SMALLSERIAL, auto-enable increment
+            // But only if the field is NOT nullable (auto-increment requires NOT NULL)
+            const newTypeName = dataType?.name ?? (value as string);
+            const shouldForceIncrement =
+                autoIncrementAlwaysOn(newTypeName) && !field.nullable;
+
             updateField(table.id, field.id, {
                 characterMaximumLength,
                 precision,
                 scale,
                 isArray,
-                increment: undefined,
+                increment: shouldForceIncrement ? true : undefined,
                 default: undefined,
                 type: dataTypeDataToDataType(
                     dataType ?? {
@@ -247,6 +255,7 @@ export const useUpdateTableField = (
             field.scale,
             field.id,
             table.id,
+            field.nullable,
         ]
     );
 
@@ -267,9 +276,16 @@ export const useUpdateTableField = (
     const debouncedNullableUpdate = useDebounce(
         useCallback(
             (value: boolean) => {
-                updateField(table.id, field.id, { nullable: value });
+                const updates: Partial<DBField> = { nullable: value };
+
+                // If setting to nullable, clear increment (auto-increment requires NOT NULL)
+                if (value && field.increment) {
+                    updates.increment = undefined;
+                }
+
+                updateField(table.id, field.id, updates);
             },
-            [updateField, table.id, field.id]
+            [updateField, table.id, field.id, field.increment]
         ),
         100 // 100ms debounce for toggle
     );

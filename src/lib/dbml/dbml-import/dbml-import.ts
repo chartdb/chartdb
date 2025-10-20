@@ -552,7 +552,8 @@ export const importDBMLToDiagram = async (
                         ...options,
                         enums: extractedData.enums,
                     }),
-                    nullable: !field.not_null,
+                    // Auto-increment fields must be NOT NULL
+                    nullable: field.increment ? false : !field.not_null,
                     primaryKey: field.pk || false,
                     unique: field.unique || field.pk || false, // Primary keys are always unique
                     createdAt: Date.now(),

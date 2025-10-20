@@ -9,6 +9,7 @@ import {
     findDataTypeDataById,
     supportsAutoIncrementDataType,
     supportsArrayDataType,
+    autoIncrementAlwaysOn,
 } from '@/lib/data/data-types/data-types';
 import {
     Popover,
@@ -111,6 +112,18 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         [field.type.name, databaseType]
     );
 
+    // Check if this is a SERIAL-type that is inherently auto-incrementing
+    const forceAutoIncrement = useMemo(
+        () => autoIncrementAlwaysOn(field.type.name) && !localField.nullable,
+        [field.type.name, localField.nullable]
+    );
+
+    // Auto-increment is disabled if the field is nullable (auto-increment requires NOT NULL)
+    const isIncrementDisabled = useMemo(
+        () => localField.nullable || readonly || forceAutoIncrement,
+        [localField.nullable, readonly, forceAutoIncrement]
+    );
+
     return (
         <Popover
             open={isOpen}
@@ -166,10 +179,12 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     )}
                                 </Label>
                                 <Checkbox
-                                    checked={localField.increment ?? false}
-                                    disabled={
-                                        !localField.primaryKey || readonly
+                                    checked={
+                                        forceAutoIncrement
+                                            ? true
+                                            : (localField.increment ?? false)
                                     }
+                                    disabled={isIncrementDisabled}
                                     onCheckedChange={(value) =>
                                         setLocalField((current) => ({
                                             ...current,

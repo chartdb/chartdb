@@ -66,4 +66,12 @@ describe('DBML Export cases', () => {
     it('should handle case 5 diagram', { timeout: 30000 }, async () => {
         testCase('5');
     });
+
+    it(
+        'should handle case 6 diagram - auto increment',
+        { timeout: 30000 },
+        async () => {
+            testCase('6');
+        }
+    );
 });

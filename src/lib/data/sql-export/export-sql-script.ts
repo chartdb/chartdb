@@ -395,9 +395,26 @@ export const exportBaseSQL = ({
                 sqlScript += ` UNIQUE`;
             }
 
-            // Handle AUTO INCREMENT - add as a comment for AI to process
+            // Handle AUTO INCREMENT
             if (field.increment) {
-                sqlScript += ` /* AUTO_INCREMENT */`;
+                if (isDBMLFlow) {
+                    // For DBML flow, generate proper database-specific syntax
+                    if (
+                        targetDatabaseType === DatabaseType.MYSQL ||
+                        targetDatabaseType === DatabaseType.MARIADB
+                    ) {
+                        sqlScript += ` AUTO_INCREMENT`;
+                    } else if (targetDatabaseType === DatabaseType.SQL_SERVER) {
+                        sqlScript += ` IDENTITY(1,1)`;
+                    } else if (targetDatabaseType === DatabaseType.SQLITE) {
+                        // SQLite AUTOINCREMENT only works with INTEGER PRIMARY KEY
+                        // Will be handled when PRIMARY KEY is added
+                    }
+                    // PostgreSQL/CockroachDB: increment attribute added by restoreIncrementAttribute in DBML export
+                } else {
+                    // For non-DBML flow, add as a comment for AI to process
+                    sqlScript += ` /* AUTO_INCREMENT */`;
+                }
             }
 
             // Handle DEFAULT value
@@ -450,6 +467,17 @@ export const exportBaseSQL = ({
             const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
             if (field.primaryKey && !hasCompositePrimaryKey && !pkIndex?.name) {
                 sqlScript += ' PRIMARY KEY';
+
+                // For SQLite with DBML flow, add AUTOINCREMENT after PRIMARY KEY
+                if (
+                    isDBMLFlow &&
+                    field.increment &&
+                    targetDatabaseType === DatabaseType.SQLITE &&
+                    (typeName.toLowerCase() === 'integer' ||
+                        typeName.toLowerCase() === 'int')
+                ) {
+                    sqlScript += ' AUTOINCREMENT';
+                }
             }
 
             // Add a comma after each field except the last one (or before PK constraint)

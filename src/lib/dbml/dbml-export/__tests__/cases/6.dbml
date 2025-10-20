@@ -1,0 +1,14 @@
+Table "users" {
+  "id" integer [pk, not null, increment]
+  "username" varchar(100) [unique, not null]
+  "email" varchar(255) [not null]
+}
+
+Table "posts" {
+  "post_id" bigint [pk, not null, increment]
+  "user_id" integer [not null]
+  "title" varchar(200) [not null]
+  "order_num" integer [not null, increment]
+}
+
+Ref "fk_0_fk_posts_users":"users"."id" < "posts"."user_id"
