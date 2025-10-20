@@ -1,6 +1,6 @@
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain';
-import { FileType2, X, SquarePlus } from 'lucide-react';
+import { FileType2, X, SquarePlus, CircleDotDashed } from 'lucide-react';
 import React, {
     useEffect,
     useState,
@@ -17,6 +17,7 @@ import { Separator } from '@/components/separator/separator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useUpdateTable } from '@/hooks/use-update-table';
 import { useTranslation } from 'react-i18next';
+import { useLayout } from '@/hooks/use-layout';
 import { SelectBox } from '@/components/select-box/select-box';
 import type { SelectBoxOption } from '@/components/select-box/select-box';
 import {
@@ -42,6 +43,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
         const { createField, updateTable, schemas, databaseType } =
             useChartDB();
         const { t } = useTranslation();
+        const { openTableFromSidebar, selectSidebarSection } = useLayout();
         const { tableName, handleTableNameChange } = useUpdateTable(table);
         const [focusFieldId, setFocusFieldId] = useState<string | undefined>(
             focusFieldIdProp
@@ -200,6 +202,11 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
             }
         }, [isCreatingNewSchema, newSchemaName, handleCreateNewSchema]);
 
+        const openTableInEditor = useCallback(() => {
+            selectSidebarSection('tables');
+            openTableFromSidebar(table.id);
+        }, [selectSidebarSection, openTableFromSidebar, table.id]);
+
         return (
             <div
                 ref={containerRef}
@@ -283,14 +290,24 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                             }
                         />
                     </div>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="size-6 p-0 hover:bg-slate-300 dark:hover:bg-slate-700"
-                        onClick={onClose}
-                    >
-                        <X className="size-4" />
-                    </Button>
+                    <div className="flex shrink-0 flex-row gap-1">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="size-6 p-0 text-slate-500 hover:bg-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+                            onClick={openTableInEditor}
+                        >
+                            <CircleDotDashed className="size-4" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="size-6 p-0 hover:bg-slate-300 dark:hover:bg-slate-700"
+                            onClick={onClose}
+                        >
+                            <X className="size-4" />
+                        </Button>
+                    </div>
                 </div>
 
                 <ScrollArea ref={scrollAreaRef} className="nodrag flex-1 p-2">
