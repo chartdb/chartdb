@@ -101,13 +101,32 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         areas,
     ]);
 
-    // Initialize expanded state with all schemas expanded
-    useMemo(() => {
-        const initialExpanded: Record<string, boolean> = {};
-        treeData.forEach((node) => {
-            initialExpanded[node.id] = true;
+    // Sync expanded state with tree data changes - only expand NEW nodes
+    useEffect(() => {
+        setExpanded((prev) => {
+            const currentNodeIds = new Set(treeData.map((n) => n.id));
+            let hasChanges = false;
+            const newExpanded: Record<string, boolean> = { ...prev };
+
+            // Add any new nodes with expanded=true (preserve existing state)
+            treeData.forEach((node) => {
+                if (!(node.id in prev)) {
+                    newExpanded[node.id] = true;
+                    hasChanges = true;
+                }
+            });
+
+            // Remove nodes that no longer exist (cleanup)
+            Object.keys(prev).forEach((id) => {
+                if (!currentNodeIds.has(id)) {
+                    delete newExpanded[id];
+                    hasChanges = true;
+                }
+            });
+
+            // Only update state if something actually changed (performance)
+            return hasChanges ? newExpanded : prev;
         });
-        setExpanded(initialExpanded);
     }, [treeData]);
 
     // Filter tree data based on search query
@@ -317,6 +336,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     expanded={expanded}
                     setExpanded={setExpanded}
                     className="py-2"
+                    disableCache={true}
                 />
             </ScrollArea>
         </div>
