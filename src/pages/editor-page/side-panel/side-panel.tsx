@@ -15,7 +15,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { AreasSection } from './areas-section/areas-section';
 import { CustomTypesSection } from './custom-types-section/custom-types-section';
-import { DatabaseType } from '@/lib/domain/database-type';
+import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { DBMLSection } from './dbml-section/dbml-section';
 import { RefsSection } from './refs-section/refs-section';
 
@@ -54,7 +54,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                 <SelectItem value="areas">
                                     {t('side_panel.areas_section.areas')}
                                 </SelectItem>
-                                {databaseType === DatabaseType.POSTGRESQL ? (
+                                {supportsCustomTypes(databaseType) ? (
                                     <SelectItem value="customTypes">
                                         {t(
                                             'side_panel.custom_types_section.custom_types'

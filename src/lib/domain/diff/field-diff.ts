@@ -15,7 +15,9 @@ export type FieldDiffAttribute =
     | 'comments'
     | 'characterMaximumLength'
     | 'precision'
-    | 'scale';
+    | 'scale'
+    | 'increment'
+    | 'isArray';
 
 export const fieldDiffAttributeSchema: z.ZodType<FieldDiffAttribute> = z.union([
     z.literal('name'),

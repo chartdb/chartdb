@@ -28,10 +28,12 @@ export function useTree<
     fetchChildren,
     expanded: expandedProp,
     setExpanded: setExpandedProp,
+    disableCache = false,
 }: {
     fetchChildren?: FetchChildrenFunction<Type, Context>;
     expanded?: ExpandedState;
     setExpanded?: Dispatch<SetStateAction<ExpandedState>>;
+    disableCache?: boolean;
 }) {
     const [expandedInternal, setExpandedInternal] = useState<ExpandedState>({});
 
@@ -89,8 +91,8 @@ export function useTree<
             // Get any previously fetched children
             const previouslyFetchedChildren = loadedChildren[nodeId] || [];
 
-            // If we have static children, merge them with any previously fetched children
-            if (staticChildren?.length) {
+            // Only cache if caching is enabled
+            if (!disableCache && staticChildren?.length) {
                 const mergedChildren = mergeChildren(
                     staticChildren,
                     previouslyFetchedChildren
@@ -110,8 +112,8 @@ export function useTree<
             // Set expanded state immediately to show static/previously fetched children
             setExpanded((prev) => ({ ...prev, [nodeId]: true }));
 
-            // If we haven't loaded dynamic children yet
-            if (!previouslyFetchedChildren.length) {
+            // If we haven't loaded dynamic children yet and cache is enabled
+            if (!disableCache && !previouslyFetchedChildren.length) {
                 setLoading((prev) => ({ ...prev, [nodeId]: true }));
                 try {
                     const fetchedChildren = await fetchChildren?.(
@@ -140,7 +142,14 @@ export function useTree<
                 }
             }
         },
-        [expanded, loadedChildren, fetchChildren, mergeChildren, setExpanded]
+        [
+            expanded,
+            loadedChildren,
+            fetchChildren,
+            mergeChildren,
+            setExpanded,
+            disableCache,
+        ]
     );
 
     return {

@@ -16,6 +16,7 @@ import { Check, GripVertical, Pencil } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { AreaNodeContextMenu } from './area-node-context-menu';
+import { useCanvas } from '@/hooks/use-canvas';
 
 export type AreaNodeType = Node<
     {
@@ -57,6 +58,8 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         useKeyPressEvent('Enter', editAreaName);
         useKeyPressEvent('Escape', abortEdit);
 
+        const { setEditTableModeTable } = useCanvas();
+
         const enterEditMode = (e: React.MouseEvent) => {
             e.stopPropagation();
             setEditMode(true);
@@ -77,6 +80,7 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
                         borderColor: selected ? undefined : area.color,
                     }}
                     onClick={(e) => {
+                        setEditTableModeTable(null);
                         if (e.detail === 2) {
                             openAreaInEditor();
                         }

@@ -1,10 +1,19 @@
 import { Parser } from '@dbml/core';
 import { preprocessDBML, sanitizeDBML } from './dbml-import';
 import type { DBMLError } from './dbml-import-error';
-import { parseDBMLError } from './dbml-import-error';
+import {
+    parseDBMLError,
+    validateArrayTypesForDatabase,
+} from './dbml-import-error';
+import type { DatabaseType } from '@/lib/domain/database-type';
 
 export const verifyDBML = (
-    content: string
+    content: string,
+    {
+        databaseType,
+    }: {
+        databaseType: DatabaseType;
+    }
 ):
     | {
           hasError: true;
@@ -16,8 +25,12 @@ export const verifyDBML = (
           hasError: false;
       } => {
     try {
-        const preprocessedContent = preprocessDBML(content);
+        // Validate array types BEFORE preprocessing (preprocessing removes [])
+        validateArrayTypesForDatabase(content, databaseType);
+
+        const { content: preprocessedContent } = preprocessDBML(content);
         const sanitizedContent = sanitizeDBML(preprocessedContent);
+
         const parser = new Parser();
         parser.parse(sanitizedContent, 'dbmlv2');
     } catch (e) {

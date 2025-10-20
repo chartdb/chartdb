@@ -5,6 +5,7 @@ import {
     importDBMLToDiagram,
 } from '../dbml-import';
 import { Parser } from '@dbml/core';
+import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('DBML Import', () => {
     describe('preprocessDBML', () => {
@@ -22,7 +23,7 @@ TableGroup "Test Group" [color: #CA4243] {
 Table posts {
   id int
 }`;
-            const result = preprocessDBML(dbml);
+            const { content: result } = preprocessDBML(dbml);
             expect(result).not.toContain('TableGroup');
             expect(result).toContain('Table users');
             expect(result).toContain('Table posts');
@@ -37,20 +38,20 @@ Table users {
 Note note_test {
   'This is a note'
 }`;
-            const result = preprocessDBML(dbml);
+            const { content: result } = preprocessDBML(dbml);
             expect(result).not.toContain('Note');
             expect(result).toContain('Table users');
         });
 
-        it('should convert array types to text', () => {
+        it('should remove array syntax while preserving base type', () => {
             const dbml = `
 Table users {
   tags text[]
   domains varchar[]
 }`;
-            const result = preprocessDBML(dbml);
+            const { content: result } = preprocessDBML(dbml);
             expect(result).toContain('tags text');
-            expect(result).toContain('domains text');
+            expect(result).toContain('domains varchar');
             expect(result).not.toContain('[]');
         });
 
@@ -60,7 +61,7 @@ Table users {
   status enum
   verification_type enum // comment here
 }`;
-            const result = preprocessDBML(dbml);
+            const { content: result } = preprocessDBML(dbml);
             expect(result).toContain('status varchar');
             expect(result).toContain('verification_type varchar');
             expect(result).not.toContain('enum');
@@ -71,7 +72,7 @@ Table users {
 Table users [headercolor: #24BAB1] {
   id int
 }`;
-            const result = preprocessDBML(dbml);
+            const { content: result } = preprocessDBML(dbml);
             expect(result).toContain('Table users {');
             expect(result).not.toContain('headercolor');
         });
@@ -105,7 +106,9 @@ Note note_test {
   'This is a test note'
 }`;
 
-            const diagram = await importDBMLToDiagram(complexDBML);
+            const diagram = await importDBMLToDiagram(complexDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
             expect(diagram.tables).toHaveLength(2);
             expect(diagram.relationships).toHaveLength(1);
@@ -149,7 +152,7 @@ Note note_1750185617764 {
 }`;
 
             // Test that preprocessing handles all issues
-            const preprocessed = preprocessDBML(problematicDBML);
+            const { content: preprocessed } = preprocessDBML(problematicDBML);
             const sanitized = sanitizeDBML(preprocessed);
 
             // Should not throw

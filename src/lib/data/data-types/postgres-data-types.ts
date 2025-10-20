@@ -12,6 +12,7 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'text', id: 'text', usageLevel: 1 },
     { name: 'boolean', id: 'boolean', usageLevel: 1 },
     { name: 'timestamp', id: 'timestamp', usageLevel: 1 },
+    { name: 'timestamptz', id: 'timestamptz', usageLevel: 1 },
     { name: 'date', id: 'date', usageLevel: 1 },
 
     // Level 2 - Second most common types
@@ -42,6 +43,7 @@ export const postgresDataTypes: readonly DataTypeData[] = [
         id: 'timestamp_with_time_zone',
         usageLevel: 2,
     },
+    { name: 'int', id: 'int', usageLevel: 2 },
 
     // Less common types
     {
@@ -95,7 +97,6 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     { name: 'tsvector', id: 'tsvector' },
     { name: 'tsquery', id: 'tsquery' },
     { name: 'xml', id: 'xml' },
-    { name: 'array', id: 'array' },
     { name: 'int4range', id: 'int4range' },
     { name: 'int8range', id: 'int8range' },
     { name: 'numrange', id: 'numrange' },

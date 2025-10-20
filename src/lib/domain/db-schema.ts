@@ -1,4 +1,5 @@
-import { DatabaseType } from './database-type';
+import { DATABASE_CAPABILITIES } from './database-capabilities';
+import type { DatabaseType } from './database-type';
 
 export interface DBSchema {
     id: string;
@@ -18,10 +19,8 @@ export const schemaNameToDomainSchemaName = (
           ? undefined
           : schema?.trim();
 
-export const databasesWithSchemas: DatabaseType[] = [
-    DatabaseType.POSTGRESQL,
-    DatabaseType.SQL_SERVER,
-    DatabaseType.CLICKHOUSE,
-    DatabaseType.COCKROACHDB,
-    DatabaseType.ORACLE,
-];
+export const databasesWithSchemas: DatabaseType[] = Object.keys(
+    DATABASE_CAPABILITIES
+).filter(
+    (dbType) => DATABASE_CAPABILITIES[dbType as DatabaseType].supportsSchemas
+) as DatabaseType[];

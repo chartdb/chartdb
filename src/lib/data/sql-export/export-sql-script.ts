@@ -1,9 +1,6 @@
 import type { Diagram } from '../../domain/diagram';
 import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
-import {
-    DatabaseType,
-    databaseTypesWithCommentSupport,
-} from '@/lib/domain/database-type';
+import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import { dataTypeMap, type DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
@@ -12,6 +9,59 @@ import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
 import { escapeSQLComment } from './export-per-type/common';
+import {
+    databaseTypesWithCommentSupport,
+    supportsCustomTypes,
+} from '@/lib/domain/database-capabilities';
+
+// Function to format default values with proper quoting
+const formatDefaultValue = (value: string): string => {
+    const trimmed = value.trim();
+
+    // SQL keywords and function-like keywords that don't need quotes
+    const keywords = [
+        'TRUE',
+        'FALSE',
+        'NULL',
+        'CURRENT_TIMESTAMP',
+        'CURRENT_DATE',
+        'CURRENT_TIME',
+        'NOW',
+        'GETDATE',
+        'NEWID',
+        'UUID',
+    ];
+    if (keywords.includes(trimmed.toUpperCase())) {
+        return trimmed;
+    }
+
+    // Function calls (contain parentheses) don't need quotes
+    if (trimmed.includes('(') && trimmed.includes(')')) {
+        return trimmed;
+    }
+
+    // Numbers don't need quotes
+    if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+        return trimmed;
+    }
+
+    // Already quoted strings - keep as is
+    if (
+        (trimmed.startsWith("'") && trimmed.endsWith("'")) ||
+        (trimmed.startsWith('"') && trimmed.endsWith('"'))
+    ) {
+        return trimmed;
+    }
+
+    // Check if it's a simple identifier (alphanumeric, no spaces) that might be a currency or enum
+    // These typically don't have spaces and are short (< 10 chars)
+    if (/^[A-Z][A-Z0-9_]*$/i.test(trimmed) && trimmed.length <= 10) {
+        return trimmed; // Treat as unquoted identifier (e.g., EUR, USD)
+    }
+
+    // Everything else needs to be quoted and escaped
+    return `'${trimmed.replace(/'/g, "''")}'`;
+};
 
 // Function to simplify verbose data type names
 const simplifyDataType = (typeName: string): string => {
@@ -151,10 +201,7 @@ export const exportBaseSQL = ({
                 // or if we rely on the DBML generator to create Enums separately (as currently done)
                 // For now, let's assume PostgreSQL-style for demonstration if isDBMLFlow is false.
                 // If isDBMLFlow is true, we let TableDBML.tsx handle Enum syntax directly.
-                if (
-                    targetDatabaseType === DatabaseType.POSTGRESQL &&
-                    !isDBMLFlow
-                ) {
+                if (supportsCustomTypes(targetDatabaseType) && !isDBMLFlow) {
                     const enumValues = customType.values
                         .map((v) => `'${v.replace(/'/g, "''")}'`)
                         .join(', ');
@@ -167,10 +214,7 @@ export const exportBaseSQL = ({
             ) {
                 // For PostgreSQL, generate CREATE TYPE ... AS (...)
                 // This is crucial for composite types to be recognized by the DBML importer
-                if (
-                    targetDatabaseType === DatabaseType.POSTGRESQL ||
-                    isDBMLFlow
-                ) {
+                if (supportsCustomTypes(targetDatabaseType) || isDBMLFlow) {
                     // Assume other DBs might not support this or DBML flow needs it
                     const compositeFields = customType.fields
                         .map((f) => `${f.field} ${simplifyDataType(f.type)}`)
@@ -185,13 +229,12 @@ export const exportBaseSQL = ({
                     (ct.kind === 'enum' &&
                         ct.values &&
                         ct.values.length > 0 &&
-                        targetDatabaseType === DatabaseType.POSTGRESQL &&
+                        supportsCustomTypes(targetDatabaseType) &&
                         !isDBMLFlow) ||
                     (ct.kind === 'composite' &&
                         ct.fields &&
                         ct.fields.length > 0 &&
-                        (targetDatabaseType === DatabaseType.POSTGRESQL ||
-                            isDBMLFlow))
+                        (supportsCustomTypes(targetDatabaseType) || isDBMLFlow))
             )
         ) {
             sqlScript += '\n';
@@ -251,7 +294,7 @@ export const exportBaseSQL = ({
 
             if (
                 customEnumType &&
-                targetDatabaseType === DatabaseType.POSTGRESQL &&
+                supportsCustomTypes(targetDatabaseType) &&
                 !isDBMLFlow
             ) {
                 typeName = customEnumType.schema
@@ -294,6 +337,7 @@ export const exportBaseSQL = ({
             }
 
             const quotedFieldName = getQuotedFieldName(field.name, isDBMLFlow);
+
             sqlScript += `  ${quotedFieldName} ${typeName}`;
 
             // Add size for character types
@@ -334,6 +378,11 @@ export const exportBaseSQL = ({
                 } else if (field.precision) {
                     sqlScript += `(${field.precision})`;
                 }
+            }
+
+            // Add array suffix if field is an array (after type size and precision)
+            if (field.isArray) {
+                sqlScript += '[]';
             }
 
             // Handle NOT NULL constraint
@@ -391,7 +440,9 @@ export const exportBaseSQL = ({
                         }
                     }
 
-                    sqlScript += ` DEFAULT ${fieldDefault}`;
+                    // Format default value with proper quoting
+                    const formattedDefault = formatDefaultValue(fieldDefault);
+                    sqlScript += ` DEFAULT ${formattedDefault}`;
                 }
             }
 

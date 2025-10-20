@@ -140,7 +140,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
         if (importMethod === 'dbml') {
             // Validate DBML by parsing it
-            const validateResponse = verifyDBML(scriptResult);
+            const validateResponse = verifyDBML(scriptResult, { databaseType });
             if (!validateResponse.hasError) {
                 setErrorMessage('');
                 setSqlValidation({

@@ -295,4 +295,51 @@ describe('DBML Import cases', () => {
     it('should handle case 2 - tables with relationships', async () => {
         await testDBMLImportCase('2');
     });
+
+    it('should handle table with default values', async () => {
+        const dbmlContent = `Table "public"."products" {
+  "id" bigint [pk, not null]
+  "name" varchar(255) [not null]
+  "price" decimal(10,2) [not null, default: 0]
+  "is_active" boolean [not null, default: true]
+  "status" varchar(50) [not null, default: "deprecated"]
+  "description" varchar(100) [default: \`complex "value" with quotes\`]
+  "created_at" timestamp [not null, default: "now()"]
+
+  Indexes {
+    (name) [name: "idx_products_name"]
+  }
+}`;
+
+        const result = await importDBMLToDiagram(dbmlContent, {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
+
+        expect(result.tables).toHaveLength(1);
+        const table = result.tables![0];
+        expect(table.name).toBe('products');
+        expect(table.fields).toHaveLength(7);
+
+        // Check numeric default (0)
+        const priceField = table.fields.find((f) => f.name === 'price');
+        expect(priceField?.default).toBe('0');
+
+        // Check boolean default (true)
+        const isActiveField = table.fields.find((f) => f.name === 'is_active');
+        expect(isActiveField?.default).toBe('true');
+
+        // Check string default with all quotes removed
+        const statusField = table.fields.find((f) => f.name === 'status');
+        expect(statusField?.default).toBe('deprecated');
+
+        // Check backtick string - all quotes removed
+        const descField = table.fields.find((f) => f.name === 'description');
+        expect(descField?.default).toBe('complex value with quotes');
+
+        // Check function default with all quotes removed
+        const createdAtField = table.fields.find(
+            (f) => f.name === 'created_at'
+        );
+        expect(createdAtField?.default).toBe('now()');
+    });
 });

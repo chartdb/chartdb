@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { KeyRound, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
-import type { DBTable } from '@/lib/domain';
+import type { DatabaseType, DBTable } from '@/lib/domain';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
 import {
     Tooltip,
@@ -18,10 +18,11 @@ export interface TableEditModeFieldProps {
     table: DBTable;
     field: DBField;
     focused?: boolean;
+    databaseType: DatabaseType;
 }
 
 export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
-    ({ table, field, focused = false }) => {
+    ({ table, field, focused = false, databaseType }) => {
         const { t } = useTranslation();
         const [showHighlight, setShowHighlight] = React.useState(false);
 
@@ -102,7 +103,9 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                         'side_panel.tables_section.table.field_type'
                                     )}
                                     value={field.type.id}
-                                    valueSuffix={generateDBFieldSuffix(field)}
+                                    valueSuffix={generateDBFieldSuffix(field, {
+                                        databaseType,
+                                    })}
                                     optionSuffix={(option) =>
                                         generateFieldSuffix(option.value)
                                     }
@@ -119,9 +122,9 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                         </TooltipTrigger>
                         <TooltipContent>
                             {field.type.name}
-                            {field.characterMaximumLength
-                                ? `(${field.characterMaximumLength})`
-                                : ''}
+                            {generateDBFieldSuffix(field, {
+                                databaseType,
+                            })}
                         </TooltipContent>
                     </Tooltip>
                 </div>

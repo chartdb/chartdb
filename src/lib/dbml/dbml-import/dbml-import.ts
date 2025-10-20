@@ -14,12 +14,20 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
+import { validateArrayTypesForDatabase } from './dbml-import-error';
 
 export const defaultDBMLDiagramName = 'DBML Import';
 
-// Preprocess DBML to handle unsupported features
-export const preprocessDBML = (content: string): string => {
+interface PreprocessDBMLResult {
+    content: string;
+    arrayFields: Map<string, Set<string>>;
+}
+
+export const preprocessDBML = (content: string): PreprocessDBMLResult => {
     let processed = content;
+
+    // Track array fields found during preprocessing
+    const arrayFields = new Map<string, Set<string>>();
 
     // Remove TableGroup blocks (not supported by parser)
     processed = processed.replace(/TableGroup\s+[^{]*\{[^}]*\}/gs, '');
@@ -30,8 +38,37 @@ export const preprocessDBML = (content: string): string => {
     // Don't remove enum definitions - we'll parse them
     // processed = processed.replace(/enum\s+\w+\s*\{[^}]*\}/gs, '');
 
-    // Handle array types by converting them to text
-    processed = processed.replace(/(\w+)\[\]/g, 'text');
+    // Handle array types by tracking them and converting syntax for DBML parser
+    // Note: DBML doesn't officially support array syntax, so we convert type[] to type
+    // but track which fields should be arrays
+
+    // First, find all array field declarations and track them
+    const tablePattern =
+        /Table\s+(?:"([^"]+)"\.)?(?:"([^"]+)"|(\w+))\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}/gs;
+    let match;
+
+    while ((match = tablePattern.exec(content)) !== null) {
+        const schema = match[1] || '';
+        const tableName = match[2] || match[3];
+        const tableBody = match[4];
+        const fullTableName = schema ? `${schema}.${tableName}` : tableName;
+
+        // Find array field declarations within this table
+        const fieldPattern = /"?(\w+)"?\s+(\w+(?:\([^)]+\))?)\[\]/g;
+        let fieldMatch;
+
+        while ((fieldMatch = fieldPattern.exec(tableBody)) !== null) {
+            const fieldName = fieldMatch[1];
+
+            if (!arrayFields.has(fullTableName)) {
+                arrayFields.set(fullTableName, new Set());
+            }
+            arrayFields.get(fullTableName)!.add(fieldName);
+        }
+    }
+
+    // Now convert array syntax for DBML parser (keep the base type, remove [])
+    processed = processed.replace(/(\w+(?:\(\d+(?:,\s*\d+)?\))?)\[\]/g, '$1');
 
     // Handle inline enum types without values by converting to varchar
     processed = processed.replace(
@@ -46,7 +83,7 @@ export const preprocessDBML = (content: string): string => {
         'Table $1 {'
     );
 
-    return processed;
+    return { content: processed, arrayFields };
 };
 
 // Simple function to replace Spanish special characters
@@ -85,10 +122,12 @@ interface DBMLField {
     pk?: boolean;
     not_null?: boolean;
     increment?: boolean;
+    isArray?: boolean;
     characterMaximumLength?: string | null;
     precision?: number | null;
     scale?: number | null;
     note?: string | { value: string } | null;
+    default?: string | null;
 }
 
 interface DBMLIndexColumn {
@@ -189,8 +228,8 @@ const determineCardinality = (
 
 export const importDBMLToDiagram = async (
     dbmlContent: string,
-    options?: {
-        databaseType?: DatabaseType;
+    options: {
+        databaseType: DatabaseType;
     }
 ): Promise<Diagram> => {
     try {
@@ -207,9 +246,13 @@ export const importDBMLToDiagram = async (
             };
         }
 
+        // Validate array types BEFORE preprocessing (preprocessing removes [])
+        validateArrayTypesForDatabase(dbmlContent, options.databaseType);
+
         const parser = new Parser();
         // Preprocess and sanitize DBML content
-        const preprocessedContent = preprocessDBML(dbmlContent);
+        const { content: preprocessedContent, arrayFields } =
+            preprocessDBML(dbmlContent);
         const sanitizedContent = sanitizeDBML(preprocessedContent);
 
         // Handle content that becomes empty after preprocessing
@@ -334,6 +377,33 @@ export const importDBMLToDiagram = async (
                         schema: schemaName,
                         note: table.note,
                         fields: table.fields.map((field): DBMLField => {
+                            // Extract default value and remove all quotes
+                            let defaultValue: string | undefined;
+                            if (
+                                field.dbdefault !== undefined &&
+                                field.dbdefault !== null
+                            ) {
+                                const rawDefault = String(
+                                    field.dbdefault.value
+                                );
+                                defaultValue = rawDefault.replace(/['"`]/g, '');
+                            }
+
+                            // Check if this field should be an array
+                            const fullTableName = schemaName
+                                ? `${schemaName}.${table.name}`
+                                : table.name;
+
+                            let isArray = arrayFields
+                                .get(fullTableName)
+                                ?.has(field.name);
+
+                            if (!isArray && schemaName) {
+                                isArray = arrayFields
+                                    .get(table.name)
+                                    ?.has(field.name);
+                            }
+
                             return {
                                 name: field.name,
                                 type: field.type,
@@ -341,7 +411,9 @@ export const importDBMLToDiagram = async (
                                 pk: field.pk,
                                 not_null: field.not_null,
                                 increment: field.increment,
+                                isArray: isArray || undefined,
                                 note: field.note,
+                                default: defaultValue,
                                 ...getFieldExtraAttributes(field, allEnums),
                             } satisfies DBMLField;
                         }),
@@ -487,7 +559,10 @@ export const importDBMLToDiagram = async (
                     characterMaximumLength: field.characterMaximumLength,
                     precision: field.precision,
                     scale: field.scale,
+                    ...(field.increment ? { increment: field.increment } : {}),
+                    ...(field.isArray ? { isArray: field.isArray } : {}),
                     ...(fieldComment ? { comments: fieldComment } : {}),
+                    ...(field.default ? { default: field.default } : {}),
                 };
             });
 

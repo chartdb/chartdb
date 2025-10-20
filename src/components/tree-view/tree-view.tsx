@@ -42,6 +42,7 @@ interface TreeViewProps<
     renderHoverComponent?: (node: TreeNode<Type, Context>) => ReactNode;
     renderActionsComponent?: (node: TreeNode<Type, Context>) => ReactNode;
     loadingNodeIds?: string[];
+    disableCache?: boolean;
 }
 
 export function TreeView<
@@ -62,12 +63,14 @@ export function TreeView<
     renderHoverComponent,
     renderActionsComponent,
     loadingNodeIds,
+    disableCache = false,
 }: TreeViewProps<Type, Context>) {
     const { expanded, loading, loadedChildren, hasMoreChildren, toggleNode } =
         useTree({
             fetchChildren,
             expanded: expandedProp,
             setExpanded: setExpandedProp,
+            disableCache,
         });
     const [selectedIdInternal, setSelectedIdInternal] = React.useState<
         string | undefined
@@ -145,6 +148,7 @@ export function TreeView<
                     renderHoverComponent={renderHoverComponent}
                     renderActionsComponent={renderActionsComponent}
                     loadingNodeIds={loadingNodeIds}
+                    disableCache={disableCache}
                 />
             ))}
         </div>
@@ -179,6 +183,7 @@ interface TreeNodeProps<
     renderHoverComponent?: (node: TreeNode<Type, Context>) => ReactNode;
     renderActionsComponent?: (node: TreeNode<Type, Context>) => ReactNode;
     loadingNodeIds?: string[];
+    disableCache?: boolean;
 }
 
 function TreeNode<Type extends string, Context extends Record<Type, unknown>>({
@@ -201,11 +206,16 @@ function TreeNode<Type extends string, Context extends Record<Type, unknown>>({
     renderHoverComponent,
     renderActionsComponent,
     loadingNodeIds,
+    disableCache = false,
 }: TreeNodeProps<Type, Context>) {
     const [isHovered, setIsHovered] = useState(false);
     const isExpanded = expanded[node.id];
     const isLoading = loading[node.id];
-    const children = loadedChildren[node.id] || node.children;
+    // If cache is disabled, always use fresh node.children
+    // Otherwise, use cached loadedChildren if available (for async fetched data)
+    const children = disableCache
+        ? node.children
+        : node.children || loadedChildren[node.id];
     const isSelected = selectedId === node.id;
 
     const IconComponent =
@@ -423,6 +433,7 @@ function TreeNode<Type extends string, Context extends Record<Type, unknown>>({
                                 renderHoverComponent={renderHoverComponent}
                                 renderActionsComponent={renderActionsComponent}
                                 loadingNodeIds={loadingNodeIds}
+                                disableCache={disableCache}
                             />
                         ))}
                         {isLoading ? (
