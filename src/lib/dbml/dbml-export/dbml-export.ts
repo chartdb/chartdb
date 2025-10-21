@@ -807,31 +807,37 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             };
         }) ?? [];
 
-    // Remove duplicate tables (consider both schema and table name)
+    // Filter out empty tables and duplicates in a single pass for performance
     const seenTableIdentifiers = new Set<string>();
-    const uniqueTables = sanitizedTables.filter((table) => {
+    const tablesWithFields = sanitizedTables.filter((table) => {
+        // Skip tables with no fields (empty tables cause DBML export to fail)
+        if (table.fields.length === 0) {
+            return false;
+        }
+
         // Create a unique identifier combining schema and table name
         const tableIdentifier = table.schema
             ? `${table.schema}.${table.name}`
             : table.name;
 
+        // Skip duplicate tables
         if (seenTableIdentifiers.has(tableIdentifier)) {
-            return false; // Skip duplicate
+            return false;
         }
         seenTableIdentifiers.add(tableIdentifier);
-        return true; // Keep unique table
+        return true; // Keep unique, non-empty table
     });
 
     // Create the base filtered diagram structure
     const filteredDiagram: Diagram = {
         ...diagram,
-        tables: uniqueTables,
+        tables: tablesWithFields,
         relationships:
             diagram.relationships?.filter((rel) => {
-                const sourceTable = uniqueTables.find(
+                const sourceTable = tablesWithFields.find(
                     (t) => t.id === rel.sourceTableId
                 );
-                const targetTable = uniqueTables.find(
+                const targetTable = tablesWithFields.find(
                     (t) => t.id === rel.targetTableId
                 );
                 const sourceFieldExists = sourceTable?.fields.some(
@@ -931,13 +937,13 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
         );
 
         // Restore schema information that may have been stripped by DBML importer
-        standard = restoreTableSchemas(standard, uniqueTables);
+        standard = restoreTableSchemas(standard, tablesWithFields);
 
         // Restore composite primary key names
-        standard = restoreCompositePKNames(standard, uniqueTables);
+        standard = restoreCompositePKNames(standard, tablesWithFields);
 
         // Restore increment attribute for auto-incrementing fields
-        standard = restoreIncrementAttribute(standard, uniqueTables);
+        standard = restoreIncrementAttribute(standard, tablesWithFields);
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {
