@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { SelectBox } from '@/components/select-box/select-box';
 import { cn } from '@/lib/utils';
 import { TableFieldToggle } from './table-field-toggle';
+import { requiresNotNull } from '@/lib/data/data-types/data-types';
 
 export interface TableEditModeFieldProps {
     table: DBTable;
@@ -40,6 +41,8 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
         } = useUpdateTableField(table, field);
 
         const inputRef = React.useRef<HTMLInputElement>(null);
+
+        const typeRequiresNotNull = requiresNotNull(field.type.name);
 
         // Animate the highlight after mount if focused
         useEffect(() => {
@@ -135,6 +138,7 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                 <TableFieldToggle
                                     pressed={nullable}
                                     onPressedChange={handleNullableToggle}
+                                    disabled={typeRequiresNotNull}
                                 >
                                     N
                                 </TableFieldToggle>

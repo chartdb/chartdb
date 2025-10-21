@@ -173,6 +173,12 @@ export const autoIncrementAlwaysOn = (dataTypeName: string): boolean => {
     );
 };
 
+export const requiresNotNull = (dataTypeName: string): boolean => {
+    return ['serial', 'bigserial', 'smallserial'].includes(
+        dataTypeName.toLowerCase()
+    );
+};
+
 const ARRAY_INCOMPATIBLE_TYPES = [
     'serial',
     'bigserial',

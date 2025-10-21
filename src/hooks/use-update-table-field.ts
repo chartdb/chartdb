@@ -11,6 +11,7 @@ import {
     sortedDataTypeMap,
     supportsArrayDataType,
     autoIncrementAlwaysOn,
+    requiresNotNull,
 } from '@/lib/data/data-types/data-types';
 import { generateDBFieldSuffix } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
@@ -225,18 +226,16 @@ export const useUpdateTableField = (
                 }
             }
 
-            // Determine increment value based on type
-            // If the new type is SERIAL/BIGSERIAL/SMALLSERIAL, auto-enable increment
-            // But only if the field is NOT nullable (auto-increment requires NOT NULL)
             const newTypeName = dataType?.name ?? (value as string);
-            const shouldForceIncrement =
-                autoIncrementAlwaysOn(newTypeName) && !field.nullable;
+            const typeRequiresNotNull = requiresNotNull(newTypeName);
+            const shouldForceIncrement = autoIncrementAlwaysOn(newTypeName);
 
             updateField(table.id, field.id, {
                 characterMaximumLength,
                 precision,
                 scale,
                 isArray,
+                ...(typeRequiresNotNull ? { nullable: false } : {}),
                 increment: shouldForceIncrement ? true : undefined,
                 default: undefined,
                 type: dataTypeDataToDataType(
@@ -255,7 +254,6 @@ export const useUpdateTableField = (
             field.scale,
             field.id,
             table.id,
-            field.nullable,
         ]
     );
 
