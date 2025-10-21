@@ -311,7 +311,7 @@ export const pt_BR: LanguageTranslation = {
             back: 'Voltar',
             // TODO: Translate
             import_from_file: 'Import from File',
-            empty_diagram: 'Diagrama vazio',
+            empty_diagram: 'Banco de dados vazio',
             continue: 'Continuar',
             import: 'Importar',
         },

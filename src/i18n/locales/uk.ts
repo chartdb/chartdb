@@ -308,7 +308,7 @@ export const uk: LanguageTranslation = {
             cancel: 'Скасувати',
             back: 'Назад',
             import_from_file: 'Імпортувати з файлу',
-            empty_diagram: 'Порожня діаграма',
+            empty_diagram: 'Порожня база даних',
             continue: 'Продовжити',
             import: 'Імпорт',
         },

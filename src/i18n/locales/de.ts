@@ -313,7 +313,7 @@ export const de: LanguageTranslation = {
             back: 'Zurück',
             // TODO: Translate
             import_from_file: 'Import from File',
-            empty_diagram: 'Leeres Diagramm',
+            empty_diagram: 'Leere Datenbank',
             continue: 'Weiter',
             import: 'Importieren',
         },

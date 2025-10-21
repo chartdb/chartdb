@@ -305,7 +305,7 @@ export const hr: LanguageTranslation = {
             cancel: 'Odustani',
             import_from_file: 'Uvezi iz datoteke',
             back: 'Natrag',
-            empty_diagram: 'Prazan dijagram',
+            empty_diagram: 'Prazna baza podataka',
             continue: 'Nastavi',
             import: 'Uvezi',
         },

@@ -311,7 +311,7 @@ export const ne: LanguageTranslation = {
             cancel: 'रद्द गर्नुहोस्',
             import_from_file: 'फाइलबाट आयात गर्नुहोस्',
             back: 'फर्क',
-            empty_diagram: 'रिक्त डायाग्राम',
+            empty_diagram: 'खाली डाटाबेस',
             continue: 'जारी राख्नुहोस्',
             import: 'आयात गर्नुहोस्',
         },

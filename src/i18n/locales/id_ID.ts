@@ -309,7 +309,7 @@ export const id_ID: LanguageTranslation = {
             cancel: 'Batal',
             import_from_file: 'Impor dari file',
             back: 'Kembali',
-            empty_diagram: 'Diagram Kosong',
+            empty_diagram: 'Database Kosong',
             continue: 'Lanjutkan',
             import: 'Impor',
         },

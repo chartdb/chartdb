@@ -309,7 +309,7 @@ export const ko_KR: LanguageTranslation = {
             cancel: '취소',
             back: '뒤로가기',
             import_from_file: '파일에서 가져오기',
-            empty_diagram: '빈 다이어그램으로 시작',
+            empty_diagram: '빈 데이터베이스',
             continue: '계속',
             import: '가져오기',
         },

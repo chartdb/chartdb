@@ -308,7 +308,7 @@ export const tr: LanguageTranslation = {
             import_from_file: 'Import from File',
             cancel: 'İptal',
             back: 'Geri',
-            empty_diagram: 'Boş diyagram',
+            empty_diagram: 'Boş veritabanı',
             continue: 'Devam',
             import: 'İçe Aktar',
         },

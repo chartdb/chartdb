@@ -312,7 +312,7 @@ export const te: LanguageTranslation = {
             // TODO: Translate
             import_from_file: 'Import from File',
             back: 'తిరుగు',
-            empty_diagram: 'ఖాళీ చిత్రము',
+            empty_diagram: 'ఖాళీ డేటాబేస్',
             continue: 'కొనసాగించు',
             import: 'డిగుమతి',
         },

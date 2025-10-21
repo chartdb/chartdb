@@ -308,7 +308,7 @@ export const ar: LanguageTranslation = {
             cancel: 'إلغاء',
             import_from_file: 'استيراد من ملف',
             back: 'رجوع',
-            empty_diagram: 'مخطط فارغ',
+            empty_diagram: 'قاعدة بيانات فارغة',
             continue: 'متابعة',
             import: 'استيراد',
         },

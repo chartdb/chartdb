@@ -301,7 +301,7 @@ export const en = {
             cancel: 'Cancel',
             import_from_file: 'Import from File',
             back: 'Back',
-            empty_diagram: 'Empty diagram',
+            empty_diagram: 'Empty database',
             continue: 'Continue',
             import: 'Import',
         },

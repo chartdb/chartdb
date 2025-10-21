@@ -307,7 +307,7 @@ export const fr: LanguageTranslation = {
             cancel: 'Annuler',
             back: 'Retour',
             import_from_file: "Importer à partir d'un fichier",
-            empty_diagram: 'Diagramme vide',
+            empty_diagram: 'Base de données vide',
             continue: 'Continuer',
             import: 'Importer',
         },
