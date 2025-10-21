@@ -383,4 +383,44 @@ describe('DBML Import cases', () => {
         expect(field4?.increment).toBeUndefined();
         expect(field4?.nullable).toBe(false);
     });
+
+    it('should handle SERIAL types without increment attribute', async () => {
+        const dbmlContent = `Table "public"."test_table" {
+  "id" serial [pk]
+  "counter" bigserial
+  "small_counter" smallserial
+  "regular" integer
+}`;
+
+        const result = await importDBMLToDiagram(dbmlContent, {
+            databaseType: DatabaseType.POSTGRESQL,
+        });
+
+        expect(result.tables).toHaveLength(1);
+        const table = result.tables![0];
+        expect(table.fields).toHaveLength(4);
+
+        // SERIAL type without [increment] - should STILL be not null (type requires it)
+        const idField = table.fields.find((f) => f.name === 'id');
+        expect(idField?.type?.name).toBe('serial');
+        expect(idField?.nullable).toBe(false); // CRITICAL: Type requires NOT NULL
+        expect(idField?.primaryKey).toBe(true);
+
+        // BIGSERIAL without [increment] - should be not null
+        const counterField = table.fields.find((f) => f.name === 'counter');
+        expect(counterField?.type?.name).toBe('bigserial');
+        expect(counterField?.nullable).toBe(false); // CRITICAL: Type requires NOT NULL
+
+        // SMALLSERIAL without [increment] - should be not null
+        const smallCounterField = table.fields.find(
+            (f) => f.name === 'small_counter'
+        );
+        expect(smallCounterField?.type?.name).toBe('smallserial');
+        expect(smallCounterField?.nullable).toBe(false); // CRITICAL: Type requires NOT NULL
+
+        // Regular INTEGER - should be nullable by default
+        const regularField = table.fields.find((f) => f.name === 'regular');
+        expect(regularField?.type?.name).toBe('integer');
+        expect(regularField?.nullable).toBe(true); // No NOT NULL constraint
+    });
 });

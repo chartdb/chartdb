@@ -5,7 +5,10 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
-import { findDataTypeDataById } from '@/lib/data/data-types/data-types';
+import {
+    findDataTypeDataById,
+    requiresNotNull,
+} from '@/lib/data/data-types/data-types';
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
@@ -552,8 +555,10 @@ export const importDBMLToDiagram = async (
                         ...options,
                         enums: extractedData.enums,
                     }),
-                    // Auto-increment fields must be NOT NULL
-                    nullable: field.increment ? false : !field.not_null,
+                    nullable:
+                        field.increment || requiresNotNull(field.type.type_name)
+                            ? false
+                            : !field.not_null,
                     primaryKey: field.pk || false,
                     unique: field.unique || field.pk || false, // Primary keys are always unique
                     createdAt: Date.now(),
