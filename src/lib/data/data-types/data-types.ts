@@ -167,6 +167,18 @@ export const supportsAutoIncrementDataType = (
     ].includes(dataTypeName.toLocaleLowerCase());
 };
 
+export const autoIncrementAlwaysOn = (dataTypeName: string): boolean => {
+    return ['serial', 'bigserial', 'smallserial'].includes(
+        dataTypeName.toLowerCase()
+    );
+};
+
+export const requiresNotNull = (dataTypeName: string): boolean => {
+    return ['serial', 'bigserial', 'smallserial'].includes(
+        dataTypeName.toLowerCase()
+    );
+};
+
 const ARRAY_INCOMPATIBLE_TYPES = [
     'serial',
     'bigserial',

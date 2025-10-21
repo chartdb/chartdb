@@ -583,6 +583,54 @@ const fixMultilineTableNames = (dbml: string): string => {
     );
 };
 
+// Restore increment attribute for auto-incrementing fields
+const restoreIncrementAttribute = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
+
+    let result = dbml;
+
+    tables.forEach((table) => {
+        // Find fields with increment=true
+        const incrementFields = table.fields.filter((f) => f.increment);
+
+        incrementFields.forEach((field) => {
+            // Build the table identifier pattern
+            const tableIdentifier = table.schema
+                ? `"${table.schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\."${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`
+                : `"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`;
+
+            // Escape field name for regex
+            const escapedFieldName = field.name.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                '\\$&'
+            );
+
+            // Pattern to match the field line with existing attributes in brackets
+            // Matches: "field_name" type [existing, attributes]
+            const fieldPattern = new RegExp(
+                `(Table ${tableIdentifier} \\{[^}]*?^\\s*"${escapedFieldName}"[^\\[\\n]+)(\\[[^\\]]*\\])`,
+                'gms'
+            );
+
+            result = result.replace(
+                fieldPattern,
+                (match, fieldPart, brackets) => {
+                    // Check if increment already exists
+                    if (brackets.includes('increment')) {
+                        return match;
+                    }
+
+                    // Add increment to the attributes
+                    const newBrackets = brackets.replace(']', ', increment]');
+                    return fieldPart + newBrackets;
+                }
+            );
+        });
+    });
+
+    return result;
+};
+
 // Restore composite primary key names in the DBML
 const restoreCompositePKNames = (dbml: string, tables: DBTable[]): string => {
     if (!tables || tables.length === 0) return dbml;
@@ -887,6 +935,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore composite primary key names
         standard = restoreCompositePKNames(standard, uniqueTables);
+
+        // Restore increment attribute for auto-incrementing fields
+        standard = restoreIncrementAttribute(standard, uniqueTables);
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {

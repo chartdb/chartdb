@@ -10,6 +10,8 @@ import {
     dataTypeDataToDataType,
     sortedDataTypeMap,
     supportsArrayDataType,
+    autoIncrementAlwaysOn,
+    requiresNotNull,
 } from '@/lib/data/data-types/data-types';
 import { generateDBFieldSuffix } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
@@ -224,12 +226,17 @@ export const useUpdateTableField = (
                 }
             }
 
+            const newTypeName = dataType?.name ?? (value as string);
+            const typeRequiresNotNull = requiresNotNull(newTypeName);
+            const shouldForceIncrement = autoIncrementAlwaysOn(newTypeName);
+
             updateField(table.id, field.id, {
                 characterMaximumLength,
                 precision,
                 scale,
                 isArray,
-                increment: undefined,
+                ...(typeRequiresNotNull ? { nullable: false } : {}),
+                increment: shouldForceIncrement ? true : undefined,
                 default: undefined,
                 type: dataTypeDataToDataType(
                     dataType ?? {
@@ -267,9 +274,16 @@ export const useUpdateTableField = (
     const debouncedNullableUpdate = useDebounce(
         useCallback(
             (value: boolean) => {
-                updateField(table.id, field.id, { nullable: value });
+                const updates: Partial<DBField> = { nullable: value };
+
+                // If setting to nullable, clear increment (auto-increment requires NOT NULL)
+                if (value && field.increment) {
+                    updates.increment = undefined;
+                }
+
+                updateField(table.id, field.id, updates);
             },
-            [updateField, table.id, field.id]
+            [updateField, table.id, field.id, field.increment]
         ),
         100 // 100ms debounce for toggle
     );

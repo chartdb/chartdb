@@ -15,6 +15,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
 import type { DatabaseType, DBTable } from '@/lib/domain';
+import { requiresNotNull } from '@/lib/data/data-types/data-types';
 
 export interface TableFieldProps {
     table: DBTable;
@@ -54,6 +55,8 @@ export const TableField: React.FC<TableFieldProps> = ({
         transform: CSS.Translate.toString(transform),
         transition,
     };
+
+    const typeRequiresNotNull = requiresNotNull(field.type.name);
 
     return (
         <div
@@ -130,7 +133,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <TableFieldToggle
                                 pressed={nullable}
                                 onPressedChange={handleNullableToggle}
-                                disabled={readonly}
+                                disabled={readonly || typeRequiresNotNull}
                             >
                                 N
                             </TableFieldToggle>
