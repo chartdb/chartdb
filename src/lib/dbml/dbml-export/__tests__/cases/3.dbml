@@ -1,6 +1,6 @@
 Table "public"."guy_table" {
   "id" integer [pk, not null]
-  "created_at" timestamp [not null]
+  "created_at" "timestamp without time zone" [not null]
   "column3" text
   "arrayfield" text[]
   "field_5" "character varying"

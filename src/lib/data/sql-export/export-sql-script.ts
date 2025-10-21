@@ -338,7 +338,13 @@ export const exportBaseSQL = ({
 
             const quotedFieldName = getQuotedFieldName(field.name, isDBMLFlow);
 
-            sqlScript += `  ${quotedFieldName} ${typeName}`;
+            // Quote multi-word type names for DBML flow to prevent @dbml/core parser issues
+            const quotedTypeName =
+                isDBMLFlow && typeName.includes(' ')
+                    ? `"${typeName}"`
+                    : typeName;
+
+            sqlScript += `  ${quotedFieldName} ${quotedTypeName}`;
 
             // Add size for character types
             if (
