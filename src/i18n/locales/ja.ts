@@ -314,7 +314,7 @@ export const ja: LanguageTranslation = {
             back: '戻る',
             // TODO: Translate
             import_from_file: 'Import from File',
-            empty_diagram: '空のダイアグラム',
+            empty_diagram: '空のデータベース',
             continue: '続行',
             import: 'インポート',
         },

@@ -306,7 +306,7 @@ export const zh_CN: LanguageTranslation = {
             cancel: '取消',
             import_from_file: '从文件导入',
             back: '上一步',
-            empty_diagram: '新建空关系图',
+            empty_diagram: '空数据库',
             continue: '下一步',
             import: '导入',
         },

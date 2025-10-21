@@ -310,7 +310,7 @@ export const gu: LanguageTranslation = {
             cancel: 'રદ કરો',
             back: 'પાછા',
             import_from_file: 'ફાઇલમાંથી આયાત કરો',
-            empty_diagram: 'ખાલી ડાયાગ્રામ',
+            empty_diagram: 'ખાલી ડેટાબેસ',
             continue: 'ચાલુ રાખો',
             import: 'આયાત કરો',
         },

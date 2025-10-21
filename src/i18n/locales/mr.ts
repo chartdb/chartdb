@@ -315,7 +315,7 @@ export const mr: LanguageTranslation = {
             // TODO: Add translations
             import_from_file: 'Import from File',
             back: 'मागे',
-            empty_diagram: 'रिक्त आरेख',
+            empty_diagram: 'रिक्त डेटाबेस',
             continue: 'सुरू ठेवा',
             import: 'आयात करा',
         },

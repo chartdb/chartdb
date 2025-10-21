@@ -310,7 +310,7 @@ export const es: LanguageTranslation = {
             back: 'Atrás',
             // TODO: Translate
             import_from_file: 'Import from File',
-            empty_diagram: 'Diagrama vacío',
+            empty_diagram: 'Base de datos vacía',
             continue: 'Continuar',
             import: 'Importar',
         },

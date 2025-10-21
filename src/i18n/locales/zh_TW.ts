@@ -305,7 +305,7 @@ export const zh_TW: LanguageTranslation = {
             cancel: '取消',
             import_from_file: '從檔案匯入',
             back: '返回',
-            empty_diagram: '空白圖表',
+            empty_diagram: '空資料庫',
             continue: '繼續',
             import: '匯入',
         },

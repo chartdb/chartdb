@@ -309,7 +309,7 @@ export const vi: LanguageTranslation = {
             cancel: 'Hủy',
             import_from_file: 'Nhập từ tệp',
             back: 'Trở lại',
-            empty_diagram: 'Sơ đồ trống',
+            empty_diagram: 'Cơ sở dữ liệu trống',
             continue: 'Tiếp tục',
             import: 'Nhập',
         },

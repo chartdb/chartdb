@@ -310,7 +310,7 @@ export const bn: LanguageTranslation = {
             cancel: 'বাতিল করুন',
             back: 'ফিরে যান',
             import_from_file: 'ফাইল থেকে আমদানি করুন',
-            empty_diagram: 'ফাঁকা চিত্র',
+            empty_diagram: 'খালি ডাটাবেস',
             continue: 'চালিয়ে যান',
             import: 'আমদানি করুন',
         },

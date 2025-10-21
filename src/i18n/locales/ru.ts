@@ -307,7 +307,7 @@ export const ru: LanguageTranslation = {
             cancel: 'Отменить',
             back: 'Назад',
             import_from_file: 'Импортировать из файла',
-            empty_diagram: 'Пустая диаграмма',
+            empty_diagram: 'Пустая база данных',
             continue: 'Продолжить',
             import: 'Импорт',
         },
