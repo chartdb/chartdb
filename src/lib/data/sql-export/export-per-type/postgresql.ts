@@ -286,10 +286,14 @@ export function exportPostgreSQL({
                             }
                         }
 
-                        // Handle array types (check if the type name ends with '[]')
-                        if (typeName.endsWith('[]')) {
-                            typeWithSize =
-                                typeWithSize.replace('[]', '') + '[]';
+                        // Handle array types (check if isArray flag or if type name ends with '[]')
+                        if (field.isArray || typeName.endsWith('[]')) {
+                            // Remove any existing [] notation
+                            const baseTypeWithoutArray = typeWithSize.replace(
+                                /\[\]$/,
+                                ''
+                            );
+                            typeWithSize = baseTypeWithoutArray + '[]';
                         }
 
                         const notNull = field.nullable ? '' : ' NOT NULL';

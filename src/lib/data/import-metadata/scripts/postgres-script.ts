@@ -181,7 +181,13 @@ cols AS (
                                             '","table":"', cols.table_name,
                                             '","name":"', cols.column_name,
                                             '","ordinal_position":', cols.ordinal_position,
-                                            ',"type":"', case when LOWER(replace(cols.data_type, '"', '')) = 'user-defined' then pg_type.typname else LOWER(replace(cols.data_type, '"', '')) end,
+                                            ',"type":"', CASE WHEN cols.data_type = 'ARRAY' THEN
+                                                                format_type(pg_type.typelem, NULL)
+                                                            WHEN LOWER(replace(cols.data_type, '"', '')) = 'user-defined' THEN
+                                                                format_type(pg_type.oid, NULL)
+                                                            ELSE
+                                                                LOWER(replace(cols.data_type, '"', ''))
+                                                        END,
                                             '","character_maximum_length":"', COALESCE(cols.character_maximum_length::text, 'null'),
                                             '","precision":',
                                                 CASE
@@ -194,9 +200,13 @@ cols AS (
                                             ',"default":"', ${withExtras ? withDefault : withoutDefault},
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
                                             '","comment":"', ${withExtras ? withComments : withoutComments},
-                                            '","is_identity":', CASE 
+                                            '","is_identity":', CASE
                                                 WHEN cols.is_identity = 'YES' THEN 'true'
                                                 WHEN cols.column_default IS NOT NULL AND cols.column_default LIKE 'nextval(%' THEN 'true'
+                                                ELSE 'false'
+                                            END,
+                                            ',"is_array":', CASE
+                                                WHEN cols.data_type = 'ARRAY' OR pg_type.typelem > 0 THEN 'true'
                                                 ELSE 'false'
                                             END,
                                             '}')), ',') AS cols_metadata
@@ -211,6 +221,8 @@ cols AS (
         ON attr.attrelid = c.oid AND attr.attname = cols.column_name
     LEFT JOIN pg_catalog.pg_type
         ON pg_type.oid = attr.atttypid
+    LEFT JOIN pg_catalog.pg_type AS elem_type
+        ON elem_type.oid = pg_type.typelem
     WHERE cols.table_schema NOT IN ('information_schema', 'pg_catalog')${
         databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
             ? timescaleColFilter
