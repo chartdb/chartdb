@@ -117,35 +117,37 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                 </div>
             ) : null}
 
-            {DatabasesWithoutDDLInstructions.includes(databaseType) ? null : (
-                <div className="flex flex-col gap-1">
-                    <p className="text-sm leading-6 text-primary">
-                        How would you like to import?
-                    </p>
-                    <ToggleGroup
-                        type="single"
-                        className="ml-1 flex-wrap justify-start gap-2"
-                        value={importMethod}
-                        onValueChange={(value) => {
-                            let selectedImportMethod: ImportMethod = 'query';
-                            if (value) {
-                                selectedImportMethod = value as ImportMethod;
-                            }
+            <div className="flex flex-col gap-1">
+                <p className="text-sm leading-6 text-primary">
+                    How would you like to import?
+                </p>
+                <ToggleGroup
+                    type="single"
+                    className="ml-1 flex-wrap justify-start gap-2"
+                    value={importMethod}
+                    onValueChange={(value) => {
+                        let selectedImportMethod: ImportMethod = 'query';
+                        if (value) {
+                            selectedImportMethod = value as ImportMethod;
+                        }
 
-                            setImportMethod(selectedImportMethod);
-                        }}
+                        setImportMethod(selectedImportMethod);
+                    }}
+                >
+                    <ToggleGroupItem
+                        value="query"
+                        variant="outline"
+                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
                     >
-                        <ToggleGroupItem
-                            value="query"
-                            variant="outline"
-                            className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
-                        >
-                            <Avatar className="h-3 w-4 rounded-none">
-                                <AvatarImage src={logo} alt="query" />
-                                <AvatarFallback>Query</AvatarFallback>
-                            </Avatar>
-                            Smart Query
-                        </ToggleGroupItem>
+                        <Avatar className="h-3 w-4 rounded-none">
+                            <AvatarImage src={logo} alt="query" />
+                            <AvatarFallback>Query</AvatarFallback>
+                        </Avatar>
+                        Smart Query
+                    </ToggleGroupItem>
+                    {!DatabasesWithoutDDLInstructions.includes(
+                        databaseType
+                    ) && (
                         <ToggleGroupItem
                             value="ddl"
                             variant="outline"
@@ -156,19 +158,19 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                             </Avatar>
                             SQL Script
                         </ToggleGroupItem>
-                        <ToggleGroupItem
-                            value="dbml"
-                            variant="outline"
-                            className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
-                        >
-                            <Avatar className="size-4 rounded-none">
-                                <Code size={16} />
-                            </Avatar>
-                            DBML
-                        </ToggleGroupItem>
-                    </ToggleGroup>
-                </div>
-            )}
+                    )}
+                    <ToggleGroupItem
+                        value="dbml"
+                        variant="outline"
+                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
+                    >
+                        <Avatar className="size-4 rounded-none">
+                            <Code size={16} />
+                        </Avatar>
+                        DBML
+                    </ToggleGroupItem>
+                </ToggleGroup>
+            </div>
 
             <div className="flex flex-col gap-2">
                 <div className="text-sm font-semibold">Instructions:</div>
