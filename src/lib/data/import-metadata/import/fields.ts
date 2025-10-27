@@ -60,6 +60,7 @@ export const createFieldsFromMetadata = ({
             ...(col.is_identity !== undefined
                 ? { increment: col.is_identity }
                 : {}),
+            ...(col.is_array !== undefined ? { isArray: col.is_array } : {}),
             createdAt: Date.now(),
             comments: col.comment ? col.comment : undefined,
         })
