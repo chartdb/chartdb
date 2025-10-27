@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.17.0](https://github.com/chartdb/chartdb/compare/v1.16.0...v1.17.0) (2025-10-27)
+
+
+### Features
+
+* create relationships on canvas modal ([#946](https://github.com/chartdb/chartdb/issues/946)) ([34475ad](https://github.com/chartdb/chartdb/commit/34475add32f11323589ef092ccf2a8e9152ff272))
+
+
+### Bug Fixes
+
+* add auto-increment field detection in smart-query import ([#935](https://github.com/chartdb/chartdb/issues/935)) ([57b3b87](https://github.com/chartdb/chartdb/commit/57b3b8777fd0a445abf0ba6603faab612d469d5c))
+* add open table in editor from canvas edit ([#952](https://github.com/chartdb/chartdb/issues/952)) ([7d811de](https://github.com/chartdb/chartdb/commit/7d811de097eb11e51012772fa6bf586fd0b16c62))
+* add rels export dbml ([#937](https://github.com/chartdb/chartdb/issues/937)) ([c3c646b](https://github.com/chartdb/chartdb/commit/c3c646bf7cbb1328f4b2eb85c9a7e929f0fcd3b9))
+* add support for arrays ([#949](https://github.com/chartdb/chartdb/issues/949)) ([49328d8](https://github.com/chartdb/chartdb/commit/49328d8fbd7786f6c0c04cd5605d43a24cbf10ea))
+* add support for parsing default values in DBML ([#948](https://github.com/chartdb/chartdb/issues/948)) ([459698b](https://github.com/chartdb/chartdb/commit/459698b5d0a1ff23a3719c2e55e4ab2e2384c4fe))
+* add timestampz and int as datatypes to postgres ([#940](https://github.com/chartdb/chartdb/issues/940)) ([b15bc94](https://github.com/chartdb/chartdb/commit/b15bc945acb96d7cb3832b3b1b607dfcaef9e5ca))
+* auto-enter edit mode when creating new tables from canvas ([#943](https://github.com/chartdb/chartdb/issues/943)) ([bcd8aa9](https://github.com/chartdb/chartdb/commit/bcd8aa9378aa563f40a2b6802cc503be4c882356))
+* dbml diff fields types preview ([#934](https://github.com/chartdb/chartdb/issues/934)) ([bb03309](https://github.com/chartdb/chartdb/commit/bb033091b1f64b888822be1423a80f16f5314f6b))
+* exit table edit on area click ([#945](https://github.com/chartdb/chartdb/issues/945)) ([38fedce](https://github.com/chartdb/chartdb/commit/38fedcec0c10ea2b3f0b7fc92ca1f5ac9e540389))
+* import array fields ([#961](https://github.com/chartdb/chartdb/issues/961)) ([91e713c](https://github.com/chartdb/chartdb/commit/91e713c30a44f1ba7a767ca7816079610136fcb8))
+* manipulate schema directly from the canvas ([#947](https://github.com/chartdb/chartdb/issues/947)) ([7ad0e77](https://github.com/chartdb/chartdb/commit/7ad0e7712de975a23b2a337dc0a4a7fb4b122bd1))
+* preserve multi-word types in DBML export/import ([#956](https://github.com/chartdb/chartdb/issues/956)) ([9ed27cf](https://github.com/chartdb/chartdb/commit/9ed27cf30cca1312713e80e525138f0c27154936))
+* prevent text input glitch when editing table field names ([#944](https://github.com/chartdb/chartdb/issues/944)) ([498655e](https://github.com/chartdb/chartdb/commit/498655e7b77e57eaf641ba86263ce1ef60b93e16))
+* resolve canvas filter tree state issues ([#953](https://github.com/chartdb/chartdb/issues/953)) ([ccb29e0](https://github.com/chartdb/chartdb/commit/ccb29e0a574dfa4cfdf0ebf242a4c4aaa48cc37b))
+* resolve dbml increment & nullable attributes issue ([#954](https://github.com/chartdb/chartdb/issues/954)) ([2c4b344](https://github.com/chartdb/chartdb/commit/2c4b344efb24041e7f607fc6124e109b69aaa457))
+* show SQL Script option conditionally for databases without DDL support ([#960](https://github.com/chartdb/chartdb/issues/960)) ([acf6d4b](https://github.com/chartdb/chartdb/commit/acf6d4b3654d8868b8a8ebf717c608d9749b71da))
+* use flag for custom types ([#951](https://github.com/chartdb/chartdb/issues/951)) ([62dec48](https://github.com/chartdb/chartdb/commit/62dec4857211b705a8039691da1772263ea986fe))
+
 ## [1.16.0](https://github.com/chartdb/chartdb/compare/v1.15.1...v1.16.0) (2025-09-24)
 
 
