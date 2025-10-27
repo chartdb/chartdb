@@ -64,7 +64,7 @@ export const loadFromDatabaseMetadata = async ({
     const diagram: Diagram = {
         id: generateDiagramId(),
         name: databaseMetadata.database_name
-            ? `${databaseMetadata.database_name}-db`
+            ? `${databaseMetadata.database_name}`
             : diagramNumber
               ? `Diagram ${diagramNumber}`
               : 'New Diagram',
