@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/chartdb/chartdb/compare/v1.17.0...v1.17.1) (2025-10-27)
+
+
+### Bug Fixes
+
+* add postgres array type support for import and export ([#958](https://github.com/chartdb/chartdb/issues/958)) ([68412f9](https://github.com/chartdb/chartdb/commit/68412f90a7d4466946b5f20b1b31ae64708d2031))
+
 ## [1.17.0](https://github.com/chartdb/chartdb/compare/v1.16.0...v1.17.0) (2025-10-27)
 
 
