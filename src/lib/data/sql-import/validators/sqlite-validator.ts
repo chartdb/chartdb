@@ -8,6 +8,7 @@ import type {
     ValidationError,
     ValidationWarning,
 } from './postgresql-validator';
+import { detectForeignDialect } from './dialect-detection';
 
 /**
  * Validates SQLite SQL syntax
@@ -40,6 +41,12 @@ export function validateSQLiteDialect(sql: string): ValidationResult {
     // Check for common SQLite syntax patterns
     const lines = sql.split('\n');
     let tableCount = 0;
+
+    // Check for foreign SQL dialects
+    const foreignDialectError = detectForeignDialect(lines, 'SQLite');
+    if (foreignDialectError) {
+        errors.push(foreignDialectError);
+    }
 
     lines.forEach((line, index) => {
         const trimmedLine = line.trim();
