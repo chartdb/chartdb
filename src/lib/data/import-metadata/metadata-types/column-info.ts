@@ -15,8 +15,8 @@ export interface ColumnInfo {
     default?: string | null; // Default value for the column, nullable
     collation?: string | null;
     comment?: string | null;
-    is_identity?: boolean; // Indicates if the column is auto-increment/identity
-    is_array?: boolean; // Indicates if the column is an array type
+    is_identity?: boolean | null; // Indicates if the column is auto-increment/identity
+    is_array?: boolean | null; // Indicates if the column is an array type
 }
 
 export const ColumnInfoSchema: z.ZodType<ColumnInfo> = z.object({
@@ -37,6 +37,6 @@ export const ColumnInfoSchema: z.ZodType<ColumnInfo> = z.object({
     default: z.string().nullable().optional(),
     collation: z.string().nullable().optional(),
     comment: z.string().nullable().optional(),
-    is_identity: z.boolean().optional(),
-    is_array: z.boolean().optional(),
+    is_identity: z.boolean().nullable().optional(),
+    is_array: z.boolean().nullable().optional(),
 });
