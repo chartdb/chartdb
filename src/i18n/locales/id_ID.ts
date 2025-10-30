@@ -10,6 +10,7 @@ export const id_ID: LanguageTranslation = {
             areas: 'Area',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
+            visuals: 'Visual',
         },
         menu: {
             actions: {
@@ -232,6 +233,14 @@ export const id_ID: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visual',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

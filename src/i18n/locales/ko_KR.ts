@@ -10,6 +10,7 @@ export const ko_KR: LanguageTranslation = {
             areas: '영역',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
+            visuals: '시각화',
         },
         menu: {
             actions: {
@@ -232,6 +233,14 @@ export const ko_KR: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: '시각화',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

@@ -10,6 +10,7 @@ export const es: LanguageTranslation = {
             areas: 'Áreas',
             dependencies: 'Dependencias',
             custom_types: 'Tipos Personalizados',
+            visuals: 'Visuales',
         },
         menu: {
             actions: {
@@ -232,6 +233,14 @@ export const es: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuales',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

@@ -10,6 +10,7 @@ export const ru: LanguageTranslation = {
             areas: 'Области',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
+            visuals: 'Визуальные элементы',
         },
         menu: {
             actions: {
@@ -230,6 +231,14 @@ export const ru: LanguageTranslation = {
                     description: 'Создайте область, чтобы начать',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Визуальные элементы',
+                tabs: {
+                    areas: 'Области',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

@@ -5,8 +5,10 @@ export type SidebarSection =
     | 'dbml'
     | 'tables'
     | 'refs'
-    | 'areas'
-    | 'customTypes';
+    | 'customTypes'
+    | 'visuals';
+
+export type VisualsTab = 'areas';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
@@ -33,6 +35,9 @@ export interface LayoutContext {
 
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
+
+    selectedVisualsTab: VisualsTab;
+    selectVisualsTab: (tab: VisualsTab) => void;
 
     isSidePanelShowed: boolean;
     hideSidePanel: () => void;
@@ -65,6 +70,9 @@ export const layoutContext = createContext<LayoutContext>({
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,
     closeAllTablesInSidebar: emptyFn,
+
+    selectedVisualsTab: 'areas',
+    selectVisualsTab: emptyFn,
 
     isSidePanelShowed: false,
     hideSidePanel: emptyFn,

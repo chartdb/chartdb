@@ -10,6 +10,7 @@ export const ne: LanguageTranslation = {
             areas: 'क्षेत्रहरू',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -233,6 +234,14 @@ export const ne: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

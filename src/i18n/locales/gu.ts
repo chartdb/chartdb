@@ -10,6 +10,7 @@ export const gu: LanguageTranslation = {
             areas: 'ક્ષેત્રો',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -234,6 +235,14 @@ export const gu: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

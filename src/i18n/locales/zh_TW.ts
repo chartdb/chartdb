@@ -10,6 +10,7 @@ export const zh_TW: LanguageTranslation = {
             areas: '區域',
             dependencies: '相依性',
             custom_types: '自定義類型',
+            visuals: '視覺效果',
         },
         menu: {
             actions: {
@@ -229,6 +230,14 @@ export const zh_TW: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: '視覺效果',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

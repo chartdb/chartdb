@@ -10,6 +10,7 @@ export const tr: LanguageTranslation = {
             areas: 'Alanlar',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
+            visuals: 'Görseller',
         },
         menu: {
             actions: {
@@ -233,6 +234,14 @@ export const tr: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Görseller',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

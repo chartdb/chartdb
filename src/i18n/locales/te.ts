@@ -10,6 +10,7 @@ export const te: LanguageTranslation = {
             areas: 'ప్రదేశాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -234,6 +235,14 @@ export const te: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

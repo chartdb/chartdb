@@ -10,6 +10,7 @@ export const hr: LanguageTranslation = {
             areas: 'Područja',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
+            visuals: 'Vizuali',
         },
         menu: {
             actions: {
@@ -226,6 +227,13 @@ export const hr: LanguageTranslation = {
                 empty_state: {
                     title: 'Nema područja',
                     description: 'Stvorite područje za početak',
+                },
+            },
+
+            visuals_section: {
+                visuals: 'Vizuali',
+                tabs: {
+                    areas: 'Područja',
                 },
             },
 

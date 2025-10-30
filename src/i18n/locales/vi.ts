@@ -10,6 +10,7 @@ export const vi: LanguageTranslation = {
             areas: 'Khu vực',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
+            visuals: 'Hình ảnh',
         },
         menu: {
             actions: {
@@ -232,6 +233,14 @@ export const vi: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Hình ảnh',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

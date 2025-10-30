@@ -10,6 +10,7 @@ export const bn: LanguageTranslation = {
             areas: 'এলাকা',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
+            visuals: 'ভিজ্যুয়াল',
         },
         menu: {
             actions: {
@@ -233,6 +234,14 @@ export const bn: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'ভিজ্যুয়াল',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

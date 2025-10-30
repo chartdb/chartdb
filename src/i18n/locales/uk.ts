@@ -10,6 +10,7 @@ export const uk: LanguageTranslation = {
             areas: 'Області',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
+            visuals: 'Візуальні елементи',
         },
         menu: {
             actions: {
@@ -231,6 +232,14 @@ export const uk: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Візуальні елементи',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

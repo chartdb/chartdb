@@ -10,6 +10,7 @@ export const ar: LanguageTranslation = {
             areas: 'المناطق',
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
+            visuals: 'مرئيات',
         },
         menu: {
             actions: {
@@ -229,6 +230,13 @@ export const ar: LanguageTranslation = {
                 empty_state: {
                     title: 'No areas',
                     description: 'Create an area to get started',
+                },
+            },
+
+            visuals_section: {
+                visuals: 'مرئيات',
+                tabs: {
+                    areas: 'Areas',
                 },
             },
 

@@ -42,8 +42,12 @@ export interface SidebarItem {
 export interface EditorSidebarProps {}
 
 export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
-    const { selectSidebarSection, selectedSidebarSection, showSidePanel } =
-        useLayout();
+    const {
+        selectSidebarSection,
+        selectedSidebarSection,
+        showSidePanel,
+        selectVisualsTab,
+    } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
@@ -101,15 +105,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'refs',
             },
-            {
-                title: t('editor_sidebar.areas'),
-                icon: Group,
-                onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('areas');
-                },
-                active: selectedSidebarSection === 'areas',
-            },
             ...(supportsCustomTypes(databaseType)
                 ? [
                       {
@@ -123,6 +118,16 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                       },
                   ]
                 : []),
+            {
+                title: t('editor_sidebar.visuals'),
+                icon: Group,
+                onClick: () => {
+                    showSidePanel();
+                    selectSidebarSection('visuals');
+                    selectVisualsTab('areas');
+                },
+                active: selectedSidebarSection === 'visuals',
+            },
         ],
         [
             selectSidebarSection,
@@ -130,6 +135,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             t,
             showSidePanel,
             databaseType,
+            selectVisualsTab,
         ]
     );
 

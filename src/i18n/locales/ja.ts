@@ -10,6 +10,7 @@ export const ja: LanguageTranslation = {
             areas: 'エリア',
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
+            visuals: 'ビジュアル',
         },
         menu: {
             actions: {
@@ -237,6 +238,14 @@ export const ja: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'ビジュアル',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',

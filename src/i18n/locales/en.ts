@@ -10,6 +10,7 @@ export const en = {
             areas: 'Areas',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -224,6 +225,13 @@ export const en = {
                 empty_state: {
                     title: 'No areas',
                     description: 'Create an area to get started',
+                },
+            },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
                 },
             },
 

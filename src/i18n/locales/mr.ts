@@ -10,6 +10,7 @@ export const mr: LanguageTranslation = {
             areas: 'क्षेत्रे',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -236,6 +237,14 @@ export const mr: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
