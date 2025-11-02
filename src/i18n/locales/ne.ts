@@ -7,9 +7,9 @@ export const ne: LanguageTranslation = {
             browse: 'ब्राउज',
             tables: 'टेबलहरू',
             refs: 'Refs',
-            areas: 'क्षेत्रहरू',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -233,6 +233,35 @@ export const ne: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'टिप्पणीहरू',
+                },
+            },
+
+            notes_section: {
+                filter: 'फिल्टर',
+                add_note: 'टिप्पणी थप्नुहोस्',
+                no_results: 'कुनै टिप्पणी फेला परेन',
+                clear: 'फिल्टर खाली गर्नुहोस्',
+                empty_state: {
+                    title: 'कुनै टिप्पणी छैन',
+                    description:
+                        'क्यानभासमा पाठ टिप्पणी थप्न टिप्पणी सिर्जना गर्नुहोस्',
+                },
+                note: {
+                    empty_note: 'खाली टिप्पणी',
+                    note_actions: {
+                        title: 'टिप्पणी कार्यहरू',
+                        edit_content: 'सामग्री सम्पादन गर्नुहोस्',
+                        delete_note: 'टिप्पणी मेटाउनुहोस्',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -487,6 +516,7 @@ export const ne: LanguageTranslation = {
             new_relationship: 'नयाँ सम्बन्ध',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'नयाँ नोट',
         },
 
         table_node_context_menu: {

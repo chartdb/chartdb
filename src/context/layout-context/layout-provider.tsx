@@ -1,5 +1,9 @@
 import React from 'react';
-import type { LayoutContext, SidebarSection } from './layout-context';
+import type {
+    LayoutContext,
+    SidebarSection,
+    VisualsTab,
+} from './layout-context';
 import { layoutContext } from './layout-context';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
@@ -16,10 +20,15 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     const [openedAreaInSidebar, setOpenedAreaInSidebar] = React.useState<
         string | undefined
     >();
+    const [openedNoteInSidebar, setOpenedNoteInSidebar] = React.useState<
+        string | undefined
+    >();
     const [openedCustomTypeInSidebar, setOpenedCustomTypeInSidebar] =
         React.useState<string | undefined>();
     const [selectedSidebarSection, setSelectedSidebarSection] =
         React.useState<SidebarSection>('tables');
+    const [selectedVisualsTab, setSelectedVisualsTab] =
+        React.useState<VisualsTab>('areas');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(isDesktop);
 
@@ -37,6 +46,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
 
     const closeAllAreasInSidebar: LayoutContext['closeAllAreasInSidebar'] =
         () => setOpenedAreaInSidebar('');
+
+    const closeAllNotesInSidebar: LayoutContext['closeAllNotesInSidebar'] =
+        () => setOpenedNoteInSidebar('');
 
     const closeAllCustomTypesInSidebar: LayoutContext['closeAllCustomTypesInSidebar'] =
         () => setOpenedCustomTypeInSidebar('');
@@ -83,8 +95,18 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         areaId
     ) => {
         showSidePanel();
-        setSelectedSidebarSection('areas');
+        setSelectedSidebarSection('visuals');
+        setSelectedVisualsTab('areas');
         setOpenedAreaInSidebar(areaId);
+    };
+
+    const openNoteFromSidebar: LayoutContext['openNoteFromSidebar'] = (
+        noteId
+    ) => {
+        showSidePanel();
+        setSelectedSidebarSection('visuals');
+        setSelectedVisualsTab('notes');
+        setOpenedNoteInSidebar(noteId);
     };
 
     const openCustomTypeFromSidebar: LayoutContext['openCustomTypeFromSidebar'] =
@@ -116,9 +138,14 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
                 openedAreaInSidebar,
                 openAreaFromSidebar,
                 closeAllAreasInSidebar,
+                openedNoteInSidebar,
+                openNoteFromSidebar,
+                closeAllNotesInSidebar,
                 openedCustomTypeInSidebar,
                 openCustomTypeFromSidebar,
                 closeAllCustomTypesInSidebar,
+                selectedVisualsTab,
+                selectVisualsTab: setSelectedVisualsTab,
             }}
         >
             {children}

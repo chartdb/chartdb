@@ -7,9 +7,9 @@ export const pt_BR: LanguageTranslation = {
             browse: 'Navegar',
             tables: 'Tabelas',
             refs: 'Refs',
-            areas: 'Áreas',
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
+            visuals: 'Visuais',
         },
         menu: {
             actions: {
@@ -233,6 +233,35 @@ export const pt_BR: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuais',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'Notas',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filtrar',
+                add_note: 'Adicionar Nota',
+                no_results: 'Nenhuma nota encontrada',
+                clear: 'Limpar Filtro',
+                empty_state: {
+                    title: 'Sem Notas',
+                    description:
+                        'Crie uma nota para adicionar anotações de texto na tela',
+                },
+                note: {
+                    empty_note: 'Nota vazia',
+                    note_actions: {
+                        title: 'Ações de Nota',
+                        edit_content: 'Editar Conteúdo',
+                        delete_note: 'Excluir Nota',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -486,6 +515,7 @@ export const pt_BR: LanguageTranslation = {
             new_relationship: 'Novo Relacionamento',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Nova Nota',
         },
 
         table_node_context_menu: {

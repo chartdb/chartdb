@@ -7,9 +7,9 @@ export const id_ID: LanguageTranslation = {
             browse: 'Jelajahi',
             tables: 'Tabel',
             refs: 'Refs',
-            areas: 'Area',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
+            visuals: 'Visual',
         },
         menu: {
             actions: {
@@ -232,6 +232,35 @@ export const id_ID: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visual',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'Catatan',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filter',
+                add_note: 'Tambah Catatan',
+                no_results: 'Tidak ada catatan ditemukan',
+                clear: 'Hapus Filter',
+                empty_state: {
+                    title: 'Tidak Ada Catatan',
+                    description:
+                        'Buat catatan untuk menambahkan anotasi teks di kanvas',
+                },
+                note: {
+                    empty_note: 'Catatan kosong',
+                    note_actions: {
+                        title: 'Aksi Catatan',
+                        edit_content: 'Edit Konten',
+                        delete_note: 'Hapus Catatan',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -484,6 +513,7 @@ export const id_ID: LanguageTranslation = {
             new_relationship: 'Hubungan Baru',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Catatan Baru',
         },
 
         table_node_context_menu: {

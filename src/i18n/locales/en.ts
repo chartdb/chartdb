@@ -7,9 +7,9 @@ export const en = {
             browse: 'Browse',
             tables: 'Tables',
             refs: 'Refs',
-            areas: 'Areas',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -224,6 +224,34 @@ export const en = {
                 empty_state: {
                     title: 'No areas',
                     description: 'Create an area to get started',
+                },
+            },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'Notes',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filter',
+                add_note: 'Add Note',
+                no_results: 'No notes found',
+                clear: 'Clear Filter',
+                empty_state: {
+                    title: 'No Notes',
+                    description:
+                        'Create a note to add text annotations on the canvas',
+                },
+                note: {
+                    empty_note: 'Empty note',
+                    note_actions: {
+                        title: 'Note Actions',
+                        edit_content: 'Edit Content',
+                        delete_note: 'Delete Note',
+                    },
                 },
             },
 
@@ -473,6 +501,7 @@ export const en = {
             new_view: 'New View',
             new_relationship: 'New Relationship',
             new_area: 'New Area',
+            new_note: 'New Note',
         },
 
         table_node_context_menu: {

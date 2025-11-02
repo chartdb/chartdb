@@ -7,9 +7,9 @@ export const te: LanguageTranslation = {
             browse: 'బ్రాఉజ్',
             tables: 'టేబల్లు',
             refs: 'సంబంధాలు',
-            areas: 'ప్రదేశాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
+            visuals: 'Visuals',
         },
         menu: {
             actions: {
@@ -234,6 +234,35 @@ export const te: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuals',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'గమనికలు',
+                },
+            },
+
+            notes_section: {
+                filter: 'ఫిల్టర్',
+                add_note: 'గమనిక జోడించండి',
+                no_results: 'గమనికలు కనుగొనబడలేదు',
+                clear: 'ఫిల్టర్‌ను క్లియర్ చేయండి',
+                empty_state: {
+                    title: 'గమనికలు లేవు',
+                    description:
+                        'కాన్వాస్‌పై టెక్స్ట్ ఉల్లేఖనలను జోడించడానికి ఒక గమనికను సృష్టించండి',
+                },
+                note: {
+                    empty_note: 'ఖాళీ గమనిక',
+                    note_actions: {
+                        title: 'గమనిక చర్యలు',
+                        edit_content: 'కంటెంట్‌ను సవరించండి',
+                        delete_note: 'గమనికను తొలగించండి',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -490,6 +519,7 @@ export const te: LanguageTranslation = {
             new_relationship: 'కొత్త సంబంధం',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'కొత్త నోట్',
         },
 
         table_node_context_menu: {

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { AreaList } from './areas-list/areas-list';
 import { Button } from '@/components/button/button';
 import { Group, X } from 'lucide-react';
 import { Input } from '@/components/input/input';
@@ -10,10 +9,11 @@ import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import { useViewport } from '@xyflow/react';
+import { AreaList } from './areas-list/areas-list';
 
-export interface AreasSectionProps {}
+export interface AreasTabProps {}
 
-export const AreasSection: React.FC<AreasSectionProps> = () => {
+export const AreasTab: React.FC<AreasTabProps> = () => {
     const { createArea, areas, readonly } = useChartDB();
     const viewport = useViewport();
     const { t } = useTranslation();
@@ -58,11 +58,8 @@ export const AreasSection: React.FC<AreasSectionProps> = () => {
     }, []);
 
     return (
-        <section
-            className="flex flex-1 flex-col overflow-hidden px-2"
-            data-vaul-no-drag
-        >
-            <div className="flex items-center justify-between gap-4 py-1">
+        <div className="flex flex-1 flex-col overflow-hidden px-2">
+            <div className="flex items-center justify-between gap-4 pb-1">
                 <div className="flex-1">
                     <Input
                         ref={filterInputRef}
@@ -116,6 +113,6 @@ export const AreasSection: React.FC<AreasSectionProps> = () => {
                     )}
                 </ScrollArea>
             </div>
-        </section>
+        </div>
     );
 };

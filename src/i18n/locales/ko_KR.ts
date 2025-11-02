@@ -7,9 +7,9 @@ export const ko_KR: LanguageTranslation = {
             browse: '찾아보기',
             tables: '테이블',
             refs: 'Refs',
-            areas: '영역',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
+            visuals: '시각화',
         },
         menu: {
             actions: {
@@ -232,6 +232,35 @@ export const ko_KR: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: '시각화',
+                tabs: {
+                    areas: 'Areas',
+                    notes: '메모',
+                },
+            },
+
+            notes_section: {
+                filter: '필터',
+                add_note: '메모 추가',
+                no_results: '메모를 찾을 수 없습니다',
+                clear: '필터 지우기',
+                empty_state: {
+                    title: '메모 없음',
+                    description:
+                        '캔버스에 텍스트 주석을 추가하려면 메모를 만드세요',
+                },
+                note: {
+                    empty_note: '빈 메모',
+                    note_actions: {
+                        title: '메모 작업',
+                        edit_content: '내용 편집',
+                        delete_note: '메모 삭제',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -481,6 +510,7 @@ export const ko_KR: LanguageTranslation = {
             new_relationship: '새 연관관계',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: '새 메모',
         },
 
         table_node_context_menu: {

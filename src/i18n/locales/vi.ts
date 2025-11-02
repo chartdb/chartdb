@@ -7,9 +7,9 @@ export const vi: LanguageTranslation = {
             browse: 'Duyệt',
             tables: 'Bảng',
             refs: 'Refs',
-            areas: 'Khu vực',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
+            visuals: 'Hình ảnh',
         },
         menu: {
             actions: {
@@ -232,6 +232,35 @@ export const vi: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Hình ảnh',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'Ghi chú',
+                },
+            },
+
+            notes_section: {
+                filter: 'Lọc',
+                add_note: 'Thêm Ghi Chú',
+                no_results: 'Không tìm thấy ghi chú',
+                clear: 'Xóa Bộ Lọc',
+                empty_state: {
+                    title: 'Không Có Ghi Chú',
+                    description:
+                        'Tạo ghi chú để thêm chú thích văn bản trên canvas',
+                },
+                note: {
+                    empty_note: 'Ghi chú trống',
+                    note_actions: {
+                        title: 'Hành Động Ghi Chú',
+                        edit_content: 'Chỉnh Sửa Nội Dung',
+                        delete_note: 'Xóa Ghi Chú',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -482,6 +511,7 @@ export const vi: LanguageTranslation = {
             new_relationship: 'Tạo quan hệ mới',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Ghi Chú Mới',
         },
 
         table_node_context_menu: {

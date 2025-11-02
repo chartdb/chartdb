@@ -2,6 +2,7 @@ import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
+    ContextMenuSeparator,
     ContextMenuTrigger,
 } from '@/components/context-menu/context-menu';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -10,7 +11,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useReactFlow } from '@xyflow/react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Table, Workflow, Group, View } from 'lucide-react';
+import { Table, Workflow, Group, View, StickyNote } from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
@@ -19,7 +20,8 @@ import { defaultSchemas } from '@/lib/data/default-schemas';
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, readonly, createArea, databaseType } = useChartDB();
+    const { createTable, readonly, createArea, databaseType, createNote } =
+        useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { openCreateRelationshipDialog } = useDialog();
     const { screenToFlowPosition } = useReactFlow();
@@ -121,6 +123,21 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         [createArea, screenToFlowPosition]
     );
 
+    const createNoteHandler = useCallback(
+        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const position = screenToFlowPosition({
+                x: event.clientX,
+                y: event.clientY,
+            });
+
+            createNote({
+                x: position.x,
+                y: position.y,
+            });
+        },
+        [createNote, screenToFlowPosition]
+    );
+
     const createRelationshipHandler = useCallback(() => {
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
@@ -158,12 +175,20 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     {t('canvas_context_menu.new_relationship')}
                     <Workflow className="size-3.5" />
                 </ContextMenuItem>
+                <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={createAreaHandler}
                     className="flex justify-between gap-4"
                 >
                     {t('canvas_context_menu.new_area')}
                     <Group className="size-3.5" />
+                </ContextMenuItem>
+                <ContextMenuItem
+                    onClick={createNoteHandler}
+                    className="flex justify-between gap-4"
+                >
+                    {t('canvas_context_menu.new_note')}
+                    <StickyNote className="size-3.5" />
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

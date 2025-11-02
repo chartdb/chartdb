@@ -83,6 +83,9 @@ import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
 import type { Area } from '@/lib/domain/area';
+import type { NoteNodeType } from './note-node/note-node';
+import { NoteNode } from './note-node/note-node';
+import type { Note } from '@/lib/domain/note';
 import type { TempCursorNodeType } from './temp-cursor-node/temp-cursor-node';
 import {
     TEMP_CURSOR_HANDLE_ID,
@@ -123,6 +126,7 @@ export type EdgeType =
 export type NodeType =
     | TableNodeType
     | AreaNodeType
+    | NoteNodeType
     | TempCursorNodeType
     | CreateRelationshipNodeType;
 
@@ -137,6 +141,7 @@ const edgeTypes: EdgeTypes = {
 const nodeTypes: NodeTypes = {
     table: TableNode,
     area: AreaNode,
+    note: NoteNode,
     'temp-cursor': TempCursorNode,
     'create-relationship': CreateRelationshipNode,
 };
@@ -238,6 +243,21 @@ const areaToAreaNode = (
     };
 };
 
+const noteToNoteNode = (note: Note): NoteNodeType => {
+    return {
+        id: note.id,
+        type: 'note',
+        position: { x: note.x, y: note.y },
+        data: { note },
+        width: note.width,
+        height: note.height,
+        zIndex: 50,
+        style: {
+            zIndex: 50,
+        },
+    };
+};
+
 export interface CanvasProps {
     initialTables: DBTable[];
 }
@@ -254,6 +274,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const {
         tables,
         areas,
+        notes,
         relationships,
         createRelationship,
         createDependency,
@@ -267,6 +288,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         readonly,
         removeArea,
         updateArea,
+        removeNote,
+        updateNote,
         highlightedCustomType,
         highlightCustomTypeId,
     } = useChartDB();
@@ -287,6 +310,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         endFloatingEdgeCreation,
         hoveringTableId,
         hideCreateRelationshipNode,
+        events: canvasEvents,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
@@ -543,6 +567,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         filterLoading,
                     })
                 ),
+                ...notes.map((note) => noteToNoteNode(note)),
                 ...prevNodes.filter(
                     (n) =>
                         n.type === 'temp-cursor' ||
@@ -560,6 +585,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [
         tables,
         areas,
+        notes,
         setNodes,
         filter,
         databaseType,
@@ -975,6 +1001,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 sizeChanges: areaSizeChanges,
             } = findRelevantNodesChanges(changesToApply, 'area');
 
+            // Then, detect note changes
+            const {
+                positionChanges: notePositionChanges,
+                removeChanges: noteRemoveChanges,
+                sizeChanges: noteSizeChanges,
+            } = findRelevantNodesChanges(changesToApply, 'note');
+
             // Then, detect table changes
             const { positionChanges, removeChanges, sizeChanges } =
                 findRelevantNodesChanges(changesToApply, 'table');
@@ -1144,6 +1177,49 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 }
             }
 
+            // Handle note changes
+            if (
+                notePositionChanges.length > 0 ||
+                noteRemoveChanges.length > 0 ||
+                noteSizeChanges.length > 0
+            ) {
+                const notesUpdates: Record<string, Partial<Note>> = {};
+                // Handle note position changes
+                notePositionChanges.forEach((change) => {
+                    if (change.type === 'position' && change.position) {
+                        notesUpdates[change.id] = {
+                            ...notesUpdates[change.id],
+                            x: change.position.x,
+                            y: change.position.y,
+                        };
+                    }
+                });
+
+                // Handle note size changes
+                noteSizeChanges.forEach((change) => {
+                    if (change.type === 'dimensions' && change.dimensions) {
+                        notesUpdates[change.id] = {
+                            ...notesUpdates[change.id],
+                            width: change.dimensions.width,
+                            height: change.dimensions.height,
+                        };
+                    }
+                });
+
+                // Handle note removal
+                noteRemoveChanges.forEach((change) => {
+                    removeNote(change.id);
+                    delete notesUpdates[change.id];
+                });
+
+                // Apply note updates to storage
+                if (Object.keys(notesUpdates).length > 0) {
+                    for (const [id, updates] of Object.entries(notesUpdates)) {
+                        updateNote(id, updates);
+                    }
+                }
+            }
+
             return onNodesChange(changesToApply);
         },
         [
@@ -1153,6 +1229,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             findRelevantNodesChanges,
             updateArea,
             removeArea,
+            updateNote,
+            removeNote,
             readonly,
             tables,
             areas,
@@ -1423,23 +1501,35 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         return [...edges, tempEdge];
     }, [edges, tempFloatingEdge, cursorPosition, hoveringTableId]);
 
-    const onPaneClickHandler = useCallback(() => {
-        if (tempFloatingEdge) {
-            endFloatingEdgeCreation();
-            setCursorPosition(null);
-        }
+    const onPaneClickHandler = useCallback(
+        (event: React.MouseEvent<Element, MouseEvent>) => {
+            if (tempFloatingEdge) {
+                endFloatingEdgeCreation();
+                setCursorPosition(null);
+            }
 
-        // Close CreateRelationshipNode if it exists
-        hideCreateRelationshipNode();
+            // Close CreateRelationshipNode if it exists
+            hideCreateRelationshipNode();
 
-        // Exit edit table mode
-        exitEditTableMode();
-    }, [
-        tempFloatingEdge,
-        exitEditTableMode,
-        endFloatingEdgeCreation,
-        hideCreateRelationshipNode,
-    ]);
+            // Exit edit table mode
+            exitEditTableMode();
+
+            canvasEvents.emit({
+                action: 'pan_click',
+                data: {
+                    x: event.clientX,
+                    y: event.clientY,
+                },
+            });
+        },
+        [
+            canvasEvents,
+            tempFloatingEdge,
+            exitEditTableMode,
+            endFloatingEdgeCreation,
+            hideCreateRelationshipNode,
+        ]
+    );
 
     return (
         <CanvasContextMenu>

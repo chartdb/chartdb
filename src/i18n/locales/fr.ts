@@ -7,9 +7,9 @@ export const fr: LanguageTranslation = {
             browse: 'Parcourir',
             tables: 'Tables',
             refs: 'Refs',
-            areas: 'Zones',
             dependencies: 'Dépendances',
             custom_types: 'Types Personnalisés',
+            visuals: 'Visuels',
         },
         menu: {
             actions: {
@@ -230,6 +230,35 @@ export const fr: LanguageTranslation = {
                     description: 'Create an area to get started',
                 },
             },
+
+            visuals_section: {
+                visuals: 'Visuels',
+                tabs: {
+                    areas: 'Areas',
+                    notes: 'Notes',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filtrer',
+                add_note: 'Ajouter une Note',
+                no_results: 'Aucune note trouvée',
+                clear: 'Effacer le Filtre',
+                empty_state: {
+                    title: 'Pas de Notes',
+                    description:
+                        'Créez une note pour ajouter des annotations de texte sur le canevas',
+                },
+                note: {
+                    empty_note: 'Note vide',
+                    note_actions: {
+                        title: 'Actions de Note',
+                        edit_content: 'Modifier le Contenu',
+                        delete_note: 'Supprimer la Note',
+                    },
+                },
+            },
+
             // TODO: Translate
             custom_types_section: {
                 custom_types: 'Custom Types',
@@ -482,6 +511,7 @@ export const fr: LanguageTranslation = {
             new_relationship: 'Nouvelle Relation',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Nouvelle Note',
         },
 
         table_node_context_menu: {

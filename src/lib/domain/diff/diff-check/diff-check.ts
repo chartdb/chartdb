@@ -4,6 +4,7 @@ import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
+import type { Note } from '@/lib/domain/note';
 import type { ChartDBDiff, DiffMap, DiffObject } from '@/lib/domain/diff/diff';
 import type {
     FieldDiff,
@@ -11,6 +12,7 @@ import type {
 } from '@/lib/domain/diff/field-diff';
 import type { TableDiff, TableDiffAttribute } from '../table-diff';
 import type { AreaDiff, AreaDiffAttribute } from '../area-diff';
+import type { NoteDiff, NoteDiffAttribute } from '../note-diff';
 import type { IndexDiff } from '../index-diff';
 import type { RelationshipDiff } from '../relationship-diff';
 
@@ -44,10 +46,12 @@ export interface GenerateDiffOptions {
     includeIndexes?: boolean;
     includeRelationships?: boolean;
     includeAreas?: boolean;
+    includeNotes?: boolean;
     attributes?: {
         tables?: TableDiffAttribute[];
         fields?: FieldDiffAttribute[];
         areas?: AreaDiffAttribute[];
+        notes?: NoteDiffAttribute[];
     };
     changeTypes?: {
         tables?: TableDiff['type'][];
@@ -55,6 +59,7 @@ export interface GenerateDiffOptions {
         indexes?: IndexDiff['type'][];
         relationships?: RelationshipDiff['type'][];
         areas?: AreaDiff['type'][];
+        notes?: NoteDiff['type'][];
     };
     matchers?: {
         table?: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
@@ -65,6 +70,7 @@ export interface GenerateDiffOptions {
             relationships: DBRelationship[]
         ) => DBRelationship | undefined;
         area?: (area: Area, areas: Area[]) => Area | undefined;
+        note?: (note: Note, notes: Note[]) => Note | undefined;
     };
 }
 
@@ -81,6 +87,7 @@ export function generateDiff({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     changedAreas: Map<string, boolean>;
+    changedNotes: Map<string, boolean>;
 } {
     // Merge with default options
     const mergedOptions: GenerateDiffOptions = {
@@ -89,6 +96,7 @@ export function generateDiff({
         includeIndexes: options.includeIndexes ?? true,
         includeRelationships: options.includeRelationships ?? true,
         includeAreas: options.includeAreas ?? false,
+        includeNotes: options.includeNotes ?? false,
         attributes: options.attributes ?? {},
         changeTypes: options.changeTypes ?? {},
         matchers: options.matchers ?? {},
@@ -98,6 +106,7 @@ export function generateDiff({
     const changedTables = new Map<string, boolean>();
     const changedFields = new Map<string, boolean>();
     const changedAreas = new Map<string, boolean>();
+    const changedNotes = new Map<string, boolean>();
 
     // Use provided matchers or default ones
     const tableMatcher = mergedOptions.matchers?.table ?? defaultTableMatcher;
@@ -106,6 +115,7 @@ export function generateDiff({
     const relationshipMatcher =
         mergedOptions.matchers?.relationship ?? defaultRelationshipMatcher;
     const areaMatcher = mergedOptions.matchers?.area ?? defaultAreaMatcher;
+    const noteMatcher = mergedOptions.matchers?.note ?? defaultNoteMatcher;
 
     // Compare tables
     if (mergedOptions.includeTables) {
@@ -157,7 +167,26 @@ export function generateDiff({
         });
     }
 
-    return { diffMap: newDiffs, changedTables, changedFields, changedAreas };
+    // Compare notes if enabled
+    if (mergedOptions.includeNotes) {
+        compareNotes({
+            diagram,
+            newDiagram,
+            diffMap: newDiffs,
+            changedNotes,
+            attributes: mergedOptions.attributes?.notes,
+            changeTypes: mergedOptions.changeTypes?.notes,
+            noteMatcher,
+        });
+    }
+
+    return {
+        diffMap: newDiffs,
+        changedTables,
+        changedFields,
+        changedAreas,
+        changedNotes,
+    };
 }
 
 // Compare tables between diagrams
@@ -1019,6 +1048,217 @@ function compareAreas({
     }
 }
 
+// Compare notes between diagrams
+function compareNotes({
+    diagram,
+    newDiagram,
+    diffMap,
+    changedNotes,
+    attributes,
+    changeTypes,
+    noteMatcher,
+}: {
+    diagram: Diagram;
+    newDiagram: Diagram;
+    diffMap: DiffMap;
+    changedNotes: Map<string, boolean>;
+    attributes?: NoteDiffAttribute[];
+    changeTypes?: NoteDiff['type'][];
+    noteMatcher: (note: Note, notes: Note[]) => Note | undefined;
+}) {
+    const oldNotes = diagram.notes || [];
+    const newNotes = newDiagram.notes || [];
+
+    // If changeTypes is empty array, don't check any changes
+    if (changeTypes && changeTypes.length === 0) {
+        return;
+    }
+
+    // If changeTypes is undefined, check all types
+    const typesToCheck = changeTypes ?? ['added', 'removed', 'changed'];
+
+    // Check for added notes
+    if (typesToCheck.includes('added')) {
+        for (const newNote of newNotes) {
+            if (!noteMatcher(newNote, oldNotes)) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: newNote.id,
+                    }),
+                    {
+                        object: 'note',
+                        type: 'added',
+                        noteAdded: newNote,
+                    }
+                );
+                changedNotes.set(newNote.id, true);
+            }
+        }
+    }
+
+    // Check for removed notes
+    if (typesToCheck.includes('removed')) {
+        for (const oldNote of oldNotes) {
+            if (!noteMatcher(oldNote, newNotes)) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                    }),
+                    {
+                        object: 'note',
+                        type: 'removed',
+                        noteId: oldNote.id,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+        }
+    }
+
+    // Check for note content and color changes
+    if (typesToCheck.includes('changed')) {
+        for (const oldNote of oldNotes) {
+            const newNote = noteMatcher(oldNote, newNotes);
+
+            if (!newNote) continue;
+
+            // If attributes are specified, only check those attributes
+            const attributesToCheck: NoteDiffAttribute[] = attributes ?? [
+                'content',
+                'color',
+            ];
+
+            if (
+                attributesToCheck.includes('content') &&
+                oldNote.content !== newNote.content
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'content',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'content',
+                        newValue: newNote.content,
+                        oldValue: oldNote.content,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+
+            if (
+                attributesToCheck.includes('color') &&
+                oldNote.color !== newNote.color
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'color',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'color',
+                        newValue: newNote.color,
+                        oldValue: oldNote.color,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+
+            if (attributesToCheck.includes('x') && oldNote.x !== newNote.x) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'x',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'x',
+                        newValue: newNote.x,
+                        oldValue: oldNote.x,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+
+            if (attributesToCheck.includes('y') && oldNote.y !== newNote.y) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'y',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'y',
+                        newValue: newNote.y,
+                        oldValue: oldNote.y,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+
+            if (
+                attributesToCheck.includes('width') &&
+                oldNote.width !== newNote.width
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'width',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'width',
+                        newValue: newNote.width,
+                        oldValue: oldNote.width,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+
+            if (
+                attributesToCheck.includes('height') &&
+                oldNote.height !== newNote.height
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'note',
+                        objectId: oldNote.id,
+                        attribute: 'height',
+                    }),
+                    {
+                        object: 'note',
+                        type: 'changed',
+                        noteId: oldNote.id,
+                        attribute: 'height',
+                        newValue: newNote.height,
+                        oldValue: oldNote.height,
+                    }
+                );
+                changedNotes.set(oldNote.id, true);
+            }
+        }
+    }
+}
+
 const defaultTableMatcher = (
     table: DBTable,
     tables: DBTable[]
@@ -1049,4 +1289,8 @@ const defaultRelationshipMatcher = (
 
 const defaultAreaMatcher = (area: Area, areas: Area[]): Area | undefined => {
     return areas.find((a) => a.id === area.id);
+};
+
+const defaultNoteMatcher = (note: Note, notes: Note[]): Note | undefined => {
+    return notes.find((n) => n.id === note.id);
 };

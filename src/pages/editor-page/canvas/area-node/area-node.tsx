@@ -32,7 +32,8 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         const [editMode, setEditMode] = useState(false);
         const [areaName, setAreaName] = useState(area.name);
         const inputRef = React.useRef<HTMLInputElement>(null);
-        const { openAreaFromSidebar, selectSidebarSection } = useLayout();
+        const { openAreaFromSidebar, selectSidebarSection, selectVisualsTab } =
+            useLayout();
 
         const focused = !!selected && !dragging;
 
@@ -50,9 +51,15 @@ export const AreaNode: React.FC<NodeProps<AreaNodeType>> = React.memo(
         }, [area.name]);
 
         const openAreaInEditor = useCallback(() => {
-            selectSidebarSection('areas');
+            selectSidebarSection('visuals');
+            selectVisualsTab('areas');
             openAreaFromSidebar(area.id);
-        }, [selectSidebarSection, openAreaFromSidebar, area.id]);
+        }, [
+            selectSidebarSection,
+            openAreaFromSidebar,
+            area.id,
+            selectVisualsTab,
+        ]);
 
         useClickAway(inputRef, editAreaName);
         useKeyPressEvent('Enter', editAreaName);

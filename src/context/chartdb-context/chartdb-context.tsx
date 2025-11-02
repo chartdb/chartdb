@@ -12,6 +12,7 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
+import type { Note } from '@/lib/domain/note';
 
 export type ChartDBEventType =
     | 'add_tables'
@@ -74,6 +75,7 @@ export interface ChartDBContext {
     dependencies: DBDependency[];
     areas: Area[];
     customTypes: DBCustomType[];
+    notes: Note[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
     readonly?: boolean;
@@ -255,6 +257,31 @@ export interface ChartDBContext {
         options?: { updateHistory: boolean }
     ) => Promise<void>;
 
+    // Note operations
+    createNote: (attributes?: Partial<Omit<Note, 'id'>>) => Promise<Note>;
+    addNote: (
+        note: Note,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addNotes: (
+        notes: Note[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    getNote: (id: string) => Note | null;
+    removeNote: (
+        id: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeNotes: (
+        ids: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateNote: (
+        id: string,
+        note: Partial<Note>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+
     // Custom type operations
     createCustomType: (
         attributes?: Partial<Omit<DBCustomType, 'id'>>
@@ -292,6 +319,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     dependencies: [],
     areas: [],
     customTypes: [],
+    notes: [],
     schemas: [],
     highlightCustomTypeId: emptyFn,
     currentDiagram: {
@@ -367,6 +395,15 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeArea: emptyFn,
     removeAreas: emptyFn,
     updateArea: emptyFn,
+
+    // Note operations
+    createNote: emptyFn,
+    addNote: emptyFn,
+    addNotes: emptyFn,
+    getNote: emptyFn,
+    removeNote: emptyFn,
+    removeNotes: emptyFn,
+    updateNote: emptyFn,
 
     // Custom type operations
     createCustomType: emptyFn,

@@ -5,8 +5,10 @@ export type SidebarSection =
     | 'dbml'
     | 'tables'
     | 'refs'
-    | 'areas'
-    | 'customTypes';
+    | 'customTypes'
+    | 'visuals';
+
+export type VisualsTab = 'areas' | 'notes';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
@@ -27,12 +29,19 @@ export interface LayoutContext {
     openAreaFromSidebar: (areaId: string) => void;
     closeAllAreasInSidebar: () => void;
 
+    openedNoteInSidebar: string | undefined;
+    openNoteFromSidebar: (noteId: string) => void;
+    closeAllNotesInSidebar: () => void;
+
     openedCustomTypeInSidebar: string | undefined;
     openCustomTypeFromSidebar: (customTypeId: string) => void;
     closeAllCustomTypesInSidebar: () => void;
 
     selectedSidebarSection: SidebarSection;
     selectSidebarSection: (section: SidebarSection) => void;
+
+    selectedVisualsTab: VisualsTab;
+    selectVisualsTab: (tab: VisualsTab) => void;
 
     isSidePanelShowed: boolean;
     hideSidePanel: () => void;
@@ -58,6 +67,10 @@ export const layoutContext = createContext<LayoutContext>({
     openAreaFromSidebar: emptyFn,
     closeAllAreasInSidebar: emptyFn,
 
+    openedNoteInSidebar: undefined,
+    openNoteFromSidebar: emptyFn,
+    closeAllNotesInSidebar: emptyFn,
+
     openedCustomTypeInSidebar: undefined,
     openCustomTypeFromSidebar: emptyFn,
     closeAllCustomTypesInSidebar: emptyFn,
@@ -65,6 +78,9 @@ export const layoutContext = createContext<LayoutContext>({
     selectSidebarSection: emptyFn,
     openTableFromSidebar: emptyFn,
     closeAllTablesInSidebar: emptyFn,
+
+    selectedVisualsTab: 'areas',
+    selectVisualsTab: emptyFn,
 
     isSidePanelShowed: false,
     hideSidePanel: emptyFn,

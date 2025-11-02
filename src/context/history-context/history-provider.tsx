@@ -39,6 +39,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         addCustomTypes,
         removeCustomTypes,
         updateCustomType,
+        addNotes,
+        removeNotes,
+        updateNote,
     } = useChartDB();
 
     const redoActionHandlers = useMemo(
@@ -135,6 +138,15 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addNotes: ({ redoData: { notes } }) => {
+                return addNotes(notes, { updateHistory: false });
+            },
+            removeNotes: ({ redoData: { noteIds } }) => {
+                return removeNotes(noteIds, { updateHistory: false });
+            },
+            updateNote: ({ redoData: { noteId, note } }) => {
+                return updateNote(noteId, note, { updateHistory: false });
+            },
         }),
         [
             addTables,
@@ -160,6 +172,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addCustomTypes,
             removeCustomTypes,
             updateCustomType,
+            addNotes,
+            removeNotes,
+            updateNote,
         ]
     );
 
@@ -271,6 +286,15 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addNotes: ({ undoData: { noteIds } }) => {
+                return removeNotes(noteIds, { updateHistory: false });
+            },
+            removeNotes: ({ undoData: { notes } }) => {
+                return addNotes(notes, { updateHistory: false });
+            },
+            updateNote: ({ undoData: { noteId, note } }) => {
+                return updateNote(noteId, note, { updateHistory: false });
+            },
         }),
         [
             addTables,
@@ -296,6 +320,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addCustomTypes,
             removeCustomTypes,
             updateCustomType,
+            addNotes,
+            removeNotes,
+            updateNote,
         ]
     );
 
