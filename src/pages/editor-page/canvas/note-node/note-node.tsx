@@ -19,7 +19,11 @@ export interface NoteNodeProps extends NodeProps {
 
 export type NoteNodeType = Node<{ note: Note }, 'note'>;
 
-export const NoteNode: React.FC<NoteNodeProps> = ({ data, selected }) => {
+export const NoteNode: React.FC<NoteNodeProps> = ({
+    data,
+    selected,
+    dragging,
+}) => {
     const { note } = data;
     const { updateNote, removeNote, readonly } = useChartDB();
     const [editMode, setEditMode] = useState(false);
@@ -27,6 +31,8 @@ export const NoteNode: React.FC<NoteNodeProps> = ({ data, selected }) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { events } = useCanvas();
     const { effectiveTheme } = useTheme();
+
+    const focused = !!selected && !dragging;
 
     const saveContent = useCallback(() => {
         if (!editMode) return;
@@ -146,13 +152,15 @@ export const NoteNode: React.FC<NoteNodeProps> = ({ data, selected }) => {
                 }}
             />
 
-            <NodeResizer
-                minWidth={200}
-                minHeight={150}
-                isVisible={selected}
-                lineClassName="!border-pink-500"
-                handleClassName="!h-3 !w-3 !bg-pink-500 !rounded-full"
-            />
+            {focused && !readonly ? (
+                <NodeResizer
+                    minWidth={200}
+                    minHeight={150}
+                    isVisible={selected}
+                    lineClassName="!border-pink-500"
+                    handleClassName="!h-3 !w-3 !bg-pink-500 !rounded-full"
+                />
+            ) : null}
 
             {/* Note body */}
             <div className="group/note relative flex-1 overflow-hidden p-2">
