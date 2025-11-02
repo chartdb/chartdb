@@ -620,6 +620,7 @@ export const applyDBMLChanges = ({
         ...sourceDiagram,
         tables: finalTables.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
         areas: targetDiagram.areas,
+        notes: targetDiagram.notes,
         relationships: sortedRelationships,
         dependencies: updatedDependencies,
         customTypes: updatedCustomTypes,
