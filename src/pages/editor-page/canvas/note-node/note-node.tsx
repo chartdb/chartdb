@@ -136,8 +136,10 @@ export const NoteNode: React.FC<NoteNodeProps> = ({
     return (
         <div
             className={cn(
-                'flex h-full flex-col overflow-hidden rounded border shadow-md',
-                selected ? 'border-pink-600 border-2' : 'border-border'
+                'flex h-full flex-col overflow-hidden rounded-[6px] border',
+                selected
+                    ? 'border-pink-600'
+                    : 'border-slate-500 dark:border-slate-600'
             )}
             style={{
                 background: getBodyColor(note.color),
@@ -165,7 +167,7 @@ export const NoteNode: React.FC<NoteNodeProps> = ({
             {/* Note body */}
             <div className="group/note relative flex-1 overflow-hidden p-2">
                 {/* Corner fold (bottom-right) */}
-                <div className="absolute bottom-0 right-0 border-b-[20px] border-l-[40px] border-r-0 border-t-0 border-b-black/10 border-l-transparent opacity-50 dark:border-b-white/10" />
+                <div className="absolute bottom-0 right-0 border-b-[30px] border-l-[30px] border-r-0 border-t-0 border-b-black/10 border-l-transparent opacity-50 dark:border-b-white/10" />
 
                 {/* Content area */}
                 {editMode ? (
