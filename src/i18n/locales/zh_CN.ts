@@ -7,7 +7,6 @@ export const zh_CN: LanguageTranslation = {
             browse: '浏览',
             tables: '表',
             refs: '引用',
-            areas: '区域',
             dependencies: '依赖关系',
             custom_types: '自定义类型',
             visuals: '视觉效果',
@@ -235,6 +234,26 @@ export const zh_CN: LanguageTranslation = {
                 visuals: '视觉效果',
                 tabs: {
                     areas: 'Areas',
+                    notes: '笔记',
+                },
+            },
+
+            notes_section: {
+                filter: '筛选',
+                add_note: '添加笔记',
+                no_results: '未找到笔记',
+                clear: '清除筛选',
+                empty_state: {
+                    title: '没有笔记',
+                    description: '创建笔记以在画布上添加文本注释',
+                },
+                note: {
+                    empty_note: '空笔记',
+                    note_actions: {
+                        title: '笔记操作',
+                        edit_content: '编辑内容',
+                        delete_note: '删除笔记',
+                    },
                 },
             },
 
@@ -486,6 +505,7 @@ export const zh_CN: LanguageTranslation = {
             new_relationship: '新建关系',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: '新笔记',
         },
 
         table_node_context_menu: {

@@ -7,7 +7,6 @@ export const tr: LanguageTranslation = {
             browse: 'Gözat',
             tables: 'Tablolar',
             refs: 'Refs',
-            areas: 'Alanlar',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
             visuals: 'Görseller',
@@ -239,6 +238,27 @@ export const tr: LanguageTranslation = {
                 visuals: 'Görseller',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'Notlar',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filtrele',
+                add_note: 'Not Ekle',
+                no_results: 'Not bulunamadı',
+                clear: 'Filtreyi Temizle',
+                empty_state: {
+                    title: 'Not Yok',
+                    description:
+                        'Tuval üzerinde metin açıklamaları eklemek için bir not oluşturun',
+                },
+                note: {
+                    empty_note: 'Boş not',
+                    note_actions: {
+                        title: 'Not İşlemleri',
+                        edit_content: 'İçeriği Düzenle',
+                        delete_note: 'Notu Sil',
+                    },
                 },
             },
 
@@ -484,6 +504,7 @@ export const tr: LanguageTranslation = {
             new_relationship: 'Yeni İlişki',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Yeni Not',
         },
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',

@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useRef,
 } from 'react';
-import type { CanvasContext } from './canvas-context';
+import type { CanvasContext, CanvasEvent } from './canvas-context';
 import { canvasContext } from './canvas-context';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { adjustTablePositions } from '@/lib/domain/db-table';
@@ -20,6 +20,7 @@ import {
     CREATE_RELATIONSHIP_NODE_ID,
     type CreateRelationshipNodeType,
 } from '@/pages/editor-page/canvas/create-relationship-node/create-relationship-node';
+import { useEventEmitter } from 'ahooks';
 
 interface CanvasProviderProps {
     children: ReactNode;
@@ -42,6 +43,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         tableId: string;
         fieldId?: string;
     } | null>(null);
+
+    const events = useEventEmitter<CanvasEvent>();
 
     const [showFilter, setShowFilter] = useState(false);
 
@@ -212,6 +215,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 setHoveringTableId,
                 showCreateRelationshipNode,
                 hideCreateRelationshipNode,
+                events,
             }}
         >
             {children}

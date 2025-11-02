@@ -7,7 +7,6 @@ export const mr: LanguageTranslation = {
             browse: 'ब्राउज',
             tables: 'टेबल',
             refs: 'Refs',
-            areas: 'क्षेत्रे',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
             visuals: 'Visuals',
@@ -242,6 +241,27 @@ export const mr: LanguageTranslation = {
                 visuals: 'Visuals',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'नोट्स',
+                },
+            },
+
+            notes_section: {
+                filter: 'फिल्टर',
+                add_note: 'नोट जोडा',
+                no_results: 'कोणत्याही नोट्स सापडल्या नाहीत',
+                clear: 'फिल्टर साफ करा',
+                empty_state: {
+                    title: 'नोट्स नाहीत',
+                    description:
+                        'कॅनव्हासवर मजकूर भाष्य जोडण्यासाठी एक नोट तयार करा',
+                },
+                note: {
+                    empty_note: 'रिकामी नोट',
+                    note_actions: {
+                        title: 'नोट क्रिया',
+                        edit_content: 'सामग्री संपादित करा',
+                        delete_note: 'नोट हटवा',
+                    },
                 },
             },
 
@@ -502,6 +522,7 @@ export const mr: LanguageTranslation = {
             new_relationship: 'नवीन रिलेशनशिप',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'नवीन टीप',
         },
 
         table_node_context_menu: {

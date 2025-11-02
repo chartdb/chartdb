@@ -7,7 +7,6 @@ export const uk: LanguageTranslation = {
             browse: 'Огляд',
             tables: 'Таблиці',
             refs: 'Зв’язки',
-            areas: 'Області',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
             visuals: 'Візуальні елементи',
@@ -237,6 +236,27 @@ export const uk: LanguageTranslation = {
                 visuals: 'Візуальні елементи',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'Нотатки',
+                },
+            },
+
+            notes_section: {
+                filter: 'Фільтр',
+                add_note: 'Додати Нотатку',
+                no_results: 'Нотатки не знайдено',
+                clear: 'Очистити Фільтр',
+                empty_state: {
+                    title: 'Немає Нотаток',
+                    description:
+                        'Створіть нотатку, щоб додати текстові анотації на полотні',
+                },
+                note: {
+                    empty_note: 'Порожня нотатка',
+                    note_actions: {
+                        title: 'Дії з Нотаткою',
+                        edit_content: 'Редагувати Вміст',
+                        delete_note: 'Видалити Нотатку',
+                    },
                 },
             },
 
@@ -490,6 +510,7 @@ export const uk: LanguageTranslation = {
             new_relationship: 'Новий звʼязок',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Нова Нотатка',
         },
 
         table_node_context_menu: {

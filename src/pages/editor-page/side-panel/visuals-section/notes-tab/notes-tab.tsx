@@ -1,57 +1,57 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
-import { Group, X } from 'lucide-react';
+import { StickyNote, X } from 'lucide-react';
 import { Input } from '@/components/input/input';
-import type { Area } from '@/lib/domain/area';
+import type { Note } from '@/lib/domain/note';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import { useViewport } from '@xyflow/react';
-import { AreaList } from './areas-list/areas-list';
+import { NotesList } from './notes-list/notes-list';
 
-export interface AreasTabProps {}
+export interface NotesTabProps {}
 
-export const AreasTab: React.FC<AreasTabProps> = () => {
-    const { createArea, areas, readonly } = useChartDB();
+export const NotesTab: React.FC<NotesTabProps> = () => {
+    const { createNote, notes, readonly } = useChartDB();
     const viewport = useViewport();
     const { t } = useTranslation();
-    const { openAreaFromSidebar } = useLayout();
+    const { openNoteFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const filterInputRef = React.useRef<HTMLInputElement>(null);
 
-    const filteredAreas = useMemo(() => {
-        const filterAreaName: (area: Area) => boolean = (area) =>
+    const filteredNotes = useMemo(() => {
+        const filterNoteContent: (note: Note) => boolean = (note) =>
             !filterText?.trim?.() ||
-            area.name.toLowerCase().includes(filterText.toLowerCase());
+            note.content.toLowerCase().includes(filterText.toLowerCase());
 
-        return areas.filter(filterAreaName);
-    }, [areas, filterText]);
+        return notes.filter(filterNoteContent);
+    }, [notes, filterText]);
 
-    const createAreaWithLocation = useCallback(async () => {
+    const createNoteWithLocation = useCallback(async () => {
         const padding = 80;
         const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
         const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
-        const area = await createArea({
+        const note = await createNote({
             x: centerX,
             y: centerY,
         });
-        if (openAreaFromSidebar) {
-            openAreaFromSidebar(area.id);
+        if (openNoteFromSidebar) {
+            openNoteFromSidebar(note.id);
         }
     }, [
-        createArea,
-        openAreaFromSidebar,
+        createNote,
+        openNoteFromSidebar,
         viewport.x,
         viewport.y,
         viewport.zoom,
     ]);
 
-    const handleCreateArea = useCallback(async () => {
+    const handleCreateNote = useCallback(async () => {
         setFilterText('');
-        createAreaWithLocation();
-    }, [createAreaWithLocation, setFilterText]);
+        createNoteWithLocation();
+    }, [createNoteWithLocation, setFilterText]);
 
     const handleClearFilter = useCallback(() => {
         setFilterText('');
@@ -64,7 +64,7 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                     <Input
                         ref={filterInputRef}
                         type="text"
-                        placeholder={t('side_panel.areas_section.filter')}
+                        placeholder={t('side_panel.notes_section.filter')}
                         className="h-8 w-full focus-visible:ring-0"
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
@@ -74,29 +74,29 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                     <Button
                         variant="secondary"
                         className="h-8 p-2 text-xs"
-                        onClick={handleCreateArea}
+                        onClick={handleCreateNote}
                     >
-                        <Group className="h-4" />
-                        {t('side_panel.areas_section.add_area')}
+                        <StickyNote className="h-4" />
+                        {t('side_panel.notes_section.add_note')}
                     </Button>
                 ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
-                    {areas.length === 0 ? (
+                    {notes.length === 0 ? (
                         <EmptyState
                             title={t(
-                                'side_panel.areas_section.empty_state.title'
+                                'side_panel.notes_section.empty_state.title'
                             )}
                             description={t(
-                                'side_panel.areas_section.empty_state.description'
+                                'side_panel.notes_section.empty_state.description'
                             )}
                             className="mt-20"
                         />
-                    ) : filterText && filteredAreas.length === 0 ? (
+                    ) : filterText && filteredNotes.length === 0 ? (
                         <div className="mt-10 flex flex-col items-center gap-2">
                             <div className="text-sm text-muted-foreground">
-                                {t('side_panel.areas_section.no_results')}
+                                {t('side_panel.notes_section.no_results')}
                             </div>
                             <Button
                                 variant="outline"
@@ -105,11 +105,11 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                                 className="gap-1"
                             >
                                 <X className="size-3.5" />
-                                {t('side_panel.areas_section.clear')}
+                                {t('side_panel.notes_section.clear')}
                             </Button>
                         </div>
                     ) : (
-                        <AreaList areas={filteredAreas} />
+                        <NotesList notes={filteredNotes} />
                     )}
                 </ScrollArea>
             </div>

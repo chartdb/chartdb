@@ -11,3 +11,4 @@ export * from './db-relationship';
 export * from './db-schema';
 export * from './db-table';
 export * from './diagram';
+export * from './note';

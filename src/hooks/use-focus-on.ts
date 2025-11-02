@@ -88,6 +88,44 @@ export const useFocusOn = () => {
         [fitView, setNodes, hideSidePanel, isDesktop]
     );
 
+    const focusOnNote = useCallback(
+        (noteId: string, options: FocusOptions = {}) => {
+            const { select = true } = options;
+
+            if (select) {
+                setNodes((nodes) =>
+                    nodes.map((node) =>
+                        node.id === noteId
+                            ? {
+                                  ...node,
+                                  selected: true,
+                              }
+                            : {
+                                  ...node,
+                                  selected: false,
+                              }
+                    )
+                );
+            }
+
+            fitView({
+                duration: 500,
+                maxZoom: 1,
+                minZoom: 1,
+                nodes: [
+                    {
+                        id: noteId,
+                    },
+                ],
+            });
+
+            if (!isDesktop) {
+                hideSidePanel();
+            }
+        },
+        [fitView, setNodes, hideSidePanel, isDesktop]
+    );
+
     const focusOnRelationship = useCallback(
         (
             relationshipId: string,
@@ -137,6 +175,7 @@ export const useFocusOn = () => {
     return {
         focusOnArea,
         focusOnTable,
+        focusOnNote,
         focusOnRelationship,
     };
 };

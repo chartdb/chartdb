@@ -8,7 +8,7 @@ export type SidebarSection =
     | 'customTypes'
     | 'visuals';
 
-export type VisualsTab = 'areas';
+export type VisualsTab = 'areas' | 'notes';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
@@ -28,6 +28,10 @@ export interface LayoutContext {
     openedAreaInSidebar: string | undefined;
     openAreaFromSidebar: (areaId: string) => void;
     closeAllAreasInSidebar: () => void;
+
+    openedNoteInSidebar: string | undefined;
+    openNoteFromSidebar: (noteId: string) => void;
+    closeAllNotesInSidebar: () => void;
 
     openedCustomTypeInSidebar: string | undefined;
     openCustomTypeFromSidebar: (customTypeId: string) => void;
@@ -62,6 +66,10 @@ export const layoutContext = createContext<LayoutContext>({
     openedAreaInSidebar: undefined,
     openAreaFromSidebar: emptyFn,
     closeAllAreasInSidebar: emptyFn,
+
+    openedNoteInSidebar: undefined,
+    openNoteFromSidebar: emptyFn,
+    closeAllNotesInSidebar: emptyFn,
 
     openedCustomTypeInSidebar: undefined,
     openCustomTypeFromSidebar: emptyFn,

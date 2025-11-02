@@ -6,10 +6,12 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
+import type { Note } from '@/lib/domain/note';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { TableDiffChanged } from '../../table-diff';
 import type { FieldDiffChanged } from '../../field-diff';
 import type { AreaDiffChanged } from '../../area-diff';
+import type { NoteDiffChanged } from '../../note-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -79,6 +81,20 @@ function createMockArea(overrides?: Partial<Area>): Area {
         color: 'blue',
         ...overrides,
     } as Area;
+}
+
+// Helper function to create a mock note
+function createMockNote(overrides?: Partial<Note>): Note {
+    return {
+        id: 'note-1',
+        content: 'Test note content',
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 150,
+        color: '#3b82f6',
+        ...overrides,
+    } as Note;
 }
 
 describe('generateDiff', () => {
@@ -466,6 +482,408 @@ describe('generateDiff', () => {
         });
     });
 
+    describe('Note Diffing', () => {
+        it('should detect added notes when includeNotes is true', () => {
+            const oldDiagram = createMockDiagram({ notes: [] });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote()],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('added');
+            expect(result.changedNotes.has('note-1')).toBe(true);
+        });
+
+        it('should not detect note changes when includeNotes is false', () => {
+            const oldDiagram = createMockDiagram({ notes: [] });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote()],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: false,
+                },
+            });
+
+            expect(result.diffMap.size).toBe(0);
+            expect(result.changedNotes.size).toBe(0);
+        });
+
+        it('should detect removed notes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote()],
+            });
+            const newDiagram = createMockDiagram({ notes: [] });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('removed');
+            expect(result.changedNotes.has('note-1')).toBe(true);
+        });
+
+        it('should detect note content changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ content: 'Old content' })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ content: 'New content' })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-content-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as NoteDiffChanged)?.attribute).toBe('content');
+            expect((diff as NoteDiffChanged)?.oldValue).toBe('Old content');
+            expect((diff as NoteDiffChanged)?.newValue).toBe('New content');
+        });
+
+        it('should detect note color changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ color: '#3b82f6' })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ color: '#ef4444' })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-color-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as NoteDiffChanged)?.attribute).toBe('color');
+            expect((diff as NoteDiffChanged)?.oldValue).toBe('#3b82f6');
+            expect((diff as NoteDiffChanged)?.newValue).toBe('#ef4444');
+        });
+
+        it('should detect note position changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ x: 0, y: 0 })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ x: 100, y: 200 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    attributes: {
+                        notes: ['content', 'color', 'x', 'y'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(2);
+            expect(result.diffMap.has('note-x-note-1')).toBe(true);
+            expect(result.diffMap.has('note-y-note-1')).toBe(true);
+
+            const xDiff = result.diffMap.get('note-x-note-1');
+            expect((xDiff as NoteDiffChanged)?.oldValue).toBe(0);
+            expect((xDiff as NoteDiffChanged)?.newValue).toBe(100);
+        });
+
+        it('should detect note width changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ width: 200 })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ width: 300 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    attributes: {
+                        notes: ['width'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-width-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as NoteDiffChanged)?.attribute).toBe('width');
+            expect((diff as NoteDiffChanged)?.oldValue).toBe(200);
+            expect((diff as NoteDiffChanged)?.newValue).toBe(300);
+        });
+
+        it('should detect note height changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ height: 150 })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ height: 250 })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    attributes: {
+                        notes: ['height'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('note-height-note-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as NoteDiffChanged)?.attribute).toBe('height');
+            expect((diff as NoteDiffChanged)?.oldValue).toBe(150);
+            expect((diff as NoteDiffChanged)?.newValue).toBe(250);
+        });
+
+        it('should detect multiple note dimension changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({ x: 0, y: 0, width: 200, height: 150 }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({ x: 50, y: 75, width: 300, height: 250 }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    attributes: {
+                        notes: ['x', 'y', 'width', 'height'],
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(4);
+            expect(result.diffMap.has('note-x-note-1')).toBe(true);
+            expect(result.diffMap.has('note-y-note-1')).toBe(true);
+            expect(result.diffMap.has('note-width-note-1')).toBe(true);
+            expect(result.diffMap.has('note-height-note-1')).toBe(true);
+
+            const widthDiff = result.diffMap.get('note-width-note-1');
+            expect((widthDiff as NoteDiffChanged)?.oldValue).toBe(200);
+            expect((widthDiff as NoteDiffChanged)?.newValue).toBe(300);
+
+            const heightDiff = result.diffMap.get('note-height-note-1');
+            expect((heightDiff as NoteDiffChanged)?.oldValue).toBe(150);
+            expect((heightDiff as NoteDiffChanged)?.newValue).toBe(250);
+        });
+
+        it('should detect multiple notes with different changes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({ id: 'note-1', content: 'Note 1' }),
+                    createMockNote({ id: 'note-2', content: 'Note 2' }),
+                    createMockNote({ id: 'note-3', content: 'Note 3' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        content: 'Note 1 Updated',
+                    }), // Changed
+                    createMockNote({ id: 'note-2', content: 'Note 2' }), // Unchanged
+                    // note-3 removed
+                    createMockNote({ id: 'note-4', content: 'Note 4' }), // Added
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                },
+            });
+
+            // Should detect: 1 content change, 1 removal, 1 addition
+            expect(result.diffMap.has('note-content-note-1')).toBe(true); // Changed
+            expect(result.diffMap.has('note-note-3')).toBe(true); // Removed
+            expect(result.diffMap.has('note-note-4')).toBe(true); // Added
+
+            expect(result.changedNotes.has('note-1')).toBe(true);
+            expect(result.changedNotes.has('note-3')).toBe(true);
+            expect(result.changedNotes.has('note-4')).toBe(true);
+        });
+
+        it('should use custom note matcher', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        content: 'Unique content',
+                        color: '#3b82f6',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({
+                        id: 'note-2',
+                        content: 'Unique content',
+                        color: '#ef4444',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    matchers: {
+                        note: (note, notes) =>
+                            notes.find((n) => n.content === note.content),
+                    },
+                },
+            });
+
+            // With content-based matching, note-1 should match note-2 by content
+            // and detect the color change
+            const colorChange = result.diffMap.get('note-color-note-1');
+            expect(colorChange).toBeDefined();
+            expect(colorChange?.type).toBe('changed');
+            expect((colorChange as NoteDiffChanged)?.attribute).toBe('color');
+            expect((colorChange as NoteDiffChanged)?.oldValue).toBe('#3b82f6');
+            expect((colorChange as NoteDiffChanged)?.newValue).toBe('#ef4444');
+        });
+
+        it('should only check specified note change types', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [createMockNote({ id: 'note-1', content: 'Note 1' })],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [createMockNote({ id: 'note-2', content: 'Note 2' })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    changeTypes: {
+                        notes: ['added'], // Only check for added notes
+                    },
+                },
+            });
+
+            // Should only detect added note (note-2)
+            const addedNotes = Array.from(result.diffMap.values()).filter(
+                (diff) => diff.type === 'added' && diff.object === 'note'
+            );
+            expect(addedNotes.length).toBe(1);
+
+            // Should not detect removed note (note-1)
+            const removedNotes = Array.from(result.diffMap.values()).filter(
+                (diff) => diff.type === 'removed' && diff.object === 'note'
+            );
+            expect(removedNotes.length).toBe(0);
+        });
+
+        it('should only check specified note attributes', () => {
+            const oldDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        content: 'Old content',
+                        color: '#3b82f6',
+                        x: 0,
+                        y: 0,
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        content: 'New content',
+                        color: '#ef4444',
+                        x: 100,
+                        y: 200,
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    includeNotes: true,
+                    attributes: {
+                        notes: ['content'], // Only check content changes
+                    },
+                },
+            });
+
+            // Should only detect content change
+            const contentChanges = Array.from(result.diffMap.values()).filter(
+                (diff) =>
+                    diff.type === 'changed' &&
+                    diff.attribute === 'content' &&
+                    diff.object === 'note'
+            );
+            expect(contentChanges.length).toBe(1);
+
+            // Should not detect color or position changes
+            const otherChanges = Array.from(result.diffMap.values()).filter(
+                (diff) =>
+                    diff.type === 'changed' &&
+                    (diff.attribute === 'color' ||
+                        diff.attribute === 'x' ||
+                        diff.attribute === 'y') &&
+                    diff.object === 'note'
+            );
+            expect(otherChanges.length).toBe(0);
+        });
+    });
+
     describe('Custom Matchers', () => {
         it('should use custom table matcher to match by name', () => {
             const oldDiagram = createMockDiagram({
@@ -708,7 +1126,7 @@ describe('generateDiff', () => {
     });
 
     describe('Complex Scenarios', () => {
-        it('should detect all dimensional changes for tables and areas', () => {
+        it('should detect all dimensional changes for tables, areas, and notes', () => {
             const oldDiagram = createMockDiagram({
                 tables: [
                     createMockTable({
@@ -725,6 +1143,15 @@ describe('generateDiff', () => {
                         y: 0,
                         width: 200,
                         height: 150,
+                    }),
+                ],
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        x: 0,
+                        y: 0,
+                        width: 300,
+                        height: 200,
                     }),
                 ],
             });
@@ -747,6 +1174,15 @@ describe('generateDiff', () => {
                         height: 175,
                     }),
                 ],
+                notes: [
+                    createMockNote({
+                        id: 'note-1',
+                        x: 40,
+                        y: 50,
+                        width: 350,
+                        height: 225,
+                    }),
+                ],
             });
 
             const result = generateDiff({
@@ -754,9 +1190,11 @@ describe('generateDiff', () => {
                 newDiagram,
                 options: {
                     includeAreas: true,
+                    includeNotes: true,
                     attributes: {
                         tables: ['x', 'y', 'width'],
                         areas: ['x', 'y', 'width', 'height'],
+                        notes: ['x', 'y', 'width', 'height'],
                     },
                 },
             });
@@ -772,6 +1210,12 @@ describe('generateDiff', () => {
             expect(result.diffMap.has('area-width-area-1')).toBe(true);
             expect(result.diffMap.has('area-height-area-1')).toBe(true);
 
+            // Note dimensional changes
+            expect(result.diffMap.has('note-x-note-1')).toBe(true);
+            expect(result.diffMap.has('note-y-note-1')).toBe(true);
+            expect(result.diffMap.has('note-width-note-1')).toBe(true);
+            expect(result.diffMap.has('note-height-note-1')).toBe(true);
+
             // Verify the correct values
             const tableWidthDiff = result.diffMap.get('table-width-table-1');
             expect((tableWidthDiff as TableDiffChanged)?.oldValue).toBe(100);
@@ -784,6 +1228,14 @@ describe('generateDiff', () => {
             const areaHeightDiff = result.diffMap.get('area-height-area-1');
             expect((areaHeightDiff as AreaDiffChanged)?.oldValue).toBe(150);
             expect((areaHeightDiff as AreaDiffChanged)?.newValue).toBe(175);
+
+            const noteWidthDiff = result.diffMap.get('note-width-note-1');
+            expect((noteWidthDiff as NoteDiffChanged)?.oldValue).toBe(300);
+            expect((noteWidthDiff as NoteDiffChanged)?.newValue).toBe(350);
+
+            const noteHeightDiff = result.diffMap.get('note-height-note-1');
+            expect((noteHeightDiff as NoteDiffChanged)?.oldValue).toBe(200);
+            expect((noteHeightDiff as NoteDiffChanged)?.newValue).toBe(225);
         });
 
         it('should handle multiple simultaneous changes', () => {
@@ -852,6 +1304,7 @@ describe('generateDiff', () => {
             expect(result.changedTables.size).toBe(0);
             expect(result.changedFields.size).toBe(0);
             expect(result.changedAreas.size).toBe(0);
+            expect(result.changedNotes.size).toBe(0);
         });
 
         it('should handle diagrams with undefined collections', () => {
@@ -859,11 +1312,13 @@ describe('generateDiff', () => {
                 tables: undefined,
                 relationships: undefined,
                 areas: undefined,
+                notes: undefined,
             });
             const diagram2 = createMockDiagram({
                 tables: [createMockTable({ id: 'table-1' })],
                 relationships: [createMockRelationship({ id: 'rel-1' })],
                 areas: [createMockArea({ id: 'area-1' })],
+                notes: [createMockNote({ id: 'note-1' })],
             });
 
             const result = generateDiff({
@@ -871,6 +1326,7 @@ describe('generateDiff', () => {
                 newDiagram: diagram2,
                 options: {
                     includeAreas: true,
+                    includeNotes: true,
                 },
             });
 
@@ -878,6 +1334,7 @@ describe('generateDiff', () => {
             expect(result.diffMap.has('table-table-1')).toBe(true);
             expect(result.diffMap.has('relationship-rel-1')).toBe(true);
             expect(result.diffMap.has('area-area-1')).toBe(true);
+            expect(result.diffMap.has('note-note-1')).toBe(true);
         });
     });
 });

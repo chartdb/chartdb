@@ -7,7 +7,6 @@ export const hr: LanguageTranslation = {
             browse: 'Pregledaj',
             tables: 'Tablice',
             refs: 'Refs',
-            areas: 'Područja',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
             visuals: 'Vizuali',
@@ -234,6 +233,27 @@ export const hr: LanguageTranslation = {
                 visuals: 'Vizuali',
                 tabs: {
                     areas: 'Područja',
+                    notes: 'Bilješke',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filtriraj',
+                add_note: 'Dodaj Bilješku',
+                no_results: 'Nije pronađena nijedna bilješka',
+                clear: 'Očisti Filter',
+                empty_state: {
+                    title: 'Nema Bilješki',
+                    description:
+                        'Kreirajte bilješku za dodavanje tekstualnih napomena na platnu',
+                },
+                note: {
+                    empty_note: 'Prazna bilješka',
+                    note_actions: {
+                        title: 'Akcije Bilješke',
+                        edit_content: 'Uredi Sadržaj',
+                        delete_note: 'Obriši Bilješku',
+                    },
                 },
             },
 
@@ -486,6 +506,7 @@ export const hr: LanguageTranslation = {
             new_view: 'Novi Pogled',
             new_relationship: 'Nova veza',
             new_area: 'Novo područje',
+            new_note: 'Nova Bilješka',
         },
 
         table_node_context_menu: {

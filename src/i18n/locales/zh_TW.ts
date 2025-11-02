@@ -7,7 +7,6 @@ export const zh_TW: LanguageTranslation = {
             browse: '瀏覽',
             tables: '表格',
             refs: 'Refs',
-            areas: '區域',
             dependencies: '相依性',
             custom_types: '自定義類型',
             visuals: '視覺效果',
@@ -235,6 +234,26 @@ export const zh_TW: LanguageTranslation = {
                 visuals: '視覺效果',
                 tabs: {
                     areas: 'Areas',
+                    notes: '筆記',
+                },
+            },
+
+            notes_section: {
+                filter: '篩選',
+                add_note: '新增筆記',
+                no_results: '未找到筆記',
+                clear: '清除篩選',
+                empty_state: {
+                    title: '沒有筆記',
+                    description: '建立筆記以在畫布上新增文字註解',
+                },
+                note: {
+                    empty_note: '空白筆記',
+                    note_actions: {
+                        title: '筆記操作',
+                        edit_content: '編輯內容',
+                        delete_note: '刪除筆記',
+                    },
                 },
             },
 
@@ -486,6 +505,7 @@ export const zh_TW: LanguageTranslation = {
             new_relationship: '新建關聯',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: '新筆記',
         },
 
         table_node_context_menu: {

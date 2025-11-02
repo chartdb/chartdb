@@ -11,6 +11,7 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import type { Note } from '@/lib/domain/note';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -39,6 +40,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             >;
             db_custom_types: EntityTable<
                 DBCustomType & { diagramId: string },
+                'id' // primary key "id" (for the typings only)
+            >;
+            notes: EntityTable<
+                Note & { diagramId: string },
                 'id' // primary key "id" (for the typings only)
             >;
             config: EntityTable<
@@ -215,6 +220,23 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             .upgrade((tx) => {
                 tx.table('config').clear();
             });
+
+        dexieDB.version(13).stores({
+            diagrams:
+                '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
+            db_tables:
+                '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
+            db_relationships:
+                '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+            db_dependencies:
+                '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
+            areas: '++id, diagramId, name, x, y, width, height, color',
+            db_custom_types:
+                '++id, diagramId, schema, type, kind, values, fields',
+            config: '++id, defaultDiagramId',
+            diagram_filters: 'diagramId, tableIds, schemasIds',
+            notes: '++id, diagramId, content, x, y, width, height, color',
+        });
 
         dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);
@@ -550,6 +572,56 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             [db]
         );
 
+    // Note operations
+    const addNote: StorageContext['addNote'] = useCallback(
+        async ({ note, diagramId }) => {
+            await db.notes.add({
+                ...note,
+                diagramId,
+            });
+        },
+        [db]
+    );
+
+    const getNote: StorageContext['getNote'] = useCallback(
+        async ({ diagramId, id }) => {
+            return await db.notes.get({ id, diagramId });
+        },
+        [db]
+    );
+
+    const updateNote: StorageContext['updateNote'] = useCallback(
+        async ({ id, attributes }) => {
+            await db.notes.update(id, attributes);
+        },
+        [db]
+    );
+
+    const deleteNote: StorageContext['deleteNote'] = useCallback(
+        async ({ diagramId, id }) => {
+            await db.notes.where({ id, diagramId }).delete();
+        },
+        [db]
+    );
+
+    const listNotes: StorageContext['listNotes'] = useCallback(
+        async (diagramId) => {
+            return await db.notes
+                .where('diagramId')
+                .equals(diagramId)
+                .toArray();
+        },
+        [db]
+    );
+
+    const deleteDiagramNotes: StorageContext['deleteDiagramNotes'] =
+        useCallback(
+            async (diagramId) => {
+                await db.notes.where('diagramId').equals(diagramId).delete();
+            },
+            [db]
+        );
+
     const addDiagram: StorageContext['addDiagram'] = useCallback(
         async ({ diagram }) => {
             const promises = [];
@@ -597,9 +669,22 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 )
             );
 
+            const notes = diagram.notes ?? [];
+            promises.push(
+                ...notes.map((note) => addNote({ diagramId: diagram.id, note }))
+            );
+
             await Promise.all(promises);
         },
-        [db, addArea, addCustomType, addDependency, addRelationship, addTable]
+        [
+            db,
+            addArea,
+            addCustomType,
+            addDependency,
+            addRelationship,
+            addTable,
+            addNote,
+        ]
     );
 
     const listDiagrams: StorageContext['listDiagrams'] = useCallback(
@@ -610,6 +695,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 includeDependencies: false,
                 includeAreas: false,
                 includeCustomTypes: false,
+                includeNotes: false,
             }
         ): Promise<Diagram[]> => {
             let diagrams = await db.diagrams.toArray();
@@ -663,6 +749,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 );
             }
 
+            if (options.includeNotes) {
+                diagrams = await Promise.all(
+                    diagrams.map(async (diagram) => {
+                        diagram.notes = await listNotes(diagram.id);
+                        return diagram;
+                    })
+                );
+            }
+
             return diagrams;
         },
         [
@@ -672,6 +767,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             listDependencies,
             listRelationships,
             listTables,
+            listNotes,
         ]
     );
 
@@ -684,6 +780,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 includeDependencies: false,
                 includeAreas: false,
                 includeCustomTypes: false,
+                includeNotes: false,
             }
         ): Promise<Diagram | undefined> => {
             const diagram = await db.diagrams.get(id);
@@ -712,6 +809,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 diagram.customTypes = await listCustomTypes(id);
             }
 
+            if (options.includeNotes) {
+                diagram.notes = await listNotes(id);
+            }
+
             return diagram;
         },
         [
@@ -721,6 +822,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             listDependencies,
             listRelationships,
             listTables,
+            listNotes,
         ]
     );
 
@@ -749,6 +851,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                         .where('diagramId')
                         .equals(id)
                         .modify({ diagramId: attributes.id }),
+                    db.notes.where('diagramId').equals(id).modify({
+                        diagramId: attributes.id,
+                    }),
                 ]);
             }
         },
@@ -764,6 +869,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 db.db_dependencies.where('diagramId').equals(id).delete(),
                 db.areas.where('diagramId').equals(id).delete(),
                 db.db_custom_types.where('diagramId').equals(id).delete(),
+                db.notes.where('diagramId').equals(id).delete(),
             ]);
         },
         [db]
@@ -810,6 +916,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 deleteCustomType,
                 listCustomTypes,
                 deleteDiagramCustomTypes,
+                addNote,
+                getNote,
+                updateNote,
+                deleteNote,
+                listNotes,
+                deleteDiagramNotes,
                 getDiagramFilter,
                 updateDiagramFilter,
                 deleteDiagramFilter,

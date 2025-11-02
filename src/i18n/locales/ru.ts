@@ -7,7 +7,6 @@ export const ru: LanguageTranslation = {
             browse: 'Обзор',
             tables: 'Таблицы',
             refs: 'Ссылки',
-            areas: 'Области',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
             visuals: 'Визуальные элементы',
@@ -236,6 +235,27 @@ export const ru: LanguageTranslation = {
                 visuals: 'Визуальные элементы',
                 tabs: {
                     areas: 'Области',
+                    notes: 'Заметки',
+                },
+            },
+
+            notes_section: {
+                filter: 'Фильтр',
+                add_note: 'Добавить Заметку',
+                no_results: 'Заметки не найдены',
+                clear: 'Очистить Фильтр',
+                empty_state: {
+                    title: 'Нет Заметок',
+                    description:
+                        'Создайте заметку, чтобы добавить текстовые аннотации на холсте',
+                },
+                note: {
+                    empty_note: 'Пустая заметка',
+                    note_actions: {
+                        title: 'Действия с Заметкой',
+                        edit_content: 'Редактировать Содержимое',
+                        delete_note: 'Удалить Заметку',
+                    },
                 },
             },
 
@@ -490,6 +510,7 @@ export const ru: LanguageTranslation = {
             new_view: 'Новое представление',
             new_relationship: 'Создать отношение',
             new_area: 'Новая область',
+            new_note: 'Новая Заметка',
         },
 
         table_node_context_menu: {

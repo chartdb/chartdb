@@ -7,7 +7,6 @@ export const gu: LanguageTranslation = {
             browse: 'બ્રાઉજ',
             tables: 'ટેબલો',
             refs: 'રેફ્સ',
-            areas: 'ક્ષેત્રો',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
             visuals: 'Visuals',
@@ -240,6 +239,27 @@ export const gu: LanguageTranslation = {
                 visuals: 'Visuals',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'નોંધો',
+                },
+            },
+
+            notes_section: {
+                filter: 'ફિલ્ટર',
+                add_note: 'નોંધ ઉમેરો',
+                no_results: 'કોઈ નોંધો મળી નથી',
+                clear: 'ફિલ્ટર સાફ કરો',
+                empty_state: {
+                    title: 'કોઈ નોંધો નથી',
+                    description:
+                        'કેનવાસ પર ટેક્સ્ટ એનોટેશન ઉમેરવા માટે નોંધ બનાવો',
+                },
+                note: {
+                    empty_note: 'ખાલી નોંધ',
+                    note_actions: {
+                        title: 'નોંધ ક્રિયાઓ',
+                        edit_content: 'સામગ્રી સંપાદિત કરો',
+                        delete_note: 'નોંધ કાઢી નાખો',
+                    },
                 },
             },
 
@@ -494,6 +514,7 @@ export const gu: LanguageTranslation = {
             new_relationship: 'નવો સંબંધ',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'નવી નોંધ',
         },
 
         table_node_context_menu: {

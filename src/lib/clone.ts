@@ -6,6 +6,7 @@ import type { DBIndex } from './domain/db-index';
 import type { DBRelationship } from './domain/db-relationship';
 import type { DBTable } from './domain/db-table';
 import type { Diagram } from './domain/diagram';
+import type { Note } from './domain/note';
 import { generateId as defaultGenerateId } from './utils';
 
 const generateIdsMapFromTable = (
@@ -47,6 +48,10 @@ const generateIdsMapFromDiagram = (
 
     diagram.areas?.forEach((area) => {
         idsMap.set(area.id, generateId());
+    });
+
+    diagram.notes?.forEach((note) => {
+        idsMap.set(note.id, generateId());
     });
 
     diagram.customTypes?.forEach((customType) => {
@@ -218,6 +223,21 @@ export const cloneDiagram = (
             })
             .filter((area): area is Area => area !== null) ?? [];
 
+    const notes: Note[] =
+        diagram.notes
+            ?.map((note) => {
+                const id = getNewId(note.id);
+                if (!id) {
+                    return null;
+                }
+
+                return {
+                    ...note,
+                    id,
+                } satisfies Note;
+            })
+            .filter((note): note is Note => note !== null) ?? [];
+
     const customTypes: DBCustomType[] =
         diagram.customTypes
             ?.map((customType) => {
@@ -242,6 +262,7 @@ export const cloneDiagram = (
             relationships,
             tables,
             areas,
+            notes,
             customTypes,
             createdAt: diagram.createdAt
                 ? new Date(diagram.createdAt)

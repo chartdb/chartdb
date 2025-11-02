@@ -7,7 +7,6 @@ export const es: LanguageTranslation = {
             browse: 'Examinar',
             tables: 'Tablas',
             refs: 'Refs',
-            areas: 'Áreas',
             dependencies: 'Dependencias',
             custom_types: 'Tipos Personalizados',
             visuals: 'Visuales',
@@ -238,6 +237,27 @@ export const es: LanguageTranslation = {
                 visuals: 'Visuales',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'Notas',
+                },
+            },
+
+            notes_section: {
+                filter: 'Filtrar',
+                add_note: 'Agregar Nota',
+                no_results: 'No se encontraron notas',
+                clear: 'Limpiar Filtro',
+                empty_state: {
+                    title: 'Sin Notas',
+                    description:
+                        'Crea una nota para agregar anotaciones de texto en el lienzo',
+                },
+                note: {
+                    empty_note: 'Nota vacía',
+                    note_actions: {
+                        title: 'Acciones de Nota',
+                        edit_content: 'Editar Contenido',
+                        delete_note: 'Eliminar Nota',
+                    },
                 },
             },
 
@@ -495,6 +515,7 @@ export const es: LanguageTranslation = {
             new_relationship: 'Nueva Relación',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'Nueva Nota',
         },
 
         table_node_context_menu: {

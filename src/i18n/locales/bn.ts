@@ -7,7 +7,6 @@ export const bn: LanguageTranslation = {
             browse: 'ব্রাউজ',
             tables: 'টেবিল',
             refs: 'রেফস',
-            areas: 'এলাকা',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
             visuals: 'ভিজ্যুয়াল',
@@ -239,6 +238,27 @@ export const bn: LanguageTranslation = {
                 visuals: 'ভিজ্যুয়াল',
                 tabs: {
                     areas: 'Areas',
+                    notes: 'নোট',
+                },
+            },
+
+            notes_section: {
+                filter: 'ফিল্টার',
+                add_note: 'নোট যোগ করুন',
+                no_results: 'কোনো নোট পাওয়া যায়নি',
+                clear: 'ফিল্টার সাফ করুন',
+                empty_state: {
+                    title: 'কোনো নোট নেই',
+                    description:
+                        'ক্যানভাসে টেক্সট টীকা যোগ করতে একটি নোট তৈরি করুন',
+                },
+                note: {
+                    empty_note: 'খালি নোট',
+                    note_actions: {
+                        title: 'নোট ক্রিয়া',
+                        edit_content: 'বিষয়বস্তু সম্পাদনা',
+                        delete_note: 'নোট মুছুন',
+                    },
                 },
             },
 
@@ -493,6 +513,7 @@ export const bn: LanguageTranslation = {
             new_relationship: 'নতুন সম্পর্ক',
             // TODO: Translate
             new_area: 'New Area',
+            new_note: 'নতুন নোট',
         },
 
         table_node_context_menu: {

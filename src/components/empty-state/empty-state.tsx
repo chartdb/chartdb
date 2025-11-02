@@ -1,9 +1,16 @@
 import React, { forwardRef } from 'react';
 import EmptyStateImage from '@/assets/empty_state.png';
 import EmptyStateImageDark from '@/assets/empty_state_dark.png';
-import { Label } from '@/components/label/label';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '../empty/empty';
 
 export interface EmptyStateProps {
     title: string;
@@ -38,26 +45,29 @@ export const EmptyState = forwardRef<
                     className
                 )}
             >
-                <img
-                    src={
-                        effectiveTheme === 'dark'
-                            ? EmptyStateImageDark
-                            : EmptyStateImage
-                    }
-                    alt="Empty state"
-                    className={cn('mb-2 w-20', imageClassName)}
-                />
-                <Label className={cn('text-base', titleClassName)}>
-                    {title}
-                </Label>
-                <Label
-                    className={cn(
-                        'text-sm text-center font-normal text-muted-foreground',
-                        descriptionClassName
-                    )}
-                >
-                    {description}
-                </Label>
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            {/* <Group /> */}
+                            <img
+                                src={
+                                    effectiveTheme === 'dark'
+                                        ? EmptyStateImageDark
+                                        : EmptyStateImage
+                                }
+                                alt="Empty state"
+                                className={cn('p-2', imageClassName)}
+                            />
+                        </EmptyMedia>
+                        <EmptyTitle className={titleClassName}>
+                            {title}
+                        </EmptyTitle>
+                        <EmptyDescription className={descriptionClassName}>
+                            {description}
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent />
+                </Empty>
             </div>
         );
     }
