@@ -11,6 +11,14 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import type { User, PublicUser } from '@/lib/domain/user';
+import { sanitizeUsername } from '@/lib/domain/user';
+import type { DiagramCollaborator } from '@/lib/domain/diagram-collaborator';
+import type { AuditLogEntry } from '@/lib/domain/audit-log';
+import type { DiagramVersion } from '@/lib/domain/diagram-version';
+import type { DiagramActivity } from '@/lib/domain/diagram-activity';
+import { generateId } from '@/lib/utils';
+import { hashPassword } from '@/lib/crypto';
 
 export const StorageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -49,6 +57,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 DiagramFilter & { diagramId: string },
                 'diagramId' // primary key "id" (for the typings only)
             >;
+            users: EntityTable<User, 'id'>;
+            diagram_collaborators: EntityTable<DiagramCollaborator, 'id'>;
+            audit_logs: EntityTable<AuditLogEntry, 'id'>;
+            diagram_versions: EntityTable<DiagramVersion, 'id'>;
+            diagram_activity: EntityTable<DiagramActivity, 'id'>;
         };
 
         // Schema declaration:
@@ -214,6 +227,47 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             })
             .upgrade((tx) => {
                 tx.table('config').clear();
+            });
+
+        dexieDB
+            .version(13)
+            .stores({
+                diagrams:
+                    '++id, name, databaseType, databaseEdition, ownerId, visibility, allowEditorsToInvite, shareToken, createdAt, updatedAt',
+                db_tables:
+                    '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
+                db_relationships:
+                    '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
+                db_dependencies:
+                    '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
+                areas: '++id, diagramId, name, x, y, width, height, color',
+                db_custom_types:
+                    '++id, diagramId, schema, type, kind, values, fields',
+                config: '++id, defaultDiagramId',
+                diagram_filters: 'diagramId, tableIds, schemasIds',
+                users: 'id, username, displayName, role, active, mustChangePassword, createdAt, updatedAt, lastLoginAt',
+                diagram_collaborators:
+                    'id, diagramId, userId, role, canInvite, invitedBy, createdAt, updatedAt',
+                audit_logs:
+                    'id, action, actorId, targetId, targetType, createdAt',
+                diagram_versions:
+                    'id, diagramId, version, name, createdAt, createdBy',
+                diagram_activity: 'id, diagramId, userId, type, createdAt',
+            })
+            .upgrade((tx) => {
+                tx.table('diagrams')
+                    .toCollection()
+                    .modify((diagram: Diagram) => {
+                        if (!diagram.ownerId) {
+                            diagram.ownerId = 'admin';
+                        }
+                        if (!diagram.visibility) {
+                            diagram.visibility = 'private';
+                        }
+                        if (diagram.allowEditorsToInvite === undefined) {
+                            diagram.allowEditorsToInvite = false;
+                        }
+                    });
             });
 
         dexieDB.on('ready', async () => {
@@ -550,6 +604,267 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             [db]
         );
 
+    const ensureDefaultAdminUser: StorageContext['ensureDefaultAdminUser'] =
+        useCallback(async () => {
+            const existingAdmin = await db.users.get('admin');
+
+            if (existingAdmin) {
+                return;
+            }
+
+            const now = new Date();
+            const passwordHash = await hashPassword('ABC@2025');
+
+            await db.users.add({
+                id: 'admin',
+                username: 'admin',
+                displayName: 'Administrator',
+                passwordHash,
+                role: 'admin',
+                active: true,
+                mustChangePassword: true,
+                createdAt: now,
+                updatedAt: now,
+            });
+        }, [db]);
+
+    const createUser: StorageContext['createUser'] = useCallback(
+        async ({
+            username,
+            displayName,
+            role,
+            passwordHash,
+            mustChangePassword = false,
+            active = true,
+        }) => {
+            const normalizedUsername = sanitizeUsername(username);
+            const existing = await db.users
+                .where('username')
+                .equals(normalizedUsername)
+                .first();
+
+            if (existing) {
+                throw new Error('Username already exists');
+            }
+
+            const now = new Date();
+            const user: User = {
+                id: generateId(),
+                username: normalizedUsername,
+                displayName,
+                role,
+                passwordHash,
+                active,
+                mustChangePassword,
+                createdAt: now,
+                updatedAt: now,
+            };
+
+            await db.users.add(user);
+
+            return user;
+        },
+        [db]
+    );
+
+    const updateUser: StorageContext['updateUser'] = useCallback(
+        async ({ id, attributes }) => {
+            const updates: Partial<User> = { ...attributes };
+
+            if (updates.username) {
+                updates.username = sanitizeUsername(updates.username);
+            }
+
+            updates.updatedAt = new Date();
+
+            await db.users.update(id, updates);
+        },
+        [db]
+    );
+
+    const setUserPassword: StorageContext['setUserPassword'] = useCallback(
+        async ({ id, passwordHash, mustChangePassword }) => {
+            await db.users.update(id, {
+                passwordHash,
+                mustChangePassword: mustChangePassword ?? false,
+                updatedAt: new Date(),
+            });
+        },
+        [db]
+    );
+
+    const getUserByUsername: StorageContext['getUserByUsername'] = useCallback(
+        async (username: string) => {
+            return await db.users
+                .where('username')
+                .equals(sanitizeUsername(username))
+                .first();
+        },
+        [db]
+    );
+
+    const getUserById: StorageContext['getUserById'] = useCallback(
+        async (id: string) => {
+            return await db.users.get(id);
+        },
+        [db]
+    );
+
+    const listUsers: StorageContext['listUsers'] = useCallback(async () => {
+        const users = await db.users.toArray();
+        return users.map<PublicUser>(
+            ({
+                id,
+                username,
+                displayName,
+                role,
+                active,
+                mustChangePassword,
+                lastLoginAt,
+            }) => ({
+                id,
+                username,
+                displayName,
+                role,
+                active,
+                mustChangePassword,
+                lastLoginAt,
+            })
+        );
+    }, [db]);
+
+    const touchUserLogin: StorageContext['touchUserLogin'] = useCallback(
+        async (id: string) => {
+            const lastLoginAt = new Date();
+            await db.users.update(id, {
+                lastLoginAt,
+                updatedAt: lastLoginAt,
+            });
+        },
+        [db]
+    );
+
+    const listDiagramCollaborators: StorageContext['listDiagramCollaborators'] =
+        useCallback(
+            async (diagramId: string) => {
+                return await db.diagram_collaborators
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .toArray();
+            },
+            [db]
+        );
+
+    const addDiagramCollaborator: StorageContext['addDiagramCollaborator'] =
+        useCallback(
+            async ({ collaborator }) => {
+                await db.diagram_collaborators.add(collaborator);
+            },
+            [db]
+        );
+
+    const updateDiagramCollaborator: StorageContext['updateDiagramCollaborator'] =
+        useCallback(
+            async ({ id, attributes }) => {
+                await db.diagram_collaborators.update(id, {
+                    ...attributes,
+                    updatedAt: new Date(),
+                });
+            },
+            [db]
+        );
+
+    const removeDiagramCollaborator: StorageContext['removeDiagramCollaborator'] =
+        useCallback(
+            async (id: string) => {
+                await db.diagram_collaborators.delete(id);
+            },
+            [db]
+        );
+
+    const getDiagramCollaborator: StorageContext['getDiagramCollaborator'] =
+        useCallback(
+            async ({ diagramId, userId }) => {
+                return await db.diagram_collaborators
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .and((collaborator) => collaborator.userId === userId)
+                    .first();
+            },
+            [db]
+        );
+
+    const updateDiagramVisibility: StorageContext['updateDiagramVisibility'] =
+        useCallback(
+            async ({
+                diagramId,
+                visibility,
+                shareToken,
+                allowEditorsToInvite,
+            }) => {
+                await db.diagrams.update(diagramId, {
+                    visibility,
+                    shareToken,
+                    allowEditorsToInvite,
+                    updatedAt: new Date(),
+                });
+            },
+            [db]
+        );
+
+    const addAuditLogEntry: StorageContext['addAuditLogEntry'] = useCallback(
+        async (entry: AuditLogEntry) => {
+            await db.audit_logs.add(entry);
+        },
+        [db]
+    );
+
+    const listAuditLogs: StorageContext['listAuditLogs'] =
+        useCallback(async () => {
+            return await db.audit_logs.orderBy('createdAt').reverse().toArray();
+        }, [db]);
+
+    const addDiagramVersion: StorageContext['addDiagramVersion'] = useCallback(
+        async ({ version }) => {
+            await db.diagram_versions.add(version);
+        },
+        [db]
+    );
+
+    const listDiagramVersions: StorageContext['listDiagramVersions'] =
+        useCallback(
+            async (diagramId: string) => {
+                const versions = await db.diagram_versions
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .sortBy('createdAt');
+
+                return versions.reverse();
+            },
+            [db]
+        );
+
+    const addDiagramActivity: StorageContext['addDiagramActivity'] =
+        useCallback(
+            async (activity) => {
+                await db.diagram_activity.add(activity);
+            },
+            [db]
+        );
+
+    const listDiagramActivity: StorageContext['listDiagramActivity'] =
+        useCallback(
+            async (diagramId: string) => {
+                const activity = await db.diagram_activity
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .sortBy('createdAt');
+
+                return activity.reverse();
+            },
+            [db]
+        );
+
     const addDiagram: StorageContext['addDiagram'] = useCallback(
         async ({ diagram }) => {
             const promises = [];
@@ -559,6 +874,10 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     name: diagram.name,
                     databaseType: diagram.databaseType,
                     databaseEdition: diagram.databaseEdition,
+                    ownerId: diagram.ownerId,
+                    visibility: diagram.visibility ?? 'private',
+                    allowEditorsToInvite: diagram.allowEditorsToInvite ?? false,
+                    shareToken: diagram.shareToken,
                     createdAt: diagram.createdAt,
                     updatedAt: diagram.updatedAt,
                 })
@@ -813,6 +1132,26 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 getDiagramFilter,
                 updateDiagramFilter,
                 deleteDiagramFilter,
+                ensureDefaultAdminUser,
+                createUser,
+                updateUser,
+                setUserPassword,
+                getUserByUsername,
+                getUserById,
+                listUsers,
+                touchUserLogin,
+                listDiagramCollaborators,
+                addDiagramCollaborator,
+                updateDiagramCollaborator,
+                removeDiagramCollaborator,
+                getDiagramCollaborator,
+                updateDiagramVisibility,
+                addAuditLogEntry,
+                listAuditLogs,
+                addDiagramVersion,
+                listDiagramVersions,
+                addDiagramActivity,
+                listDiagramActivity,
             }}
         >
             {children}

@@ -16,6 +16,10 @@ export interface Diagram {
     name: string;
     databaseType: DatabaseType;
     databaseEdition?: DatabaseEdition;
+    ownerId?: string;
+    visibility?: 'private' | 'link_view' | 'link_edit';
+    allowEditorsToInvite?: boolean;
+    shareToken?: string;
     tables?: DBTable[];
     relationships?: DBRelationship[];
     dependencies?: DBDependency[];
@@ -30,6 +34,10 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     name: z.string(),
     databaseType: z.nativeEnum(DatabaseType),
     databaseEdition: z.nativeEnum(DatabaseEdition).optional(),
+    ownerId: z.string().optional(),
+    visibility: z.enum(['private', 'link_view', 'link_edit']).optional(),
+    allowEditorsToInvite: z.boolean().optional(),
+    shareToken: z.string().optional(),
     tables: z.array(dbTableSchema).optional(),
     relationships: z.array(dbRelationshipSchema).optional(),
     dependencies: z.array(dbDependencySchema).optional(),

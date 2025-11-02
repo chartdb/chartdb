@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
-import { generateDiagramId } from '@/lib/utils';
+import { generateDiagramId, generateId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -27,6 +27,7 @@ import {
     importDBMLToDiagram,
 } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
+import { useAuth } from '@/hooks/use-auth';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -35,6 +36,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { diagramId } = useChartDB();
     const { t } = useTranslation();
+    const { currentUser } = useAuth();
     const [importMethod, setImportMethod] = useState<ImportMethod>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
@@ -77,6 +79,17 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
+
+    const applyOwnership = useCallback(
+        (diagram: Diagram): Diagram => ({
+            ...diagram,
+            ownerId: currentUser?.id ?? 'admin',
+            visibility: diagram.visibility ?? 'private',
+            allowEditorsToInvite: diagram.allowEditorsToInvite ?? false,
+            shareToken: diagram.shareToken ?? generateId(),
+        }),
+        [currentUser?.id]
+    );
 
     const importNewDiagram = useCallback(
         async ({
@@ -127,13 +140,19 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 });
             }
 
-            await addDiagram({ diagram });
+            if (!diagram) {
+                throw new Error('Unable to generate diagram');
+            }
+
+            const ownedDiagram = applyOwnership(diagram);
+
+            await addDiagram({ diagram: ownedDiagram });
             await updateConfig({
-                config: { defaultDiagramId: diagram.id },
+                config: { defaultDiagramId: ownedDiagram.id },
             });
 
             closeCreateDiagramDialog();
-            navigate(`/diagrams/${diagram.id}`);
+            navigate(`/diagrams/${ownedDiagram.id}`);
         },
         [
             importMethod,
@@ -145,11 +164,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updateConfig,
             scriptResult,
             diagramNumber,
+            applyOwnership,
         ]
     );
 
     const createEmptyDiagram = useCallback(async () => {
-        const diagram: Diagram = {
+        const diagram: Diagram = applyOwnership({
             id: generateDiagramId(),
             name: `Diagram ${diagramNumber}`,
             databaseType: databaseType ?? DatabaseType.GENERIC,
@@ -159,7 +179,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     : databaseEdition,
             createdAt: new Date(),
             updatedAt: new Date(),
-        };
+        });
 
         await addDiagram({ diagram });
         await updateConfig({ config: { defaultDiagramId: diagram.id } });
@@ -173,6 +193,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         navigate,
         updateConfig,
         diagramNumber,
+        applyOwnership,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {

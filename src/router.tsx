@@ -1,153 +1,94 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { createBrowserRouter } from 'react-router-dom';
-import type { TemplatePageLoaderData } from './pages/template-page/template-page';
-import type { TemplatesPageLoaderData } from './pages/templates-page/templates-page';
-import { getTemplatesAndAllTags } from './templates-data/template-utils';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 const routes: RouteObject[] = [
-    ...['', 'diagrams/:diagramId'].map((path) => ({
-        path,
-        async lazy() {
-            const { EditorPage } = await import(
-                './pages/editor-page/editor-page'
-            );
-
-            return {
-                element: <EditorPage />,
-            };
-        },
-    })),
     {
-        path: 'examples',
+        path: '/login',
         async lazy() {
-            const { ExamplesPage } = await import(
-                './pages/examples-page/examples-page'
-            );
+            const { LoginPage } = await import('./pages/login/login-page');
             return {
-                element: <ExamplesPage />,
+                element: <LoginPage />,
             };
         },
     },
     {
-        id: 'templates',
-        path: 'templates',
+        path: '/',
         async lazy() {
-            const { TemplatesPage } = await import(
-                './pages/templates-page/templates-page'
+            const { ProtectedLayout } = await import(
+                './pages/app-shell/protected-layout'
             );
             return {
-                element: <TemplatesPage />,
+                element: <ProtectedLayout />,
             };
         },
-
-        loader: async (): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags();
-
-            return {
-                allTags: tags,
-                templates,
-            };
-        },
-    },
-    {
-        id: 'templates_featured',
-        path: 'templates/featured',
-        async lazy() {
-            const { TemplatesPage } = await import(
-                './pages/templates-page/templates-page'
-            );
-            return {
-                element: <TemplatesPage />,
-            };
-        },
-        loader: async (): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags({
-                featured: true,
-            });
-
-            return {
-                allTags: tags,
-                templates,
-            };
-        },
-    },
-    {
-        id: 'templates_tags',
-        path: 'templates/tags/:tag',
-        async lazy() {
-            const { TemplatesPage } = await import(
-                './pages/templates-page/templates-page'
-            );
-            return {
-                element: <TemplatesPage />,
-            };
-        },
-        loader: async ({ params }): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags({
-                tag: params.tag?.replace(/-/g, ' '),
-            });
-
-            return {
-                allTags: tags,
-                templates,
-            };
-        },
-    },
-    {
-        id: 'templates_templateSlug',
-        path: 'templates/:templateSlug',
-        async lazy() {
-            const { TemplatePage } = await import(
-                './pages/template-page/template-page'
-            );
-            return {
-                element: <TemplatePage />,
-            };
-        },
-        loader: async ({ params }): Promise<TemplatePageLoaderData> => {
-            const { templates } = await import(
-                './templates-data/templates-data'
-            );
-            return {
-                template: templates.find(
-                    (template) => template.slug === params.templateSlug
-                ),
-            };
-        },
-    },
-    {
-        id: 'templates_load',
-        path: 'templates/clone/:templateSlug',
-        async lazy() {
-            const { CloneTemplatePage } = await import(
-                './pages/clone-template-page/clone-template-page'
-            );
-            return {
-                element: <CloneTemplatePage />,
-            };
-        },
-        loader: async ({ params }) => {
-            const { templates } = await import(
-                './templates-data/templates-data'
-            );
-            return {
-                template: templates.find(
-                    (template) => template.slug === params.templateSlug
-                ),
-            };
-        },
+        children: [
+            {
+                async lazy() {
+                    const { AppShell } = await import(
+                        './pages/app-shell/app-shell'
+                    );
+                    return {
+                        element: <AppShell />,
+                    };
+                },
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to="diagrams" replace />,
+                    },
+                    {
+                        path: 'diagrams',
+                        async lazy() {
+                            const { MyDiagramsPage } = await import(
+                                './pages/diagrams/my-diagrams-page'
+                            );
+                            return { element: <MyDiagramsPage /> };
+                        },
+                    },
+                    {
+                        path: 'shared',
+                        async lazy() {
+                            const { SharedWithMePage } = await import(
+                                './pages/diagrams/shared-with-me-page'
+                            );
+                            return { element: <SharedWithMePage /> };
+                        },
+                    },
+                    {
+                        path: 'users',
+                        async lazy() {
+                            const { UserManagementPage } = await import(
+                                './pages/user-management/user-management-page'
+                            );
+                            return { element: <UserManagementPage /> };
+                        },
+                    },
+                    {
+                        path: 'audit-logs',
+                        async lazy() {
+                            const { AuditLogsPage } = await import(
+                                './pages/audit-logs/audit-logs-page'
+                            );
+                            return { element: <AuditLogsPage /> };
+                        },
+                    },
+                ],
+            },
+            {
+                path: 'diagrams/:diagramId',
+                async lazy() {
+                    const { EditorPage } = await import(
+                        './pages/editor-page/editor-page'
+                    );
+                    return { element: <EditorPage /> };
+                },
+            },
+        ],
     },
     {
         path: '*',
-        async lazy() {
-            const { NotFoundPage } = await import(
-                './pages/not-found-page/not-found-page'
-            );
-            return {
-                element: <NotFoundPage />,
-            };
-        },
+        element: <Navigate to="/diagrams" replace />,
     },
 ];
 

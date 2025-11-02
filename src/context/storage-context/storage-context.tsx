@@ -8,6 +8,11 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
+import type { User, PublicUser } from '@/lib/domain/user';
+import type { DiagramCollaborator } from '@/lib/domain/diagram-collaborator';
+import type { AuditLogEntry } from '@/lib/domain/audit-log';
+import type { DiagramVersion } from '@/lib/domain/diagram-version';
+import type { DiagramActivity } from '@/lib/domain/diagram-activity';
 
 export interface StorageContext {
     // Config operations
@@ -135,6 +140,72 @@ export interface StorageContext {
     }) => Promise<void>;
     listCustomTypes: (diagramId: string) => Promise<DBCustomType[]>;
     deleteDiagramCustomTypes: (diagramId: string) => Promise<void>;
+
+    // User management
+    ensureDefaultAdminUser: () => Promise<void>;
+    createUser: (params: {
+        username: string;
+        displayName: string;
+        role: User['role'];
+        passwordHash: string;
+        mustChangePassword?: boolean;
+        active?: boolean;
+    }) => Promise<User>;
+    updateUser: (params: {
+        id: string;
+        attributes: Partial<
+            Pick<
+                User,
+                | 'username'
+                | 'displayName'
+                | 'role'
+                | 'mustChangePassword'
+                | 'active'
+            >
+        >;
+    }) => Promise<void>;
+    setUserPassword: (params: {
+        id: string;
+        passwordHash: string;
+        mustChangePassword?: boolean;
+    }) => Promise<void>;
+    getUserByUsername: (username: string) => Promise<User | undefined>;
+    getUserById: (id: string) => Promise<User | undefined>;
+    listUsers: () => Promise<PublicUser[]>;
+    touchUserLogin: (id: string) => Promise<void>;
+
+    // Diagram collaborators
+    listDiagramCollaborators: (
+        diagramId: string
+    ) => Promise<DiagramCollaborator[]>;
+    addDiagramCollaborator: (params: {
+        collaborator: DiagramCollaborator;
+    }) => Promise<void>;
+    updateDiagramCollaborator: (params: {
+        id: string;
+        attributes: Partial<Pick<DiagramCollaborator, 'role' | 'canInvite'>>;
+    }) => Promise<void>;
+    removeDiagramCollaborator: (id: string) => Promise<void>;
+    getDiagramCollaborator: (params: {
+        diagramId: string;
+        userId: string;
+    }) => Promise<DiagramCollaborator | undefined>;
+
+    // Diagram metadata
+    updateDiagramVisibility: (params: {
+        diagramId: string;
+        visibility: 'private' | 'link_view' | 'link_edit';
+        shareToken?: string;
+        allowEditorsToInvite?: boolean;
+    }) => Promise<void>;
+
+    // Logs & versions
+    addAuditLogEntry: (entry: AuditLogEntry) => Promise<void>;
+    listAuditLogs: () => Promise<AuditLogEntry[]>;
+    addDiagramVersion: (params: { version: DiagramVersion }) => Promise<void>;
+    listDiagramVersions: (diagramId: string) => Promise<DiagramVersion[]>;
+    addDiagramActivity: (activity: DiagramActivity) => Promise<void>;
+    listDiagramActivity: (diagramId: string) => Promise<DiagramActivity[]>;
 }
 
 export const storageInitialValue: StorageContext = {
@@ -187,6 +258,30 @@ export const storageInitialValue: StorageContext = {
     deleteCustomType: emptyFn,
     listCustomTypes: emptyFn,
     deleteDiagramCustomTypes: emptyFn,
+
+    ensureDefaultAdminUser: emptyFn,
+    createUser: emptyFn,
+    updateUser: emptyFn,
+    setUserPassword: emptyFn,
+    getUserByUsername: emptyFn,
+    getUserById: emptyFn,
+    listUsers: emptyFn,
+    touchUserLogin: emptyFn,
+
+    listDiagramCollaborators: emptyFn,
+    addDiagramCollaborator: emptyFn,
+    updateDiagramCollaborator: emptyFn,
+    removeDiagramCollaborator: emptyFn,
+    getDiagramCollaborator: emptyFn,
+
+    updateDiagramVisibility: emptyFn,
+
+    addAuditLogEntry: emptyFn,
+    listAuditLogs: emptyFn,
+    addDiagramVersion: emptyFn,
+    listDiagramVersions: emptyFn,
+    addDiagramActivity: emptyFn,
+    listDiagramActivity: emptyFn,
 };
 
 export const storageContext =
