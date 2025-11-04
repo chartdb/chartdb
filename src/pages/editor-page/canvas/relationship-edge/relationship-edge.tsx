@@ -8,6 +8,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -35,6 +36,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 useLayout();
             const { checkIfRelationshipRemoved, checkIfNewRelationship } =
                 useDiff();
+            const { showCardinality } = useLocalConfig();
 
             const { relationships } = useChartDB();
 
@@ -144,7 +146,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         sourceSide === 'left' ? Position.Left : Position.Right,
                     targetPosition:
                         targetSide === 'left' ? Position.Left : Position.Right,
-                    offset: (edgeNumber + 1) * 14,
+                    offset: (edgeNumber + 1 + (showCardinality ? 1.5 : 0)) * 14,
                 });
                 return path;
             }, [
@@ -157,6 +159,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 sourceSide,
                 targetSide,
                 edgeNumber,
+                showCardinality,
             ]);
 
             const sourceMarker = useMemo(
