@@ -325,7 +325,8 @@ export const NoteNode: React.FC<NoteNodeProps> = ({
                                 ),
                             }}
                         >
-                            {note.content || '*Double-click to add text...*'}
+                            {note.content ||
+                                `*Double-click to write (Markdown format)*`}
                         </ReactMarkdown>
                     </div>
                 )}
