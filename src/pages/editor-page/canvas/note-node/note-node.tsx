@@ -176,7 +176,7 @@ export const NoteNode: React.FC<NoteNodeProps> = ({
                 {editMode ? (
                     <textarea
                         ref={textareaRef}
-                        className="size-full resize-none overflow-auto border-none bg-transparent p-0 text-sm leading-relaxed text-gray-700 outline-none dark:text-gray-300"
+                        className="nodrag size-full resize-none overflow-auto border-none bg-transparent p-0 text-sm leading-relaxed text-gray-700 outline-none dark:text-gray-300"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
