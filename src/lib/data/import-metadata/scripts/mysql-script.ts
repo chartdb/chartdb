@@ -94,7 +94,8 @@ export const getMySQLQuery = (
                 ',"default":"', ${withExtras ? withDefault : withoutDefault},
                 '","collation":"', IFNULL(cols.collation_name, ''),
                 '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
-                '}'
+                ',"comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\\\"'), '\\n', ' '),
+                '"}'
             )))))
 ), indexes as (
   (SELECT (@indexes:=NULL),
@@ -131,7 +132,8 @@ export const getMySQLQuery = (
                                              '"rows":', IFNULL(\`TABLE_ROWS\`, 0),
                                              ', "type":"', IFNULL(\`TABLE_TYPE\`, ''), '",',
                                              '"engine":"', IFNULL(\`ENGINE\`, ''), '",',
-                                             '"collation":"', IFNULL(\`TABLE_COLLATION\`, ''), '"}')))))
+                                             '"collation":"', IFNULL(\`TABLE_COLLATION\`, ''), '",',
+                                             '"comment":"', REPLACE(REPLACE(IFNULL(\`TABLE_COMMENT\`, ''), '"', '\\\\"'), '\\\\n', ' '), '"}')))))
 ), views as (
 (SELECT (@views:=NULL),
               (SELECT (0)
@@ -219,7 +221,8 @@ export const getMySQLQuery = (
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
                ',"default":"', ${withExtras ? withDefault : withoutDefault},
-               '","collation":"', IFNULL(cols.collation_name, ''), '"}')
+               '","collation":"', IFNULL(cols.collation_name, ''),
+               '","comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\"'), '\\n', ' '), '"}')
     ) FROM (
         SELECT cols.table_schema,
                cols.table_name,
@@ -231,7 +234,8 @@ export const getMySQLQuery = (
                cols.ordinal_position,
                cols.is_nullable,
                cols.column_default,
-               cols.collation_name
+               cols.collation_name,
+               cols.column_comment
         FROM information_schema.columns cols
         WHERE cols.table_schema = DATABASE()
     ) AS cols), ''),
@@ -274,14 +278,16 @@ export const getMySQLQuery = (
                '","rows":', IFNULL(tbls.TABLE_ROWS, 0),
                ',"type":"', IFNULL(tbls.TABLE_TYPE, ''),
                '","engine":"', IFNULL(tbls.ENGINE, ''),
-               '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''), '"}')
+               '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''),
+               '","comment":"', REPLACE(REPLACE(IFNULL(tbls.TABLE_COMMENT, ''), '"', '\\\\"'), '\\\\n', ' '), '"}')
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\`,
                \`TABLE_ROWS\`,
                \`TABLE_TYPE\`,
                \`ENGINE\`,
-               \`TABLE_COLLATION\`
+               \`TABLE_COLLATION\`,
+               \`TABLE_COMMENT\`
         FROM information_schema.tables tbls
         WHERE tbls.table_schema = DATABASE()
     ) AS tbls), ''),
