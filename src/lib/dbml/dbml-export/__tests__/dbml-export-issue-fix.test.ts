@@ -349,7 +349,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should export table and field comments to DBML', () => {
+    it('should export table and field comments to DBML for PostgreSQL', () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -516,6 +516,239 @@ describe('DBML Export - Issue Fixes', () => {
         );
         expect(result.standardDbml).not.toContain(
             '"title" varchar(500) [not null, note:'
+        );
+    });
+
+    it('should export table and field comments to DBML for MySQL', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.MYSQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'pl_a_cmsn',
+                    comments: 'Commission table',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'mandt',
+                            type: { id: 'char', name: 'char' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            comments: 'Mandant',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '3',
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'policy_no',
+                            type: { id: 'char', name: 'char' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            comments: 'Policennummer',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '25',
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field3',
+                            name: 'validity_from',
+                            type: { id: 'date', name: 'date' },
+                            primaryKey: false,
+                            nullable: false,
+                            unique: false,
+                            comments: 'Gültigkeitsdatum bis',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check table exists in DBML
+        expect(result.standardDbml).toContain('Table "pl_a_cmsn" {');
+
+        // Check table comments are preserved for MySQL
+        expect(result.standardDbml).toContain("Note: 'Commission table'");
+
+        // Check field comments are preserved with note: syntax
+        expect(result.standardDbml).toContain(
+            '"mandt" char(3) [pk, not null, note: \'Mandant\']'
+        );
+        expect(result.standardDbml).toContain(
+            '"policy_no" char(25) [not null, note: \'Policennummer\']'
+        );
+        expect(result.standardDbml).toContain(
+            '"validity_from" date [not null, note: \'Gültigkeitsdatum bis\']'
+        );
+
+        // Also check inline DBML
+        expect(result.inlineDbml).toContain('Table "pl_a_cmsn" {');
+        expect(result.inlineDbml).toContain("Note: 'Commission table'");
+        expect(result.inlineDbml).toContain(
+            '"mandt" char(3) [pk, not null, note: \'Mandant\']'
+        );
+        expect(result.inlineDbml).toContain(
+            '"policy_no" char(25) [not null, note: \'Policennummer\']'
+        );
+        expect(result.inlineDbml).toContain(
+            '"validity_from" date [not null, note: \'Gültigkeitsdatum bis\']'
+        );
+    });
+
+    it('should handle multiline comments for MySQL tables and fields', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.MYSQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'users',
+                    comments:
+                        'This is a multiline\ntable comment\nwith multiple lines',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            comments: 'This is a\nmultiline field\ncomment',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'description',
+                            type: { id: 'text', name: 'text' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            comments:
+                                'Field with\n\ntabs\tand\n  spaces  \nand newlines',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: null,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check that multiline table comment is preserved as single line at the end
+        expect(result.standardDbml).toContain('Table "users" {');
+        expect(result.standardDbml).toContain(
+            "Note: 'This is a multiline table comment with multiple lines'"
+        );
+        // Note should be at the end of the table, before closing brace
+        expect(result.standardDbml).toMatch(
+            /Table "users" \{[\s\S]*Note: 'This is a multiline table comment with multiple lines'\s*\}/m
+        );
+
+        // Check that multiline field comments are preserved as single line
+        expect(result.standardDbml).toContain(
+            '"id" bigint [pk, not null, note: \'This is a multiline field comment\']'
+        );
+        expect(result.standardDbml).toContain(
+            '"description" text [note: \'Field with tabs and spaces and newlines\']'
+        );
+
+        // Also verify in inline DBML
+        expect(result.inlineDbml).toContain(
+            "Note: 'This is a multiline table comment with multiple lines'"
+        );
+        expect(result.inlineDbml).toContain(
+            '"id" bigint [pk, not null, note: \'This is a multiline field comment\']'
+        );
+    });
+
+    it('should handle multiline comments for PostgreSQL tables and fields', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'products',
+                    comments: 'Product catalog\nwith detailed\ninformation',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'sku',
+                            type: { id: 'varchar', name: 'varchar' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: false,
+                            comments: 'Stock Keeping Unit\nUnique identifier',
+                            collation: null,
+                            default: null,
+                            characterMaximumLength: '50',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // Check that multiline comments are flattened for PostgreSQL too
+        expect(result.standardDbml).toContain('Table "products" {');
+        expect(result.standardDbml).toContain(
+            "Note: 'Product catalog with detailed information'"
+        );
+        // Note should be at the end of the table
+        expect(result.standardDbml).toMatch(
+            /Table "products" \{[\s\S]*Note: 'Product catalog with detailed information'\s*\}/m
+        );
+        expect(result.standardDbml).toContain(
+            '"sku" varchar(50) [pk, not null, note: \'Stock Keeping Unit Unique identifier\']'
         );
     });
 
