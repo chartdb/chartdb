@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.18.0](https://github.com/chartdb/chartdb/compare/v1.17.0...v1.18.0) (2025-11-15)
+
+
+### Features
+
+* add markdown support to sticky notes ([#971](https://github.com/chartdb/chartdb/issues/971)) ([a4674a2](https://github.com/chartdb/chartdb/commit/a4674a2bf8adf988f2e67e7d99abaa293aeb3686))
+* add sticky notes ([#967](https://github.com/chartdb/chartdb/issues/967)) ([6d38ebe](https://github.com/chartdb/chartdb/commit/6d38ebe3ecd271b80c33db7e2731594a39b004d5))
+
+
+### Bug Fixes
+
+* add postgres array type support for import and export ([#958](https://github.com/chartdb/chartdb/issues/958)) ([68412f9](https://github.com/chartdb/chartdb/commit/68412f90a7d4466946b5f20b1b31ae64708d2031))
+* Add Transactional/Analytical database categorization tabs ([#965](https://github.com/chartdb/chartdb/issues/965)) ([07dc4ea](https://github.com/chartdb/chartdb/commit/07dc4eace087d72efce88b80f8311828004f813f))
+* adjust relationship edge offset when cardinality is visible ([#973](https://github.com/chartdb/chartdb/issues/973)) ([0afa71e](https://github.com/chartdb/chartdb/commit/0afa71efccdc424930ee5615d50fe209db98151a))
+* dbml with notes ([#968](https://github.com/chartdb/chartdb/issues/968)) ([973b766](https://github.com/chartdb/chartdb/commit/973b7663b14fd0ba97e3358db9c6621663dec62c))
+* disable dragging on edit node content ([#972](https://github.com/chartdb/chartdb/issues/972)) ([69d4e8d](https://github.com/chartdb/chartdb/commit/69d4e8dca65682327b8654f58f11cf2c9a8f62cb))
+* note markdown empty note ([#974](https://github.com/chartdb/chartdb/issues/974)) ([c8b8277](https://github.com/chartdb/chartdb/commit/c8b827764c162fb440d2d410fd6b1b50dd032531))
+* note markdown empty note ([#975](https://github.com/chartdb/chartdb/issues/975)) ([9baecea](https://github.com/chartdb/chartdb/commit/9baecea4abcd39b1a584b6a4526a61261c4a68b9))
+* notes colors ([#970](https://github.com/chartdb/chartdb/issues/970)) ([4fd940a](https://github.com/chartdb/chartdb/commit/4fd940afbb33cb3306566e73c5640c6305c08a72))
+* notes with readonly ([#969](https://github.com/chartdb/chartdb/issues/969)) ([3d85bcc](https://github.com/chartdb/chartdb/commit/3d85bcc6ab862cc0a2ef6b29ae905afde88b9821))
+* preserve MySQL column notes in DBML export ([#979](https://github.com/chartdb/chartdb/issues/979)) ([39eebe5](https://github.com/chartdb/chartdb/commit/39eebe5e2ae9179490743224cc40d16599dccd61))
+
 ## [1.17.0](https://github.com/chartdb/chartdb/compare/v1.16.0...v1.17.0) (2025-10-27)
 
 
