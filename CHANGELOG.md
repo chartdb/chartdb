@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/chartdb/chartdb/compare/v1.18.0...v1.18.1) (2025-11-25)
+
+
+### Bug Fixes
+
+* docker image ([#982](https://github.com/chartdb/chartdb/issues/982)) ([03af4f8](https://github.com/chartdb/chartdb/commit/03af4f8ea4e579dbc804bf64b6142ed04c86c37f))
+
 ## [1.18.0](https://github.com/chartdb/chartdb/compare/v1.17.0...v1.18.0) (2025-11-25)
 
 
