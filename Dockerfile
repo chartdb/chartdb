@@ -31,4 +31,6 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
+USER nginx
+
 ENTRYPOINT ["/entrypoint.sh"]
