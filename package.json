@@ -16,7 +16,7 @@
         "test:coverage": "vitest --coverage"
     },
     "dependencies": {
-        "@ai-sdk/openai": "^0.0.51",
+        "@ai-sdk/openai": "^2.0.72",
         "@dbml/core": "^3.13.9",
         "@dnd-kit/sortable": "^8.0.0",
         "@monaco-editor/react": "^4.6.0",
@@ -45,7 +45,7 @@
         "@uidotdev/usehooks": "^2.4.1",
         "@xyflow/react": "^12.8.2",
         "ahooks": "^3.8.1",
-        "ai": "^3.3.14",
+        "ai": "^5.0.101",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.0.0",
@@ -102,7 +102,7 @@
         "eslint-plugin-react-refresh": "^0.4.7",
         "eslint-plugin-tailwindcss": "^3.17.4",
         "globals": "^15.13.0",
-        "happy-dom": "^18.0.1",
+        "happy-dom": "^20.0.10",
         "husky": "^9.1.5",
         "postcss": "^8.4.40",
         "prettier": "^3.3.3",
