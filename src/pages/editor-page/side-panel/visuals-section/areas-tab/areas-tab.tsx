@@ -92,6 +92,16 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                                 'side_panel.areas_section.empty_state.description'
                             )}
                             className="mt-20"
+                            secondaryAction={
+                                !readonly
+                                    ? {
+                                          label: t(
+                                              'side_panel.areas_section.add_area'
+                                          ),
+                                          onClick: handleCreateArea,
+                                      }
+                                    : undefined
+                            }
                         />
                     ) : filterText && filteredAreas.length === 0 ? (
                         <div className="mt-10 flex flex-col items-center gap-2">

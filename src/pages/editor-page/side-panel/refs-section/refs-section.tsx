@@ -216,6 +216,16 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                                 'side_panel.refs_section.empty_state.description'
                             )}
                             className="mt-20"
+                            secondaryAction={
+                                !readonly
+                                    ? {
+                                          label: t(
+                                              'side_panel.refs_section.add_relationship'
+                                          ),
+                                          onClick: handleCreateRelationship,
+                                      }
+                                    : undefined
+                            }
                         />
                     ) : (
                         <RefsList refs={filteredRefs} />

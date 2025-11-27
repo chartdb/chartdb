@@ -92,6 +92,16 @@ export const NotesTab: React.FC<NotesTabProps> = () => {
                                 'side_panel.notes_section.empty_state.description'
                             )}
                             className="mt-20"
+                            secondaryAction={
+                                !readonly
+                                    ? {
+                                          label: t(
+                                              'side_panel.notes_section.add_note'
+                                          ),
+                                          onClick: handleCreateNote,
+                                      }
+                                    : undefined
+                            }
                         />
                     ) : filterText && filteredNotes.length === 0 ? (
                         <div className="mt-10 flex flex-col items-center gap-2">
