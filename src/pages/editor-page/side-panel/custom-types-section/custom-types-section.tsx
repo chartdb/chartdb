@@ -73,6 +73,14 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                                 'side_panel.custom_types_section.empty_state.description'
                             )}
                             className="mt-20"
+                            secondaryAction={
+                                !readonly
+                                    ? {
+                                          label: 'New Type',
+                                          onClick: handleCreateCustomType,
+                                      }
+                                    : undefined
+                            }
                         />
                     ) : filterText && filteredCustomTypes.length === 0 ? (
                         <div className="mt-10 flex flex-col items-center gap-2">

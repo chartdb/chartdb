@@ -184,6 +184,19 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                 'side_panel.tables_section.empty_state.description'
                             )}
                             className="mt-20"
+                            secondaryAction={
+                                !readonly
+                                    ? {
+                                          label: t(
+                                              'side_panel.tables_section.add_table'
+                                          ),
+                                          onClick: () =>
+                                              handleCreateTable({
+                                                  view: false,
+                                              }),
+                                      }
+                                    : undefined
+                            }
                         />
                     ) : filterText && filteredTables.length === 0 ? (
                         <div className="mt-10 flex flex-col items-center gap-2">
