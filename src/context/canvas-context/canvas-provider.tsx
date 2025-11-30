@@ -21,6 +21,7 @@ import {
     type CreateRelationshipNodeType,
 } from '@/pages/editor-page/canvas/create-relationship-node/create-relationship-node';
 import { useEventEmitter } from 'ahooks';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 interface CanvasProviderProps {
     children: ReactNode;
@@ -36,6 +37,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         diagramId,
     } = useChartDB();
     const { filter, loading: filterLoading } = useDiagramFilter();
+    const { showDBViews } = useLocalConfig();
     const { fitView, screenToFlowPosition, setNodes } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
         useState<Graph<string>>(createGraph());
@@ -77,17 +79,18 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         ) => {
             const newTables = adjustTablePositions({
                 relationships,
-                tables: tables.filter((table) =>
-                    filterTable({
-                        table: {
-                            id: table.id,
-                            schema: table.schema,
-                        },
-                        filter,
-                        options: {
-                            defaultSchema: defaultSchemas[databaseType],
-                        },
-                    })
+                tables: tables.filter(
+                    (table) =>
+                        filterTable({
+                            table: {
+                                id: table.id,
+                                schema: table.schema,
+                            },
+                            filter,
+                            options: {
+                                defaultSchema: defaultSchemas[databaseType],
+                            },
+                        }) && (showDBViews ? true : !table.isView)
                 ),
                 areas,
                 mode: 'all',
@@ -133,6 +136,7 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
             fitView,
             databaseType,
             areas,
+            showDBViews,
         ]
     );
 

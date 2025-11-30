@@ -630,21 +630,26 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [tempFloatingEdge?.sourceNodeId, setNodes]);
 
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
+    const prevShowDBViews = useRef<boolean>(showDBViews);
     useEffect(() => {
-        if (!equal(filter, prevFilter.current)) {
+        if (
+            !equal(filter, prevFilter.current) ||
+            showDBViews !== prevShowDBViews.current
+        ) {
             debounce(() => {
                 const overlappingTablesInDiagram = findOverlappingTables({
-                    tables: tables.filter((table) =>
-                        filterTable({
-                            table: {
-                                id: table.id,
-                                schema: table.schema,
-                            },
-                            filter,
-                            options: {
-                                defaultSchema: defaultSchemas[databaseType],
-                            },
-                        })
+                    tables: tables.filter(
+                        (table) =>
+                            filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            }) && (showDBViews ? true : !table.isView)
                     ),
                 });
                 setOverlapGraph(overlappingTablesInDiagram);
@@ -655,8 +660,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 });
             }, 500)();
             prevFilter.current = filter;
+            prevShowDBViews.current = showDBViews;
         }
-    }, [filter, fitView, tables, setOverlapGraph, databaseType]);
+    }, [filter, fitView, tables, setOverlapGraph, databaseType, showDBViews]);
 
     useEffect(() => {
         const checkParentAreas = debounce(() => {
@@ -1337,17 +1343,18 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             } else if (event.action === 'load_diagram') {
                 const diagramTables = event.data.diagram.tables ?? [];
                 const overlappingTablesInDiagram = findOverlappingTables({
-                    tables: diagramTables.filter((table) =>
-                        filterTable({
-                            table: {
-                                id: table.id,
-                                schema: table.schema,
-                            },
-                            filter,
-                            options: {
-                                defaultSchema: defaultSchemas[databaseType],
-                            },
-                        })
+                    tables: diagramTables.filter(
+                        (table) =>
+                            filterTable({
+                                table: {
+                                    id: table.id,
+                                    schema: table.schema,
+                                },
+                                filter,
+                                options: {
+                                    defaultSchema: defaultSchemas[databaseType],
+                                },
+                            }) && (showDBViews ? true : !table.isView)
                     ),
                 });
                 setOverlapGraph(overlappingTablesInDiagram);
@@ -1361,6 +1368,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             filter,
             setNodes,
             databaseType,
+            showDBViews,
         ]
     );
 
