@@ -561,12 +561,18 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             )}
                             {fieldDiffChangedNullable ? (
                                 fieldDiffChangedNullable.new ? (
-                                    <span className="font-semibold">?</span>
+                                    <span className="font-semibold text-orange-500 dark:text-orange-400">
+                                        ?
+                                    </span>
                                 ) : (
-                                    <span className="line-through">?</span>
+                                    <span className="text-orange-500 line-through dark:text-orange-400">
+                                        ?
+                                    </span>
                                 )
                             ) : field.nullable ? (
-                                '?'
+                                <span className="text-orange-500 dark:text-orange-400">
+                                    ?
+                                </span>
                             ) : (
                                 ''
                             )}
