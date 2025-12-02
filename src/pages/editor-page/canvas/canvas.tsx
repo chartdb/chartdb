@@ -1573,6 +1573,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     snapGrid={[20, 20]}
                     onPaneClick={onPaneClickHandler}
                     connectionLineComponent={ConnectionLine}
+                    deleteKeyCode={['Backspace', 'Delete']}
                 >
                     <Controls
                         position="top-left"
