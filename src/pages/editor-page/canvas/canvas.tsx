@@ -341,7 +341,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         useEdgesState<EdgeType>(initialEdges);
 
     const [snapToGridEnabled, setSnapToGridEnabled] = useState(false);
-    const shiftPressed = useKeyPress('Shift');
 
     const [cursorPosition, setCursorPosition] = useState<{
         x: number;
@@ -958,37 +957,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
             }
 
-            // Handle Shift+click multi-selection: preserve existing selections
-            if (shiftPressed) {
-                const selectChanges = changesToApply.filter(
-                    (change) => change.type === 'select'
-                );
-                const hasNewSelection = selectChanges.some(
-                    (change) =>
-                        change.type === 'select' && change.selected === true
-                );
-
-                if (hasNewSelection && selectChanges.length > 0) {
-                    // Get currently selected node IDs
-                    const currentlySelectedIds = new Set(
-                        nodes.filter((n) => n.selected).map((n) => n.id)
-                    );
-
-                    // Modify changes: keep new selections, convert deselections to no-op for currently selected
-                    changesToApply = changesToApply.map((change) => {
-                        if (
-                            change.type === 'select' &&
-                            change.selected === false &&
-                            currentlySelectedIds.has(change.id)
-                        ) {
-                            // Keep this node selected
-                            return { ...change, selected: true };
-                        }
-                        return change;
-                    });
-                }
-            }
-
             // Handle area drag changes - add child table movements for visual feedback only
             const areaDragChanges = changesToApply.filter((change) => {
                 if (change.type === 'position') {
@@ -1274,8 +1242,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             tables,
             areas,
             getNode,
-            shiftPressed,
-            nodes,
         ]
     );
 
@@ -1433,6 +1399,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     useClickAway(containerRef, exitEditTableMode);
     useClickAway(containerRef, hideCreateRelationshipNode);
 
+    const shiftPressed = useKeyPress('Shift');
     const operatingSystem = getOperatingSystem();
 
     useHotkeys(
@@ -1608,11 +1575,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
-                    selectionOnDrag={shiftPressed}
-                    selectionMode={SelectionMode.Partial}
+                    selectionMode={SelectionMode.Full}
                     onPaneClick={onPaneClickHandler}
                     connectionLineComponent={ConnectionLine}
                     deleteKeyCode={['Backspace', 'Delete']}
+                    multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
                 >
                     <Controls
                         position="top-left"
