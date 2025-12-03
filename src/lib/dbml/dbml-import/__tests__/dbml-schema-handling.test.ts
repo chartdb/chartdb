@@ -395,8 +395,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
 
             // Perform 3 round-trips
             for (let cycle = 1; cycle <= 3; cycle++) {
-                console.log(`🔄 Round-trip cycle ${cycle}`);
-
                 // Export
                 const exported = generateDBMLFromDiagram(currentDiagram);
 

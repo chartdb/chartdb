@@ -44,10 +44,6 @@ Table "finance"."general_ledger" {
         expect(exportResult.standardDbml).toMatch(
             /"finance"\."general_ledger"\."ledger_id"\s*<\s*"finance"\."general_ledger"\."reversal_id"/
         );
-
-        console.log(
-            '✅ Self-referencing relationship preserved in DBML export'
-        );
     });
 
     it('should handle self-referencing relationships in employee hierarchy', async () => {

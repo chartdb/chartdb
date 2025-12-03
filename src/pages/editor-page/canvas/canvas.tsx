@@ -26,6 +26,7 @@ import {
     Controls,
     useReactFlow,
     useKeyPress,
+    SelectionMode,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -1550,7 +1551,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 <ReactFlow
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
-                    className="canvas-cursor-default nodes-animated"
+                    className={cn('nodes-animated', {
+                        'canvas-cursor-multi-select': shiftPressed,
+                        'canvas-cursor-default': !shiftPressed,
+                    })}
                     nodes={nodesWithCursor}
                     edges={edgesWithFloating}
                     onNodesChange={onNodesChangeHandler}
@@ -1571,9 +1575,11 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     panOnScroll={scrollAction === 'pan'}
                     snapToGrid={shiftPressed || snapToGridEnabled}
                     snapGrid={[20, 20]}
+                    selectionMode={SelectionMode.Full}
                     onPaneClick={onPaneClickHandler}
                     connectionLineComponent={ConnectionLine}
                     deleteKeyCode={['Backspace', 'Delete']}
+                    multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
                 >
                     <Controls
                         position="top-left"
