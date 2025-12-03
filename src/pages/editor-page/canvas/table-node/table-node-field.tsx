@@ -129,6 +129,14 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             return count;
         }, [relationships, tableNodeId, field.id]);
 
+        const isForeignKey = useMemo(() => {
+            return relationships.some(
+                (rel) =>
+                    rel.targetTableId === tableNodeId &&
+                    rel.targetFieldId === field.id
+            );
+        }, [relationships, tableNodeId, field.id]);
+
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
 
         useEffect(() => {
@@ -389,6 +397,11 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 !isSummaryOnly &&
                                 !isDiffFieldRemoved &&
                                 !isDiffNewField,
+                            'text-blue-600 dark:text-blue-400':
+                                isForeignKey &&
+                                !isDiffFieldRemoved &&
+                                !isDiffNewField &&
+                                !isDiffFieldChanged,
                         })}
                     >
                         {fieldDiffChangedName ? (
@@ -455,6 +468,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                 !isSummaryOnly &&
                                 !isDiffNewField
                                 ? 'text-sky-800 dark:text-sky-200'
+                                : '',
+                            isForeignKey &&
+                                !isDiffFieldRemoved &&
+                                !isDiffNewField &&
+                                !isDiffFieldChanged
+                                ? 'text-blue-600 dark:text-blue-400'
                                 : ''
                         )}
                     >
