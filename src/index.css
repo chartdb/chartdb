@@ -7,6 +7,11 @@
         @apply cursor-default;
     }
 
+    .react-flow.canvas-cursor-multi-select .react-flow__pane,
+    .react-flow.canvas-cursor-multi-select .react-flow__node {
+        cursor: crosshair !important;
+    }
+
     .react-flow.nodes-animated .react-flow__node {
         @apply transition-[width];
         @apply duration-100;
