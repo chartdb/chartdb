@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
@@ -58,6 +58,11 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     const typeRequiresNotNull = requiresNotNull(field.type.name);
 
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const handleCommentIndicatorClick = useCallback(() => {
+        setPopoverOpen(true);
+    }, []);
+
     return (
         <div
             className="flex flex-1 touch-none flex-row justify-between gap-2 p-1"
@@ -74,9 +79,9 @@ export const TableField: React.FC<TableFieldProps> = ({
                         <GripVertical className="size-3.5  text-muted-foreground" />
                     </div>
                 ) : null}
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span className="min-w-0 flex-1">
+                <span className="relative min-w-0 flex-1">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
                             <Input
                                 className="h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
@@ -89,10 +94,30 @@ export const TableField: React.FC<TableFieldProps> = ({
                                 }
                                 readOnly={readonly}
                             />
-                        </span>
-                    </TooltipTrigger>
-                    <TooltipContent>{field.name}</TooltipContent>
-                </Tooltip>
+                        </TooltipTrigger>
+                        <TooltipContent>{field.name}</TooltipContent>
+                    </Tooltip>
+                    {field.comments ? (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div
+                                    className="absolute right-0 top-0 h-full w-[10px] cursor-pointer"
+                                    onClick={handleCommentIndicatorClick}
+                                >
+                                    <div className="pointer-events-none absolute right-0 top-0 size-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-pink-500" />
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <div>
+                                    <div className="font-normal text-white/70 dark:text-black/70">
+                                        Comment:
+                                    </div>
+                                    <div>{field.comments}</div>
+                                </div>
+                            </TooltipContent>
+                        </Tooltip>
+                    ) : null}
+                </span>
                 <Tooltip>
                     <TooltipTrigger className="flex h-8 min-w-0 flex-1" asChild>
                         <span>
@@ -165,6 +190,8 @@ export const TableField: React.FC<TableFieldProps> = ({
                     updateField={updateField}
                     removeField={removeField}
                     databaseType={databaseType}
+                    open={popoverOpen}
+                    onOpenChange={setPopoverOpen}
                 />
             </div>
         </div>

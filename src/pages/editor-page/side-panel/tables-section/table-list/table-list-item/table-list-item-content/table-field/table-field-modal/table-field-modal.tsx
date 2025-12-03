@@ -39,6 +39,8 @@ export interface TableFieldPopoverProps {
     databaseType: DatabaseType;
     updateField: (attrs: Partial<DBField>) => void;
     removeField: () => void;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
 export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
@@ -47,11 +49,28 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     databaseType,
     updateField,
     removeField,
+    open: controlledOpen,
+    onOpenChange: controlledOnOpenChange,
 }) => {
     const { readonly } = useChartDB();
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
-    const [isOpen, setIsOpen] = React.useState(false);
+    const [internalOpen, setInternalOpen] = React.useState(false);
+
+    const isOpen = useMemo(
+        () => controlledOpen ?? internalOpen,
+        [controlledOpen, internalOpen]
+    );
+    const setIsOpen = useCallback(
+        (open: boolean) => {
+            if (controlledOnOpenChange) {
+                controlledOnOpenChange(open);
+            } else {
+                setInternalOpen(open);
+            }
+        },
+        [controlledOnOpenChange, setInternalOpen]
+    );
 
     // Check if this field is the only primary key in the table
     const isOnlyPrimaryKey = React.useMemo(() => {

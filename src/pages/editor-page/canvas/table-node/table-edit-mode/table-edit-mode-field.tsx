@@ -72,9 +72,9 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                 )}
             >
                 <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span className="min-w-0 flex-1">
+                    <span className="relative min-w-0 flex-1">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
                                 <Input
                                     ref={inputRef}
                                     className="h-8 w-full !truncate bg-background focus-visible:ring-0"
@@ -88,10 +88,27 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                     }
                                     autoFocus={focused}
                                 />
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent>{fieldName}</TooltipContent>
-                    </Tooltip>
+                            </TooltipTrigger>
+                            <TooltipContent>{fieldName}</TooltipContent>
+                        </Tooltip>
+                        {field.comments ? (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <div className="absolute right-0 top-0 h-full w-[10px] cursor-pointer">
+                                        <div className="pointer-events-none absolute right-0 top-0 size-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-pink-500" />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <div>
+                                        <div className="font-normal text-white/70 dark:text-black/70">
+                                            Comment:
+                                        </div>
+                                        <div>{field.comments}</div>
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
+                        ) : null}
+                    </span>
                     <Tooltip>
                         <TooltipTrigger
                             className="flex h-8 min-w-0 flex-1"
