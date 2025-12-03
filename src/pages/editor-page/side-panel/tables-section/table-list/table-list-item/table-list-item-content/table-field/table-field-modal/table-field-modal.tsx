@@ -41,7 +41,6 @@ export interface TableFieldPopoverProps {
     removeField: () => void;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
-    autoFocusComments?: boolean;
 }
 
 export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
@@ -52,25 +51,26 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     removeField,
     open: controlledOpen,
     onOpenChange: controlledOnOpenChange,
-    autoFocusComments = false,
 }) => {
     const { readonly } = useChartDB();
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
     const [internalOpen, setInternalOpen] = React.useState(false);
-    const commentsRef = useRef<HTMLTextAreaElement>(null);
 
-    const isOpen = controlledOpen ?? internalOpen;
-    const setIsOpen = controlledOnOpenChange ?? setInternalOpen;
-
-    useEffect(() => {
-        if (isOpen && autoFocusComments && commentsRef.current) {
-            // Small delay to ensure the popover is rendered
-            setTimeout(() => {
-                commentsRef.current?.focus();
-            }, 0);
-        }
-    }, [isOpen, autoFocusComments]);
+    const isOpen = useMemo(
+        () => controlledOpen ?? internalOpen,
+        [controlledOpen, internalOpen]
+    );
+    const setIsOpen = useCallback(
+        (open: boolean) => {
+            if (controlledOnOpenChange) {
+                controlledOnOpenChange(open);
+            } else {
+                setInternalOpen(open);
+            }
+        },
+        [controlledOnOpenChange, setInternalOpen]
+    );
 
     // Check if this field is the only primary key in the table
     const isOnlyPrimaryKey = React.useMemo(() => {
@@ -481,7 +481,6 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 )}
                             </Label>
                             <Textarea
-                                ref={commentsRef}
                                 value={localField.comments ?? undefined}
                                 onChange={(e) =>
                                     setLocalField((current) => ({

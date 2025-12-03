@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { KeyRound, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
@@ -41,40 +41,8 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
         } = useUpdateTableField(table, field);
 
         const inputRef = React.useRef<HTMLInputElement>(null);
-        const typeRef = React.useRef<HTMLSpanElement>(null);
-        const [isNameTruncated, setIsNameTruncated] = useState(false);
-        const [isTypeTruncated, setIsTypeTruncated] = useState(false);
-        const [isCommentTooltipOpen, setIsCommentTooltipOpen] = useState(false);
 
         const typeRequiresNotNull = requiresNotNull(field.type.name);
-
-        useEffect(() => {
-            const checkTruncation = () => {
-                if (inputRef.current) {
-                    setIsNameTruncated(
-                        inputRef.current.scrollWidth >
-                            inputRef.current.clientWidth
-                    );
-                }
-            };
-            checkTruncation();
-        }, [fieldName]);
-
-        useEffect(() => {
-            const checkTypeTruncation = () => {
-                if (typeRef.current) {
-                    const selectBoxValue =
-                        typeRef.current.querySelector('.truncate');
-                    if (selectBoxValue) {
-                        setIsTypeTruncated(
-                            selectBoxValue.scrollWidth >
-                                selectBoxValue.clientWidth
-                        );
-                    }
-                }
-            };
-            checkTypeTruncation();
-        }, [field.type.id, field.characterMaximumLength]);
 
         // Animate the highlight after mount if focused
         useEffect(() => {
@@ -104,15 +72,9 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                 )}
             >
                 <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">
-                    <Tooltip
-                        open={
-                            isNameTruncated && !isCommentTooltipOpen
-                                ? undefined
-                                : false
-                        }
-                    >
-                        <TooltipTrigger asChild>
-                            <span className="relative min-w-0 flex-1">
+                    <span className="relative min-w-0 flex-1">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
                                 <Input
                                     ref={inputRef}
                                     className="h-8 w-full !truncate bg-background focus-visible:ring-0"
@@ -126,28 +88,33 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                     }
                                     autoFocus={focused}
                                 />
-                                {field.comments ? (
-                                    <Tooltip
-                                        onOpenChange={setIsCommentTooltipOpen}
-                                    >
-                                        <TooltipTrigger asChild>
-                                            <div className="absolute right-0 top-0 size-0 cursor-pointer border-l-[10px] border-t-[10px] border-l-transparent border-t-red-500" />
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {field.comments}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                ) : null}
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent>{fieldName}</TooltipContent>
-                    </Tooltip>
-                    <Tooltip open={isTypeTruncated ? undefined : false}>
+                            </TooltipTrigger>
+                            <TooltipContent>{fieldName}</TooltipContent>
+                        </Tooltip>
+                        {field.comments ? (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <div className="absolute right-0 top-0 h-full w-[10px] cursor-pointer">
+                                        <div className="pointer-events-none absolute right-0 top-0 size-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-pink-500" />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <div>
+                                        <div className="font-normal text-white/70 dark:text-black/70">
+                                            Comment:
+                                        </div>
+                                        <div>{field.comments}</div>
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
+                        ) : null}
+                    </span>
+                    <Tooltip>
                         <TooltipTrigger
                             className="flex h-8 min-w-0 flex-1"
                             asChild
                         >
-                            <span ref={typeRef}>
+                            <span>
                                 <SelectBox
                                     className="flex h-8 min-h-8 w-full bg-background"
                                     popoverClassName="min-w-[200px]"
