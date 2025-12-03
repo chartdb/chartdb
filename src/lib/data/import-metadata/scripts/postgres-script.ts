@@ -336,7 +336,7 @@ cols AS (
             JOIN pg_class c ON c.oid = t.typrelid
             JOIN pg_attribute a ON a.attrelid = c.oid
             WHERE t.typtype = 'c'
-              AND c.relkind = 'c'  -- ✅ Only user-defined composite types
+              AND c.relkind = 'c'  -- Only user-defined composite types
               AND a.attnum > 0 AND NOT a.attisdropped
               AND n.nspname NOT IN ('pg_catalog', 'information_schema') ${
                   databaseEdition === DatabaseEdition.POSTGRESQL_TIMESCALE
