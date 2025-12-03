@@ -165,7 +165,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         </span>
                     </TooltipTrigger>
                     <TooltipContent>
-                        {t('side_panel.tables_section.table.nullable')}
+                        {nullable ? 'Null' : 'Not Null'}
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
