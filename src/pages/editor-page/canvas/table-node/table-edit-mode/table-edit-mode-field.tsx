@@ -156,17 +156,13 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                     pressed={nullable}
                                     onPressedChange={handleNullableToggle}
                                     disabled={typeRequiresNotNull}
-                                    className="data-[state=on]:text-orange-500 dark:data-[state=on]:text-orange-400"
                                 >
                                     N
                                 </TableFieldToggle>
                             </span>
                         </TooltipTrigger>
                         <TooltipContent>
-                            Nullable
-                            <span className="text-orange-500 dark:text-orange-400">
-                                ?
-                            </span>
+                            {nullable ? 'Null' : 'Not Null'}
                         </TooltipContent>
                     </Tooltip>
                     <Tooltip>

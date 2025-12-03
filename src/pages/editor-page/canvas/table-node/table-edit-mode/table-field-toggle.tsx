@@ -13,6 +13,7 @@ export const TableFieldToggle = React.forwardRef<
             variant="default"
             className={cn(
                 'h-8 w-[32px] p-2 text-xs text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200',
+                'data-[state=on]:text-orange-600 dark:data-[state=on]:text-orange-400',
                 className
             )}
         />
