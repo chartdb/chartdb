@@ -5,7 +5,10 @@ import { clickhouseDataTypes } from './clickhouse-data-types';
 import { genericDataTypes } from './generic-data-types';
 import { mariadbDataTypes } from './mariadb-data-types';
 import { mysqlDataTypes } from './mysql-data-types';
-import { postgresDataTypes } from './postgres-data-types';
+import {
+    getPostgresPreferredSynonym,
+    postgresDataTypes,
+} from './postgres-data-types';
 import { sqlServerDataTypes } from './sql-server-data-types';
 import { sqliteDataTypes } from './sqlite-data-types';
 import { oracleDataTypes } from './oracle-data-types';
@@ -196,4 +199,44 @@ export const supportsArrayDataType = (
     return !ARRAY_INCOMPATIBLE_TYPES.includes(
         dataTypeName.toLowerCase() as (typeof ARRAY_INCOMPATIBLE_TYPES)[number]
     );
+};
+
+/**
+ * Resolves a data type to its preferred synonym if one exists for the given database type.
+ *
+ * This function acts as a dispatcher to database-specific synonym resolution functions.
+ * Currently supports PostgreSQL synonyms.
+ *
+ * @param typeName - The name of the data type to check (case-insensitive)
+ * @param databaseType - The database type (e.g., PostgreSQL, MySQL, etc.)
+ * @returns The DataTypeData of the preferred synonym, or null if the type
+ *          is already the preferred form, has no synonyms, or the database type
+ *          doesn't have synonym mappings
+ *
+ * @example
+ * ```ts
+ * getPreferredSynonym('character varying', DatabaseType.POSTGRESQL)
+ * // Returns: { name: 'varchar', id: 'varchar', ... }
+ *
+ * getPreferredSynonym('varchar', DatabaseType.POSTGRESQL)
+ * // Returns: null (already the preferred form)
+ *
+ * getPreferredSynonym('character varying', DatabaseType.MYSQL)
+ * // Returns: null (MySQL synonym mappings not implemented)
+ * ```
+ */
+export const getPreferredSynonym = (
+    typeName: string,
+    databaseType: DatabaseType
+): DataTypeData | null => {
+    const nameLower = typeName.toLowerCase().trim();
+
+    if (
+        databaseType === DatabaseType.POSTGRESQL ||
+        databaseType === DatabaseType.COCKROACHDB
+    ) {
+        return getPostgresPreferredSynonym(nameLower);
+    }
+
+    return null;
 };

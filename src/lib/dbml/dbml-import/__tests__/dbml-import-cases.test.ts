@@ -420,7 +420,7 @@ describe('DBML Import cases', () => {
 
         // Regular INTEGER - should be nullable by default
         const regularField = table.fields.find((f) => f.name === 'regular');
-        expect(regularField?.type?.name).toBe('integer');
+        expect(regularField?.type?.name).toBe('int');
         expect(regularField?.nullable).toBe(true); // No NOT NULL constraint
     });
 });

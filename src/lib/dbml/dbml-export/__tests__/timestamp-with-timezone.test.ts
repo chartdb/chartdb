@@ -95,8 +95,8 @@ describe('DBML Export - Timestamp with Time Zone', () => {
             (f) => f.name === 'updated_at'
         );
 
-        expect(createdAtField?.type.name).toBe('timestamp with time zone');
-        expect(updatedAtField?.type.name).toBe('timestamp without time zone');
+        expect(createdAtField?.type.name).toBe('timestamptz');
+        expect(updatedAtField?.type.name).toBe('timestamp');
     });
 
     it('should handle time with time zone types', async () => {
@@ -177,8 +177,8 @@ describe('DBML Export - Timestamp with Time Zone', () => {
         );
         const endTimeField = table?.fields.find((f) => f.name === 'end_time');
 
-        expect(startTimeField?.type.name).toBe('time with time zone');
-        expect(endTimeField?.type.name).toBe('time without time zone');
+        expect(startTimeField?.type.name).toBe('timetz');
+        expect(endTimeField?.type.name).toBe('time');
     });
 
     it('should handle double precision type', async () => {
