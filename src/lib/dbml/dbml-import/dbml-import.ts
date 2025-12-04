@@ -7,6 +7,7 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import {
     findDataTypeDataById,
+    getPreferredSynonym,
     requiresNotNull,
 } from '@/lib/data/data-types/data-types';
 import { defaultTableColor } from '@/lib/colors';
@@ -548,13 +549,25 @@ export const importDBMLToDiagram = async (
                     }
                 }
 
+                // Map DBML type to DataType
+                const mappedType = mapDBMLTypeToDataType(field.type.type_name, {
+                    ...options,
+                    enums: extractedData.enums,
+                });
+
+                // Check if there's a preferred synonym for this type
+                const preferredType = getPreferredSynonym(
+                    mappedType.name,
+                    options.databaseType
+                );
+
+                // Use the preferred synonym if it exists, otherwise use the mapped type
+                const finalType = preferredType ?? mappedType;
+
                 return {
                     id: generateId(),
                     name: field.name.replace(/['"]/g, ''),
-                    type: mapDBMLTypeToDataType(field.type.type_name, {
-                        ...options,
-                        enums: extractedData.enums,
-                    }),
+                    type: finalType,
                     nullable:
                         field.increment || requiresNotNull(field.type.type_name)
                             ? false

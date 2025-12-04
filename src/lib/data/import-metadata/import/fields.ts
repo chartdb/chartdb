@@ -1,20 +1,24 @@
 import type { DBField } from '@/lib/domain';
+import type { DatabaseType } from '@/lib/domain';
 import type { ColumnInfo } from '../metadata-types/column-info';
 import type { AggregatedIndexInfo } from '../metadata-types/index-info';
 import type { PrimaryKeyInfo } from '../metadata-types/primary-key-info';
 import type { TableInfo } from '../metadata-types/table-info';
 import { generateId } from '@/lib/utils';
+import { getPreferredSynonym } from '@/lib/data/data-types/data-types';
 
 export const createFieldsFromMetadata = ({
     tableColumns,
     tablePrimaryKeys,
     aggregatedIndexes,
+    databaseType,
 }: {
     tableColumns: ColumnInfo[];
     tableSchema?: string;
     tableInfo: TableInfo;
     tablePrimaryKeys: PrimaryKeyInfo[];
     aggregatedIndexes: AggregatedIndexInfo[];
+    databaseType: DatabaseType;
 }) => {
     const uniqueColumns = tableColumns.reduce((acc, col) => {
         if (!acc.has(col.name)) {
@@ -31,14 +35,28 @@ export const createFieldsFromMetadata = ({
         pk.column.trim()
     );
 
-    return sortedColumns.map(
-        (col: ColumnInfo): DBField => ({
+    return sortedColumns.map((col: ColumnInfo): DBField => {
+        // Create initial type from column metadata
+        const initialType = {
+            id: col.type.split(' ').join('_').toLowerCase(),
+            name: col.type.toLowerCase(),
+        };
+
+        // Check if there's a preferred synonym for this type
+        const preferredType = getPreferredSynonym(
+            initialType.name,
+            databaseType
+        );
+
+        // Use the preferred synonym if it exists, otherwise use the initial type
+        const finalType = preferredType
+            ? { id: preferredType.id, name: preferredType.name }
+            : initialType;
+
+        return {
             id: generateId(),
             name: col.name,
-            type: {
-                id: col.type.split(' ').join('_').toLowerCase(),
-                name: col.type.toLowerCase(),
-            },
+            type: finalType,
             primaryKey: tablePrimaryKeysColumns.includes(col.name),
             unique: Object.values(aggregatedIndexes).some(
                 (idx) =>
@@ -63,6 +81,6 @@ export const createFieldsFromMetadata = ({
             ...(col.is_array !== undefined ? { isArray: col.is_array } : {}),
             createdAt: Date.now(),
             comments: col.comment ? col.comment : undefined,
-        })
-    );
+        };
+    });
 };

@@ -4,7 +4,10 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
-import type { DataType } from '@/lib/data/data-types/data-types';
+import {
+    getPreferredSynonym,
+    type DataType,
+} from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -715,10 +718,21 @@ export function convertToChartDBDiagram(
                 );
             }
 
+            // Check if there's a preferred synonym for this type
+            const preferredType = getPreferredSynonym(
+                mappedType.name,
+                targetDatabaseType
+            );
+
+            // Use the preferred synonym if it exists, otherwise use the mapped type
+            const finalType = preferredType
+                ? { id: preferredType.id, name: preferredType.name }
+                : mappedType;
+
             const field: DBField = {
                 id: generateId(),
                 name: column.name,
-                type: mappedType,
+                type: finalType,
                 nullable: column.nullable,
                 primaryKey: column.primaryKey,
                 unique: column.unique,

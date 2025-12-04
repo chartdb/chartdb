@@ -142,6 +142,7 @@ export const createTablesFromMetadata = ({
             tablePrimaryKeys,
             tableInfo,
             tableSchema,
+            databaseType,
         });
 
         // Check for composite primary key and find matching index name
