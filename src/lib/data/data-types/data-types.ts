@@ -229,11 +229,13 @@ export const getPreferredSynonym = (
     typeName: string,
     databaseType: DatabaseType
 ): DataTypeData | null => {
+    const nameLower = typeName.toLowerCase().trim();
+
     if (
         databaseType === DatabaseType.POSTGRESQL ||
         databaseType === DatabaseType.COCKROACHDB
     ) {
-        return getPostgresPreferredSynonym(typeName);
+        return getPostgresPreferredSynonym(nameLower);
     }
 
     return null;

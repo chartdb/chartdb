@@ -518,7 +518,7 @@ CREATE TRIGGER arcane_audit_apprentices AFTER INSERT OR UPDATE OR DELETE ON appr
                 DatabaseType.POSTGRESQL
             );
             expect(getPreferredSynonymSpy).toHaveBeenCalledWith(
-                'character varying',
+                'varchar',
                 DatabaseType.POSTGRESQL
             );
 
