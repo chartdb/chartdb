@@ -1547,6 +1547,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 id="canvas"
                 ref={containerRef}
                 onMouseMove={handleMouseMove}
+                style={{ touchAction: 'none' }}
             >
                 <ReactFlow
                     onlyRenderVisibleElements

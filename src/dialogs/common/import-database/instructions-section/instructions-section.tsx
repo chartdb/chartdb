@@ -36,6 +36,7 @@ export interface InstructionsSectionProps {
     setImportMethod: (method: ImportMethod) => void;
     showSSMSInfoDialog: boolean;
     setShowSSMSInfoDialog: (show: boolean) => void;
+    hideSmartQuery?: boolean;
 }
 
 export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
@@ -46,12 +47,14 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
     setImportMethod,
     setShowSSMSInfoDialog,
     showSSMSInfoDialog,
+    hideSmartQuery = false,
 }) => {
     const { t } = useTranslation();
 
     return (
         <div className="flex w-full flex-1 flex-col gap-4">
-            {databaseTypeToEditionMap[databaseType].length > 0 ? (
+            {!hideSmartQuery &&
+            databaseTypeToEditionMap[databaseType].length > 0 ? (
                 <div className="flex flex-col gap-1">
                     <p className="text-sm leading-6 text-primary">
                         {t(
@@ -134,17 +137,19 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                         setImportMethod(selectedImportMethod);
                     }}
                 >
-                    <ToggleGroupItem
-                        value="query"
-                        variant="outline"
-                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
-                    >
-                        <Avatar className="h-3 w-4 rounded-none">
-                            <AvatarImage src={logo} alt="query" />
-                            <AvatarFallback>Query</AvatarFallback>
-                        </Avatar>
-                        Smart Query
-                    </ToggleGroupItem>
+                    {!hideSmartQuery && (
+                        <ToggleGroupItem
+                            value="query"
+                            variant="outline"
+                            className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
+                        >
+                            <Avatar className="h-3 w-4 rounded-none">
+                                <AvatarImage src={logo} alt="query" />
+                                <AvatarFallback>Query</AvatarFallback>
+                            </Avatar>
+                            Smart Query
+                        </ToggleGroupItem>
+                    )}
                     {!DatabasesWithoutDDLInstructions.includes(
                         databaseType
                     ) && (
@@ -174,7 +179,7 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
 
             <div className="flex flex-col gap-2">
                 <div className="text-sm font-semibold">Instructions:</div>
-                {importMethod === 'query' ? (
+                {importMethod === 'query' && !hideSmartQuery ? (
                     <SmartQueryInstructions
                         databaseType={databaseType}
                         databaseEdition={databaseEdition}
