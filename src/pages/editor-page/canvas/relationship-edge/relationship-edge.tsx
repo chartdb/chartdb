@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
-import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBRelationship, Cardinality } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from '../table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
@@ -9,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { RelationshipCardinalityPopover } from './relationship-cardinality-popover';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -38,14 +40,80 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 useDiff();
             const { showCardinality } = useLocalConfig();
 
-            const { relationships } = useChartDB();
+            const { relationships, updateRelationship, removeRelationship } =
+                useChartDB();
 
             const relationship = data?.relationship;
+
+            const [popoverOpen, setPopoverOpen] = useState(false);
+            const [popoverAnchorPosition, setPopoverAnchorPosition] = useState<{
+                x: number;
+                y: number;
+            } | null>(null);
 
             const openRelationshipInEditor = useCallback(() => {
                 selectSidebarSection('refs');
                 openRelationshipFromSidebar(id);
             }, [id, openRelationshipFromSidebar, selectSidebarSection]);
+
+            const handleEdgeClick = useCallback(
+                (e: React.MouseEvent) => {
+                    if (e.detail === 2) {
+                        // Double click - open in sidebar
+                        openRelationshipInEditor();
+                    }
+                    // Single click just selects the edge, doesn't open popover
+                },
+                [openRelationshipInEditor]
+            );
+
+            const handleIndicatorClick = useCallback((e: React.MouseEvent) => {
+                e.stopPropagation();
+                setPopoverAnchorPosition({
+                    x: e.clientX,
+                    y: e.clientY,
+                });
+                setPopoverOpen(true);
+            }, []);
+
+            const handleSwitchTables = useCallback(async () => {
+                if (!relationship) return;
+                await updateRelationship(
+                    id,
+                    {
+                        sourceTableId: relationship.targetTableId,
+                        targetTableId: relationship.sourceTableId,
+                        sourceFieldId: relationship.targetFieldId,
+                        targetFieldId: relationship.sourceFieldId,
+                        sourceCardinality: relationship.targetCardinality,
+                        targetCardinality: relationship.sourceCardinality,
+                    },
+                    { updateHistory: true }
+                );
+            }, [id, relationship, updateRelationship]);
+
+            const handleCardinalityChange = useCallback(
+                async (
+                    newSourceCardinality: Cardinality,
+                    newTargetCardinality: Cardinality
+                ) => {
+                    if (!relationship) return;
+                    await updateRelationship(
+                        id,
+                        {
+                            sourceCardinality: newSourceCardinality,
+                            targetCardinality: newTargetCardinality,
+                        },
+                        { updateHistory: true }
+                    );
+                },
+                [id, relationship, updateRelationship]
+            );
+
+            const handleDelete = useCallback(() => {
+                removeRelationship(id, { updateHistory: true });
+                setPopoverOpen(false);
+            }, [id, removeRelationship]);
 
             const edgeNumber = useMemo(() => {
                 let index = 0;
@@ -201,6 +269,27 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 [checkIfRelationshipRemoved, relationship?.id]
             );
 
+            // Calculate the midpoint of the edge for the indicator
+            const edgeMidpoint = useMemo(() => {
+                const sourceXPos =
+                    sourceSide === 'left' ? sourceLeftX : sourceRightX;
+                const targetXPos =
+                    targetSide === 'left' ? targetLeftX : targetRightX;
+                return {
+                    x: (sourceXPos + targetXPos) / 2,
+                    y: (sourceY + targetY) / 2,
+                };
+            }, [
+                sourceSide,
+                targetSide,
+                sourceLeftX,
+                sourceRightX,
+                targetLeftX,
+                targetRightX,
+                sourceY,
+                targetY,
+            ]);
+
             return (
                 <>
                     <path
@@ -219,11 +308,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                                     isDiffRelationshipRemoved,
                             },
                         ])}
-                        onClick={(e) => {
-                            if (e.detail === 2) {
-                                openRelationshipInEditor();
-                            }
-                        }}
+                        onClick={handleEdgeClick}
                     />
                     <path
                         d={edgePath}
@@ -232,12 +317,70 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         strokeWidth={20}
                         // eslint-disable-next-line tailwindcss/no-custom-classname
                         className="react-flow__edge-interaction"
-                        onClick={(e) => {
-                            if (e.detail === 2) {
-                                openRelationshipInEditor();
-                            }
-                        }}
+                        onClick={handleEdgeClick}
                     />
+                    {selected && (
+                        <foreignObject
+                            width={24}
+                            height={24}
+                            x={edgeMidpoint.x - 12}
+                            y={edgeMidpoint.y - 12}
+                            className="overflow-visible"
+                            style={{ pointerEvents: 'all' }}
+                        >
+                            <button
+                                onClick={handleIndicatorClick}
+                                className="relative flex size-6 items-center justify-center rounded-full border-2 border-pink-600 bg-white shadow-lg transition-all hover:scale-110 hover:bg-pink-50"
+                                title="Edit relationship"
+                                style={{ zIndex: 10 }}
+                            >
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 14 14"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <circle
+                                        cx="3"
+                                        cy="7"
+                                        r="1.5"
+                                        fill="#db2777"
+                                    />
+                                    <circle
+                                        cx="7"
+                                        cy="7"
+                                        r="1.5"
+                                        fill="#db2777"
+                                    />
+                                    <circle
+                                        cx="11"
+                                        cy="7"
+                                        r="1.5"
+                                        fill="#db2777"
+                                    />
+                                </svg>
+                            </button>
+                        </foreignObject>
+                    )}
+                    {relationship &&
+                        createPortal(
+                            <RelationshipCardinalityPopover
+                                open={popoverOpen}
+                                onOpenChange={setPopoverOpen}
+                                anchorPosition={popoverAnchorPosition}
+                                sourceCardinality={
+                                    relationship.sourceCardinality ?? 'one'
+                                }
+                                targetCardinality={
+                                    relationship.targetCardinality ?? 'one'
+                                }
+                                onCardinalityChange={handleCardinalityChange}
+                                onSwitch={handleSwitchTables}
+                                onDelete={handleDelete}
+                            />,
+                            document.body
+                        )}
                 </>
                 // <BaseEdge
                 //     id={id}
