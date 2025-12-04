@@ -279,19 +279,71 @@ const updateTables = ({
             return targetField;
         });
 
-        // Update indexes by matching on name within the table
+        // Update indexes - match by name first, then by semantic structure
+        // Build map of source indexes by name for quick lookup
         const sourceIndexesByName = new Map<string, DBIndex>();
         sourceTable.indexes?.forEach((index) => {
             sourceIndexesByName.set(index.name, index);
         });
 
         const updatedIndexes = targetTable.indexes?.map((targetIndex) => {
-            const sourceIndex = sourceIndexesByName.get(targetIndex.name);
-            if (sourceIndex) {
+            // First try to match by name
+            const sourceIndexByName = sourceIndexesByName.get(targetIndex.name);
+            if (sourceIndexByName) {
+                // Names match - preserve source's id, name, and createdAt
                 return {
                     ...targetIndex,
-                    id: sourceIndex.id,
-                    createdAt: sourceIndex.createdAt,
+                    id: sourceIndexByName.id,
+                    name: sourceIndexByName.name,
+                    createdAt: sourceIndexByName.createdAt,
+                };
+            }
+
+            // No name match - try semantic match by field IDs, unique, and isPrimaryKey
+            // Translate target field IDs to source field IDs for comparison
+            const targetFieldIdsAsSourceIds = targetIndex.fieldIds.map(
+                (fid) => idMappings.fields[fid] || fid
+            );
+
+            const sourceIndexBySemantic = sourceTable.indexes?.find(
+                (srcIndex) => {
+                    // Skip if this source index was already matched by name
+                    if (
+                        sourceIndexesByName.has(srcIndex.name) &&
+                        targetTable.indexes?.some(
+                            (ti) => ti.name === srcIndex.name
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    // Compare field IDs (order matters for indexes)
+                    if (
+                        srcIndex.fieldIds.length !==
+                        targetFieldIdsAsSourceIds.length
+                    ) {
+                        return false;
+                    }
+                    const fieldsMatch = srcIndex.fieldIds.every(
+                        (fid, i) => fid === targetFieldIdsAsSourceIds[i]
+                    );
+                    if (!fieldsMatch) return false;
+
+                    // Match unique and isPrimaryKey status
+                    return (
+                        srcIndex.unique === targetIndex.unique &&
+                        !!srcIndex.isPrimaryKey === !!targetIndex.isPrimaryKey
+                    );
+                }
+            );
+
+            if (sourceIndexBySemantic) {
+                // Semantic match - keep target's id and createdAt, use source's name
+                return {
+                    ...targetIndex,
+                    name: sourceIndexBySemantic.name,
+                    id: sourceIndexBySemantic.id,
+                    createdAt: sourceIndexBySemantic.createdAt,
                 };
             }
             return targetIndex;
