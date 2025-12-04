@@ -1040,11 +1040,11 @@ Table "bb"."users" {
             expect(bbUsersTable?.fields).toHaveLength(1);
 
             expect(aaUsersTable?.fields[0].name).toBe('id');
-            expect(aaUsersTable?.fields[0].type.id).toBe('integer');
+            expect(aaUsersTable?.fields[0].type.id).toBe('int');
             expect(aaUsersTable?.fields[0].primaryKey).toBe(true);
 
             expect(bbUsersTable?.fields[0].name).toBe('id');
-            expect(bbUsersTable?.fields[0].type.id).toBe('integer');
+            expect(bbUsersTable?.fields[0].type.id).toBe('int');
             expect(bbUsersTable?.fields[0].primaryKey).toBe(true);
         });
 
