@@ -14,12 +14,6 @@ CREATE TABLE wizard_spells (
 
         const result = await fromPostgres(sql);
 
-        console.log('Test results:', {
-            tableCount: result.tables.length,
-            tableNames: result.tables.map((t) => t.name),
-            warnings: result.warnings,
-        });
-
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('wizard_spells');
     });
@@ -201,46 +195,23 @@ CREATE TABLE guild_master_actions (
 
         // Count CREATE TABLE statements
         const createTableMatches = sql.match(/CREATE TABLE/gi) || [];
-        console.log(
-            `\nFound ${createTableMatches.length} CREATE TABLE statements in file`
-        );
-
-        // Find all table names
-        const tableNameMatches =
-            sql.match(
-                /CREATE TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?["']?(\w+)["']?/gi
-            ) || [];
-        const tableNames = tableNameMatches
-            .map((match) => {
-                const nameMatch = match.match(
-                    /CREATE TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?["']?(\w+)["']?/i
-                );
-                return nameMatch ? nameMatch[1] : null;
-            })
-            .filter(Boolean);
-
-        console.log('Table names found in SQL:', tableNames);
-        console.log(
-            'quest_sample_rewards in list?',
-            tableNames.includes('quest_sample_rewards')
-        );
 
         // Parse the file
         const result = await fromPostgres(sql);
 
-        console.log(`\nParsed ${result.tables.length} tables`);
-        console.log(
-            'Parsed table names:',
-            result.tables.map((t) => t.name).sort()
-        );
-
         const junctionTable = result.tables.find(
             (t) => t.name.includes('_') && t.columns.length >= 2
         );
-        console.log('junction table found?', !!junctionTable);
 
         // All CREATE TABLE statements should be parsed
         expect(result.tables.length).toBe(createTableMatches.length);
         expect(junctionTable).toBeDefined();
+
+        // Verify quest_sample_rewards is parsed
+        const questSampleRewards = result.tables.find(
+            (t) => t.name === 'quest_sample_rewards'
+        );
+        expect(questSampleRewards).toBeDefined();
+        expect(questSampleRewards!.columns).toHaveLength(2);
     });
 });

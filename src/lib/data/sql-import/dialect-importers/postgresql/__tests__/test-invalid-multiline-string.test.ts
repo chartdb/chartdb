@@ -15,11 +15,6 @@ CREATE TABLE test_table (
         const result = await fromPostgres(sql);
 
         // Even with syntax error, it should try to parse what it can
-        console.log('Result:', {
-            tables: result.tables.length,
-            warnings: result.warnings,
-        });
-
         // Should attempt to parse the table even if parser fails
         expect(result.tables.length).toBeGreaterThanOrEqual(0);
     });
@@ -42,12 +37,6 @@ CREATE TABLE table3 (
 );`;
 
         const result = await fromPostgres(sql);
-
-        console.log('Multi-table result:', {
-            tableCount: result.tables.length,
-            tableNames: result.tables.map((t) => t.name),
-            warnings: result.warnings?.length || 0,
-        });
 
         // Should parse at least table1 and table3
         expect(result.tables.length).toBeGreaterThanOrEqual(2);

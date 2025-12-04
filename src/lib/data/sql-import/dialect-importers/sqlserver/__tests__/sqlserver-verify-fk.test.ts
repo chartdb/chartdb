@@ -54,20 +54,6 @@ CREATE TABLE [DBO].[SpellComponent](
         expect(fk2?.targetColumn).toBe('SPELLID');
         expect(fk2?.sourceTableId).toBeTruthy();
         expect(fk2?.targetTableId).toBeTruthy();
-
-        // Log for debugging
-        console.log('\n=== FK Verification Results ===');
-        console.log(
-            'Tables:',
-            result.tables.map((t) => `${t.schema}.${t.name}`)
-        );
-        console.log('Total FKs found:', result.relationships.length);
-        result.relationships.forEach((r, i) => {
-            console.log(
-                `FK ${i + 1}: ${r.sourceTable}.${r.sourceColumn} -> ${r.targetTable}.${r.targetColumn}`
-            );
-            console.log(`  IDs: ${r.sourceTableId} -> ${r.targetTableId}`);
-        });
     });
 
     it('should parse inline FOREIGN KEY syntax correctly', async () => {

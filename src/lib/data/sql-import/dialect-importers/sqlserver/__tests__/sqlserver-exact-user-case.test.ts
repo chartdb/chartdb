@@ -20,31 +20,7 @@ CREATE TABLE [DBO].[SpellComponent](
   [ITSSCHOOLMETA]  [VARCHAR](32), FOREIGN KEY (itsschoolmeta) REFERENCES MagicSchool(SCHOOLID), 
   [KEYATTR] CHAR (100),  ) ON [PRIMARY]`;
 
-        console.log('Testing complex fantasy SQL...');
-        console.log(
-            'Number of CREATE TABLE statements:',
-            (sql.match(/CREATE\s+TABLE/gi) || []).length
-        );
-
         const result = await fromSQLServer(sql);
-
-        console.log(
-            'Result tables:',
-            result.tables.map((t) => t.name)
-        );
-        console.log('Result relationships:', result.relationships.length);
-
-        // Debug: Show actual relationships
-        if (result.relationships.length === 0) {
-            console.log('WARNING: No relationships found!');
-        } else {
-            console.log('Relationships found:');
-            result.relationships.forEach((r) => {
-                console.log(
-                    `  ${r.sourceTable}.${r.sourceColumn} -> ${r.targetTable}.${r.targetColumn}`
-                );
-            });
-        }
 
         // Should create TWO tables
         expect(result.tables).toHaveLength(2);

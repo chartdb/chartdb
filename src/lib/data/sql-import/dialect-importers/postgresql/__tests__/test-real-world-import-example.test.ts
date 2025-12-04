@@ -55,13 +55,6 @@ CREATE INDEX "grimoires_category_idx" ON "grimoires" ("category");
 
         const result = await fromPostgres(sql);
 
-        // Verify enum parsing
-        console.log('\n=== IMPORT RESULTS ===');
-        console.log(`Enums parsed: ${result.enums?.length || 0}`);
-        console.log(`Tables parsed: ${result.tables.length}`);
-        console.log(`Relationships found: ${result.relationships.length}`);
-        console.log(`Warnings: ${result.warnings?.length || 0}`);
-
         // All enums should be parsed despite schema qualification
         expect(result.enums).toHaveLength(3);
         expect(result.enums?.map((e) => e.name).sort()).toEqual([
@@ -98,12 +91,6 @@ CREATE INDEX "grimoires_category_idx" ON "grimoires" ("category");
             'master',
             'archmage',
         ]);
-
-        // Log warnings for visibility
-        if (result.warnings && result.warnings.length > 0) {
-            console.log('\n=== WARNINGS ===');
-            result.warnings.forEach((w) => console.log(`- ${w}`));
-        }
     });
 
     it('should provide actionable feedback for common syntax issues', async () => {

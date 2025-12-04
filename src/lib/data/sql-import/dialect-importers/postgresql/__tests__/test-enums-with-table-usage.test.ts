@@ -22,14 +22,6 @@ CREATE TABLE spellbooks (
 
         const result = await fromPostgres(sql);
 
-        // Debug output
-        console.log('Enums found:', result.enums?.length || 0);
-        if (result.enums) {
-            result.enums.forEach((e) => {
-                console.log(`  - ${e.name}`);
-            });
-        }
-
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);
 

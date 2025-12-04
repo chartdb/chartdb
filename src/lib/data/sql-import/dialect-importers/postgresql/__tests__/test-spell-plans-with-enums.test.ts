@@ -44,15 +44,7 @@ CREATE TABLE plan_sample_spells (
     PRIMARY KEY (spell_plan_id, spell_id)
 );`;
 
-        console.log('Testing exact SQL from forth example...');
-
         const result = await fromPostgres(sql);
-
-        console.log('Results:', {
-            tables: result.tables.length,
-            tableNames: result.tables.map((t) => t.name),
-            warnings: result.warnings?.length || 0,
-        });
 
         // Should have 3 tables
         expect(result.tables).toHaveLength(3);

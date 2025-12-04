@@ -60,28 +60,6 @@ CREATE TABLE [DBO].[SpellComponent](
                 )
         );
         expect(fk2).toBeDefined();
-
-        console.log(
-            'Full flow test - Relationships created:',
-            diagram.relationships?.length
-        );
-        diagram.relationships?.forEach((r) => {
-            const sourceTable = diagram.tables?.find(
-                (t) => t.id === r.sourceTableId
-            );
-            const targetTable = diagram.tables?.find(
-                (t) => t.id === r.targetTableId
-            );
-            const sourceField = sourceTable?.fields.find(
-                (f) => f.id === r.sourceFieldId
-            );
-            const targetField = targetTable?.fields.find(
-                (f) => f.id === r.targetFieldId
-            );
-            console.log(
-                `  ${sourceTable?.name}.${sourceField?.name} -> ${targetTable?.name}.${targetField?.name}`
-            );
-        });
     });
 
     it('should handle case-insensitive field matching', async () => {

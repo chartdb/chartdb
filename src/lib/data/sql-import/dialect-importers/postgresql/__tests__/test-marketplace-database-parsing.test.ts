@@ -241,48 +241,12 @@ CREATE TABLE audit_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
 
-        console.log('Parsing SQL...');
-        const startTime = Date.now();
         const result = await fromPostgres(sql);
-        const parseTime = Date.now() - startTime;
-
-        console.log(`Parse completed in ${parseTime}ms`);
 
         // Expected counts
         const expectedTables = 27;
         const expectedEnums = 15;
         const minExpectedRelationships = 36; // Adjusted based on actual relationships in the schema
-
-        console.log('\n=== PARSING RESULTS ===');
-        console.log(
-            `Tables parsed: ${result.tables.length} (expected: ${expectedTables})`
-        );
-        console.log(
-            `Enums parsed: ${result.enums?.length || 0} (expected: ${expectedEnums})`
-        );
-        console.log(
-            `Relationships parsed: ${result.relationships.length} (expected min: ${minExpectedRelationships})`
-        );
-        console.log(`Warnings: ${result.warnings?.length || 0}`);
-
-        // List parsed tables
-        console.log('\n=== TABLES PARSED ===');
-        const tableNames = result.tables.map((t) => t.name).sort();
-        tableNames.forEach((name) => console.log(`- ${name}`));
-
-        // List enums
-        if (result.enums && result.enums.length > 0) {
-            console.log('\n=== ENUMS PARSED ===');
-            result.enums.forEach((e) => {
-                console.log(`- ${e.name}: ${e.values.length} values`);
-            });
-        }
-
-        // Show warnings if any
-        if (result.warnings && result.warnings.length > 0) {
-            console.log('\n=== WARNINGS ===');
-            result.warnings.forEach((w) => console.log(`- ${w}`));
-        }
 
         // Verify counts
         expect(result.tables).toHaveLength(expectedTables);

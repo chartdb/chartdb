@@ -15,12 +15,6 @@ CREATE TABLE towers (
 
         const result = await fromPostgres(sql);
 
-        console.log(
-            'Tables:',
-            result.tables.map((t) => t.name)
-        );
-        console.log('Relationships:', result.relationships);
-
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);
         expect(result.relationships[0].sourceTable).toBe('towers');
@@ -42,13 +36,6 @@ CREATE TABLE quests (
 );`;
 
         const result = await fromPostgres(sql);
-
-        console.log(
-            'Tables:',
-            result.tables.map((t) => t.name)
-        );
-        console.log('Relationships:', result.relationships);
-        console.log('Warnings:', result.warnings);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);

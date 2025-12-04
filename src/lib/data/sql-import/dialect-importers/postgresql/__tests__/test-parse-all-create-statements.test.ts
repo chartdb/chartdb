@@ -29,13 +29,6 @@ CREATE TABLE schema1.table_with_schema (id INTEGER PRIMARY KEY);`;
         // Count CREATE TABLE statements in the SQL
         const createTableCount = (sql.match(/CREATE TABLE/gi) || []).length;
 
-        console.log(`\nValidation:`);
-        console.log(`- CREATE TABLE statements in SQL: ${createTableCount}`);
-        console.log(`- Tables parsed: ${result.tables.length}`);
-        console.log(
-            `- Table names: ${result.tables.map((t) => t.name).join(', ')}`
-        );
-
         // All CREATE TABLE statements should result in a parsed table
         expect(result.tables).toHaveLength(createTableCount);
 
@@ -82,20 +75,14 @@ CREATE TABLE complex_constraints (
 
         const createTableCount = (sql.match(/CREATE TABLE/gi) || []).length;
 
-        console.log(`\nEdge case validation:`);
-        console.log(`- CREATE TABLE statements: ${createTableCount}`);
-        console.log(`- Tables parsed: ${result.tables.length}`);
-        console.log(
-            `- Expected tables: only_fks, no_pk, empty_table, complex_constraints`
-        );
-        console.log(
-            `- Actual tables: ${result.tables.map((t) => t.name).join(', ')}`
-        );
-        result.tables.forEach((t) => {
-            console.log(`- ${t.name}: ${t.columns.length} columns`);
-        });
-
         // Even edge cases should be parsed
         expect(result.tables).toHaveLength(createTableCount);
+
+        // Verify the expected tables are present
+        const tableNames = result.tables.map((t) => t.name).sort();
+        expect(tableNames).toContain('only_fks');
+        expect(tableNames).toContain('no_pk');
+        expect(tableNames).toContain('empty_table');
+        expect(tableNames).toContain('complex_constraints');
     });
 });

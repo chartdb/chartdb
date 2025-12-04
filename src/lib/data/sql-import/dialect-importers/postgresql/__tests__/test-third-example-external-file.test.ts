@@ -62,47 +62,12 @@ CREATE TABLE rewards (
         // Use the improved parser
         const parserResult = await fromPostgres(sql);
 
-        console.log('\nParser Result:');
-        console.log('- Enums found:', parserResult.enums?.length || 0);
-        if (parserResult.enums) {
-            parserResult.enums.forEach((e) => {
-                console.log(`  - ${e.name}: ${e.values.length} values`);
-            });
-        }
-
         // Convert to diagram
         const diagram = convertToChartDBDiagram(
             parserResult,
             DatabaseType.POSTGRESQL,
             DatabaseType.POSTGRESQL
         );
-
-        console.log('\nDiagram Result:');
-        console.log('- Custom types:', diagram.customTypes?.length || 0);
-        if (diagram.customTypes) {
-            diagram.customTypes.forEach((t) => {
-                console.log(`  - ${t.name} (${t.kind})`);
-            });
-        }
-
-        // Check contracts table
-        const contractsTable = diagram.tables?.find(
-            (t) => t.name === 'contracts'
-        );
-        if (contractsTable) {
-            console.log('\nContracts table enum fields:');
-            const enumFields = ['status'];
-            enumFields.forEach((fieldName) => {
-                const field = contractsTable.fields.find(
-                    (f) => f.name === fieldName
-                );
-                if (field) {
-                    console.log(
-                        `  - ${field.name}: ${field.type.name} (id: ${field.type.id})`
-                    );
-                }
-            });
-        }
 
         // Assertions
         expect(parserResult.enums).toHaveLength(5);

@@ -11,15 +11,6 @@ CREATE TABLE spell_ingredients (
 
         const result = await fromPostgres(sql);
 
-        console.log('String preservation result:', {
-            tableCount: result.tables.length,
-            columns: result.tables[0]?.columns.map((c) => ({
-                name: c.name,
-                type: c.type,
-                default: c.default,
-            })),
-        });
-
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].columns).toHaveLength(2);
 

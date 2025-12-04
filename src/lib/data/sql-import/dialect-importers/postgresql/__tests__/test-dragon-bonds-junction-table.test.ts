@@ -11,18 +11,7 @@ CREATE TABLE dragon_bonds (
     PRIMARY KEY (dragon_master_id, dragon_id)
 );`;
 
-        console.log('Testing with SQL:', sql);
-
         const result = await fromPostgres(sql);
-
-        console.log('Result:', {
-            tableCount: result.tables.length,
-            tables: result.tables.map((t) => ({
-                name: t.name,
-                columns: t.columns.length,
-            })),
-            warnings: result.warnings,
-        });
 
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('dragon_bonds');
@@ -59,11 +48,6 @@ CREATE TABLE dragon_bonds (
 );`;
 
         const result = await fromPostgres(sql);
-
-        console.log('With dependencies:', {
-            tableCount: result.tables.length,
-            tableNames: result.tables.map((t) => t.name),
-        });
 
         expect(result.tables).toHaveLength(3);
         const dragonBonds = result.tables.find(

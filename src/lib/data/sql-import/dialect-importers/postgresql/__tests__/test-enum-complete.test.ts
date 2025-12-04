@@ -36,56 +36,6 @@ CREATE TABLE dragon_quests (
         // Parse the SQL
         const result = await fromPostgres(sql);
 
-        // Check enums
-        console.log('\nEnum parsing results:');
-        console.log(`Found ${result.enums?.length || 0} enum types`);
-
-        if (result.enums) {
-            result.enums.forEach((e) => {
-                console.log(`  - ${e.name}: ${e.values.length} values`);
-            });
-        }
-
-        // Expected enums
-        const expectedEnums = [
-            'wizard_rank',
-            'spell_frequency',
-            'magic_school',
-            'quest_status',
-            'dragon_mood',
-        ];
-
-        // Check which are missing
-        const foundEnumNames = result.enums?.map((e) => e.name) || [];
-        const missingEnums = expectedEnums.filter(
-            (e) => !foundEnumNames.includes(e)
-        );
-
-        if (missingEnums.length > 0) {
-            console.log('\nMissing enums:', missingEnums);
-
-            // Let's check if they're in the SQL at all
-            missingEnums.forEach((enumName) => {
-                const regex = new RegExp(`CREATE\\s+TYPE\\s+${enumName}`, 'i');
-                if (regex.test(sql)) {
-                    console.log(
-                        `  ${enumName} exists in SQL but wasn't parsed`
-                    );
-
-                    // Find the line
-                    const lines = sql.split('\n');
-                    const lineIndex = lines.findIndex((line) =>
-                        regex.test(line)
-                    );
-                    if (lineIndex !== -1) {
-                        console.log(
-                            `    Line ${lineIndex + 1}: ${lines[lineIndex].trim()}`
-                        );
-                    }
-                }
-            });
-        }
-
         // Convert to diagram
         const diagram = convertToChartDBDiagram(
             result,
@@ -93,68 +43,54 @@ CREATE TABLE dragon_quests (
             DatabaseType.POSTGRESQL
         );
 
-        // Check custom types in diagram
-        console.log(
-            '\nCustom types in diagram:',
-            diagram.customTypes?.length || 0
-        );
-
-        // Check wizards table
-        const wizardsTable = diagram.tables?.find((t) => t.name === 'wizards');
-        if (wizardsTable) {
-            console.log('\nWizards table:');
-            const rankField = wizardsTable.fields.find(
-                (f) => f.name === 'rank'
-            );
-            if (rankField) {
-                console.log(
-                    `  rank field type: ${rankField.type.name} (id: ${rankField.type.id})`
-                );
-            }
-        }
-
-        // Check spellbooks table
-        const spellbooksTable = diagram.tables?.find(
-            (t) => t.name === 'spellbooks'
-        );
-        if (spellbooksTable) {
-            console.log('\nSpellbooks table:');
-            const frequencyField = spellbooksTable.fields.find(
-                (f) => f.name === 'cast_frequency'
-            );
-            if (frequencyField) {
-                console.log(
-                    `  cast_frequency field type: ${frequencyField.type.name}`
-                );
-            }
-
-            const schoolField = spellbooksTable.fields.find(
-                (f) => f.name === 'primary_school'
-            );
-            if (schoolField) {
-                console.log(
-                    `  primary_school field type: ${schoolField.type.name}`
-                );
-            }
-        }
-
         // Assertions
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);
         expect(diagram.customTypes).toHaveLength(5);
 
-        // Check that wizard_rank is present
+        // Verify all expected enums are present
+        const expectedEnums = [
+            'wizard_rank',
+            'spell_frequency',
+            'magic_school',
+            'quest_status',
+            'dragon_mood',
+        ];
+        const foundEnumNames = result.enums!.map((e) => e.name);
+        expectedEnums.forEach((enumName) => {
+            expect(foundEnumNames).toContain(enumName);
+        });
+
+        // Check that wizard_rank is present with correct values
         const wizardRankEnum = result.enums!.find(
             (e) => e.name === 'wizard_rank'
         );
         expect(wizardRankEnum).toBeDefined();
+        expect(wizardRankEnum!.values).toHaveLength(5);
 
         // Check that the rank field uses wizard_rank type
-        if (wizardsTable) {
-            const rankField = wizardsTable.fields.find(
-                (f) => f.name === 'rank'
-            );
-            expect(rankField?.type.name.toLowerCase()).toBe('wizard_rank');
-        }
+        const wizardsTable = diagram.tables?.find((t) => t.name === 'wizards');
+        expect(wizardsTable).toBeDefined();
+        const rankField = wizardsTable!.fields.find((f) => f.name === 'rank');
+        expect(rankField).toBeDefined();
+        expect(rankField!.type.name.toLowerCase()).toBe('wizard_rank');
+
+        // Check spellbooks table enum fields
+        const spellbooksTable = diagram.tables?.find(
+            (t) => t.name === 'spellbooks'
+        );
+        expect(spellbooksTable).toBeDefined();
+
+        const frequencyField = spellbooksTable!.fields.find(
+            (f) => f.name === 'cast_frequency'
+        );
+        expect(frequencyField).toBeDefined();
+        expect(frequencyField!.type.name.toLowerCase()).toBe('spell_frequency');
+
+        const schoolField = spellbooksTable!.fields.find(
+            (f) => f.name === 'primary_school'
+        );
+        expect(schoolField).toBeDefined();
+        expect(schoolField!.type.name.toLowerCase()).toBe('magic_school');
     });
 });
