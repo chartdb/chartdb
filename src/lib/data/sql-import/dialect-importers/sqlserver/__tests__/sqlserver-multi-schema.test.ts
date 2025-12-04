@@ -415,10 +415,8 @@ ALTER TABLE [marketplace].[transactions] ADD CONSTRAINT [FK_MarketTransactions_P
             (name) => !foundRelationshipNames.includes(name)
         );
 
-        if (missingRelationships.length > 0) {
-            console.log('Missing relationships:', missingRelationships);
-            console.log('Found relationships:', foundRelationshipNames);
-        }
+        // Verify all expected relationships were found
+        expect(missingRelationships.length).toBe(0);
 
         // Verify relationships count - we have 32 working relationships
         expect(result.relationships.length).toBe(32);
@@ -509,16 +507,6 @@ ALTER TABLE [marketplace].[transactions] ADD CONSTRAINT [FK_MarketTransactions_P
                 r.targetSchema === 'realm'
         );
         expect(citiesToKingdoms).toBeDefined();
-
-        console.log('Multi-schema test results:');
-        console.log('Total schemas:', schemas.size);
-        console.log('Total tables:', result.tables.length);
-        console.log('Total relationships:', result.relationships.length);
-        console.log(
-            'Cross-schema relationships:',
-            crossSchemaRelationships.length
-        );
-        console.log('Within-schema relationships:', withinSchemaRels.length);
     });
 
     it('should handle mixed schema notation formats', async () => {

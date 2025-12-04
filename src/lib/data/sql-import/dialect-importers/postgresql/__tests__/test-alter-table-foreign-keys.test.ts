@@ -163,14 +163,6 @@ ALTER TABLE ONLY "wizard_resident" ADD CONSTRAINT "wizard_tower_fk2" FOREIGN KEY
 
         const result = await fromPostgres(sql);
 
-        console.log('Relationships found:', result.relationships.length);
-        result.relationships.forEach((rel, i) => {
-            console.log(
-                `FK ${i + 1}: ${rel.sourceTable}.${rel.sourceColumn} -> ${rel.targetTable}.${rel.targetColumn}`
-            );
-        });
-        console.log('Warnings:', result.warnings);
-
         expect(result.tables).toHaveLength(2);
 
         // At least one relationship should be found (the regex fallback should catch at least one)
@@ -204,9 +196,6 @@ ALTER TABLE ONLY "public"."account_emailaddress" ADD CONSTRAINT "account_emailad
 `;
 
         const result = await fromPostgres(sql);
-
-        console.log('Warnings:', result.warnings);
-        console.log('Relationships:', result.relationships);
 
         expect(result.tables).toHaveLength(2);
         expect(result.relationships).toHaveLength(1);

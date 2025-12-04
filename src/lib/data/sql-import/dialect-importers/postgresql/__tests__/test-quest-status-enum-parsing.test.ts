@@ -17,13 +17,7 @@ CREATE TYPE ritual_status AS ENUM ('pending', 'channeling', 'completed', 'failed
 CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 `;
 
-        console.log('Testing with fromPostgres...');
         const result = await fromPostgres(sql);
-
-        console.log(
-            'Enums found:',
-            result.enums?.map((e) => e.name)
-        );
 
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);

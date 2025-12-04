@@ -164,10 +164,6 @@ describe('SQL Server Foreign Key Relationship Tests', () => {
 
         const result = await fromSQLServer(sql);
 
-        // Debug output
-        console.log('Total tables:', result.tables.length);
-        console.log('Total relationships:', result.relationships.length);
-
         // Check if we have the expected number of tables and relationships
         expect(result.tables).toHaveLength(4);
         expect(result.relationships).toHaveLength(4);
@@ -182,37 +178,22 @@ describe('SQL Server Foreign Key Relationship Tests', () => {
 
         expect(spellCastingRel).toBeDefined();
 
-        if (spellCastingRel) {
-            // Find the corresponding tables
-            const spellTable = result.tables.find(
-                (t) => t.name === 'Spell' && t.schema === 'spellcasting'
-            );
-            const spellCastingProcessTable = result.tables.find(
-                (t) =>
-                    t.name === 'SpellCastingProcess' &&
-                    t.schema === 'spellcasting'
-            );
+        // Find the corresponding tables
+        const spellTable = result.tables.find(
+            (t) => t.name === 'Spell' && t.schema === 'spellcasting'
+        );
+        const spellCastingProcessTable = result.tables.find(
+            (t) =>
+                t.name === 'SpellCastingProcess' && t.schema === 'spellcasting'
+        );
 
-            console.log('SpellCastingProcess relationship:', {
-                sourceTableId: spellCastingRel.sourceTableId,
-                targetTableId: spellCastingRel.targetTableId,
-                spellCastingProcessTableId: spellCastingProcessTable?.id,
-                spellTableId: spellTable?.id,
-                isSourceIdValid:
-                    spellCastingRel.sourceTableId ===
-                    spellCastingProcessTable?.id,
-                isTargetIdValid:
-                    spellCastingRel.targetTableId === spellTable?.id,
-            });
-
-            // Verify the IDs are properly linked
-            expect(spellCastingRel.sourceTableId).toBeTruthy();
-            expect(spellCastingRel.targetTableId).toBeTruthy();
-            expect(spellCastingRel.sourceTableId).toBe(
-                spellCastingProcessTable!.id
-            );
-            expect(spellCastingRel.targetTableId).toBe(spellTable!.id);
-        }
+        // Verify the IDs are properly linked
+        expect(spellCastingRel!.sourceTableId).toBeTruthy();
+        expect(spellCastingRel!.targetTableId).toBeTruthy();
+        expect(spellCastingRel!.sourceTableId).toBe(
+            spellCastingProcessTable!.id
+        );
+        expect(spellCastingRel!.targetTableId).toBe(spellTable!.id);
 
         // Check the apprentice self-referencing relationships
         const apprenticeWizardRel = result.relationships.find(
@@ -240,13 +221,6 @@ describe('SQL Server Foreign Key Relationship Tests', () => {
                 r.sourceTableId === '' ||
                 r.targetTableId === ''
         );
-
-        if (relationshipsWithMissingIds.length > 0) {
-            console.log(
-                'Relationships with missing IDs:',
-                relationshipsWithMissingIds.slice(0, 5)
-            );
-        }
 
         expect(relationshipsWithMissingIds).toHaveLength(0);
     });

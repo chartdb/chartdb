@@ -13,13 +13,6 @@ CREATE TABLE crystal_enchantments (
 
         const result = await fromPostgres(sql);
 
-        console.log('\nDebug info:');
-        console.log('Tables found:', result.tables.length);
-        console.log(
-            'Table names:',
-            result.tables.map((t) => t.name)
-        );
-
         expect(result.tables).toHaveLength(1);
         expect(result.tables[0].name).toBe('crystal_enchantments');
         expect(result.tables[0].columns).toHaveLength(2);

@@ -180,36 +180,26 @@ CREATE TABLE rewards (
 );`;
         const result = await fromPostgres(sql);
 
-        console.log('\nParsing results:');
-        console.log(`- Tables found: ${result.tables.length}`);
-        console.log(`- Enums found: ${result.enums?.length || 0}`);
-        console.log(`- Warnings: ${result.warnings?.length || 0}`);
-
         // List all table names
         const tableNames = result.tables.map((t) => t.name).sort();
-        console.log('\nTable names:');
-        tableNames.forEach((name, i) => {
-            console.log(`  ${i + 1}. ${name}`);
-        });
 
         // Should have all 20 tables
         expect(result.tables).toHaveLength(20);
+
+        // Verify parsing metadata
+        expect(result.enums).toHaveLength(5);
 
         // Check for quest_sample_rewards specifically
         const questSampleRewards = result.tables.find(
             (t) => t.name === 'quest_sample_rewards'
         );
         expect(questSampleRewards).toBeDefined();
+        expect(questSampleRewards!.columns).toHaveLength(2);
 
-        if (questSampleRewards) {
-            console.log('\nquest_sample_rewards table details:');
-            console.log(`- Columns: ${questSampleRewards.columns.length}`);
-            questSampleRewards.columns.forEach((col) => {
-                console.log(
-                    `  - ${col.name}: ${col.type} (nullable: ${col.nullable})`
-                );
-            });
-        }
+        // Verify quest_sample_rewards columns
+        const qsrColumnNames = questSampleRewards!.columns.map((c) => c.name);
+        expect(qsrColumnNames).toContain('quest_template_id');
+        expect(qsrColumnNames).toContain('reward_id');
 
         // Expected tables
         const expectedTables = [

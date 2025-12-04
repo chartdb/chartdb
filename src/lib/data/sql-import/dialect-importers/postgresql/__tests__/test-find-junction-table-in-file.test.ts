@@ -140,64 +140,30 @@ CREATE TABLE guild_master_actions (
 
         // First, verify the table exists in the SQL
         const tableExists = sql.includes('CREATE TABLE quest_sample_rewards');
-        console.log('\nDebugging quest_sample_rewards:');
-        console.log('- Table exists in SQL:', tableExists);
-
-        // Extract the specific table definition
-        const tableMatch = sql.match(
-            /-- Junction table[\s\S]*?CREATE TABLE quest_sample_rewards[\s\S]*?;/
-        );
-        if (tableMatch) {
-            console.log('- Table definition found, first 200 chars:');
-            console.log(tableMatch[0].substring(0, 200) + '...');
-        }
 
         // Now parse
         const result = await fromPostgres(sql);
-
-        console.log('\nParsing results:');
-        console.log('- Total tables:', result.tables.length);
-        console.log(
-            '- Table names:',
-            result.tables.map((t) => t.name).join(', ')
-        );
 
         // Look for quest_sample_rewards
         const questSampleRewards = result.tables.find(
             (t) => t.name === 'quest_sample_rewards'
         );
-        console.log('- quest_sample_rewards found:', !!questSampleRewards);
-
-        if (!questSampleRewards) {
-            // Check warnings for clues
-            console.log('\nWarnings that might be relevant:');
-            result.warnings?.forEach((w, i) => {
-                if (
-                    w.includes('quest_sample_rewards') ||
-                    w.includes('Failed to parse')
-                ) {
-                    console.log(`  ${i}: ${w}`);
-                }
-            });
-
-            // List all tables to see what's missing
-            console.log('\nAll parsed tables:');
-            result.tables.forEach((t, i) => {
-                console.log(
-                    `  ${i + 1}. ${t.name} (${t.columns.length} columns)`
-                );
-            });
-        } else {
-            console.log('\nquest_sample_rewards details:');
-            console.log('- Columns:', questSampleRewards.columns.length);
-            questSampleRewards.columns.forEach((c) => {
-                console.log(`  - ${c.name}: ${c.type}`);
-            });
-        }
 
         // The test expectation
         expect(tableExists).toBe(true);
         expect(result.tables.length).toBeGreaterThanOrEqual(19); // At least 19 tables
         expect(questSampleRewards).toBeDefined();
+
+        // Verify quest_sample_rewards has correct columns
+        expect(questSampleRewards!.columns).toHaveLength(2);
+        const columnNames = questSampleRewards!.columns.map((c) => c.name);
+        expect(columnNames).toContain('quest_template_id');
+        expect(columnNames).toContain('reward_id');
+
+        // Verify no parsing warnings for this table
+        const questSampleRewardsWarnings = result.warnings?.filter((w) =>
+            w.includes('quest_sample_rewards')
+        );
+        expect(questSampleRewardsWarnings?.length ?? 0).toBe(0);
     });
 });

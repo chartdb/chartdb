@@ -21,12 +21,6 @@ CREATE TABLE table3 (
 
         const result = await fromPostgres(sql);
 
-        console.log('Test results:', {
-            tableCount: result.tables.length,
-            tableNames: result.tables.map((t) => t.name),
-            warnings: result.warnings,
-        });
-
         // Should parse all 3 tables even though table2 has undefined reference
         expect(result.tables).toHaveLength(3);
 

@@ -598,13 +598,6 @@ ALTER TABLE [Transactions] ADD CONSTRAINT [FK_Transactions_Currency]
 
         const result = await fromSQLServer(sql);
 
-        // Debug: log table names to see what's parsed
-        console.log('Tables found:', result.tables.length);
-        console.log(
-            'Table names:',
-            result.tables.map((t) => t.name)
-        );
-
         // Verify correct number of tables
         expect(result.tables.length).toBe(37); // Actually 37 tables after counting
 
@@ -614,7 +607,6 @@ ALTER TABLE [Transactions] ADD CONSTRAINT [FK_Transactions_Currency]
         expect(schemas.has('dbo')).toBe(true);
 
         // Verify correct number of relationships
-        console.log('Relationships found:', result.relationships.length);
         expect(result.relationships.length).toBe(55); // 55 foreign key relationships that can be parsed
 
         // Verify all relationships have valid source and target table IDs
@@ -682,23 +674,5 @@ ALTER TABLE [Transactions] ADD CONSTRAINT [FK_Transactions_Currency]
             expect(rel.sourceTableId).toBe(sourceTable?.id);
             expect(rel.targetTableId).toBe(targetTable?.id);
         }
-
-        console.log('Single-schema test results:');
-        console.log('Total tables:', result.tables.length);
-        console.log('Total relationships:', result.relationships.length);
-        console.log(
-            'All relationships properly linked:',
-            validRelationships.length === result.relationships.length
-        );
-
-        // Sample of relationship names for verification
-        const sampleRelationships = result.relationships
-            .slice(0, 5)
-            .map((r) => ({
-                name: r.name,
-                source: `${r.sourceTable}.${r.sourceColumn}`,
-                target: `${r.targetTable}.${r.targetColumn}`,
-            }));
-        console.log('Sample relationships:', sampleRelationships);
     });
 });

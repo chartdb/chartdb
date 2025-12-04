@@ -32,48 +32,19 @@ CREATE TABLE creature_abilities (
 );
 `;
 
-        console.log(
-            'Testing PostgreSQL parser with CREATE EXTENSION and CREATE TYPE...\n'
-        );
+        const result = await fromPostgres(testSQL);
 
-        try {
-            const result = await fromPostgres(testSQL);
+        // Basic assertions
+        expect(result.tables.length).toBe(2);
+        expect(result.tables[0].name).toBe('mystical_creatures');
+        expect(result.tables[1].name).toBe('creature_abilities');
+        expect(result.relationships.length).toBe(1);
 
-            console.log('Parse successful!');
-            console.log('\nTables found:', result.tables.length);
-            result.tables.forEach((table) => {
-                console.log(`\n- Table: ${table.name}`);
-                console.log('  Columns:');
-                table.columns.forEach((col) => {
-                    console.log(
-                        `    - ${col.name}: ${col.type}${col.nullable ? '' : ' NOT NULL'}${col.primaryKey ? ' PRIMARY KEY' : ''}`
-                    );
-                });
-            });
-
-            console.log('\nRelationships found:', result.relationships.length);
-            result.relationships.forEach((rel) => {
-                console.log(
-                    `- ${rel.sourceTable}.${rel.sourceColumn} -> ${rel.targetTable}.${rel.targetColumn}`
-                );
-            });
-
-            if (result.warnings && result.warnings.length > 0) {
-                console.log('\nWarnings:');
-                result.warnings.forEach((warning) => {
-                    console.log(`- ${warning}`);
-                });
-            }
-
-            // Basic assertions
-            expect(result.tables.length).toBe(2);
-            expect(result.tables[0].name).toBe('mystical_creatures');
-            expect(result.tables[1].name).toBe('creature_abilities');
-            expect(result.relationships.length).toBe(1);
-        } catch (error) {
-            console.error('Error parsing SQL:', (error as Error).message);
-            console.error('\nStack trace:', (error as Error).stack);
-            throw error;
-        }
+        // Verify enums are parsed
+        expect(result.enums).toHaveLength(2);
+        expect(result.enums?.map((e) => e.name).sort()).toEqual([
+            'creature_alignment',
+            'magic_school',
+        ]);
     });
 });

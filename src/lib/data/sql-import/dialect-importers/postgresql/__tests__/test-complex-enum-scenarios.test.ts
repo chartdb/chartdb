@@ -62,15 +62,6 @@ ALTER TABLE "spells" ADD CONSTRAINT "spells_wizard_id_wizard_id_fk"
 
         const result = await fromPostgres(sql);
 
-        // Check enum parsing
-        console.log('\n=== ENUMS FOUND ===');
-        console.log('Count:', result.enums?.length || 0);
-        if (result.enums) {
-            result.enums.forEach((e) => {
-                console.log(`  - ${e.name}: ${e.values.length} values`);
-            });
-        }
-
         // Should find all 7 enums
         expect(result.enums).toHaveLength(7);
 
@@ -97,11 +88,6 @@ ALTER TABLE "spells" ADD CONSTRAINT "spells_wizard_id_wizard_id_fk"
             'mythic',
         ]);
 
-        // Check table parsing
-        console.log('\n=== TABLES FOUND ===');
-        console.log('Count:', result.tables.length);
-        console.log('Names:', result.tables.map((t) => t.name).join(', '));
-
         // Should find all 4 tables
         expect(result.tables).toHaveLength(4);
         expect(result.tables.map((t) => t.name).sort()).toEqual([
@@ -110,15 +96,6 @@ ALTER TABLE "spells" ADD CONSTRAINT "spells_wizard_id_wizard_id_fk"
             'wizard',
             'wizard_account',
         ]);
-
-        // Check warnings for syntax issues
-        console.log('\n=== WARNINGS ===');
-        console.log('Count:', result.warnings?.length || 0);
-        if (result.warnings) {
-            result.warnings.forEach((w) => {
-                console.log(`  - ${w}`);
-            });
-        }
 
         // Should have warnings about custom types and parsing failures
         expect(result.warnings).toBeDefined();
@@ -150,8 +127,7 @@ CREATE TABLE "dragons" (
         expect(result.enums).toHaveLength(1);
         expect(result.enums?.[0].name).toBe('dragon_element');
 
-        // Table might have issues due to missing space
-        console.log('Tables:', result.tables.length);
-        console.log('Warnings:', result.warnings);
+        // Table might succeed or fail due to missing space syntax
+        // The important thing is the enum was still parsed correctly
     });
 });

@@ -203,39 +203,18 @@ CREATE TABLE guild_master_actions (
 
         const result = await fromPostgres(sql);
 
-        console.log('\n=== PARSING RESULTS ===');
-        console.log(`Tables parsed: ${result.tables.length}`);
-        console.log(`Expected: ${expectedTables.length}`);
-
         const parsedTableNames = result.tables.map((t) => t.name).sort();
-        console.log('\nParsed tables:');
-        parsedTableNames.forEach((name, i) => {
-            console.log(`  ${i + 1}. ${name}`);
-        });
 
-        // Find missing tables
+        // Find missing tables and verify none are missing
         const missingTables = expectedTables.filter(
             (expected) => !parsedTableNames.includes(expected)
         );
-        if (missingTables.length > 0) {
-            console.log('\nMissing tables:');
-            missingTables.forEach((name) => {
-                console.log(`  - ${name}`);
-            });
-        }
+        expect(missingTables).toHaveLength(0);
 
         // Check for quest_sample_rewards specifically
         const questSampleRewards = result.tables.find(
             (t) => t.name === 'quest_sample_rewards'
         );
-        console.log(`\nquest_sample_rewards found: ${!!questSampleRewards}`);
-        if (questSampleRewards) {
-            console.log('quest_sample_rewards details:');
-            console.log(`  - Columns: ${questSampleRewards.columns.length}`);
-            questSampleRewards.columns.forEach((col) => {
-                console.log(`    - ${col.name}: ${col.type}`);
-            });
-        }
 
         // Verify all tables were parsed
         expect(result.tables).toHaveLength(expectedTables.length);
@@ -249,11 +228,5 @@ CREATE TABLE guild_master_actions (
             .map((c) => c.name)
             .sort();
         expect(columnNames).toEqual(['quest_template_id', 'reward_id']);
-
-        // Check warnings if any
-        if (result.warnings && result.warnings.length > 0) {
-            console.log('\nWarnings:');
-            result.warnings.forEach((w) => console.log(`  - ${w}`));
-        }
     });
 });

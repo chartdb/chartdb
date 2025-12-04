@@ -43,9 +43,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             expect(diagram.tables).toBeDefined();
             diagram.tables?.forEach((table) => {
                 expect(table.schema).toBe('');
-                console.log(
-                    `✓ Table "${table.name}" has no schema (MySQL behavior)`
-                );
             });
 
             // Check specific tables
@@ -129,8 +126,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                     expect(resultField?.name).toBe(sourceField.name);
                 });
             });
-
-            console.log('✓ All IDs preserved after DBML round-trip');
         });
     });
 
@@ -230,9 +225,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             // For MySQL, 'public' schema should be stripped
             mysqlDiagram.tables?.forEach((table) => {
                 expect(table.schema).toBe('');
-                console.log(
-                    `✓ MySQL: Table "${table.name}" has no schema (public was stripped)`
-                );
             });
 
             // Now test with PostgreSQL - public should also be stripped (it's the default)
@@ -242,9 +234,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
 
             pgDiagram.tables?.forEach((table) => {
                 expect(table.schema).toBe('');
-                console.log(
-                    `✓ PostgreSQL: Table "${table.name}" has no schema (public is default)`
-                );
             });
         });
 
@@ -275,7 +264,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
 
             expect(magicTable?.schema).toBe('fantasy');
             expect(questTable?.schema).toBe('adventure');
-            console.log('✓ Custom schemas preserved correctly');
         });
     });
 
@@ -427,8 +415,6 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                     expect(currentTable?.id).toBe(original.id);
                 });
             }
-
-            console.log('✓ Data integrity maintained through 3 cycles');
         });
     });
 });

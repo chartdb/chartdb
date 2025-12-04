@@ -14,13 +14,6 @@ CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 
         const result = await fromPostgres(sql);
 
-        console.log('Result enums:', result.enums?.length || 0);
-        if (result.enums) {
-            result.enums.forEach((e) => {
-                console.log(`  - ${e.name}`);
-            });
-        }
-
         expect(result.enums).toBeDefined();
         expect(result.enums).toHaveLength(5);
     });
@@ -47,9 +40,6 @@ CREATE TYPE mana_status AS ENUM ('pending', 'charged', 'depleted');
 
         for (const enumDef of enums) {
             const result = await fromPostgres(enumDef.sql);
-
-            console.log(`\nTesting ${enumDef.name}:`);
-            console.log(`  Found enums: ${result.enums?.length || 0}`);
 
             expect(result.enums).toBeDefined();
             expect(result.enums).toHaveLength(1);

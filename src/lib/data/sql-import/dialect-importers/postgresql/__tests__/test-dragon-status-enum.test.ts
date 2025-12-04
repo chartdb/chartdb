@@ -49,11 +49,6 @@ CREATE TABLE dragons (
 
         const result = await fromPostgres(sql);
 
-        console.log(
-            'Parsed enums:',
-            result.enums?.map((e) => e.name)
-        );
-
         expect(result.enums).toHaveLength(3);
 
         // Specifically check for dragon_status

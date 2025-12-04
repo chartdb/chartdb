@@ -16,13 +16,6 @@ CREATE TABLE "wizards" (
 
         const result = await fromPostgres(sql);
 
-        console.log('Enums found:', result.enums?.length || 0);
-        if (result.enums) {
-            result.enums.forEach((e) => {
-                console.log(`  - ${e.name}: ${e.values.join(', ')}`);
-            });
-        }
-
         // Should find both enums
         expect(result.enums).toHaveLength(2);
 
@@ -64,8 +57,7 @@ CREATE TABLE "dragons" (
         expect(result.enums).toHaveLength(1);
         expect(result.enums?.[0].name).toBe('dragon_type');
 
-        // Table parsing might fail due to syntax error
-        console.log('Tables found:', result.tables.length);
-        console.log('Warnings:', result.warnings);
+        // Table parsing might succeed or fail due to missing space syntax
+        // The important thing is the enum was still parsed correctly
     });
 });

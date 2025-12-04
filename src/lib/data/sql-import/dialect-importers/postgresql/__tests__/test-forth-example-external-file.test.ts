@@ -40,19 +40,13 @@ CREATE TABLE plan_sample_spells (
 
         const result = await fromPostgres(sql);
 
-        console.log('Parsing results:');
-        console.log(
-            '- Tables:',
-            result.tables.map((t) => t.name)
-        );
-        console.log('- Table count:', result.tables.length);
-        console.log('- Relationships:', result.relationships.length);
-        console.log('- Enums:', result.enums?.length || 0);
-
-        // Should have 3 tables
+        // Verify parsing results
         expect(result.tables).toHaveLength(3);
+        expect(result.relationships).toHaveLength(2);
+        expect(result.enums).toBeDefined();
+        expect(result.enums).toHaveLength(5);
 
-        // Check table names
+        // Verify table names
         const tableNames = result.tables.map((t) => t.name).sort();
         expect(tableNames).toEqual([
             'plan_sample_spells',
@@ -60,19 +54,12 @@ CREATE TABLE plan_sample_spells (
             'spells',
         ]);
 
-        // Should have 2 relationships (both from plan_sample_spells)
-        expect(result.relationships).toHaveLength(2);
-
         // Check plan_sample_spells specifically
         const planSampleSpells = result.tables.find(
             (t) => t.name === 'plan_sample_spells'
         );
         expect(planSampleSpells).toBeDefined();
         expect(planSampleSpells!.columns).toHaveLength(2);
-
-        // Should have 5 enum types
-        expect(result.enums).toBeDefined();
-        expect(result.enums).toHaveLength(5);
     });
 
     it('should parse the exact junction table definition', async () => {
