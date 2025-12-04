@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
     preprocessDBML,
     sanitizeDBML,
@@ -6,6 +6,7 @@ import {
 } from '../dbml-import';
 import { Parser } from '@dbml/core';
 import { DatabaseType } from '@/lib/domain/database-type';
+import * as dataTypes from '@/lib/data/data-types/data-types';
 
 describe('DBML Import', () => {
     describe('preprocessDBML', () => {
@@ -175,6 +176,70 @@ Note note_1750185617764 {
             const result = sanitizeDBML(dbml);
             // Russian text should remain unchanged
             expect(result).toContain('нужна таблица справочник?');
+        });
+    });
+
+    describe('Type Synonym Resolution', () => {
+        it('should call getPreferredSynonym for PostgreSQL types and use resolved types', async () => {
+            // Spy on getPreferredSynonym
+            const getPreferredSynonymSpy = vi.spyOn(
+                dataTypes,
+                'getPreferredSynonym'
+            );
+
+            // Mock return value for 'character varying' -> 'varchar'
+            getPreferredSynonymSpy.mockImplementation(
+                (typeName, databaseType) => {
+                    if (
+                        typeName === 'character varying' &&
+                        databaseType === DatabaseType.POSTGRESQL
+                    ) {
+                        return {
+                            id: 'varchar',
+                            name: 'varchar',
+                            fieldAttributes: { hasCharMaxLength: true },
+                            usageLevel: 1,
+                        } as const;
+                    }
+                    return null;
+                }
+            );
+
+            const dbml = `
+                Table users {
+                    id int [pk]
+                    name "character varying"(255)
+                    email "character varying"(100)
+                }
+            `;
+
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
+
+            // Verify getPreferredSynonym was called
+            expect(getPreferredSynonymSpy).toHaveBeenCalled();
+            expect(getPreferredSynonymSpy).toHaveBeenCalledWith(
+                'character varying',
+                DatabaseType.POSTGRESQL
+            );
+
+            // Verify the resolved type was used in the diagram
+            const usersTable = diagram.tables?.find((t) => t.name === 'users');
+            expect(usersTable).toBeDefined();
+
+            const nameField = usersTable?.fields.find((f) => f.name === 'name');
+            expect(nameField?.type.id).toBe('varchar');
+            expect(nameField?.type.name).toBe('varchar');
+
+            const emailField = usersTable?.fields.find(
+                (f) => f.name === 'email'
+            );
+            expect(emailField?.type.id).toBe('varchar');
+            expect(emailField?.type.name).toBe('varchar');
+
+            // Restore the original implementation
+            getPreferredSynonymSpy.mockRestore();
         });
     });
 });
