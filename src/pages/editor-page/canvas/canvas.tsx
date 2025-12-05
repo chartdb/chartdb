@@ -406,31 +406,45 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             {} as Record<string, number>
         );
 
-        setEdges([
-            ...relationships.map(
-                (relationship): RelationshipEdgeType => ({
-                    id: relationship.id,
-                    source: relationship.sourceTableId,
-                    target: relationship.targetTableId,
-                    sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                    targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                    type: 'relationship-edge',
-                    data: { relationship },
-                })
-            ),
-            ...dependencies.map(
-                (dep): DependencyEdgeType => ({
-                    id: dep.id,
-                    source: dep.dependentTableId,
-                    target: dep.tableId,
-                    sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
-                    targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
-                    type: 'dependency-edge',
-                    data: { dependency: dep },
-                    hidden: !showDBViews,
-                })
-            ),
-        ]);
+        setEdges((prevEdges) => {
+            // Create a map of previous edge states to preserve selection
+            const prevEdgeStates = new Map(
+                prevEdges.map((edge) => [
+                    edge.id,
+                    { selected: edge.selected, animated: edge.animated },
+                ])
+            );
+
+            return [
+                ...relationships.map((relationship): RelationshipEdgeType => {
+                    const prevState = prevEdgeStates.get(relationship.id);
+                    return {
+                        id: relationship.id,
+                        source: relationship.sourceTableId,
+                        target: relationship.targetTableId,
+                        sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                        targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                        type: 'relationship-edge',
+                        data: { relationship },
+                        selected: prevState?.selected ?? false,
+                    };
+                }),
+                ...dependencies.map((dep): DependencyEdgeType => {
+                    const prevState = prevEdgeStates.get(dep.id);
+                    return {
+                        id: dep.id,
+                        source: dep.dependentTableId,
+                        target: dep.tableId,
+                        sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
+                        targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
+                        type: 'dependency-edge',
+                        data: { dependency: dep },
+                        hidden: !showDBViews,
+                        selected: prevState?.selected ?? false,
+                    };
+                }),
+            ];
+        });
     }, [relationships, dependencies, setEdges, showDBViews]);
 
     useEffect(() => {
