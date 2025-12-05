@@ -11,7 +11,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useReactFlow } from '@xyflow/react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Table, Workflow, Group, View, StickyNote } from 'lucide-react';
+import { Table, Workflow, Group, View, StickyNote, Import } from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
@@ -23,7 +23,8 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const { createTable, readonly, createArea, databaseType, createNote } =
         useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
-    const { openCreateRelationshipDialog } = useDialog();
+    const { openCreateRelationshipDialog, openImportDatabaseDialog } =
+        useDialog();
     const { screenToFlowPosition } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
@@ -142,13 +143,20 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
 
+    const importSqlDbmlHandler = useCallback(() => {
+        // Defer dialog opening to prevent Radix UI context menu/dialog portal conflicts
+        queueMicrotask(() => {
+            openImportDatabaseDialog({ databaseType, hideSmartQuery: true });
+        });
+    }, [openImportDatabaseDialog, databaseType]);
+
     if (!isDesktop) {
         return <>{children}</>;
     }
 
     return (
         <ContextMenu>
-            <ContextMenuTrigger disabled={readonly}>
+            <ContextMenuTrigger disabled={readonly} asChild>
                 {children}
             </ContextMenuTrigger>
             <ContextMenuContent>
@@ -174,6 +182,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 >
                     {t('canvas_context_menu.new_relationship')}
                     <Workflow className="size-3.5" />
+                </ContextMenuItem>
+                <ContextMenuSeparator />
+                <ContextMenuItem
+                    onClick={importSqlDbmlHandler}
+                    className="flex justify-between gap-4"
+                >
+                    Import SQL/DBML
+                    <Import className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem
