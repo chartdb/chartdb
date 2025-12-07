@@ -1,16 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
 import type { DBRelationship, Cardinality } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from '../table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
 import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { RelationshipCardinalityPopover } from './relationship-cardinality-popover';
+import { useCanvas } from '@/hooks/use-canvas';
+import { EditRelationshipPopover } from './edit-relationship-popover';
+import { EllipsisIcon } from 'lucide-react';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -34,47 +35,49 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             data,
         }) => {
             const { getInternalNode, getEdge } = useReactFlow();
-            const { openRelationshipFromSidebar, selectSidebarSection } =
-                useLayout();
             const { checkIfRelationshipRemoved, checkIfNewRelationship } =
                 useDiff();
             const { showCardinality } = useLocalConfig();
 
             const { relationships, updateRelationship, removeRelationship } =
                 useChartDB();
+            const {
+                editRelationshipPopover,
+                openRelationshipPopover,
+                closeRelationshipPopover,
+            } = useCanvas();
 
             const relationship = data?.relationship;
 
-            const [popoverOpen, setPopoverOpen] = useState(false);
-            const [popoverAnchorPosition, setPopoverAnchorPosition] = useState<{
-                x: number;
-                y: number;
-            } | null>(null);
-
-            const openRelationshipInEditor = useCallback(() => {
-                selectSidebarSection('refs');
-                openRelationshipFromSidebar(id);
-            }, [id, openRelationshipFromSidebar, selectSidebarSection]);
+            const isPopoverOpen = useMemo(
+                () => editRelationshipPopover?.relationshipId === id,
+                [editRelationshipPopover, id]
+            );
 
             const handleEdgeClick = useCallback(
                 (e: React.MouseEvent) => {
                     if (e.detail === 2) {
                         // Double click - open in sidebar
-                        openRelationshipInEditor();
+                        openRelationshipPopover({
+                            relationshipId: id,
+                            position: { x: e.clientX, y: e.clientY },
+                        });
                     }
                     // Single click just selects the edge, doesn't open popover
                 },
-                [openRelationshipInEditor]
+                [openRelationshipPopover, id]
             );
 
-            const handleIndicatorClick = useCallback((e: React.MouseEvent) => {
-                e.stopPropagation();
-                setPopoverAnchorPosition({
-                    x: e.clientX,
-                    y: e.clientY,
-                });
-                setPopoverOpen(true);
-            }, []);
+            const handleIndicatorClick = useCallback(
+                (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    openRelationshipPopover({
+                        relationshipId: id,
+                        position: { x: e.clientX, y: e.clientY },
+                    });
+                },
+                [id, openRelationshipPopover]
+            );
 
             const handleSwitchTables = useCallback(async () => {
                 if (!relationship) return;
@@ -90,7 +93,14 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     },
                     { updateHistory: true }
                 );
-            }, [id, relationship, updateRelationship]);
+
+                closeRelationshipPopover();
+            }, [
+                id,
+                relationship,
+                updateRelationship,
+                closeRelationshipPopover,
+            ]);
 
             const handleCardinalityChange = useCallback(
                 async (
@@ -106,14 +116,15 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         },
                         { updateHistory: true }
                     );
+                    closeRelationshipPopover();
                 },
-                [id, relationship, updateRelationship]
+                [id, relationship, updateRelationship, closeRelationshipPopover]
             );
 
             const handleDelete = useCallback(() => {
                 removeRelationship(id, { updateHistory: true });
-                setPopoverOpen(false);
-            }, [id, removeRelationship]);
+                closeRelationshipPopover();
+            }, [id, removeRelationship, closeRelationshipPopover]);
 
             const edgeNumber = useMemo(() => {
                 let index = 0;
@@ -330,45 +341,22 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         >
                             <button
                                 onClick={handleIndicatorClick}
-                                className="relative flex size-6 items-center justify-center rounded-full border-2 border-pink-600 bg-white shadow-lg transition-all hover:scale-110 hover:bg-pink-50"
+                                className="relative flex size-6 items-center justify-center rounded-full border-2 border-pink-600 bg-background shadow-lg transition-all hover:scale-110 hover:bg-pink-50"
                                 title="Edit relationship"
                                 style={{ zIndex: 10 }}
                             >
-                                <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 14 14"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <circle
-                                        cx="3"
-                                        cy="7"
-                                        r="1.5"
-                                        fill="#db2777"
-                                    />
-                                    <circle
-                                        cx="7"
-                                        cy="7"
-                                        r="1.5"
-                                        fill="#db2777"
-                                    />
-                                    <circle
-                                        cx="11"
-                                        cy="7"
-                                        r="1.5"
-                                        fill="#db2777"
-                                    />
-                                </svg>
+                                <EllipsisIcon className="size-4 text-pink-600" />
                             </button>
                         </foreignObject>
                     )}
                     {relationship &&
+                        isPopoverOpen &&
+                        editRelationshipPopover?.position &&
                         createPortal(
-                            <RelationshipCardinalityPopover
-                                open={popoverOpen}
-                                onOpenChange={setPopoverOpen}
-                                anchorPosition={popoverAnchorPosition}
+                            <EditRelationshipPopover
+                                anchorPosition={
+                                    editRelationshipPopover.position
+                                }
                                 sourceCardinality={
                                     relationship.sourceCardinality ?? 'one'
                                 }

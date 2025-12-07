@@ -42,6 +42,15 @@ export interface CanvasContext {
             fieldId?: string;
         } | null>
     >;
+    openRelationshipPopover: (params: {
+        relationshipId: string;
+        position: { x: number; y: number };
+    }) => void;
+    closeRelationshipPopover: () => void;
+    editRelationshipPopover: {
+        relationshipId: string;
+        position: { x: number; y: number };
+    } | null;
     tempFloatingEdge: {
         sourceNodeId: string;
         targetNodeId?: string;
@@ -79,6 +88,9 @@ export const canvasContext = createContext<CanvasContext>({
     showFilter: false,
     editTableModeTable: null,
     setEditTableModeTable: emptyFn,
+    openRelationshipPopover: emptyFn,
+    closeRelationshipPopover: emptyFn,
+    editRelationshipPopover: null,
     tempFloatingEdge: null,
     setTempFloatingEdge: emptyFn,
     startFloatingEdgeCreation: emptyFn,

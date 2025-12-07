@@ -46,6 +46,11 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         fieldId?: string;
     } | null>(null);
 
+    const [editRelationshipPopover, setEditRelationshipPopover] = useState<{
+        relationshipId: string;
+        position: { x: number; y: number };
+    } | null>(null);
+
     const events = useEventEmitter<CanvasEvent>();
 
     const [showFilter, setShowFilter] = useState(false);
@@ -161,6 +166,16 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
             endFloatingEdgeCreation();
         }, [setNodes, endFloatingEdgeCreation]);
 
+    const openRelationshipPopover: CanvasContext['openRelationshipPopover'] =
+        useCallback(({ relationshipId, position }) => {
+            setEditRelationshipPopover({ relationshipId, position });
+        }, []);
+
+    const closeRelationshipPopover: CanvasContext['closeRelationshipPopover'] =
+        useCallback(() => {
+            setEditRelationshipPopover(null);
+        }, []);
+
     const showCreateRelationshipNode: CanvasContext['showCreateRelationshipNode'] =
         useCallback(
             ({ sourceTableId, targetTableId, x, y }) => {
@@ -211,6 +226,9 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 showFilter,
                 editTableModeTable,
                 setEditTableModeTable,
+                openRelationshipPopover,
+                closeRelationshipPopover,
+                editRelationshipPopover,
                 tempFloatingEdge: tempFloatingEdge,
                 setTempFloatingEdge: setTempFloatingEdge,
                 startFloatingEdgeCreation: startFloatingEdgeCreation,

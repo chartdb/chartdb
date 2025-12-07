@@ -311,6 +311,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         endFloatingEdgeCreation,
         hoveringTableId,
         hideCreateRelationshipNode,
+        closeRelationshipPopover,
         events: canvasEvents,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
@@ -427,6 +428,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         type: 'relationship-edge',
                         data: { relationship },
                         selected: prevState?.selected ?? false,
+                        animated: prevState?.animated ?? false,
                     };
                 }),
                 ...dependencies.map((dep): DependencyEdgeType => {
@@ -441,6 +443,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         data: { dependency: dep },
                         hidden: !showDBViews,
                         selected: prevState?.selected ?? false,
+                        animated: prevState?.animated ?? false,
                     };
                 }),
             ];
@@ -1461,7 +1464,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
     }, []);
 
-    // Handle escape key to cancel floating edge creation and close relationship node
+    // Handle escape key to cancel floating edge creation, close relationship node, and close relationship popover
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -1471,11 +1474,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 }
                 // Also close CreateRelationshipNode if present
                 hideCreateRelationshipNode();
+                // Exit edit table mode
+                exitEditTableMode();
+                // Close relationship edit popover
+                closeRelationshipPopover();
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [tempFloatingEdge, endFloatingEdgeCreation, hideCreateRelationshipNode]);
+    }, [
+        tempFloatingEdge,
+        endFloatingEdgeCreation,
+        hideCreateRelationshipNode,
+        closeRelationshipPopover,
+        exitEditTableMode,
+    ]);
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
@@ -1537,6 +1550,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             // Exit edit table mode
             exitEditTableMode();
 
+            // Close relationship edit popover
+            closeRelationshipPopover();
+
             canvasEvents.emit({
                 action: 'pan_click',
                 data: {
@@ -1551,6 +1567,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             exitEditTableMode,
             endFloatingEdgeCreation,
             hideCreateRelationshipNode,
+            closeRelationshipPopover,
         ]
     );
 

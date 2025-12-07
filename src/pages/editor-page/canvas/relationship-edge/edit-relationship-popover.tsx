@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Trash2, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { Cardinality } from '@/lib/domain/db-relationship';
 import { cn } from '@/lib/utils';
+import { useClickAway } from 'react-use';
+import { useCanvas } from '@/hooks/use-canvas';
 
-export interface RelationshipCardinalityPopoverProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    anchorPosition: { x: number; y: number } | null;
+export interface EditRelationshipPopoverProps {
+    anchorPosition: { x: number; y: number };
     sourceCardinality: Cardinality;
     targetCardinality: Cardinality;
     onCardinalityChange: (
@@ -30,11 +30,9 @@ const relationshipTypes: RelationshipTypeOption[] = [
     { label: 'N:1', sourceCardinality: 'many', targetCardinality: 'one' },
 ];
 
-export const RelationshipCardinalityPopover: React.FC<
-    RelationshipCardinalityPopoverProps
+export const EditRelationshipPopover: React.FC<
+    EditRelationshipPopoverProps
 > = ({
-    open,
-    onOpenChange,
     anchorPosition,
     sourceCardinality,
     targetCardinality,
@@ -43,29 +41,9 @@ export const RelationshipCardinalityPopover: React.FC<
     onDelete,
 }) => {
     const popoverRef = useRef<HTMLDivElement>(null);
+    const { closeRelationshipPopover } = useCanvas();
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                popoverRef.current &&
-                !popoverRef.current.contains(event.target as Node)
-            ) {
-                onOpenChange(false);
-            }
-        };
-
-        if (open) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [open, onOpenChange]);
-
-    if (!open || !anchorPosition) {
-        return null;
-    }
+    useClickAway(popoverRef, closeRelationshipPopover);
 
     return (
         <div
@@ -87,7 +65,7 @@ export const RelationshipCardinalityPopover: React.FC<
                             variant={isActive ? 'default' : 'outline'}
                             size="sm"
                             className={cn(
-                                'h-8 w-12 text-xs font-medium',
+                                'h-7 w-11 text-xs font-medium',
                                 isActive &&
                                     'bg-slate-700 text-white hover:bg-slate-600'
                             )}
@@ -106,20 +84,20 @@ export const RelationshipCardinalityPopover: React.FC<
                 <Button
                     variant="ghost"
                     size="sm"
-                    className="size-8 p-0 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                    className="size-7 p-0 text-sky-600 hover:bg-sky-50 hover:text-sky-700"
                     onClick={onSwitch}
                     title="Switch tables"
                 >
-                    <ArrowLeftRight className="size-4" />
+                    <ArrowLeftRight className="!size-3.5" />
                 </Button>
                 <Button
                     variant="ghost"
                     size="sm"
-                    className="size-8 p-0 text-red-600 hover:bg-red-50 hover:text-red-700"
+                    className="size-7 p-0 text-red-600 hover:bg-red-50 hover:text-red-700"
                     onClick={onDelete}
                     title="Delete relationship"
                 >
-                    <Trash2 className="size-4" />
+                    <Trash2 className="!size-3.5" />
                 </Button>
             </div>
         </div>
