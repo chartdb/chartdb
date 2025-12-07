@@ -311,6 +311,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         endFloatingEdgeCreation,
         hoveringTableId,
         hideCreateRelationshipNode,
+        closeRelationshipPopover,
         events: canvasEvents,
     } = useCanvas();
     const { filter, loading: filterLoading } = useDiagramFilter();
@@ -406,31 +407,47 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             {} as Record<string, number>
         );
 
-        setEdges([
-            ...relationships.map(
-                (relationship): RelationshipEdgeType => ({
-                    id: relationship.id,
-                    source: relationship.sourceTableId,
-                    target: relationship.targetTableId,
-                    sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                    targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                    type: 'relationship-edge',
-                    data: { relationship },
-                })
-            ),
-            ...dependencies.map(
-                (dep): DependencyEdgeType => ({
-                    id: dep.id,
-                    source: dep.dependentTableId,
-                    target: dep.tableId,
-                    sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
-                    targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
-                    type: 'dependency-edge',
-                    data: { dependency: dep },
-                    hidden: !showDBViews,
-                })
-            ),
-        ]);
+        setEdges((prevEdges) => {
+            // Create a map of previous edge states to preserve selection
+            const prevEdgeStates = new Map(
+                prevEdges.map((edge) => [
+                    edge.id,
+                    { selected: edge.selected, animated: edge.animated },
+                ])
+            );
+
+            return [
+                ...relationships.map((relationship): RelationshipEdgeType => {
+                    const prevState = prevEdgeStates.get(relationship.id);
+                    return {
+                        id: relationship.id,
+                        source: relationship.sourceTableId,
+                        target: relationship.targetTableId,
+                        sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                        targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                        type: 'relationship-edge',
+                        data: { relationship },
+                        selected: prevState?.selected ?? false,
+                        animated: prevState?.animated ?? false,
+                    };
+                }),
+                ...dependencies.map((dep): DependencyEdgeType => {
+                    const prevState = prevEdgeStates.get(dep.id);
+                    return {
+                        id: dep.id,
+                        source: dep.dependentTableId,
+                        target: dep.tableId,
+                        sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
+                        targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
+                        type: 'dependency-edge',
+                        data: { dependency: dep },
+                        hidden: !showDBViews,
+                        selected: prevState?.selected ?? false,
+                        animated: prevState?.animated ?? false,
+                    };
+                }),
+            ];
+        });
     }, [relationships, dependencies, setEdges, showDBViews]);
 
     useEffect(() => {
@@ -1447,7 +1464,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
     }, []);
 
-    // Handle escape key to cancel floating edge creation and close relationship node
+    // Handle escape key to cancel floating edge creation, close relationship node, and close relationship popover
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -1457,11 +1474,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 }
                 // Also close CreateRelationshipNode if present
                 hideCreateRelationshipNode();
+                // Exit edit table mode
+                exitEditTableMode();
+                // Close relationship edit popover
+                closeRelationshipPopover();
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [tempFloatingEdge, endFloatingEdgeCreation, hideCreateRelationshipNode]);
+    }, [
+        tempFloatingEdge,
+        endFloatingEdgeCreation,
+        hideCreateRelationshipNode,
+        closeRelationshipPopover,
+        exitEditTableMode,
+    ]);
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
@@ -1523,6 +1550,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             // Exit edit table mode
             exitEditTableMode();
 
+            // Close relationship edit popover
+            closeRelationshipPopover();
+
             canvasEvents.emit({
                 action: 'pan_click',
                 data: {
@@ -1537,6 +1567,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             exitEditTableMode,
             endFloatingEdgeCreation,
             hideCreateRelationshipNode,
+            closeRelationshipPopover,
         ]
     );
 
