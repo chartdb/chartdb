@@ -57,7 +57,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             const handleEdgeClick = useCallback(
                 (e: React.MouseEvent) => {
                     if (e.detail === 2) {
-                        // Double click - open in sidebar
+                        // Double click - open popover
                         openRelationshipPopover({
                             relationshipId: id,
                             position: { x: e.clientX, y: e.clientY },
@@ -66,6 +66,18 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     // Single click just selects the edge, doesn't open popover
                 },
                 [openRelationshipPopover, id]
+            );
+
+            const handleContextMenu = useCallback(
+                (e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openRelationshipPopover({
+                        relationshipId: id,
+                        position: { x: e.clientX, y: e.clientY },
+                    });
+                },
+                [id, openRelationshipPopover]
             );
 
             const handleIndicatorClick = useCallback(
@@ -320,6 +332,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                             },
                         ])}
                         onClick={handleEdgeClick}
+                        onContextMenu={handleContextMenu}
                     />
                     <path
                         d={edgePath}
@@ -329,6 +342,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         // eslint-disable-next-line tailwindcss/no-custom-classname
                         className="react-flow__edge-interaction"
                         onClick={handleEdgeClick}
+                        onContextMenu={handleContextMenu}
                     />
                     {selected && (
                         <foreignObject

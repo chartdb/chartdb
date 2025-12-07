@@ -69,12 +69,14 @@ export const EditRelationshipPopover: React.FC<
                                 isActive &&
                                     'bg-slate-700 text-white hover:bg-slate-600'
                             )}
-                            onClick={() =>
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
                                 onCardinalityChange(
                                     type.sourceCardinality,
                                     type.targetCardinality
-                                )
-                            }
+                                );
+                            }}
                         >
                             {type.label}
                         </Button>
@@ -85,7 +87,11 @@ export const EditRelationshipPopover: React.FC<
                     variant="ghost"
                     size="sm"
                     className="size-7 p-0 text-sky-600 hover:bg-sky-50 hover:text-sky-700"
-                    onClick={onSwitch}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onSwitch();
+                    }}
                     title="Switch tables"
                 >
                     <ArrowLeftRight className="!size-3.5" />
