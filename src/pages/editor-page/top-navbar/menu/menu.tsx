@@ -189,7 +189,7 @@ export const Menu: React.FC<MenuProps> = () => {
                                 onClick={() =>
                                     openImportDatabaseDialog({
                                         databaseType,
-                                        hideSmartQuery: true,
+                                        importMethods: ['ddl', 'dbml'],
                                         initialImportMethod: 'ddl',
                                     })
                                 }
@@ -200,7 +200,7 @@ export const Menu: React.FC<MenuProps> = () => {
                                 onClick={() =>
                                     openImportDatabaseDialog({
                                         databaseType,
-                                        hideSmartQuery: true,
+                                        importMethods: ['ddl', 'dbml'],
                                         initialImportMethod: 'dbml',
                                     })
                                 }

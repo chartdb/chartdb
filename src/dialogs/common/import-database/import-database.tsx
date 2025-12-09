@@ -80,7 +80,7 @@ export interface ImportDatabaseProps {
     title: string;
     importMethod: ImportMethod;
     setImportMethod: (method: ImportMethod) => void;
-    hideSmartQuery?: boolean;
+    importMethods?: ImportMethod[];
 }
 
 export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
@@ -96,7 +96,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     title,
     importMethod,
     setImportMethod,
-    hideSmartQuery = false,
+    importMethods,
 }) => {
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
@@ -459,7 +459,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 databaseEdition={databaseEdition}
                 setShowSSMSInfoDialog={setShowSSMSInfoDialog}
                 showSSMSInfoDialog={showSSMSInfoDialog}
-                hideSmartQuery={hideSmartQuery}
+                importMethods={importMethods}
             />
         ),
         [
@@ -470,7 +470,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             databaseEdition,
             setShowSSMSInfoDialog,
             showSSMSInfoDialog,
-            hideSmartQuery,
+            importMethods,
         ]
     );
 

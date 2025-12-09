@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import logo from '@/assets/logo-2.png';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle/toggle-group';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -36,8 +36,10 @@ export interface InstructionsSectionProps {
     setImportMethod: (method: ImportMethod) => void;
     showSSMSInfoDialog: boolean;
     setShowSSMSInfoDialog: (show: boolean) => void;
-    hideSmartQuery?: boolean;
+    importMethods?: ImportMethod[];
 }
+
+const defaultImportMethods: ImportMethod[] = ['query', 'ddl', 'dbml'];
 
 export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
     databaseType,
@@ -47,13 +49,26 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
     setImportMethod,
     setShowSSMSInfoDialog,
     showSSMSInfoDialog,
-    hideSmartQuery = false,
+    importMethods = defaultImportMethods,
 }) => {
     const { t } = useTranslation();
 
+    const showSmartQuery = useMemo(
+        () => importMethods.includes('query'),
+        [importMethods]
+    );
+    const showDDL = useMemo(
+        () => importMethods.includes('ddl'),
+        [importMethods]
+    );
+    const showDBML = useMemo(
+        () => importMethods.includes('dbml'),
+        [importMethods]
+    );
+
     return (
         <div className="flex w-full flex-1 flex-col gap-4">
-            {!hideSmartQuery &&
+            {showSmartQuery &&
             databaseTypeToEditionMap[databaseType].length > 0 ? (
                 <div className="flex flex-col gap-1">
                     <p className="text-sm leading-6 text-primary">
@@ -137,7 +152,7 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                         setImportMethod(selectedImportMethod);
                     }}
                 >
-                    {!hideSmartQuery && (
+                    {showSmartQuery && (
                         <ToggleGroupItem
                             value="query"
                             variant="outline"
@@ -150,36 +165,39 @@ export const InstructionsSection: React.FC<InstructionsSectionProps> = ({
                             Smart Query
                         </ToggleGroupItem>
                     )}
-                    {!DatabasesWithoutDDLInstructions.includes(
-                        databaseType
-                    ) && (
+                    {showDDL &&
+                        !DatabasesWithoutDDLInstructions.includes(
+                            databaseType
+                        ) && (
+                            <ToggleGroupItem
+                                value="ddl"
+                                variant="outline"
+                                className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
+                            >
+                                <Avatar className="size-4 rounded-none">
+                                    <FileCode size={16} />
+                                </Avatar>
+                                SQL Script
+                            </ToggleGroupItem>
+                        )}
+                    {showDBML && (
                         <ToggleGroupItem
-                            value="ddl"
+                            value="dbml"
                             variant="outline"
                             className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
                         >
                             <Avatar className="size-4 rounded-none">
-                                <FileCode size={16} />
+                                <Code size={16} />
                             </Avatar>
-                            SQL Script
+                            DBML
                         </ToggleGroupItem>
                     )}
-                    <ToggleGroupItem
-                        value="dbml"
-                        variant="outline"
-                        className="h-6 gap-1 p-0 px-2 shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700"
-                    >
-                        <Avatar className="size-4 rounded-none">
-                            <Code size={16} />
-                        </Avatar>
-                        DBML
-                    </ToggleGroupItem>
                 </ToggleGroup>
             </div>
 
             <div className="flex flex-col gap-2">
                 <div className="text-sm font-semibold">Instructions:</div>
-                {importMethod === 'query' && !hideSmartQuery ? (
+                {importMethod === 'query' && showSmartQuery ? (
                     <SmartQueryInstructions
                         databaseType={databaseType}
                         databaseEdition={databaseEdition}

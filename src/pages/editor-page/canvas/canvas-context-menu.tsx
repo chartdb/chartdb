@@ -146,7 +146,10 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const importSqlDbmlHandler = useCallback(() => {
         // Defer dialog opening to prevent Radix UI context menu/dialog portal conflicts
         queueMicrotask(() => {
-            openImportDatabaseDialog({ databaseType, hideSmartQuery: true });
+            openImportDatabaseDialog({
+                databaseType,
+                importMethods: ['ddl', 'dbml'],
+            });
         });
     }, [openImportDatabaseDialog, databaseType]);
 

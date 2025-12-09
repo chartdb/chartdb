@@ -18,18 +18,20 @@ import type { ImportMethod } from '@/lib/import-method/import-method';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
-    hideSmartQuery?: boolean;
+    importMethods?: ImportMethod[];
     initialImportMethod?: ImportMethod;
 }
+
+const defaultImportMethods: ImportMethod[] = ['query', 'ddl', 'dbml'];
 
 export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     dialog,
     databaseType,
-    hideSmartQuery = false,
+    importMethods = defaultImportMethods,
     initialImportMethod,
 }) => {
     const [importMethod, setImportMethod] = useState<ImportMethod>(
-        initialImportMethod ?? (hideSmartQuery ? 'ddl' : 'query')
+        initialImportMethod ?? importMethods[0]
     );
     const { closeImportDatabaseDialog } = useDialog();
     const {
@@ -55,10 +57,8 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         if (!dialog.open) return;
         setDatabaseEdition(undefined);
         setScriptResult('');
-        setImportMethod(
-            initialImportMethod ?? (hideSmartQuery ? 'ddl' : 'query')
-        );
-    }, [dialog.open, hideSmartQuery, initialImportMethod]);
+        setImportMethod(initialImportMethod ?? importMethods[0]);
+    }, [dialog.open, importMethods, initialImportMethod]);
 
     const importDatabase = useCallback(async () => {
         let diagram: Diagram | undefined;
@@ -174,7 +174,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                     title={t('import_database_dialog.title', { diagramName })}
                     importMethod={importMethod}
                     setImportMethod={setImportMethod}
-                    hideSmartQuery={hideSmartQuery}
+                    importMethods={importMethods}
                 />
             </DialogContent>
         </Dialog>
