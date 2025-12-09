@@ -917,22 +917,25 @@ export function convertToChartDBDiagram(
         }
 
         // Use the cardinality from the SQL parser if available, otherwise determine it
+        // Note: In SQLForeignKey, source = table with FK, target = referenced table
+        // In DBRelationship, we want source = referenced table (PK), target = FK table
+        // So we swap them here
         const sourceCardinality =
-            rel.sourceCardinality ||
-            (sourceField.unique || sourceField.primaryKey ? 'one' : 'many');
-        const targetCardinality =
             rel.targetCardinality ||
             (targetField.unique || targetField.primaryKey ? 'one' : 'many');
+        const targetCardinality =
+            rel.sourceCardinality ||
+            (sourceField.unique || sourceField.primaryKey ? 'one' : 'many');
 
         relationships.push({
             id: generateId(),
             name: rel.name,
-            sourceSchema: sourceTable.schema,
-            targetSchema: targetTable.schema,
-            sourceTableId: sourceTableId,
-            targetTableId: targetTableId,
-            sourceFieldId: sourceField.id,
-            targetFieldId: targetField.id,
+            sourceSchema: targetTable.schema,
+            targetSchema: sourceTable.schema,
+            sourceTableId: targetTableId,
+            targetTableId: sourceTableId,
+            sourceFieldId: targetField.id,
+            targetFieldId: sourceField.id,
             sourceCardinality,
             targetCardinality,
             createdAt: Date.now(),
