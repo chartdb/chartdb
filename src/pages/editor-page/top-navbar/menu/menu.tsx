@@ -188,56 +188,24 @@ export const Menu: React.FC<MenuProps> = () => {
                             <MenubarItem
                                 onClick={() =>
                                     openImportDatabaseDialog({
-                                        databaseType: DatabaseType.POSTGRESQL,
+                                        databaseType,
+                                        importMethods: ['ddl', 'dbml'],
+                                        initialImportMethod: 'ddl',
                                     })
                                 }
                             >
-                                {databaseTypeToLabelMap['postgresql']}
+                                SQL
                             </MenubarItem>
                             <MenubarItem
                                 onClick={() =>
                                     openImportDatabaseDialog({
-                                        databaseType: DatabaseType.MYSQL,
+                                        databaseType,
+                                        importMethods: ['ddl', 'dbml'],
+                                        initialImportMethod: 'dbml',
                                     })
                                 }
                             >
-                                {databaseTypeToLabelMap['mysql']}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType: DatabaseType.SQL_SERVER,
-                                    })
-                                }
-                            >
-                                {databaseTypeToLabelMap['sql_server']}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType: DatabaseType.MARIADB,
-                                    })
-                                }
-                            >
-                                {databaseTypeToLabelMap['mariadb']}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType: DatabaseType.SQLITE,
-                                    })
-                                }
-                            >
-                                {databaseTypeToLabelMap['sqlite']}
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType: DatabaseType.ORACLE,
-                                    })
-                                }
-                            >
-                                {databaseTypeToLabelMap['oracle']}
+                                DBML
                             </MenubarItem>
                         </MenubarSubContent>
                     </MenubarSub>

@@ -46,6 +46,8 @@ import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-lang
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { detectImportMethod } from '@/lib/import-method/detect-import-method';
 import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
+import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
+import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import {
     clearErrorHighlight,
     highlightErrorLine,
@@ -78,6 +80,7 @@ export interface ImportDatabaseProps {
     title: string;
     importMethod: ImportMethod;
     setImportMethod: (method: ImportMethod) => void;
+    importMethods?: ImportMethod[];
 }
 
 export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
@@ -93,6 +96,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     title,
     importMethod,
     setImportMethod,
+    importMethods,
 }) => {
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
@@ -143,11 +147,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             const validateResponse = verifyDBML(scriptResult, { databaseType });
             if (!validateResponse.hasError) {
                 setErrorMessage('');
-                setSqlValidation({
-                    isValid: true,
-                    errors: [],
-                    warnings: [],
-                });
+
+                // Try to count tables/relationships for DBML
+                (async () => {
+                    try {
+                        const diagram = await importDBMLToDiagram(
+                            scriptResult,
+                            { databaseType }
+                        );
+                        setSqlValidation({
+                            isValid: true,
+                            errors: [],
+                            warnings: [],
+                            tableCount: diagram.tables?.length ?? 0,
+                            relationshipCount:
+                                diagram.relationships?.length ?? 0,
+                        });
+                    } catch {
+                        // If parsing fails, just show validation without counts
+                        setSqlValidation({
+                            isValid: true,
+                            errors: [],
+                            warnings: [],
+                        });
+                    }
+                })();
             } else {
                 let errorMsg = 'Invalid DBML syntax';
                 let line: number = 1;
@@ -184,10 +208,10 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         // SQL validation
         // First run our validation based on database type
         const validation = validateSQL(scriptResult, databaseType);
-        setSqlValidation(validation);
 
         // If we have auto-fixable errors, show the auto-fix button
         if (validation.fixedSQL && validation.errors.length > 0) {
+            setSqlValidation(validation);
             setShowAutoFixButton(true);
             // Don't try to parse invalid SQL
             setErrorMessage('SQL contains syntax errors');
@@ -197,14 +221,33 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         // Hide auto-fix button if no fixes available
         setShowAutoFixButton(false);
 
-        // Validate the SQL (either original or already fixed)
+        // Validate the SQL (either original or already fixed) and count tables/relationships
         parseSQLError({
             sqlContent: scriptResult,
             sourceDatabaseType: databaseType,
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.success) {
                 setErrorMessage('');
+
+                // Try to parse and count tables/relationships for successful validation
+                try {
+                    const diagram = await sqlImportToDiagram({
+                        sqlContent: scriptResult,
+                        sourceDatabaseType: databaseType,
+                        targetDatabaseType: databaseType,
+                    });
+
+                    setSqlValidation({
+                        ...validation,
+                        tableCount: diagram.tables?.length ?? 0,
+                        relationshipCount: diagram.relationships?.length ?? 0,
+                    });
+                } catch {
+                    // If parsing fails, just show validation without counts
+                    setSqlValidation(validation);
+                }
             } else if (!result.success && result.error) {
+                setSqlValidation(validation);
                 setErrorMessage(result.error);
             }
         });
@@ -333,6 +376,12 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         };
     }, []);
 
+    // Use ref to track current import method to avoid closure issues
+    const importMethodRef = useRef(importMethod);
+    useEffect(() => {
+        importMethodRef.current = importMethod;
+    }, [importMethod]);
+
     const handleEditorDidMount = useCallback(
         (editor: editor.IStandaloneCodeEditor) => {
             editorRef.current = editor;
@@ -357,7 +406,8 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
                 // First, detect content type to determine if we should switch modes
                 const detectedType = detectImportMethod(content);
-                if (detectedType && detectedType !== importMethod) {
+                const currentMethod = importMethodRef.current;
+                if (detectedType && detectedType !== currentMethod) {
                     // Switch to the detected mode immediately
                     setImportMethod(detectedType);
 
@@ -373,7 +423,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     // For DDL and DBML modes, do NOT format as it can break the syntax
                 } else {
                     // Content type didn't change, apply formatting based on current mode
-                    if (importMethod === 'query' && !isLargeFile) {
+                    if (currentMethod === 'query' && !isLargeFile) {
                         // Only format JSON content if not too large
                         setTimeout(() => {
                             editor
@@ -387,7 +437,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
             pasteDisposableRef.current = disposable;
         },
-        [importMethod, setImportMethod]
+        [setImportMethod]
     );
 
     const renderHeader = useCallback(() => {
@@ -409,6 +459,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 databaseEdition={databaseEdition}
                 setShowSSMSInfoDialog={setShowSSMSInfoDialog}
                 showSSMSInfoDialog={showSSMSInfoDialog}
+                importMethods={importMethods}
             />
         ),
         [
@@ -419,6 +470,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
             databaseEdition,
             setShowSSMSInfoDialog,
             showSSMSInfoDialog,
+            importMethods,
         ]
     );
 
@@ -489,6 +541,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         errorMessage={errorMessage}
                         isAutoFixing={isAutoFixing}
                         onErrorClick={handleErrorClick}
+                        importMethod={importMethod}
                     />
                 ) : null}
             </div>

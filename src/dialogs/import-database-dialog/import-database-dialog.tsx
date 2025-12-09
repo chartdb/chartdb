@@ -10,39 +10,40 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { loadFromDatabaseMetadata } from '@/lib/data/import-metadata/import';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
-import { Trans, useTranslation } from 'react-i18next';
-import { useReactFlow } from '@xyflow/react';
+import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import { useAlert } from '@/context/alert-context/alert-context';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
+    importMethods?: ImportMethod[];
+    initialImportMethod?: ImportMethod;
 }
+
+const defaultImportMethods: ImportMethod[] = ['query', 'ddl', 'dbml'];
 
 export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     dialog,
     databaseType,
+    importMethods = defaultImportMethods,
+    initialImportMethod,
 }) => {
-    const [importMethod, setImportMethod] = useState<ImportMethod>('query');
+    const [importMethod, setImportMethod] = useState<ImportMethod>(
+        initialImportMethod ?? importMethods[0]
+    );
     const { closeImportDatabaseDialog } = useDialog();
-    const { showAlert } = useAlert();
     const {
-        tables,
-        relationships,
-        removeTables,
-        removeRelationships,
         addTables,
         addRelationships,
         diagramName,
         databaseType: currentDatabaseType,
         updateDatabaseType,
+        tables: existingTables,
     } = useChartDB();
     const [scriptResult, setScriptResult] = useState('');
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
-    const { setNodes } = useReactFlow();
     const { t } = useTranslation();
     const [databaseEdition, setDatabaseEdition] = useState<
         DatabaseEdition | undefined
@@ -56,7 +57,8 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         if (!dialog.open) return;
         setDatabaseEdition(undefined);
         setScriptResult('');
-    }, [dialog.open]);
+        setImportMethod(initialImportMethod ?? importMethods[0]);
+    }, [dialog.open, importMethods, initialImportMethod]);
 
     const importDatabase = useCallback(async () => {
         let diagram: Diagram | undefined;
@@ -85,247 +87,54 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             });
         }
 
-        const tableIdsToRemove = tables
-            .filter((table) =>
-                diagram.tables?.some(
-                    (t) => t.name === table.name && t.schema === table.schema
-                )
-            )
-            .map((table) => table.id);
-
-        const relationshipIdsToRemove = relationships
-            .filter((relationship) => {
-                const sourceTable = tables.find(
-                    (table) => table.id === relationship.sourceTableId
-                );
-
-                const targetTable = tables.find(
-                    (table) => table.id === relationship.targetTableId
-                );
-
-                if (!sourceTable || !targetTable) return true; // should not happen
-
-                const sourceField = sourceTable.fields.find(
-                    (field) => field.id === relationship.sourceFieldId
-                );
-
-                const targetField = targetTable.fields.find(
-                    (field) => field.id === relationship.targetFieldId
-                );
-
-                if (!sourceField || !targetField) return true; // should not happen
-
-                const replacementSourceTable = diagram.tables?.find(
-                    (table) =>
-                        table.name === sourceTable.name &&
-                        table.schema === sourceTable.schema
-                );
-
-                const replacementTargetTable = diagram.tables?.find(
-                    (table) =>
-                        table.name === targetTable.name &&
-                        table.schema === targetTable.schema
-                );
-
-                // if the source or target field of the relationship is not in the new table, remove the relationship
-                if (
-                    (replacementSourceTable &&
-                        !replacementSourceTable.fields.some(
-                            (field) => field.name === sourceField.name
-                        )) ||
-                    (replacementTargetTable &&
-                        !replacementTargetTable.fields.some(
-                            (field) => field.name === targetField.name
-                        ))
-                ) {
-                    return true;
-                }
-
-                return diagram.relationships?.some((r) => {
-                    const sourceNewTable = diagram.tables?.find(
-                        (table) => table.id === r.sourceTableId
-                    );
-
-                    const targetNewTable = diagram.tables?.find(
-                        (table) => table.id === r.targetTableId
-                    );
-
-                    const sourceNewField = sourceNewTable?.fields.find(
-                        (field) => field.id === r.sourceFieldId
-                    );
-
-                    const targetNewField = targetNewTable?.fields.find(
-                        (field) => field.id === r.targetFieldId
-                    );
-
-                    return (
-                        sourceField.name === sourceNewField?.name &&
-                        sourceTable.name === sourceNewTable?.name &&
-                        sourceTable.schema === sourceNewTable?.schema &&
-                        targetField.name === targetNewField?.name &&
-                        targetTable.name === targetNewTable?.name &&
-                        targetTable.schema === targetNewTable?.schema
-                    );
-                });
-            })
-            .map((relationship) => relationship.id);
-
-        const newRelationshipsNumber = diagram.relationships?.filter(
-            (relationship) => {
-                const newSourceTable = diagram.tables?.find(
-                    (table) => table.id === relationship.sourceTableId
-                );
-                const newTargetTable = diagram.tables?.find(
-                    (table) => table.id === relationship.targetTableId
-                );
-                const newSourceField = newSourceTable?.fields.find(
-                    (field) => field.id === relationship.sourceFieldId
-                );
-                const newTargetField = newTargetTable?.fields.find(
-                    (field) => field.id === relationship.targetFieldId
-                );
-
-                return !relationships.some((r) => {
-                    const sourceTable = tables.find(
-                        (table) => table.id === r.sourceTableId
-                    );
-                    const targetTable = tables.find(
-                        (table) => table.id === r.targetTableId
-                    );
-                    const sourceField = sourceTable?.fields.find(
-                        (field) => field.id === r.sourceFieldId
-                    );
-                    const targetField = targetTable?.fields.find(
-                        (field) => field.id === r.targetFieldId
-                    );
-                    return (
-                        sourceField?.name === newSourceField?.name &&
-                        sourceTable?.name === newSourceTable?.name &&
-                        sourceTable?.schema === newSourceTable?.schema &&
-                        targetField?.name === newTargetField?.name &&
-                        targetTable?.name === newTargetTable?.name &&
-                        targetTable?.schema === newTargetTable?.schema
-                    );
-                });
-            }
-        ).length;
-
-        const newTablesNumber = diagram.tables?.filter(
-            (table) =>
-                !tables.some(
-                    (t) => t.name === table.name && t.schema === table.schema
-                )
-        ).length;
-
-        const shouldRemove = new Promise<boolean>((resolve) => {
-            if (
-                tableIdsToRemove.length === 0 &&
-                relationshipIdsToRemove.length === 0 &&
-                newTablesNumber === 0 &&
-                newRelationshipsNumber === 0
-            ) {
-                resolve(true);
-                return;
-            }
-
-            const content = (
-                <>
-                    <div className="!mb-2">
-                        {t(
-                            'import_database_dialog.override_alert.content.alert'
-                        )}
-                    </div>
-                    {(newTablesNumber ?? 0 > 0) ? (
-                        <div className="!m-0 text-blue-500">
-                            <Trans
-                                i18nKey="import_database_dialog.override_alert.content.new_tables"
-                                values={{
-                                    newTablesNumber,
-                                }}
-                                components={{
-                                    bold: <span className="font-bold" />,
-                                }}
-                            />
-                        </div>
-                    ) : null}
-                    {(newRelationshipsNumber ?? 0 > 0) ? (
-                        <div className="!m-0 text-blue-500">
-                            <Trans
-                                i18nKey="import_database_dialog.override_alert.content.new_relationships"
-                                values={{
-                                    newRelationshipsNumber,
-                                }}
-                                components={{
-                                    bold: <span className="font-bold" />,
-                                }}
-                            />
-                        </div>
-                    ) : null}
-                    {tableIdsToRemove.length > 0 && (
-                        <div className="!m-0 text-red-500">
-                            <Trans
-                                i18nKey="import_database_dialog.override_alert.content.tables_override"
-                                values={{
-                                    tablesOverrideNumber:
-                                        tableIdsToRemove.length,
-                                }}
-                                components={{
-                                    bold: <span className="font-bold" />,
-                                }}
-                            />
-                        </div>
-                    )}
-                    <div className="!mt-2">
-                        {t(
-                            'import_database_dialog.override_alert.content.proceed'
-                        )}
-                    </div>
-                </>
-            );
-
-            showAlert({
-                title: t('import_database_dialog.override_alert.title'),
-                content,
-                actionLabel: t('import_database_dialog.override_alert.import'),
-                closeLabel: t('import_database_dialog.override_alert.cancel'),
-                onAction: () => resolve(true),
-                onClose: () => resolve(false),
-            });
-        });
-
-        if (!(await shouldRemove)) return;
-
-        await Promise.all([
-            removeTables(tableIdsToRemove, { updateHistory: false }),
-            removeRelationships(relationshipIdsToRemove, {
-                updateHistory: false,
-            }),
-        ]);
-
-        await Promise.all([
-            addTables(diagram.tables ?? [], { updateHistory: false }),
-            addRelationships(diagram.relationships ?? [], {
-                updateHistory: false,
-            }),
-        ]);
-
-        if (currentDatabaseType === DatabaseType.GENERIC) {
-            await updateDatabaseType(databaseType);
+        // Skip if nothing to import
+        const newTablesNumber = diagram.tables?.length ?? 0;
+        const newRelationshipsNumber = diagram.relationships?.length ?? 0;
+        if (newTablesNumber === 0 && newRelationshipsNumber === 0) {
+            return;
         }
 
-        setNodes((nodes) =>
-            nodes.map((node) => ({
-                ...node,
-                selected:
-                    diagram.tables?.some((table) => table.id === node.id) ??
-                    false,
-            }))
-        );
-
-        resetRedoStack();
-        resetUndoStack();
-
+        // Close dialog immediately to prevent re-render blocking
         closeImportDatabaseDialog();
+
+        // Calculate position offset for new tables to avoid overlap
+        let offsetX = 0;
+        if (existingTables.length > 0) {
+            // Find the rightmost table
+            const rightmostTable = existingTables.reduce((max, table) => {
+                const tableRight = table.x + (table.width ?? 250);
+                const maxRight = max.x + (max.width ?? 250);
+                return tableRight > maxRight ? table : max;
+            });
+            // Position new tables 150px to the right of the rightmost table
+            offsetX = rightmostTable.x + (rightmostTable.width ?? 250) + 150;
+        }
+
+        // Apply offset to imported tables
+        const positionedTables =
+            diagram.tables?.map((table) => ({
+                ...table,
+                x: table.x + offsetX,
+            })) ?? [];
+
+        // Use queueMicrotask to defer work after dialog closes but before next paint
+        queueMicrotask(async () => {
+            // Add tables and relationships
+            await Promise.all([
+                addTables(positionedTables, { updateHistory: false }),
+                addRelationships(diagram.relationships ?? [], {
+                    updateHistory: false,
+                }),
+            ]);
+
+            if (currentDatabaseType === DatabaseType.GENERIC) {
+                await updateDatabaseType(databaseType);
+            }
+
+            // Reset undo/redo stacks
+            resetRedoStack();
+            resetUndoStack();
+        });
     }, [
         importMethod,
         databaseEdition,
@@ -333,18 +142,12 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         updateDatabaseType,
         databaseType,
         scriptResult,
-        tables,
         addRelationships,
         addTables,
-        closeImportDatabaseDialog,
-        relationships,
-        removeRelationships,
-        removeTables,
         resetRedoStack,
         resetUndoStack,
-        showAlert,
-        setNodes,
-        t,
+        closeImportDatabaseDialog,
+        existingTables,
     ]);
 
     return (
@@ -371,6 +174,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                     title={t('import_database_dialog.title', { diagramName })}
                     importMethod={importMethod}
                     setImportMethod={setImportMethod}
+                    importMethods={importMethods}
                 />
             </DialogContent>
         </Dialog>

@@ -101,8 +101,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         });
     const openImportDatabaseDialogHandler: DialogContext['openImportDatabaseDialog'] =
         useCallback(
-            ({ databaseType }) => {
-                setImportDatabaseDialogParams({ databaseType });
+            ({ databaseType, importMethods, initialImportMethod }) => {
+                setImportDatabaseDialogParams({
+                    databaseType,
+                    importMethods,
+                    initialImportMethod,
+                });
                 setOpenImportDatabaseDialog(true);
             },
             [setOpenImportDatabaseDialog]
@@ -144,8 +148,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(false),
                 openImportDatabaseDialog: openImportDatabaseDialogHandler,
-                closeImportDatabaseDialog: () =>
-                    setOpenImportDatabaseDialog(false),
+                closeImportDatabaseDialog: () => {
+                    setOpenImportDatabaseDialog(false);
+                },
                 openTableSchemaDialog: openTableSchemaDialogHandler,
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),

@@ -9,6 +9,7 @@ export interface ValidationResult {
     warnings: ValidationWarning[];
     fixedSQL?: string;
     tableCount?: number;
+    relationshipCount?: number;
 }
 
 export interface ValidationError {

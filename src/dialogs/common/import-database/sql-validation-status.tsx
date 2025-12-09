@@ -11,6 +11,7 @@ interface SQLValidationStatusProps {
     errorMessage: string;
     isAutoFixing?: boolean;
     onErrorClick?: (line: number) => void;
+    importMethod?: 'ddl' | 'dbml' | 'query';
 }
 
 export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
@@ -18,6 +19,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
     errorMessage,
     isAutoFixing = false,
     onErrorClick,
+    importMethod = 'ddl',
 }) => {
     const hasErrors = useMemo(
         () => validation?.errors.length && validation.errors.length > 0,
@@ -168,7 +170,46 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
                         <div className="flex items-start gap-2">
                             <CheckCircle className="mt-0.5 size-4 shrink-0 text-green-700 dark:text-green-300" />
                             <div className="flex-1 text-sm text-green-700 dark:text-green-300">
-                                SQL syntax validated successfully
+                                <div>
+                                    {importMethod === 'dbml'
+                                        ? 'DBML syntax validated successfully'
+                                        : 'SQL syntax validated successfully'}
+                                </div>
+                                {(validation.tableCount !== undefined ||
+                                    validation.relationshipCount !==
+                                        undefined) && (
+                                    <div className="mt-1 flex gap-2 text-xs">
+                                        {validation.tableCount !== undefined &&
+                                            validation.tableCount > 0 && (
+                                                <span>
+                                                    <span className="font-semibold">
+                                                        {validation.tableCount}
+                                                    </span>{' '}
+                                                    table
+                                                    {validation.tableCount !== 1
+                                                        ? 's'
+                                                        : ''}
+                                                </span>
+                                            )}
+                                        {validation.relationshipCount !==
+                                            undefined &&
+                                            validation.relationshipCount >
+                                                0 && (
+                                                <span>
+                                                    <span className="font-semibold">
+                                                        {
+                                                            validation.relationshipCount
+                                                        }
+                                                    </span>{' '}
+                                                    relationship
+                                                    {validation.relationshipCount !==
+                                                    1
+                                                        ? 's'
+                                                        : ''}
+                                                </span>
+                                            )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
