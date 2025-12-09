@@ -27,20 +27,8 @@ FROM nginx:stable-alpine AS production
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 COPY ./default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY entrypoint.sh /entrypoint.sh
-
-# Set permissions for nginx user to write to necessary directories
-RUN chmod +x /entrypoint.sh && \
-    chown -R nginx:nginx /usr/share/nginx/html && \
-    chown -R nginx:nginx /etc/nginx/conf.d && \
-    chown -R nginx:nginx /var/cache/nginx && \
-    chown -R nginx:nginx /var/log/nginx && \
-    mkdir -p /var/run/nginx && \
-    chown -R nginx:nginx /var/run/nginx && \
-    touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
-
-USER nginx
 
 ENTRYPOINT ["/entrypoint.sh"]
