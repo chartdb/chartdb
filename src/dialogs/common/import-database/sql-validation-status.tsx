@@ -178,11 +178,11 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
                                 {(validation.tableCount !== undefined ||
                                     validation.relationshipCount !==
                                         undefined) && (
-                                    <div className="mt-1 text-xs">
+                                    <div className="mt-1 flex gap-2 text-xs">
                                         {validation.tableCount !== undefined &&
                                             validation.tableCount > 0 && (
-                                                <span className="mr-3">
-                                                    <span className="font-bold">
+                                                <span>
+                                                    <span className="font-semibold">
                                                         {validation.tableCount}
                                                     </span>{' '}
                                                     table
@@ -196,7 +196,7 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
                                             validation.relationshipCount >
                                                 0 && (
                                                 <span>
-                                                    <span className="font-bold">
+                                                    <span className="font-semibold">
                                                         {
                                                             validation.relationshipCount
                                                         }

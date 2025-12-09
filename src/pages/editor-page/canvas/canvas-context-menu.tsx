@@ -159,7 +159,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
     return (
         <ContextMenu>
-            <ContextMenuTrigger disabled={readonly} asChild>
+            <ContextMenuTrigger disabled={readonly}>
                 {children}
             </ContextMenuTrigger>
             <ContextMenuContent>
@@ -188,14 +188,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem
-                    onClick={importSqlDbmlHandler}
-                    className="flex justify-between gap-4"
-                >
-                    Import SQL/DBML
-                    <Import className="size-3.5" />
-                </ContextMenuItem>
-                <ContextMenuSeparator />
-                <ContextMenuItem
                     onClick={createAreaHandler}
                     className="flex justify-between gap-4"
                 >
@@ -208,6 +200,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 >
                     {t('canvas_context_menu.new_note')}
                     <StickyNote className="size-3.5" />
+                </ContextMenuItem>{' '}
+                <ContextMenuSeparator />
+                <ContextMenuItem
+                    onClick={importSqlDbmlHandler}
+                    className="flex justify-between gap-4"
+                >
+                    Import SQL/DBML
+                    <Import className="size-3.5" />
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>
