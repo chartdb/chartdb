@@ -421,7 +421,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                                     <MessageCircleMore size={14} />
                                 </div>
                             </TooltipTrigger>
-                            <TooltipContent>{field.comments}</TooltipContent>
+                            <TooltipContent className="max-w-xs whitespace-pre-wrap break-words">
+                                {field.comments}
+                            </TooltipContent>
                         </Tooltip>
                     ) : null}
                 </div>
