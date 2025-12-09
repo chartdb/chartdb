@@ -43,7 +43,7 @@ CREATE TABLE [DBO].[SpellComponent](
                 r.targetFieldId && // Must have field IDs
                 diagram.tables?.some(
                     (t) =>
-                        t.id === r.sourceTableId && t.name === 'SpellDefinition'
+                        t.id === r.targetTableId && t.name === 'SpellDefinition'
                 )
         );
         expect(fk1).toBeDefined();

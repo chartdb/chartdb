@@ -371,6 +371,27 @@ function parseCreateTableManually(
             continue;
         }
 
+        // Handle standalone PRIMARY KEY definitions (without CONSTRAINT keyword)
+        // Format: PRIMARY KEY (column1, column2, ...)
+        if (part.match(/^\s*PRIMARY\s+KEY/i)) {
+            const pkColumnsMatch = part.match(
+                /PRIMARY\s+KEY(?:\s+CLUSTERED)?\s*\(([\s\S]+?)\)/i
+            );
+            if (pkColumnsMatch) {
+                const pkColumns = pkColumnsMatch[1].split(',').map((c) =>
+                    c
+                        .trim()
+                        .replace(/\[|\]|\s+(ASC|DESC)/gi, '')
+                        .trim()
+                );
+                pkColumns.forEach((col) => {
+                    const column = columns.find((c) => c.name === col);
+                    if (column) column.primaryKey = true;
+                });
+            }
+            continue;
+        }
+
         // Handle constraint definitions
         if (part.match(/^\s*CONSTRAINT/i)) {
             // Parse constraints
