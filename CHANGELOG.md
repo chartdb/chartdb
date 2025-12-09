@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.19.0](https://github.com/chartdb/chartdb/compare/v1.18.1...v1.19.0) (2025-12-09)
+
+
+### Features
+
+* add canvas relationship editor with inline controls ([#996](https://github.com/chartdb/chartdb/issues/996)) ([beeb6c0](https://github.com/chartdb/chartdb/commit/beeb6c0ae5978d73b0d516914b400eaedd578e4b))
+
+
+### Bug Fixes
+
+* add actions to empty state ([#986](https://github.com/chartdb/chartdb/issues/986)) ([de5f172](https://github.com/chartdb/chartdb/commit/de5f17266d384ae2decdf556cd8581e3436bc689))
+* add automatic data type synonym resolution for PostgreSQL imports ([#994](https://github.com/chartdb/chartdb/issues/994)) ([fbd04e9](https://github.com/chartdb/chartdb/commit/fbd04e9d5eb15dda90541ba8b4a0670b54aa0382))
+* add field comments indicators with tooltips ([#989](https://github.com/chartdb/chartdb/issues/989)) ([41c05c0](https://github.com/chartdb/chartdb/commit/41c05c067f8a9d5037ff6d1017f6f9b1949143af))
+* highlight FK columns in blue on canvas tables ([#990](https://github.com/chartdb/chartdb/issues/990)) ([07632e5](https://github.com/chartdb/chartdb/commit/07632e554324f6c5844f4316bf4eb709111500c3))
+* overlapping indication with hidden views ([#988](https://github.com/chartdb/chartdb/issues/988)) ([7428f46](https://github.com/chartdb/chartdb/commit/7428f46f328f02e5fa808c5256ebda8693d4ed03))
+* port 80 bind permission error ([#1000](https://github.com/chartdb/chartdb/issues/1000)) ([5b79c56](https://github.com/chartdb/chartdb/commit/5b79c564968e3dc04474b1a4a40db9cd7fe7ed99))
+* preserve index names when applying DBML changes ([#997](https://github.com/chartdb/chartdb/issues/997)) ([be26154](https://github.com/chartdb/chartdb/commit/be26154cc552db2d2fb3f88821c98495ffd4193d))
+* shift key for canvas selection + cursor indicator ([#993](https://github.com/chartdb/chartdb/issues/993)) ([1d6f4cd](https://github.com/chartdb/chartdb/commit/1d6f4cdda4a2e949496376e118f52bdc08cd7253))
+* style nullable indicators ([#992](https://github.com/chartdb/chartdb/issues/992)) ([3f53ab5](https://github.com/chartdb/chartdb/commit/3f53ab52da1c4769af49d9725b87d7b0dac46818))
+* support Delete key in addition to Backspace for canvas deletion ([#991](https://github.com/chartdb/chartdb/issues/991)) ([94d7d3f](https://github.com/chartdb/chartdb/commit/94d7d3f52243eaa6abca9de738565b94bb23b0f8))
+
 ## [1.18.1](https://github.com/chartdb/chartdb/compare/v1.18.0...v1.18.1) (2025-11-25)
 
 
