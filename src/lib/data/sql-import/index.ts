@@ -5,6 +5,7 @@ import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump
 
 import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
 import { fromSQLite } from './dialect-importers/sqlite/sqlite';
+import { fromOracle, isOracleFormat } from './dialect-importers/oracle/oracle';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
@@ -137,6 +138,11 @@ export function detectDatabaseType(sqlContent: string): DatabaseType | null {
         return DatabaseType.SQLITE;
     }
 
+    // Check for Oracle format
+    if (isOracleFormat(sqlContent)) {
+        return DatabaseType.ORACLE;
+    }
+
     // Look for database-specific keywords
     if (
         sqlContent.includes('SERIAL PRIMARY KEY') ||
@@ -208,6 +214,9 @@ export async function sqlImportToDiagram({
             break;
         case DatabaseType.SQLITE:
             parserResult = await fromSQLite(sqlContent);
+            break;
+        case DatabaseType.ORACLE:
+            parserResult = await fromOracle(sqlContent);
             break;
         default:
             throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
@@ -283,7 +292,10 @@ export async function parseSQLError({
                 // SQLite validation
                 await fromSQLite(sqlContent);
                 break;
-            // Add more database types here
+            case DatabaseType.ORACLE:
+                // Oracle validation
+                await fromOracle(sqlContent);
+                break;
             default:
                 throw new Error(
                     `Unsupported database type: ${sourceDatabaseType}`

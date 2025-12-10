@@ -32,6 +32,7 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
+import { getDefaultPrimaryKeyType } from '@/lib/data/data-types/data-types';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -342,10 +343,7 @@ export const ChartDBProvider: React.FC<
                     {
                         id: generateId(),
                         name: 'id',
-                        type:
-                            databaseType === DatabaseType.SQLITE
-                                ? { id: 'integer', name: 'integer' }
-                                : { id: 'bigint', name: 'bigint' },
+                        type: getDefaultPrimaryKeyType(databaseType),
                         unique: true,
                         nullable: false,
                         primaryKey: true,
@@ -865,10 +863,7 @@ export const ChartDBProvider: React.FC<
             const field: DBField = {
                 id: generateId(),
                 name: `field_${(table?.fields?.length ?? 0) + 1}`,
-                type:
-                    databaseType === DatabaseType.SQLITE
-                        ? { id: 'integer', name: 'integer' }
-                        : { id: 'bigint', name: 'bigint' },
+                type: getDefaultPrimaryKeyType(databaseType),
                 unique: false,
                 nullable: true,
                 primaryKey: false,

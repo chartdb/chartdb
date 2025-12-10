@@ -240,3 +240,39 @@ export const getPreferredSynonym = (
 
     return null;
 };
+
+/**
+ * Returns the default primary key data type for a given database type.
+ *
+ * Different databases have different conventions for auto-increment primary key types:
+ * - SQLite: INTEGER (required for AUTOINCREMENT)
+ * - Oracle: NUMBER (Oracle doesn't have bigint - uses NUMBER for all numeric types)
+ * - Others: BIGINT (PostgreSQL, MySQL, SQL Server, MariaDB, etc.)
+ *
+ * @param databaseType - The database type
+ * @returns The DataType object with id and name for the default primary key type
+ *
+ * @example
+ * ```ts
+ * getDefaultPrimaryKeyType(DatabaseType.SQLITE)
+ * // Returns: { id: 'integer', name: 'integer' }
+ *
+ * getDefaultPrimaryKeyType(DatabaseType.ORACLE)
+ * // Returns: { id: 'number', name: 'number' }
+ *
+ * getDefaultPrimaryKeyType(DatabaseType.POSTGRESQL)
+ * // Returns: { id: 'bigint', name: 'bigint' }
+ * ```
+ */
+export const getDefaultPrimaryKeyType = (
+    databaseType: DatabaseType
+): DataType => {
+    switch (databaseType) {
+        case DatabaseType.SQLITE:
+            return { id: 'integer', name: 'integer' };
+        case DatabaseType.ORACLE:
+            return { id: 'number', name: 'number' };
+        default:
+            return { id: 'bigint', name: 'bigint' };
+    }
+};
