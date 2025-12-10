@@ -13,6 +13,7 @@ import {
 import { validateMySQLDialect } from './validators/mysql-validator';
 import { validateSQLServerDialect } from './validators/sqlserver-validator';
 import { validateSQLiteDialect } from './validators/sqlite-validator';
+import { validateOracleDialect } from './validators/oracle-validator';
 
 // Re-export types for backward compatibility
 export type { ValidationResult, ValidationError, ValidationWarning };
@@ -43,6 +44,9 @@ export function validateSQL(
         case DatabaseType.MARIADB:
             // MariaDB uses MySQL validator
             return validateMySQLDialect(sql);
+
+        case DatabaseType.ORACLE:
+            return validateOracleDialect(sql);
 
         default:
             return {

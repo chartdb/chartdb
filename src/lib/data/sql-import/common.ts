@@ -540,13 +540,40 @@ export const typeAffinity: Record<string, Record<string, string>> = {
     },
     [DatabaseType.ORACLE]: {
         // Oracle data types (all lowercase for consistency)
+        // Character types
         varchar2: 'varchar',
         nvarchar2: 'varchar',
+        char: 'char',
+        nchar: 'char',
+        clob: 'text',
+        nclob: 'text',
+        long: 'text',
+        // Numeric types
         number: 'numeric',
+        integer: 'integer',
+        int: 'integer',
+        smallint: 'smallint',
+        float: 'float',
+        real: 'real',
+        binary_float: 'float',
+        binary_double: 'double',
+        // Date/Time types
         date: 'date',
         timestamp: 'timestamp',
-        clob: 'text',
+        'timestamp with time zone': 'timestamp',
+        'timestamp with local time zone': 'timestamp',
+        interval: 'interval',
+        // Binary types
         blob: 'blob',
+        raw: 'blob',
+        'long raw': 'blob',
+        bfile: 'blob',
+        // Other types
+        rowid: 'varchar',
+        urowid: 'varchar',
+        xmltype: 'text',
+        json: 'json',
+        boolean: 'boolean',
     },
     [DatabaseType.GENERIC]: {
         // Generic fallback types (all lowercase for consistency)
