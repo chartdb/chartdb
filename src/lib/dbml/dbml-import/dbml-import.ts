@@ -569,7 +569,9 @@ export const importDBMLToDiagram = async (
                     name: field.name.replace(/['"]/g, ''),
                     type: finalType,
                     nullable:
-                        field.increment || requiresNotNull(field.type.type_name)
+                        field.increment ||
+                        field.pk ||
+                        requiresNotNull(field.type.type_name)
                             ? false
                             : !field.not_null,
                     primaryKey: field.pk || false,
@@ -600,13 +602,14 @@ export const importDBMLToDiagram = async (
                     if (dbmlIndex.name) {
                         compositePKIndexName = dbmlIndex.name;
                     }
-                    // Mark fields as primary keys
+                    // Mark fields as primary keys and NOT NULL
                     dbmlIndex.columns.forEach((col) => {
                         const columnName =
                             typeof col === 'string' ? col : col.value;
                         const field = fields.find((f) => f.name === columnName);
                         if (field) {
                             field.primaryKey = true;
+                            field.nullable = false;
                         }
                     });
                 }
