@@ -55,24 +55,27 @@ export const createRelationshipsFromMetadata = ({
                     .length > 1;
 
             if (sourceTable && targetTable && sourceField && targetField) {
+                // In ForeignKeyInfo: schema/table/column = FK table, reference_* = PK table
+                // In DBRelationship: source = referenced table (PK), target = FK table
+                // So we swap them here
                 const sourceCardinality = determineCardinality(
-                    sourceField,
-                    isSourceTablePKComplex
-                );
-                const targetCardinality = determineCardinality(
                     targetField,
                     isTargetTablePKComplex
+                );
+                const targetCardinality = determineCardinality(
+                    sourceField,
+                    isSourceTablePKComplex
                 );
 
                 return {
                     id: generateId(),
                     name: fk.foreign_key_name,
-                    sourceSchema: schema,
-                    targetSchema: targetSchema,
-                    sourceTableId: sourceTable.id,
-                    targetTableId: targetTable.id,
-                    sourceFieldId: sourceField.id,
-                    targetFieldId: targetField.id,
+                    sourceSchema: targetSchema,
+                    targetSchema: schema,
+                    sourceTableId: targetTable.id,
+                    targetTableId: sourceTable.id,
+                    sourceFieldId: targetField.id,
+                    targetFieldId: sourceField.id,
                     sourceCardinality,
                     targetCardinality,
                     createdAt: Date.now(),
