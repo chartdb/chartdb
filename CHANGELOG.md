@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.19.1](https://github.com/chartdb/chartdb/compare/v1.19.0...v1.19.1) (2025-12-11)
+
+
+### Bug Fixes
+
+* add import from canvas ([#995](https://github.com/chartdb/chartdb/issues/995)) ([8b31944](https://github.com/chartdb/chartdb/commit/8b31944f67f44ba3c7cd9fa153d41a7c0dbfac05))
+* add Oracle database support for SQL import ([#1005](https://github.com/chartdb/chartdb/issues/1005)) ([9ac99d9](https://github.com/chartdb/chartdb/commit/9ac99d928c5d2661006b62e5782cb36b35953fa9))
+* add text wrapping and max-width to field comment tooltips ([#1004](https://github.com/chartdb/chartdb/issues/1004)) ([ccfd94b](https://github.com/chartdb/chartdb/commit/ccfd94bf779f5d32816b0a1ed56cc868aff53edd))
+* correct relationship direction in metadata import ([#1007](https://github.com/chartdb/chartdb/issues/1007)) ([87ac0ed](https://github.com/chartdb/chartdb/commit/87ac0ed7d0b29802978a46e5aa89993247537388))
+* correct relationship direction in SQL import ([#1003](https://github.com/chartdb/chartdb/issues/1003)) ([9b6d6db](https://github.com/chartdb/chartdb/commit/9b6d6dbb3cc15a1fb53f867b3f665aa7d0bb6b8c))
+* mark primary key columns as NOT NULL when importing DBML ([#1006](https://github.com/chartdb/chartdb/issues/1006)) ([e5ae46c](https://github.com/chartdb/chartdb/commit/e5ae46c3d742dc1d88c3085d9550870f493a5914))
+* update-browserslist-db ([#1001](https://github.com/chartdb/chartdb/issues/1001)) ([b16336b](https://github.com/chartdb/chartdb/commit/b16336bae26e8edb2e6e144a203488835fc73185))
+* upgrade vite ([#1008](https://github.com/chartdb/chartdb/issues/1008)) ([bedc2c8](https://github.com/chartdb/chartdb/commit/bedc2c80905225699c7e1218075d96e0ac4f4b78))
+
 ## [1.19.0](https://github.com/chartdb/chartdb/compare/v1.18.1...v1.19.0) (2025-12-09)
 
 
