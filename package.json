@@ -89,7 +89,7 @@
         "@types/react-dom": "^18.3.0",
         "@typescript-eslint/eslint-plugin": "^8.18.0",
         "@typescript-eslint/parser": "^8.18.0",
-        "@vitejs/plugin-react": "^4.3.1",
+        "@vitejs/plugin-react": "^5.1.2",
         "@vitest/ui": "^3.2.4",
         "autoprefixer": "^10.4.20",
         "eslint": "^9.16.0",
@@ -106,11 +106,11 @@
         "husky": "^9.1.5",
         "postcss": "^8.4.40",
         "prettier": "^3.3.3",
-        "rollup-plugin-visualizer": "^5.12.0",
+        "rollup-plugin-visualizer": "^6.0.5",
         "tailwindcss": "^3.4.7",
         "typescript": "^5.2.2",
         "unplugin-inject-preload": "^3.0.0",
-        "vite": "^5.3.4",
+        "vite": "^7.2.7",
         "vitest": "^3.2.4"
     }
 }
