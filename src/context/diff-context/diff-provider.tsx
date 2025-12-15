@@ -15,6 +15,7 @@ import { useEventEmitter } from 'ahooks';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataType } from '@/lib/data/data-types/data-types';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { Area } from '@/lib/domain/area';
 import type { ChartDBDiff, DiffMap } from '@/lib/domain/diff/diff';
 
 export const DiffProvider: React.FC<React.PropsWithChildren> = ({
@@ -92,6 +93,32 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const findAreasToAdd = useCallback(
+        ({
+            diffMap,
+            newDiagram,
+        }: {
+            diffMap: DiffMap;
+            newDiagram: Diagram;
+        }) => {
+            const areas: Area[] = [];
+            diffMap.forEach((diff) => {
+                if (diff.object === 'area' && diff.type === 'added') {
+                    const area = newDiagram?.areas?.find(
+                        (a) => a.id === diff.areaAdded.id
+                    );
+
+                    if (area) {
+                        areas.push(area);
+                    }
+                }
+            });
+
+            return areas;
+        },
+        []
+    );
+
     const generateDiffCalculatedData = useCallback(
         ({
             newDiagram,
@@ -122,9 +149,13 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                     diffMap: diffMap,
                     newDiagram: newDiagram,
                 }),
+                areasToAdd: findAreasToAdd({
+                    diffMap: diffMap,
+                    newDiagram: newDiagram,
+                }),
             };
         },
-        [findRelationshipsToAdd, generateFieldsToAddMap]
+        [findRelationshipsToAdd, generateFieldsToAddMap, findAreasToAdd]
     );
 
     const calculateDiff: DiffContext['calculateDiff'] = useCallback(
@@ -505,6 +536,34 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const checkIfNewArea = useCallback<DiffContext['checkIfNewArea']>(
+        ({ areaId }) => {
+            const areaKey = getDiffMapKey({
+                diffObject: 'area',
+                objectId: areaId,
+            });
+
+            return (
+                diffMap.has(areaKey) && diffMap.get(areaKey)?.type === 'added'
+            );
+        },
+        [diffMap]
+    );
+
+    const checkIfAreaRemoved = useCallback<DiffContext['checkIfAreaRemoved']>(
+        ({ areaId }) => {
+            const areaKey = getDiffMapKey({
+                diffObject: 'area',
+                objectId: areaId,
+            });
+
+            return (
+                diffMap.has(areaKey) && diffMap.get(areaKey)?.type === 'removed'
+            );
+        },
+        [diffMap]
+    );
+
     const resetDiff = useCallback<DiffContext['resetDiff']>(() => {
         setDiffMap(new Map<string, ChartDBDiff>());
         setTablesChanged(new Map<string, boolean>());
@@ -549,6 +608,10 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 // relationship diff
                 checkIfNewRelationship,
                 checkIfRelationshipRemoved,
+
+                // area diff
+                checkIfNewArea,
+                checkIfAreaRemoved,
 
                 events,
             }}

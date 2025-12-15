@@ -5,6 +5,7 @@ import type { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataType } from '@/lib/data/data-types/data-types';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { Area } from '@/lib/domain/area';
 import type { DiffMap } from '@/lib/domain/diff/diff';
 
 export type DiffEventType = 'diff_calculated';
@@ -18,6 +19,7 @@ export type DiffCalculatedData = {
     tablesToAdd: DBTable[];
     fieldsToAdd: Map<string, DBField[]>;
     relationshipsToAdd: DBRelationship[];
+    areasToAdd: Area[];
 };
 
 export type DiffCalculatedEvent = DiffEventBase<
@@ -122,6 +124,10 @@ export interface DiffContext {
     }: {
         relationshipId: string;
     }) => boolean;
+
+    // area diff
+    checkIfNewArea: ({ areaId }: { areaId: string }) => boolean;
+    checkIfAreaRemoved: ({ areaId }: { areaId: string }) => boolean;
 
     events: EventEmitter<DiffEvent>;
 }

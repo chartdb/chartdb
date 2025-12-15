@@ -40,6 +40,23 @@ const normalizeBoolean = (value: boolean | undefined | null): boolean => {
     return value === true;
 };
 
+// Helper to determine if an attribute change should add to the changed map
+// - undefined: always add (current behavior)
+// - empty array: never add
+// - array with values: only add if attribute is in the array
+const shouldAddToChangedMap = <T>(
+    attribute: T,
+    changedAttributes?: T[]
+): boolean => {
+    if (changedAttributes === undefined) {
+        return true;
+    }
+    if (changedAttributes.length === 0) {
+        return false;
+    }
+    return changedAttributes.includes(attribute);
+};
+
 export interface GenerateDiffOptions {
     includeTables?: boolean;
     includeFields?: boolean;
@@ -52,6 +69,12 @@ export interface GenerateDiffOptions {
         fields?: FieldDiffAttribute[];
         areas?: AreaDiffAttribute[];
         notes?: NoteDiffAttribute[];
+    };
+    changedMaps?: {
+        changedTablesAttributes?: TableDiffAttribute[];
+        changedFieldsAttributes?: FieldDiffAttribute[];
+        changedAreasAttributes?: AreaDiffAttribute[];
+        changedNotesAttributes?: NoteDiffAttribute[];
     };
     changeTypes?: {
         tables?: TableDiff['type'][];
@@ -98,6 +121,7 @@ export function generateDiff({
         includeAreas: options.includeAreas ?? false,
         includeNotes: options.includeNotes ?? false,
         attributes: options.attributes ?? {},
+        changedMaps: options.changedMaps,
         changeTypes: options.changeTypes ?? {},
         matchers: options.matchers ?? {},
     };
@@ -125,6 +149,8 @@ export function generateDiff({
             diffMap: newDiffs,
             changedTables,
             attributes: mergedOptions.attributes?.tables,
+            changedTablesAttributes:
+                mergedOptions.changedMaps?.changedTablesAttributes,
             changeTypes: mergedOptions.changeTypes?.tables,
             tableMatcher,
         });
@@ -138,6 +164,10 @@ export function generateDiff({
         changedTables,
         changedFields,
         options: mergedOptions,
+        changedTablesAttributes:
+            mergedOptions.changedMaps?.changedTablesAttributes,
+        changedFieldsAttributes:
+            mergedOptions.changedMaps?.changedFieldsAttributes,
         tableMatcher,
         fieldMatcher,
         indexMatcher,
@@ -162,6 +192,8 @@ export function generateDiff({
             diffMap: newDiffs,
             changedAreas,
             attributes: mergedOptions.attributes?.areas,
+            changedAreasAttributes:
+                mergedOptions.changedMaps?.changedAreasAttributes,
             changeTypes: mergedOptions.changeTypes?.areas,
             areaMatcher,
         });
@@ -175,6 +207,8 @@ export function generateDiff({
             diffMap: newDiffs,
             changedNotes,
             attributes: mergedOptions.attributes?.notes,
+            changedNotesAttributes:
+                mergedOptions.changedMaps?.changedNotesAttributes,
             changeTypes: mergedOptions.changeTypes?.notes,
             noteMatcher,
         });
@@ -196,6 +230,7 @@ function compareTables({
     diffMap,
     changedTables,
     attributes,
+    changedTablesAttributes,
     changeTypes,
     tableMatcher,
 }: {
@@ -204,6 +239,7 @@ function compareTables({
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
     attributes?: TableDiffAttribute[];
+    changedTablesAttributes?: TableDiffAttribute[];
     changeTypes?: TableDiff['type'][];
     tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
 }) {
@@ -292,7 +328,9 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (shouldAddToChangedMap('name', changedTablesAttributes)) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
 
             if (
@@ -316,7 +354,11 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (
+                    shouldAddToChangedMap('comments', changedTablesAttributes)
+                ) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
 
             if (
@@ -339,7 +381,9 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (shouldAddToChangedMap('color', changedTablesAttributes)) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
 
             if (attributesToCheck.includes('x') && oldTable.x !== newTable.x) {
@@ -359,7 +403,9 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (shouldAddToChangedMap('x', changedTablesAttributes)) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
 
             if (attributesToCheck.includes('y') && oldTable.y !== newTable.y) {
@@ -379,7 +425,9 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (shouldAddToChangedMap('y', changedTablesAttributes)) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
 
             if (
@@ -402,7 +450,9 @@ function compareTables({
                     }
                 );
 
-                changedTables.set(oldTable.id, true);
+                if (shouldAddToChangedMap('width', changedTablesAttributes)) {
+                    changedTables.set(oldTable.id, true);
+                }
             }
         }
     }
@@ -416,6 +466,8 @@ function compareTableContents({
     changedTables,
     changedFields,
     options,
+    changedTablesAttributes,
+    changedFieldsAttributes,
     tableMatcher,
     fieldMatcher,
     indexMatcher,
@@ -426,6 +478,8 @@ function compareTableContents({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     options?: GenerateDiffOptions;
+    changedTablesAttributes?: TableDiffAttribute[];
+    changedFieldsAttributes?: FieldDiffAttribute[];
     tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
     fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
@@ -448,6 +502,8 @@ function compareTableContents({
                 changedTables,
                 changedFields,
                 attributes: options?.attributes?.fields,
+                changedTablesAttributes,
+                changedFieldsAttributes,
                 changeTypes: options?.changeTypes?.fields,
                 fieldMatcher,
             });
@@ -461,6 +517,7 @@ function compareTableContents({
                 newIndexes: newTable.indexes,
                 diffMap,
                 changedTables,
+                changedTablesAttributes,
                 changeTypes: options?.changeTypes?.indexes,
                 indexMatcher,
             });
@@ -477,6 +534,8 @@ function compareFields({
     changedTables,
     changedFields,
     attributes,
+    changedTablesAttributes,
+    changedFieldsAttributes,
     changeTypes,
     fieldMatcher,
 }: {
@@ -487,6 +546,8 @@ function compareFields({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     attributes?: FieldDiffAttribute[];
+    changedTablesAttributes?: TableDiffAttribute[];
+    changedFieldsAttributes?: FieldDiffAttribute[];
     changeTypes?: FieldDiff['type'][];
     fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
 }) {
@@ -557,6 +618,8 @@ function compareFields({
                 changedTables,
                 changedFields,
                 attributes,
+                changedTablesAttributes,
+                changedFieldsAttributes,
             });
         }
     }
@@ -571,6 +634,8 @@ function compareFieldProperties({
     changedTables,
     changedFields,
     attributes,
+    changedTablesAttributes,
+    changedFieldsAttributes,
 }: {
     tableId: string;
     oldField: DBField;
@@ -579,6 +644,8 @@ function compareFieldProperties({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     attributes?: FieldDiffAttribute[];
+    changedTablesAttributes?: TableDiffAttribute[];
+    changedFieldsAttributes?: FieldDiffAttribute[];
 }) {
     // If attributes are specified, only check those attributes
     const attributesToCheck: FieldDiffAttribute[] = attributes ?? [
@@ -680,6 +747,11 @@ function compareFieldProperties({
     }
 
     if (changedAttributes.length > 0) {
+        // Track which attributes should trigger adding to changed maps
+        const attributesThatTriggerChange = changedAttributes.filter((attr) =>
+            shouldAddToChangedMap(attr, changedFieldsAttributes)
+        );
+
         for (const attribute of changedAttributes) {
             diffMap.set(
                 getDiffMapKey({
@@ -698,8 +770,22 @@ function compareFieldProperties({
                 }
             );
         }
-        changedTables.set(tableId, true);
-        changedFields.set(oldField.id, true);
+
+        // Only add to changed maps if at least one attribute should trigger a change
+        if (attributesThatTriggerChange.length > 0) {
+            // For changedTables, we need to check changedTablesAttributes
+            // undefined = always add, empty = never add, array = check if any field attribute qualifies
+            if (changedTablesAttributes === undefined) {
+                changedTables.set(tableId, true);
+            } else if (changedTablesAttributes.length > 0) {
+                // If changedTablesAttributes has values, we only add if explicitly configured
+                // Since these are field changes, we keep current behavior of adding to changedTables
+                changedTables.set(tableId, true);
+            }
+            // If changedTablesAttributes is empty array, don't add to changedTables
+
+            changedFields.set(oldField.id, true);
+        }
     }
 }
 
@@ -710,6 +796,7 @@ function compareIndexes({
     newIndexes,
     diffMap,
     changedTables,
+    changedTablesAttributes,
     changeTypes,
     indexMatcher,
 }: {
@@ -718,6 +805,7 @@ function compareIndexes({
     newIndexes: DBIndex[];
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
+    changedTablesAttributes?: TableDiffAttribute[];
     changeTypes?: IndexDiff['type'][];
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
 }) {
@@ -728,6 +816,13 @@ function compareIndexes({
 
     // If changeTypes is undefined, check all types
     const typesToCheck = changeTypes ?? ['added', 'removed'];
+
+    // For structural changes (added/removed indexes), add to changedTables unless
+    // changedTablesAttributes is explicitly set to empty array
+    const shouldAddToChangedTables =
+        changedTablesAttributes === undefined ||
+        changedTablesAttributes.length > 0;
+
     // Check for added indexes
     if (typesToCheck.includes('added')) {
         for (const newIndex of newIndexes) {
@@ -744,7 +839,9 @@ function compareIndexes({
                         tableId,
                     }
                 );
-                changedTables.set(tableId, true);
+                if (shouldAddToChangedTables) {
+                    changedTables.set(tableId, true);
+                }
             }
         }
     }
@@ -765,7 +862,9 @@ function compareIndexes({
                         tableId,
                     }
                 );
-                changedTables.set(tableId, true);
+                if (shouldAddToChangedTables) {
+                    changedTables.set(tableId, true);
+                }
             }
         }
     }
@@ -844,6 +943,7 @@ function compareAreas({
     diffMap,
     changedAreas,
     attributes,
+    changedAreasAttributes,
     changeTypes,
     areaMatcher,
 }: {
@@ -852,6 +952,7 @@ function compareAreas({
     diffMap: DiffMap;
     changedAreas: Map<string, boolean>;
     attributes?: AreaDiffAttribute[];
+    changedAreasAttributes?: AreaDiffAttribute[];
     changeTypes?: AreaDiff['type'][];
     areaMatcher: (area: Area, areas: Area[]) => Area | undefined;
 }) {
@@ -938,7 +1039,9 @@ function compareAreas({
                         oldValue: oldArea.name,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('name', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
 
             if (
@@ -960,7 +1063,9 @@ function compareAreas({
                         oldValue: oldArea.color,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('color', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
 
             if (attributesToCheck.includes('x') && oldArea.x !== newArea.x) {
@@ -979,7 +1084,9 @@ function compareAreas({
                         oldValue: oldArea.x,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('x', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
 
             if (attributesToCheck.includes('y') && oldArea.y !== newArea.y) {
@@ -998,7 +1105,9 @@ function compareAreas({
                         oldValue: oldArea.y,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('y', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
 
             if (
@@ -1020,7 +1129,9 @@ function compareAreas({
                         oldValue: oldArea.width,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('width', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
 
             if (
@@ -1042,7 +1153,9 @@ function compareAreas({
                         oldValue: oldArea.height,
                     }
                 );
-                changedAreas.set(oldArea.id, true);
+                if (shouldAddToChangedMap('height', changedAreasAttributes)) {
+                    changedAreas.set(oldArea.id, true);
+                }
             }
         }
     }
@@ -1055,6 +1168,7 @@ function compareNotes({
     diffMap,
     changedNotes,
     attributes,
+    changedNotesAttributes,
     changeTypes,
     noteMatcher,
 }: {
@@ -1063,6 +1177,7 @@ function compareNotes({
     diffMap: DiffMap;
     changedNotes: Map<string, boolean>;
     attributes?: NoteDiffAttribute[];
+    changedNotesAttributes?: NoteDiffAttribute[];
     changeTypes?: NoteDiff['type'][];
     noteMatcher: (note: Note, notes: Note[]) => Note | undefined;
 }) {
@@ -1149,7 +1264,9 @@ function compareNotes({
                         oldValue: oldNote.content,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('content', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
 
             if (
@@ -1171,7 +1288,9 @@ function compareNotes({
                         oldValue: oldNote.color,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('color', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
 
             if (attributesToCheck.includes('x') && oldNote.x !== newNote.x) {
@@ -1190,7 +1309,9 @@ function compareNotes({
                         oldValue: oldNote.x,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('x', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
 
             if (attributesToCheck.includes('y') && oldNote.y !== newNote.y) {
@@ -1209,7 +1330,9 @@ function compareNotes({
                         oldValue: oldNote.y,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('y', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
 
             if (
@@ -1231,7 +1354,9 @@ function compareNotes({
                         oldValue: oldNote.width,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('width', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
 
             if (
@@ -1253,7 +1378,9 @@ function compareNotes({
                         oldValue: oldNote.height,
                     }
                 );
-                changedNotes.set(oldNote.id, true);
+                if (shouldAddToChangedMap('height', changedNotesAttributes)) {
+                    changedNotes.set(oldNote.id, true);
+                }
             }
         }
     }

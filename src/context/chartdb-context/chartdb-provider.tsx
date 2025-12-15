@@ -77,7 +77,8 @@ export const ChartDBProvider: React.FC<
         useState<string>();
 
     const diffCalculatedHandler = useCallback((event: DiffCalculatedEvent) => {
-        const { tablesToAdd, fieldsToAdd, relationshipsToAdd } = event.data;
+        const { tablesToAdd, fieldsToAdd, relationshipsToAdd, areasToAdd } =
+            event.data;
         setTables((tables) =>
             [...tables, ...(tablesToAdd ?? [])].map((table) => {
                 const fields = fieldsToAdd.get(table.id);
@@ -90,6 +91,7 @@ export const ChartDBProvider: React.FC<
             ...relationships,
             ...(relationshipsToAdd ?? []),
         ]);
+        setAreas((areas) => [...areas, ...(areasToAdd ?? [])]);
     }, []);
 
     diffEvents.useSubscription(diffCalculatedHandler);
