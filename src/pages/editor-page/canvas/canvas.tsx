@@ -1077,81 +1077,93 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 childTableMovements.size > 0 ||
                 areaRemoveChanges.length > 0
             ) {
-                updateTablesState((currentTables) => {
-                    const updatedTables = currentTables
-                        .map((currentTable) => {
-                            // Handle area removal - clear parentAreaId
-                            const removedArea = areaRemoveChanges.find(
-                                (change) =>
-                                    change.id === currentTable.parentAreaId
+                updateTablesState(
+                    (currentTables) => {
+                        const updatedTables = currentTables
+                            .map((currentTable) => {
+                                // Handle area removal - clear parentAreaId
+                                const removedArea = areaRemoveChanges.find(
+                                    (change) =>
+                                        change.id === currentTable.parentAreaId
+                                );
+                                if (removedArea) {
+                                    return {
+                                        ...currentTable,
+                                        parentAreaId: null,
+                                    };
+                                }
+
+                                // Handle direct table changes
+                                const positionChange = positionChanges.find(
+                                    (change) => change.id === currentTable.id
+                                );
+                                const sizeChange = sizeChanges.find(
+                                    (change) => change.id === currentTable.id
+                                );
+
+                                // Handle child table movement from area drag
+                                const areaMovement = childTableMovements.get(
+                                    currentTable.id
+                                );
+
+                                if (
+                                    positionChange ||
+                                    sizeChange ||
+                                    areaMovement
+                                ) {
+                                    const x = positionChange?.position?.x;
+                                    const y = positionChange?.position?.y;
+
+                                    return {
+                                        ...currentTable,
+                                        ...(positionChange &&
+                                        x !== undefined &&
+                                        y !== undefined &&
+                                        !isNaN(x) &&
+                                        !isNaN(y)
+                                            ? {
+                                                  x,
+                                                  y,
+                                              }
+                                            : {}),
+                                        ...(areaMovement && !positionChange
+                                            ? {
+                                                  x:
+                                                      currentTable.x +
+                                                      areaMovement.deltaX,
+                                                  y:
+                                                      currentTable.y +
+                                                      areaMovement.deltaY,
+                                              }
+                                            : {}),
+                                        ...(sizeChange
+                                            ? {
+                                                  width:
+                                                      sizeChange.dimensions
+                                                          ?.width ??
+                                                      currentTable.width,
+                                              }
+                                            : {}),
+                                    };
+                                }
+                                return currentTable;
+                            })
+                            .filter(
+                                (table) =>
+                                    !removeChanges.some(
+                                        (change) => change.id === table.id
+                                    )
                             );
-                            if (removedArea) {
-                                return {
-                                    ...currentTable,
-                                    parentAreaId: null,
-                                };
-                            }
 
-                            // Handle direct table changes
-                            const positionChange = positionChanges.find(
-                                (change) => change.id === currentTable.id
-                            );
-                            const sizeChange = sizeChanges.find(
-                                (change) => change.id === currentTable.id
-                            );
-
-                            // Handle child table movement from area drag
-                            const areaMovement = childTableMovements.get(
-                                currentTable.id
-                            );
-
-                            if (positionChange || sizeChange || areaMovement) {
-                                const x = positionChange?.position?.x;
-                                const y = positionChange?.position?.y;
-
-                                return {
-                                    ...currentTable,
-                                    ...(positionChange &&
-                                    x !== undefined &&
-                                    y !== undefined &&
-                                    !isNaN(x) &&
-                                    !isNaN(y)
-                                        ? {
-                                              x,
-                                              y,
-                                          }
-                                        : {}),
-                                    ...(areaMovement && !positionChange
-                                        ? {
-                                              x:
-                                                  currentTable.x +
-                                                  areaMovement.deltaX,
-                                              y:
-                                                  currentTable.y +
-                                                  areaMovement.deltaY,
-                                          }
-                                        : {}),
-                                    ...(sizeChange
-                                        ? {
-                                              width:
-                                                  sizeChange.dimensions
-                                                      ?.width ??
-                                                  currentTable.width,
-                                          }
-                                        : {}),
-                                };
-                            }
-                            return currentTable;
-                        })
-                        .filter(
-                            (table) =>
-                                !removeChanges.some(
-                                    (change) => change.id === table.id
-                                )
-                        );
-
-                    return updatedTables;
-                });
+                        return updatedTables;
+                    },
+                    {
+                        updateHistory:
+                            positionChanges.length > 0 ||
+                            removeChanges.length > 0 ||
+                            sizeChanges.length > 0,
+                    }
+                );
             }
 
             updateOverlappingGraphOnChangesDebounced({
