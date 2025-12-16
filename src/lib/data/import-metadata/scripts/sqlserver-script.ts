@@ -1,8 +1,8 @@
 import { DatabaseEdition } from '@/lib/domain/database-edition';
 
-const withExtras = false;
+const withDefault = true;
 
-const withDefault = `'"' + STRING_ESCAPE(COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '\\"'), ''), 'json') + '"'`;
+const withDefaultExpr = `'"' + STRING_ESCAPE(COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', '\\"'), ''), 'json') + '"'`;
 const withoutDefault = `'""'`;
 
 const sqlServerQuery = `${`/* SQL Server 2017 and above edition (14.0, 15.0, 16.0, 17.0)*/`}
@@ -86,7 +86,7 @@ cols AS (
                                 ELSE 'null'
                             END +
                         ', "nullable": ' + CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
-                        ', "default": ' + ${withExtras ? withDefault : withoutDefault} +
+                        ', "default": ' + ${withDefault ? withDefaultExpr : withoutDefault} +
                         ', "collation": ' + CASE
                             WHEN cols.COLLATION_NAME IS NULL THEN 'null'
                             ELSE '"' + STRING_ESCAPE(cols.COLLATION_NAME, 'json') + '"'
@@ -284,7 +284,7 @@ cols AS (
                                         ELSE 'null'
                                     END +
                                 ', "nullable": ' + CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
-                                ', "default": ' + ${withExtras ? withDefault : withoutDefault} +
+                                ', "default": ' + ${withDefault ? withDefaultExpr : withoutDefault} +
                                 ', "collation": ' +
                                     CASE
                                         WHEN cols.COLLATION_NAME IS NULL THEN 'null'

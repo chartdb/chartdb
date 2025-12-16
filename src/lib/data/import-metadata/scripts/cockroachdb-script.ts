@@ -24,9 +24,9 @@ WITH fk_info AS (
                                             ',"table":"', replace(table_name::TEXT, '"', ''), '"',
                                             ',"column":"', replace(fk_column::TEXT, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name::TEXT, '"',
-                                            ',"reference_schema":"', COALESCE(reference_schema::TEXT, 'public'), '"',
-                                            ',"reference_table":"', reference_table::TEXT, '"',
-                                            ',"reference_column":"', reference_column::TEXT, '"',
+                                            ',"reference_schema":"', COALESCE(replace(reference_schema::TEXT, '"', ''), 'public'), '"',
+                                            ',"reference_table":"', replace(reference_table::TEXT, '"', ''), '"',
+                                            ',"reference_column":"', replace(reference_column::TEXT, '"', ''), '"',
                                             ',"fk_def":"', replace(fk_def::TEXT, '"', ''),
                                             '"}')), ',') as fk_metadata
     FROM (
@@ -124,7 +124,7 @@ cols AS (
                                                     ELSE 'null'
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN true ELSE false END::TEXT,
-                                            ',"default":"', null,
+                                            ',"default":"', COALESCE(replace(replace(cols.column_default::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '","collation":"', COALESCE(cols.COLLATION_NAME::TEXT, ''),
                                             '","comment":"', COALESCE(replace(replace(dsc.description::TEXT, '"', '\\"'), '\\x', '\\\\x'), ''),
                                             '","is_identity":', CASE 
