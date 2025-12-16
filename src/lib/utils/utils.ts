@@ -123,3 +123,7 @@ export function mergeRefs<T>(
         }
     };
 }
+
+export const isStringEmpty = (str: string | undefined | null): boolean => {
+    return !str || str.trim().length === 0;
+};
