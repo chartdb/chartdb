@@ -109,6 +109,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
 
     const [showCheckJsonButton, setShowCheckJsonButton] = useState(false);
     const [isCheckingJson, setIsCheckingJson] = useState(false);
+    const [jsonCheckAttempts, setJsonCheckAttempts] = useState(0);
     const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
     const [sqlValidation, setSqlValidation] = useState<ValidationResult | null>(
         null
@@ -124,6 +125,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         setScriptResult('');
         setErrorMessage('');
         setShowCheckJsonButton(false);
+        setJsonCheckAttempts(0);
     }, [importMethod, setScriptResult]);
 
     // Check if the ddl or dbml is valid
@@ -262,23 +264,29 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (scriptResult.trim().length === 0) {
             setErrorMessage('');
             setShowCheckJsonButton(false);
+            setJsonCheckAttempts(0);
             return;
         }
 
         if (isStringMetadataJson(scriptResult)) {
             setErrorMessage('');
             setShowCheckJsonButton(false);
+            setJsonCheckAttempts(0);
         } else if (
             scriptResult.trim().includes('{') &&
             scriptResult.trim().includes('}')
         ) {
-            setShowCheckJsonButton(true);
-            setErrorMessage('');
+            // Only show the check button if we haven't exhausted all attempts (2 tries)
+            if (jsonCheckAttempts < 2) {
+                setShowCheckJsonButton(true);
+                setErrorMessage('');
+            }
+            // If we've exhausted attempts, keep the error message and don't show the button
         } else {
             setErrorMessage(errorScriptOutputMessage);
             setShowCheckJsonButton(false);
         }
-    }, [scriptResult, importMethod]);
+    }, [scriptResult, importMethod, jsonCheckAttempts]);
 
     const handleImport = useCallback(() => {
         if (errorMessage.length === 0 && scriptResult.trim().length !== 0) {
@@ -355,10 +363,12 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         if (isStringMetadataJson(fixedJson)) {
             setScriptResult(fixedJson);
             setErrorMessage('');
+            setJsonCheckAttempts(0);
             formatEditor();
         } else {
             setScriptResult(fixedJson);
             setErrorMessage(errorScriptOutputMessage);
+            setJsonCheckAttempts((prev) => prev + 1);
             formatEditor();
         }
 
