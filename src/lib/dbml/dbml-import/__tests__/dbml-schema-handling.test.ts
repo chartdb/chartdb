@@ -39,10 +39,10 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                 databaseType: DatabaseType.MYSQL,
             });
 
-            // Verify no 'public' schema was added
+            // Verify schema is undefined for MySQL (no default schema)
             expect(diagram.tables).toBeDefined();
             diagram.tables?.forEach((table) => {
-                expect(table.schema).toBe('');
+                expect(table.schema).toBeUndefined();
             });
 
             // Check specific tables
@@ -50,7 +50,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                 (t) => t.name === 'wizards'
             );
             expect(wizardsTable).toBeDefined();
-            expect(wizardsTable?.schema).toBe('');
+            expect(wizardsTable?.schema).toBeUndefined();
 
             // Check that reserved keywords are preserved as field names
             const yesField = wizardsTable?.fields.find((f) => f.name === 'Yes');
@@ -162,7 +162,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             const heroesTable = diagram.tables?.find(
                 (t) => t.name === 'heroes'
             );
-            expect(heroesTable?.schema).toBe(''); // 'public' should be converted to empty
+            expect(heroesTable?.schema).toBe('public'); // PostgreSQL default schema
 
             const secretQuestsTable = diagram.tables?.find(
                 (t) => t.name === 'secret_quests'
@@ -172,7 +172,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             const artifactsTable = diagram.tables?.find(
                 (t) => t.name === 'artifacts'
             );
-            expect(artifactsTable?.schema).toBe(''); // No schema = empty string
+            expect(artifactsTable?.schema).toBe('public'); // No schema = default schema
         });
 
         it('should handle reserved keywords for PostgreSQL', async () => {
@@ -222,18 +222,18 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                 }
             );
 
-            // For MySQL, 'public' schema should be stripped
+            // For MySQL, 'public' schema should become undefined (no default schema)
             mysqlDiagram.tables?.forEach((table) => {
-                expect(table.schema).toBe('');
+                expect(table.schema).toBeUndefined();
             });
 
-            // Now test with PostgreSQL - public should also be stripped (it's the default)
+            // For PostgreSQL, 'public' is the default schema
             const pgDiagram = await importDBMLToDiagram(dbmlWithPublicSchema, {
                 databaseType: DatabaseType.POSTGRESQL,
             });
 
             pgDiagram.tables?.forEach((table) => {
-                expect(table.schema).toBe('');
+                expect(table.schema).toBe('public');
             });
         });
 

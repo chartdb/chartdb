@@ -1,7 +1,8 @@
 import { Parser } from '@dbml/core';
 import type { Diagram } from '@/lib/domain/diagram';
-import { generateDiagramId, generateId } from '@/lib/utils';
+import { generateDiagramId, generateId, isStringEmpty } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
+import { defaultSchemas } from '@/lib/data/default-schemas';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
@@ -502,14 +503,22 @@ export const importDBMLToDiagram = async (
             if (schema.enums) {
                 schema.enums.forEach((enumDef) => {
                     // Get schema name from enum or use schema's name
-                    const enumSchema =
+                    // DBML parser uses 'public' as its default - treat it as empty
+                    const rawEnumSchema =
                         typeof enumDef.schema === 'string'
                             ? enumDef.schema
                             : enumDef.schema?.name || schema.name;
+                    const defaultSchema = defaultSchemas[options.databaseType];
+                    const isEnumSchemaEmpty =
+                        isStringEmpty(rawEnumSchema) ||
+                        rawEnumSchema === 'public';
+                    const enumSchema = isEnumSchemaEmpty
+                        ? defaultSchema
+                        : rawEnumSchema;
 
                     allEnums.push({
                         name: enumDef.name,
-                        schema: enumSchema === 'public' ? '' : enumSchema,
+                        schema: enumSchema,
                         values: enumDef.values || [],
                         note: enumDef.note,
                     });
@@ -722,15 +731,21 @@ export const importDBMLToDiagram = async (
                 }
             }
 
+            // Get raw schema from DBML, then apply defaultSchema if empty
+            // DBML parser uses 'public' as its default - treat it as empty
+            const defaultSchema = defaultSchemas[options.databaseType];
+            const rawSchema =
+                typeof table.schema === 'string'
+                    ? table.schema
+                    : table.schema?.name;
+            const isSchemaEmpty =
+                isStringEmpty(rawSchema) || rawSchema === 'public';
+            const tableSchema = isSchemaEmpty ? defaultSchema : rawSchema;
+
             const tableToReturn: DBTable = {
                 id: generateId(),
                 name: table.name.replace(/['"]/g, ''),
-                schema:
-                    typeof table.schema === 'string'
-                        ? table.schema === 'public'
-                            ? ''
-                            : table.schema
-                        : table.schema?.name || '',
+                schema: tableSchema,
                 order: index,
                 fields,
                 indexes,

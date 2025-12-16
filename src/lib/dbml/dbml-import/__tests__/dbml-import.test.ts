@@ -242,4 +242,62 @@ Note note_1750185617764 {
             getPreferredSynonymSpy.mockRestore();
         });
     });
+
+    describe('Schema Handling with defaultSchemas', () => {
+        it('should use defaultSchema when table schema is empty for PostgreSQL', async () => {
+            const dbml = `
+                Table users {
+                    id int [pk]
+                }
+            `;
+
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
+
+            expect(diagram.tables?.[0]?.schema).toBe('public');
+        });
+
+        it('should use defaultSchema when table schema is empty for SQL Server', async () => {
+            const dbml = `
+                Table users {
+                    id int [pk]
+                }
+            `;
+
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.SQL_SERVER,
+            });
+
+            expect(diagram.tables?.[0]?.schema).toBe('dbo');
+        });
+
+        it('should have undefined schema for database types without defaultSchema', async () => {
+            const dbml = `
+                Table users {
+                    id int [pk]
+                }
+            `;
+
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.SQLITE,
+            });
+
+            expect(diagram.tables?.[0]?.schema).toBeUndefined();
+        });
+
+        it('should preserve explicit schema even when different from default', async () => {
+            const dbml = `
+                Table "custom_schema"."users" {
+                    id int [pk]
+                }
+            `;
+
+            const diagram = await importDBMLToDiagram(dbml, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
+
+            expect(diagram.tables?.[0]?.schema).toBe('custom_schema');
+        });
+    });
 });
