@@ -40,6 +40,52 @@ const normalizeBoolean = (value: boolean | undefined | null): boolean => {
     return value === true;
 };
 
+/**
+ * Normalizes a comment/content string for comparison purposes.
+ * This handles cases where the same content differs only in whitespace formatting,
+ * such as newlines vs spaces, multiple spaces, or different line break styles.
+ *
+ * Examples that will be considered equal:
+ * - "| A | B" vs "| A\n| B"
+ * - "hello  world" vs "hello world"
+ * - "line1\r\nline2" vs "line1\nline2"
+ */
+const normalizeComment = (
+    value: string | undefined | null
+): string | undefined => {
+    if (value === undefined || value === null) {
+        return undefined;
+    }
+    // Replace all whitespace sequences (newlines, tabs, multiple spaces) with a single space
+    // Then trim leading/trailing whitespace
+    return value.replace(/\s+/g, ' ').trim();
+};
+
+/**
+ * Compares two comment/content strings in a whitespace-insensitive manner.
+ * Returns true if the comments are semantically different (i.e., a real change).
+ */
+const areCommentsDifferent = (
+    oldComment: string | undefined | null,
+    newComment: string | undefined | null
+): boolean => {
+    const normalizedOld = normalizeComment(oldComment);
+    const normalizedNew = normalizeComment(newComment);
+
+    // Both undefined/empty means equal
+    if (!normalizedOld && !normalizedNew) {
+        return false;
+    }
+
+    // One defined, one not means different
+    if (!normalizedOld || !normalizedNew) {
+        return true;
+    }
+
+    // Compare normalized versions
+    return normalizedOld !== normalizedNew;
+};
+
 // Helper to determine if an attribute change should add to the changed map
 // - undefined: always add (current behavior)
 // - empty array: never add
@@ -335,8 +381,7 @@ function compareTables({
 
             if (
                 attributesToCheck.includes('comments') &&
-                (oldTable.comments || newTable.comments) &&
-                oldTable.comments !== newTable.comments
+                areCommentsDifferent(oldTable.comments, newTable.comments)
             ) {
                 diffMap.set(
                     getDiffMapKey({
@@ -698,8 +743,7 @@ function compareFieldProperties({
 
     if (
         attributesToCheck.includes('comments') &&
-        (newField.comments || oldField.comments) &&
-        oldField.comments !== newField.comments
+        areCommentsDifferent(oldField.comments, newField.comments)
     ) {
         changedAttributes.push('comments');
     }
@@ -1247,7 +1291,7 @@ function compareNotes({
 
             if (
                 attributesToCheck.includes('content') &&
-                oldNote.content !== newNote.content
+                areCommentsDifferent(oldNote.content, newNote.content)
             ) {
                 diffMap.set(
                     getDiffMapKey({
