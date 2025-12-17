@@ -429,6 +429,9 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                         wordWrap: 'off',
                         mouseWheelZoom: false,
                         readOnly: !isEditMode,
+                        autoClosingBrackets: 'always',
+                        autoClosingQuotes: 'always',
+                        autoSurround: 'languageDefined',
                     },
                     onChange: (value) => {
                         setEditedDbml(value ?? '');

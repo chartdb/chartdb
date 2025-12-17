@@ -40,6 +40,34 @@ export const setupDBMLLanguage = (monaco: Monaco) => {
     const dataTypesNames = dataTypes.map((dt) => dt.name);
     const datatypePattern = dataTypesNames.join('|');
 
+    // Language configuration for auto-closing brackets, comments, etc.
+    monaco.languages.setLanguageConfiguration('dbml', {
+        brackets: [
+            ['{', '}'],
+            ['[', ']'],
+            ['(', ')'],
+        ],
+        autoClosingPairs: [
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '"', close: '"', notIn: ['string'] },
+            { open: "'", close: "'", notIn: ['string'] },
+            { open: '`', close: '`', notIn: ['string'] },
+        ],
+        surroundingPairs: [
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '"', close: '"' },
+            { open: "'", close: "'" },
+            { open: '`', close: '`' },
+        ],
+        comments: {
+            lineComment: '//',
+        },
+    });
+
     monaco.languages.setMonarchTokensProvider('dbml', {
         keywords: ['Table', 'Ref', 'Indexes', 'Note', 'Enum', 'enum'],
         datatypes: dataTypesNames,
