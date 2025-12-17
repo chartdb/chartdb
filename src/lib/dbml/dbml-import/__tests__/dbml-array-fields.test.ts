@@ -88,7 +88,7 @@ Table "heroes" {
                 (f) => f.name === 'skill_levels'
             );
             expect(skillLevels?.isArray).toBe(true);
-            expect(skillLevels?.type.name).toBe('decimal');
+            expect(skillLevels?.type.name).toBe('numeric');
             expect(skillLevels?.precision).toBe(5);
             expect(skillLevels?.scale).toBe(2);
 
@@ -227,7 +227,7 @@ Table "guilds"."members" {
             // Verify exported DBML has correct array syntax with types
             expect(exportedDbml).toContain('varchar(50)[]');
             expect(exportedDbml).toContain('int[]');
-            expect(exportedDbml).toContain('decimal(3,1)[]');
+            expect(exportedDbml).toContain('numeric(3,1)[]');
             expect(exportedDbml).toContain('text[]');
 
             // Re-import

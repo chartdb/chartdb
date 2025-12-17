@@ -324,6 +324,12 @@ export const importDBMLToDiagram = async (
                 enums,
             });
 
+            // Also check the preferred synonym for field attributes (e.g., decimal → numeric)
+            const preferredType = options.databaseType
+                ? getPreferredSynonym(dataType.name, options.databaseType)
+                : null;
+            const effectiveType = preferredType ?? dataType;
+
             // Check if this is a character type that should have a max length
             const baseTypeName = typeName
                 .replace(/\(.*\)/, '')
@@ -340,8 +346,8 @@ export const importDBMLToDiagram = async (
                     characterMaximumLength: args[0],
                 };
             } else if (
-                dataType.fieldAttributes?.precision &&
-                dataType.fieldAttributes?.scale
+                effectiveType.fieldAttributes?.precision &&
+                effectiveType.fieldAttributes?.scale
             ) {
                 const precisionNum = args?.[0] ? parseInt(args[0]) : undefined;
                 const scaleNum = args?.[1] ? parseInt(args[1]) : undefined;
