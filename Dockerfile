@@ -1,4 +1,4 @@
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 ARG VITE_OPENAI_API_KEY
 ARG VITE_OPENAI_API_ENDPOINT
