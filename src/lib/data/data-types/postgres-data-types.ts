@@ -21,23 +21,23 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     // Level 2 - Second most common types
     { name: 'bigint', id: 'bigint', usageLevel: 2 },
     // { name: 'int8', id: 'int8', usageLevel: 2 },
-    {
-        name: 'decimal',
-        id: 'decimal',
-        usageLevel: 2,
-        fieldAttributes: {
-            precision: {
-                max: 131072,
-                min: 0,
-                default: 10,
-            },
-            scale: {
-                max: 16383,
-                min: 0,
-                default: 2,
-            },
-        },
-    },
+    // {
+    //     name: 'decimal',
+    //     id: 'decimal',
+    //     usageLevel: 2,
+    //     fieldAttributes: {
+    //         precision: {
+    //             max: 131072,
+    //             min: 0,
+    //             default: 10,
+    //         },
+    //         scale: {
+    //             max: 16383,
+    //             min: 0,
+    //             default: 2,
+    //         },
+    //     },
+    // },
     { name: 'serial', id: 'serial', usageLevel: 2 },
     { name: 'json', id: 'json', usageLevel: 2 },
     { name: 'jsonb', id: 'jsonb', usageLevel: 2 },
@@ -53,6 +53,7 @@ export const postgresDataTypes: readonly DataTypeData[] = [
     {
         name: 'numeric',
         id: 'numeric',
+        usageLevel: 2,
         fieldAttributes: {
             precision: {
                 max: 131072,
@@ -171,6 +172,9 @@ const synonymMap: Record<string, string> = {
 
     // Bit types
     'bit varying': 'varbit',
+
+    // Numeric types
+    decimal: 'numeric',
 } as const;
 
 /**
