@@ -1,5 +1,6 @@
-const withExtras = false;
-const withDefault = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
+const withDefault = true;
+
+const withDefaultExpr = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
 const withoutDefault = `""`;
 
 export const mariaDBQuery = `SET SESSION group_concat_max_len = 10000000;
@@ -68,7 +69,7 @@ SELECT CAST(CONCAT(
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-               ',"default":"', ${withExtras ? withDefault : withoutDefault},
+               ',"default":"', ${withDefault ? withDefaultExpr : withoutDefault},
                '","collation":"', IFNULL(cols.collation_name, ''),
                '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
                ',"comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\"'), '\\n', ' '), '"}')

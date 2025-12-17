@@ -64,8 +64,9 @@ export const getPostgresQuery = (
     `;
 
     const withExtras = false;
+    const withDefault = true;
 
-    const withDefault = `COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), '')`;
+    const withDefaultExpr = `COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), '')`;
     const withoutDefault = `null`;
 
     const withComments = `COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), '')`;
@@ -78,9 +79,9 @@ WITH fk_info${databaseEdition ? '_' + databaseEdition : ''} AS (
                                             ',"table":"', replace(table_name::text, '"', ''), '"',
                                             ',"column":"', replace(fk_column::text, '"', ''), '"',
                                             ',"foreign_key_name":"', foreign_key_name, '"',
-                                            ',"reference_schema":"', COALESCE(reference_schema, 'public'), '"',
-                                            ',"reference_table":"', reference_table, '"',
-                                            ',"reference_column":"', reference_column, '"',
+                                            ',"reference_schema":"', COALESCE(replace(reference_schema, '"', ''), 'public'), '"',
+                                            ',"reference_table":"', replace(reference_table, '"', ''), '"',
+                                            ',"reference_column":"', replace(reference_column, '"', ''), '"',
                                             ',"fk_def":"', replace(fk_def, '"', ''),
                                             '"}')), ',') as fk_metadata
     FROM (
@@ -197,7 +198,7 @@ cols AS (
                                                     ELSE 'null'
                                                 END,
                                             ',"nullable":', CASE WHEN (cols.IS_NULLABLE = 'YES') THEN 'true' ELSE 'false' END,
-                                            ',"default":"', ${withExtras ? withDefault : withoutDefault},
+                                            ',"default":"', ${withDefault ? withDefaultExpr : withoutDefault},
                                             '","collation":"', COALESCE(cols.COLLATION_NAME, ''),
                                             '","comment":"', ${withExtras ? withComments : withoutComments},
                                             '","is_identity":', CASE
