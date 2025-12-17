@@ -74,4 +74,8 @@ describe('DBML Export cases', () => {
             testCase('6');
         }
     );
+
+    it('should handle case 7 diagram', { timeout: 30000 }, async () => {
+        testCase('7');
+    });
 });
