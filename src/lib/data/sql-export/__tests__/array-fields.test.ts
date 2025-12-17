@@ -142,7 +142,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
                         {
                             id: generateId(),
                             name: 'skill_levels',
-                            type: { id: 'decimal', name: 'decimal' },
+                            type: { id: 'numeric', name: 'numeric' },
                             primaryKey: false,
                             unique: false,
                             nullable: true,
@@ -176,7 +176,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
         expect(sql).toContain('CREATE TABLE "game"."heroes"');
         expect(sql).toContain('"abilities" varchar(100)[]');
         expect(sql).toContain('"inventory_slots" integer[]');
-        expect(sql).toContain('"skill_levels" decimal(5, 2)[]');
+        expect(sql).toContain('"skill_levels" numeric(5, 2)[]');
     });
 
     it('should export non-array fields normally when isArray is false or undefined', () => {

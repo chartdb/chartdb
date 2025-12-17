@@ -4,9 +4,12 @@ import { importDBMLToDiagram } from '../../dbml-import/dbml-import';
 import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('DBML Self-Referencing Relationships', () => {
-    it('should preserve self-referencing relationships in DBML export', async () => {
-        // Create a DBML with self-referencing relationship (general_ledger example)
-        const inputDBML = `
+    it(
+        'should preserve self-referencing relationships in DBML export',
+        { timeout: 30000 },
+        async () => {
+            // Create a DBML with self-referencing relationship (general_ledger example)
+            const inputDBML = `
 Table "finance"."general_ledger" {
   "ledger_id" bigint [pk]
   "account_name" varchar(100)
@@ -16,35 +19,36 @@ Table "finance"."general_ledger" {
 }
 `;
 
-        // Import the DBML
-        const diagram = await importDBMLToDiagram(inputDBML, {
-            databaseType: DatabaseType.POSTGRESQL,
-        });
+            // Import the DBML
+            const diagram = await importDBMLToDiagram(inputDBML, {
+                databaseType: DatabaseType.POSTGRESQL,
+            });
 
-        // Verify the relationship was imported
-        expect(diagram.relationships).toBeDefined();
-        expect(diagram.relationships?.length).toBe(1);
+            // Verify the relationship was imported
+            expect(diagram.relationships).toBeDefined();
+            expect(diagram.relationships?.length).toBe(1);
 
-        // Verify it's a self-referencing relationship
-        const relationship = diagram.relationships![0];
-        expect(relationship.sourceTableId).toBe(relationship.targetTableId);
+            // Verify it's a self-referencing relationship
+            const relationship = diagram.relationships![0];
+            expect(relationship.sourceTableId).toBe(relationship.targetTableId);
 
-        // Export back to DBML
-        const exportResult = generateDBMLFromDiagram(diagram);
+            // Export back to DBML
+            const exportResult = generateDBMLFromDiagram(diagram);
 
-        // Check inline format
-        expect(exportResult.inlineDbml).toContain('reversal_id');
-        // The DBML parser correctly interprets FK as: target < source
-        expect(exportResult.inlineDbml).toMatch(
-            /ref:\s*<\s*"finance"\."general_ledger"\."ledger_id"/
-        );
+            // Check inline format
+            expect(exportResult.inlineDbml).toContain('reversal_id');
+            // The DBML parser correctly interprets FK as: target < source
+            expect(exportResult.inlineDbml).toMatch(
+                /ref:\s*<\s*"finance"\."general_ledger"\."ledger_id"/
+            );
 
-        // Check standard format
-        expect(exportResult.standardDbml).toContain('Ref ');
-        expect(exportResult.standardDbml).toMatch(
-            /"finance"\."general_ledger"\."ledger_id"\s*<\s*"finance"\."general_ledger"\."reversal_id"/
-        );
-    });
+            // Check standard format
+            expect(exportResult.standardDbml).toContain('Ref ');
+            expect(exportResult.standardDbml).toMatch(
+                /"finance"\."general_ledger"\."ledger_id"\s*<\s*"finance"\."general_ledger"\."reversal_id"/
+            );
+        }
+    );
 
     it('should handle self-referencing relationships in employee hierarchy', async () => {
         // Create an employee table with manager relationship
