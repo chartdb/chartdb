@@ -843,6 +843,12 @@ export async function fromPostgres(
                                     normalizedBaseType = 'INTEGER';
                                     isSerialType = true;
                                 }
+                            } else if (upperType === 'SMALLSERIAL') {
+                                normalizedBaseType = 'SMALLINT';
+                                isSerialType = true;
+                            } else if (upperType === 'BIGSERIAL') {
+                                normalizedBaseType = 'BIGINT';
+                                isSerialType = true;
                             } else if (upperType === 'INT') {
                                 // Use length to determine the actual int type
                                 if (typeLength === 2) {
@@ -862,12 +868,17 @@ export async function fromPostgres(
                             // Now handle parameters - but skip for integer types that shouldn't have them
                             let finalDataType = normalizedBaseType;
 
-                            // Don't add parameters to INTEGER types that come from int4, int8, etc.
+                            // Don't add parameters to INTEGER types that come from int4, int8, serial types, etc.
                             const isNormalizedIntegerType =
                                 ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
                                     normalizedBaseType
                                 ) &&
-                                (upperType === 'INT' || upperType === 'SERIAL');
+                                [
+                                    'INT',
+                                    'SERIAL',
+                                    'SMALLSERIAL',
+                                    'BIGSERIAL',
+                                ].includes(upperType);
 
                             if (!isSerialType && !isNormalizedIntegerType) {
                                 // Include precision/scale/length in the type string if available

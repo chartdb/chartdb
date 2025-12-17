@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { fixMetadataJson, isStringMetadataJson } from '../utils';
 
 describe('fixMetadataJson', () => {
@@ -280,6 +280,10 @@ describe('isStringMetadataJson', () => {
     });
 
     it('should return false for valid JSON but missing required fields', () => {
+        const consoleErrorSpy = vi
+            .spyOn(console, 'error')
+            .mockImplementation(() => {});
+
         const incompleteMetadata = JSON.stringify({
             fk_info: [],
             pk_info: [],
@@ -287,6 +291,8 @@ describe('isStringMetadataJson', () => {
         });
 
         expect(isStringMetadataJson(incompleteMetadata)).toBe(false);
+
+        consoleErrorSpy.mockRestore();
     });
 
     it('should return false for empty string', () => {
@@ -294,8 +300,14 @@ describe('isStringMetadataJson', () => {
     });
 
     it('should return false for null-like values', () => {
+        const consoleErrorSpy = vi
+            .spyOn(console, 'error')
+            .mockImplementation(() => {});
+
         expect(isStringMetadataJson('null')).toBe(false);
         expect(isStringMetadataJson('undefined')).toBe(false);
+
+        consoleErrorSpy.mockRestore();
     });
 });
 

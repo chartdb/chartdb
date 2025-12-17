@@ -64,9 +64,8 @@ export const SmartQueryInstructions: React.FC<SmartQueryInstructionsProps> = ({
 
     useEffect(() => {
         const loadScripts = async () => {
-            const { importMetadataScripts } = await import(
-                '@/lib/data/import-metadata/scripts/scripts'
-            );
+            const { importMetadataScripts } =
+                await import('@/lib/data/import-metadata/scripts/scripts');
             setImportMetadataScripts(importMetadataScripts);
         };
         loadScripts();
