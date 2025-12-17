@@ -12,8 +12,7 @@ import {
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { cn } from '@/lib/utils';
 
-export interface DiagramIconProps
-    extends React.ComponentPropsWithoutRef<'div'> {
+export interface DiagramIconProps extends React.ComponentPropsWithoutRef<'div'> {
     databaseType: DatabaseType;
     databaseEdition?: DatabaseEdition;
     imgClassName?: string;

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { fromMySQL } from '../mysql';
 
 describe('MySQL Default Value Import', () => {
@@ -173,6 +173,10 @@ describe('MySQL Default Value Import', () => {
 
     describe('Complex Real-World Example', () => {
         it('should handle complex table with multiple default types', async () => {
+            const consoleErrorSpy = vi
+                .spyOn(console, 'error')
+                .mockImplementation(() => {});
+
             const sql = `
                 CREATE TABLE adventurer_profiles (
                     adventurer_id BIGINT NOT NULL AUTO_INCREMENT,
@@ -223,6 +227,8 @@ describe('MySQL Default Value Import', () => {
                 (c) => c.name === 'inventory_data'
             );
             expect(inventoryColumn?.default).toBe('NULL');
+
+            consoleErrorSpy.mockRestore();
         });
     });
 });
