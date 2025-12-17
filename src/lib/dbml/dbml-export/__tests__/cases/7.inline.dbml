@@ -1,0 +1,14 @@
+Table "clean"."wms_item" {
+  "id" int64 [note: '''| Źródło: [WMS].[dbo].[wms_items].[id] | Tabele docelowe: [BQ].[reporting].[dim_products_history].[wms_prod_id] | Czym jest dana kolumna: jest to \'WMS\'owe\' id produktu | Informacje dodatkowe: brak''', ref: < "reporting"."wms_dim_products_history"."wms_id_prod"]
+  "symbol" int64 [note: '''| Źródło: [WMS].[dbo].[wms_items].[symbol] | Tabele docelowe: [BQ].[reporting].[dim_products_history].[iai_prod_id] | Czym jest dana kolumna: jest to \'IAI\'owe\' id produktu | Informacje dodatkowe: brak''', ref: < "reporting"."wms_dim_products_history"."iai_id_prod"]
+  "ean_code" int64 [note: '| Źródło: [WMS].[dbo].[wms_items].[ean_code] | Tabele docelowe: [BQ].[reporting].[dim_products_history].[ean] | Czym jest dana kolumna: jest to kod ean produktu | Informacje dodatkowe: brak', ref: < "reporting"."wms_dim_products_history"."ean"]
+  "status" string
+  "dwh_created_at" datetime
+  "dwh_modified_at" datetime
+}
+
+Table "reporting"."wms_dim_products_history" {
+  "iai_id_prod" int64
+  "wms_id_prod" int64
+  "ean" int64
+}

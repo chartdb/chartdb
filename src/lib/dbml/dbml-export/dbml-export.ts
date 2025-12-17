@@ -218,6 +218,41 @@ export const sanitizeSQLforDBML = (sql: string): string => {
     return sanitized;
 };
 
+// Find the matching closing bracket, properly handling quoted strings within brackets
+const findClosingBracket = (str: string, openBracketIndex: number): number => {
+    let i = openBracketIndex + 1;
+    const len = str.length;
+
+    while (i < len) {
+        const char = str[i];
+
+        if (char === ']') return i;
+
+        // Skip quoted strings (triple, single, or double)
+        if (char === "'" || char === '"') {
+            const isTriple =
+                char === "'" && str[i + 1] === "'" && str[i + 2] === "'";
+            const quote = isTriple ? "'''" : char;
+            const quoteLen = quote.length;
+            i += quoteLen;
+
+            while (i < len) {
+                if (str[i] === '\\') {
+                    i += 2; // Skip escaped char
+                } else if (str.startsWith(quote, i)) {
+                    i += quoteLen;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            continue;
+        }
+        i++;
+    }
+    return -1;
+};
+
 // Post-process DBML to convert separate Ref statements to inline refs
 const convertToInlineRefs = (dbml: string): string => {
     // Extract all Ref statements - Updated pattern to handle schema.table.field format
@@ -372,59 +407,49 @@ const convertToInlineRefs = (dbml: string): string => {
 
     // 2. Apply all refs to fields
     fieldRefs.forEach((fieldData, fieldKey) => {
-        // fieldKey might be "schema.table.field" or just "table.field"
         const lastDotIndex = fieldKey.lastIndexOf('.');
         const tableName = fieldKey.substring(0, lastDotIndex);
         const fieldName = fieldKey.substring(lastDotIndex + 1);
         const tableData = tableMap.get(tableName);
 
-        if (tableData) {
-            // Updated pattern to capture field definition and all existing attributes in brackets
-            const fieldPattern = new RegExp(
-                `^([ \t]*"${fieldName}"[^\\n]*?)(?:\\s*(\\[[^\\]]*\\]))*\\s*(//.*)?$`,
-                'gm'
-            );
-            let newContent = tableData.content;
+        if (!tableData) return;
 
-            newContent = newContent.replace(
-                fieldPattern,
-                (lineMatch, fieldPart, existingBrackets, commentPart) => {
-                    // Collect all attributes from existing brackets
-                    const allAttributes: string[] = [];
-                    if (existingBrackets) {
-                        // Extract all bracket contents
-                        const bracketPattern = /\[([^\]]*)\]/g;
-                        let bracketMatch;
-                        while (
-                            (bracketMatch = bracketPattern.exec(lineMatch)) !==
-                            null
-                        ) {
-                            const content = bracketMatch[1].trim();
-                            if (content) {
-                                allAttributes.push(content);
-                            }
-                        }
-                    }
+        const fieldStartPattern = new RegExp(`^([ \\t]*)"${fieldName}"\\s+`);
+        const lines = tableData.content.split('\n');
+        let modified = false;
 
-                    // Add all refs for this field
-                    allAttributes.push(...fieldData.refs);
+        const newLines = lines.map((line) => {
+            const match = fieldStartPattern.exec(line);
+            if (!match) return line;
 
-                    // Combine all attributes into a single bracket
-                    const combinedAttributes = allAttributes.join(', ');
+            modified = true;
+            const leadingSpaces = match[1];
+            const bracketStart = line.indexOf('[');
 
-                    // Preserve original spacing from fieldPart
-                    const leadingSpaces = fieldPart.match(/^(\s*)/)?.[1] || '';
-                    const fieldDefWithoutSpaces = fieldPart.trim();
+            // Extract field definition (before bracket) and existing attributes
+            const fieldDef =
+                bracketStart !== -1
+                    ? line.substring(0, bracketStart).trim()
+                    : line.trim();
 
-                    return `${leadingSpaces}${fieldDefWithoutSpaces} [${combinedAttributes}]${commentPart || ''}`;
-                }
-            );
+            const existingContent =
+                bracketStart !== -1
+                    ? line.substring(
+                          bracketStart + 1,
+                          findClosingBracket(line, bracketStart)
+                      )
+                    : null;
 
-            // Update the table content if modified
-            if (newContent !== tableData.content) {
-                tableData.content = newContent;
-                tableMap.set(tableName, tableData);
-            }
+            const attributes = existingContent
+                ? [existingContent.trim(), ...fieldData.refs]
+                : fieldData.refs;
+
+            return `${leadingSpaces}${fieldDef} [${attributes.join(', ')}]`;
+        });
+
+        if (modified) {
+            tableData.content = newLines.join('\n');
+            tableMap.set(tableName, tableData);
         }
     });
 
