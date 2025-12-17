@@ -31,7 +31,12 @@ import {
     clearErrorHighlight,
     highlightErrorLine,
 } from '@/components/code-snippet/dbml/utils';
+import {
+    registerDBMLCompletionProvider,
+    type DBMLCompletionManager,
+} from '@/components/code-snippet/dbml/dbml-completion-provider';
 import type * as monaco from 'monaco-editor';
+import type { Monaco } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 
@@ -58,9 +63,13 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const decorationsCollection =
         useRef<monaco.editor.IEditorDecorationsCollection>();
+    const completionManagerRef = useRef<DBMLCompletionManager>();
 
     const handleEditorDidMount = useCallback(
-        (editor: monaco.editor.IStandaloneCodeEditor) => {
+        (
+            editor: monaco.editor.IStandaloneCodeEditor,
+            monacoInstance: Monaco
+        ) => {
             editorRef.current = editor;
             decorationsCollection.current =
                 editor.createDecorationsCollection();
@@ -86,6 +95,13 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             });
 
             readOnlyDisposableRef.current = readOnlyDisposable;
+
+            // Register DBML completion provider
+            completionManagerRef.current?.dispose();
+            completionManagerRef.current = registerDBMLCompletionProvider(
+                monacoInstance,
+                editor.getValue()
+            );
         },
         []
     );
@@ -304,6 +320,11 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         dbmlToDisplay,
     ]);
 
+    // Update completion provider when editor content changes
+    useEffect(() => {
+        completionManagerRef.current?.updateSource(editedDbml);
+    }, [editedDbml]);
+
     useEffect(() => {
         isMountedRef.current = true;
 
@@ -317,6 +338,11 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             if (readOnlyDisposableRef.current) {
                 readOnlyDisposableRef.current.dispose();
                 readOnlyDisposableRef.current = undefined;
+            }
+
+            if (completionManagerRef.current) {
+                completionManagerRef.current.dispose();
+                completionManagerRef.current = undefined;
             }
         };
     }, []);

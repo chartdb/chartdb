@@ -17,7 +17,8 @@
     },
     "dependencies": {
         "@ai-sdk/openai": "^2.0.72",
-        "@dbml/core": "^3.13.9",
+        "@dbml/core": "^3.14.1",
+        "@dbml/parse": "^5.3.0",
         "@dnd-kit/sortable": "^8.0.0",
         "@monaco-editor/react": "^4.6.0",
         "@radix-ui/react-accordion": "^1.2.0",
