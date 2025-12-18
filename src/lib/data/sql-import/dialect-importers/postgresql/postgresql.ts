@@ -973,7 +973,11 @@ export async function fromPostgres(
                             ) {
                                 // Process primary key constraint
                                 if (Array.isArray(constraintDef.definition)) {
-                                    constraintDef.definition.forEach(
+                                    const pkColumns = constraintDef.definition;
+                                    const isSingleColumnPK =
+                                        pkColumns.length === 1;
+
+                                    pkColumns.forEach(
                                         (colDef: ColumnReference) => {
                                             const pkColumnName =
                                                 extractColumnName(colDef);
@@ -983,6 +987,11 @@ export async function fromPostgres(
                                             );
                                             if (column) {
                                                 column.primaryKey = true;
+                                                // Only mark as unique if it's a single-column primary key
+                                                // Composite primary keys don't guarantee uniqueness of individual columns
+                                                if (isSingleColumnPK) {
+                                                    column.unique = true;
+                                                }
                                             }
                                         }
                                     );

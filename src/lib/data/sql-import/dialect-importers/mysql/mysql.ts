@@ -424,6 +424,9 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                 )
                                                             );
 
+                                                    const isSingleColumnPK =
+                                                        pkColumns.length === 1;
+
                                                     // Mark columns as PK
                                                     for (const colName of pkColumns) {
                                                         const col =
@@ -434,6 +437,12 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                             );
                                                         if (col) {
                                                             col.primaryKey = true;
+                                                            // Only mark as unique if single-column PK
+                                                            if (
+                                                                isSingleColumnPK
+                                                            ) {
+                                                                col.unique = true;
+                                                            }
                                                         }
                                                     }
 

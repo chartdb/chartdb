@@ -384,9 +384,16 @@ function parseCreateTableManually(
                         .replace(/\[|\]|\s+(ASC|DESC)/gi, '')
                         .trim()
                 );
+                const isSingleColumnPK = pkColumns.length === 1;
                 pkColumns.forEach((col) => {
                     const column = columns.find((c) => c.name === col);
-                    if (column) column.primaryKey = true;
+                    if (column) {
+                        column.primaryKey = true;
+                        // Only mark as unique if single-column PK
+                        if (isSingleColumnPK) {
+                            column.unique = true;
+                        }
+                    }
                 });
             }
             continue;
@@ -415,9 +422,16 @@ function parseCreateTableManually(
                                     .replace(/\[|\]|\s+(ASC|DESC)/gi, '')
                                     .trim()
                             );
+                        const isSingleColumnPK = pkColumns.length === 1;
                         pkColumns.forEach((col) => {
                             const column = columns.find((c) => c.name === col);
-                            if (column) column.primaryKey = true;
+                            if (column) {
+                                column.primaryKey = true;
+                                // Only mark as unique if single-column PK
+                                if (isSingleColumnPK) {
+                                    column.unique = true;
+                                }
+                            }
                         });
                     }
                 } else if (constraintType === 'UNIQUE') {

@@ -409,11 +409,18 @@ function parseCreateTableManually(
                 const pkColumns = pkColumnsMatch[1]
                     .split(',')
                     .map((c) => normalizeOracleIdentifier(c.trim()));
+                const isSingleColumnPK = pkColumns.length === 1;
                 pkColumns.forEach((col) => {
                     const column = columns.find(
                         (c) => c.name.toUpperCase() === col.toUpperCase()
                     );
-                    if (column) column.primaryKey = true;
+                    if (column) {
+                        column.primaryKey = true;
+                        // Only mark as unique if single-column PK
+                        if (isSingleColumnPK) {
+                            column.unique = true;
+                        }
+                    }
                 });
             }
             continue;
@@ -436,12 +443,19 @@ function parseCreateTableManually(
                         const pkColumns = pkColumnsMatch[1]
                             .split(',')
                             .map((c) => normalizeOracleIdentifier(c.trim()));
+                        const isSingleColumnPK = pkColumns.length === 1;
                         pkColumns.forEach((col) => {
                             const column = columns.find(
                                 (c) =>
                                     c.name.toUpperCase() === col.toUpperCase()
                             );
-                            if (column) column.primaryKey = true;
+                            if (column) {
+                                column.primaryKey = true;
+                                // Only mark as unique if single-column PK
+                                if (isSingleColumnPK) {
+                                    column.unique = true;
+                                }
+                            }
                         });
                     }
                 } else if (constraintType === 'UNIQUE') {
