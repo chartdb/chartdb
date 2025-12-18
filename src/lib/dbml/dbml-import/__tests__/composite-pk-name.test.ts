@@ -177,14 +177,15 @@ Table "simple" {
         expect(diagram.tables).toBeDefined();
         const table = diagram.tables![0];
 
-        // PK index should not exist for composite PK without name
+        // PK index should exist but with empty name (auto-generated)
         const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
         expect(pkIndex).toBeDefined();
+        expect(pkIndex!.name).toBe('');
 
         const sqlScript = exportPostgreSQL({ diagram });
 
-        // Should have unnamed PRIMARY KEY
+        // Should have unnamed PRIMARY KEY (no CONSTRAINT for auto-generated PK index)
         expect(sqlScript).toContain('PRIMARY KEY ("x", "y")');
-        expect(sqlScript).toContain('CONSTRAINT');
+        expect(sqlScript).not.toContain('CONSTRAINT');
     });
 });

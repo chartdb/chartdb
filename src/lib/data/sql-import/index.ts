@@ -10,6 +10,7 @@ import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
 import { fromMySQL, isMySQLFormat } from './dialect-importers/mysql/mysql';
+import { getTableIndexesWithPrimaryKey } from '@/lib/domain/db-index';
 
 /**
  * Detect if SQL content is from pg_dump format
@@ -235,14 +236,19 @@ export async function sqlImportToDiagram({
         mode: 'perSchema',
     });
 
-    const sortedTables = adjustedTables.sort((a, b) => {
-        if (a.isView === b.isView) {
-            // Both are either tables or views, so sort alphabetically by name
-            return a.name.localeCompare(b.name);
-        }
-        // If one is a view and the other is not, put tables first
-        return a.isView ? 1 : -1;
-    });
+    const sortedTables = adjustedTables
+        .map((table) => ({
+            ...table,
+            indexes: getTableIndexesWithPrimaryKey({ table }),
+        }))
+        .sort((a, b) => {
+            if (a.isView === b.isView) {
+                // Both are either tables or views, so sort alphabetically by name
+                return a.name.localeCompare(b.name);
+            }
+            // If one is a view and the other is not, put tables first
+            return a.isView ? 1 : -1;
+        });
 
     return {
         ...diagram,

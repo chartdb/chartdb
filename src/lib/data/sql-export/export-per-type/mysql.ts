@@ -315,6 +315,7 @@ export function exportMySQL({
                     primaryKeyFields.length > 0
                         ? `,\n    ${(() => {
                               // Find PK index to get the constraint name
+                              // Only use CONSTRAINT syntax if PK index has a non-empty name
                               const pkIndex = table.indexes.find(
                                   (idx) => idx.isPrimaryKey
                               );
