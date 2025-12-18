@@ -819,39 +819,52 @@ const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
             // Single table with this name - simple case
             const table = tablesGroup[0].table;
             if (table.schema) {
-                // Match table definition without schema (e.g., Table "users" {)
-                const tablePattern = new RegExp(
-                    `Table\\s+"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s*{`,
-                    'g'
-                );
-                const schemaTableName = `Table "${table.schema}"."${table.name}" {`;
-                result = result.replace(tablePattern, schemaTableName);
-
-                // Update references in Ref statements
                 const escapedTableName = table.name.replace(
                     /[.*+?^${}()|[\]\\]/g,
                     '\\$&'
                 );
-
-                // Pattern 1: In Ref definitions - :"tablename"."field"
-                const refDefPattern = new RegExp(
-                    `(Ref\\s+"[^"]+")\\s*:\\s*"${escapedTableName}"\\."([^"]+)"`,
-                    'g'
-                );
-                result = result.replace(
-                    refDefPattern,
-                    `$1:"${table.schema}"."${table.name}"."$2"`
+                const escapedSchema = table.schema.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    '\\$&'
                 );
 
-                // Pattern 2: In Ref targets - [<>] "tablename"."field"
-                const refTargetPattern = new RegExp(
-                    `([<>])\\s*"${escapedTableName}"\\."([^"]+)"`,
+                // Check if the schema is already present in the table definition
+                const schemaAlreadyPresent = new RegExp(
+                    `Table\\s+"${escapedSchema}"\\."${escapedTableName}"\\s*{`,
                     'g'
-                );
-                result = result.replace(
-                    refTargetPattern,
-                    `$1 "${table.schema}"."${table.name}"."$2"`
-                );
+                ).test(result);
+
+                // Only add schema if it's not already present
+                if (!schemaAlreadyPresent) {
+                    // Match table definition without schema (e.g., Table "users" {)
+                    const tablePattern = new RegExp(
+                        `Table\\s+"${escapedTableName}"\\s*{`,
+                        'g'
+                    );
+                    const schemaTableName = `Table "${table.schema}"."${table.name}" {`;
+                    result = result.replace(tablePattern, schemaTableName);
+
+                    // Update references in Ref statements
+                    // Pattern 1: In Ref definitions - :"tablename"."field"
+                    const refDefPattern = new RegExp(
+                        `(Ref\\s+"[^"]+")\\s*:\\s*"${escapedTableName}"\\."([^"]+)"`,
+                        'g'
+                    );
+                    result = result.replace(
+                        refDefPattern,
+                        `$1:"${table.schema}"."${table.name}"."$2"`
+                    );
+
+                    // Pattern 2: In Ref targets - [<>] "tablename"."field"
+                    const refTargetPattern = new RegExp(
+                        `([<>])\\s*"${escapedTableName}"\\."([^"]+)"`,
+                        'g'
+                    );
+                    result = result.replace(
+                        refTargetPattern,
+                        `$1 "${table.schema}"."${table.name}"."$2"`
+                    );
+                }
             }
         } else {
             // Multiple tables with the same name - need to be more careful

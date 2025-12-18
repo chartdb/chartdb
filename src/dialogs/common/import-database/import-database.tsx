@@ -515,6 +515,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                     : 'dbml-light'
                             }
                             options={{
+                                editContext: false,
                                 formatOnPaste: false, // Never format on paste - we handle it manually
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,

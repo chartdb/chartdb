@@ -203,6 +203,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             theme={effectiveTheme}
                             {...editorProps}
                             options={{
+                                editContext: false,
                                 readOnly: true,
                                 automaticLayout: true,
                                 scrollBeyondLastLine: false,

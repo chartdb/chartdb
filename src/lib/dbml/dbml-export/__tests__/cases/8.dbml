@@ -1,0 +1,30 @@
+Table "pokemon"."abilities" {
+  "abil_id" int [pk, not null]
+  "abil_name" varchar(500) [not null]
+}
+
+Table "pokemon"."pokemon_abilities" {
+  "pok_id" int [not null]
+  "abil_id" int [not null]
+  "is_hidden" int [not null]
+  "slot" int [not null]
+  "music" bigint
+
+  Indexes {
+    (pok_id, slot) [pk]
+    is_hidden [name: "pokemon_abilities_pokemon_ix_pokemon_abilities_is_hidden"]
+    abil_id [name: "pokemon_abilities_pokemon_abil_id"]
+  }
+}
+
+Table "pokemon"."pokemon" {
+  "pok_id" int [pk, not null]
+  "pok_name" varchar(500) [not null]
+  "pok_height" int
+  "pok_weight" int
+  "pok_base_experience" int
+}
+
+Ref "fk_0_fk_pokemon_abilities_pok_id_pokemon_pok_id":"pokemon"."pokemon"."pok_id" < "pokemon"."pokemon_abilities"."pok_id"
+
+Ref "fk_1_fk_pokemon_abilities_abil_id_abilities_abil_id":"pokemon"."abilities"."abil_id" < "pokemon"."pokemon_abilities"."abil_id"
