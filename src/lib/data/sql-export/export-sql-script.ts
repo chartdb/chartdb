@@ -469,9 +469,15 @@ export const exportBaseSQL = ({
                 }
             }
 
-            // Handle PRIMARY KEY constraint - only add inline if no PK index with custom name
+            // Handle PRIMARY KEY constraint - only add inline if single PK without named constraint
             const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
-            if (field.primaryKey && !hasCompositePrimaryKey && !pkIndex?.name) {
+            // Only use CONSTRAINT syntax if PK index has a non-empty name
+            const useNamedConstraint = !!pkIndex?.name;
+            if (
+                field.primaryKey &&
+                !hasCompositePrimaryKey &&
+                !useNamedConstraint
+            ) {
                 sqlScript += ' PRIMARY KEY';
 
                 // For SQLite with DBML flow, add AUTOINCREMENT after PRIMARY KEY
@@ -489,7 +495,7 @@ export const exportBaseSQL = ({
             // Add a comma after each field except the last one (or before PK constraint)
             const needsPKConstraint =
                 hasCompositePrimaryKey ||
-                (primaryKeyFields.length === 1 && pkIndex?.name);
+                (primaryKeyFields.length === 1 && useNamedConstraint);
             if (index < table.fields.length - 1 || needsPKConstraint) {
                 sqlScript += ',\n';
             }
@@ -497,14 +503,16 @@ export const exportBaseSQL = ({
 
         // Add primary key constraint if needed (for composite PKs or single PK with custom name)
         const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
+        // Only use CONSTRAINT syntax if PK index has a non-empty name
+        const useNamedConstraint = !!pkIndex?.name;
         if (
             hasCompositePrimaryKey ||
-            (primaryKeyFields.length === 1 && pkIndex?.name)
+            (primaryKeyFields.length === 1 && useNamedConstraint)
         ) {
             const pkFieldNames = primaryKeyFields
                 .map((f) => getQuotedFieldName(f.name, isDBMLFlow))
                 .join(', ');
-            if (pkIndex?.name) {
+            if (useNamedConstraint) {
                 sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
             } else {
                 sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;

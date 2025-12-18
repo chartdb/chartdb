@@ -1,5 +1,9 @@
 import type { DatabaseEdition, Diagram } from '@/lib/domain';
-import { adjustTablePositions, DatabaseType } from '@/lib/domain';
+import {
+    adjustTablePositions,
+    DatabaseType,
+    getTableIndexesWithPrimaryKey,
+} from '@/lib/domain';
 import { generateDiagramId } from '@/lib/utils';
 import type { DatabaseMetadata } from '../metadata-types/database-metadata';
 import { createCustomTypesFromMetadata } from './custom-types';
@@ -52,14 +56,19 @@ export const loadFromDatabaseMetadata = async ({
         mode: 'perSchema',
     });
 
-    const sortedTables = adjustedTables.sort((a, b) => {
-        if (a.isView === b.isView) {
-            // Both are either tables or views, so sort alphabetically by name
-            return a.name.localeCompare(b.name);
-        }
-        // If one is a view and the other is not, put tables first
-        return a.isView ? 1 : -1;
-    });
+    const sortedTables = adjustedTables
+        .map((table) => ({
+            ...table,
+            indexes: getTableIndexesWithPrimaryKey({ table }),
+        }))
+        .sort((a, b) => {
+            if (a.isView === b.isView) {
+                // Both are either tables or views, so sort alphabetically by name
+                return a.name.localeCompare(b.name);
+            }
+            // If one is a view and the other is not, put tables first
+            return a.isView ? 1 : -1;
+        });
 
     const diagram: Diagram = {
         id: generateDiagramId(),

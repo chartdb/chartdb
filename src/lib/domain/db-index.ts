@@ -66,9 +66,10 @@ export const getTablePrimaryKeyIndex = ({
         };
     } else {
         // Create new PK index for primary key(s)
+        // Use empty name for auto-generated PK indexes to indicate no CONSTRAINT should be used
         const pkIndex: DBIndex = {
             id: generateId(),
-            name: `pk_${table.name}_${primaryKeyFields.map((f) => f.name).join('_')}`,
+            name: '',
             fieldIds: pkFieldIds,
             unique: true,
             isPrimaryKey: true,

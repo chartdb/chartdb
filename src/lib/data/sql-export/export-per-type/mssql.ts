@@ -180,6 +180,7 @@ export function exportMSSQL({
                     table.fields.filter((f) => f.primaryKey).length > 0
                         ? `,\n    ${(() => {
                               // Find PK index to get the constraint name
+                              // Only use CONSTRAINT syntax if PK index has a non-empty name
                               const pkIndex = table.indexes.find(
                                   (idx) => idx.isPrimaryKey
                               );
@@ -194,6 +195,11 @@ export function exportMSSQL({
                 }\n);\n${(() => {
                     const validIndexes = table.indexes
                         .map((index) => {
+                            // Skip primary key indexes - they're already handled as constraints
+                            if (index.isPrimaryKey) {
+                                return '';
+                            }
+
                             const indexName = table.schema
                                 ? `[${table.schema}_${index.name}]`
                                 : `[${index.name}]`;
