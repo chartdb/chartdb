@@ -147,101 +147,101 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                         </TooltipContent>
                     </Tooltip>
                 )}
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                        >
-                            <Ellipsis className="size-3.5" />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-52">
-                        <div className="flex flex-col gap-2">
-                            <div className="text-sm font-semibold">
-                                {t(
-                                    'side_panel.tables_section.table.index_actions.title'
-                                )}
-                            </div>
-                            <Separator orientation="horizontal" />
+                {!index.isPrimaryKey ? (
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                            >
+                                <Ellipsis className="size-3.5" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-52">
                             <div className="flex flex-col gap-2">
-                                <Label
-                                    htmlFor="width"
-                                    className="text-subtitle"
-                                >
+                                <div className="text-sm font-semibold">
                                     {t(
-                                        'side_panel.tables_section.table.index_actions.name'
+                                        'side_panel.tables_section.table.index_actions.title'
                                     )}
-                                </Label>
-                                <Input
-                                    value={index.name}
-                                    onChange={(value) =>
-                                        updateIndex({
-                                            name: value.target.value,
-                                        })
-                                    }
-                                    readOnly={readonly}
-                                />
-                            </div>
-                            {!index.isPrimaryKey ? (
-                                <>
-                                    <div className="mt-2 flex items-center justify-between">
+                                </div>
+                                <Separator orientation="horizontal" />
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.index_actions.name'
+                                        )}
+                                    </Label>
+                                    <Input
+                                        value={index.name}
+                                        onChange={(value) =>
+                                            updateIndex({
+                                                name: value.target.value,
+                                            })
+                                        }
+                                        readOnly={readonly}
+                                    />
+                                </div>
+                                <div className="mt-2 flex items-center justify-between">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.index_actions.unique'
+                                        )}
+                                    </Label>
+                                    <Checkbox
+                                        checked={index.unique}
+                                        onCheckedChange={(value) =>
+                                            updateIndex({
+                                                unique: !!value,
+                                            })
+                                        }
+                                        disabled={readonly}
+                                    />
+                                </div>
+                                {indexTypeOptions.length > 0 ? (
+                                    <div className="mt-2 flex flex-col gap-2">
                                         <Label
-                                            htmlFor="width"
+                                            htmlFor="indexType"
                                             className="text-subtitle"
                                         >
                                             {t(
-                                                'side_panel.tables_section.table.index_actions.unique'
+                                                'side_panel.tables_section.table.index_actions.index_type'
                                             )}
                                         </Label>
-                                        <Checkbox
-                                            checked={index.unique}
-                                            onCheckedChange={(value) =>
-                                                updateIndex({
-                                                    unique: !!value,
-                                                })
-                                            }
-                                            disabled={readonly}
+                                        <SelectBox
+                                            options={indexTypeOptions}
+                                            value={index.type || 'btree'}
+                                            onChange={updateIndexType}
+                                            readonly={readonly}
                                         />
                                     </div>
-                                    {indexTypeOptions.length > 0 ? (
-                                        <div className="mt-2 flex flex-col gap-2">
-                                            <Label
-                                                htmlFor="indexType"
-                                                className="text-subtitle"
-                                            >
-                                                {t(
-                                                    'side_panel.tables_section.table.index_actions.index_type'
-                                                )}
-                                            </Label>
-                                            <SelectBox
-                                                options={indexTypeOptions}
-                                                value={index.type || 'btree'}
-                                                onChange={updateIndexType}
-                                                readonly={readonly}
-                                            />
-                                        </div>
-                                    ) : null}
-                                    {!readonly ? (
-                                        <>
-                                            <Separator orientation="horizontal" />
-                                            <Button
-                                                variant="outline"
-                                                className="flex gap-2 !text-red-700"
-                                                onClick={removeIndex}
-                                            >
-                                                <Trash2 className="size-3.5 text-red-700" />
-                                                {t(
-                                                    'side_panel.tables_section.table.index_actions.delete_index'
-                                                )}
-                                            </Button>
-                                        </>
-                                    ) : null}
-                                </>
-                            ) : null}
-                        </div>
-                    </PopoverContent>
-                </Popover>
+                                ) : null}
+                                {!readonly ? (
+                                    <>
+                                        <Separator orientation="horizontal" />
+                                        <Button
+                                            variant="outline"
+                                            className="flex gap-2 !text-red-700"
+                                            onClick={removeIndex}
+                                        >
+                                            <Trash2 className="size-3.5 text-red-700" />
+                                            {t(
+                                                'side_panel.tables_section.table.index_actions.delete_index'
+                                            )}
+                                        </Button>
+                                    </>
+                                ) : null}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                ) : (
+                    <div className="h-8 w-[32px]" />
+                )}
             </div>
         </div>
     );
