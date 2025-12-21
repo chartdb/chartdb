@@ -20,8 +20,8 @@ import {
 } from '@/lib/data/sql-export/export-sql-script';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { Annoyed, Sparkles } from 'lucide-react';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { Annoyed, Sparkles, Blocks, Wand2 } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import type { Diagram } from '@/lib/domain/diagram';
@@ -49,7 +49,29 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     const [error, setError] = React.useState<boolean>(false);
     const [isScriptLoading, setIsScriptLoading] =
         React.useState<boolean>(false);
+    const [useAIExport, setUseAIExport] = React.useState<boolean>(false);
     const abortControllerRef = useRef<AbortController | null>(null);
+
+    // Check if a deterministic export path is available
+    const hasDeterministicPath = useMemo(() => {
+        return (
+            targetDatabaseType === DatabaseType.GENERIC ||
+            currentDiagram.databaseType === targetDatabaseType ||
+            (currentDiagram.databaseType === DatabaseType.POSTGRESQL &&
+                (targetDatabaseType === DatabaseType.MYSQL ||
+                    targetDatabaseType === DatabaseType.MARIADB ||
+                    targetDatabaseType === DatabaseType.SQL_SERVER))
+        );
+    }, [targetDatabaseType, currentDiagram.databaseType]);
+
+    // Show toggle only for cross-dialect exports where both options are available
+    const showExportModeToggle = useMemo(() => {
+        return (
+            hasDeterministicPath &&
+            currentDiagram.databaseType !== targetDatabaseType &&
+            targetDatabaseType !== DatabaseType.GENERIC
+        );
+    }, [hasDeterministicPath, currentDiagram.databaseType, targetDatabaseType]);
 
     const exportSQLScript = useCallback(async () => {
         const filteredDiagram: Diagram = {
@@ -120,7 +142,8 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
             }),
         };
 
-        if (targetDatabaseType === DatabaseType.GENERIC) {
+        // Use deterministic export if available and AI export is not selected
+        if (hasDeterministicPath && !useAIExport) {
             return Promise.resolve(
                 exportBaseSQL({
                     diagram: filteredDiagram,
@@ -135,7 +158,13 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 signal: abortControllerRef.current?.signal,
             });
         }
-    }, [targetDatabaseType, currentDiagram, filter]);
+    }, [
+        targetDatabaseType,
+        currentDiagram,
+        filter,
+        hasDeterministicPath,
+        useAIExport,
+    ]);
 
     useEffect(() => {
         if (!dialog.open) {
@@ -249,6 +278,36 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                                       ],
                         })}
                     </DialogDescription>
+                    {showExportModeToggle && (
+                        <div className="flex items-center gap-3 pt-2">
+                            <div className="inline-flex h-8 items-center rounded-full bg-muted p-1 text-muted-foreground">
+                                <button
+                                    type="button"
+                                    className={`inline-flex h-6 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all ${
+                                        !useAIExport
+                                            ? 'bg-background text-foreground shadow-sm'
+                                            : 'hover:text-foreground'
+                                    }`}
+                                    onClick={() => setUseAIExport(false)}
+                                >
+                                    <Blocks className="size-3" />
+                                    Deterministic
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`inline-flex h-6 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all ${
+                                        useAIExport
+                                            ? 'bg-background text-foreground shadow-sm'
+                                            : 'hover:text-foreground'
+                                    }`}
+                                    onClick={() => setUseAIExport(true)}
+                                >
+                                    <Wand2 className="size-3" />
+                                    AI
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </DialogHeader>
                 <DialogInternalContent>
                     <div className="flex flex-1 items-center justify-center">
