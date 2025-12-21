@@ -13,8 +13,9 @@ import type {
 import type { TableDiff, TableDiffAttribute } from '../table-diff';
 import type { AreaDiff, AreaDiffAttribute } from '../area-diff';
 import type { NoteDiff, NoteDiffAttribute } from '../note-diff';
-import type { IndexDiff } from '../index-diff';
+import type { IndexDiff, IndexDiffAttribute } from '../index-diff';
 import type { RelationshipDiff } from '../relationship-diff';
+import { areBooleansEqual } from '@/lib/utils';
 
 export function getDiffMapKey({
     diffObject,
@@ -113,12 +114,14 @@ export interface GenerateDiffOptions {
     attributes?: {
         tables?: TableDiffAttribute[];
         fields?: FieldDiffAttribute[];
+        indexes?: IndexDiffAttribute[];
         areas?: AreaDiffAttribute[];
         notes?: NoteDiffAttribute[];
     };
     changedMaps?: {
         changedTablesAttributes?: TableDiffAttribute[];
         changedFieldsAttributes?: FieldDiffAttribute[];
+        changedIndexesAttributes?: IndexDiffAttribute[];
         changedAreasAttributes?: AreaDiffAttribute[];
         changedNotesAttributes?: NoteDiffAttribute[];
     };
@@ -155,6 +158,7 @@ export function generateDiff({
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
+    changedIndexes: Map<string, boolean>;
     changedAreas: Map<string, boolean>;
     changedNotes: Map<string, boolean>;
 } {
@@ -175,6 +179,7 @@ export function generateDiff({
     const newDiffs = new Map<string, ChartDBDiff>();
     const changedTables = new Map<string, boolean>();
     const changedFields = new Map<string, boolean>();
+    const changedIndexes = new Map<string, boolean>();
     const changedAreas = new Map<string, boolean>();
     const changedNotes = new Map<string, boolean>();
 
@@ -209,11 +214,14 @@ export function generateDiff({
         diffMap: newDiffs,
         changedTables,
         changedFields,
+        changedIndexes,
         options: mergedOptions,
         changedTablesAttributes:
             mergedOptions.changedMaps?.changedTablesAttributes,
         changedFieldsAttributes:
             mergedOptions.changedMaps?.changedFieldsAttributes,
+        changedIndexesAttributes:
+            mergedOptions.changedMaps?.changedIndexesAttributes,
         tableMatcher,
         fieldMatcher,
         indexMatcher,
@@ -264,6 +272,7 @@ export function generateDiff({
         diffMap: newDiffs,
         changedTables,
         changedFields,
+        changedIndexes,
         changedAreas,
         changedNotes,
     };
@@ -510,9 +519,11 @@ function compareTableContents({
     diffMap,
     changedTables,
     changedFields,
+    changedIndexes,
     options,
     changedTablesAttributes,
     changedFieldsAttributes,
+    changedIndexesAttributes,
     tableMatcher,
     fieldMatcher,
     indexMatcher,
@@ -522,9 +533,11 @@ function compareTableContents({
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
+    changedIndexes: Map<string, boolean>;
     options?: GenerateDiffOptions;
     changedTablesAttributes?: TableDiffAttribute[];
     changedFieldsAttributes?: FieldDiffAttribute[];
+    changedIndexesAttributes?: IndexDiffAttribute[];
     tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
     fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
@@ -562,7 +575,10 @@ function compareTableContents({
                 newIndexes: newTable.indexes,
                 diffMap,
                 changedTables,
+                changedIndexes,
+                attributes: options?.attributes?.indexes,
                 changedTablesAttributes,
+                changedIndexesAttributes,
                 changeTypes: options?.changeTypes?.indexes,
                 indexMatcher,
             });
@@ -840,7 +856,10 @@ function compareIndexes({
     newIndexes,
     diffMap,
     changedTables,
+    changedIndexes,
+    attributes,
     changedTablesAttributes,
+    changedIndexesAttributes,
     changeTypes,
     indexMatcher,
 }: {
@@ -849,7 +868,10 @@ function compareIndexes({
     newIndexes: DBIndex[];
     diffMap: DiffMap;
     changedTables: Map<string, boolean>;
+    changedIndexes: Map<string, boolean>;
+    attributes?: IndexDiffAttribute[];
     changedTablesAttributes?: TableDiffAttribute[];
+    changedIndexesAttributes?: IndexDiffAttribute[];
     changeTypes?: IndexDiff['type'][];
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
 }) {
@@ -859,7 +881,7 @@ function compareIndexes({
     }
 
     // If changeTypes is undefined, check all types
-    const typesToCheck = changeTypes ?? ['added', 'removed'];
+    const typesToCheck = changeTypes ?? ['added', 'removed', 'changed'];
 
     // For structural changes (added/removed indexes), add to changedTables unless
     // changedTablesAttributes is explicitly set to empty array
@@ -886,6 +908,7 @@ function compareIndexes({
                 if (shouldAddToChangedTables) {
                     changedTables.set(tableId, true);
                 }
+                changedIndexes.set(newIndex.id, true);
             }
         }
     }
@@ -909,7 +932,137 @@ function compareIndexes({
                 if (shouldAddToChangedTables) {
                     changedTables.set(tableId, true);
                 }
+                changedIndexes.set(oldIndex.id, true);
             }
+        }
+    }
+
+    // Check for index changes
+    if (typesToCheck.includes('changed')) {
+        for (const oldIndex of oldIndexes) {
+            const newIndex = indexMatcher(oldIndex, newIndexes);
+            if (!newIndex) continue;
+
+            compareIndexProperties({
+                tableId,
+                oldIndex,
+                newIndex,
+                diffMap,
+                changedTables,
+                changedIndexes,
+                attributes,
+                changedTablesAttributes,
+                changedIndexesAttributes,
+            });
+        }
+    }
+}
+
+// Helper to compare fieldIds arrays
+const areFieldIdsEqual = (
+    oldFieldIds: string[],
+    newFieldIds: string[]
+): boolean => {
+    if (oldFieldIds.length !== newFieldIds.length) {
+        return false;
+    }
+    for (let i = 0; i < oldFieldIds.length; i++) {
+        if (oldFieldIds[i] !== newFieldIds[i]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+// Compare index properties
+function compareIndexProperties({
+    tableId,
+    oldIndex,
+    newIndex,
+    diffMap,
+    changedTables,
+    changedIndexes,
+    attributes,
+    changedTablesAttributes,
+    changedIndexesAttributes,
+}: {
+    tableId: string;
+    oldIndex: DBIndex;
+    newIndex: DBIndex;
+    diffMap: DiffMap;
+    changedTables: Map<string, boolean>;
+    changedIndexes: Map<string, boolean>;
+    attributes?: IndexDiffAttribute[];
+    changedTablesAttributes?: TableDiffAttribute[];
+    changedIndexesAttributes?: IndexDiffAttribute[];
+}) {
+    // If attributes are specified, only check those attributes
+    const attributesToCheck: IndexDiffAttribute[] = attributes ?? [
+        'name',
+        'unique',
+        'fieldIds',
+        'type',
+    ];
+
+    const changedAttributes: IndexDiffAttribute[] = [];
+
+    if (attributesToCheck.includes('name') && oldIndex.name !== newIndex.name) {
+        changedAttributes.push('name');
+    }
+
+    if (
+        attributesToCheck.includes('unique') &&
+        oldIndex.unique !== newIndex.unique
+    ) {
+        changedAttributes.push('unique');
+    }
+
+    if (
+        attributesToCheck.includes('fieldIds') &&
+        !areFieldIdsEqual(oldIndex.fieldIds, newIndex.fieldIds)
+    ) {
+        changedAttributes.push('fieldIds');
+    }
+
+    if (attributesToCheck.includes('type') && oldIndex.type !== newIndex.type) {
+        changedAttributes.push('type');
+    }
+
+    if (changedAttributes.length > 0) {
+        // Track which attributes should trigger adding to changed maps
+        const attributesThatTriggerChange = changedAttributes.filter((attr) =>
+            shouldAddToChangedMap(attr, changedIndexesAttributes)
+        );
+
+        for (const attribute of changedAttributes) {
+            diffMap.set(
+                getDiffMapKey({
+                    diffObject: 'index',
+                    objectId: oldIndex.id,
+                    attribute,
+                }),
+                {
+                    object: 'index',
+                    type: 'changed',
+                    indexId: oldIndex.id,
+                    tableId,
+                    attribute,
+                    oldValue: oldIndex[attribute],
+                    newValue: newIndex[attribute],
+                }
+            );
+        }
+
+        // Only add to changed maps if at least one attribute should trigger a change
+        if (attributesThatTriggerChange.length > 0) {
+            // For changedTables, we need to check changedTablesAttributes
+            if (changedTablesAttributes === undefined) {
+                changedTables.set(tableId, true);
+            } else if (changedTablesAttributes.length > 0) {
+                changedTables.set(tableId, true);
+            }
+
+            changedIndexes.set(oldIndex.id, true);
         }
     }
 }
@@ -1448,7 +1601,35 @@ const defaultIndexMatcher = (
     index: DBIndex,
     indexes: DBIndex[]
 ): DBIndex | undefined => {
-    return indexes.find((i) => i.id === index.id);
+    // Priority 1: Match by ID
+    const byId = indexes.find((i) => i.id === index.id);
+    if (byId) {
+        return byId;
+    }
+
+    // Priority 2: Match by name (only if unique match)
+    if (index.name) {
+        const byName = indexes.filter(
+            (i) =>
+                i.name === index.name &&
+                areBooleansEqual(i.isPrimaryKey, index.isPrimaryKey)
+        );
+        if (byName.length === 1) {
+            return byName[0];
+        }
+    }
+
+    // Priority 3: Match by fieldIds (only if unique match)
+    const byFieldIds = indexes.filter(
+        (i) =>
+            areFieldIdsEqual(i.fieldIds, index.fieldIds) &&
+            areBooleansEqual(i.isPrimaryKey, index.isPrimaryKey)
+    );
+    if (byFieldIds.length === 1) {
+        return byFieldIds[0];
+    }
+
+    return undefined;
 };
 
 const defaultRelationshipMatcher = (
