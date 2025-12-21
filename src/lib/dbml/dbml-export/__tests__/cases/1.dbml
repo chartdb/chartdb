@@ -2973,9 +2973,9 @@ Table "data"."Products_20" {
   "field_32" text
 
   Indexes {
+    geom [name: "idx_Products_20_3"]
     updated_at [unique, name: "idx_Products_20_1"]
     updated_at [unique, name: "idx_Products_20_2"]
-    geom [name: "idx_Products_20_3"]
   }
 }
 
@@ -6449,8 +6449,8 @@ Table "admin"."Transactions_2" {
   "amount" nvarchar(500)
 
   Indexes {
-    updated_at [unique, name: "idx_Transactions_2_1"]
     geom [name: "idx_Transactions_2_2"]
+    updated_at [unique, name: "idx_Transactions_2_1"]
   }
 }
 
@@ -6802,8 +6802,8 @@ Table "admin"."Transactions_14" {
   "field_65" date
 
   Indexes {
-    updated_at [unique, name: "idx_Transactions_14_1"]
     geom [name: "idx_Transactions_14_2"]
+    updated_at [unique, name: "idx_Transactions_14_1"]
   }
 }
 

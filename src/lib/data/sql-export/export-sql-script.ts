@@ -540,7 +540,9 @@ export const exportBaseSQL = ({
             }
         });
 
-        // Generate SQL for indexes
+        // Generate SQL for indexes - collect, then sort by the full CREATE INDEX statement
+        const indexStatements: string[] = [];
+
         table.indexes.forEach((index) => {
             // Skip the primary key index (it's already handled as a constraint)
             if (index.isPrimaryKey) {
@@ -582,9 +584,18 @@ export const exportBaseSQL = ({
                 const indexName = needsQuoting
                     ? `"${rawIndexName}"`
                     : rawIndexName;
-                sqlScript += `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});\n`;
+                indexStatements.push(
+                    `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${fieldNames});`
+                );
             }
         });
+
+        // Sort index statements alphabetically for consistent, deterministic output
+        indexStatements.sort((a, b) => a.localeCompare(b));
+        sqlScript += indexStatements.join('\n');
+        if (indexStatements.length > 0) {
+            sqlScript += '\n';
+        }
     });
 
     if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
