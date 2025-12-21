@@ -19,6 +19,7 @@ export interface TableDiffChanged {
     object: 'table';
     type: 'changed';
     tableId: string;
+    newTableId: string;
     attribute: TableDiffAttribute;
     oldValue?: string | number | null;
     newValue?: string | number | null;
@@ -28,6 +29,7 @@ export const TableDiffChangedSchema: z.ZodType<TableDiffChanged> = z.object({
     object: z.literal('table'),
     type: z.literal('changed'),
     tableId: z.string(),
+    newTableId: z.string(),
     attribute: tableDiffAttributeSchema,
     oldValue: z.union([z.string(), z.number(), z.null()]).optional(),
     newValue: z.union([z.string(), z.number(), z.null()]).optional(),

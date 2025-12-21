@@ -26,6 +26,10 @@ export const fieldDiffAttributeSchema: z.ZodType<FieldDiffAttribute> = z.union([
     z.literal('unique'),
     z.literal('nullable'),
     z.literal('comments'),
+    z.literal('characterMaximumLength'),
+    z.literal('precision'),
+    z.literal('scale'),
+    z.literal('increment'),
 ]);
 
 export interface FieldDiffAdded<T = DBField> {
@@ -64,6 +68,7 @@ export interface FieldDiffChanged {
     object: 'field';
     type: 'changed';
     fieldId: string;
+    newFieldId: string;
     tableId: string;
     attribute: FieldDiffAttribute;
     oldValue: string | boolean | DataType | number;
@@ -74,6 +79,7 @@ export const fieldDiffChangedSchema: z.ZodType<FieldDiffChanged> = z.object({
     object: z.literal('field'),
     type: z.literal('changed'),
     fieldId: z.string(),
+    newFieldId: z.string(),
     tableId: z.string(),
     attribute: fieldDiffAttributeSchema,
     oldValue: z.union([z.string(), z.boolean(), dataTypeSchema]),

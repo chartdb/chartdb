@@ -19,6 +19,7 @@ export interface NoteDiffChanged {
     object: 'note';
     type: 'changed';
     noteId: string;
+    newNoteId: string;
     attribute: NoteDiffAttribute;
     oldValue?: string | number | null;
     newValue?: string | number | null;
@@ -28,6 +29,7 @@ export const NoteDiffChangedSchema: z.ZodType<NoteDiffChanged> = z.object({
     object: z.literal('note'),
     type: z.literal('changed'),
     noteId: z.string(),
+    newNoteId: z.string(),
     attribute: noteDiffAttributeSchema,
     oldValue: z.union([z.string(), z.number(), z.null()]).optional(),
     newValue: z.union([z.string(), z.number(), z.null()]).optional(),

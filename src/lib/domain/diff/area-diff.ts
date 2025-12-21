@@ -19,6 +19,7 @@ export interface AreaDiffChanged {
     object: 'area';
     type: 'changed';
     areaId: string;
+    newAreaId: string;
     attribute: AreaDiffAttribute;
     oldValue?: string | number | null;
     newValue?: string | number | null;
@@ -28,6 +29,7 @@ export const AreaDiffChangedSchema: z.ZodType<AreaDiffChanged> = z.object({
     object: z.literal('area'),
     type: z.literal('changed'),
     areaId: z.string(),
+    newAreaId: z.string(),
     attribute: areaDiffAttributeSchema,
     oldValue: z.union([z.string(), z.number(), z.null()]).optional(),
     newValue: z.union([z.string(), z.number(), z.null()]).optional(),
