@@ -46,6 +46,7 @@ export interface IndexDiffChanged {
     object: 'index';
     type: 'changed';
     indexId: string;
+    newIndexId: string;
     tableId: string;
     attribute: IndexDiffAttribute;
     oldValue?: string | boolean | string[] | IndexType | null;
@@ -56,6 +57,7 @@ export const indexDiffChangedSchema: z.ZodType<IndexDiffChanged> = z.object({
     object: z.literal('index'),
     type: z.literal('changed'),
     indexId: z.string(),
+    newIndexId: z.string(),
     tableId: z.string(),
     attribute: indexDiffAttributeSchema,
     oldValue: z
