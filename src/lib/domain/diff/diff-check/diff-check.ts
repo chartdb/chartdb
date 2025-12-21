@@ -1,6 +1,9 @@
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DBField } from '@/lib/domain/db-field';
-import type { DBIndex } from '@/lib/domain/db-index';
+import {
+    defaultIndexTypeForDatabase,
+    type DBIndex,
+} from '@/lib/domain/db-index';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
@@ -16,6 +19,7 @@ import type { NoteDiff, NoteDiffAttribute } from '../note-diff';
 import type { IndexDiff, IndexDiffAttribute } from '../index-diff';
 import type { RelationshipDiff } from '../relationship-diff';
 import { areBooleansEqual } from '@/lib/utils';
+import type { DatabaseType } from '../../database-type';
 
 export function getDiffMapKey({
     diffObject,
@@ -225,6 +229,7 @@ export function generateDiff({
         tableMatcher,
         fieldMatcher,
         indexMatcher,
+        databaseType: diagram.databaseType,
     });
 
     // Compare relationships
@@ -533,6 +538,7 @@ function compareTableContents({
     tableMatcher,
     fieldMatcher,
     indexMatcher,
+    databaseType,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
@@ -547,6 +553,7 @@ function compareTableContents({
     tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
     fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
+    databaseType: DatabaseType;
 }) {
     const oldTables = diagram.tables || [];
     const newTables = newDiagram.tables || [];
@@ -587,6 +594,7 @@ function compareTableContents({
                 changedIndexesAttributes,
                 changeTypes: options?.changeTypes?.indexes,
                 indexMatcher,
+                databaseType,
             });
         }
     }
@@ -869,6 +877,7 @@ function compareIndexes({
     changedIndexesAttributes,
     changeTypes,
     indexMatcher,
+    databaseType,
 }: {
     tableId: string;
     oldIndexes: DBIndex[];
@@ -881,6 +890,7 @@ function compareIndexes({
     changedIndexesAttributes?: IndexDiffAttribute[];
     changeTypes?: IndexDiff['type'][];
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
+    databaseType: DatabaseType;
 }) {
     // If changeTypes is empty array, don't check any changes
     if (changeTypes && changeTypes.length === 0) {
@@ -960,6 +970,7 @@ function compareIndexes({
                 attributes,
                 changedTablesAttributes,
                 changedIndexesAttributes,
+                databaseType,
             });
         }
     }
@@ -992,6 +1003,7 @@ function compareIndexProperties({
     attributes,
     changedTablesAttributes,
     changedIndexesAttributes,
+    databaseType,
 }: {
     tableId: string;
     oldIndex: DBIndex;
@@ -1002,6 +1014,7 @@ function compareIndexProperties({
     attributes?: IndexDiffAttribute[];
     changedTablesAttributes?: TableDiffAttribute[];
     changedIndexesAttributes?: IndexDiffAttribute[];
+    databaseType: DatabaseType;
 }) {
     // If attributes are specified, only check those attributes
     const attributesToCheck: IndexDiffAttribute[] = attributes ?? [
@@ -1031,8 +1044,16 @@ function compareIndexProperties({
         changedAttributes.push('fieldIds');
     }
 
-    if (attributesToCheck.includes('type') && oldIndex.type !== newIndex.type) {
-        changedAttributes.push('type');
+    if (attributesToCheck.includes('type')) {
+        const oldType =
+            oldIndex.type ?? defaultIndexTypeForDatabase[databaseType];
+        const newType =
+            newIndex.type ?? defaultIndexTypeForDatabase[databaseType];
+
+        // if both null/undefined, consider equal
+        if (oldType !== newType) {
+            changedAttributes.push('type');
+        }
     }
 
     if (changedAttributes.length > 0) {
