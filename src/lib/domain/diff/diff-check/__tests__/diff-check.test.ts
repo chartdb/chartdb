@@ -510,6 +510,90 @@ describe('generateDiff', () => {
             expect((diff as IndexDiffChanged)?.newValue).toBe('hash');
         });
 
+        it('should not detect index type change when both are undefined/null (use database default)', () => {
+            const oldDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: undefined })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: null })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.has('index-type-index-1')).toBe(false);
+        });
+
+        it('should not detect index type change when one is undefined and the other is the database default', () => {
+            const oldDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: undefined })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: 'btree' })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // btree is the default for PostgreSQL, so undefined vs 'btree' should be equal
+            expect(result.diffMap.has('index-type-index-1')).toBe(false);
+        });
+
+        it('should detect index type change when one is undefined and the other differs from database default', () => {
+            const oldDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: undefined })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: 'hash' })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // undefined defaults to 'btree' for PostgreSQL, so undefined vs 'hash' should be different
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-type-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as IndexDiffChanged)?.attribute).toBe('type');
+        });
+
         it('should detect multiple index attribute changes', () => {
             const oldDiagram = createMockDiagram({
                 tables: [

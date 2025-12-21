@@ -45,6 +45,12 @@ export const databaseIndexTypes: { [key in DatabaseType]?: IndexType[] } = {
     [DatabaseType.POSTGRESQL]: ['btree', 'hash'],
 };
 
+export const defaultIndexTypeForDatabase: {
+    [key in DatabaseType]?: IndexType;
+} = {
+    [DatabaseType.POSTGRESQL]: 'btree',
+};
+
 export const getTablePrimaryKeyIndex = ({
     table,
 }: {
