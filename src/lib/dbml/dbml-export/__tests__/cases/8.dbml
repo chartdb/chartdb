@@ -12,8 +12,8 @@ Table "pokemon"."pokemon_abilities" {
 
   Indexes {
     (pok_id, slot) [pk]
-    is_hidden [name: "pokemon_abilities_pokemon_ix_pokemon_abilities_is_hidden"]
     abil_id [name: "pokemon_abilities_pokemon_abil_id"]
+    is_hidden [name: "pokemon_abilities_pokemon_ix_pokemon_abilities_is_hidden"]
   }
 }
 
