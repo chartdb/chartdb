@@ -12,6 +12,7 @@ import type { TableDiffChanged } from '../../table-diff';
 import type { FieldDiffChanged } from '../../field-diff';
 import type { AreaDiffChanged } from '../../area-diff';
 import type { NoteDiffChanged } from '../../note-diff';
+import type { IndexDiffChanged } from '../../index-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -95,6 +96,18 @@ function createMockNote(overrides?: Partial<Note>): Note {
         color: '#3b82f6',
         ...overrides,
     } as Note;
+}
+
+// Helper function to create a mock index
+function createMockIndex(overrides?: Partial<DBIndex>): DBIndex {
+    return {
+        id: 'index-1',
+        name: 'idx_users_email',
+        unique: false,
+        fieldIds: ['field-1'],
+        createdAt: Date.now(),
+        ...overrides,
+    } as DBIndex;
 }
 
 describe('generateDiff', () => {
@@ -317,6 +330,412 @@ describe('generateDiff', () => {
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('changed');
             expect((diff as FieldDiffChanged)?.attribute).toBe('type');
+        });
+    });
+
+    describe('Index Diffing', () => {
+        it('should detect added indexes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [createMockTable({ indexes: [] })],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex()],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('added');
+            expect(result.changedIndexes.has('index-1')).toBe(true);
+        });
+
+        it('should detect removed indexes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex()],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [createMockTable({ indexes: [] })],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('removed');
+            expect(result.changedIndexes.has('index-1')).toBe(true);
+        });
+
+        it('should detect index name changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ name: 'idx_old_name' })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ name: 'idx_new_name' })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-name-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as IndexDiffChanged)?.attribute).toBe('name');
+            expect((diff as IndexDiffChanged)?.oldValue).toBe('idx_old_name');
+            expect((diff as IndexDiffChanged)?.newValue).toBe('idx_new_name');
+            expect(result.changedIndexes.has('index-1')).toBe(true);
+        });
+
+        it('should detect index unique changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ unique: false })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ unique: true })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-unique-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as IndexDiffChanged)?.attribute).toBe('unique');
+            expect((diff as IndexDiffChanged)?.oldValue).toBe(false);
+            expect((diff as IndexDiffChanged)?.newValue).toBe(true);
+        });
+
+        it('should detect index fieldIds changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ fieldIds: ['field-1'] })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                fieldIds: ['field-1', 'field-2'],
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-fieldIds-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as IndexDiffChanged)?.attribute).toBe('fieldIds');
+            expect((diff as IndexDiffChanged)?.oldValue).toEqual(['field-1']);
+            expect((diff as IndexDiffChanged)?.newValue).toEqual([
+                'field-1',
+                'field-2',
+            ]);
+        });
+
+        it('should detect index type changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: 'btree' })],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [createMockIndex({ type: 'hash' })],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-type-index-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as IndexDiffChanged)?.attribute).toBe('type');
+            expect((diff as IndexDiffChanged)?.oldValue).toBe('btree');
+            expect((diff as IndexDiffChanged)?.newValue).toBe('hash');
+        });
+
+        it('should detect multiple index attribute changes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                name: 'idx_old',
+                                unique: false,
+                                type: 'btree',
+                            }),
+                        ],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                name: 'idx_new',
+                                unique: true,
+                                type: 'hash',
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(3);
+            expect(result.diffMap.has('index-name-index-1')).toBe(true);
+            expect(result.diffMap.has('index-unique-index-1')).toBe(true);
+            expect(result.diffMap.has('index-type-index-1')).toBe(true);
+        });
+
+        it('should only check specified index attributes', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                name: 'idx_old',
+                                unique: false,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                name: 'idx_new',
+                                unique: true,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    attributes: {
+                        indexes: ['name'], // Only check name changes
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            expect(result.diffMap.has('index-name-index-1')).toBe(true);
+            expect(result.diffMap.has('index-unique-index-1')).toBe(false);
+        });
+
+        it('should match indexes by name when IDs differ', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-old-id',
+                                name: 'idx_email',
+                                unique: false,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-new-id',
+                                name: 'idx_email',
+                                unique: true,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // Should detect as change (matched by name), not add+remove
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('index-unique-index-old-id');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+        });
+
+        it('should match indexes by fieldIds when IDs and names differ', () => {
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-old-id',
+                                name: 'idx_old_name',
+                                fieldIds: ['field-1', 'field-2'],
+                                unique: false,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-new-id',
+                                name: 'idx_new_name',
+                                fieldIds: ['field-1', 'field-2'],
+                                unique: true,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // Should detect name and unique as changes (matched by fieldIds)
+            expect(result.diffMap.size).toBe(2);
+            expect(result.diffMap.has('index-name-index-old-id')).toBe(true);
+            expect(result.diffMap.has('index-unique-index-old-id')).toBe(true);
+        });
+
+        it('should prioritize ID matching over name and fieldIds', () => {
+            // Even if name and fieldIds match a different index,
+            // ID matching takes priority
+            const oldDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-1',
+                                name: 'idx_email',
+                                fieldIds: ['field-1'],
+                                unique: false,
+                            }),
+                            createMockIndex({
+                                id: 'index-2',
+                                name: 'idx_other',
+                                fieldIds: ['field-2'],
+                                unique: false,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                tables: [
+                    createMockTable({
+                        indexes: [
+                            createMockIndex({
+                                id: 'index-1',
+                                name: 'idx_renamed', // Name changed
+                                fieldIds: ['field-1'],
+                                unique: true, // Unique changed
+                            }),
+                            createMockIndex({
+                                id: 'index-2',
+                                name: 'idx_email', // Has old index-1's name
+                                fieldIds: ['field-2'],
+                                unique: false,
+                            }),
+                        ],
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // index-1 should match by ID, detecting name and unique changes
+            expect(result.diffMap.has('index-name-index-1')).toBe(true);
+            expect(result.diffMap.has('index-unique-index-1')).toBe(true);
+
+            // index-2 should match by ID, detecting only name change
+            expect(result.diffMap.has('index-name-index-2')).toBe(true);
+
+            // No added or removed indexes
+            const added = Array.from(result.diffMap.values()).filter(
+                (d) => d.type === 'added' && d.object === 'index'
+            );
+            const removed = Array.from(result.diffMap.values()).filter(
+                (d) => d.type === 'removed' && d.object === 'index'
+            );
+            expect(added.length).toBe(0);
+            expect(removed.length).toBe(0);
         });
     });
 
@@ -1122,6 +1541,513 @@ describe('generateDiff', () => {
             // Should only detect index removal, not field removal
             expect(result.diffMap.has('index-idx-1')).toBe(true);
             expect(result.diffMap.has('field-field-1')).toBe(false);
+        });
+    });
+
+    describe('Smart Comment Comparison', () => {
+        describe('Table Comments', () => {
+            it('should not detect change when comments differ only by newlines vs spaces', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments:
+                                '| Source: [DB].[schema].[table].[col] | Target: [DW].[reporting].[dim_items].[item_id] | Description: Primary key | Notes: none',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments:
+                                '| Source: [DB].[schema].[table].[col]\n| Target: [DW].[reporting].[dim_items].[item_id]\n| Description: Primary key\n| Notes: none',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                // Should not detect any changes
+                expect(result.diffMap.size).toBe(0);
+                expect(result.changedTables.size).toBe(0);
+            });
+
+            it('should not detect change when comments differ by multiple spaces', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments:
+                                'Column  description   with  extra   spaces',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'Column description with extra spaces',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should not detect change when comments differ by tabs vs spaces', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'Key\tValue\tPairs',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'Key Value Pairs',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should not detect change when comments differ by leading/trailing whitespace', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: '  Table description  ',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'Table description',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should detect change when comments have actual content differences', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'Old description',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'New description',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(1);
+                const diff = result.diffMap.get('table-comments-table-1');
+                expect(diff).toBeDefined();
+                expect(diff?.type).toBe('changed');
+                expect((diff as TableDiffChanged)?.attribute).toBe('comments');
+            });
+
+            it('should detect change when one comment is empty and other has content', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: '',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: 'New comment',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(1);
+            });
+
+            it('should not detect change when both comments are undefined', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: undefined,
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: undefined,
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should not detect change when one is undefined and other is whitespace-only', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: undefined,
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: '   ',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+        });
+
+        describe('Field Comments', () => {
+            it('should not detect change when field comments differ only by newlines vs spaces', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments:
+                                        '| Type: FK | Ref: orders.id | Info: Order reference',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments:
+                                        '| Type: FK\n| Ref: orders.id\n| Info: Order reference',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+                expect(result.changedFields.size).toBe(0);
+            });
+
+            it('should not detect change when field comments differ by CRLF vs LF', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: 'Line 1\r\nLine 2\r\nLine 3',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: 'Line 1\nLine 2\nLine 3',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should detect change when field comments have actual content differences', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: 'Primary key for users table',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: 'Unique identifier for customers',
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(1);
+                const diff = result.diffMap.get('field-comments-field-1');
+                expect(diff).toBeDefined();
+                expect(diff?.type).toBe('changed');
+                expect((diff as FieldDiffChanged)?.attribute).toBe('comments');
+            });
+        });
+
+        describe('Note Content', () => {
+            it('should not detect change when note content differs only by newlines vs spaces', () => {
+                const oldDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content:
+                                '# Title | Section 1 | Section 2 | Section 3',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content:
+                                '# Title\n| Section 1\n| Section 2\n| Section 3',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                    options: {
+                        includeNotes: true,
+                    },
+                });
+
+                expect(result.diffMap.size).toBe(0);
+                expect(result.changedNotes.size).toBe(0);
+            });
+
+            it('should not detect change when note content differs by mixed whitespace', () => {
+                const oldDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content:
+                                'Important\t\tnote\n\nwith   mixed\r\n\r\nwhitespace',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content: 'Important note with mixed whitespace',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                    options: {
+                        includeNotes: true,
+                    },
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should detect change when note content has actual differences', () => {
+                const oldDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content: 'TODO: Implement feature X',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    notes: [
+                        createMockNote({
+                            id: 'note-1',
+                            content: 'DONE: Feature X implemented',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                    options: {
+                        includeNotes: true,
+                    },
+                });
+
+                expect(result.diffMap.size).toBe(1);
+                const diff = result.diffMap.get('note-content-note-1');
+                expect(diff).toBeDefined();
+                expect(diff?.type).toBe('changed');
+                expect((diff as NoteDiffChanged)?.attribute).toBe('content');
+            });
+        });
+
+        describe('Edge Cases', () => {
+            it('should handle complex multi-line structured comments', () => {
+                const structuredComment1 =
+                    '| Column: user_id | Type: INT | Nullable: NO | Default: AUTO_INCREMENT | FK: users.id | Description: Foreign key reference to users table';
+                const structuredComment2 =
+                    '| Column: user_id\n| Type: INT\n| Nullable: NO\n| Default: AUTO_INCREMENT\n| FK: users.id\n| Description: Foreign key reference to users table';
+
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: structuredComment1,
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            fields: [
+                                createMockField({
+                                    id: 'field-1',
+                                    comments: structuredComment2,
+                                }),
+                            ],
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(0);
+            });
+
+            it('should preserve detection of actual word changes in multi-line comments', () => {
+                const oldDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: '| Status: Active\n| Owner: Team A',
+                        }),
+                    ],
+                });
+                const newDiagram = createMockDiagram({
+                    tables: [
+                        createMockTable({
+                            id: 'table-1',
+                            comments: '| Status: Deprecated\n| Owner: Team B',
+                        }),
+                    ],
+                });
+
+                const result = generateDiff({
+                    diagram: oldDiagram,
+                    newDiagram,
+                });
+
+                expect(result.diffMap.size).toBe(1);
+                const diff = result.diffMap.get('table-comments-table-1');
+                expect(diff).toBeDefined();
+                expect(diff?.type).toBe('changed');
+            });
         });
     });
 

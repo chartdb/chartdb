@@ -127,3 +127,12 @@ export function mergeRefs<T>(
 export const isStringEmpty = (str: string | undefined | null): boolean => {
     return !str || str.trim().length === 0;
 };
+
+export const areBooleansEqual = (
+    a: boolean | undefined | null,
+    b: boolean | undefined | null
+): boolean => {
+    const boolA = a ?? false;
+    const boolB = b ?? false;
+    return boolA === boolB;
+};
