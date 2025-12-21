@@ -444,7 +444,8 @@ export function exportSQLite({
                                     ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX IF NOT EXISTS "${safeIndexName}"\nON ${tableName} (${indexFieldNames.join(', ')});`
                                     : '';
                             })
-                            .filter(Boolean);
+                            .filter(Boolean)
+                            .sort((a, b) => a.localeCompare(b)); // Sort for consistent output
 
                         return validIndexes.length > 0
                             ? `\n-- Indexes\n${validIndexes.join('\n')}`

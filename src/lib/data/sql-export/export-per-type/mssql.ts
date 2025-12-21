@@ -228,7 +228,8 @@ export function exportMSSQL({
                                 ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});`
                                 : '';
                         })
-                        .filter(Boolean);
+                        .filter(Boolean)
+                        .sort((a, b) => a.localeCompare(b)); // Sort for consistent output
 
                     return validIndexes.length > 0
                         ? `\n-- Indexes\n${validIndexes.join('\n')}`

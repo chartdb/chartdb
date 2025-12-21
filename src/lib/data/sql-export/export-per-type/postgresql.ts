@@ -421,7 +421,8 @@ export function exportPostgreSQL({
                                     ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName}${index.type && index.type !== 'btree' ? ` USING ${index.type.toUpperCase()}` : ''} (${indexFieldNames.join(', ')});`
                                     : '';
                             })
-                            .filter(Boolean);
+                            .filter(Boolean)
+                            .sort((a, b) => a.localeCompare(b)); // Sort for consistent output
 
                         return validIndexes.length > 0
                             ? `\n-- Indexes\n${validIndexes.join('\n')}`
