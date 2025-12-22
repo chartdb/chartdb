@@ -8,6 +8,10 @@ import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
+import {
+    exportPostgreSQLToMySQL,
+    exportPostgreSQLToMSSQL,
+} from './cross-dialect';
 import { escapeSQLComment } from './export-per-type/common';
 import {
     databaseTypesWithCommentSupport,
@@ -155,6 +159,20 @@ export const exportBaseSQL = ({
                 return exportMySQL({ diagram, onlyRelationships });
             default:
                 return exportPostgreSQL({ diagram, onlyRelationships });
+        }
+    }
+
+    // Deterministic cross-dialect exports (PostgreSQL to MySQL/SQL Server)
+    // These do not use LLM and provide consistent, predictable output
+    if (!isDBMLFlow && diagram.databaseType === DatabaseType.POSTGRESQL) {
+        if (
+            targetDatabaseType === DatabaseType.MYSQL ||
+            targetDatabaseType === DatabaseType.MARIADB
+        ) {
+            return exportPostgreSQLToMySQL({ diagram, onlyRelationships });
+        }
+        if (targetDatabaseType === DatabaseType.SQL_SERVER) {
+            return exportPostgreSQLToMSSQL({ diagram, onlyRelationships });
         }
     }
 
