@@ -1,24 +1,13 @@
 /**
- * Type mappings for deterministic cross-dialect SQL export.
+ * Type mappings for PostgreSQL as the source dialect.
  * Maps PostgreSQL types to MySQL and SQL Server equivalents.
  */
 
-export interface TypeMapping {
-    /** The target database type name */
-    targetType: string;
-    /** Optional comment/warning about the conversion */
-    conversionNote?: string;
-    /** Whether the original type info should be included as inline comment */
-    includeInlineComment?: boolean;
-    /** For types that need length specification */
-    defaultLength?: number;
-    /** For types that need precision */
-    defaultPrecision?: number;
-    /** For types that need scale */
-    defaultScale?: number;
-}
-
-export type TypeMappingTable = Record<string, TypeMapping>;
+import type {
+    TypeMapping,
+    TypeMappingTable,
+    IndexTypeMappingTable,
+} from '../types';
 
 /**
  * PostgreSQL to MySQL type mappings
@@ -495,10 +484,7 @@ export const postgresqlToSQLServer: TypeMappingTable = {
 /**
  * Index type mappings from PostgreSQL to MySQL
  */
-export const postgresqlIndexTypeToMySQL: Record<
-    string,
-    { targetType: string; note?: string }
-> = {
+export const postgresqlIndexTypeToMySQL: IndexTypeMappingTable = {
     btree: { targetType: 'BTREE' },
     hash: { targetType: 'HASH' },
     gin: {
@@ -522,10 +508,7 @@ export const postgresqlIndexTypeToMySQL: Record<
 /**
  * Index type mappings from PostgreSQL to SQL Server
  */
-export const postgresqlIndexTypeToSQLServer: Record<
-    string,
-    { targetType: string; note?: string }
-> = {
+export const postgresqlIndexTypeToSQLServer: IndexTypeMappingTable = {
     btree: { targetType: 'NONCLUSTERED' },
     hash: {
         targetType: 'NONCLUSTERED',

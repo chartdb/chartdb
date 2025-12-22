@@ -8,8 +8,10 @@ import { exportMSSQL } from './export-per-type/mssql';
 import { exportPostgreSQL } from './export-per-type/postgresql';
 import { exportSQLite } from './export-per-type/sqlite';
 import { exportMySQL } from './export-per-type/mysql';
-import { exportPostgreSQLToMySQL } from './export-per-type/postgresql-to-mysql';
-import { exportPostgreSQLToMSSQL } from './export-per-type/postgresql-to-mssql';
+import {
+    exportPostgreSQLToMySQL,
+    exportPostgreSQLToMSSQL,
+} from './cross-dialect';
 import { escapeSQLComment } from './export-per-type/common';
 import {
     databaseTypesWithCommentSupport,

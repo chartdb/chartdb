@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { exportPostgreSQLToMySQL } from '../export-per-type/postgresql-to-mysql';
-import { exportPostgreSQLToMSSQL } from '../export-per-type/postgresql-to-mssql';
+import { exportPostgreSQLToMySQL } from '../cross-dialect/postgresql/to-mysql';
+import { exportPostgreSQLToMSSQL } from '../cross-dialect/postgresql/to-mssql';
 import { exportBaseSQL } from '../export-sql-script';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';

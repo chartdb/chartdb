@@ -16,17 +16,17 @@ import {
     isFunction,
     isKeyword,
     strHasQuotes,
-} from './common';
+} from '../common';
 import {
     postgresqlIndexTypeToMySQL,
     getTypeMapping,
     getFallbackTypeMapping,
-} from '../cross-dialect/type-mappings';
+} from './type-mappings';
 import {
     detectUnsupportedFeatures,
     formatWarningsHeader,
     getIndexInlineComment,
-} from '../cross-dialect/unsupported-features';
+} from '../unsupported-features';
 import { DatabaseType } from '@/lib/domain/database-type';
 
 /**

@@ -13,7 +13,7 @@ import {
     getTypeMapping,
     postgresqlIndexTypeToMySQL,
     postgresqlIndexTypeToSQLServer,
-} from './type-mappings';
+} from './postgresql/type-mappings';
 
 export type UnsupportedFeatureType =
     | 'type'

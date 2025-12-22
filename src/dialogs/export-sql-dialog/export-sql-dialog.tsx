@@ -18,6 +18,7 @@ import {
     exportBaseSQL,
     exportSQL,
 } from '@/lib/data/sql-export/export-sql-script';
+import { hasCrossDialectSupport } from '@/lib/data/sql-export/cross-dialect';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { Annoyed, Sparkles, Blocks, Wand2 } from 'lucide-react';
@@ -57,10 +58,10 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
         return (
             targetDatabaseType === DatabaseType.GENERIC ||
             currentDiagram.databaseType === targetDatabaseType ||
-            (currentDiagram.databaseType === DatabaseType.POSTGRESQL &&
-                (targetDatabaseType === DatabaseType.MYSQL ||
-                    targetDatabaseType === DatabaseType.MARIADB ||
-                    targetDatabaseType === DatabaseType.SQL_SERVER))
+            hasCrossDialectSupport(
+                currentDiagram.databaseType,
+                targetDatabaseType
+            )
         );
     }, [targetDatabaseType, currentDiagram.databaseType]);
 
