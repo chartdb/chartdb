@@ -280,14 +280,14 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                         })}
                     </DialogDescription>
                     {showExportModeToggle && (
-                        <div className="flex items-center gap-3 pt-2">
-                            <div className="inline-flex h-8 items-center rounded-full bg-muted p-1 text-muted-foreground">
+                        <div className="flex items-center pt-2">
+                            <div className="grid h-auto grid-cols-2 gap-1 rounded-xl border bg-background p-1">
                                 <button
                                     type="button"
-                                    className={`inline-flex h-6 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all ${
+                                    className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-xs transition-all ${
                                         !useAIExport
-                                            ? 'bg-background text-foreground shadow-sm'
-                                            : 'hover:text-foreground'
+                                            ? 'bg-secondary text-secondary-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                                     }`}
                                     onClick={() => setUseAIExport(false)}
                                 >
@@ -296,10 +296,10 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                                 </button>
                                 <button
                                     type="button"
-                                    className={`inline-flex h-6 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all ${
+                                    className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-xs transition-all ${
                                         useAIExport
-                                            ? 'bg-background text-foreground shadow-sm'
-                                            : 'hover:text-foreground'
+                                            ? 'bg-secondary text-secondary-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                                     }`}
                                     onClick={() => setUseAIExport(true)}
                                 >
