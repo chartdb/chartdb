@@ -66,7 +66,7 @@ export const getPostgresQuery = (
     const withExtras = false;
     const withDefault = true;
 
-    const withDefaultExpr = `COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), '')`;
+    const withDefaultExpr = `CASE WHEN cols.column_default IS NOT NULL AND cols.column_default LIKE 'nextval(%' THEN '' ELSE COALESCE(replace(replace(cols.column_default, '"', '\\"'), '\\x', '\\\\x'), '') END`;
     const withoutDefault = `null`;
 
     const withComments = `COALESCE(replace(replace(dsc.description, '"', '\\"'), '\\x', '\\\\x'), '')`;
@@ -182,7 +182,14 @@ cols AS (
                                             '","table":"', cols.table_name,
                                             '","name":"', cols.column_name,
                                             '","ordinal_position":', cols.ordinal_position,
-                                            ',"type":"', CASE WHEN cols.data_type = 'ARRAY' THEN
+                                            ',"type":"', CASE WHEN cols.column_default IS NOT NULL AND cols.column_default LIKE 'nextval(%' THEN
+                                                                CASE
+                                                                    WHEN LOWER(replace(cols.data_type, '"', '')) = 'smallint' THEN 'smallserial'
+                                                                    WHEN LOWER(replace(cols.data_type, '"', '')) = 'integer' THEN 'serial'
+                                                                    WHEN LOWER(replace(cols.data_type, '"', '')) = 'bigint' THEN 'bigserial'
+                                                                    ELSE LOWER(replace(cols.data_type, '"', ''))
+                                                                END
+                                                            WHEN cols.data_type = 'ARRAY' THEN
                                                                 format_type(pg_type.typelem, NULL)
                                                             WHEN LOWER(replace(cols.data_type, '"', '')) = 'user-defined' THEN
                                                                 format_type(pg_type.oid, NULL)
