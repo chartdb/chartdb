@@ -42,14 +42,14 @@ CREATE TABLE book_spells (
             (c) => c.name === 'spell_book_id'
         );
         expect(spellBookIdColumn).toBeDefined();
-        expect(spellBookIdColumn!.type).toBe('UUID');
+        expect(spellBookIdColumn!.type).toBe('uuid');
         expect(spellBookIdColumn!.nullable).toBe(false);
 
         const spellIdColumn = bookSpells!.columns.find(
             (c) => c.name === 'spell_id'
         );
         expect(spellIdColumn).toBeDefined();
-        expect(spellIdColumn!.type).toBe('UUID');
+        expect(spellIdColumn!.type).toBe('uuid');
         expect(spellIdColumn!.nullable).toBe(false);
     });
 

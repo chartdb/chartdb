@@ -423,6 +423,10 @@ export const typeAffinity: Record<string, Record<string, string>> = {
         int2: 'smallint',
         bigint: 'bigint',
         int8: 'bigint',
+        // Serial types - map to themselves (they're valid PostgreSQL types)
+        serial: 'serial',
+        smallserial: 'smallserial',
+        bigserial: 'bigserial',
         decimal: 'decimal',
         numeric: 'numeric',
         real: 'real',
@@ -705,6 +709,32 @@ export function convertToChartDBDiagram(
                     id: column.type.toLowerCase(),
                     name: column.type,
                 };
+            }
+            // Handle PostgreSQL-specific types (not in genericDataTypes)
+            else if (
+                sourceDatabaseType === DatabaseType.POSTGRESQL &&
+                targetDatabaseType === DatabaseType.POSTGRESQL
+            ) {
+                const normalizedType = column.type.toLowerCase();
+
+                // Preserve PostgreSQL-specific types that don't exist in genericDataTypes
+                // Serial types are PostgreSQL-specific syntax (not true data types)
+                if (
+                    normalizedType === 'serial' ||
+                    normalizedType === 'smallserial' ||
+                    normalizedType === 'bigserial' ||
+                    normalizedType === 'jsonb' ||
+                    normalizedType === 'timestamptz' ||
+                    normalizedType === 'timetz'
+                ) {
+                    mappedType = { id: normalizedType, name: normalizedType };
+                } else {
+                    // Use the standard mapping for other types
+                    mappedType = mapSQLTypeToGenericType(
+                        column.type,
+                        sourceDatabaseType
+                    );
+                }
             }
             // Handle SQL Server types specifically
             else if (

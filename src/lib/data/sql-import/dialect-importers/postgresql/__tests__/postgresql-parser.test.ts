@@ -19,7 +19,7 @@ describe('PostgreSQL Parser', () => {
             expect(result.tables[0].name).toBe('wizards');
             expect(result.tables[0].columns).toHaveLength(4);
             expect(result.tables[0].columns[0].name).toBe('id');
-            expect(result.tables[0].columns[0].type).toBe('INTEGER');
+            expect(result.tables[0].columns[0].type).toBe('integer');
             expect(result.tables[0].columns[0].primaryKey).toBe(true);
         });
 
@@ -81,9 +81,9 @@ describe('PostgreSQL Parser', () => {
 
             expect(result.tables).toHaveLength(1);
             const columns = result.tables[0].columns;
-            expect(columns.find((c) => c.name === 'id')?.type).toBe('UUID');
-            expect(columns.find((c) => c.name === 'data')?.type).toBe('JSONB');
-            expect(columns.find((c) => c.name === 'tags')?.type).toBe('TEXT[]');
+            expect(columns.find((c) => c.name === 'id')?.type).toBe('uuid');
+            expect(columns.find((c) => c.name === 'data')?.type).toBe('jsonb');
+            expect(columns.find((c) => c.name === 'tags')?.type).toBe('text[]');
         });
 
         it('should handle numeric with precision', async () => {
@@ -102,7 +102,7 @@ describe('PostgreSQL Parser', () => {
             const columns = result.tables[0].columns;
             // Parser limitation: scale on separate line is not captured
             const amountType = columns.find((c) => c.name === 'amount')?.type;
-            expect(amountType).toMatch(/^NUMERIC/);
+            expect(amountType).toMatch(/^numeric/);
         });
 
         it('should handle multi-line numeric definitions', async () => {

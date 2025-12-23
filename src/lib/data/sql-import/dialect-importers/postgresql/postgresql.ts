@@ -249,69 +249,159 @@ function splitSQLStatements(sql: string): string[] {
 }
 
 /**
- * Normalize PostgreSQL type aliases to standard types
+ * Set of serial type names for O(1) lookup
  */
-function normalizePostgreSQLType(type: string): string {
+const SERIAL_TYPES = new Set([
+    'SERIAL',
+    'SERIAL2',
+    'SERIAL4',
+    'SERIAL8',
+    'BIGSERIAL',
+    'SMALLSERIAL',
+]);
+
+/**
+ * Check if a type is a serial type
+ */
+function isSerialTypeName(typeName: string): boolean {
+    return SERIAL_TYPES.has(typeName.toUpperCase().split('(')[0]);
+}
+
+/**
+ * Normalize PostgreSQL type syntax to lowercase canonical form.
+ * This function handles parsing-level normalization only - it converts
+ * verbose SQL syntax to the preferred short form that getPreferredSynonym
+ * expects. It preserves semantic types like serial (does NOT convert to integer).
+ *
+ * The optional `length` parameter is used to resolve ambiguous types where
+ * the SQL parser returns a base type with a length modifier (e.g., 'SERIAL'
+ * with length=2 for 'serial2', or 'INT' with length=8 for 'int8').
+ *
+ * Type synonym resolution (e.g., integer→int) is handled by getPreferredSynonym.
+ */
+function normalizePostgreSQLType(
+    type: string,
+    length?: number | undefined
+): string {
     const upperType = type.toUpperCase();
 
-    // Handle types with parameters - more complex regex to handle CHARACTER VARYING
+    // Handle types with parameters (e.g., VARCHAR(255), NUMERIC(10,2))
     const typeMatch = upperType.match(/^([\w\s]+?)(\(.+\))?$/);
-    if (!typeMatch) return type;
+    if (!typeMatch) return type.toLowerCase();
 
     const baseType = typeMatch[1].trim();
     const params = typeMatch[2] || '';
 
     let normalizedBase: string;
     switch (baseType) {
-        // Serial types
+        // Serial types - preserve as-is (they are valid PostgreSQL types)
+        // Handle parser quirk: 'SERIAL' with length=2 means 'serial2' (smallserial)
         case 'SERIAL':
+            if (length === 2) {
+                normalizedBase = 'smallserial';
+            } else if (length === 8) {
+                normalizedBase = 'bigserial';
+            } else {
+                normalizedBase = 'serial';
+            }
+            break;
         case 'SERIAL4':
-            normalizedBase = 'INTEGER';
+            normalizedBase = 'serial';
             break;
         case 'BIGSERIAL':
         case 'SERIAL8':
-            normalizedBase = 'BIGINT';
+            normalizedBase = 'bigserial';
             break;
         case 'SMALLSERIAL':
         case 'SERIAL2':
-            normalizedBase = 'SMALLINT';
+            normalizedBase = 'smallserial';
             break;
-        // Integer aliases
+        // Integer types - normalize to lowercase canonical form
+        // Handle parser quirk: 'INT' with length=2 means 'int2' (smallint)
         case 'INT':
+            if (length === 2) {
+                normalizedBase = 'smallint';
+            } else if (length === 8) {
+                normalizedBase = 'bigint';
+            } else {
+                normalizedBase = 'integer';
+            }
+            break;
         case 'INT4':
-            normalizedBase = 'INTEGER';
+        case 'INTEGER':
+            normalizedBase = 'integer';
             break;
         case 'INT2':
-            normalizedBase = 'SMALLINT';
+        case 'SMALLINT':
+            normalizedBase = 'smallint';
             break;
         case 'INT8':
-            normalizedBase = 'BIGINT';
+        case 'BIGINT':
+            normalizedBase = 'bigint';
             break;
-        // Boolean aliases
+        // Boolean
         case 'BOOL':
-            normalizedBase = 'BOOLEAN';
+        case 'BOOLEAN':
+            normalizedBase = 'boolean';
             break;
-        // Character types - use common names
+        // Character types - normalize verbose forms
         case 'CHARACTER VARYING':
+            normalizedBase = 'varchar';
+            break;
         case 'VARCHAR':
-            normalizedBase = 'VARCHAR';
+            normalizedBase = 'varchar';
             break;
         case 'CHARACTER':
-        case 'CHAR':
-            normalizedBase = 'CHAR';
+            normalizedBase = 'char';
             break;
-        // Timestamp aliases
+        case 'CHAR':
+            normalizedBase = 'char';
+            break;
+        // Timestamp types
         case 'TIMESTAMPTZ':
         case 'TIMESTAMP WITH TIME ZONE':
-            normalizedBase = 'TIMESTAMPTZ';
+            normalizedBase = 'timestamptz';
+            break;
+        case 'TIMESTAMP WITHOUT TIME ZONE':
+        case 'TIMESTAMP':
+            normalizedBase = 'timestamp';
+            break;
+        // Time types
+        case 'TIMETZ':
+        case 'TIME WITH TIME ZONE':
+            normalizedBase = 'timetz';
+            break;
+        case 'TIME WITHOUT TIME ZONE':
+        case 'TIME':
+            normalizedBase = 'time';
+            break;
+        // Floating point
+        case 'FLOAT4':
+        case 'REAL':
+            normalizedBase = 'real';
+            break;
+        case 'FLOAT8':
+        case 'DOUBLE PRECISION':
+            normalizedBase = 'double precision';
+            break;
+        // Bit types
+        case 'BIT VARYING':
+            normalizedBase = 'varbit';
+            break;
+        // Numeric types
+        case 'DECIMAL':
+            normalizedBase = 'numeric';
+            break;
+        case 'NUMERIC':
+            normalizedBase = 'numeric';
             break;
         default:
-            // For unknown types (like enums), preserve original case
-            return type;
+            // For unknown types (like enums, user-defined), preserve original in lowercase
+            return type.toLowerCase();
     }
 
-    // Return normalized type with original parameters preserved
-    return normalizedBase + params;
+    // Return normalized type with parameters preserved (lowercase)
+    return normalizedBase + params.toLowerCase();
 }
 
 /**
@@ -372,17 +462,9 @@ function extractColumnsFromSQL(sql: string): SQLColumn[] {
             }
 
             // Check if it's a serial type for increment flag
-            const upperType = columnType.toUpperCase();
-            const isSerialType = [
-                'SERIAL',
-                'SERIAL2',
-                'SERIAL4',
-                'SERIAL8',
-                'BIGSERIAL',
-                'SMALLSERIAL',
-            ].includes(upperType.split('(')[0]);
+            const isSerialType = isSerialTypeName(columnType);
 
-            // Normalize the type
+            // Normalize the type (preserves serial types)
             columnType = normalizePostgreSQLType(columnType);
 
             // Check for common constraints
@@ -820,121 +902,76 @@ export async function fromPostgres(
                                 }
                             }
 
-                            // First normalize the base type
-                            let normalizedBaseType = rawDataType;
-                            let isSerialType = false;
-
-                            // Check if it's a serial type first
-                            const upperType = rawDataType.toUpperCase();
-                            const typeLength = definition?.length as
+                            // Check if it's a serial type
+                            const isSerialType = isSerialTypeName(rawDataType);
+                            const typeLength = columnDef.definition?.length as
                                 | number
                                 | undefined;
 
-                            if (upperType === 'SERIAL') {
-                                // Use length to determine the actual serial type
-                                if (typeLength === 2) {
-                                    normalizedBaseType = 'SMALLINT';
-                                    isSerialType = true;
-                                } else if (typeLength === 8) {
-                                    normalizedBaseType = 'BIGINT';
-                                    isSerialType = true;
-                                } else {
-                                    // Default serial or serial4
-                                    normalizedBaseType = 'INTEGER';
-                                    isSerialType = true;
-                                }
-                            } else if (upperType === 'SMALLSERIAL') {
-                                normalizedBaseType = 'SMALLINT';
-                                isSerialType = true;
-                            } else if (upperType === 'BIGSERIAL') {
-                                normalizedBaseType = 'BIGINT';
-                                isSerialType = true;
-                            } else if (upperType === 'INT') {
-                                // Use length to determine the actual int type
-                                if (typeLength === 2) {
-                                    normalizedBaseType = 'SMALLINT';
-                                } else if (typeLength === 8) {
-                                    normalizedBaseType = 'BIGINT';
-                                } else {
-                                    // Default int or int4
-                                    normalizedBaseType = 'INTEGER';
-                                }
-                            } else {
-                                // Apply normalization for other types
-                                normalizedBaseType =
-                                    normalizePostgreSQLType(rawDataType);
-                            }
+                            // Normalize the type (pass length to handle parser quirks like INT with length=8)
+                            let finalDataType = normalizePostgreSQLType(
+                                rawDataType,
+                                typeLength
+                            );
 
-                            // Now handle parameters - but skip for integer types that shouldn't have them
-                            let finalDataType = normalizedBaseType;
-
-                            // Don't add parameters to INTEGER types that come from int4, int8, serial types, etc.
-                            const isNormalizedIntegerType =
-                                ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
-                                    normalizedBaseType
-                                ) &&
-                                [
-                                    'INT',
-                                    'SERIAL',
-                                    'SMALLSERIAL',
-                                    'BIGSERIAL',
-                                ].includes(upperType);
-
-                            if (!isSerialType && !isNormalizedIntegerType) {
-                                // Include precision/scale/length in the type string if available
+                            // Add type parameters for non-serial, non-integer types
+                            if (!isSerialType) {
                                 const precision =
                                     columnDef.definition?.precision;
                                 const scale = columnDef.definition?.scale;
-                                const length = columnDef.definition?.length;
-
-                                // Also check if there's a suffix that includes the precision/scale
-                                const definition =
+                                const suffix = (
                                     columnDef.definition as Record<
                                         string,
                                         unknown
-                                    >;
-                                const suffix = definition?.suffix;
+                                    >
+                                )?.suffix;
 
-                                if (
-                                    suffix &&
-                                    Array.isArray(suffix) &&
-                                    suffix.length > 0
-                                ) {
-                                    // The suffix contains the full type parameters like (10,2)
-                                    const params = suffix
-                                        .map((s: unknown) => {
-                                            if (
+                                // Skip adding parameters to integer types (they don't have size params)
+                                const isIntegerType = [
+                                    'integer',
+                                    'bigint',
+                                    'smallint',
+                                ].includes(finalDataType);
+
+                                if (!isIntegerType) {
+                                    if (
+                                        suffix &&
+                                        Array.isArray(suffix) &&
+                                        suffix.length > 0
+                                    ) {
+                                        const params = suffix
+                                            .map((s: unknown) =>
                                                 typeof s === 'object' &&
                                                 s !== null &&
                                                 'value' in s
-                                            ) {
-                                                return String(
-                                                    (s as { value: unknown })
-                                                        .value
-                                                );
-                                            }
-                                            return String(s);
-                                        })
-                                        .join(',');
-                                    finalDataType = `${normalizedBaseType}(${params})`;
-                                } else if (precision !== undefined) {
-                                    if (scale !== undefined) {
-                                        finalDataType = `${normalizedBaseType}(${precision},${scale})`;
-                                    } else {
-                                        finalDataType = `${normalizedBaseType}(${precision})`;
+                                                    ? String(
+                                                          (
+                                                              s as {
+                                                                  value: unknown;
+                                                              }
+                                                          ).value
+                                                      )
+                                                    : String(s)
+                                            )
+                                            .join(',');
+                                        finalDataType = `${finalDataType}(${params})`;
+                                    } else if (precision !== undefined) {
+                                        finalDataType =
+                                            scale !== undefined
+                                                ? `${finalDataType}(${precision},${scale})`
+                                                : `${finalDataType}(${precision})`;
+                                    } else if (
+                                        scale !== undefined &&
+                                        typeLength !== undefined
+                                    ) {
+                                        // For NUMERIC, node-sql-parser stores precision as 'length'
+                                        finalDataType = `${finalDataType}(${typeLength},${scale})`;
+                                    } else if (
+                                        typeLength !== undefined &&
+                                        typeLength !== null
+                                    ) {
+                                        finalDataType = `${finalDataType}(${typeLength})`;
                                     }
-                                } else if (
-                                    scale !== undefined &&
-                                    length !== undefined
-                                ) {
-                                    // For DECIMAL/NUMERIC, node-sql-parser stores precision as 'length'
-                                    finalDataType = `${normalizedBaseType}(${length},${scale})`;
-                                } else if (
-                                    length !== undefined &&
-                                    length !== null
-                                ) {
-                                    // For VARCHAR, CHAR, etc.
-                                    finalDataType = `${normalizedBaseType}(${length})`;
                                 }
                             }
 
@@ -1259,81 +1296,61 @@ export async function fromPostgres(
                             const rawDataType = String(
                                 definition?.dataType || 'TEXT'
                             );
-                            // console.log('expr:', JSON.stringify(expr, null, 2));
-
-                            // Normalize the type
-                            let normalizedBaseType =
-                                normalizePostgreSQLType(rawDataType);
 
                             // Check if it's a serial type
-                            const upperType = rawDataType.toUpperCase();
-                            const isSerialType = [
-                                'SERIAL',
-                                'SERIAL2',
-                                'SERIAL4',
-                                'SERIAL8',
-                                'BIGSERIAL',
-                                'SMALLSERIAL',
-                            ].includes(upperType.split('(')[0]);
+                            const isSerialType = isSerialTypeName(rawDataType);
+                            const typeLength = definition?.length as
+                                | number
+                                | undefined;
 
-                            if (isSerialType) {
-                                const typeLength = definition?.length as
-                                    | number
-                                    | undefined;
-                                if (upperType === 'SERIAL') {
-                                    if (typeLength === 2) {
-                                        normalizedBaseType = 'SMALLINT';
-                                    } else if (typeLength === 8) {
-                                        normalizedBaseType = 'BIGINT';
-                                    } else {
-                                        normalizedBaseType = 'INTEGER';
-                                    }
-                                }
-                            }
+                            // Normalize the type (pass length to handle parser quirks)
+                            let finalDataType = normalizePostgreSQLType(
+                                rawDataType,
+                                typeLength
+                            );
 
-                            // Handle type parameters
-                            let finalDataType = normalizedBaseType;
-                            const isNormalizedIntegerType =
-                                ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
-                                    normalizedBaseType
-                                ) &&
-                                (upperType === 'INT' || upperType === 'SERIAL');
-
-                            if (!isSerialType && !isNormalizedIntegerType) {
+                            // Add type parameters for non-serial, non-integer types
+                            if (!isSerialType) {
                                 const precision = definition?.precision;
                                 const scale = definition?.scale;
-                                const length = definition?.length;
                                 const suffix =
                                     (definition?.suffix as unknown[]) || [];
 
-                                if (suffix.length > 0) {
-                                    const params = suffix
-                                        .map((s: unknown) => {
-                                            if (
+                                const isIntegerType = [
+                                    'integer',
+                                    'bigint',
+                                    'smallint',
+                                ].includes(finalDataType);
+
+                                if (!isIntegerType) {
+                                    if (suffix.length > 0) {
+                                        const params = suffix
+                                            .map((s: unknown) =>
                                                 typeof s === 'object' &&
                                                 s !== null &&
                                                 'value' in s
-                                            ) {
-                                                return String(
-                                                    (s as { value: unknown })
-                                                        .value
-                                                );
-                                            }
-                                            return String(s);
-                                        })
-                                        .join(',');
-                                    finalDataType = `${normalizedBaseType}(${params})`;
-                                } else if (precision !== undefined) {
-                                    if (scale !== undefined) {
-                                        finalDataType = `${normalizedBaseType}(${precision},${scale})`;
-                                    } else {
-                                        finalDataType = `${normalizedBaseType}(${precision})`;
+                                                    ? String(
+                                                          (
+                                                              s as {
+                                                                  value: unknown;
+                                                              }
+                                                          ).value
+                                                      )
+                                                    : String(s)
+                                            )
+                                            .join(',');
+                                        finalDataType = `${finalDataType}(${params})`;
+                                    } else if (precision !== undefined) {
+                                        finalDataType =
+                                            scale !== undefined
+                                                ? `${finalDataType}(${precision},${scale})`
+                                                : `${finalDataType}(${precision})`;
+                                    } else if (
+                                        typeLength !== undefined &&
+                                        typeLength !== null
+                                    ) {
+                                        finalDataType = `${finalDataType}(${typeLength})`;
                                     }
-                                } else if (
-                                    length !== undefined &&
-                                    length !== null
-                                ) {
-                                    finalDataType = `${normalizedBaseType}(${length})`;
                                 }
                             }
 
@@ -1429,84 +1446,62 @@ export async function fromPostgres(
                                     definition?.dataType || 'TEXT'
                                 );
 
-                                // Normalize the type
-                                let normalizedBaseType =
-                                    normalizePostgreSQLType(rawDataType);
-
                                 // Check if it's a serial type
-                                const upperType = rawDataType.toUpperCase();
-                                const isSerialType = [
-                                    'SERIAL',
-                                    'SERIAL2',
-                                    'SERIAL4',
-                                    'SERIAL8',
-                                    'BIGSERIAL',
-                                    'SMALLSERIAL',
-                                ].includes(upperType.split('(')[0]);
+                                const isSerialType =
+                                    isSerialTypeName(rawDataType);
+                                const typeLength = definition?.length as
+                                    | number
+                                    | undefined;
 
-                                if (isSerialType) {
-                                    const typeLength = definition?.length as
-                                        | number
-                                        | undefined;
-                                    if (upperType === 'SERIAL') {
-                                        if (typeLength === 2) {
-                                            normalizedBaseType = 'SMALLINT';
-                                        } else if (typeLength === 8) {
-                                            normalizedBaseType = 'BIGINT';
-                                        } else {
-                                            normalizedBaseType = 'INTEGER';
-                                        }
-                                    }
-                                }
+                                // Normalize the type (pass length to handle parser quirks)
+                                let finalDataType = normalizePostgreSQLType(
+                                    rawDataType,
+                                    typeLength
+                                );
 
-                                // Handle type parameters
-                                let finalDataType = normalizedBaseType;
-                                const isNormalizedIntegerType =
-                                    ['INTEGER', 'BIGINT', 'SMALLINT'].includes(
-                                        normalizedBaseType
-                                    ) &&
-                                    (upperType === 'INT' ||
-                                        upperType === 'SERIAL');
-
-                                if (!isSerialType && !isNormalizedIntegerType) {
+                                // Add type parameters for non-serial, non-integer types
+                                if (!isSerialType) {
                                     const precision =
                                         columnDef.definition?.precision;
                                     const scale = columnDef.definition?.scale;
-                                    const length = columnDef.definition?.length;
                                     const suffix =
                                         (definition?.suffix as unknown[]) || [];
 
-                                    if (suffix.length > 0) {
-                                        const params = suffix
-                                            .map((s: unknown) => {
-                                                if (
+                                    const isIntegerType = [
+                                        'integer',
+                                        'bigint',
+                                        'smallint',
+                                    ].includes(finalDataType);
+
+                                    if (!isIntegerType) {
+                                        if (suffix.length > 0) {
+                                            const params = suffix
+                                                .map((s: unknown) =>
                                                     typeof s === 'object' &&
                                                     s !== null &&
                                                     'value' in s
-                                                ) {
-                                                    return String(
-                                                        (
-                                                            s as {
-                                                                value: unknown;
-                                                            }
-                                                        ).value
-                                                    );
-                                                }
-                                                return String(s);
-                                            })
-                                            .join(',');
-                                        finalDataType = `${normalizedBaseType}(${params})`;
-                                    } else if (precision !== undefined) {
-                                        if (scale !== undefined) {
-                                            finalDataType = `${normalizedBaseType}(${precision},${scale})`;
-                                        } else {
-                                            finalDataType = `${normalizedBaseType}(${precision})`;
+                                                        ? String(
+                                                              (
+                                                                  s as {
+                                                                      value: unknown;
+                                                                  }
+                                                              ).value
+                                                          )
+                                                        : String(s)
+                                                )
+                                                .join(',');
+                                            finalDataType = `${finalDataType}(${params})`;
+                                        } else if (precision !== undefined) {
+                                            finalDataType =
+                                                scale !== undefined
+                                                    ? `${finalDataType}(${precision},${scale})`
+                                                    : `${finalDataType}(${precision})`;
+                                        } else if (
+                                            typeLength !== undefined &&
+                                            typeLength !== null
+                                        ) {
+                                            finalDataType = `${finalDataType}(${typeLength})`;
                                         }
-                                    } else if (
-                                        length !== undefined &&
-                                        length !== null
-                                    ) {
-                                        finalDataType = `${normalizedBaseType}(${length})`;
                                     }
                                 }
 
