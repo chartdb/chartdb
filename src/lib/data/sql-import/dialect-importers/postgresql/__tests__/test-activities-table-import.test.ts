@@ -27,55 +27,55 @@ CREATE TABLE public.activities (
         // Check each column
         const columns = table.columns;
 
-        // id column - serial4 should become INTEGER with auto-increment
+        // id column - serial4 is preserved as serial with auto-increment
         const idCol = columns.find((c) => c.name === 'id');
         expect(idCol).toBeDefined();
-        expect(idCol?.type).toBe('INTEGER');
+        expect(idCol?.type).toBe('serial');
         expect(idCol?.primaryKey).toBe(true);
         expect(idCol?.increment).toBe(true);
         expect(idCol?.nullable).toBe(false);
 
-        // user_id column - int4 should become INTEGER
+        // user_id column - int4 becomes integer
         const userIdCol = columns.find((c) => c.name === 'user_id');
         expect(userIdCol).toBeDefined();
-        expect(userIdCol?.type).toBe('INTEGER');
+        expect(userIdCol?.type).toBe('integer');
         expect(userIdCol?.nullable).toBe(false);
 
         // workflow_id column - int4 NULL
         const workflowIdCol = columns.find((c) => c.name === 'workflow_id');
         expect(workflowIdCol).toBeDefined();
-        expect(workflowIdCol?.type).toBe('INTEGER');
+        expect(workflowIdCol?.type).toBe('integer');
         expect(workflowIdCol?.nullable).toBe(true);
 
         // task_id column - int4 NULL
         const taskIdCol = columns.find((c) => c.name === 'task_id');
         expect(taskIdCol).toBeDefined();
-        expect(taskIdCol?.type).toBe('INTEGER');
+        expect(taskIdCol?.type).toBe('integer');
         expect(taskIdCol?.nullable).toBe(true);
 
-        // action column - character varying(50)
+        // action column - character varying(50) becomes varchar(50)
         const actionCol = columns.find((c) => c.name === 'action');
         expect(actionCol).toBeDefined();
-        expect(actionCol?.type).toBe('VARCHAR(50)');
+        expect(actionCol?.type).toBe('varchar(50)');
         expect(actionCol?.nullable).toBe(false);
 
         // description column - text
         const descriptionCol = columns.find((c) => c.name === 'description');
         expect(descriptionCol).toBeDefined();
-        expect(descriptionCol?.type).toBe('TEXT');
+        expect(descriptionCol?.type).toBe('text');
         expect(descriptionCol?.nullable).toBe(false);
 
         // created_at column - timestamp with default
         const createdAtCol = columns.find((c) => c.name === 'created_at');
         expect(createdAtCol).toBeDefined();
-        expect(createdAtCol?.type).toBe('TIMESTAMP');
+        expect(createdAtCol?.type).toBe('timestamp');
         expect(createdAtCol?.nullable).toBe(false);
         expect(createdAtCol?.default).toContain('NOW');
 
-        // is_read column - bool with default
+        // is_read column - bool becomes boolean with default
         const isReadCol = columns.find((c) => c.name === 'is_read');
         expect(isReadCol).toBeDefined();
-        expect(isReadCol?.type).toBe('BOOLEAN');
+        expect(isReadCol?.type).toBe('boolean');
         expect(isReadCol?.nullable).toBe(false);
         expect(isReadCol?.default).toBe('FALSE');
     });
@@ -106,44 +106,46 @@ CREATE TABLE type_test (
         const table = result.tables[0];
         const cols = table.columns;
 
-        // Check serial types
-        expect(cols.find((c) => c.name === 'id')?.type).toBe('INTEGER');
+        // Check serial types - preserved as serial, smallserial, bigserial
+        expect(cols.find((c) => c.name === 'id')?.type).toBe('serial');
         expect(cols.find((c) => c.name === 'id')?.increment).toBe(true);
-        expect(cols.find((c) => c.name === 'small_id')?.type).toBe('SMALLINT');
+        expect(cols.find((c) => c.name === 'small_id')?.type).toBe(
+            'smallserial'
+        );
         expect(cols.find((c) => c.name === 'small_id')?.increment).toBe(true);
-        expect(cols.find((c) => c.name === 'big_id')?.type).toBe('BIGINT');
+        expect(cols.find((c) => c.name === 'big_id')?.type).toBe('bigserial');
         expect(cols.find((c) => c.name === 'big_id')?.increment).toBe(true);
 
-        // Check integer types
-        expect(cols.find((c) => c.name === 'int_col')?.type).toBe('INTEGER');
-        expect(cols.find((c) => c.name === 'small_int')?.type).toBe('SMALLINT');
-        expect(cols.find((c) => c.name === 'big_int')?.type).toBe('BIGINT');
+        // Check integer types - normalized to lowercase
+        expect(cols.find((c) => c.name === 'int_col')?.type).toBe('integer');
+        expect(cols.find((c) => c.name === 'small_int')?.type).toBe('smallint');
+        expect(cols.find((c) => c.name === 'big_int')?.type).toBe('bigint');
 
-        // Check boolean types
-        expect(cols.find((c) => c.name === 'bool_col')?.type).toBe('BOOLEAN');
+        // Check boolean types - normalized to lowercase
+        expect(cols.find((c) => c.name === 'bool_col')?.type).toBe('boolean');
         expect(cols.find((c) => c.name === 'boolean_col')?.type).toBe(
-            'BOOLEAN'
+            'boolean'
         );
 
-        // Check string types
+        // Check string types - normalized to lowercase
         expect(cols.find((c) => c.name === 'varchar_col')?.type).toBe(
-            'VARCHAR(100)'
+            'varchar(100)'
         );
-        expect(cols.find((c) => c.name === 'char_col')?.type).toBe('CHAR(10)');
-        expect(cols.find((c) => c.name === 'text_col')?.type).toBe('TEXT');
+        expect(cols.find((c) => c.name === 'char_col')?.type).toBe('char(10)');
+        expect(cols.find((c) => c.name === 'text_col')?.type).toBe('text');
 
-        // Check timestamp types
+        // Check timestamp types - normalized to lowercase
         expect(cols.find((c) => c.name === 'timestamp_col')?.type).toBe(
-            'TIMESTAMP'
+            'timestamp'
         );
         expect(cols.find((c) => c.name === 'timestamptz_col')?.type).toBe(
-            'TIMESTAMPTZ'
+            'timestamptz'
         );
 
-        // Check other types
-        expect(cols.find((c) => c.name === 'date_col')?.type).toBe('DATE');
-        expect(cols.find((c) => c.name === 'time_col')?.type).toBe('TIME');
-        expect(cols.find((c) => c.name === 'json_col')?.type).toBe('JSON');
-        expect(cols.find((c) => c.name === 'jsonb_col')?.type).toBe('JSONB');
+        // Check other types - normalized to lowercase
+        expect(cols.find((c) => c.name === 'date_col')?.type).toBe('date');
+        expect(cols.find((c) => c.name === 'time_col')?.type).toBe('time');
+        expect(cols.find((c) => c.name === 'json_col')?.type).toBe('json');
+        expect(cols.find((c) => c.name === 'jsonb_col')?.type).toBe('jsonb');
     });
 });

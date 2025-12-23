@@ -43,7 +43,7 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
         // Check that the id column is present
         const idColumn = locationTable.columns.find((col) => col.name === 'id');
         expect(idColumn).toBeDefined();
-        expect(idColumn?.type).toBe('BIGINT');
+        expect(idColumn?.type).toBe('bigint');
         expect(idColumn?.primaryKey).toBe(true);
 
         // Check some of the added columns
@@ -51,19 +51,19 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
             (col) => col.name === 'country_id'
         );
         expect(countryIdColumn).toBeDefined();
-        expect(countryIdColumn?.type).toBe('INTEGER');
+        expect(countryIdColumn?.type).toBe('integer');
 
         const streetColumn = locationTable.columns.find(
             (col) => col.name === 'street'
         );
         expect(streetColumn).toBeDefined();
-        expect(streetColumn?.type).toBe('TEXT');
+        expect(streetColumn?.type).toBe('text');
 
         const remarksColumn = locationTable.columns.find(
             (col) => col.name === 'remarks'
         );
         expect(remarksColumn).toBeDefined();
-        expect(remarksColumn?.type).toBe('TEXT');
+        expect(remarksColumn?.type).toBe('text');
     });
 
     it('should handle ALTER TABLE ADD COLUMN with schema qualification', async () => {
@@ -87,13 +87,13 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
             (col) => col.name === 'email'
         );
         expect(emailColumn).toBeDefined();
-        expect(emailColumn?.type).toBe('VARCHAR(255)');
+        expect(emailColumn?.type).toBe('varchar(255)');
 
         const createdAtColumn = usersTable.columns.find(
             (col) => col.name === 'created_at'
         );
         expect(createdAtColumn).toBeDefined();
-        expect(createdAtColumn?.type).toBe('TIMESTAMP');
+        expect(createdAtColumn?.type).toBe('timestamp');
     });
 
     it('should handle ALTER TABLE ADD COLUMN with constraints', async () => {
@@ -156,7 +156,7 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
             (col) => col.name === 'name'
         );
         expect(nameColumns).toHaveLength(1);
-        expect(nameColumns[0].type).toBe('VARCHAR(100)'); // Should keep original type
+        expect(nameColumns[0].type).toBe('varchar(100)'); // Should keep original type
     });
 
     it('should use default schema when not specified', async () => {
@@ -204,12 +204,12 @@ describe('PostgreSQL ALTER TABLE ADD COLUMN Tests', () => {
             (col) => col.name === 'my-column'
         );
         expect(myColumn).toBeDefined();
-        expect(myColumn?.type).toBe('VARCHAR(50)');
+        expect(myColumn?.type).toBe('varchar(50)');
 
         const anotherColumn = myTable.columns.find(
             (col) => col.name === 'another-column'
         );
         expect(anotherColumn).toBeDefined();
-        expect(anotherColumn?.type).toBe('INTEGER');
+        expect(anotherColumn?.type).toBe('integer');
     });
 });

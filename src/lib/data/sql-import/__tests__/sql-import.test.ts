@@ -382,10 +382,10 @@ CREATE TABLE playlists (
         expect(fieldNames).toContain('items_count');
         expect(fieldNames).toContain('units_sold');
 
-        // Verify primary key
+        // Verify primary key - serial is preserved (not converted to int)
         const pkField = fields?.find((f) => f.name === 'order_id');
         expect(pkField?.primaryKey).toBe(true);
-        expect(pkField?.type.name).toBe('int');
+        expect(pkField?.type.name).toBe('serial');
 
         // Verify decimal fields (decimal is normalized to numeric in PostgreSQL)
         const totalAmountField = fields?.find((f) => f.name === 'total_amount');

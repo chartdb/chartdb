@@ -30,15 +30,15 @@ ALTER TABLE table_12 ALTER COLUMN field3 TYPE VARCHAR(254);
         // Check that the columns have the updated type
         const field1 = table.columns.find((col) => col.name === 'field1');
         expect(field1).toBeDefined();
-        expect(field1?.type).toBe('VARCHAR(254)'); // Should be updated from 200 to 254
+        expect(field1?.type).toBe('varchar(254)'); // Should be updated from 200 to 254
 
         const field2 = table.columns.find((col) => col.name === 'field2');
         expect(field2).toBeDefined();
-        expect(field2?.type).toBe('VARCHAR(254)');
+        expect(field2?.type).toBe('varchar(254)');
 
         const field3 = table.columns.find((col) => col.name === 'field3');
         expect(field3).toBeDefined();
-        expect(field3?.type).toBe('VARCHAR(254)');
+        expect(field3?.type).toBe('varchar(254)');
     });
 
     it('should handle various ALTER COLUMN TYPE scenarios', async () => {
@@ -65,13 +65,13 @@ ALTER TABLE test_table ALTER COLUMN score TYPE NUMERIC(10,4);
         const table = result.tables[0];
 
         const nameCol = table.columns.find((col) => col.name === 'name');
-        expect(nameCol?.type).toBe('VARCHAR(100)');
+        expect(nameCol?.type).toBe('varchar(100)');
 
         const ageCol = table.columns.find((col) => col.name === 'age');
-        expect(ageCol?.type).toBe('INTEGER');
+        expect(ageCol?.type).toBe('integer');
 
         const scoreCol = table.columns.find((col) => col.name === 'score');
-        expect(scoreCol?.type).toBe('NUMERIC(10,4)');
+        expect(scoreCol?.type).toBe('numeric(10,4)');
     });
 
     it('should handle multiple type changes on the same column', async () => {
@@ -101,18 +101,18 @@ ALTER TABLE table_12 ALTER COLUMN field1 TYPE BIGINT;
         expect(table.schema).toBe('public');
         expect(table.columns).toHaveLength(4);
 
-        // Check that field1 has the final type (BIGINT), not the intermediate VARCHAR(254)
+        // Check that field1 has the final type (bigint), not the intermediate varchar(254)
         const field1 = table.columns.find((col) => col.name === 'field1');
         expect(field1).toBeDefined();
-        expect(field1?.type).toBe('BIGINT'); // Should be BIGINT, not VARCHAR(254)
+        expect(field1?.type).toBe('bigint'); // Should be bigint, not varchar(254)
 
-        // Check that field2 and field3 still have VARCHAR(254)
+        // Check that field2 and field3 still have varchar(254)
         const field2 = table.columns.find((col) => col.name === 'field2');
         expect(field2).toBeDefined();
-        expect(field2?.type).toBe('VARCHAR(254)');
+        expect(field2?.type).toBe('varchar(254)');
 
         const field3 = table.columns.find((col) => col.name === 'field3');
         expect(field3).toBeDefined();
-        expect(field3?.type).toBe('VARCHAR(254)');
+        expect(field3?.type).toBe('varchar(254)');
     });
 });

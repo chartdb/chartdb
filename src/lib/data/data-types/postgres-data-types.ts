@@ -165,6 +165,7 @@ const synonymMap: Record<string, string> = {
     // Timestamp types
     'timestamp with time zone': 'timestamptz',
     'timestamp without time zone': 'timestamp',
+    datetime: 'timestamp',
 
     // Time types
     'time with time zone': 'timetz',
