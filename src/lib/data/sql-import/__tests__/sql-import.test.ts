@@ -335,4 +335,79 @@ CREATE TABLE playlists (
         expect(relationship?.targetFieldId).toBe(playlistUserIdField?.id);
         expect(relationship?.targetCardinality).toBe('many');
     });
+
+    it('should parse PostgreSQL table with schema, decimal types, and various column types', async () => {
+        const sql = `
+            CREATE TABLE "inventory"."order_summary" (
+                "order_id" SERIAL PRIMARY KEY,
+                "customer_id" int,
+                "product_id" int,
+                "batch_id" int,
+                "order_date" date,
+                "total_amount" decimal(15,2),
+                "discount_amount" decimal(15,2),
+                "items_count" int,
+                "units_sold" int
+            );
+        `;
+
+        const diagram = await sqlImportToDiagram({
+            sqlContent: sql,
+            sourceDatabaseType: DatabaseType.POSTGRESQL,
+            targetDatabaseType: DatabaseType.POSTGRESQL,
+        });
+
+        // Verify diagram structure
+        expect(diagram).toBeDefined();
+        expect(diagram.databaseType).toBe(DatabaseType.POSTGRESQL);
+
+        // Verify table was parsed
+        expect(diagram.tables).toHaveLength(1);
+        const table = diagram.tables?.[0];
+        expect(table?.name).toBe('order_summary');
+        expect(table?.schema).toBe('inventory');
+
+        // Verify all fields were parsed
+        const fields = table?.fields;
+        expect(fields).toHaveLength(9);
+
+        const fieldNames = fields?.map((f) => f.name);
+        expect(fieldNames).toContain('order_id');
+        expect(fieldNames).toContain('customer_id');
+        expect(fieldNames).toContain('product_id');
+        expect(fieldNames).toContain('batch_id');
+        expect(fieldNames).toContain('order_date');
+        expect(fieldNames).toContain('total_amount');
+        expect(fieldNames).toContain('discount_amount');
+        expect(fieldNames).toContain('items_count');
+        expect(fieldNames).toContain('units_sold');
+
+        // Verify primary key
+        const pkField = fields?.find((f) => f.name === 'order_id');
+        expect(pkField?.primaryKey).toBe(true);
+        expect(pkField?.type.name).toBe('int');
+
+        // Verify decimal fields (decimal is normalized to numeric in PostgreSQL)
+        const totalAmountField = fields?.find((f) => f.name === 'total_amount');
+        expect(totalAmountField?.type.name).toBe('numeric');
+        expect(totalAmountField?.type.id).toBe('numeric');
+        expect(totalAmountField?.precision).toBe(15);
+        expect(totalAmountField?.scale).toBe(2);
+
+        const discountAmountField = fields?.find(
+            (f) => f.name === 'discount_amount'
+        );
+        expect(discountAmountField?.type.name).toBe('numeric');
+        expect(discountAmountField?.type.id).toBe('numeric');
+        expect(discountAmountField?.precision).toBe(15);
+        expect(discountAmountField?.scale).toBe(2);
+
+        // Verify date field
+        const orderDateField = fields?.find((f) => f.name === 'order_date');
+        expect(orderDateField?.type.name).toBe('date');
+
+        // Verify int fields
+        const customerIdField = fields?.find((f) => f.name === 'customer_id');
+        expect(customerIdField?.type.name).toBe('int');
+    });
 });
