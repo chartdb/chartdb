@@ -198,13 +198,17 @@ export function getTypeArgs(
 
     if (!definition) return typeArgs;
 
-    if (definition.length !== undefined) {
-        typeArgs.length = definition.length;
-    }
-
-    if (definition.scale !== undefined && definition.precision !== undefined) {
-        typeArgs.precision = definition.precision;
+    // node-sql-parser stores precision as 'length' for DECIMAL/NUMERIC types
+    // Check if scale is present to determine if this is a numeric type with precision
+    if (definition.scale !== undefined) {
+        // When scale exists, length represents precision (for DECIMAL/NUMERIC)
+        // or precision property is directly available
+        typeArgs.precision = definition.precision ?? definition.length;
         typeArgs.scale = definition.scale;
+    } else if (definition.precision !== undefined) {
+        typeArgs.precision = definition.precision;
+    } else if (definition.length !== undefined) {
+        typeArgs.length = definition.length;
     }
 
     return typeArgs;

@@ -924,6 +924,12 @@ export async function fromPostgres(
                                         finalDataType = `${normalizedBaseType}(${precision})`;
                                     }
                                 } else if (
+                                    scale !== undefined &&
+                                    length !== undefined
+                                ) {
+                                    // For DECIMAL/NUMERIC, node-sql-parser stores precision as 'length'
+                                    finalDataType = `${normalizedBaseType}(${length},${scale})`;
+                                } else if (
                                     length !== undefined &&
                                     length !== null
                                 ) {
