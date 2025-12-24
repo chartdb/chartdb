@@ -493,12 +493,12 @@ export function exportPostgreSQL({
                     r.sourceCardinality === 'one' &&
                     r.targetCardinality === 'one'
                 ) {
-                    // For 1:1, FK can go on either side, but typically goes on the table that references the other
-                    // We'll keep the current behavior for 1:1
-                    fkTable = sourceTable;
-                    fkField = sourceField;
-                    refTable = targetTable;
-                    refField = targetField;
+                    // For 1:1, FK goes on target table (the table with the FK column)
+                    // Source represents the referenced (parent) table, target is the referencing (child) table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
                 } else {
                     // Many-to-many relationships need a junction table, skip for now
                     return '';

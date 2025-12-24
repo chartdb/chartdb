@@ -197,4 +197,123 @@ describe('SQL Export Tests', () => {
             });
         });
     });
+
+    describe('exportBaseSQL with foreign key relationships', () => {
+        it('should export PostgreSQL diagram with two tables and a foreign key relationship', () => {
+            const diagram = createDiagram({
+                id: 'ee570f766a15',
+                name: 'Diagram 1',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        id: '10hmfnjq496fk2p0vgl5cooal',
+                        name: 'user_profiles',
+                        x: 1701,
+                        y: -100,
+                        schema: 'public',
+                        color: '#8eb7ff',
+                        isView: false,
+                        order: 1,
+                        fields: [
+                            createField({
+                                id: '0moy7ijg3k2azxhsbsjg0n94f',
+                                name: 'id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                unique: true,
+                                nullable: false,
+                                primaryKey: true,
+                            }),
+                            createField({
+                                id: '3vo5j6c208kox4qt2i6lpx9x8',
+                                name: 'user_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                unique: false,
+                                nullable: true,
+                                primaryKey: false,
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: '4sjv9srxk3ny3j4aptozbjzg2',
+                                name: '',
+                                fieldIds: ['0moy7ijg3k2azxhsbsjg0n94f'],
+                                unique: true,
+                                isPrimaryKey: true,
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                    createTable({
+                        id: 'tooohdxmn7kw9u1sv77o7x0pb',
+                        name: 'users',
+                        x: 1229,
+                        y: -92,
+                        schema: 'public',
+                        color: '#8eb7ff',
+                        isView: false,
+                        order: 0,
+                        fields: [
+                            createField({
+                                id: 'ahppb8odc54hqyenfslw37xv1',
+                                name: 'id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                unique: true,
+                                nullable: false,
+                                primaryKey: true,
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: 'y7rauhiqqwywx7zz1z59pig0r',
+                                name: '',
+                                fieldIds: ['ahppb8odc54hqyenfslw37xv1'],
+                                unique: true,
+                                isPrimaryKey: true,
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                ],
+                relationships: [
+                    {
+                        id: 's8leta6fjmm86fcwfpjngq65c',
+                        name: 'users_id_fk',
+                        sourceSchema: 'public',
+                        sourceTableId: 'tooohdxmn7kw9u1sv77o7x0pb',
+                        targetSchema: 'public',
+                        targetTableId: '10hmfnjq496fk2p0vgl5cooal',
+                        sourceFieldId: 'ahppb8odc54hqyenfslw37xv1',
+                        targetFieldId: '3vo5j6c208kox4qt2i6lpx9x8',
+                        sourceCardinality: 'one',
+                        targetCardinality: 'one',
+                        createdAt: testTime,
+                    },
+                ],
+            });
+
+            const expectedSql = `CREATE SCHEMA IF NOT EXISTS "public";
+
+CREATE TABLE "public"."user_profiles" (
+    "id" bigint NOT NULL,
+    "user_id" bigint,
+    PRIMARY KEY ("id")
+);
+
+CREATE TABLE "public"."users" (
+    "id" bigint NOT NULL,
+    PRIMARY KEY ("id")
+);
+
+-- Foreign key constraints
+-- Schema: public
+ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_users_id" FOREIGN KEY("user_id") REFERENCES "public"."users"("id");`;
+
+            const sql = exportBaseSQL({
+                diagram,
+                targetDatabaseType: DatabaseType.POSTGRESQL,
+            });
+
+            expect(sql.trim()).toBe(expectedSql.trim());
+        });
+    });
 });
