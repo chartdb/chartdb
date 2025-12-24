@@ -251,11 +251,11 @@ export function exportPostgreSQL({
                                 typeName.toLowerCase() === 'integer' ||
                                 typeName.toLowerCase() === 'int'
                             ) {
-                                serialType = 'SERIAL';
+                                serialType = 'serial';
                             } else if (typeName.toLowerCase() === 'bigint') {
-                                serialType = 'BIGSERIAL';
+                                serialType = 'bigserial';
                             } else if (typeName.toLowerCase() === 'smallint') {
-                                serialType = 'SMALLSERIAL';
+                                serialType = 'smallserial';
                             }
                         }
 
@@ -325,7 +325,7 @@ export function exportPostgreSQL({
                                 : '';
 
                         // Do not add PRIMARY KEY as a column constraint - will add as table constraint
-                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${serialType || typeWithSize}${serialType ? '' : notNull}${identity}${unique}${defaultValue}`;
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${serialType || typeWithSize}${notNull}${identity}${unique}${defaultValue}`;
                     })
                     .join(',\n')}${
                     primaryKeyFields.length > 0
