@@ -268,6 +268,23 @@ function isSerialTypeName(typeName: string): boolean {
 }
 
 /**
+ * Check if a specific column has GENERATED AS IDENTITY syntax in the SQL
+ * @param sql The SQL statement containing the column definition
+ * @param columnName The name of the column to check
+ * @returns true if the column has GENERATED AS IDENTITY
+ */
+function hasGeneratedIdentity(sql: string, columnName: string): boolean {
+    // Create a regex pattern to find the column definition
+    // Match the column name (quoted or unquoted) followed by its definition until the next comma or closing paren
+    const escapedName = columnName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(
+        `["']?${escapedName}["']?\\s+[^,)]*GENERATED\\s+(?:BY\\s+DEFAULT|ALWAYS)\\s+AS\\s+IDENTITY`,
+        'i'
+    );
+    return pattern.test(sql);
+}
+
+/**
  * Normalize PostgreSQL type syntax to lowercase canonical form.
  * This function handles parsing-level normalization only - it converts
  * verbose SQL syntax to the preferred short form that getPreferredSynonym
@@ -984,10 +1001,11 @@ export async function fromPostgres(
                                 columns.push({
                                     name: columnName,
                                     type: finalDataType,
-                                    nullable: isSerialType
-                                        ? false
-                                        : columnDef.nullable?.type !==
-                                          'not null',
+                                    nullable:
+                                        isSerialType || isPrimaryKey
+                                            ? false
+                                            : columnDef.nullable?.type !==
+                                              'not null',
                                     primaryKey: isPrimaryKey || isSerialType,
                                     unique: columnDef.unique === 'unique',
                                     typeArgs: getTypeArgs(columnDef.definition),
@@ -998,13 +1016,11 @@ export async function fromPostgres(
                                         isSerialType ||
                                         columnDef.auto_increment ===
                                             'auto_increment' ||
-                                        // Check if the SQL contains GENERATED IDENTITY for this column
-                                        (stmt.sql
-                                            .toUpperCase()
-                                            .includes('GENERATED') &&
-                                            stmt.sql
-                                                .toUpperCase()
-                                                .includes('IDENTITY')),
+                                        // Check if the SQL contains GENERATED IDENTITY for this specific column
+                                        hasGeneratedIdentity(
+                                            stmt.sql,
+                                            columnName
+                                        ),
                                 });
                             }
                         } else if (def.resource === 'constraint') {
@@ -1403,12 +1419,7 @@ export async function fromPostgres(
                                     isSerialType ||
                                     definition?.auto_increment ===
                                         'auto_increment' ||
-                                    (stmt.sql
-                                        .toUpperCase()
-                                        .includes('GENERATED') &&
-                                        stmt.sql
-                                            .toUpperCase()
-                                            .includes('IDENTITY')),
+                                    hasGeneratedIdentity(stmt.sql, columnName),
                             };
 
                             // Add the column to the table if it doesn't already exist
@@ -1528,12 +1539,10 @@ export async function fromPostgres(
                                         isSerialType ||
                                         columnDef.auto_increment ===
                                             'auto_increment' ||
-                                        (stmt.sql
-                                            .toUpperCase()
-                                            .includes('GENERATED') &&
-                                            stmt.sql
-                                                .toUpperCase()
-                                                .includes('IDENTITY')),
+                                        hasGeneratedIdentity(
+                                            stmt.sql,
+                                            columnName
+                                        ),
                                 };
 
                                 // Add the column to the table if it doesn't already exist
