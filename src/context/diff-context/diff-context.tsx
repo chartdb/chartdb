@@ -35,6 +35,7 @@ export interface DiffContext {
     diffMap: DiffMap;
     hasDiff: boolean;
     isSummaryOnly: boolean;
+    relationshipIdMap: Map<string, string>;
 
     calculateDiff: ({
         diagram,
@@ -114,6 +115,11 @@ export interface DiffContext {
     }) => { old: boolean; new: boolean } | null;
 
     // relationship diff
+    checkIfRelationshipHasChange: ({
+        relationshipId,
+    }: {
+        relationshipId: string;
+    }) => boolean;
     checkIfNewRelationship: ({
         relationshipId,
     }: {
@@ -124,6 +130,11 @@ export interface DiffContext {
     }: {
         relationshipId: string;
     }) => boolean;
+    getRelationshipNewName: ({
+        relationshipId,
+    }: {
+        relationshipId: string;
+    }) => { old: string; new: string } | null;
 
     // area diff
     checkIfNewArea: ({ areaId }: { areaId: string }) => boolean;

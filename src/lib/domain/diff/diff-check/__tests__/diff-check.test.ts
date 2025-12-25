@@ -13,6 +13,7 @@ import type { FieldDiffChanged } from '../../field-diff';
 import type { AreaDiffChanged } from '../../area-diff';
 import type { NoteDiffChanged } from '../../note-diff';
 import type { IndexDiffChanged } from '../../index-diff';
+import type { RelationshipDiffChanged } from '../../relationship-diff';
 
 // Helper function to create a mock diagram
 function createMockDiagram(overrides?: Partial<Diagram>): Diagram {
@@ -61,11 +62,14 @@ function createMockRelationship(
 ): DBRelationship {
     return {
         id: 'rel-1',
+        name: 'fk_default',
         sourceTableId: 'table-1',
         targetTableId: 'table-2',
         sourceFieldId: 'field-1',
         targetFieldId: 'field-2',
-        type: 'one-to-many',
+        sourceCardinality: 'one',
+        targetCardinality: 'many',
+        createdAt: Date.now(),
         ...overrides,
     } as DBRelationship;
 }
@@ -839,6 +843,7 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('relationship-rel-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('added');
+            expect(result.changedRelationships.has('rel-1')).toBe(true);
         });
 
         it('should detect removed relationships', () => {
@@ -856,6 +861,565 @@ describe('generateDiff', () => {
             const diff = result.diffMap.get('relationship-rel-1');
             expect(diff).toBeDefined();
             expect(diff?.type).toBe('removed');
+            expect(result.changedRelationships.has('rel-1')).toBe(true);
+        });
+
+        it('should detect relationship name changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ name: 'fk_old_name' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ name: 'fk_new_name' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-name-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe('name');
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe(
+                'fk_old_name'
+            );
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe(
+                'fk_new_name'
+            );
+            expect(result.changedRelationships.has('rel-1')).toBe(true);
+        });
+
+        it('should detect relationship sourceCardinality changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceCardinality: 'one' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceCardinality: 'many' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get(
+                'relationship-sourceCardinality-rel-1'
+            );
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'sourceCardinality'
+            );
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe('one');
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe('many');
+        });
+
+        it('should detect relationship targetCardinality changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetCardinality: 'many' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetCardinality: 'one' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get(
+                'relationship-targetCardinality-rel-1'
+            );
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'targetCardinality'
+            );
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe('many');
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe('one');
+        });
+
+        it('should detect multiple relationship attribute changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_old',
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_new',
+                        sourceCardinality: 'many',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(3);
+            expect(result.diffMap.has('relationship-name-rel-1')).toBe(true);
+            expect(
+                result.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(true);
+            expect(
+                result.diffMap.has('relationship-targetCardinality-rel-1')
+            ).toBe(true);
+        });
+
+        it('should only check specified relationship attributes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_old',
+                        sourceCardinality: 'one',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_new',
+                        sourceCardinality: 'many',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    attributes: {
+                        relationships: ['name'], // Only check name changes
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            expect(result.diffMap.has('relationship-name-rel-1')).toBe(true);
+            expect(
+                result.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(false);
+        });
+
+        it('should only check specified relationship change types', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ id: 'rel-1', name: 'fk_old' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    // Use different sourceFieldId to ensure it's a truly different relationship
+                    createMockRelationship({
+                        id: 'rel-2',
+                        name: 'fk_new',
+                        sourceFieldId: 'field-3',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    changeTypes: {
+                        relationships: ['added'], // Only check for added relationships
+                    },
+                },
+            });
+
+            // Should only detect added relationship (rel-2)
+            const addedRelationships = Array.from(
+                result.diffMap.values()
+            ).filter(
+                (diff) =>
+                    diff.type === 'added' && diff.object === 'relationship'
+            );
+            expect(addedRelationships.length).toBe(1);
+
+            // Should not detect removed relationship (rel-1)
+            const removedRelationships = Array.from(
+                result.diffMap.values()
+            ).filter(
+                (diff) =>
+                    diff.type === 'removed' && diff.object === 'relationship'
+            );
+            expect(removedRelationships.length).toBe(0);
+        });
+
+        it('should use custom relationship matcher', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        id: 'rel-1',
+                        name: 'fk_users_orders',
+                        sourceCardinality: 'one',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        id: 'rel-2',
+                        name: 'fk_users_orders',
+                        sourceCardinality: 'many',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    matchers: {
+                        relationship: (rel, rels) =>
+                            rels.find((r) => r.name === rel.name),
+                    },
+                },
+            });
+
+            // With name-based matching, rel-1 should match rel-2 by name
+            // and detect the sourceCardinality change
+            const cardinalityChange = result.diffMap.get(
+                'relationship-sourceCardinality-rel-1'
+            );
+            expect(cardinalityChange).toBeDefined();
+            expect(cardinalityChange?.type).toBe('changed');
+            expect(
+                (cardinalityChange as RelationshipDiffChanged)?.attribute
+            ).toBe('sourceCardinality');
+            expect(
+                (cardinalityChange as RelationshipDiffChanged)?.oldValue
+            ).toBe('one');
+            expect(
+                (cardinalityChange as RelationshipDiffChanged)?.newValue
+            ).toBe('many');
+        });
+
+        it('should not detect changes when relationships are unchanged', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_users_orders',
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_users_orders',
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(0);
+            expect(result.changedRelationships.size).toBe(0);
+        });
+
+        it('should detect relationship sourceSchema changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceSchema: 'public' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceSchema: 'private' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-sourceSchema-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'sourceSchema'
+            );
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe('public');
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe('private');
+        });
+
+        it('should detect relationship targetSchema changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetSchema: 'schema_a' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetSchema: 'schema_b' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-targetSchema-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'targetSchema'
+            );
+        });
+
+        it('should detect relationship sourceTableId changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceTableId: 'table-1' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceTableId: 'table-3' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-sourceTableId-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'sourceTableId'
+            );
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe('table-1');
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe('table-3');
+        });
+
+        it('should detect relationship targetTableId changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetTableId: 'table-2' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetTableId: 'table-4' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-targetTableId-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'targetTableId'
+            );
+        });
+
+        it('should detect relationship sourceFieldId changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceFieldId: 'field-1' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ sourceFieldId: 'field-5' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-sourceFieldId-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'sourceFieldId'
+            );
+            expect((diff as RelationshipDiffChanged)?.oldValue).toBe('field-1');
+            expect((diff as RelationshipDiffChanged)?.newValue).toBe('field-5');
+        });
+
+        it('should detect relationship targetFieldId changes', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetFieldId: 'field-2' }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({ targetFieldId: 'field-6' }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(1);
+            const diff = result.diffMap.get('relationship-targetFieldId-rel-1');
+            expect(diff).toBeDefined();
+            expect(diff?.type).toBe('changed');
+            expect((diff as RelationshipDiffChanged)?.attribute).toBe(
+                'targetFieldId'
+            );
+        });
+
+        it('should detect all relationship attribute changes simultaneously', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_old',
+                        sourceSchema: 'public',
+                        sourceTableId: 'table-1',
+                        targetSchema: 'public',
+                        targetTableId: 'table-2',
+                        sourceFieldId: 'field-1',
+                        targetFieldId: 'field-2',
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_new',
+                        sourceSchema: 'private',
+                        sourceTableId: 'table-3',
+                        targetSchema: 'private',
+                        targetTableId: 'table-4',
+                        sourceFieldId: 'field-5',
+                        targetFieldId: 'field-6',
+                        sourceCardinality: 'many',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            expect(result.diffMap.size).toBe(9);
+            expect(result.diffMap.has('relationship-name-rel-1')).toBe(true);
+            expect(result.diffMap.has('relationship-sourceSchema-rel-1')).toBe(
+                true
+            );
+            expect(result.diffMap.has('relationship-sourceTableId-rel-1')).toBe(
+                true
+            );
+            expect(result.diffMap.has('relationship-targetSchema-rel-1')).toBe(
+                true
+            );
+            expect(result.diffMap.has('relationship-targetTableId-rel-1')).toBe(
+                true
+            );
+            expect(result.diffMap.has('relationship-sourceFieldId-rel-1')).toBe(
+                true
+            );
+            expect(result.diffMap.has('relationship-targetFieldId-rel-1')).toBe(
+                true
+            );
+            expect(
+                result.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(true);
+            expect(
+                result.diffMap.has('relationship-targetCardinality-rel-1')
+            ).toBe(true);
+        });
+
+        it('should filter relationship attributes correctly', () => {
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_old',
+                        sourceSchema: 'public',
+                        sourceTableId: 'table-1',
+                        sourceCardinality: 'one',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        name: 'fk_new',
+                        sourceSchema: 'private',
+                        sourceTableId: 'table-3',
+                        sourceCardinality: 'many',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+                options: {
+                    attributes: {
+                        relationships: ['name', 'sourceCardinality'], // Only check these
+                    },
+                },
+            });
+
+            expect(result.diffMap.size).toBe(2);
+            expect(result.diffMap.has('relationship-name-rel-1')).toBe(true);
+            expect(
+                result.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(true);
+            // Should not detect sourceSchema or sourceTableId changes
+            expect(result.diffMap.has('relationship-sourceSchema-rel-1')).toBe(
+                false
+            );
+            expect(result.diffMap.has('relationship-sourceTableId-rel-1')).toBe(
+                false
+            );
         });
     });
 

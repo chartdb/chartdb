@@ -1,5 +1,29 @@
 import { z } from 'zod';
-import type { DBRelationship } from '../db-relationship';
+import type { Cardinality, DBRelationship } from '../db-relationship';
+
+export type RelationshipDiffAttribute =
+    | 'name'
+    | 'sourceSchema'
+    | 'sourceTableId'
+    | 'targetSchema'
+    | 'targetTableId'
+    | 'sourceFieldId'
+    | 'targetFieldId'
+    | 'sourceCardinality'
+    | 'targetCardinality';
+
+export const relationshipDiffAttributeSchema: z.ZodType<RelationshipDiffAttribute> =
+    z.union([
+        z.literal('name'),
+        z.literal('sourceSchema'),
+        z.literal('sourceTableId'),
+        z.literal('targetSchema'),
+        z.literal('targetTableId'),
+        z.literal('sourceFieldId'),
+        z.literal('targetFieldId'),
+        z.literal('sourceCardinality'),
+        z.literal('targetCardinality'),
+    ]);
 
 export interface RelationshipDiffAdded<T = DBRelationship> {
     object: 'relationship';
@@ -30,9 +54,31 @@ export const relationshipDiffRemovedSchema: z.ZodType<RelationshipDiffRemoved> =
         relationshipId: z.string(),
     });
 
+export interface RelationshipDiffChanged {
+    object: 'relationship';
+    type: 'changed';
+    relationshipId: string;
+    newRelationshipId: string;
+    attribute: RelationshipDiffAttribute;
+    oldValue?: string | Cardinality | null;
+    newValue?: string | Cardinality | null;
+}
+
+export const relationshipDiffChangedSchema: z.ZodType<RelationshipDiffChanged> =
+    z.object({
+        object: z.literal('relationship'),
+        type: z.literal('changed'),
+        relationshipId: z.string(),
+        newRelationshipId: z.string(),
+        attribute: relationshipDiffAttributeSchema,
+        oldValue: z.union([z.string(), z.null()]).optional(),
+        newValue: z.union([z.string(), z.null()]).optional(),
+    });
+
 export type RelationshipDiff<T = DBRelationship> =
     | RelationshipDiffAdded<T>
-    | RelationshipDiffRemoved;
+    | RelationshipDiffRemoved
+    | RelationshipDiffChanged;
 
 export const createRelationshipDiffSchema = <T = DBRelationship>(
     relationshipSchema: z.ZodType<T>
@@ -40,5 +86,6 @@ export const createRelationshipDiffSchema = <T = DBRelationship>(
     return z.union([
         createRelationshipDiffAddedSchema(relationshipSchema),
         relationshipDiffRemovedSchema,
+        relationshipDiffChangedSchema,
     ]) as z.ZodType<RelationshipDiff<T>>;
 };
