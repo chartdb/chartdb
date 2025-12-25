@@ -1290,19 +1290,46 @@ function compareRelationshipProperties({
     ) {
         changedAttributes.push('targetFieldId');
     }
+    // Check cardinality changes, but exclude changes that produce the same DDL.
+    // In DDL export, when source is 'one', the relationship direction stays consistent.
+    // Therefore (one, one) ↔ (one, many) are equivalent from DDL perspective.
+    const shouldCheckCardinality =
+        attributesToCheck.includes('sourceCardinality') ||
+        attributesToCheck.includes('targetCardinality');
 
-    if (
-        attributesToCheck.includes('sourceCardinality') &&
-        oldRelationship.sourceCardinality !== newRelationship.sourceCardinality
-    ) {
-        changedAttributes.push('sourceCardinality');
-    }
+    if (shouldCheckCardinality) {
+        const oldSource = oldRelationship.sourceCardinality;
+        const oldTarget = oldRelationship.targetCardinality;
+        const newSource = newRelationship.sourceCardinality;
+        const newTarget = newRelationship.targetCardinality;
 
-    if (
-        attributesToCheck.includes('targetCardinality') &&
-        oldRelationship.targetCardinality !== newRelationship.targetCardinality
-    ) {
-        changedAttributes.push('targetCardinality');
+        // Check if this is an "equivalent" cardinality change that produces the same DDL
+        // Equivalent pairs: (one, one) ↔ (many, one) - both put FK on source table
+        const isEquivalentCardinalityChange =
+            (oldSource === 'one' &&
+                oldTarget === 'one' &&
+                newTarget === 'many' &&
+                newSource === 'one') ||
+            (oldTarget === 'many' &&
+                oldSource === 'one' &&
+                newSource === 'one' &&
+                newTarget === 'one');
+
+        if (!isEquivalentCardinalityChange) {
+            if (
+                attributesToCheck.includes('sourceCardinality') &&
+                oldSource !== newSource
+            ) {
+                changedAttributes.push('sourceCardinality');
+            }
+
+            if (
+                attributesToCheck.includes('targetCardinality') &&
+                oldTarget !== newTarget
+            ) {
+                changedAttributes.push('targetCardinality');
+            }
+        }
     }
 
     if (changedAttributes.length > 0) {
