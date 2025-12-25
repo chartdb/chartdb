@@ -17,7 +17,10 @@ import type { TableDiff, TableDiffAttribute } from '../table-diff';
 import type { AreaDiff, AreaDiffAttribute } from '../area-diff';
 import type { NoteDiff, NoteDiffAttribute } from '../note-diff';
 import type { IndexDiff, IndexDiffAttribute } from '../index-diff';
-import type { RelationshipDiff } from '../relationship-diff';
+import type {
+    RelationshipDiff,
+    RelationshipDiffAttribute,
+} from '../relationship-diff';
 import { areBooleansEqual } from '@/lib/utils';
 import type { DatabaseType } from '../../database-type';
 
@@ -119,6 +122,7 @@ export interface GenerateDiffOptions {
         tables?: TableDiffAttribute[];
         fields?: FieldDiffAttribute[];
         indexes?: IndexDiffAttribute[];
+        relationships?: RelationshipDiffAttribute[];
         areas?: AreaDiffAttribute[];
         notes?: NoteDiffAttribute[];
     };
@@ -126,6 +130,7 @@ export interface GenerateDiffOptions {
         changedTablesAttributes?: TableDiffAttribute[];
         changedFieldsAttributes?: FieldDiffAttribute[];
         changedIndexesAttributes?: IndexDiffAttribute[];
+        changedRelationshipsAttributes?: RelationshipDiffAttribute[];
         changedAreasAttributes?: AreaDiffAttribute[];
         changedNotesAttributes?: NoteDiffAttribute[];
     };
@@ -163,8 +168,10 @@ export function generateDiff({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     changedIndexes: Map<string, boolean>;
+    changedRelationships: Map<string, boolean>;
     changedAreas: Map<string, boolean>;
     changedNotes: Map<string, boolean>;
+    relationshipIdMap: Map<string, string>;
 } {
     // Merge with default options
     const mergedOptions: GenerateDiffOptions = {
@@ -184,8 +191,10 @@ export function generateDiff({
     const changedTables = new Map<string, boolean>();
     const changedFields = new Map<string, boolean>();
     const changedIndexes = new Map<string, boolean>();
+    const changedRelationships = new Map<string, boolean>();
     const changedAreas = new Map<string, boolean>();
     const changedNotes = new Map<string, boolean>();
+    const relationshipIdMap = new Map<string, string>();
 
     // Use provided matchers or default ones
     const tableMatcher = mergedOptions.matchers?.table ?? defaultTableMatcher;
@@ -238,6 +247,11 @@ export function generateDiff({
             diagram,
             newDiagram,
             diffMap: newDiffs,
+            changedRelationships,
+            relationshipIdMap,
+            attributes: mergedOptions.attributes?.relationships,
+            changedRelationshipsAttributes:
+                mergedOptions.changedMaps?.changedRelationshipsAttributes,
             changeTypes: mergedOptions.changeTypes?.relationships,
             relationshipMatcher,
         });
@@ -278,8 +292,10 @@ export function generateDiff({
         changedTables,
         changedFields,
         changedIndexes,
+        changedRelationships,
         changedAreas,
         changedNotes,
+        relationshipIdMap,
     };
 }
 
@@ -1101,12 +1117,20 @@ function compareRelationships({
     diagram,
     newDiagram,
     diffMap,
+    changedRelationships,
+    relationshipIdMap,
+    attributes,
+    changedRelationshipsAttributes,
     changeTypes,
     relationshipMatcher,
 }: {
     diagram: Diagram;
     newDiagram: Diagram;
     diffMap: DiffMap;
+    changedRelationships: Map<string, boolean>;
+    relationshipIdMap: Map<string, string>;
+    attributes?: RelationshipDiffAttribute[];
+    changedRelationshipsAttributes?: RelationshipDiffAttribute[];
     changeTypes?: RelationshipDiff['type'][];
     relationshipMatcher: (
         relationship: DBRelationship,
@@ -1119,7 +1143,7 @@ function compareRelationships({
     }
 
     // If changeTypes is undefined, check all types
-    const typesToCheck = changeTypes ?? ['added', 'removed'];
+    const typesToCheck = changeTypes ?? ['added', 'removed', 'changed'];
     const oldRelationships = diagram.relationships || [];
     const newRelationships = newDiagram.relationships || [];
 
@@ -1138,6 +1162,7 @@ function compareRelationships({
                         newRelationship,
                     }
                 );
+                changedRelationships.set(newRelationship.id, true);
             }
         }
     }
@@ -1157,7 +1182,162 @@ function compareRelationships({
                         relationshipId: oldRelationship.id,
                     }
                 );
+                changedRelationships.set(oldRelationship.id, true);
             }
+        }
+    }
+
+    // Check for relationship changes
+    if (typesToCheck.includes('changed')) {
+        for (const oldRelationship of oldRelationships) {
+            const newRelationship = relationshipMatcher(
+                oldRelationship,
+                newRelationships
+            );
+            if (!newRelationship) continue;
+
+            compareRelationshipProperties({
+                oldRelationship,
+                newRelationship,
+                diffMap,
+                changedRelationships,
+                relationshipIdMap,
+                attributes,
+                changedRelationshipsAttributes,
+            });
+        }
+    }
+}
+
+// Compare relationship properties
+function compareRelationshipProperties({
+    oldRelationship,
+    newRelationship,
+    diffMap,
+    changedRelationships,
+    relationshipIdMap,
+    attributes,
+    changedRelationshipsAttributes,
+}: {
+    oldRelationship: DBRelationship;
+    newRelationship: DBRelationship;
+    diffMap: DiffMap;
+    changedRelationships: Map<string, boolean>;
+    relationshipIdMap: Map<string, string>;
+    attributes?: RelationshipDiffAttribute[];
+    changedRelationshipsAttributes?: RelationshipDiffAttribute[];
+}) {
+    // If attributes are specified, only check those attributes
+    const attributesToCheck: RelationshipDiffAttribute[] = attributes ?? [
+        'name',
+        'sourceSchema',
+        'sourceTableId',
+        'targetSchema',
+        'targetTableId',
+        'sourceFieldId',
+        'targetFieldId',
+        'sourceCardinality',
+        'targetCardinality',
+    ];
+
+    const changedAttributes: RelationshipDiffAttribute[] = [];
+
+    if (
+        attributesToCheck.includes('name') &&
+        oldRelationship.name !== newRelationship.name
+    ) {
+        changedAttributes.push('name');
+    }
+
+    if (
+        attributesToCheck.includes('sourceSchema') &&
+        oldRelationship.sourceSchema !== newRelationship.sourceSchema
+    ) {
+        changedAttributes.push('sourceSchema');
+    }
+
+    if (
+        attributesToCheck.includes('sourceTableId') &&
+        oldRelationship.sourceTableId !== newRelationship.sourceTableId
+    ) {
+        changedAttributes.push('sourceTableId');
+    }
+
+    if (
+        attributesToCheck.includes('targetSchema') &&
+        oldRelationship.targetSchema !== newRelationship.targetSchema
+    ) {
+        changedAttributes.push('targetSchema');
+    }
+
+    if (
+        attributesToCheck.includes('targetTableId') &&
+        oldRelationship.targetTableId !== newRelationship.targetTableId
+    ) {
+        changedAttributes.push('targetTableId');
+    }
+
+    if (
+        attributesToCheck.includes('sourceFieldId') &&
+        oldRelationship.sourceFieldId !== newRelationship.sourceFieldId
+    ) {
+        changedAttributes.push('sourceFieldId');
+    }
+
+    if (
+        attributesToCheck.includes('targetFieldId') &&
+        oldRelationship.targetFieldId !== newRelationship.targetFieldId
+    ) {
+        changedAttributes.push('targetFieldId');
+    }
+
+    if (
+        attributesToCheck.includes('sourceCardinality') &&
+        oldRelationship.sourceCardinality !== newRelationship.sourceCardinality
+    ) {
+        changedAttributes.push('sourceCardinality');
+    }
+
+    if (
+        attributesToCheck.includes('targetCardinality') &&
+        oldRelationship.targetCardinality !== newRelationship.targetCardinality
+    ) {
+        changedAttributes.push('targetCardinality');
+    }
+
+    if (changedAttributes.length > 0) {
+        // Track which attributes should trigger adding to changed maps
+        const attributesThatTriggerChange = changedAttributes.filter((attr) =>
+            shouldAddToChangedMap(attr, changedRelationshipsAttributes)
+        );
+
+        for (const attribute of changedAttributes) {
+            diffMap.set(
+                getDiffMapKey({
+                    diffObject: 'relationship',
+                    objectId: oldRelationship.id,
+                    attribute,
+                }),
+                {
+                    object: 'relationship',
+                    type: 'changed',
+                    relationshipId: oldRelationship.id,
+                    newRelationshipId: newRelationship.id,
+                    attribute,
+                    oldValue: oldRelationship[attribute],
+                    newValue: newRelationship[attribute],
+                }
+            );
+        }
+
+        // Only add to changed maps if at least one attribute should trigger a change
+        if (attributesThatTriggerChange.length > 0) {
+            changedRelationships.set(oldRelationship.id, true);
+            changedRelationships.set(newRelationship.id, true);
+
+            // Store bidirectional mapping between old and new IDs
+            relationshipIdMap.set(oldRelationship.id, newRelationship.id);
+            relationshipIdMap.set(newRelationship.id, oldRelationship.id);
         }
     }
 }
@@ -1677,7 +1857,35 @@ const defaultRelationshipMatcher = (
     relationship: DBRelationship,
     relationships: DBRelationship[]
 ): DBRelationship | undefined => {
-    return relationships.find((r) => r.id === relationship.id);
+    // Priority 1: Match by ID
+    const byId = relationships.find((r) => r.id === relationship.id);
+    if (byId) {
+        return byId;
+    }
+
+    // Priority 2: Match by name (only if unique match)
+    if (relationship.name) {
+        const byName = relationships.filter(
+            (r) => r.name === relationship.name
+        );
+        if (byName.length === 1) {
+            return byName[0];
+        }
+    }
+
+    // Priority 3: Match by structural identity (source/target table and field IDs)
+    const byStructure = relationships.filter(
+        (r) =>
+            r.sourceTableId === relationship.sourceTableId &&
+            r.targetTableId === relationship.targetTableId &&
+            r.sourceFieldId === relationship.sourceFieldId &&
+            r.targetFieldId === relationship.targetFieldId
+    );
+    if (byStructure.length === 1) {
+        return byStructure[0];
+    }
+
+    return undefined;
 };
 
 const defaultAreaMatcher = (area: Area, areas: Area[]): Area | undefined => {

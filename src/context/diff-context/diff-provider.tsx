@@ -33,6 +33,12 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
     const [fieldsChanged, setFieldsChanged] = React.useState<
         Map<string, boolean>
     >(new Map<string, boolean>());
+    const [relationshipsChanged, setRelationshipsChanged] = React.useState<
+        Map<string, boolean>
+    >(new Map<string, boolean>());
+    const [relationshipIdMap, setRelationshipIdMap] = React.useState<
+        Map<string, string>
+    >(new Map<string, string>());
     const [isSummaryOnly, setIsSummaryOnly] = React.useState<boolean>(false);
 
     const events = useEventEmitter<DiffEvent>();
@@ -164,11 +170,15 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 diffMap: newDiffs,
                 changedTables: newChangedTables,
                 changedFields: newChangedFields,
+                changedRelationships: newChangedRelationships,
+                relationshipIdMap: newRelationshipIdMap,
             } = generateDiff({ diagram, newDiagram: newDiagramArg });
 
             setDiffMap(newDiffs);
             setTablesChanged(newChangedTables);
             setFieldsChanged(newChangedFields);
+            setRelationshipsChanged(newChangedRelationships);
+            setRelationshipIdMap(newRelationshipIdMap);
             setNewDiagram(newDiagramArg);
             setOriginalDiagram(diagram);
             setIsSummaryOnly(options?.summaryOnly ?? false);
@@ -502,6 +512,62 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         [diffMap]
     );
 
+    const checkIfRelationshipHasChange = useCallback<
+        DiffContext['checkIfRelationshipHasChange']
+    >(
+        ({ relationshipId }) =>
+            relationshipsChanged.get(relationshipId) ?? false,
+        [relationshipsChanged]
+    );
+
+    const getRelationshipNewName = useCallback<
+        DiffContext['getRelationshipNewName']
+    >(
+        ({ relationshipId }) => {
+            // Try with the given ID first
+            const relationshipNameKey = getDiffMapKey({
+                diffObject: 'relationship',
+                objectId: relationshipId,
+                attribute: 'name',
+            });
+
+            if (diffMap.has(relationshipNameKey)) {
+                const diff = diffMap.get(relationshipNameKey);
+
+                if (diff?.type === 'changed') {
+                    return {
+                        new: diff.newValue as string,
+                        old: diff.oldValue as string,
+                    };
+                }
+            }
+
+            // If not found, try with the mapped ID (old <-> new mapping)
+            const mappedId = relationshipIdMap.get(relationshipId);
+            if (mappedId) {
+                const mappedKey = getDiffMapKey({
+                    diffObject: 'relationship',
+                    objectId: mappedId,
+                    attribute: 'name',
+                });
+
+                if (diffMap.has(mappedKey)) {
+                    const diff = diffMap.get(mappedKey);
+
+                    if (diff?.type === 'changed') {
+                        return {
+                            new: diff.newValue as string,
+                            old: diff.oldValue as string,
+                        };
+                    }
+                }
+            }
+
+            return null;
+        },
+        [diffMap, relationshipIdMap]
+    );
+
     const checkIfNewRelationship = useCallback<
         DiffContext['checkIfNewRelationship']
     >(
@@ -568,6 +634,8 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
         setDiffMap(new Map<string, ChartDBDiff>());
         setTablesChanged(new Map<string, boolean>());
         setFieldsChanged(new Map<string, boolean>());
+        setRelationshipsChanged(new Map<string, boolean>());
+        setRelationshipIdMap(new Map<string, string>());
         setNewDiagram(null);
         setOriginalDiagram(null);
         setIsSummaryOnly(false);
@@ -606,8 +674,11 @@ export const DiffProvider: React.FC<React.PropsWithChildren> = ({
                 getFieldNewIsArray,
 
                 // relationship diff
+                checkIfRelationshipHasChange,
                 checkIfNewRelationship,
                 checkIfRelationshipRemoved,
+                getRelationshipNewName,
+                relationshipIdMap,
 
                 // area diff
                 checkIfNewArea,
