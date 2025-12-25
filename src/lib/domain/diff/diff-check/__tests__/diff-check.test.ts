@@ -926,14 +926,22 @@ describe('generateDiff', () => {
         });
 
         it('should detect relationship targetCardinality changes', () => {
+            // Use (many, many) -> (many, one) to test targetCardinality change detection
+            // This is NOT equivalent since source is 'many' in both cases
             const oldDiagram = createMockDiagram({
                 relationships: [
-                    createMockRelationship({ targetCardinality: 'many' }),
+                    createMockRelationship({
+                        sourceCardinality: 'many',
+                        targetCardinality: 'many',
+                    }),
                 ],
             });
             const newDiagram = createMockDiagram({
                 relationships: [
-                    createMockRelationship({ targetCardinality: 'one' }),
+                    createMockRelationship({
+                        sourceCardinality: 'many',
+                        targetCardinality: 'one',
+                    }),
                 ],
             });
 
@@ -953,6 +961,102 @@ describe('generateDiff', () => {
             );
             expect((diff as RelationshipDiffChanged)?.oldValue).toBe('many');
             expect((diff as RelationshipDiffChanged)?.newValue).toBe('one');
+        });
+
+        it('should NOT detect cardinality changes between (one,one) and (one,many) as they produce same DDL', () => {
+            // (one,one) -> (one,many): source stays 'one', equivalent from DDL perspective
+            const oldDiagram1 = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'one',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+            const newDiagram1 = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+
+            const result1 = generateDiff({
+                diagram: oldDiagram1,
+                newDiagram: newDiagram1,
+            });
+
+            // Should NOT detect any cardinality changes
+            expect(
+                result1.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(false);
+            expect(
+                result1.diffMap.has('relationship-targetCardinality-rel-1')
+            ).toBe(false);
+            expect(result1.diffMap.size).toBe(0);
+
+            // (one,many) -> (one,one): reverse direction, also equivalent
+            const oldDiagram2 = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                    }),
+                ],
+            });
+            const newDiagram2 = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'one',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+
+            const result2 = generateDiff({
+                diagram: oldDiagram2,
+                newDiagram: newDiagram2,
+            });
+
+            expect(
+                result2.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(false);
+            expect(
+                result2.diffMap.has('relationship-targetCardinality-rel-1')
+            ).toBe(false);
+            expect(result2.diffMap.size).toBe(0);
+        });
+
+        it('should still detect cardinality changes that produce different DDL', () => {
+            // (one,one) -> (many,one): source changes from 'one' to 'many', real change
+            const oldDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'one',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+            const newDiagram = createMockDiagram({
+                relationships: [
+                    createMockRelationship({
+                        sourceCardinality: 'many',
+                        targetCardinality: 'one',
+                    }),
+                ],
+            });
+
+            const result = generateDiff({
+                diagram: oldDiagram,
+                newDiagram,
+            });
+
+            // Should detect the sourceCardinality change
+            expect(
+                result.diffMap.has('relationship-sourceCardinality-rel-1')
+            ).toBe(true);
+            expect(result.diffMap.size).toBe(1);
         });
 
         it('should detect multiple relationship attribute changes', () => {
