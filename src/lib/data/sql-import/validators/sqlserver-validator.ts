@@ -8,6 +8,7 @@ import type {
     ValidationError,
     ValidationWarning,
 } from './postgresql-validator';
+import { detectForeignDialect } from './dialect-detection';
 
 /**
  * Validates SQL Server SQL syntax
@@ -34,12 +35,15 @@ export function validateSQLServerDialect(sql: string): ValidationResult {
         };
     }
 
-    // TODO: Implement SQL Server-specific validation
-    // For now, just do basic checks
-
     // Check for common SQL Server syntax patterns
     const lines = sql.split('\n');
     let tableCount = 0;
+
+    // Check for foreign SQL dialects
+    const foreignDialectError = detectForeignDialect(lines, 'SQL Server');
+    if (foreignDialectError) {
+        errors.push(foreignDialectError);
+    }
 
     lines.forEach((line, index) => {
         const trimmedLine = line.trim();
