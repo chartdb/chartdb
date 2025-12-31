@@ -4,7 +4,7 @@ export const ja: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '新規',
-            browse: '参照',
+            browse: '開く',
             tables: 'テーブル',
             refs: '参照',
             dependencies: '依存関係',
@@ -15,7 +15,7 @@ export const ja: LanguageTranslation = {
             actions: {
                 actions: 'アクション',
                 new: '新規...',
-                browse: '参照...',
+                browse: 'すべてのデータベース...',
                 save: '保存',
                 import: 'データベースをインポート',
                 export_sql: 'SQLをエクスポート',

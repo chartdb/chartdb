@@ -4,7 +4,7 @@ export const uk: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Нова',
-            browse: 'Огляд',
+            browse: 'Відкрити',
             tables: 'Таблиці',
             refs: 'Зв’язки',
             dependencies: 'Залежності',
@@ -15,7 +15,7 @@ export const uk: LanguageTranslation = {
             actions: {
                 actions: 'Дії',
                 new: 'Нова...',
-                browse: 'Огляд...',
+                browse: 'Усі бази даних...',
                 save: 'Зберегти',
                 import: 'Імпорт бази даних',
                 export_sql: 'Експорт SQL',

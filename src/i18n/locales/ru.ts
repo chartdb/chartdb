@@ -4,7 +4,7 @@ export const ru: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Новая',
-            browse: 'Обзор',
+            browse: 'Открыть',
             tables: 'Таблицы',
             refs: 'Ссылки',
             dependencies: 'Зависимости',
@@ -15,7 +15,7 @@ export const ru: LanguageTranslation = {
             actions: {
                 actions: 'Действия',
                 new: 'Новая...',
-                browse: 'Обзор...',
+                browse: 'Все базы данных...',
                 save: 'Сохранить',
                 import: 'Импортировать базу данных',
                 export_sql: 'Экспорт SQL',

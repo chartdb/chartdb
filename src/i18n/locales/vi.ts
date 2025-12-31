@@ -4,7 +4,7 @@ export const vi: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Mới',
-            browse: 'Duyệt',
+            browse: 'Mở',
             tables: 'Bảng',
             refs: 'Refs',
             dependencies: 'Phụ thuộc',
@@ -15,7 +15,7 @@ export const vi: LanguageTranslation = {
             actions: {
                 actions: 'Hành động',
                 new: 'Mới...',
-                browse: 'Duyệt...',
+                browse: 'Tất cả cơ sở dữ liệu...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
                 export_sql: 'Xuất SQL',

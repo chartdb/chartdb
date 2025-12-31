@@ -4,7 +4,7 @@ export const zh_TW: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '新建',
-            browse: '瀏覽',
+            browse: '開啟',
             tables: '表格',
             refs: 'Refs',
             dependencies: '相依性',
@@ -15,7 +15,7 @@ export const zh_TW: LanguageTranslation = {
             actions: {
                 actions: '操作',
                 new: '新增...',
-                browse: '瀏覽...',
+                browse: '所有資料庫...',
                 save: '儲存',
                 import: '匯入資料庫',
                 export_sql: '匯出 SQL',

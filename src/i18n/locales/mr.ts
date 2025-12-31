@@ -4,7 +4,7 @@ export const mr: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'नवीन',
-            browse: 'ब्राउज',
+            browse: 'उघडा',
             tables: 'टेबल',
             refs: 'Refs',
             dependencies: 'अवलंबने',
@@ -15,7 +15,7 @@ export const mr: LanguageTranslation = {
             actions: {
                 actions: 'क्रिया',
                 new: 'नवीन...',
-                browse: 'ब्राउज करा...',
+                browse: 'सर्व डेटाबेस...',
                 save: 'जतन करा',
                 import: 'डेटाबेस इम्पोर्ट करा',
                 export_sql: 'SQL एक्स्पोर्ट करा',

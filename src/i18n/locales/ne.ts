@@ -4,7 +4,7 @@ export const ne: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'नयाँ',
-            browse: 'ब्राउज',
+            browse: 'खोल्नुहोस्',
             tables: 'टेबलहरू',
             refs: 'Refs',
             dependencies: 'निर्भरताहरू',
@@ -15,7 +15,7 @@ export const ne: LanguageTranslation = {
             actions: {
                 actions: 'कार्यहरू',
                 new: 'नयाँ...',
-                browse: 'ब्राउज गर्नुहोस्...',
+                browse: 'सबै डाटाबेसहरू...',
                 save: 'सुरक्षित गर्नुहोस्',
                 import: 'डाटाबेस आयात गर्नुहोस्',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
