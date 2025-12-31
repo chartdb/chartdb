@@ -426,10 +426,9 @@ export const mr: LanguageTranslation = {
         export_image_dialog: {
             title: 'इमेज निर्यात करा',
             description: 'एक्स्पोर्ट करण्यासाठी स्केल फॅक्टर निवडा:',
-            scale_1x: '1x नियमित',
-            scale_2x: '2x (शिफारस केलेले)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (कमी गुणवत्ता)',
+            scale_2x: '2x (सामान्य गुणवत्ता)',
+            scale_4x: '4x (सर्वोत्तम गुणवत्ता)',
             cancel: 'रद्द करा',
             export: 'निर्यात करा',
             // TODO: Translate

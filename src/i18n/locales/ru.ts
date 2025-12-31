@@ -419,10 +419,9 @@ export const ru: LanguageTranslation = {
         export_image_dialog: {
             title: 'Экспортировать изображение',
             description: 'Выберите детализацию изображения при экспорте:',
-            scale_1x: '1x Обычный',
-            scale_2x: '2x (Рекомендовано)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Низкое качество)',
+            scale_2x: '2x (Обычное качество)',
+            scale_4x: '4x (Лучшее качество)',
             cancel: 'Отменить',
             export: 'Экспортировать',
             // TODO: Translate

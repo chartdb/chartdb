@@ -414,10 +414,9 @@ export const zh_TW: LanguageTranslation = {
         export_image_dialog: {
             title: '匯出圖片',
             description: '請選擇匯出的倍率:',
-            scale_1x: '1x 標準',
-            scale_2x: '2x (推薦)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (低品質)',
+            scale_2x: '2x (普通品質)',
+            scale_4x: '4x (最佳品質)',
             cancel: '取消',
             export: '匯出',
             // TODO: Translate

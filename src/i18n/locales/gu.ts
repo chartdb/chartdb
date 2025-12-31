@@ -421,10 +421,9 @@ export const gu: LanguageTranslation = {
         export_image_dialog: {
             title: 'છબી નિકાસ કરો',
             description: 'નિકાસ માટે સ્કેલ ફેક્ટર પસંદ કરો:',
-            scale_1x: '1x સામાન્ય',
-            scale_2x: '2x (ભલામણ કરેલું)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (નીચી ગુણવત્તા)',
+            scale_2x: '2x (સામાન્ય ગુણવત્તા)',
+            scale_4x: '4x (શ્રેષ્ઠ ગુણવત્તા)',
             cancel: 'રદ કરો',
             export: 'નિકાસ કરો',
             // TODO: Translate

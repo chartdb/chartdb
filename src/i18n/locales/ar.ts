@@ -417,10 +417,9 @@ export const ar: LanguageTranslation = {
         export_image_dialog: {
             title: 'تصدير الصورة',
             description: ':اختر عامل المقياس للتصدير',
-            scale_1x: '1x عادي',
-            scale_2x: '2x (موصى به)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (جودة منخفضة)',
+            scale_2x: '2x (جودة عادية)',
+            scale_4x: '4x (أفضل جودة)',
             cancel: 'إلغاء',
             export: 'تصدير',
             // TODO: Translate

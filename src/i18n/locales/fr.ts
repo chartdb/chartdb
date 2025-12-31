@@ -385,10 +385,9 @@ export const fr: LanguageTranslation = {
             title: "Exporter l'image",
             description:
                 "Choisissez le facteur d'échelle pour l'image exportée.",
-            scale_1x: '1x Normal',
-            scale_2x: '2x (Recommandé)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Basse qualité)',
+            scale_2x: '2x (Qualité normale)',
+            scale_4x: '4x (Meilleure qualité)',
             cancel: 'Annuler',
             export: 'Exporter',
             // TODO: Translate

@@ -425,10 +425,9 @@ export const ja: LanguageTranslation = {
         export_image_dialog: {
             title: '画像をエクスポート',
             description: 'エクスポートの倍率を選択してください:',
-            scale_1x: '1x 標準',
-            scale_2x: '2x (推奨)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (低画質)',
+            scale_2x: '2x (通常画質)',
+            scale_4x: '4x (最高画質)',
             cancel: 'キャンセル',
             export: 'エクスポート',
             // TODO: Translate
