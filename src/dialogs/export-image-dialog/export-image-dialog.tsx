@@ -30,7 +30,7 @@ export interface ExportImageDialogProps extends BaseDialogProps {
 
 const DEFAULT_INCLUDE_PATTERN_BG = true;
 const DEFAULT_TRANSPARENT = false;
-const DEFAULT_SCALE = '2';
+const DEFAULT_SCALE = '4';
 export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
     dialog,
     format,
@@ -62,7 +62,7 @@ export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
 
     const scaleOptions: SelectBoxOption[] = useMemo(
         () =>
-            ['1', '2', '3', '4'].map((scale) => ({
+            ['1', '2', '4'].map((scale) => ({
                 value: scale,
                 label: t(`export_image_dialog.scale_${scale}x`),
             })),
